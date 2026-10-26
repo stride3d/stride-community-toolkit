@@ -30,17 +30,27 @@ public class SceneManager
     private string _lastAction = "Initialized";
     private DateTime _lastActionTime = DateTime.Now;
 
-    public int ShapeCount => _scene.Entities.Count(e => e.Name.EndsWith(GameConfig.ShapeName));
+    public int ShapeCount
+    {
+        get
+        {
+            var count = 0;
+
+            foreach (var entity in _scene.Entities)
+            {
+                if (entity.Name.EndsWith(GameConfig.ShapeName)) count++;
+            }
+
+            return count;
+        }
+    }
 
     public SceneManager(Game game, Scene scene, Box2DSimulation simulation)
     {
         _game = game;
         _scene = scene;
-
-        var camera = scene.GetCamera() ?? throw new InvalidOperationException("Camera not found in scene");
-
         _simulation = simulation;
-        _camera = camera;
+        _camera = game.GetCameraEntity().Get<CameraComponent>();
         _shapeFactory = new ShapeFactory(scene);
         _uiHelper = new UiHelper(game);
         _inputManager = new InputManager(game, _camera);
@@ -57,7 +67,7 @@ public class SceneManager
         CreateInitialScene();
     }
 
-    void CreateInitialScene()
+    private void CreateInitialScene()
     {
         AddGroundAndWalls();
 
@@ -117,7 +127,7 @@ public class SceneManager
                 Color = GameConfig.GroundColor,
             }
         };
-        entity.Transform.Position = new Vector3(position.X, position.Y, 0);
+        entity.Transform.Position = new Vector3(position, 0);
         entity.Scene = _scene;
     }
 
@@ -129,7 +139,6 @@ public class SceneManager
     {
         ProcessInput();
         UpdateUI();
-
     }
 
     /// <summary>
@@ -137,8 +146,8 @@ public class SceneManager
     /// </summary>
     public void AddInitialShapes()
     {
-        _shapeSpawner.Add(ShapeFactory.Rectangle, 10, GameConfig.ShapeColor);
-        LogAction($"Added {10} initial demo shapes");
+        _shapeSpawner.Add(ShapeFactory.Rectangle, GameConfig.DefaultSpawnCount, GameConfig.ShapeColor);
+        LogAction($"Added {GameConfig.DefaultSpawnCount} initial demo shapes");
     }
 
     private void ProcessInput()
@@ -203,7 +212,6 @@ public class SceneManager
         {
             TogglePhysics();
         }
-
     }
 
     private void ProcessMouseInput()
@@ -213,7 +221,7 @@ public class SceneManager
         var mousePosition = _game.Input.MousePosition;
         var worldPoint = _inputManager.GetWorldPointFromMouse(mousePosition);
 
-        if (worldPoint == null)
+        if (worldPoint is null)
         {
             LogAction("Mouse click outside world bounds");
             return;
@@ -231,8 +239,7 @@ public class SceneManager
     private void TogglePhysics()
     {
         _simulation.Enabled = !_simulation.Enabled;
-        var status = _simulation.Enabled ? "enabled" : "disabled";
-        LogAction($"Physics {status}");
+        LogAction($"Physics {(_simulation.Enabled ? "enabled" : "disabled")}");
     }
 
     private void UpdateUI()
@@ -243,7 +250,6 @@ public class SceneManager
         {
             _uiHelper.RenderStatusMessage($"Last action: {_lastAction}", Color.LightGreen);
         }
-
     }
 
     private void LogAction(string action)

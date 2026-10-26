@@ -1,9 +1,10 @@
 using Stride.BepuPhysics;
+using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Instancing;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -49,18 +50,16 @@ Primitive3D[] shapes =
 int[] batchSizes = [1000, 2500, 5000, 10000, 20000];
 
 var random = new Random(1);
-var bodies = new List<Entity>();
+List<Entity> bodies = [];
 
-Scene? scene = null;
-BufferedEntityInstancing? awakeInstancing = null;
-BufferedEntityInstancing? sleepingInstancing = null;
-Entity? awakeMaster = null;
-Entity? sleepingMaster = null;
+Scene scene = null!;
+Entity awakeMaster = null!;
+Entity sleepingMaster = null!;
 
 // Sleep-state tracking, aligned with the bodies list: which master each body is drawn by right now
 List<BodyComponent> bodyComponents = [];
 List<bool> awakeStates = [];
-int sleepingCount = 0;
+var sleepingCount = 0;
 
 var shape = Primitive3D.Sphere();
 var layout = SpawnLayout.Grid;
@@ -70,6 +69,10 @@ List<KeyMenu> menus = [];
 
 using var game = new Game();
 
+// The buffered instancings own their GPU buffers, and the engine never releases user-owned buffers
+using var awakeInstancing = new BufferedEntityInstancing(new BepuEntityInstancing());
+using var sleepingInstancing = new BufferedEntityInstancing(new BepuEntityInstancing());
+
 game.Run(new SceneSetup3D
 {
     // A head-on view of the XY plane; the light is aimed by hand below, so the setup adds none
@@ -78,10 +81,6 @@ game.Run(new SceneSetup3D
     Ground = null,
     Profiler = true
 }.UseBepu().UseSkybox(), start: Start, update: Update);
-
-// The buffered instancings own their GPU buffers, and the engine never releases user-owned buffers
-awakeInstancing?.Dispose();
-sleepingInstancing?.Dispose();
 
 void Start(Scene rootScene)
 {
@@ -95,8 +94,7 @@ void Start(Scene rootScene)
 
     // The default aim shines toward +Z, which leaves the faces turned towards the camera unlit
     var light = game.AddDirectionalLight();
-    light.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-30)) *
-                               Quaternion.RotationY(MathUtil.DegreesToRadians(-30));
+    light.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-30)) * Quaternion.RotationY(MathUtil.DegreesToRadians(-30));
 
     CreateWall(new Vector3(-WallWidth / 2, 0, 0), wallSize);
     CreateWall(new Vector3(WallWidth / 2, 0, 0), wallSize);
@@ -116,22 +114,16 @@ void CreateWall(Vector3 position, Vector3 size, Quaternion? rotation = null)
     var wall = game.CreatePrimitive(Primitive3D.Box(size), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(Color.LightGray),
-        Body = BodyMode.Static
+        Body = BodyMode.Static,
+        Position = position,
     });
 
-    wall.Transform.Position = position;
-    if (rotation.HasValue)
-    {
-        wall.Transform.Rotation = rotation.Value;
-    }
+    wall.Transform.Rotation = rotation ?? Quaternion.Identity;
     wall.Scene = scene;
 }
 
 void SetupInstancing()
 {
-    awakeInstancing = new BufferedEntityInstancing(new BepuEntityInstancing());
-    sleepingInstancing = new BufferedEntityInstancing(new BepuEntityInstancing());
-
     // One master per sleep state for the whole run. Their Models are swapped when the shape changes;
     // the instancing objects are reused, because they grow their own buffers and retire the old ones
     // safely. The sleeping master is where the sleep skip pays off: once the pile settles it holds
@@ -237,8 +229,8 @@ void ChangeShape(Primitive3D type)
 
     Clear();
 
-    awakeMaster!.Get<ModelComponent>().Model = ModelFor(shape);
-    sleepingMaster!.Get<ModelComponent>().Model = SleepingModelFor(shape);
+    awakeMaster.Get<ModelComponent>().Model = ModelFor(shape);
+    sleepingMaster.Get<ModelComponent>().Model = SleepingModelFor(shape);
 
     SpawnBatch(batchSize);
 }
@@ -248,13 +240,10 @@ void Clear()
 {
     // Before the entities leave the scene: an entity removed from the scene stays registered with
     // the instancing, which would keep reading transforms off it and drawing ghosts
-    awakeInstancing?.Clear();
-    sleepingInstancing?.Clear();
+    awakeInstancing.Clear();
+    sleepingInstancing.Clear();
 
-    foreach (var body in bodies)
-    {
-        body.Scene = null;
-    }
+    foreach (var body in bodies) body.Scene = null;
 
     bodies.Clear();
     bodyComponents.Clear();
@@ -278,20 +267,14 @@ void SpawnBatch(int count)
             // The jitter matters. A perfectly regular lattice of touching bodies degenerates
             // Bepu's broad-phase tree and kills the process with a stack overflow in
             // Refit2WithCacheOptimization - a millimetre of noise is enough to avoid it.
-            Spawn(new Vector3(
-                (column - perRow / 2f) * 1.2f + Jitter(),
-                SpawnHeight + row * 1.2f + Jitter(),
-                0));
+            Spawn(new Vector3((column - perRow / 2f) * 1.2f + Jitter(), SpawnHeight + row * 1.2f + Jitter(), 0));
         }
     }
     else
     {
         for (var i = 0; i < count; i++)
         {
-            Spawn(new Vector3(
-                (random.NextSingle() - 0.5f) * (WallWidth - 10),
-                SpawnHeight + random.NextSingle() * (count / 20f),
-                0));
+            Spawn(new Vector3((random.NextSingle() - 0.5f) * (WallWidth - 10), SpawnHeight + random.NextSingle() * (count / 20f), 0));
         }
     }
 
@@ -305,9 +288,7 @@ void Spawn(Vector3 position)
     // CreatePrimitive avoids building one mesh and one pair of GPU buffers per body.
     var entity = new Entity("InstancedItem") { new ModelComponent(models[shape]) };
 
-    entity.AddBepuPhysics(shape, new BepuPhysicsOptions
-    {
-    });
+    entity.AddBepuPhysics(shape, new BepuPhysicsOptions { Component = new Body2DComponent { Collider = new CompoundCollider() } });
 
     // The master draws every instance. Leaving each entity its own ModelComponent would draw the
     // whole pile twice - once per entity, once instanced - which is slower than not instancing at all
@@ -316,12 +297,12 @@ void Spawn(Vector3 position)
     entity.Transform.Position = position;
 
     // New bodies are awake by definition; UpdateSleepTint moves them once Bepu puts them to sleep
-    awakeInstancing?.AddInstance(entity);
+    awakeInstancing.AddInstance(entity);
 
     entity.Scene = scene;
 
     bodies.Add(entity);
-    bodyComponents.Add(entity.Get<BodyComponent>()!);
+    bodyComponents.Add(entity.Get<BodyComponent>());
     awakeStates.Add(true);
 }
 
@@ -348,22 +329,22 @@ void UpdateSleepTint()
 
         if (awake)
         {
-            sleepingInstancing?.RemoveInstance(bodies[i]);
-            awakeInstancing?.AddInstance(bodies[i]);
+            sleepingInstancing.RemoveInstance(bodies[i]);
+            awakeInstancing.AddInstance(bodies[i]);
             sleepingCount--;
         }
         else
         {
-            awakeInstancing?.RemoveInstance(bodies[i]);
-            sleepingInstancing?.AddInstance(bodies[i]);
+            awakeInstancing.RemoveInstance(bodies[i]);
+            sleepingInstancing.AddInstance(bodies[i]);
             sleepingCount++;
         }
     }
 
     // An instancing with zero instances falls back to drawing the master's model once, un-instanced,
     // at the master's own transform - a lone shape floating at the origin. Hide the master instead.
-    awakeMaster!.Get<ModelComponent>().Enabled = awakeInstancing!.RegisteredInstanceCount > 0;
-    sleepingMaster!.Get<ModelComponent>().Enabled = sleepingInstancing!.RegisteredInstanceCount > 0;
+    awakeMaster.Get<ModelComponent>().Enabled = awakeInstancing.RegisteredInstanceCount > 0;
+    sleepingMaster.Get<ModelComponent>().Enabled = sleepingInstancing.RegisteredInstanceCount > 0;
 }
 
 /// <summary>
@@ -382,11 +363,11 @@ void DespawnEscaped()
 
         if (awakeStates[i])
         {
-            awakeInstancing?.RemoveInstance(entity);
+            awakeInstancing.RemoveInstance(entity);
         }
         else
         {
-            sleepingInstancing?.RemoveInstance(entity);
+            sleepingInstancing.RemoveInstance(entity);
             sleepingCount--;
         }
 

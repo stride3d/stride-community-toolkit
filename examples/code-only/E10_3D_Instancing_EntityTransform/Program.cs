@@ -61,18 +61,21 @@ var modelShape = Scaled(modelType);
 var random = new Random(1);
 
 // Every body ever spawned, so they can all be removed again
-var stockItems = new List<Entity>();
-var toolkitItems = new List<Entity>();
-var bufferedItems = new List<Entity>();
-var plainItems = new List<Entity>();
+List<Entity> stockItems = [];
+List<Entity> toolkitItems = [];
+List<Entity> bufferedItems = [];
+List<Entity> plainItems = [];
 
-InstancingComponent? stockMaster = null;
-BepuEntityInstancing? toolkitInstancing = null;
-BufferedEntityInstancing? bufferedInstancing = null;
-Model? sharedModel = null;
-Scene? scene = null;
+InstancingComponent stockMaster = null!;
+Model sharedModel = null!;
+Scene scene = null!;
 
 using var game = new Game();
+
+// The toolkit's instancing, and the same wrapped in the buffered one, which owns its GPU buffers;
+// the engine never releases user-owned buffers
+var toolkitInstancing = new BepuEntityInstancing();
+using var bufferedInstancing = new BufferedEntityInstancing(new BepuEntityInstancing());
 
 var sceneSetup = new SceneSetup3D
 {
@@ -82,26 +85,20 @@ var sceneSetup = new SceneSetup3D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-// The buffered instancing owns its GPU buffers, and the engine never releases user-owned buffers
-bufferedInstancing?.Dispose();
-
 void Start(Scene rootScene)
 {
     scene = rootScene;
 
     // A large ground so big drops cannot spill over the edge; the static collider comes with it
-    TextOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Instancing", BuildOverlayLines);
 
     sharedModel = CreateSharedModel(rootScene);
 
     // Three masters sharing one model: Stride's own, the toolkit's, and the toolkit's buffered
     stockMaster = CreateMaster(rootScene, sharedModel, new TimedInstancingEntityTransform(), "StockMaster");
-
-    toolkitInstancing = new BepuEntityInstancing();
     CreateMaster(rootScene, sharedModel, toolkitInstancing, "ToolkitMaster");
 
     // The buffered one wraps a Bepu gather, so it skips the update AND the upload once bodies sleep
-    bufferedInstancing = new BufferedEntityInstancing(new BepuEntityInstancing());
     CreateMaster(rootScene, sharedModel, bufferedInstancing, "BufferedMaster");
 
     // Creates and uploads the buffered master's GPU buffers, ahead of the renderer that draws them
@@ -143,10 +140,9 @@ static Primitive3D Scaled(Primitive3D shape) => shape switch
 /// </summary>
 Model CreateSharedModel(Scene rootScene)
 {
-    var prototype = game.CreatePrimitive(modelShape, new PrimitiveEntityOptions { Body = BodyMode.None });
-
     // Parked out of sight; it exists only to own the Model
-    prototype.Transform.Position = new Vector3(0, -100, 0);
+    var prototype = game.CreatePrimitive(modelShape, new PrimitiveEntityOptions { Body = BodyMode.None, Position = new Vector3(0, -100, 0) });
+
     prototype.Scene = rootScene;
 
     return prototype.Get<ModelComponent>().Model;
@@ -182,8 +178,6 @@ InstancingComponent CreateMaster(Scene rootScene, Model model, IInstancing insta
 /// </remarks>
 void DropItems(int count, ItemKind kind)
 {
-    if (scene is null || stockMaster is null || toolkitInstancing is null || bufferedInstancing is null) return;
-
     for (var i = 0; i < count; i++)
     {
         var entity = kind switch
@@ -229,18 +223,26 @@ void DropItems(int count, ItemKind kind)
 /// </summary>
 /// <remarks>
 /// Taking an entity out of the scene removes its components too, so each <see cref="InstanceComponent"/>
-/// unregisters itself from the stock master on its own. The toolkit types have no such hook - an
-/// entity leaving the scene stays registered until it is removed explicitly.
+/// disconnects from the stock master on its own. It does not unsubscribe from the master's
+/// InstancingChanged event, though: the engine only does that when Master changes, so a master keeps
+/// every instance it ever had alive, bodies and all, unless Master is cleared before the entity leaves.
+/// The toolkit types have no hook at all - an entity leaving the scene stays registered until it is
+/// removed explicitly.
 /// </remarks>
 void ClearItems()
 {
+    foreach (var entity in stockItems)
+    {
+        if (entity.Get<InstanceComponent>() is { } instance) instance.Master = null;
+    }
+
     foreach (var entity in stockItems.Concat(toolkitItems).Concat(bufferedItems).Concat(plainItems))
     {
         entity.Scene = null;
     }
 
-    toolkitInstancing?.Clear();
-    bufferedInstancing?.Clear();
+    toolkitInstancing.Clear();
+    bufferedInstancing.Clear();
 
     stockItems.Clear();
     toolkitItems.Clear();
@@ -325,20 +327,13 @@ void HandleInput()
     if (game.Input.IsKeyPressed(Keys.X)) ClearItems();
 }
 
-IReadOnlyList<TextElement> OverlayLines()
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
     // Read straight from the masters: these are the numbers the renderer actually uses
-    var stockType = stockMaster?.Type as TimedInstancingEntityTransform;
-
-    var toolkitStatus = toolkitInstancing?.UpdateSkippedLastFrame == true
-        ? "skipped (asleep)"
-        : $"{toolkitInstancing?.LastUpdateMilliseconds:0.00} ms";
-
-    var bufferedStatus = bufferedInstancing?.UpdateSkippedLastFrame == true
-        ? "skipped"
-        : $"{bufferedInstancing?.LastUpdateMilliseconds:0.00} ms";
-
-    var uploadStatus = bufferedInstancing?.UploadSkippedLastFrame == true ? "skipped" : "uploading";
+    var stockType = stockMaster.Type as TimedInstancingEntityTransform;
+    var toolkitStatus = toolkitInstancing.UpdateSkippedLastFrame ? "skipped (asleep)" : $"{toolkitInstancing.LastUpdateMilliseconds:0.00} ms";
+    var bufferedStatus = bufferedInstancing.UpdateSkippedLastFrame ? "skipped" : $"{bufferedInstancing.LastUpdateMilliseconds:0.00} ms";
+    var uploadStatus = bufferedInstancing.UploadSkippedLastFrame ? "skipped" : "uploading";
 
     return
     [

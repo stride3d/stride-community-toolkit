@@ -49,10 +49,9 @@ var wheat = new Color(0xF5, 0xDE, 0xB3);
 var gold = new Color(0xFF, 0xD7, 0x00);
 var background = new Color(0.2f, 0.2f, 0.2f);
 
-Box2DSimulation? simulation = null;
-ShapeBatch? shapeBatch = null;
-CameraComponent? camera = null;
-Basic2DCameraController? cameraController = null;
+ShapeBatch shapeBatch = null!;
+CameraComponent camera = null!;
+Basic2DCameraController cameraController = null!;
 
 var random = new Random(1);
 List<SpawnedShape> shapes = [];
@@ -62,13 +61,13 @@ List<KeyMenu> menus = [];
 // The shape catalogue: outline vertices plus the rounding radius the shader applies. A single
 // vertex with a radius is a circle, two vertices with a radius a capsule - and the collider is
 // attached from the same numbers, so physics and pixels always agree.
-var catalogue = new ShapeDefinition[]
-{
+ShapeDefinition[] catalogue =
+[
     new("Pentagon", FibonacciPentagon(0.4f), 0f),
     new("Circle", [Vector2.Zero], 0.35f),
     new("Capsule", [new(0, -0.25f), new(0, 0.25f)], 0.25f),
-    new("Box", RectangleVertices(0.35f, 0.35f), 0f)
-};
+    new("Box", RectangleVertices(0.35f, 0.35f), 0f),
+];
 var currentShape = 0;
 
 // Per-monitor DPI awareness, so a 150% display gets a sharp window rather than a stretched one;
@@ -76,6 +75,7 @@ var currentShape = 0;
 WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
+using var simulation = new Box2DSimulation();
 
 var sceneSetup = new SceneSetup2D
 {
@@ -87,8 +87,6 @@ var sceneSetup = new SceneSetup2D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-simulation?.Dispose();
-
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
@@ -97,13 +95,12 @@ void Start(Scene rootScene)
     var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
 
-    camera = rootScene.GetCamera() ?? throw new InvalidOperationException("Camera not found in scene");
+    camera = cameraEntity.Get<CameraComponent>();
 
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;
     shapeBatch.Fill.Alpha = 0.4f;
 
-    simulation = new Box2DSimulation();
     simulation.RegisterSensorEventHandler(sensorWatcher);
 
     // Pick shapes up and throw them with the left mouse button: a kinematic anchor and a motor joint
@@ -123,7 +120,7 @@ void Start(Scene rootScene)
 /// </summary>
 void CreateGround(Scene scene)
 {
-    var groundId = simulation!.CreateStaticBody(Vector3.Zero);
+    var groundId = simulation.CreateStaticBody(Vector3.Zero);
     var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
 
     var floorSquare = RectangleVertices(0.55f * GridSize, 0.5f * GridSize);
@@ -158,10 +155,8 @@ void CreateGround(Scene scene)
 
 void AddStaticSquare(Scene scene, Vector2[] vertices, float x, float y)
 {
-    var entity = new Entity("StaticSquare")
-    {
-        new ShapeComponent { Vertices = [.. vertices], Color = paleGreen }
-    };
+    var entity = new Entity("StaticSquare") { new ShapeComponent { Vertices = [.. vertices], Color = paleGreen } };
+
     entity.Transform.Position = new Vector3(x, y, 0);
     entity.Scene = scene;
 }
@@ -174,14 +169,12 @@ void CreateSensorGate(Scene scene)
 {
     var gateVertices = RectangleVertices(8f, 3f);
 
-    var entity = new Entity("SensorGate")
-    {
-        new ShapeComponent { Vertices = [.. gateVertices], Color = wheat }
-    };
+    var entity = new Entity("SensorGate") { new ShapeComponent { Vertices = [.. gateVertices], Color = wheat } };
+
     entity.Transform.Position = new Vector3(0, 22, 0);
     entity.Scene = scene;
 
-    var bodyId = simulation!.CreateStaticBody(entity, new Vector3(0, 22, 0));
+    var bodyId = simulation.CreateStaticBody(entity, new Vector3(0, 22, 0));
 
     var sensorDef = ShapeFixtureBuilder.CreateCustomShapeDef(1f, 0.6f, 0f, isSensor: true);
     sensorDef.enableSensorEvents = true;
@@ -195,13 +188,11 @@ void CreateSensorGate(Scene scene)
 /// </summary>
 void CreatePusher(Scene scene)
 {
-    var entity = new Entity("Pusher")
-    {
-        new ShapeComponent { Vertices = [new(-2, 0), new(2, 0), new(2, 8), new(-2, 8)], Color = royalBlue }
-    };
+    var entity = new Entity("Pusher") { new ShapeComponent { Vertices = [new(-2, 0), new(2, 0), new(2, 8), new(-2, 8)], Color = royalBlue } };
+
     entity.Scene = scene;
 
-    var pusherId = simulation!.CreateKinematicBody(entity, Vector3.Zero);
+    var pusherId = simulation.CreateKinematicBody(entity, Vector3.Zero);
 
     var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
     var pusherBox = b2MakeOffsetBox(2.0f, 4.0f, new B2Vec2(0.0f, 4.0f), b2Rot_identity);
@@ -236,11 +227,7 @@ void SpawnBatch(Scene scene, int count)
     {
         for (var j = 0; j < BatchPerRow; j++)
         {
-            var position = new Vector2(
-                (j - BatchPerRow / 2f) * SpawnSpacing + Jitter(),
-                SpawnHeight + i * SpawnSpacing + Jitter());
-
-            Spawn(scene, catalogue[currentShape], position);
+            Spawn(scene, catalogue[currentShape], new Vector2((j - BatchPerRow / 2f) * SpawnSpacing + Jitter(), SpawnHeight + i * SpawnSpacing + Jitter()));
         }
     }
 
@@ -256,7 +243,7 @@ void Spawn(Scene scene, ShapeDefinition definition, Vector2 position)
     var component = new ShapeComponent { Vertices = [.. definition.Vertices], Radius = definition.Radius, Color = pink };
     var entity = new Entity("Shape") { component };
 
-    var bodyId = simulation!.CreateDynamicBody(entity, new Vector3(position.X, position.Y, 0));
+    var bodyId = simulation.CreateDynamicBody(entity, new Vector3(position.X, position.Y, 0));
 
     var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
     shapeDef.enableSensorEvents = true;
@@ -291,7 +278,7 @@ void AttachCollider(ShapeDefinition definition, B2BodyId bodyId, B2ShapeDef shap
 
 void Update(Scene rootScene, GameTime time)
 {
-    simulation?.Update(time.Elapsed);
+    simulation.Update(time.Elapsed);
 
     UpdateShapeColors();
     HandleInput(rootScene);
@@ -305,26 +292,18 @@ void UpdateShapeColors()
 {
     foreach (var shape in shapes)
     {
-        Color color;
-
-        if (sensorWatcher.Contains(shape.Entity))
-        {
-            color = gold;
-        }
-        else if (!b2Body_IsAwake(shape.BodyId))
-        {
-            color = gray;
-        }
-        else
-        {
-            var velocity = b2Body_GetLinearVelocity(shape.BodyId);
-            var fast = velocity.X * velocity.X + velocity.Y * velocity.Y > FastSpeed * FastSpeed;
-
-            color = fast ? salmon : pink;
-        }
-
-        shape.Component.Color = color;
+        shape.Component.Color = BodyColor(shape);
     }
+}
+
+Color BodyColor(SpawnedShape shape)
+{
+    if (sensorWatcher.Contains(shape.Entity)) return gold;
+    if (!b2Body_IsAwake(shape.BodyId)) return gray;
+
+    var velocity = b2Body_GetLinearVelocity(shape.BodyId);
+
+    return velocity.X * velocity.X + velocity.Y * velocity.Y > FastSpeed * FastSpeed ? salmon : pink;
 }
 
 void HandleInput(Scene rootScene)
@@ -338,9 +317,9 @@ void HandleInput(Scene rootScene)
 
     if (game.Input.IsKeyPressed(Keys.Space)) SpawnBatch(rootScene, InitialCount / 2);
     if (game.Input.IsKeyPressed(Keys.X)) ClearShapes();
-    if (game.Input.IsKeyPressed(Keys.Escape) && cameraController != null) cameraController.FollowTarget = null;
+    if (game.Input.IsKeyPressed(Keys.Escape)) cameraController.FollowTarget = null;
 
-    if (!game.Input.HasMouse || camera is null) return;
+    if (!game.Input.HasMouse) return;
 
     // The left button belongs to the grabber on the camera: pick a shape up, carry it, throw it.
     // N drops a new one of the selected kind at the cursor.
@@ -353,7 +332,7 @@ void HandleInput(Scene rootScene)
     {
         var world = camera.CalculateRayPlaneIntersectionPoint(game.Input.MousePosition);
 
-        if (world is { } point && simulation!.OverlapPoint(point) is { } bodyId && cameraController != null)
+        if (world is { } point && simulation.OverlapPoint(point) is { } bodyId)
         {
             // The camera controller does the rest: it tracks the entity until Escape releases it
             cameraController.FollowTarget = simulation.GetEntity(bodyId);
@@ -365,7 +344,7 @@ void ClearShapes()
 {
     foreach (var shape in shapes)
     {
-        simulation?.RemoveBody(shape.Entity);
+        simulation.RemoveBody(shape.Entity);
         shape.Entity.Scene = null;
     }
 
@@ -458,8 +437,14 @@ public sealed class SensorWatcher : ISensorEventHandler
         }
         else if (_inside.TryGetValue(eventData.VisitorEntity, out var depth))
         {
-            if (depth <= 1) _inside.Remove(eventData.VisitorEntity);
-            else _inside[eventData.VisitorEntity] = depth - 1;
+            if (depth <= 1)
+            {
+                _inside.Remove(eventData.VisitorEntity);
+            }
+            else
+            {
+                _inside[eventData.VisitorEntity] = depth - 1;
+            }
         }
     }
 }
@@ -468,12 +453,9 @@ public sealed class SensorWatcher : ISensorEventHandler
 /// Drives the kinematic pusher along the junkyard's sweep, x = 60*sin(0.2t), by setting its target
 /// transform once per fixed step - Box2D derives the kinematic velocity from target and time step.
 /// </summary>
-public sealed class PusherDriver : IBox2DSimulationUpdate
+public sealed class PusherDriver(B2BodyId pusherId) : IBox2DSimulationUpdate
 {
-    private readonly B2BodyId _pusherId;
     private int _stepCount;
-
-    public PusherDriver(B2BodyId pusherId) => _pusherId = pusherId;
 
     public void SimulationUpdate(Box2DSimulation simulation, float deltaTime)
     {
@@ -483,12 +465,10 @@ public sealed class PusherDriver : IBox2DSimulationUpdate
         var cosSin = b2ComputeCosSin(0.2f * time);
         var target = new B2Transform(new B2Vec2(60.0f * cosSin.sine, 0.0f), b2Rot_identity);
 
-        b2Body_SetTargetTransform(_pusherId, in target, deltaTime, true);
+        b2Body_SetTargetTransform(pusherId, in target, deltaTime, true);
     }
 
-    public void AfterSimulationUpdate(Box2DSimulation simulation, float deltaTime)
-    {
-    }
+    public void AfterSimulationUpdate(Box2DSimulation simulation, float deltaTime) { }
 }
 
 /*

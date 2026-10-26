@@ -21,13 +21,10 @@ const int MaxStepsPerFrame = 5;
 var groundSize = new Vector3(15f, 1f, 2f);
 
 // Four substeps per step, for accuracy
-var world = new World()
-{
-    SubstepCount = 4
-};
+var world = new World { SubstepCount = 4 };
 
 // Each cube's visual entity and physics body, kept together so they can never drift out of sync
-var cubes = new List<CubeInstance>();
+List<CubeInstance> cubes = [];
 
 // Accumulates real elapsed time between fixed physics steps (see Update)
 var accumulatedTime = 0f;
@@ -70,9 +67,8 @@ void Update(Scene scene, GameTime time)
 
 void CreateGround(Scene rootScene)
 {
-    var groundEntity = game.CreatePrimitive(Primitive3D.Plane(groundSize.X, groundSize.Z), new()
-    {
-    });
+    var groundEntity = game.CreatePrimitive(Primitive3D.Plane(groundSize.X, groundSize.Z));
+
     groundEntity.Scene = rootScene;
 
     var groundBody = world.CreateRigidBody();
@@ -94,9 +90,9 @@ void CreateCubes(Scene rootScene, int count)
         var cubeEntity = game.CreatePrimitive(Primitive3D.Cube(CubeSize), new()
         {
             Material = game.CreateMaterial(Color.Red),
+            Position = cubePosition,
         });
 
-        cubeEntity.Transform.Position = cubePosition;
         cubeEntity.Scene = rootScene;
 
         var cubeBody = world.CreateRigidBody();
@@ -114,7 +110,6 @@ void CreateCubes(Scene rootScene, int count)
 
 void SyncPhysicsToEntities()
 {
-    // Copy physics body transforms to visual entities each frame
     foreach (var cube in cubes)
     {
         var position = cube.Body.Position;

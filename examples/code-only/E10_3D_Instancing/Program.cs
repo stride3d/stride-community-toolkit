@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -35,8 +36,8 @@ const float WallOffset = 25f;
 var cubeCount = GridWidth * GridHeight * GridDepth;
 
 // Kept so the toggles can switch each wall on and off
-var individualCubes = new List<ModelComponent>();
-ModelComponent? instancedWall = null;
+List<ModelComponent> individualCubes = [];
+ModelComponent instancedWall = null!;
 
 var showIndividual = true;
 var showInstanced = true;
@@ -55,28 +56,16 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    TextOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Instancing", BuildOverlayLines);
 
-    EnableInstancing();
+    // The render feature that performs instanced drawing. This step is easy to miss and nothing
+    // warns you about it: the code-built compositor the toolkit uses wires up Transform, Skinning,
+    // Material, ShadowCaster and lighting - but not instancing. Without this call the instanced
+    // wall renders as a single cube.
+    game.AddInstancingSupport();
 
-    CreateIndividualCubes(rootScene, CreateSharedCubeModel(rootScene, Color.Orange));
-    CreateInstancedCubes(rootScene, CreateSharedCubeModel(rootScene, Color.LightGreen));
-}
-
-/// <summary>
-/// Adds the render feature that performs instanced drawing.
-/// </summary>
-/// <remarks>
-/// This step is easy to miss and nothing warns you about it. The code-built compositor from
-/// <c>GraphicsCompositorHelper.CreateDefault</c>, which the toolkit uses, wires up Transform,
-/// Skinning, Material, ShadowCaster and lighting - but not instancing. Without this call the
-/// instanced wall renders as a single cube.
-/// </remarks>
-void EnableInstancing()
-{
-    var meshRenderFeature = game.SceneSystem.GraphicsCompositor.RenderFeatures.OfType<MeshRenderFeature>().First();
-
-    meshRenderFeature.RenderFeatures.Add(new InstancingRenderFeature());
+    CreateIndividualCubes(rootScene, CreateSharedModel(rootScene, Color.Orange));
+    CreateInstancedCubes(rootScene, CreateSharedModel(rootScene, Color.LightGreen));
 }
 
 /// <summary>
@@ -87,15 +76,15 @@ void EnableInstancing()
 /// separate vertex and index buffer per cube, so the slow side would be losing on memory as well as
 /// on draw calls, and the measurement would not be about instancing any more.
 /// </remarks>
-Model CreateSharedCubeModel(Scene rootScene, Color color)
+Model CreateSharedModel(Scene rootScene, Color color)
 {
-    var prototype = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions()
+    // Parked out of sight; it exists only to own the Model
+    var prototype = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions
     {
-        Material = game.CreateMaterial(color)
+        Material = game.CreateMaterial(color),
+        Position = new Vector3(0, -100, 0),
     });
 
-    // Park it out of sight; it exists only to own the Model
-    prototype.Transform.Position = new Vector3(0, -100, 0);
     prototype.Scene = rootScene;
 
     return prototype.Get<ModelComponent>().Model;
@@ -109,12 +98,13 @@ void CreateIndividualCubes(Scene rootScene, Model sharedModel)
 {
     foreach (var position in GridPositions(-WallOffset))
     {
-        var entity = new Entity { new ModelComponent(sharedModel) };
+        var model = new ModelComponent(sharedModel);
+        var entity = new Entity { model };
 
         entity.Transform.Position = position;
         entity.Scene = rootScene;
 
-        individualCubes.Add(entity.Get<ModelComponent>());
+        individualCubes.Add(model);
     }
 }
 
@@ -133,22 +123,20 @@ void CreateInstancedCubes(Scene rootScene, Model sharedModel)
         matrices[index++] = Matrix.Translation(position);
     }
 
-    // The instancing component lives alongside a normal ModelComponent: that model is what gets
-    // drawn, once, for every matrix in the array.
-    var entity = new Entity
-    {
-        new ModelComponent(sharedModel),
-        new InstancingComponent { Type = new InstancingUserArray() }
-    };
-
     // Call UpdateWorldMatrices rather than assigning the WorldMatrices field. InstanceCount has a
     // private setter and only this method sets it, so assigning the field leaves the count at zero
     // and nothing is drawn.
-    ((InstancingUserArray)entity.Get<InstancingComponent>().Type).UpdateWorldMatrices(matrices);
+    var instancing = new InstancingUserArray();
+
+    instancing.UpdateWorldMatrices(matrices);
+
+    // The instancing component lives alongside a normal ModelComponent: that model is what gets
+    // drawn, once, for every matrix in the array.
+    instancedWall = new ModelComponent(sharedModel);
+
+    var entity = new Entity { instancedWall, new InstancingComponent { Type = instancing } };
 
     entity.Scene = rootScene;
-
-    instancedWall = entity.Get<ModelComponent>();
 }
 
 /// <summary>
@@ -194,11 +182,11 @@ void HandleInput()
     {
         showInstanced = !showInstanced;
 
-        if (instancedWall is not null) instancedWall.Enabled = showInstanced;
+        instancedWall.Enabled = showInstanced;
     }
 }
 
-IReadOnlyList<TextElement> OverlayLines() =>
+IReadOnlyList<TextElement> BuildOverlayLines() =>
 [
     new("1", $"Instanced wall {(showInstanced ? "shown" : "hidden")}", showInstanced ? Color.LightGreen : Color.Gray),
     new("2", $"Individual wall {(showIndividual ? "shown" : "hidden")}", showIndividual ? Color.Orange : Color.Gray),

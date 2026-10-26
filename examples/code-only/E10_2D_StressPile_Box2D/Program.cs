@@ -54,19 +54,16 @@ Primitive3D[] shapes =
 int[] batchSizes = [1000, 2500, 5000, 10000, 20000];
 
 var random = new Random(1);
-var bodies = new List<Entity>();
+List<Entity> bodies = [];
 
-Scene? scene = null;
-Box2DSimulation? simulation = null;
-BufferedEntityInstancing? awakeInstancing = null;
-BufferedEntityInstancing? sleepingInstancing = null;
-Entity? awakeMaster = null;
-Entity? sleepingMaster = null;
+Scene scene = null!;
+Entity awakeMaster = null!;
+Entity sleepingMaster = null!;
 
 // Sleep-state tracking, aligned with the bodies list: which master each body is drawn by right now
 List<B2BodyId> bodyIds = [];
 List<bool> awakeStates = [];
-int sleepingCount = 0;
+var sleepingCount = 0;
 
 // One shape definition for every fixture in the pile. Contact events are off: nothing listens to
 // them here, and with tens of thousands of touching bodies just generating them costs real time.
@@ -81,6 +78,14 @@ List<KeyMenu> menus = [];
 
 using var game = new Game();
 
+// Box2D is not a Stride system: the simulation owns the native world and is stepped from Update
+// below. Default gravity is (0, -10), matching what the Bepu version falls under.
+using var simulation = new Box2DSimulation();
+
+// The buffered instancings own their GPU buffers, and the engine never releases user-owned buffers
+using var awakeInstancing = new BufferedEntityInstancing(new Box2DEntityInstancing());
+using var sleepingInstancing = new BufferedEntityInstancing(new Box2DEntityInstancing());
+
 game.Run(new SceneSetup3D
 {
     // A head-on view of the XY plane; the light is aimed by hand below, so the setup adds none
@@ -89,12 +94,6 @@ game.Run(new SceneSetup3D
     Ground = null,
     Profiler = true
 }.UseSkybox(), start: Start, update: Update);
-
-// The buffered instancing owns its GPU buffers, and the engine never releases user-owned buffers.
-// The simulation owns the native Box2D world - neither is tied to the scene's lifetime.
-awakeInstancing?.Dispose();
-sleepingInstancing?.Dispose();
-simulation?.Dispose();
 
 void Start(Scene rootScene)
 {
@@ -105,12 +104,7 @@ void Start(Scene rootScene)
 
     // The default aim shines toward +Z, which leaves the faces turned towards the camera unlit
     var light = game.AddDirectionalLight();
-    light.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-30)) *
-                               Quaternion.RotationY(MathUtil.DegreesToRadians(-30));
-
-    // Box2D is not a Stride system: the simulation is created here and stepped from Update below.
-    // Default gravity is (0, -10), matching what the Bepu version falls under.
-    simulation = new Box2DSimulation();
+    light.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-30)) * Quaternion.RotationY(MathUtil.DegreesToRadians(-30));
 
     // Cap how fast anything may move. The boxes fall ~190 units into the funnel and arrive at
     // ~60 m/s; at Box2D's default cap (400) those impacts squeeze bodies out of the pile like
@@ -141,13 +135,13 @@ void CreateWall(Vector3 position, Vector3 size, float rotation = 0f)
     var wall = game.CreatePrimitive(Primitive3D.Box(size), new()
     {
         Material = game.CreateMaterial(Color.LightGray),
+        Position = position,
     });
 
-    wall.Transform.Position = position;
     wall.Transform.Rotation = Quaternion.RotationZ(rotation);
     wall.Scene = scene;
 
-    var bodyId = simulation!.CreateStaticBody(wall, position, rotation);
+    var bodyId = simulation.CreateStaticBody(wall, position, rotation);
 
     ShapeFixtureBuilder.AttachShape(Primitive2D.Rectangle(size.X, size.Y), bodyId);
 }
@@ -157,9 +151,6 @@ void SetupInstancing()
     // Without this nothing instanced is drawn, and nothing warns you: the code-built compositor
     // wires up transform, skinning, material and lighting, but not instancing
     game.AddInstancingSupport();
-
-    awakeInstancing = new BufferedEntityInstancing(new Box2DEntityInstancing());
-    sleepingInstancing = new BufferedEntityInstancing(new Box2DEntityInstancing());
 
     // One master per sleep state for the whole run. Their Models are swapped when the shape changes;
     // the instancing objects are reused, because they grow their own buffers and retire the old ones
@@ -282,8 +273,8 @@ void ChangeShape(Primitive3D type)
 
     Clear();
 
-    awakeMaster!.Get<ModelComponent>().Model = ModelFor(shape);
-    sleepingMaster!.Get<ModelComponent>().Model = SleepingModelFor(shape);
+    awakeMaster.Get<ModelComponent>().Model = ModelFor(shape);
+    sleepingMaster.Get<ModelComponent>().Model = SleepingModelFor(shape);
 
     SpawnBatch(batchSize);
 }
@@ -293,14 +284,14 @@ void Clear()
 {
     // Before the entities leave the scene: an entity removed from the scene stays registered with
     // the instancing, which would keep reading transforms off it and drawing ghosts
-    awakeInstancing?.Clear();
-    sleepingInstancing?.Clear();
+    awakeInstancing.Clear();
+    sleepingInstancing.Clear();
 
     foreach (var body in bodies)
     {
         // Unlike Bepu, no engine processor watches the scene: the simulation must be told the body
         // is gone, or the invisible pile keeps colliding with everything spawned after it
-        simulation?.RemoveBody(body);
+        simulation.RemoveBody(body);
 
         body.Scene = null;
     }
@@ -326,20 +317,14 @@ void SpawnBatch(int count)
 
             // Box2D copes with a regular lattice, but the jitter is kept from the Bepu version:
             // perfectly aligned columns balance on each other instead of toppling into a pile
-            Spawn(new Vector3(
-                (column - perRow / 2f) * 1.2f + Jitter(),
-                SpawnHeight + row * 1.2f + Jitter(),
-                0));
+            Spawn(new Vector3((column - perRow / 2f) * 1.2f + Jitter(), SpawnHeight + row * 1.2f + Jitter(), 0));
         }
     }
     else
     {
         for (var i = 0; i < count; i++)
         {
-            Spawn(new Vector3(
-                (random.NextSingle() - 0.5f) * (WallWidth - 10),
-                SpawnHeight + random.NextSingle() * (count / 20f),
-                0));
+            Spawn(new Vector3((random.NextSingle() - 0.5f) * (WallWidth - 10), SpawnHeight + random.NextSingle() * (count / 20f), 0));
         }
     }
 
@@ -353,7 +338,7 @@ void Spawn(Vector3 position)
     // so the entity never carries a model - the master draws it
     var entity = new Entity("InstancedItem");
 
-    var bodyId = simulation!.CreateDynamicBody(entity, position);
+    var bodyId = simulation.CreateDynamicBody(entity, position);
     ShapeFixtureBuilder.AttachShape(FixtureFor(shape), bodyId, pileShapeDef);
 
     // The instancing reads this component to skip all its work while every body is asleep
@@ -362,7 +347,7 @@ void Spawn(Vector3 position)
     entity.Transform.Position = position;
 
     // New bodies are awake by definition; UpdateSleepTint moves them once Box2D puts them to sleep
-    awakeInstancing?.AddInstance(entity);
+    awakeInstancing.AddInstance(entity);
 
     entity.Scene = scene;
 
@@ -374,7 +359,7 @@ void Spawn(Vector3 position)
 void Update(Scene rootScene, GameTime time)
 {
     // Box2D is stepped by hand: fixed-timestep accumulation and entity transform sync happen inside
-    simulation?.Update(time.Elapsed);
+    simulation.Update(time.Elapsed);
 
     UpdateSleepTint();
     DespawnEscaped();
@@ -397,22 +382,22 @@ void UpdateSleepTint()
 
         if (awake)
         {
-            sleepingInstancing?.RemoveInstance(bodies[i]);
-            awakeInstancing?.AddInstance(bodies[i]);
+            sleepingInstancing.RemoveInstance(bodies[i]);
+            awakeInstancing.AddInstance(bodies[i]);
             sleepingCount--;
         }
         else
         {
-            awakeInstancing?.RemoveInstance(bodies[i]);
-            sleepingInstancing?.AddInstance(bodies[i]);
+            awakeInstancing.RemoveInstance(bodies[i]);
+            sleepingInstancing.AddInstance(bodies[i]);
             sleepingCount++;
         }
     }
 
     // An instancing with zero instances falls back to drawing the master's model once, un-instanced,
     // at the master's own transform - a lone shape floating at the origin. Hide the master instead.
-    awakeMaster!.Get<ModelComponent>().Enabled = awakeInstancing!.RegisteredInstanceCount > 0;
-    sleepingMaster!.Get<ModelComponent>().Enabled = sleepingInstancing!.RegisteredInstanceCount > 0;
+    awakeMaster.Get<ModelComponent>().Enabled = awakeInstancing.RegisteredInstanceCount > 0;
+    sleepingMaster.Get<ModelComponent>().Enabled = sleepingInstancing.RegisteredInstanceCount > 0;
 }
 
 /// <summary>
@@ -431,15 +416,15 @@ void DespawnEscaped()
 
         if (awakeStates[i])
         {
-            awakeInstancing?.RemoveInstance(entity);
+            awakeInstancing.RemoveInstance(entity);
         }
         else
         {
-            sleepingInstancing?.RemoveInstance(entity);
+            sleepingInstancing.RemoveInstance(entity);
             sleepingCount--;
         }
 
-        simulation?.RemoveBody(entity);
+        simulation.RemoveBody(entity);
         entity.Scene = null;
 
         bodies.RemoveAt(i);

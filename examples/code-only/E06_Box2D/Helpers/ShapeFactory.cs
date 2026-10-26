@@ -36,19 +36,14 @@ public class ShapeFactory(Scene scene)
     public static Shape2DModel GetRandomShapeModel()
         => All[Random.Shared.Next(All.Count)];
 
-    public Entity CreateEntity(Shape2DModel shape, Color? overrideColor = null, Vector2? position = null, string? name = null)
+    public Entity CreateEntity(Shape2DModel shape, Color? overrideColor = null, Vector2? position = null)
     {
-        var actualColor = overrideColor ?? shape.Color;
-
         // The Box2D debug-draw component renders the shape testbed-style - fill plus a
         // pixel-constant border from the same numbers the collider uses. No mesh, no material,
         // no outline shader.
-        var entity = new Entity(name ?? $"{shape.Type.Name}-{GameConfig.ShapeName}")
-        {
-            CreateShapeComponent(shape, actualColor)
-        };
+        var entity = new Entity($"{shape.Type.Name}-{GameConfig.ShapeName}") { CreateShapeComponent(shape, overrideColor ?? shape.Color) };
 
-        entity.Transform.Position = position.HasValue ? (Vector3)position : GetRandomPosition();
+        entity.Transform.Position = position is { } at ? new Vector3(at, 0) : GetRandomPosition();
         entity.Scene = scene;
 
         return entity;

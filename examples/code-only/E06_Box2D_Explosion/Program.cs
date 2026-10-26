@@ -22,9 +22,8 @@ const float RingSeconds = 0.6f;
 
 var impulse = 12f;
 
-Box2DSimulation? simulation = null;
-ShapeBatch? shapeBatch = null;
-CameraComponent? camera = null;
+ShapeBatch shapeBatch = null!;
+CameraComponent camera = null!;
 
 var pink = new Color(0xFF, 0xC0, 0xCB);
 var paleGreen = new Color(0x98, 0xFB, 0x98);
@@ -40,6 +39,7 @@ var blasts = 0;
 var sinceStart = 0f;
 
 using var game = new Game();
+using var simulation = new Box2DSimulation();
 
 var sceneSetup = new SceneSetup2D
 {
@@ -51,8 +51,6 @@ var sceneSetup = new SceneSetup2D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-simulation?.Dispose();
-
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
@@ -60,13 +58,11 @@ void Start(Scene rootScene)
 
     var cameraEntity = game.GetCameraEntity();
 
-    camera = rootScene.GetCamera() ?? throw new InvalidOperationException("Camera not found in scene");
+    camera = cameraEntity.Get<CameraComponent>();
 
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;
     shapeBatch.Fill.Alpha = 0.4f;
-
-    simulation = new Box2DSimulation();
 
     // Left mouse picks bodies up: rebuild the pyramid by hand, or throw something into the blast.
     cameraEntity.Add(new Grabber2DScript { Simulation = simulation });
@@ -97,7 +93,9 @@ void BuildScene(Scene scene)
 
     // Balls to scatter.
     for (var i = 0; i < 5; i++)
+    {
         DynamicCircle(scene, new Vector2(2 + i * 1.6f, 0.5f), 0.45f, royalBlue);
+    }
 
     // The perimeter rule: a wide slab and a ball with the same mass, at the same distance from a
     // blast centred between them. The slab is 4 by 0.5 at density 1, a mass of 2, and the ball's
@@ -108,7 +106,7 @@ void BuildScene(Scene scene)
 
 void Update(Scene rootScene, GameTime time)
 {
-    simulation?.Update(time.Elapsed);
+    simulation.Update(time.Elapsed);
 
     var dt = (float)time.Elapsed.TotalSeconds;
 
@@ -116,9 +114,11 @@ void Update(Scene rootScene, GameTime time)
     sinceStart += dt;
 
     if (blasts == 0 && sinceStart > 1f)
+    {
         Detonate(new Vector2(-8, 1));
+    }
 
-    if (game.Input.IsKeyPressed(Keys.Space) && camera?.CalculateRayPlaneIntersectionPoint(game.Input.MousePosition) is { } point)
+    if (game.Input.IsKeyPressed(Keys.Space) && camera.CalculateRayPlaneIntersectionPoint(game.Input.MousePosition) is { } point)
     {
         Detonate(point);
     }
@@ -126,10 +126,14 @@ void Update(Scene rootScene, GameTime time)
     var change = (game.Input.IsKeyDown(Keys.K) ? 1 : 0) - (game.Input.IsKeyDown(Keys.J) ? 1 : 0);
 
     if (change != 0)
+    {
         impulse = Math.Clamp(impulse + change * 10 * dt, 1, 60);
+    }
 
     if (game.Input.IsKeyPressed(Keys.R))
+    {
         Reset(rootScene);
+    }
 
     ringAge += dt;
     DrawBlast();
@@ -137,7 +141,7 @@ void Update(Scene rootScene, GameTime time)
 
 void Detonate(Vector2 point)
 {
-    simulation!.Explode(point, Radius, impulse, Falloff);
+    simulation.Explode(point, Radius, impulse, Falloff);
     lastBlast = point;
     ringAge = 0;
     blasts++;
@@ -147,7 +151,7 @@ void Detonate(Vector2 point)
 // falloff band outside, fading over a fraction of a second.
 void DrawBlast()
 {
-    if (shapeBatch is null || lastBlast is not { } centre || ringAge > RingSeconds) return;
+    if (lastBlast is not { } centre || ringAge > RingSeconds) return;
 
     var alpha = 1 - ringAge / RingSeconds;
     var ring = salmon;
@@ -163,7 +167,7 @@ void Reset(Scene scene)
 {
     foreach (var entity in spawned)
     {
-        simulation!.RemoveBody(entity);
+        simulation.RemoveBody(entity);
         entity.Scene = null;
     }
 
@@ -174,23 +178,23 @@ void Reset(Scene scene)
 
 void Ground(Scene scene)
 {
-    var entity = new Entity("Ground") { new ShapeComponent { Vertices = [.. Rectangle(26, 0.5f)], Color = paleGreen } };
+    var entity = new Entity("Ground") { new ShapeComponent { Vertices = [.. RectangleVertices(26, 0.5f)], Color = paleGreen } };
     entity.Transform.Position = new Vector3(0, -0.5f, 0);
     entity.Scene = scene;
     spawned.Add(entity);
 
-    var body = simulation!.CreateStaticBody(entity, new Vector3(0, -0.5f, 0));
+    var body = simulation.CreateStaticBody(entity, new Vector3(0, -0.5f, 0));
     ShapeFixtureBuilder.AttachShape(Primitive2D.Rectangle(52, 1), body);
 }
 
 void DynamicBox(Scene scene, Vector2 centre, Vector2 size, Color color, float density = 1f)
 {
-    var entity = new Entity("Box") { new ShapeComponent { Vertices = [.. Rectangle(size.X / 2, size.Y / 2)], Color = color } };
+    var entity = new Entity("Box") { new ShapeComponent { Vertices = [.. RectangleVertices(size.X / 2, size.Y / 2)], Color = color } };
     entity.Transform.Position = new Vector3(centre, 0);
     entity.Scene = scene;
     spawned.Add(entity);
 
-    var body = simulation!.CreateDynamicBody(entity, new Vector3(centre, 0));
+    var body = simulation.CreateDynamicBody(entity, new Vector3(centre, 0));
     ShapeFixtureBuilder.AttachShape(Primitive2D.Rectangle(size.X, size.Y), body, ShapeFixtureBuilder.CreateCustomShapeDef(density, 0.6f, 0.1f));
     entity.Add(new Box2DBodyComponent { BodyId = body });
 }
@@ -202,16 +206,14 @@ void DynamicCircle(Scene scene, Vector2 centre, float radius, Color color, float
     entity.Scene = scene;
     spawned.Add(entity);
 
-    var body = simulation!.CreateDynamicBody(entity, new Vector3(centre, 0));
+    var body = simulation.CreateDynamicBody(entity, new Vector3(centre, 0));
     ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(radius), body, ShapeFixtureBuilder.CreateCustomShapeDef(density, 0.6f, 0.1f));
     entity.Add(new Box2DBodyComponent { BodyId = body });
 }
 
 void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Explosion", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Explosion", () =>
     [
         new("Space", "Detonate at the cursor", Color.Yellow),
         new(["J", "K"], $"Impulse per metre of perimeter, {impulse:0.0}", Color.Yellow),
@@ -224,7 +226,7 @@ void AddInstructions()
     ]);
 }
 
-static Vector2[] Rectangle(float halfWidth, float halfHeight) =>
+static Vector2[] RectangleVertices(float halfWidth, float halfHeight) =>
 [
     new(-halfWidth, -halfHeight),
     new(halfWidth, -halfHeight),

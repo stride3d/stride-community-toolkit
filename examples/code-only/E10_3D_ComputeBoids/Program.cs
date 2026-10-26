@@ -40,14 +40,15 @@ using var game = new Game();
 // The setup's GameSettings is how a code-only game asks for a profile.
 
 BoidsSimulation? simulation = null;
-BoidsComputeRenderer? computeRenderer = null;
 Entity? flock = null;
-Model? boidModel = null;
+Model boidModel = null!;
 var countIndex = 1;
 
+// Look at the flock from a little way back; the camera controller takes over from there
 var sceneSetup = new SceneSetup3D
 {
     GameSettings = settings => settings.GetOrCreateConfiguration<RenderingSettings>().DefaultGraphicsProfile = GraphicsProfile.Level_11_0,
+    Camera = CameraSetup.Perspective(position: new Vector3(0, 9f, 26f), rotation: new Vector3(0, -8f, 0)).WithController(),
     Profiler = true
 }.UseBepu().UseSkybox();
 
@@ -61,12 +62,6 @@ void Start(Scene scene)
     // InstancingComponent draws its model once, at the entity, and the flock is one cone
     game.AddInstancingSupport();
 
-    // Look at the flock from a little way back; the base scene's controller takes over from here
-    var camera = game.GetCameraEntity();
-
-    camera.Transform.Position = new Vector3(0, 9f, 26f);
-    camera.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-8f));
-
     // The boid: a small cone, tip along +Y, which the shader points along the heading. The entity
     // is only a way to get the model; it never enters the scene.
     boidModel = game.CreatePrimitive(Primitive3D.Cone(0.14f, 0.4f), new PrimitiveEntityOptions
@@ -79,7 +74,7 @@ void Start(Scene scene)
 
     // The compute pass goes first in the compositor's list, so the matrices are written before the
     // scene that draws them is rendered - same command list, same frame
-    computeRenderer = new BoidsComputeRenderer { Simulation = () => simulation };
+    var computeRenderer = new BoidsComputeRenderer { Simulation = () => simulation };
 
     var compositor = game.SceneSystem.GraphicsCompositor!;
 
@@ -92,9 +87,7 @@ void Start(Scene scene)
         compositor.Game = new SceneRendererCollection { computeRenderer, compositor.Game };
     }
 
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Boids", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Boids", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime gameTime)
@@ -133,7 +126,7 @@ void Rebuild(Scene scene)
     flock.Scene = scene;
 }
 
-IReadOnlyList<TextElement> OverlayLines()
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
     if (simulation is null) return [];
 

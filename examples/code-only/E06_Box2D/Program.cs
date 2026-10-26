@@ -12,10 +12,10 @@ using Stride.Games;
 // it has to happen before the window exists
 WindowsDpiManager.EnablePerMonitorV2();
 
-Box2DSimulation? simulation = null;
-SceneManager? sceneManager = null;
+SceneManager sceneManager = null!;
 
 using var game = new Game();
+using var simulation = new Box2DSimulation();
 
 var sceneSetup = new SceneSetup2D
 {
@@ -43,7 +43,6 @@ void Start(Scene rootScene)
     shapeBatch.Glow.Strength = 0.35f;
     shapeBatch.Glow.Additive = true;
 
-    simulation = new Box2DSimulation();
     ConfigurePhysicsWorld();
 
     // Left mouse picks any shape up and throws it; a click on empty space still spawns one
@@ -55,9 +54,8 @@ void Start(Scene rootScene)
 
 void Update(Scene rootScene, GameTime time)
 {
-    simulation?.Update(time.Elapsed);
-
-    sceneManager?.Update(time);
+    simulation.Update(time.Elapsed);
+    sceneManager.Update(time);
 }
 
 void ConfigurePhysicsWorld()

@@ -93,9 +93,7 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
     /// </summary>
     public void Clear()
     {
-        var shapesToRemove = scene.Entities
-            .Where(e => e.Name.EndsWith(GameConfig.ShapeName))
-            .ToList();
+        var shapesToRemove = scene.Entities.Where(e => e.Name.EndsWith(GameConfig.ShapeName)).ToList();
 
         foreach (var entity in shapesToRemove)
         {
@@ -127,10 +125,7 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
 
         // The second shape is placed a joint length away from the first, so the joint starts at rest
         // rather than yanking the pair together on the first step.
-        entity2.Transform.Position = new Vector3(
-            entity1.Transform.Position.X + GameConfig.DefaultJointLength,
-            entity1.Transform.Position.Y,
-            entity1.Transform.Position.Z);
+        entity2.Transform.Position = entity1.Transform.Position + new Vector3(GameConfig.DefaultJointLength, 0, 0);
 
         CreateDistanceJoint(AttachBody(shapeModel1, entity1), AttachBody(shapeModel2, entity2));
     }

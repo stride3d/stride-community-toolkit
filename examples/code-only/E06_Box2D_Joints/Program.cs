@@ -26,9 +26,8 @@ using static Box2D.NET.B2WheelJoints;
 // drawn by Box2D's own debug draw through the shape batch - Box2DDebugDraw - which can also show
 // contact points, bounding boxes and centres of mass on request.
 
-Box2DSimulation? simulation = null;
-ShapeBatch? shapeBatch = null;
-Box2DDebugDraw? debugDraw = null;
+ShapeBatch shapeBatch = null!;
+Box2DDebugDraw debugDraw = null!;
 
 var pink = new Color(0xFF, 0xC0, 0xCB);
 var paleGreen = new Color(0x98, 0xFB, 0x98);
@@ -46,6 +45,7 @@ var pendulumLimit = false;
 var wheelMotor = true;
 
 using var game = new Game();
+using var simulation = new Box2DSimulation();
 
 var sceneSetup = new SceneSetup2D
 {
@@ -57,8 +57,6 @@ var sceneSetup = new SceneSetup2D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-simulation?.Dispose();
-
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
@@ -69,8 +67,6 @@ void Start(Scene rootScene)
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;
     shapeBatch.Fill.Alpha = 0.4f;
-
-    simulation = new Box2DSimulation();
 
     // Box2D's own debug draw through the batch: joints, and on request contacts, bounds and mass.
     // Shapes stay off - the entities' ShapeComponents already draw the bodies.
@@ -91,7 +87,7 @@ void BuildScene(Scene scene)
     var pivotA = new Vector2(-15, 13);
     var post = StaticBox(scene, pivotA, new Vector2(0.6f, 0.6f));
     var arm = DynamicBox(scene, pivotA + new Vector2(0, -2), new Vector2(0.5f, 4), pink);
-    pendulumJoint = simulation!.Joints.CreateRevolute(post, arm, pivotA, new RevoluteJointOptions
+    pendulumJoint = simulation.Joints.CreateRevolute(post, arm, pivotA, new RevoluteJointOptions
     {
         MaxMotorTorque = 500,
         MotorSpeed = 2,
@@ -182,7 +178,7 @@ void BuildScene(Scene scene)
 
 void Update(Scene rootScene, GameTime time)
 {
-    simulation?.Update(time.Elapsed);
+    simulation.Update(time.Elapsed);
 
     if (game.Input.IsKeyPressed(Keys.M))
     {
@@ -202,36 +198,36 @@ void Update(Scene rootScene, GameTime time)
         b2WheelJoint_EnableMotor(wheelJoint, wheelMotor);
     }
 
-    if (game.Input.IsKeyPressed(Keys.N) && debugDraw is not null)
+    if (game.Input.IsKeyPressed(Keys.N))
     {
         debugDraw.DrawContactPoints = !debugDraw.DrawContactPoints;
         debugDraw.DrawContactNormals = debugDraw.DrawContactPoints;
     }
 
-    if (game.Input.IsKeyPressed(Keys.G) && debugDraw is not null)
-        debugDraw.DrawBounds = !debugDraw.DrawBounds;
-
-    if (game.Input.IsKeyPressed(Keys.T) && debugDraw is not null)
-        debugDraw.DrawMass = !debugDraw.DrawMass;
+    if (game.Input.IsKeyPressed(Keys.G)) debugDraw.DrawBounds = !debugDraw.DrawBounds;
+    if (game.Input.IsKeyPressed(Keys.T)) debugDraw.DrawMass = !debugDraw.DrawMass;
 
     if (game.Input.IsKeyPressed(Keys.R))
+    {
         Reset(rootScene);
+    }
 
     // One call draws every joint - and whatever else is switched on - from Box2D's own view of the world.
-    if (simulation is not null)
-        debugDraw?.Draw(simulation);
+    debugDraw.Draw(simulation);
 }
 
 void Reset(Scene scene)
 {
     foreach (var joint in joints)
-        simulation!.Joints.Destroy(joint);
+    {
+        simulation.Joints.Destroy(joint);
+    }
 
     joints.Clear();
 
     foreach (var entity in spawned)
     {
-        simulation!.RemoveBody(entity);
+        simulation.RemoveBody(entity);
         entity.Scene = null;
     }
 
@@ -245,23 +241,23 @@ void Reset(Scene scene)
 
 void Ground(Scene scene)
 {
-    var entity = new Entity("Ground") { new ShapeComponent { Vertices = [.. Rectangle(24, 0.5f)], Color = paleGreen } };
+    var entity = new Entity("Ground") { new ShapeComponent { Vertices = [.. RectangleVertices(24, 0.5f)], Color = paleGreen } };
     entity.Transform.Position = new Vector3(0, -0.5f, 0);
     entity.Scene = scene;
     spawned.Add(entity);
 
-    var body = simulation!.CreateStaticBody(entity, new Vector3(0, -0.5f, 0));
+    var body = simulation.CreateStaticBody(entity, new Vector3(0, -0.5f, 0));
     ShapeFixtureBuilder.AttachShape(Primitive2D.Rectangle(48, 1), body);
 }
 
 Entity StaticBox(Scene scene, Vector2 centre, Vector2 size)
 {
-    var entity = new Entity("Static") { new ShapeComponent { Vertices = [.. Rectangle(size.X / 2, size.Y / 2)], Color = paleGreen } };
+    var entity = new Entity("Static") { new ShapeComponent { Vertices = [.. RectangleVertices(size.X / 2, size.Y / 2)], Color = paleGreen } };
     entity.Transform.Position = new Vector3(centre, 0);
     entity.Scene = scene;
     spawned.Add(entity);
 
-    var body = simulation!.CreateStaticBody(entity, new Vector3(centre, 0));
+    var body = simulation.CreateStaticBody(entity, new Vector3(centre, 0));
     ShapeFixtureBuilder.AttachShape(Primitive2D.Rectangle(size.X, size.Y), body);
 
     return entity;
@@ -269,12 +265,12 @@ Entity StaticBox(Scene scene, Vector2 centre, Vector2 size)
 
 Entity DynamicBox(Scene scene, Vector2 centre, Vector2 size, Color color)
 {
-    var entity = new Entity("Box") { new ShapeComponent { Vertices = [.. Rectangle(size.X / 2, size.Y / 2)], Color = color } };
+    var entity = new Entity("Box") { new ShapeComponent { Vertices = [.. RectangleVertices(size.X / 2, size.Y / 2)], Color = color } };
     entity.Transform.Position = new Vector3(centre, 0);
     entity.Scene = scene;
     spawned.Add(entity);
 
-    var body = simulation!.CreateDynamicBody(entity, new Vector3(centre, 0));
+    var body = simulation.CreateDynamicBody(entity, new Vector3(centre, 0));
     ShapeFixtureBuilder.AttachShape(Primitive2D.Rectangle(size.X, size.Y), body);
     entity.Add(new Box2DBodyComponent { BodyId = body });
 
@@ -288,7 +284,7 @@ Entity DynamicCircle(Scene scene, Vector2 centre, float radius, Color color)
     entity.Scene = scene;
     spawned.Add(entity);
 
-    var body = simulation!.CreateDynamicBody(entity, new Vector3(centre, 0));
+    var body = simulation.CreateDynamicBody(entity, new Vector3(centre, 0));
     ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(radius), body);
     entity.Add(new Box2DBodyComponent { BodyId = body });
 
@@ -297,16 +293,14 @@ Entity DynamicCircle(Scene scene, Vector2 centre, float radius, Color color)
 
 void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Joints", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Joints", () =>
     [
         new("M", $"Hinge motor {(pendulumMotor ? "on" : "off")}", Color.Yellow),
         new("L", $"Hinge limit {(pendulumLimit ? "on" : "off")}", Color.Yellow),
         new("J", $"Wheel motor {(wheelMotor ? "on" : "off")}", Color.Yellow),
-        new("N", $"Draw contacts {(debugDraw?.DrawContactPoints == true ? "on" : "off")}", Color.Yellow),
-        new("G", $"Draw bounds {(debugDraw?.DrawBounds == true ? "on" : "off")}", Color.Yellow),
-        new("T", $"Draw mass {(debugDraw?.DrawMass == true ? "on" : "off")}", Color.Yellow),
+        new("N", $"Draw contacts {(debugDraw.DrawContactPoints ? "on" : "off")}", Color.Yellow),
+        new("G", $"Draw bounds {(debugDraw.DrawBounds ? "on" : "off")}", Color.Yellow),
+        new("T", $"Draw mass {(debugDraw.DrawMass ? "on" : "off")}", Color.Yellow),
         new("R", "Rebuild the rigs", Color.Yellow),
         new("Left mouse", "Pull on anything", Color.Yellow),
         new(""),
@@ -315,7 +309,7 @@ void AddInstructions()
     ]);
 }
 
-static Vector2[] Rectangle(float halfWidth, float halfHeight) =>
+static Vector2[] RectangleVertices(float halfWidth, float halfHeight) =>
 [
     new(-halfWidth, -halfHeight),
     new(halfWidth, -halfHeight),
