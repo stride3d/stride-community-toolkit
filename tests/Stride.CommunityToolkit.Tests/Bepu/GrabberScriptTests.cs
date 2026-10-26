@@ -89,8 +89,7 @@ public class GrabberScriptTests
                 return;
             }
 
-            if (frames == 4)
-                game.Exit();
+            if (frames == 4) game.Exit();
         }, context: new GameContextHeadless());
 
         Assert.True(grabbed, "Grab returned false for a dynamic body in the simulation.");
@@ -125,8 +124,7 @@ public class GrabberScriptTests
             box.Scene = scene;
         }, update: (_, _) =>
         {
-            if (++frames < 2)
-                return;
+            if (++frames < 2) return;
 
             grabbed = grabber!.Grab(box!.Get<BodyComponent>(), Vector3.Zero, 5);
             game.Exit();
@@ -178,8 +176,7 @@ public class GrabberScriptTests
             hidden.Scene = scene;
         }, update: (_, _) =>
         {
-            if (++frames < 2)
-                return;
+            if (++frames < 2) return;
 
             throughTrigger = grabber!.TryPick(new RaySegment(Vector3.Zero, new Vector3(0, 0, -10)), out var hit);
             behindTrigger = hit.Collidable;

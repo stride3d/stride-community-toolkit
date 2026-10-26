@@ -93,7 +93,7 @@ public class SceneSearchGameTests
     }
 
     [Fact]
-    public async Task RunOnGameThread_RunsTheActionOnTheGameThread()
+    public void RunOnGameThread_RunsTheActionOnTheGameThread()
     {
         using var game = new Game();
 
@@ -129,7 +129,6 @@ public class SceneSearchGameTests
         Assert.NotEqual(-1, gameThread);
         Assert.Equal(gameThread, actionThread);
         Assert.Equal(gameThread, result);
-        await Task.CompletedTask;
     }
 
     [Fact]

@@ -5,11 +5,9 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Xunit;
 using static Box2D.NET.B2DistanceJoints;
-using static Box2D.NET.B2Geometries;
 using static Box2D.NET.B2Joints;
 using static Box2D.NET.B2RevoluteJoints;
-using static Box2D.NET.B2Shapes;
-using static Box2D.NET.B2Types;
+using static Stride.CommunityToolkit.Tests.Box2D.Box2DFixtures;
 
 namespace Stride.CommunityToolkit.Tests.Box2D;
 
@@ -125,15 +123,5 @@ public class Joints2DTests
         var ex = Assert.Throws<InvalidOperationException>(() => simulation.Joints.CreateWeld(with, without, Vector2.Zero));
 
         Assert.Contains("CreateDynamicBody", ex.Message);
-    }
-
-    /// <summary>A unit box, dynamic, so it has mass and the joint has something to hold.</summary>
-    internal static B2BodyId Box(Box2DSimulation simulation, Vector3 position)
-    {
-        var body = simulation.CreateDynamicBody(position);
-
-        b2CreatePolygonShape(body, b2DefaultShapeDef(), b2MakeBox(0.5f, 0.5f));
-
-        return body;
     }
 }

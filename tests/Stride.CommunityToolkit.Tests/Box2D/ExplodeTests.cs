@@ -3,6 +3,7 @@ using Stride.CommunityToolkit.Tests.Engine;
 using Stride.Core.Mathematics;
 using Xunit;
 using static Box2D.NET.B2Bodies;
+using static Stride.CommunityToolkit.Tests.Box2D.Box2DFixtures;
 
 namespace Stride.CommunityToolkit.Tests.Box2D;
 
@@ -21,8 +22,8 @@ public class ExplodeTests
     public void Explode_PushesBodiesInsideTheRadiusAwayFromTheCentre()
     {
         using var simulation = new Box2DSimulation();
-        var near = Joints2DTests.Box(simulation, new Vector3(3, 0, 0));
-        var far = Joints2DTests.Box(simulation, new Vector3(30, 0, 0));
+        var near = Box(simulation, new Vector3(3, 0, 0));
+        var far = Box(simulation, new Vector3(30, 0, 0));
 
         simulation.Explode(Vector2.Zero, radius: 5, impulsePerLength: 10, falloff: 1);
 

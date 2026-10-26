@@ -133,8 +133,12 @@ public class Grabber2DTests
         // With the cursor away from the centre the body is carried toward it; with the cursor at the
         // centre it is held there against gravity. Either way the servo, not the fall, decides.
         if (startDistance > 0.5f)
+        {
             Assert.True(endDistance < startDistance * 0.5f, $"The body was not carried toward the cursor: {startDistance} to {endDistance}.");
+        }
         else
+        {
             Assert.True(endDistance < 0.5f, $"The body was not held in place: it is {endDistance} from the target.");
+        }
     }
 }

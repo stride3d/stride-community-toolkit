@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Mathematics;
+using Stride.Core.Mathematics;
 using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Mathematics;
@@ -105,7 +106,7 @@ public class TweenTests
         tween.Update(0.5f);
 
         Assert.Equal(7.5f, tween.Lerp(0f, 10f), Tolerance);
-        Assert.Equal(7.5f, tween.Lerp(new Stride.Core.Mathematics.Vector3(0f), new Stride.Core.Mathematics.Vector3(10f)).X, Tolerance);
+        Assert.Equal(7.5f, tween.Lerp(new Vector3(0f), new Vector3(10f)).X, Tolerance);
     }
 
     [Fact]

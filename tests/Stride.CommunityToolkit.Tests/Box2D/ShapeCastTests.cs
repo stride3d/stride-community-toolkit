@@ -3,9 +3,6 @@ using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Tests.Engine;
 using Stride.Core.Mathematics;
 using Xunit;
-using static Box2D.NET.B2Geometries;
-using static Box2D.NET.B2Shapes;
-using static Box2D.NET.B2Types;
 
 namespace Stride.CommunityToolkit.Tests.Box2D;
 
@@ -88,15 +85,6 @@ public class ShapeCastTests
     }
 
     // A static 2 x 2 box at a position, with the category bits given.
-    internal static B2BodyId StaticBox(Box2DSimulation simulation, Vector2 position, ulong categoryBits)
-    {
-        var body = simulation.CreateStaticBody(new Vector3(position, 0));
-        var def = b2DefaultShapeDef();
-        def.filter.categoryBits = categoryBits;
-        var square = b2MakeBox(1f, 1f);
-
-        b2CreatePolygonShape(body, in def, in square);
-
-        return body;
-    }
+    private static B2BodyId StaticBox(Box2DSimulation simulation, Vector2 position, ulong categoryBits)
+        => Box2DFixtures.StaticBox(simulation, position, halfWidth: 1f, halfHeight: 1f, categoryBits);
 }

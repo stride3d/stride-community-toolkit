@@ -11,14 +11,7 @@ namespace Stride.CommunityToolkit.Tests.CubeCollapse;
 /// </summary>
 public class MatchFinderTests
 {
-    private static Entity MakeCube(Color colour)
-    {
-        var entity = new Entity("Cube");
-
-        entity.Add(new CubeComponent(colour));
-
-        return entity;
-    }
+    private static Entity MakeCube(Color colour) => new("Cube") { new CubeComponent(colour) };
 
     private static Entity Place(CubeGrid grid, Int3 at, Color colour)
     {

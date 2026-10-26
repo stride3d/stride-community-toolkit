@@ -5,9 +5,7 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Xunit;
 using static Box2D.NET.B2Bodies;
-using static Box2D.NET.B2Geometries;
-using static Box2D.NET.B2Shapes;
-using static Box2D.NET.B2Types;
+using static Stride.CommunityToolkit.Tests.Box2D.Box2DFixtures;
 
 namespace Stride.CommunityToolkit.Tests.Box2D;
 
@@ -157,16 +155,4 @@ public class CharacterMover2DTests
     // A wide static floor whose top is at y = 0.5, in the static category.
     private static void Ground(Box2DSimulation simulation)
         => StaticBox(simulation, Vector2.Zero, halfWidth: 20f, halfHeight: 0.5f, CharacterMover2D.StaticCategory);
-
-    private static B2BodyId StaticBox(Box2DSimulation simulation, Vector2 position, float halfWidth, float halfHeight, ulong categoryBits)
-    {
-        var body = simulation.CreateStaticBody(new Vector3(position, 0));
-        var def = b2DefaultShapeDef();
-        def.filter.categoryBits = categoryBits;
-        var box = b2MakeBox(halfWidth, halfHeight);
-
-        b2CreatePolygonShape(body, in def, in box);
-
-        return body;
-    }
 }
