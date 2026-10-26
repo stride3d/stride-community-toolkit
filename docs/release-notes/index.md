@@ -137,6 +137,7 @@ One family of helpers on the caller's own `Random`, so a world built from `new R
 
 ### ✨ Enhancement
 
+- The console example launcher prints the selected example's title before starting it, so you can identify the example after entering its number.
 - `SceneSetup.None` still honours what is not scene: the physics engine, the game settings, the overlay and the profiler. `SceneSetup.None.UseBepu()` is a hand-built scene whose primitives and ground get Bepu bodies, the way a tutorial that adds the camera, light and ground line by line wants it; before, the engine chosen on it was silently dropped. It is a new instance each time.
 - `AddSceneRenderer` keeps a `Game` overload with the signature binaries built against preview.66 and earlier bind to, so `Gum.Stride` 2026.10.1.1, built against preview.63, runs again; source binds to the `IGame` overload as before.
 - `E02_3D_MaterialPreview` runs on `SceneSetup.None` again: the default scene's ground, light and sky had crept under the thumbnail rig since the scene setup became data. The thumbnail camera has the controller; the editor's pose is the start and H brings it back.
