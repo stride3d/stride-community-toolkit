@@ -21,9 +21,7 @@ namespace Stride.CommunityToolkit.Effects.PostProcessing;
 public sealed class NightVision : ColorTransform
 {
     /// <summary>Creates the transform with its defaults.</summary>
-    public NightVision() : base("NightVisionShader")
-    {
-    }
+    public NightVision() : base("NightVisionShader") { }
 
     /// <summary>How much the luminance is amplified. Defaults to 4.</summary>
     [DataMember(10)]

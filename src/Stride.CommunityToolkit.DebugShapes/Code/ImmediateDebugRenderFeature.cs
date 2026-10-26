@@ -1,8 +1,8 @@
-using Stride.Core.Diagnostics;
-using Stride.Core.Mathematics;
 // Copyright (c) Stride contributors (https://stride3d.net)
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 
+using Stride.Core.Diagnostics;
+using Stride.Core.Mathematics;
 using Stride.Rendering;
 
 namespace Stride.CommunityToolkit.DebugShapes;
@@ -42,8 +42,8 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         if (_primitiveRenderer is null)
             return;
 
-        int lastOffset = 0;
-        int lastLineOffset = 0;
+        var lastOffset = 0;
+        var lastLineOffset = 0;
 
         foreach (RenderObject renderObject in RenderObjects)
         {
@@ -71,11 +71,11 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
         var commandList = context.CommandList;
 
-        for (int index = startIndex; index < endIndex; index++)
+        for (var index = startIndex; index < endIndex; index++)
         {
             var renderNodeReference = renderViewStage.SortedRenderNodes[index].RenderNode;
             var debugObject = (ImmediateDebugRenderObject)GetRenderNode(renderNodeReference).RenderObject;
-            bool objectHasTransparency = debugObject.Stage == DebugRenderStage.Transparent;
+            var objectHasTransparency = debugObject.Stage == DebugRenderStage.Transparent;
 
             // render with depth test first
             _primitiveRenderer.SetPrimitiveRenderingPipelineState(commandList, depthTest: true, selectedFillMode: debugObject.CurrentFillMode, hasTransparency: objectHasTransparency);
@@ -88,9 +88,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
     }
 
     /// <inheritdoc/>
-    public override void Flush(RenderDrawContext context)
-    {
-    }
+    public override void Flush(RenderDrawContext context) { }
 
     /* FIXME: is there a nicer way to handle dispose, some xenko idiom? */
 

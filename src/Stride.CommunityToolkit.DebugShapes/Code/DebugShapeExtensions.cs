@@ -63,15 +63,12 @@ public static class DebugShapeExtensions
             throw new NullReferenceException("Transparent RenderStage not found");
         }
 
-        var renderFeature = new ImmediateDebugRenderFeature()
+        var renderFeature = new ImmediateDebugRenderFeature
         {
-            RenderStageSelectors = {
-                    new ImmediateDebugRenderStageSelector
-                    {
-                        OpaqueRenderStage = opaqueRenderStage,
-                        TransparentRenderStage = transparentRenderStage
-                    }
-                }
+            RenderStageSelectors =
+            {
+                new ImmediateDebugRenderStageSelector { OpaqueRenderStage = opaqueRenderStage, TransparentRenderStage = transparentRenderStage },
+            },
         };
 
         graphicsCompositor.RenderFeatures.Add(renderFeature);
@@ -92,14 +89,8 @@ public static class DebugShapeExtensions
     /// </returns>
     public static bool TryGetRenderStage(this GraphicsCompositor graphicsCompositor, string effectName, out RenderStage? renderStage)
     {
-        renderStage = null;
-
-        var renderSystem = graphicsCompositor.RenderSystem;
-
-        for (int i = 0; i < renderSystem.RenderStages.Count; ++i)
+        foreach (var stage in graphicsCompositor.RenderSystem.RenderStages)
         {
-            var stage = renderSystem.RenderStages[i];
-
             if (stage.Name == effectName)
             {
                 renderStage = stage;
@@ -107,6 +98,8 @@ public static class DebugShapeExtensions
                 return true;
             }
         }
+
+        renderStage = null;
 
         return false;
     }

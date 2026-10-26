@@ -7,17 +7,12 @@ using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.DebugShapes;
 
+/// <summary>The vertex of a debug line: a position and a colour, as the line shader reads them.</summary>
 [StructLayout(LayoutKind.Sequential, Pack = 4)]
-internal struct LineVertex
+internal struct LineVertex(Vector3 position, Color color)
 {
-    public static readonly VertexDeclaration Layout = new VertexDeclaration(VertexElement.Position<Vector3>(), VertexElement.Color<Color>());
+    public static readonly VertexDeclaration Layout = new(VertexElement.Position<Vector3>(), VertexElement.Color<Color>());
 
-    public Vector3 Position;
-    public Color Color;
-
-    internal LineVertex(Vector3 position, Color color)
-    {
-        Position = position;
-        Color = color;
-    }
+    public Vector3 Position = position;
+    public Color Color = color;
 }

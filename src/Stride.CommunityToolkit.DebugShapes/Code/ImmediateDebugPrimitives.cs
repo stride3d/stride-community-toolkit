@@ -113,13 +113,13 @@ public static class ImmediateDebugPrimitives
     /// <param name="indices">The destination index array.</param>
     public static void CopyFromGeometricPrimitive(GeometricMeshData<VertexPositionNormalTexture> primitiveData, ref VertexPositionTexture[] vertices, ref int[] indices)
     {
-        for (int i = 0; i < vertices.Length; ++i)
+        for (var i = 0; i < vertices.Length; ++i)
         {
             vertices[i].Position = primitiveData.Vertices[i].Position;
             vertices[i].TextureCoordinate = primitiveData.Vertices[i].TextureCoordinate;
         }
 
-        for (int i = 0; i < indices.Length; ++i)
+        for (var i = 0; i < indices.Length; ++i)
         {
             indices[i] = primitiveData.Indices[i];
         }
@@ -134,14 +134,14 @@ public static class ImmediateDebugPrimitives
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateQuad(float width, float height)
     {
         var quadMeshData = GeometricPrimitive.Plane.New(width, height);
-        VertexPositionTexture[] vertices = new VertexPositionTexture[quadMeshData.Vertices.Length];
-        int[] indices = new int[quadMeshData.Indices.Length];
+        var vertices = new VertexPositionTexture[quadMeshData.Vertices.Length];
+        var indices = new int[quadMeshData.Indices.Length];
 
         CopyFromGeometricPrimitive(quadMeshData, ref vertices, ref indices);
 
         // transform it because in its default orientation it isn't flat to the normal up
-        Quaternion rotation = Quaternion.BetweenDirections(Vector3.UnitZ, Vector3.UnitY);
-        for (int i = 0; i < vertices.Length; ++i)
+        var rotation = Quaternion.BetweenDirections(Vector3.UnitZ, Vector3.UnitY);
+        for (var i = 0; i < vertices.Length; ++i)
         {
             vertices[i].Position = Vector3.Transform(vertices[i].Position, rotation);
         }
@@ -170,8 +170,8 @@ public static class ImmediateDebugPrimitives
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCube(float size = 1.0f)
     {
         var cubeMeshData = GeometricPrimitive.Cube.New(size);
-        VertexPositionTexture[] vertices = new VertexPositionTexture[cubeMeshData.Vertices.Length];
-        int[] indices = new int[cubeMeshData.Indices.Length];
+        var vertices = new VertexPositionTexture[cubeMeshData.Vertices.Length];
+        var indices = new int[cubeMeshData.Indices.Length];
 
         CopyFromGeometricPrimitive(cubeMeshData, ref vertices, ref indices);
 

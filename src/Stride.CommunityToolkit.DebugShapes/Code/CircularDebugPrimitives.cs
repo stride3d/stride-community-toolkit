@@ -45,15 +45,15 @@ internal static class CircularDebugPrimitives
             throw new ArgumentException(DebugPrimitiveUv.SplitDivisorErrorMessage);
         }
 
-        int hasUvSplits = uvSplits > 0 ? 1 : 0;
-        int extraVertices = 0;
-        int extraIndices = 0;
+        var hasUvSplits = uvSplits > 0 ? 1 : 0;
+        var extraVertices = 0;
+        var extraIndices = 0;
 
         if (hasUvSplits > 0)
         {
-            for (int i = 0; i < tessellations * 3; i += 3)
+            for (var i = 0; i < tessellations * 3; i += 3)
             {
-                int splitMod = (i / 3 - uvOffset) % (tessellations / uvSplits);
+                var splitMod = (i / 3 - uvOffset) % (tessellations / uvSplits);
                 var timeToSplit = splitMod == 0;
                 if (timeToSplit)
                 {
@@ -63,8 +63,8 @@ internal static class CircularDebugPrimitives
             }
         }
 
-        VertexPositionTexture[] vertices = new VertexPositionTexture[tessellations + 1 + hasUvSplits + extraVertices];
-        int[] indices = new int[(tessellations + 1) * 3 + extraIndices];
+        var vertices = new VertexPositionTexture[tessellations + 1 + hasUvSplits + extraVertices];
+        var indices = new int[(tessellations + 1) * 3 + extraIndices];
 
         // center of our circle
         vertices[0].Position = new Vector3(0.0f, yOffset, 0.0f);
@@ -77,17 +77,17 @@ internal static class CircularDebugPrimitives
             vertices[1].TextureCoordinate = DebugPrimitiveUv.Line;
         }
 
-        int offset = 1 + hasUvSplits;
-        for (int i = 0; i < tessellations; ++i)
+        var offset = 1 + hasUvSplits;
+        for (var i = 0; i < tessellations; ++i)
         {
             var normal = ImmediateDebugPrimitives.GetCircleVector(i, tessellations);
             vertices[offset + i].Position = normal * radius + new Vector3(0.0f, yOffset, 0.0f);
             vertices[offset + i].TextureCoordinate = DebugPrimitiveUv.Line;
         }
 
-        int curVert = tessellations + offset;
-        int curIdx = (tessellations + 1) * 3;
-        for (int i = 0; i < tessellations * 3; i += 3)
+        var curVert = tessellations + offset;
+        var curIdx = (tessellations + 1) * 3;
+        for (var i = 0; i < tessellations * 3; i += 3)
         {
             int? splitMod = uvSplits > 0 ? (i / 3 - uvOffset) % (tessellations / uvSplits) : null;
             var timeToSplit = splitMod == 0;
@@ -137,16 +137,16 @@ internal static class CircularDebugPrimitives
 
         var (capVertices, capIndices) = GenerateCircle(radius, tessellations, uvSidesForCircle ?? uvSplits, uvOffset: 1 + uvOffset);
 
-        VertexPositionTexture[] vertices = new VertexPositionTexture[capVertices.Length * 2 + tessellations * 4];
-        int[] indices = new int[capIndices.Length * 2 + tessellations * 6];
+        var vertices = new VertexPositionTexture[capVertices.Length * 2 + tessellations * 4];
+        var indices = new int[capIndices.Length * 2 + tessellations * 6];
 
-        int bottomVertsOffset = vertices.Length - capVertices.Length;
-        int topVertsOffset = vertices.Length - capVertices.Length * 2;
-        int bottomIndicesOffset = indices.Length - capIndices.Length;
-        int topIndicesOffset = indices.Length - capIndices.Length * 2;
+        var bottomVertsOffset = vertices.Length - capVertices.Length;
+        var topVertsOffset = vertices.Length - capVertices.Length * 2;
+        var bottomIndicesOffset = indices.Length - capIndices.Length;
+        var topIndicesOffset = indices.Length - capIndices.Length * 2;
 
         // copy vertices
-        for (int i = 0; i < capVertices.Length; ++i)
+        for (var i = 0; i < capVertices.Length; ++i)
         {
             vertices[bottomVertsOffset + i] = capVertices[i];
             vertices[bottomVertsOffset + i].Position.Y = -(height / 2.0f);
@@ -155,7 +155,7 @@ internal static class CircularDebugPrimitives
         }
 
         // copy indices
-        for (int i = 0; i < capIndices.Length; ++i)
+        for (var i = 0; i < capIndices.Length; ++i)
         {
             indices[bottomIndicesOffset + i] = capIndices[i] + bottomVertsOffset;
             indices[topIndicesOffset + i] = capIndices[i] + topVertsOffset;
@@ -165,9 +165,9 @@ internal static class CircularDebugPrimitives
         Array.Reverse(indices, bottomIndicesOffset, capIndices.Length);
 
         // generate sides, using our top and bottom circle triangle fans
-        int curVert = 0;
-        int curIndex = 0;
-        for (int i = 0; i < tessellations; ++i)
+        var curVert = 0;
+        var curIndex = 0;
+        for (var i = 0; i < tessellations; ++i)
         {
             var normal = ImmediateDebugPrimitives.GetCircleVector(i, tessellations);
             var curTopPos = normal * radius + Vector3.UnitY * (height / 2.0f);
@@ -222,27 +222,15 @@ internal static class CircularDebugPrimitives
 
         var (bottomVertices, bottomIndices) = GenerateCircle(radius, tessellations, uvSplits, yOffset: -(height / 2.0f));
         var (topVertices, topIndices) = GenerateCircle(radius, tessellations, uvSplitsBottom, isFlipped: true, yOffset: -(height / 2.0f));
-        VertexPositionTexture[] vertices = new VertexPositionTexture[bottomVertices.Length + topVertices.Length];
-        int[] indices = new int[topIndices.Length + bottomIndices.Length];
+        var vertices = new VertexPositionTexture[bottomVertices.Length + topVertices.Length];
+        var indices = new int[topIndices.Length + bottomIndices.Length];
 
-        // copy vertices from circle
-        for (int i = 0; i < bottomVertices.Length; ++i)
-        {
-            vertices[i] = bottomVertices[i];
-        }
+        // The top circle follows the bottom one, its indices shifted past the bottom's vertices
+        bottomVertices.CopyTo(vertices, 0);
+        topVertices.CopyTo(vertices, bottomVertices.Length);
+        bottomIndices.CopyTo(indices, 0);
 
-        for (int i = 0; i < topVertices.Length; ++i)
-        {
-            vertices[i + bottomVertices.Length] = topVertices[i];
-        }
-
-        // copy indices from circle
-        for (int i = 0; i < bottomIndices.Length; ++i)
-        {
-            indices[i] = bottomIndices[i];
-        }
-
-        for (int i = 0; i < topIndices.Length; ++i)
+        for (var i = 0; i < topIndices.Length; ++i)
         {
             indices[i + bottomIndices.Length] = topIndices[i] + bottomVertices.Length;
         }
