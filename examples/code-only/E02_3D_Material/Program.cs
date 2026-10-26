@@ -24,9 +24,10 @@ using Stride.Rendering.Materials.ComputeColors;
 // is the skybox. Z and X change the skybox light so that can be seen - dim it and the metal end of
 // the middle row goes dark while the dielectric end keeps its green.
 
-const float IntensityChangeStep = 0.5f;
-LightComponent? skyBoxLightComponent = null;
-float skyBoxLightIntensity = 0;
+const float IntensityStep = 0.5f;
+
+LightComponent? skyboxLight = null;
+var skyboxIntensity = 0f;
 
 using var game = new Game();
 
@@ -35,10 +36,9 @@ game.Run(new SceneSetup3D().UseBepu(), start: Start, update: Update);
 void Start(Scene scene)
 {
     game.AddEntityTextRenderer();
-    var skyboxEntity = game.AddSkybox();
 
-    skyBoxLightComponent = skyboxEntity.GetComponent<LightComponent>();
-    skyBoxLightIntensity = skyBoxLightComponent?.Intensity ?? 1;
+    skyboxLight = game.AddSkybox().Get<LightComponent>();
+    skyboxIntensity = skyboxLight?.Intensity ?? 1;
 
     // Back row: glossiness from rough to mirror, on a dielectric. Rough spreads the highlight into a
     // haze; glossy tightens it to a point and brings the sky into focus in it.
@@ -65,7 +65,7 @@ void Start(Scene scene)
     Cube(scene, new Vector3(-5f, 0.5f, 2f), FromDescriptor(Color.Blue, glossiness: 0.9f, metalness: 0f), "blue 0.90 / 0.00");
     Cube(scene, new Vector3(-3f, 0.5f, 2f), FromDescriptor(Color.Gold, glossiness: 0.1f, metalness: 0.8f), "gold 0.10 / 0.80");
 
-    InitializeTextOverlay();
+    AddInstructions();
 }
 
 void Cube(Scene scene, Vector3 position, Material material, string label)
@@ -91,64 +91,48 @@ void Cube(Scene scene, Vector3 position, Material material, string label)
 // model, a number in the glossiness slot, a number in the metalness slot, and the microfacet specular
 // model. Any slot that takes a number can take a texture or an expression instead, and either model
 // can be swapped for another - which is how the material gallery gets to glass, cel shading and hair.
-Material FromDescriptor(Color colour, float glossiness, float metalness)
+// The descriptor overload of CreateMaterial compiles it with the content manager: the microfacet model's
+// environment term is a lookup texture the engine ships as an asset, and without the content manager
+// nothing throws and every metal renders black.
+Material FromDescriptor(Color colour, float glossiness, float metalness) => game.CreateMaterial(new MaterialDescriptor
 {
-    // The content manager resolves the lookup texture; without it nothing throws and every metal renders black
-    return Material.New(game.GraphicsDevice, content: game.Content, descriptor: new MaterialDescriptor
+    Attributes =
     {
-        Attributes =
-        {
-            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(colour)),
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(glossiness)),
-            Specular = new MaterialMetalnessMapFeature(new ComputeFloat(metalness)),
-            // The engine's microfacet model at its defaults; its environment term is a lookup texture the
-            // engine ships as an asset, which is why this Material.New call is given the content manager
-            SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-        },
-    });
-}
+        Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(colour)),
+        DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+        MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(glossiness)),
+        Specular = new MaterialMetalnessMapFeature(new ComputeFloat(metalness)),
+        SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
+    },
+});
 
 void Update(Scene scene, GameTime time)
 {
-    if (skyBoxLightComponent == null) return;
+    if (skyboxLight is null) return;
 
-    if (game.Input.IsKeyPressed(Keys.Z))
-    {
-        skyBoxLightIntensity = Math.Max(0f, skyBoxLightIntensity - IntensityChangeStep);
+    if (game.Input.IsKeyPressed(Keys.Z)) skyboxIntensity = Math.Max(0f, skyboxIntensity - IntensityStep);
+    if (game.Input.IsKeyPressed(Keys.X)) skyboxIntensity += IntensityStep;
 
-        skyBoxLightComponent.Intensity = skyBoxLightIntensity;
-    }
-
-    if (game.Input.IsKeyPressed(Keys.X))
-    {
-        skyBoxLightIntensity += IntensityChangeStep;
-
-        skyBoxLightComponent.Intensity = skyBoxLightIntensity;
-    }
+    skyboxLight.Intensity = skyboxIntensity;
 }
 
-void InitializeTextOverlay()
+void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
     // The callback runs every frame the overlay is drawn, so the live light intensity appears without
     // anything having to push it
-    overlay.AddSection("Materials", () => GenerateInstructions(skyBoxLightIntensity));
+    TextOverlay.GetOrCreate(game).AddSection("Materials", () =>
+    [
+        new("Z", "Dim the skybox light", Color.Gold),
+        new("X", "Brighten the skybox light", Color.Gold),
+        new(""),
+        new($"Skybox light intensity: {skyboxIntensity:0.00}", Color.LightGreen),
+        new(""),
+        new("Back row: glossiness 0 to 1, metalness 0", Color.LightGray),
+        new("Middle row: metalness 0 to 1, glossiness 0.65", Color.LightGray),
+        new("Front row: the same numbers as a MaterialDescriptor", Color.LightGray),
+        new("Every feature the engine has: E02_3D_Material_Gallery", Color.LightGray),
+    ]);
 }
-
-static List<TextElement> GenerateInstructions(float skyBoxLightIntensity)
-    => [
-            new("Z", "Dim the skybox light", Color.Gold),
-            new("X", "Brighten the skybox light", Color.Gold),
-            new(""),
-            new($"Skybox light intensity: {skyBoxLightIntensity:0.00}", Color.LightGreen),
-            new(""),
-            new("Back row: glossiness 0 to 1, metalness 0", Color.LightGray),
-            new("Middle row: metalness 0 to 1, glossiness 0.65", Color.LightGray),
-            new("Front row: the same numbers as a MaterialDescriptor", Color.LightGray),
-            new("Every feature the engine has: E02_3D_Material_Gallery", Color.LightGray),
-        ];
 
 /*
 ---example-metadata

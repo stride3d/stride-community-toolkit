@@ -52,8 +52,6 @@ var t = 0f;
 ShapeBatch? shapes = null;
 EntityTextComponent? title = null;
 EntityTextComponent? note = null;
-Entity? titleEntity = null;
-Entity? noteEntity = null;
 
 using var game = new Game();
 
@@ -79,14 +77,11 @@ void Start(Scene rootScene)
     }
 
     // Placed every frame by PlacePanel, once the overlay has drawn and knows its height
-    titleEntity = Label("", Vector2.Zero, 24, Color.White);
-    noteEntity = Label("", Vector2.Zero, 13, Color.LightGray);
+    title = Label("", Vector2.Zero, 24, Color.White).Get<EntityTextComponent>();
+    note = Label("", Vector2.Zero, 13, Color.LightGray).Get<EntityTextComponent>();
 
-    title = titleEntity.Get<EntityTextComponent>();
-    note = noteEntity.Get<EntityTextComponent>();
-
-    rootScene.Entities.Add(titleEntity);
-    rootScene.Entities.Add(noteEntity);
+    rootScene.Entities.Add(title.Entity);
+    rootScene.Entities.Add(note.Entity);
 
     TextOverlay.GetOrCreate(game).AddSection("Easing", BuildOverlayLines);
 }
@@ -127,8 +122,15 @@ void PlacePanel()
     panelSize = Math.Clamp(top - (-ViewHeight / 2f + NoteBand), 4f, MaxPanelSize);
     panelCentre = new Vector2(panelCentre.X, top - panelSize / 2f);
 
-    if (titleEntity is not null) titleEntity.Transform.Position = new Vector3(panelCentre + new Vector2(0f, panelSize / 2f + TitleBand), 0f);
-    if (noteEntity is not null) noteEntity.Transform.Position = new Vector3(panelCentre + new Vector2(0f, -panelSize / 2f - 0.2f), 0f);
+    if (title is not null)
+    {
+        title.Entity.Transform.Position = new Vector3(panelCentre + new Vector2(0f, panelSize / 2f + TitleBand), 0f);
+    }
+
+    if (note is not null)
+    {
+        note.Entity.Transform.Position = new Vector3(panelCentre + new Vector2(0f, -panelSize / 2f - 0.2f), 0f);
+    }
 }
 
 void DrawTile(ShapeBatch shapes, Tile tile, bool isSelected)

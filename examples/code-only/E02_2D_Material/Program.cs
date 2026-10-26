@@ -30,12 +30,16 @@ void Start(Scene scene)
 
     // Row 1: the flat material, the one a 2D scene wants
     for (var i = 0; i < colours.Length; i++)
+    {
         Square(scene, i, 3f, game.CreateFlatMaterial(colours[i]), "flat");
+    }
 
     // Row 2: the same colours as a lit material. Black: nothing lights them, and a lit material is
     // the light's reflection, not the colour itself
     for (var i = 0; i < colours.Length; i++)
+    {
         Square(scene, i, 1f, game.CreateMaterial(colours[i]), "lit, no light");
+    }
 
     // Row 3: a texture the two ways. A screen material is unlit and clamped at the edges, the way a
     // picture should be; a textured material is lit, so here it is black too

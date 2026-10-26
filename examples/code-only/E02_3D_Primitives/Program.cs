@@ -8,7 +8,7 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 
-const string EntityName = "PrimitiveModelGroup";
+const string GroupName = "PrimitiveModelGroup";
 
 // The five colours of the first examples, one shape after another
 Color[] colours = [new(30, 70, 170), new(240, 150, 60), new(235, 100, 80), new(110, 200, 110), new(190, 130, 230)];
@@ -27,7 +27,7 @@ void Start(Scene scene)
     // F11 the physics debug meshes
     game.AddPhysicsDebug(gizmoColor: new Color4(0.4f, 0.843f, 0, 0.9f));
 
-    InitializeTextOverlay();
+    AddInstructions();
     Add3DPrimitives(scene);
 }
 
@@ -42,55 +42,43 @@ void Update(Scene scene, GameTime time)
 
 void Add3DPrimitives(Scene scene)
 {
-    var primitives = new[]
-    {
-        (Type: Primitive3D.Cube(0.5f), Position: new Vector3(-4f, 0.5f, 0), Rotation: (Quaternion?)null),
-        (Type: Primitive3D.Box(new Vector3(0.25f, 0.5f, 0.25f)), Position: new Vector3(-2.2f, 0.5f, -4f), Rotation: null),
-        (Type: Primitive3D.Cone(0.5f, 3), Position: new Vector3(0, 2, 0), Rotation: null),
-        (Type: Primitive3D.Capsule(0.25f, 0.5f), Position: new Vector3(0.01f, 6, 0), Rotation: null),
-        (Type: Primitive3D.Sphere(0.25f), Position: new Vector3(0, 8, 0), Rotation: null),
-        (Type: Primitive3D.Cylinder(0.25f, 0.5f), Position: new Vector3(0.5f, 10, 0), Rotation: null),
-        (Type: Primitive3D.Teapot(), Position: new Vector3(3, 4f, 0), Rotation: null),
-        (Type: Primitive3D.Torus(), Position: new Vector3(0, 12, 0), Rotation: null),
-        (Type: Primitive3D.TriangularPrism(new(1, 1, 3)), Position: new Vector3(-6.0f, 2, -8.0f), Rotation: Quaternion.RotationY(MathUtil.DegreesToRadians(125))),
-        (Type: Primitive3D.TriangularPrism(Vector3.One), Position: new Vector3(-3.5f, 0.5f, 1), Rotation: null),
-    };
+    (Primitive3D Type, Vector3 Position, Quaternion? Rotation)[] primitives =
+    [
+        (Primitive3D.Cube(0.5f), new Vector3(-4f, 0.5f, 0), null),
+        (Primitive3D.Box(new Vector3(0.25f, 0.5f, 0.25f)), new Vector3(-2.2f, 0.5f, -4f), null),
+        (Primitive3D.Cone(0.5f, 3), new Vector3(0, 2, 0), null),
+        (Primitive3D.Capsule(0.25f, 0.5f), new Vector3(0.01f, 6, 0), null),
+        (Primitive3D.Sphere(0.25f), new Vector3(0, 8, 0), null),
+        (Primitive3D.Cylinder(0.25f, 0.5f), new Vector3(0.5f, 10, 0), null),
+        (Primitive3D.Teapot(), new Vector3(3, 4f, 0), null),
+        (Primitive3D.Torus(), new Vector3(0, 12, 0), null),
+        (Primitive3D.TriangularPrism(new(1, 1, 3)), new Vector3(-6.0f, 2, -8.0f), Quaternion.RotationY(MathUtil.DegreesToRadians(125))),
+        (Primitive3D.TriangularPrism(Vector3.One), new Vector3(-3.5f, 0.5f, 1), null),
+    ];
 
-    foreach (var (index, primitive) in primitives.Index())
+    foreach (var (index, (type, position, rotation)) in primitives.Index())
     {
-        var entity = CreatePrimitive(primitive.Type, primitive.Position, primitive.Rotation, colours[index % colours.Length]);
+        var entity = game.CreatePrimitive(type, new() { EntityName = GroupName, Material = game.CreateMaterial(colours[index % colours.Length]) });
 
-        entity.Scene = scene;
-    }
-
-    Entity CreatePrimitive(Primitive3D shape, Vector3 position, Quaternion? rotation, Color colour)
-    {
-        var entity = game.CreatePrimitive(shape, new() { Material = game.CreateMaterial(colour) });
         entity.Transform.Position = position;
-
-        if (rotation.HasValue)
-            entity.Transform.Rotation = rotation.Value;
-
-        entity.Name = EntityName;
-        return entity;
+        entity.Transform.Rotation = rotation ?? Quaternion.Identity;
+        entity.Scene = scene;
     }
 }
 
 static void ResetTheScene(Scene scene)
 {
-    var entities = scene.Entities.Where(e => e.Name == EntityName).ToList();
-
-    foreach (var entity in entities)
+    foreach (var entity in scene.Entities.Where(e => e.Name == GroupName).ToList())
+    {
         entity.Scene = null;
+    }
 }
 
-void InitializeTextOverlay()
+void AddInstructions()
 {
     // The overlay draws itself, and is shared with the camera controller's own help, so nothing here
     // needs to be called every frame
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Game", static () =>
+    TextOverlay.GetOrCreate(game).AddSection("Game", static () =>
     [
         new("P", "Show or hide the collidable gizmos", Color.Gold),
         new("F11", "Show or hide the debug meshes", Color.Gold),

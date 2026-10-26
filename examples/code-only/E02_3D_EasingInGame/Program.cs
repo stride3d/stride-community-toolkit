@@ -223,8 +223,7 @@ void HandleInput()
 
     if (input.IsKeyPressed(Keys.L))
     {
-        if (lift.IsRunning) lift.Stop();
-        else lift.Resume();
+        if (lift.IsRunning) lift.Stop(); else lift.Resume();
     }
 
     if (input.IsKeyPressed(Keys.O))

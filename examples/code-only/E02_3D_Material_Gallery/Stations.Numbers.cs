@@ -145,5 +145,4 @@ public static class NumberStations
 
         s.PlaceTrio(mirror);
     }
-
 }

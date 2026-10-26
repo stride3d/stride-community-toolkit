@@ -103,8 +103,14 @@ void Start(Scene rootScene)
     gallery.UpdateLabels();
     LightTheRing(rootScene, gallery.Radius, sun);
 
-    if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);
-    else gallery.GoHome(instant: true);
+    if (startStation > 0)
+    {
+        gallery.GoTo(startStation - 1, instant: true);
+    }
+    else
+    {
+        gallery.GoHome(instant: true);
+    }
 
     var overlay = TextOverlay.GetOrCreate(game);
 

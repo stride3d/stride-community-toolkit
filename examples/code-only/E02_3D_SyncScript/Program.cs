@@ -18,9 +18,9 @@ void Start(Scene scene)
     entity.Add(new RotationComponentScript());
     entity.Scene = scene;
 
-    var entityCone = game.CreatePrimitive(Primitive3D.Cone(0.5f, 5));
-    entityCone.Transform.Position = new Vector3(0, 6, 0);
-    entityCone.Scene = scene;
+    var cone = game.CreatePrimitive(Primitive3D.Cone(0.5f, 5));
+    cone.Transform.Position = new Vector3(0, 6, 0);
+    cone.Scene = scene;
 }
 /*
 ---example-metadata
