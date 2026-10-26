@@ -24,24 +24,7 @@ public class TextureCanvasTests
     [Fact]
     public void SizeSetter_SizesTheBuffer()
     {
-        using var game = new Game();
-
-        Size2 size = default;
-        var byteSize = 0;
-
-        game.Run(SceneSetup.None, start: scene =>
-        {
-            using var canvas = game.CreateTextureCanvas(new Size2(64, 64));
-
-            canvas.Size = new Size2(32, 16);
-
-            size = canvas.Size;
-            byteSize = canvas.ByteSize;
-        }, update: (_, _) =>
-        {
-            if (game.UpdateTime.FrameCount > FrameBudget || byteSize > 0)
-                game.Exit();
-        }, context: new GameContextHeadless());
+        var (size, _, byteSize) = Configure(new Size2(64, 64), canvas => canvas.Size = new Size2(32, 16));
 
         Assert.Equal(new Size2(32, 16), size);
         Assert.Equal(32 * 16 * 4, byteSize);
@@ -50,26 +33,30 @@ public class TextureCanvasTests
     [Fact]
     public void PixelFormatSetter_SizesTheBuffer()
     {
-        using var game = new Game();
-
-        PixelFormat format = default;
-        var byteSize = 0;
-
-        game.Run(SceneSetup.None, start: scene =>
-        {
-            using var canvas = game.CreateTextureCanvas(new Size2(16, 16));
-
-            canvas.PixelFormat = PixelFormat.R16G16B16A16_Float;
-
-            format = canvas.PixelFormat;
-            byteSize = canvas.ByteSize;
-        }, update: (_, _) =>
-        {
-            if (game.UpdateTime.FrameCount > FrameBudget || byteSize > 0)
-                game.Exit();
-        }, context: new GameContextHeadless());
+        var (_, format, byteSize) = Configure(new Size2(16, 16), canvas => canvas.PixelFormat = PixelFormat.R16G16B16A16_Float);
 
         Assert.Equal(PixelFormat.R16G16B16A16_Float, format);
         Assert.Equal(16 * 16 * 8, byteSize);
+    }
+
+    /// <summary>Creates a canvas in a headless game, applies the change, and reads back what the canvas then says it holds.</summary>
+    private static (Size2 Size, PixelFormat Format, int ByteSize) Configure(Size2 initial, Action<TextureCanvas> change)
+    {
+        using var game = new Game();
+
+        (Size2 Size, PixelFormat Format, int ByteSize) result = default;
+
+        game.Run(SceneSetup.None, start: _ =>
+        {
+            using var canvas = game.CreateTextureCanvas(initial);
+
+            change(canvas);
+            result = (canvas.Size, canvas.PixelFormat, canvas.ByteSize);
+        }, update: (_, _) =>
+        {
+            if (game.UpdateTime.FrameCount > FrameBudget || result.ByteSize > 0) game.Exit();
+        }, context: new GameContextHeadless());
+
+        return result;
     }
 }

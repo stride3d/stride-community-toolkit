@@ -147,7 +147,7 @@ public class ReferenceGridTests
     [Fact]
     public void WorldGridUnderA2DCameraDrawsIntoTheWorldBatchAndNumbersBothAxes()
     {
-        var (grid, canvas) = Grid();
+        var (_, canvas) = Grid();
 
         canvas.Draw(Views.Orthographic(), Middle);
 
@@ -168,7 +168,7 @@ public class ReferenceGridTests
     [Fact]
     public void WorldGridUnderA3DCameraLiesOnTheGroundAndNamesThreeAxes()
     {
-        var (grid, canvas) = Grid();
+        var (_, canvas) = Grid();
 
         canvas.Draw(Views.Perspective(), Middle);
 
