@@ -15,29 +15,25 @@ game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
+    game.AddGrabber();
 
-    var lineEntity = CreateLineEntity(game);
+    // The line is a child of the first sphere, so it falls and rolls with it
+    var sphere1 = game.CreatePrimitive(Primitive3D.Sphere());
+    sphere1.Transform.Position = new Vector3(0, 8, 0);
+    sphere1.AddChild(CreateLineEntity());
+    sphere1.Scene = rootScene;
 
-    var entity1 = CreateSphereEntity(game);
-    entity1.Transform.Position = new Vector3(0, 8, 0);
-    entity1.AddChild(lineEntity);
-
-    var entity2 = CreateSphereEntity(game);
-    entity2.Transform.Position = new Vector3(-0.01f, 9, -0.01f);
-
-    entity1.Scene = rootScene;
-    entity2.Scene = rootScene;
+    var sphere2 = game.CreatePrimitive(Primitive3D.Sphere());
+    sphere2.Transform.Position = new Vector3(-0.01f, 9, -0.01f);
+    sphere2.Scene = rootScene;
 }
 
-static Entity CreateSphereEntity(Game game)
-    => game.CreatePrimitive(Primitive3D.Sphere());
-
-static Entity CreateLineEntity(Game game)
+Entity CreateLineEntity()
 {
-    var vertices = new Vector3[] { new(0, 0, 0), new(1, 1, -1) };
+    Vector3[] vertices = [new(0, 0, 0), new(1, 1, -1)];
     var vertexBuffer = Buffer.New(game.GraphicsDevice, vertices, BufferFlags.VertexBuffer, GraphicsResourceUsage.Default);
 
-    var indices = new short[] { 0, 1 };
+    short[] indices = [0, 1];
     var indexBuffer = Buffer.New(game.GraphicsDevice, indices, BufferFlags.IndexBuffer, GraphicsResourceUsage.Default);
 
     // Emissive, so the line shows whatever the lighting; an intensity above 1 also carries it past the
@@ -53,10 +49,7 @@ static Entity CreateLineEntity(Game game)
         DrawCount = indices.Length
     };
 
-    var mesh = new Mesh { Draw = meshDraw };
-    var model = new Model { mesh, material };
-
-    return new Entity { new ModelComponent(model) };
+    return new Entity { new ModelComponent(new Model { new Mesh { Draw = meshDraw }, material }) };
 }
 /*
 ---example-metadata

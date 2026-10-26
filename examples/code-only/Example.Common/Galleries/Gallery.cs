@@ -60,8 +60,6 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     private readonly ShapeBatch _overlay;
     private readonly GalleryCamera _camera;
     private int _destination;
-    private bool _atHome;
-    private int _hovered = -1;
 
     /// <summary>
     /// Builds the ring: the ground, every station with its pillars and label, the index board,
@@ -128,13 +126,13 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     /// not where the visitor is, and <c>null</c> when the registry is empty - the frame stands with its
     /// board and its ground either way.
     /// </summary>
-    public TStation? CurrentStation => _stations.Count > 0 && !_atHome ? _stations[Current] : null;
+    public TStation? CurrentStation => _stations.Count > 0 && !AtHome ? _stations[Current] : null;
 
     /// <summary>Whether the visitor is at the home spot, above and outside the ring: no station is current there.</summary>
-    public bool AtHome => _atHome;
+    public bool AtHome { get; private set; }
 
     /// <summary>The station whose pad is under the mouse, or -1: the pad fills, and a click flies there.</summary>
-    public int Hovered => _hovered;
+    public int Hovered { get; private set; } = -1;
 
     /// <summary>Whether the camera is flying itself somewhere rather than being steered.</summary>
     public bool Flying => _camera.Flying;
@@ -158,7 +156,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     public void GoHome(bool instant = false)
     {
         _destination = Current;
-        _atHome = true;
+        AtHome = true;
         _camera.FlyTo(HomePosition, HomeRotation, instant, HomeFlightSeconds, _stations.Count > 0 ? _stations[0].At(0f, 2f, 0f) : null);
     }
 
@@ -168,7 +166,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
 
     /// <summary>Next or previous: one station on from <see cref="Focus"/> - or, from home, the first station whichever way the visitor turns.</summary>
     /// <param name="direction">+1 for the next station, -1 for the previous.</param>
-    public void Step(int direction) => GoTo(_atHome ? 0 : Focus + direction);
+    public void Step(int direction) => GoTo(AtHome ? 0 : Focus + direction);
 
     /// <summary>Sends the visitor to a station: a little way towards the centre from its pad, looking at it.</summary>
     /// <param name="index">The station, counted from 0 and wrapped, so one past the last is the first.</param>
@@ -177,7 +175,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     {
         if (_stations.Count == 0) return;
 
-        _atHome = false;
+        AtHome = false;
 
         _destination = (index % _stations.Count + _stations.Count) % _stations.Count;
 
@@ -202,29 +200,35 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
 
         // Steered off the home spot - by more than a nudge, so a settled flight still counts as home -
         // and next and previous count from the nearest station again
-        if (_atHome && !Flying && Vector3.DistanceSquared(camera, HomePosition) > 0.25f) _atHome = false;
+        if (AtHome && !Flying && Vector3.DistanceSquared(camera, HomePosition) > 0.25f)
+        {
+            AtHome = false;
+        }
 
         // A pad under the mouse lights up, and a click on it is a flight there
-        _hovered = Flying ? -1 : PadUnderMouse();
-        if (_hovered >= 0 && _game.Input.IsMouseButtonPressed(MouseButton.Left)) GoTo(_hovered);
+        Hovered = Flying ? -1 : PadUnderMouse();
+
+        if (Hovered >= 0 && _game.Input.IsMouseButtonPressed(MouseButton.Left))
+        {
+            GoTo(Hovered);
+        }
 
         Current = NearestStation(camera);
 
         for (var i = 0; i < _stations.Count; i++)
         {
             var station = _stations[i];
-            var current = i == Current && !_atHome;
+            var current = i == Current && !AtHome;
 
             station.Seconds = seconds;
             station.IsCurrent = current;
 
-            DrawPad(station, current, i == _hovered);
+            DrawPad(station, current, i == Hovered);
 
             if (Solo && !current) continue;
 
             Prepare?.Invoke(station);
-            var update = _exhibits[i].Update;
-            if (update is not null) Guarded(station, () => update(station));
+            Guarded(station, _exhibits[i].Update);
         }
 
         DrawLabels();
@@ -289,7 +293,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         }
 
         configure?.Invoke(station);
-        Guarded(station, () => exhibit.Setup?.Invoke(station));
+        Guarded(station, exhibit.Setup);
 
         // The label: screen-space text pinned to a point above the pad, so it reads at any distance
         // ToDo: Test this component as well
@@ -331,14 +335,15 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     /// GPU or the engine refuses - leaves its pad empty with the message on the station, and the
     /// other stations stand. Once a station has failed its update is not run again. A gallery that
     /// rebuilds a station itself - a variation on V - runs the rebuild through here for the same reason.
+    /// An exhibit with nothing to run passes null.
     /// </summary>
-    public static void Guarded(TStation station, Action action)
+    public static void Guarded(TStation station, Action<TStation>? action)
     {
-        if (station.Error is not null) return;
+        if (action is null || station.Error is not null) return;
 
         try
         {
-            action();
+            action(station);
         }
         catch (Exception exception)
         {

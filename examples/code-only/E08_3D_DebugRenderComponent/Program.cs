@@ -31,9 +31,9 @@ void Start(Scene rootScene)
 
 void CreateSpheres(Scene rootScene, int count)
 {
-    int half = count / 2;
+    var half = count / 2;
 
-    for (int i = -half; i < half; i++)
+    for (var i = -half; i < half; i++)
     {
         var entity = game.CreatePrimitive(Primitive3D.Sphere(), new() { EntityName = SphereEntityName });
         entity.Transform.Position = new Vector3(i * 0.99f, 1, 0);

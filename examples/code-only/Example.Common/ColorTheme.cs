@@ -9,33 +9,21 @@ namespace Example.Common;
 /// cornflower blue of a 2D scene and the grey ground of a 3D one. Take them by name, or by index
 /// with <see cref="Accent"/> when a loop hands them out in turn.
 /// </remarks>
-public sealed class ColorTheme
+public sealed class ColorTheme(string name, Color blue, Color orange, Color red, Color green, Color purple)
 {
-    private readonly Color[] _accents;
+    private readonly Color[] _accents = [blue, orange, red, green, purple];
 
-    public ColorTheme(string name, Color blue, Color orange, Color red, Color green, Color purple)
-    {
-        Name = name;
-        Blue = blue;
-        Orange = orange;
-        Red = red;
-        Green = green;
-        Purple = purple;
+    public string Name { get; } = name;
 
-        _accents = [blue, orange, red, green, purple];
-    }
+    public Color Blue { get; } = blue;
 
-    public string Name { get; }
+    public Color Orange { get; } = orange;
 
-    public Color Blue { get; }
+    public Color Red { get; } = red;
 
-    public Color Orange { get; }
+    public Color Green { get; } = green;
 
-    public Color Red { get; }
-
-    public Color Green { get; }
-
-    public Color Purple { get; }
+    public Color Purple { get; } = purple;
 
     /// <summary>The accents in the order a loop hands them out: blue, orange, red, green, purple.</summary>
     public IReadOnlyList<Color> Accents => _accents;

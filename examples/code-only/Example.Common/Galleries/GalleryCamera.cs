@@ -103,9 +103,7 @@ public sealed class GalleryCamera(Game game)
             camera.Rotation = Quaternion.Slerp(_fromRotation, _toRotation, eased);
         }
 
-        if (t < 1f) return;
-
-        _elapsed = float.MaxValue;
+        if (t >= 1f) _elapsed = float.MaxValue;
     }
 
     /// <summary>The rotation that looks along a direction, level: a camera looks down its -Z, yaw turns that towards -X, pitch lifts it.</summary>

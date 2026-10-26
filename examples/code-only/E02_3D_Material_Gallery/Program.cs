@@ -140,7 +140,7 @@ void HandleInput(Gallery<MaterialStation> gallery)
     if (game.Input.IsKeyPressed(Keys.V) && station.VariationNames.Count > 1)
     {
         station.Variation++;
-        Gallery<MaterialStation>.Guarded(station, () => Stations.All[gallery.Current].Setup?.Invoke(station));
+        Gallery<MaterialStation>.Guarded(station, Stations.All[gallery.Current].Setup);
     }
 }
 

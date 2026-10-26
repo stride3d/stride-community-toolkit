@@ -1,7 +1,6 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -16,13 +15,14 @@ using var game = new Game();
 
 Entity? circleEntity = null;
 Material? sharedMaterial = null;
+
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    CreateMeshEntity(game.GraphicsDevice, rootScene, Vector3.Zero, CreateTriangleMesh);
-    CreateMeshEntity(game.GraphicsDevice, rootScene, Vector3.UnitX * 2, CreatePlaneMesh);
-    CreateMeshEntity(game.GraphicsDevice, rootScene, Vector3.UnitX * 4, CreateNonIndexedTriangleMesh);
+    CreateMeshEntity(rootScene, Vector3.Zero, CreateTriangleMesh);
+    CreateMeshEntity(rootScene, Vector3.UnitX * 2, CreatePlaneMesh);
+    CreateMeshEntity(rootScene, Vector3.UnitX * 4, CreateNonIndexedTriangleMesh);
 
     CreateLetterEntity(rootScene);
 }
@@ -56,17 +56,9 @@ void CreateNonIndexedTriangleMesh(MeshBuilder meshBuilder)
     var position = meshBuilder.WithPosition<Vector3>();
     var color = meshBuilder.WithColor<Color>();
 
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector3(0, 0, 0));
-    meshBuilder.SetElement(color, Color.Yellow);
-
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector3(0.5f, 1, 0));
-    meshBuilder.SetElement(color, Color.Purple);
-
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector3(1, 0, 0));
-    meshBuilder.SetElement(color, Color.Teal);
+    AddVertex(meshBuilder, position, color, new Vector3(0, 0, 0), Color.Yellow);
+    AddVertex(meshBuilder, position, color, new Vector3(0.5f, 1, 0), Color.Purple);
+    AddVertex(meshBuilder, position, color, new Vector3(1, 0, 0), Color.Teal);
 }
 
 void Update(Scene rootScene, GameTime gameTime)
@@ -82,7 +74,7 @@ void Update(Scene rootScene, GameTime gameTime)
         circleEntity.Remove();
     }
 
-    circleEntity = CreateMeshEntity(game.GraphicsDevice, rootScene, Vector3.UnitX * -2, b => CreateCircleMesh(b, segments));
+    circleEntity = CreateMeshEntity(rootScene, Vector3.UnitX * -2, b => CreateCircleMesh(b, segments));
 }
 
 // Disposes the GPU buffers behind an entity's meshes. Only for meshes this example built itself -
@@ -112,17 +104,9 @@ void CreateTriangleMesh(MeshBuilder meshBuilder)
     var position = meshBuilder.WithPosition<Vector3>();
     var color = meshBuilder.WithColor<Color>();
 
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector3(0, 0, 0));
-    meshBuilder.SetElement(color, Color.Red);
-
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector3(1, 0, 0));
-    meshBuilder.SetElement(color, Color.Green);
-
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector3(.5f, 1, 0));
-    meshBuilder.SetElement(color, Color.Blue);
+    AddVertex(meshBuilder, position, color, new Vector3(0, 0, 0), Color.Red);
+    AddVertex(meshBuilder, position, color, new Vector3(1, 0, 0), Color.Green);
+    AddVertex(meshBuilder, position, color, new Vector3(.5f, 1, 0), Color.Blue);
 
     meshBuilder.AddIndex(0);
     meshBuilder.AddIndex(2);
@@ -137,21 +121,10 @@ void CreatePlaneMesh(MeshBuilder meshBuilder)
     var position = meshBuilder.WithPosition<Vector3>();
     var color = meshBuilder.WithColor<Color>();
 
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector3(0, 0, 0));
-    meshBuilder.SetElement(color, Color.Red);
-
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector3(0, 1, 0));
-    meshBuilder.SetElement(color, Color.Green);
-
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector3(1, 1, 0));
-    meshBuilder.SetElement(color, Color.Blue);
-
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector3(1, 0, 0));
-    meshBuilder.SetElement(color, Color.Yellow);
+    AddVertex(meshBuilder, position, color, new Vector3(0, 0, 0), Color.Red);
+    AddVertex(meshBuilder, position, color, new Vector3(0, 1, 0), Color.Green);
+    AddVertex(meshBuilder, position, color, new Vector3(1, 1, 0), Color.Blue);
+    AddVertex(meshBuilder, position, color, new Vector3(1, 0, 0), Color.Yellow);
 
     meshBuilder.AddIndex(0);
     meshBuilder.AddIndex(1);
@@ -160,6 +133,14 @@ void CreatePlaneMesh(MeshBuilder meshBuilder)
     meshBuilder.AddIndex(0);
     meshBuilder.AddIndex(2);
     meshBuilder.AddIndex(3);
+}
+
+// One vertex: added, then its position and colour elements filled in
+static void AddVertex(MeshBuilder meshBuilder, int position, int color, Vector3 at, Color colour)
+{
+    meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, at);
+    meshBuilder.SetElement(color, colour);
 }
 
 void CreateCircleMesh(MeshBuilder meshBuilder, int segments)
@@ -193,26 +174,19 @@ void CreateCircleMesh(MeshBuilder meshBuilder, int segments)
     }
 }
 
-Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene rootScene, Vector3 position, Action<MeshBuilder> build)
+Entity CreateMeshEntity(Scene scene, Vector3 position, Action<MeshBuilder> build)
 {
     using var meshBuilder = new MeshBuilder();
 
     build(meshBuilder);
 
-    var entity = new Entity { Scene = rootScene, Transform = { Position = position } };
+    var entity = new Entity { Scene = scene, Transform = { Position = position } };
 
     // One material shared by every mesh this example builds. A material is a GPU resource like the
     // buffers are, so building one per frame for the animated circle would be the same leak again.
-    sharedMaterial ??= CreateMaterial(graphicsDevice);
+    sharedMaterial ??= CreateMaterial(game.GraphicsDevice);
 
-    var model = new Model
-    {
-        new MaterialInstance { Material = sharedMaterial },
-        new Mesh {
-            Draw = meshBuilder.ToMeshDraw(graphicsDevice),
-            MaterialIndex = 0
-        }
-    };
+    var model = new Model { new Mesh { Draw = meshBuilder.ToMeshDraw(game.GraphicsDevice) }, sharedMaterial };
 
     entity.Add(new ModelComponent { Model = model });
 

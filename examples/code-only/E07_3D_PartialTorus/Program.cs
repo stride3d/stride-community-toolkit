@@ -6,8 +6,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
 using Stride.Rendering;
-using Stride.Rendering.Materials;
-using Stride.Rendering.Materials.ComputeColors;
 
 /*
   A partial torus built vertex by vertex: a parametric surface over two angles, around the tube and
@@ -26,18 +24,12 @@ const int BendSegmentSteps = 40;
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: (Scene rootScene) =>
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: scene =>
 {
-
-    CreateMeshEntity(
-        game.GraphicsDevice,
-        rootScene,
-        new Vector3(0.0f, 1.0f, 0.0f),
-        b => BuildPartialTorusMesh(b, CylinderRadius, TorusAngle, BendRadius, CircumferenceStepsCount, BendSegmentSteps)
-    );
+    CreateMeshEntity(scene, new Vector3(0, 1, 0), b => BuildPartialTorusMesh(b, CylinderRadius, TorusAngle, BendRadius, CircumferenceStepsCount, BendSegmentSteps));
 });
 
-Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene scene, Vector3 position, Action<MeshBuilder> build)
+Entity CreateMeshEntity(Scene scene, Vector3 position, Action<MeshBuilder> build)
 {
     using var meshBuilder = new MeshBuilder();
 
@@ -45,12 +37,8 @@ Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene scene, Vector3 posi
 
     var model = new Model
     {
-        new MaterialInstance { Material = CreateMaterial(game) },
-        new Mesh
-        {
-            Draw = meshBuilder.ToMeshDraw(graphicsDevice),
-            MaterialIndex = 0
-        }
+        new Mesh { Draw = meshBuilder.ToMeshDraw(game.GraphicsDevice) },
+        game.CreateMaterial(new Color(255, 77, 128), metalness: 0f, glossiness: 0.9f),
     };
 
     var entity = new Entity { Scene = scene, Transform = { Position = position } };
@@ -69,75 +57,46 @@ void BuildPartialTorusMesh(MeshBuilder meshBuilder, float cylinderRadius, float 
     var position = meshBuilder.WithPosition<Vector3>();
     var normal = meshBuilder.WithNormal<Vector3>();
 
-    // vertices
-    for (int j = 0; j <= bendSegmentSteps; j++)
+    // Vertices: a ring around the tube at every step along the bend
+    for (var j = 0; j <= bendSegmentSteps; j++)
     {
-        // Torus angle position Phi starts at 0 in line with Z-axis and increases to Pi/2 at X-axis
-        double tPhi = j * torusAngle / bendSegmentSteps * Math.PI / 180.0;
-        double xc = bendRadius * Math.Sin(tPhi);
-        double zc = bendRadius * Math.Cos(tPhi);
+        // The bend angle phi starts at 0 on the Z axis and reaches the X axis at 90 degrees
+        var phi = j * torusAngle / bendSegmentSteps * Math.PI / 180.0;
+        var xc = bendRadius * Math.Sin(phi);
+        var zc = bendRadius * Math.Cos(phi);
 
-        for (int i = 0; i < circumferenceStepsCount; i++)
+        for (var i = 0; i < circumferenceStepsCount; i++)
         {
-            // Circumference angle tTheta
-            double tTheta = i * Math.Tau / circumferenceStepsCount;
-            double yr = cylinderRadius * Math.Sin(tTheta);
-            double xr = cylinderRadius * Math.Cos(tTheta) * Math.Sin(tPhi);
-            double zr = cylinderRadius * Math.Cos(tTheta) * Math.Cos(tPhi);
-
-            // A normal has length 1: the direction out from the tube's centre line
-            var tNorm = Vector3.Normalize(new Vector3((float)xr, (float)yr, (float)zr));
-            var tPos = new Vector3((float)(xc + xr), (float)yr, (float)(zc + zr));
+            // The angle theta around the tube
+            var theta = i * Math.Tau / circumferenceStepsCount;
+            var yr = cylinderRadius * Math.Sin(theta);
+            var xr = cylinderRadius * Math.Cos(theta) * Math.Sin(phi);
+            var zr = cylinderRadius * Math.Cos(theta) * Math.Cos(phi);
 
             meshBuilder.AddVertex();
-            meshBuilder.SetElement(position, tPos);
-            meshBuilder.SetElement(normal, tNorm);
+            meshBuilder.SetElement(position, new Vector3((float)(xc + xr), (float)yr, (float)(zc + zr)));
+            // A normal has length 1: the direction out from the tube's centre line
+            meshBuilder.SetElement(normal, Vector3.Normalize(new Vector3((float)xr, (float)yr, (float)zr)));
         }
     }
 
-    // Triangle indices
-    for (int j = 0; j < bendSegmentSteps; j++)
+    // Triangle indices: two per quad between consecutive rings
+    for (var j = 0; j < bendSegmentSteps; j++)
     {
-        for (int i = 0; i < circumferenceStepsCount; i++)
+        for (var i = 0; i < circumferenceStepsCount; i++)
         {
-            int i_tot = i + j * circumferenceStepsCount;
-            int i_next = (i + 1) % circumferenceStepsCount + j * circumferenceStepsCount;
+            var index = i + j * circumferenceStepsCount;
+            var next = (i + 1) % circumferenceStepsCount + j * circumferenceStepsCount;
 
-            // Triangle 1
-            meshBuilder.AddIndex(i_tot);
-            meshBuilder.AddIndex(i_next + circumferenceStepsCount);
-            meshBuilder.AddIndex(i_tot + circumferenceStepsCount);
+            meshBuilder.AddIndex(index);
+            meshBuilder.AddIndex(next + circumferenceStepsCount);
+            meshBuilder.AddIndex(index + circumferenceStepsCount);
 
-            // Triangle 2
-            meshBuilder.AddIndex(i_tot);
-            meshBuilder.AddIndex(i_next);
-            meshBuilder.AddIndex(i_next + circumferenceStepsCount);
+            meshBuilder.AddIndex(index);
+            meshBuilder.AddIndex(next);
+            meshBuilder.AddIndex(next + circumferenceStepsCount);
         }
     }
-}
-
-static Material CreateMaterial(Game game)
-{
-    return Material.New(game.GraphicsDevice, content: game.Content, descriptor: new MaterialDescriptor
-    {
-        Attributes = new MaterialAttributes
-        {
-            MicroSurface = new MaterialGlossinessMapFeature
-            {
-                GlossinessMap = new ComputeFloat(0.9f)
-            },
-            Diffuse = new MaterialDiffuseMapFeature
-            {
-                DiffuseMap = new ComputeColor(new Color4(1.0f, 0.3f, 0.5f, 1.0f))
-            },
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            Specular = new MaterialMetalnessMapFeature
-            {
-                MetalnessMap = new ComputeFloat(0.0f)
-            },
-            SpecularModel = new MaterialSpecularMicrofacetModelFeature()
-        }
-    });
 }
 /*
 ---example-metadata
@@ -160,7 +119,7 @@ concepts:
   - Computing correct normals for smooth shading
   - Reusing vertices between adjacent triangles through indexing
   - Getting triangle winding right so faces are not culled
-  - "Using helpers: SceneSetup3D, UseSkybox"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreateMaterial"
 tags:
   - 3D
   - Geometry

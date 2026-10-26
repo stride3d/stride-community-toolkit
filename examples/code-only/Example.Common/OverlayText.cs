@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Rendering.Text;
+using System.Text;
 
 namespace Example.Common;
 
@@ -20,7 +21,7 @@ public static class OverlayText
     {
         ArgumentNullException.ThrowIfNull(text);
 
-        var line = new System.Text.StringBuilder();
+        var line = new StringBuilder();
 
         foreach (var word in text.Split(' ', StringSplitOptions.RemoveEmptyEntries))
         {

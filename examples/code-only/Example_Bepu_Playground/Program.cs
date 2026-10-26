@@ -70,7 +70,10 @@ void Update(Scene scene, GameTime time)
 
     if (game.Input.IsKeyPressed(Keys.X))
     {
-        foreach (var entity in scene.Entities.Where(entity => entity.Name == ShapeName).ToList()) entity.Scene = null;
+        foreach (var entity in scene.Entities.Where(entity => entity.Name == ShapeName).ToList())
+        {
+            entity.Scene = null;
+        }
     }
 }
 

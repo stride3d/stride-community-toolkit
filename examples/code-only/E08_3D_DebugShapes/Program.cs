@@ -16,17 +16,7 @@ game.Run(new SceneSetup3D
 void Start(Scene rootScene)
 {
     game.AddDebugShapes();
-    AddDebugComponent(rootScene);
-}
-
-void AddDebugComponent(Scene scene)
-{
-    var entity = new Entity("Debug Shapes")
-    {
-        new ShapeUpdater()
-    };
-
-    scene.Entities.Add(entity);
+    rootScene.Entities.Add(new Entity("Debug Shapes") { new ShapeUpdater() });
 }
 /*
 ---example-metadata
