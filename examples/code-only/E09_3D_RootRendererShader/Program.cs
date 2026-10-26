@@ -1,6 +1,7 @@
 using E09_3D_RootRendererShader.Renderers;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
+using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Rendering;
 
@@ -20,27 +21,28 @@ void Start(Scene scene)
     AddRenderFeature();
 
     // A component, because its processor is what hands the render objects to the visibility group
-    var background = new RibbonBackgroundComponent
+    scene.Entities.Add(new Entity
     {
-        Intensity = 0.9f,
-        Frequency = 0.9f,
-        Amplitude = 0.9f,
-        Speed = 2f,
-        WidthFactor = 0.9f
-    };
+        new RibbonBackgroundComponent
+        {
+            Intensity = 0.9f,
+            Frequency = 0.9f,
+            Amplitude = 0.9f,
+            Speed = 2f,
+            WidthFactor = 0.9f,
+        },
+    });
 
-    var entity = new Entity { background };
-    scene.Entities.Add(entity);
-
-    game.Window.Position = new Stride.Core.Mathematics.Int2(50, 50);
+    game.Window.Position = new Int2(50, 50);
     game.Window.AllowUserResizing = true;
 }
 
-// The render feature that draws a RibbonBackgroundComponent
+// The render feature that draws a RibbonBackgroundComponent, in the opaque stage
 void AddRenderFeature()
 {
     game.SceneSystem.GraphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage);
-    var renderFeature = new RibbonBackgroundRenderFeature()
+
+    game.AddRootRenderFeature(new RibbonBackgroundRenderFeature
     {
         RenderStageSelectors =
         {
@@ -51,9 +53,7 @@ void AddRenderFeature()
                 RenderStage = opaqueRenderStage,
             }
         }
-    };
-
-    game.AddRootRenderFeature(renderFeature);
+    });
 }
 /*
 ---example-metadata

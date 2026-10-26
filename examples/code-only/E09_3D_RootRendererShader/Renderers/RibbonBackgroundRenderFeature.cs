@@ -1,4 +1,3 @@
-using Stride.Core.Annotations;
 using Stride.Core.Mathematics;
 using Stride.Graphics;
 using Stride.Rendering;
@@ -47,15 +46,8 @@ public class RibbonBackgroundRenderFeature : RootRenderFeature
         // procedurally from the UVs. Only the texture's aspect ratio matters, because Draw2D uses it
         // to crop the source rectangle so the pattern is not stretched. A tiny 16:9 placeholder
         // produces identical UVs to a full 1920x1080 surface, without the memory or the mip chain.
-        var textureDescription = TextureDescription.New2D(
-            PlaceholderWidth,
-            PlaceholderHeight,
-            PixelFormat.R8G8B8A8_UNorm_SRgb,
-            TextureFlags.ShaderResource);
+        _texture = Texture.New(Context.GraphicsDevice, TextureDescription.New2D(PlaceholderWidth, PlaceholderHeight, PixelFormat.R8G8B8A8_UNorm_SRgb, TextureFlags.ShaderResource));
 
-        _texture = Texture.New(Context.GraphicsDevice, textureDescription);
-
-        // load shader
         _background2DEffect = new DynamicEffectInstance("RibbonBackgroundShader");
         _background2DEffect.Initialize(Context.Services);
 
@@ -77,8 +69,7 @@ public class RibbonBackgroundRenderFeature : RootRenderFeature
         base.Destroy();
     }
 
-    private static void Draw2D([NotNull] RenderDrawContext context, [NotNull] RibbonRenderBackground renderBackground,
-        Texture texture, SpriteBatch spriteBatch, DynamicEffectInstance effect)
+    private static void Draw2D(RenderDrawContext context, RibbonRenderBackground renderBackground, Texture texture, SpriteBatch spriteBatch, DynamicEffectInstance effect)
     {
         var target = context.CommandList.RenderTarget;
         var graphicsDevice = context.GraphicsDevice;

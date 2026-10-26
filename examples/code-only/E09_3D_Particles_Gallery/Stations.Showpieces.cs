@@ -75,7 +75,7 @@ public static class ShowStations
         smoke.Updaters.Add(new UpdaterSizeOverTime { SamplerMain = Curves.Float((0f, 1f), (1f, 3f)) });
         smoke.Updaters.Add(new UpdaterColorOverTime { SamplerMain = Curves.Color((0f, new Color4(1f, 1f, 1f, 0f)), (0.25f, new Color4(1f, 1f, 1f, 0.55f)), (1f, new Color4(1f, 1f, 1f, 0f))) });
 
-        var emitters = v switch { 0 => new[] { smoke, embers, flames }, 1 => [flames], _ => [smoke, embers] };
+        ParticleEmitter[] emitters = v switch { 0 => [smoke, embers, flames], 1 => [flames], _ => [smoke, embers] };
 
         s.Place(new Vector3(0f, 0.2f, 0f), 3f, emitters);
     }
@@ -241,7 +241,7 @@ public static class ShowStations
         var v = s.Pick("red", "cyan", "three beams");
 
         var colour = v == 1 ? new Color4(0.3f, 1.5f, 2f, 1f) : new Color4(2f, 0.3f, 0.2f, 1f);
-        var emitters = new List<ParticleEmitter>();
+        List<ParticleEmitter> emitters = [];
         var beams = v == 2 ? 3 : 1;
 
         for (var b = 0; b < beams; b++)
@@ -272,7 +272,7 @@ public static class ShowStations
             }
         }
 
-        s.Place(new Vector3(0f, 2.5f, 0f), 2f, emitters.ToArray());
+        s.Place(new Vector3(0f, 2.5f, 0f), 2f, [.. emitters]);
     }
 
     /// <summary>Turns the station's entity slowly, for the lasers, which turn with it because they live in its space.</summary>

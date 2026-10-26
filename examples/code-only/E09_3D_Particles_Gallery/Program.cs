@@ -32,7 +32,7 @@ var startStation = args.Length >= 2 && args[0] == "--station" && int.TryParse(ar
 var startVariation = args.Length >= 4 && args[2] == "--variation" && int.TryParse(args[3], out var variation) ? variation : 0;
 var clean = args.Contains("--clean");
 
-Gallery<ParticleStation>? gallery = null;
+Gallery<ParticleStation> gallery = null!;
 ParticleTextures? textures = null;
 
 WindowsDpiManager.EnablePerMonitorV2();
@@ -67,8 +67,14 @@ void Start(Scene rootScene)
     });
     gallery.UpdateLabels();
 
-    if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);
-    else gallery.GoHome(instant: true);
+    if (startStation > 0)
+    {
+        gallery.GoTo(startStation - 1, instant: true);
+    }
+    else
+    {
+        gallery.GoHome(instant: true);
+    }
 
     var overlay = TextOverlay.GetOrCreate(game);
 
@@ -78,9 +84,7 @@ void Start(Scene rootScene)
 
 void Update(Scene scene, GameTime gameTime)
 {
-    if (gallery is null) return;
-
-    HandleInput(gallery);
+    HandleInput();
     gallery.Update(gameTime);
 
     // One station at a time means one simulation at a time: the others pause where they are
@@ -93,7 +97,7 @@ void Update(Scene scene, GameTime gameTime)
     }
 }
 
-void HandleInput(Gallery<ParticleStation> gallery)
+void HandleInput()
 {
     if (game.Input.IsKeyPressed(Keys.N)) gallery.Step(+1);
     if (game.Input.IsKeyPressed(Keys.P)) gallery.Step(-1);
@@ -120,8 +124,6 @@ void HandleInput(Gallery<ParticleStation> gallery)
 
 IReadOnlyList<TextElement> BuildOverlayLines()
 {
-    if (gallery is null) return [];
-
     var living = gallery.Stations.Sum(s => s.LivingParticles);
 
     List<TextElement> lines =
@@ -159,7 +161,6 @@ IReadOnlyList<TextElement> BuildOverlayLines()
         var emitters = particles.ParticleSystem.Emitters;
 
         lines.Add(new(string.Join("   ", emitters.Select((e, i) => $"{(string.IsNullOrEmpty(e.EmitterName) ? $"emitter {i + 1}" : e.EmitterName)}: {e.LivingParticles}")), Color.LightGray));
-
     }
 
     return lines;

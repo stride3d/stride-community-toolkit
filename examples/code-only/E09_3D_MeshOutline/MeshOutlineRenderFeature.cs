@@ -88,15 +88,13 @@ public class MeshOutlineRenderFeature : RootRenderFeature
 
             if (renderMesh.Source is not ModelComponent model) continue;
 
-            var outline = model.Entity.Get<MeshOutlineComponent>();
-            if (outline is null || !outline.Enabled) continue;
+            if (model.Entity.Get<MeshOutlineComponent>() is not { Enabled: true } outline) continue;
 
             DrawOutline(context, renderMesh, outline, viewProjection, outlineScale);
         }
     }
 
-    private void DrawOutline(RenderDrawContext context, RenderMesh renderMesh, MeshOutlineComponent outline,
-        Matrix viewProjection, Vector3 outlineScale)
+    private void DrawOutline(RenderDrawContext context, RenderMesh renderMesh, MeshOutlineComponent outline, Matrix viewProjection, Vector3 outlineScale)
     {
         var drawData = renderMesh.ActiveMeshDraw;
         var commandList = context.CommandList;

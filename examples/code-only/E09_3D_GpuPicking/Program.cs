@@ -36,11 +36,11 @@ const int CrateRows = 10;
 const float CrateSpacing = 1.3f;
 
 Matrix[] crateMatrices = [];
-Entity? crates = null;
-GpuPicker? picker = null;
-ShapeBatch? shapes = null;
+Entity crates = null!;
+GpuPicker picker = null!;
+ShapeBatch shapes = null!;
 PickResult? selected = null;
-HighlightShell? hover = null;
+HighlightShell hover = null!;
 
 WindowsDpiManager.EnablePerMonitorV2();
 
@@ -73,14 +73,12 @@ void Start(Scene scene)
     picker.Pickable = RenderGroupMask.All & ~RenderGroupMask.Group30;
 
     var overlay = TextOverlay.GetOrCreate(game);
-    overlay.AddSection("Picking", OverlayLines);
+    overlay.AddSection("Picking", BuildOverlayLines);
     overlay.SetPosition(ScreenAnchor.BottomLeft);
 }
 
 void Update(Scene scene, GameTime time)
 {
-    if (picker is null || shapes is null) return;
-
     if (game.Input.IsMouseButtonPressed(MouseButton.Left) && picker.Result is { Hit: true } hit)
     {
         selected = hit;
@@ -94,14 +92,20 @@ void Update(Scene scene, GameTime time)
     if (picker.Result is { Hit: true, ModelComponent: { } model } hovered)
     {
         // A crate has no entity of its own: the shell goes to the instance's matrix instead
-        if (model.Entity == crates) hover?.Show(model, crateMatrices[Math.Clamp(hovered.InstanceIndex, 0, crateMatrices.Length - 1)]);
-        else hover?.Show(model);
+        if (model.Entity == crates)
+        {
+            hover.Show(model, CrateMatrix(hovered.InstanceIndex));
+        }
+        else
+        {
+            hover.Show(model);
+        }
 
         DrawRing(hovered, Color.Cyan, 10f);
     }
     else
     {
-        hover?.Hide();
+        hover.Hide();
     }
 
     if (selected is { } chosen)
@@ -130,7 +134,6 @@ void BuildScene(Scene scene)
     {
         EntityName = "Teapot",
         Material = game.CreateMaterial(Color.Gold, metalness: 0.6f, glossiness: 0.8f),
-        Position = new Vector3(0f, 0f, 0f),
     });
 
     teapot.Scene = scene;
@@ -218,15 +221,13 @@ void BuildCrates(Scene scene)
 /// </summary>
 void DrawHighlight(PickResult result, Color colour, float ringPixels)
 {
-    if (shapes is null || result is not { Hit: true, Entity: { } entity, ModelComponent: { } model }) return;
+    if (result is not { Hit: true, Entity: { } entity, ModelComponent: { } model }) return;
 
     DrawRing(result, colour, ringPixels);
 
     if (entity == crates)
     {
-        var instance = crateMatrices[Math.Clamp(result.InstanceIndex, 0, crateMatrices.Length - 1)];
-
-        shapes.DrawWireBox(instance.TranslationVector, new Vector3(1f), 0.03f, colour);
+        shapes.DrawWireBox(CrateMatrix(result.InstanceIndex).TranslationVector, new Vector3(1f), 0.03f, colour);
     }
     else
     {
@@ -239,29 +240,27 @@ void DrawHighlight(PickResult result, Color colour, float ringPixels)
 /// <summary>A ring at the point on the surface the pick hit.</summary>
 void DrawRing(PickResult result, Color colour, float ringPixels)
 {
-    if (shapes is null || result is not { Hit: true, WorldPosition: { } at }) return;
+    if (result is not { Hit: true, WorldPosition: { } at }) return;
 
     shapes.BorderWidth = 2f;
     shapes.Fill.Alpha = 0f;
     shapes.DrawPixelRing(at, ringPixels, colour);
 }
 
-IReadOnlyList<TextElement> OverlayLines()
-{
-    List<TextElement> lines =
-    [
-        new("Hover", "Highlight", Color.Gold),
-        new("Left click", "Select", Color.Gold),
-        new("Escape", "Clear", Color.Gold),
-        new(""),
-        new($"Under the mouse: {Describe(picker?.Result)}", Color.Cyan),
-        new($"Selected: {Describe(selected)}", Color.Gold),
-        new("No colliders anywhere: the renderer", Color.LightGreen),
-        new("answers what is under the mouse", Color.LightGreen),
-    ];
+/// <summary>The instance's matrix, clamped: the picker's index is trusted only as far as the field goes.</summary>
+Matrix CrateMatrix(int instance) => crateMatrices[Math.Clamp(instance, 0, crateMatrices.Length - 1)];
 
-    return lines;
-}
+IReadOnlyList<TextElement> BuildOverlayLines() =>
+[
+    new("Hover", "Highlight", Color.Gold),
+    new("Left click", "Select", Color.Gold),
+    new("Escape", "Clear", Color.Gold),
+    new(""),
+    new($"Under the mouse: {Describe(picker.Result)}", Color.Cyan),
+    new($"Selected: {Describe(selected)}", Color.Gold),
+    new("No colliders anywhere: the renderer", Color.LightGreen),
+    new("answers what is under the mouse", Color.LightGreen),
+];
 
 string Describe(PickResult? result)
 {

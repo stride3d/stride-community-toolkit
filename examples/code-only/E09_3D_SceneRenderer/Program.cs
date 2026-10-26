@@ -10,8 +10,8 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 
-BodyComponent? body = null;
-bool impulseApplied = false;
+BodyComponent body = null!;
+var impulseApplied = false;
 
 using var game = new Game();
 
@@ -22,17 +22,18 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene scene)
 {
+    game.AddGrabber();
+
     // 1. A scene renderer: a label for every entity, and the static "Example 1"
     game.AddSceneRenderer(new MyCustomSceneRenderer());
 
     // 2. The toolkit's renderer for EntityTextComponent labels
     game.AddSceneRenderer(new EntityTextRenderer());
 
-    var cube = game.CreatePrimitive(Primitive3D.Cube());
-    cube.Transform.Position = new Vector3(0, 0.5f, 0);
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions { Position = new Vector3(0, 0.5f, 0) });
 
     // 2. The cube's label
-    cube.Add(new EntityTextComponent()
+    cube.Add(new EntityTextComponent
     {
         Text = "Example 2: Me, Cube",
         FontSize = 12,
@@ -41,8 +42,7 @@ void Start(Scene scene)
 
     cube.Scene = scene;
 
-    var capsule = game.CreatePrimitive(Primitive3D.Capsule());
-    capsule.Transform.Position = new Vector3(0, 8, 0);
+    var capsule = game.CreatePrimitive(Primitive3D.Capsule(), new PrimitiveEntityOptions { Position = new Vector3(0, 8, 0) });
 
     // Tilted, so it rolls when it lands
     capsule.Transform.Rotation = Quaternion.RotationZ(MathUtil.DegreesToRadians(2));
@@ -52,27 +52,23 @@ void Start(Scene scene)
     // 3. A startup script that draws for this one entity
     capsule.Add(new SpriteBatchRendererScript());
 
-    var textComponent = new EntityTextComponent()
+    capsule.Add(new EntityTextComponent
     {
         Text = "Example 2: Hello, Stride!",
         FontSize = 13,
         TextColor = Color.Blue,
         Offset = new(0, -100),
         EnableBackground = true,
-    };
-    capsule.Add(textComponent);
+    });
 
     capsule.Scene = scene;
 }
 
 void Update(Scene scene, GameTime time)
 {
-    if (body is null) return;
-
     if (impulseApplied) return;
 
     // A push, so it rolls after it lands
-
     body.ApplyAngularImpulse(new(0, 10, 0));
 
     impulseApplied = true;

@@ -13,7 +13,6 @@ namespace E09_3D_RootRendererShader.Renderers;
 [DefaultEntityComponentRenderer(typeof(RibbonBackgroundRenderProcessor))]
 public class RibbonBackgroundComponent : ActivableEntityComponent
 {
-
     /// <summary>
     /// Gets or sets the intensity.
     /// </summary>

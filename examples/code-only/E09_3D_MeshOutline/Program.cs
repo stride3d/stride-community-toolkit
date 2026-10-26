@@ -36,25 +36,12 @@ void Start(Scene rootScene)
     CreateOutlinedPrimitive(rootScene, Primitive3D.Cube(), Color.Orange, new Vector3(2f, 0.5f, 4f));
 }
 
-/// <summary>
-/// Creates a 3D primitive, gives it an outline, and adds it to the scene.
-/// </summary>
-/// <param name="rootScene">The scene to which the entity will be added.</param>
-/// <param name="modelType">The shape to create, such as <c>Primitive3D.Sphere()</c>.</param>
-/// <param name="color">The color of the outline effect.</param>
-/// <param name="position">The position of the entity in the scene.</param>
 void CreateOutlinedPrimitive(Scene rootScene, Primitive3D modelType, Color4 color, Vector3 position)
 {
-    var entity = game.CreatePrimitive(modelType);
-
-    entity.Transform.Position = position;
+    var entity = game.CreatePrimitive(modelType, new PrimitiveEntityOptions { Position = position });
 
     // The presence of this component is what makes the render feature draw an outline
-    entity.Add(new MeshOutlineComponent
-    {
-        Color = color,
-        Intensity = OutlineIntensity
-    });
+    entity.Add(new MeshOutlineComponent { Color = color, Intensity = OutlineIntensity });
 
     entity.Scene = rootScene;
 }

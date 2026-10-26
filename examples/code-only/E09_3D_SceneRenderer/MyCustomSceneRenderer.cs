@@ -18,7 +18,7 @@ public class MyCustomSceneRenderer : SceneRendererBase
 
     private SpriteFont? _font;
 
-    private readonly float _fontSize = 12;
+    private const float FontSize = 12;
 
     private Scene? _scene;
 
@@ -95,37 +95,25 @@ public class MyCustomSceneRenderer : SceneRendererBase
         {
             var worldPos = entity.Transform.Position;
 
-            // Transform to clip space
+            // Transform to clip space; behind the camera is out
             var clipPosition = Vector4.Transform(new Vector4(worldPos, 1f), viewProjection);
-            if (clipPosition.W <= 0f)
-                continue; // behind the camera
 
-            // Perspective divide -> Normalized Device Coordinates (NDC)
-            var inverseW = 1f / clipPosition.W;
-            var normalizedDeviceCoordinatesX = clipPosition.X * inverseW;
-            var normalizedDeviceCoordinatesY = clipPosition.Y * inverseW;
-            var normalizedDeviceCoordinatesZ = clipPosition.Z * inverseW;
+            if (clipPosition.W <= 0f) continue;
 
-            // Clip test in NDC: x and y in [-1,1], z in [0,1]
-            var outsideNdc = normalizedDeviceCoordinatesZ < 0f || normalizedDeviceCoordinatesZ > 1f || normalizedDeviceCoordinatesX < -1f || normalizedDeviceCoordinatesX > 1f || normalizedDeviceCoordinatesY < -1f || normalizedDeviceCoordinatesY > 1f;
+            // Perspective divide to normalized device coordinates, then the clip test: x and y in [-1,1], z in [0,1]
+            var ndc = new Vector3(clipPosition.X, clipPosition.Y, clipPosition.Z) / clipPosition.W;
 
-            // culled
-            if (outsideNdc) continue;
+            if (ndc.Z < 0f || ndc.Z > 1f || MathF.Abs(ndc.X) > 1f || MathF.Abs(ndc.Y) > 1f) continue;
 
             var screenPosition = _camera.WorldToScreenPoint(ref worldPos, GraphicsDevice);
             var finalPosition = screenPosition + _offset;
 
             var text = $"{entity.Name}: {worldPos:N1}";
 
-            var textDimensions = _spriteBatch.MeasureString(_font, text, _fontSize);
+            var textDimensions = _spriteBatch.MeasureString(_font, text, FontSize);
 
-            _spriteBatch.Draw(_colorTexture, new Rectangle(
-                (int)finalPosition.X - 2,
-                (int)finalPosition.Y - 2,
-                (int)textDimensions.X + 4,
-                (int)textDimensions.Y + 4), _defaultBackground);
-
-            _spriteBatch.DrawString(_font, text, _fontSize, finalPosition, Color.Black);
+            _spriteBatch.Draw(_colorTexture, new Rectangle((int)finalPosition.X - 2, (int)finalPosition.Y - 2, (int)textDimensions.X + 4, (int)textDimensions.Y + 4), _defaultBackground);
+            _spriteBatch.DrawString(_font, text, FontSize, finalPosition, Color.Black);
         }
 
         _spriteBatch.End();
