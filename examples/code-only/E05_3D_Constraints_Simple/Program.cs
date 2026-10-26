@@ -18,7 +18,7 @@ void Start(Scene scene)
     game.AddGroundGizmo(new(-5, 0, -5), showAxisName: true);
 
     // Left mouse picks either sphere up; the servo drags the other one along (GrabberScript, see E05_3D_Grabber).
-    game.GetCameraEntity().Add(new GrabberScript());
+    game.AddGrabber();
 
     var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
@@ -32,28 +32,24 @@ void Start(Scene scene)
         new("Carry one and the other follows", Color.LightGray),
     ]);
 
-    var entity = game.CreatePrimitive(Primitive3D.Capsule());
-    entity.Transform.Position = new Vector3(0, 3, 0);
-    entity.Scene = scene;
+    var capsule = game.CreatePrimitive(Primitive3D.Capsule(), new() { Position = new Vector3(0, 3, 0) });
+    capsule.Scene = scene;
 
     var sphere = game.CreatePrimitive(Primitive3D.Sphere(), new()
     {
-        Material = game.CreateMaterial(Color.Gold)
+        Material = game.CreateMaterial(Color.Gold),
+        Position = new Vector3(0.1f, 5, -0.3f),
     });
-    sphere.Transform.Position = new Vector3(0.1f, 5, -0.3f);
 
-    var connectedSphere = game.CreatePrimitive(Primitive3D.Sphere());
-    connectedSphere.Transform.Position = new Vector3(-2f, 1, -2f);
+    var connectedSphere = game.CreatePrimitive(Primitive3D.Sphere(), new() { Position = new Vector3(-2f, 1, -2f) });
 
     // A distance servo holds the two spheres at a target distance: grab one and the other follows
-    var distanceServo = new DistanceServoConstraintComponent
+    sphere.Add(new DistanceServoConstraintComponent
     {
         A = sphere.Get<BodyComponent>(),
         B = connectedSphere.Get<BodyComponent>(),
         TargetDistance = 3.0f,
-    };
-
-    sphere.Add(distanceServo);
+    });
 
     sphere.Scene = scene;
     connectedSphere.Scene = scene;

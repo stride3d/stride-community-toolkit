@@ -83,8 +83,8 @@ FrictionLane[] frictionLanes =
     new(Lane: 0.5f, Box: 4f, new Color(150, 205, 225)),
 ];
 
-var balls = new List<Ball>();
-var boxes = new List<Box>();
+List<Ball> balls = [];
+List<Box> boxes = [];
 var launched = false;
 
 using var game = new Game();
@@ -105,13 +105,19 @@ void Start(Scene scene)
 
     game.AddEntityTextRenderer();
 
-    for (var i = 0; i < bounceLanes.Length; i++) BuildBounceLane(scene, bounceLanes[i], (i - (bounceLanes.Length - 1) * 0.5f) * BallSpacing);
+    for (var i = 0; i < bounceLanes.Length; i++)
+    {
+        BuildBounceLane(scene, bounceLanes[i], (i - (bounceLanes.Length - 1) * 0.5f) * BallSpacing);
+    }
 
-    for (var i = 0; i < frictionLanes.Length; i++) BuildFrictionLane(scene, frictionLanes[i], FirstLaneZ + i * LaneSpacing);
+    for (var i = 0; i < frictionLanes.Length; i++)
+    {
+        BuildFrictionLane(scene, frictionLanes[i], FirstLaneZ + i * LaneSpacing);
+    }
 
     BuildEndWall(scene);
 
-    TextOverlay.GetOrCreate(game).AddSection("Physics materials", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Physics materials", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -126,7 +132,10 @@ void Update(Scene scene, GameTime time)
         Replay();
     }
 
-    foreach (var ball in balls) ball.Measure(BallRadius);
+    foreach (var ball in balls)
+    {
+        ball.Measure(BallRadius);
+    }
 }
 
 /// <summary>Puts every ball and box back where it started, still, and pushes the boxes.</summary>
@@ -139,7 +148,10 @@ void Replay()
         ball.Forget();
     }
 
-    foreach (var box in boxes) Reset(box.Body, box.Start, new Vector3(PushSpeed, 0f, 0f));
+    foreach (var box in boxes)
+    {
+        Reset(box.Body, box.Start, new Vector3(PushSpeed, 0f, 0f));
+    }
 
     static void Reset(BodyComponent body, Vector3 position, Vector3 velocity)
     {
@@ -169,13 +181,15 @@ void BuildBounceLane(Scene scene, BounceLane lane, float x)
                 SpringDampingRatio = pad.DampingRatio,
                 MaximumRecoveryVelocity = lane.PadRecovery,
             },
+            Position = new Vector3(x, PadHeight * 0.5f, BounceRowZ),
         });
 
-        padEntity.Transform.Position = new Vector3(x, PadHeight * 0.5f, BounceRowZ);
         padEntity.Scene = scene;
 
         surface = PadHeight;
     }
+
+    var start = new Vector3(x, surface + DropHeight + BallRadius, BounceRowZ);
 
     // A sphere's size is its radius in X
     var entity = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
@@ -190,11 +204,9 @@ void BuildBounceLane(Scene scene, BounceLane lane, float x)
             // Drawn between physics steps too, so the fall and the bounce are smooth
             InterpolationMode = InterpolationMode.Interpolated,
         },
+        Position = start,
     });
 
-    var start = new Vector3(x, surface + DropHeight + BallRadius, BounceRowZ);
-
-    entity.Transform.Position = start;
     entity.Scene = scene;
 
     balls.Add(new Ball(lane, entity.Get<BodyComponent>(), start, surface));
@@ -210,10 +222,12 @@ void BuildFrictionLane(Scene scene, FrictionLane lane, float z)
     {
         Material = game.CreateMaterial(lane.Colour, metalness: 0f, glossiness: lane.Lane == 0f ? 0.9f : 0.2f),
         Component = new StaticComponent { Collider = new CompoundCollider(), FrictionCoefficient = lane.Lane },
+        Position = new Vector3(0f, LaneThickness * 0.5f, z),
     });
 
-    laneEntity.Transform.Position = new Vector3(0f, LaneThickness * 0.5f, z);
     laneEntity.Scene = scene;
+
+    var start = new Vector3(-LaneLength * 0.5f + BoxSize, LaneThickness + BoxSize * 0.5f, z);
 
     var entity = game.CreatePrimitive(Primitive3D.Cube(BoxSize), new BepuPhysicsOptions
     {
@@ -224,11 +238,9 @@ void BuildFrictionLane(Scene scene, FrictionLane lane, float z)
             FrictionCoefficient = lane.Box,
             InterpolationMode = InterpolationMode.Interpolated,
         },
+        Position = start,
     });
 
-    var start = new Vector3(-LaneLength * 0.5f + BoxSize, LaneThickness + BoxSize * 0.5f, z);
-
-    entity.Transform.Position = start;
     entity.Scene = scene;
 
     boxes.Add(new Box(lane, entity.Get<BodyComponent>(), start));
@@ -245,9 +257,9 @@ void BuildEndWall(Scene scene)
     {
         Material = game.CreateMaterial(new Color(150, 150, 158), metalness: 0f, glossiness: 0.3f),
         Body = BodyMode.Static,
+        Position = new Vector3(LaneLength * 0.5f + 0.15f, 0.4f, FirstLaneZ + (frictionLanes.Length - 1) * LaneSpacing * 0.5f),
     });
 
-    wall.Transform.Position = new Vector3(LaneLength * 0.5f + 0.15f, 0.4f, FirstLaneZ + (frictionLanes.Length - 1) * LaneSpacing * 0.5f);
     wall.Scene = scene;
 }
 
@@ -263,7 +275,7 @@ void AddLabel(Scene scene, string text, Vector3 position, TextAnchor anchor)
     label.Scene = scene;
 }
 
-IReadOnlyList<TextElement> OverlayLines()
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
     List<TextElement> lines =
     [
@@ -273,13 +285,17 @@ IReadOnlyList<TextElement> OverlayLines()
     ];
 
     for (var i = 0; i < balls.Count; i++)
+    {
         lines.Add(new($"{i + 1}. {balls[i].Lane.Label}: {balls[i].Rebound / DropHeight:P0}", balls[i].Lane.Colour));
+    }
 
     lines.Add(new(""));
     lines.Add(new("Friction: lane x box, and the slide", Color.LightGray));
 
     foreach (var box in boxes)
+    {
         lines.Add(new($"{box.Lane.Lane:0.#} x {box.Lane.Box:0.#} = {box.Lane.Lane * box.Lane.Box:0.#}: {box.Distance:0.0} m", box.Lane.Colour));
+    }
 
     return lines;
 }
@@ -301,25 +317,16 @@ sealed record FrictionLane(float Lane, float Box, Color Colour)
 }
 
 /// <summary>A dropped ball, and the height of its first rebound.</summary>
-internal sealed class Ball
+internal sealed class Ball(BounceLane lane, BodyComponent body, Vector3 start, float surface)
 {
-    private readonly float _surface;
     private bool _rising;
     private bool _peaked;
 
-    internal Ball(BounceLane lane, BodyComponent body, Vector3 start, float surface)
-    {
-        Lane = lane;
-        Body = body;
-        Start = start;
-        _surface = surface;
-    }
+    internal BounceLane Lane { get; } = lane;
 
-    internal BounceLane Lane { get; }
+    internal BodyComponent Body { get; } = body;
 
-    internal BodyComponent Body { get; }
-
-    internal Vector3 Start { get; }
+    internal Vector3 Start { get; } = start;
 
     /// <summary>How far above the surface the ball's lowest point came back on its first bounce.</summary>
     internal float Rebound { get; private set; }
@@ -342,28 +349,15 @@ internal sealed class Ball
             return;
         }
 
-        Rebound = MathF.Max(Rebound, Body.Position.Y - radius - _surface);
+        Rebound = MathF.Max(Rebound, Body.Position.Y - radius - surface);
 
         if (speed < 0f) _peaked = true;
     }
 }
 
 /// <summary>A pushed box, and how far it has slid.</summary>
-internal sealed class Box
+sealed record Box(FrictionLane Lane, BodyComponent Body, Vector3 Start)
 {
-    internal Box(FrictionLane lane, BodyComponent body, Vector3 start)
-    {
-        Lane = lane;
-        Body = body;
-        Start = start;
-    }
-
-    internal FrictionLane Lane { get; }
-
-    internal BodyComponent Body { get; }
-
-    internal Vector3 Start { get; }
-
     internal float Distance => MathF.Max(Body.Position.X - Start.X, 0f);
 }
 

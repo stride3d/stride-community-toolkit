@@ -8,7 +8,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Graphics;
-using Stride.Rendering;
 
 const int ShapeCount = 100;
 const int RemovalThresholdY = -30;
@@ -31,8 +30,6 @@ void Start(Scene scene)
     var capsule = game.CreatePrimitive(Primitive3D.Capsule());
     capsule.Transform.Position = new Vector3(0, 8, 0);
     capsule.Scene = scene;
-
-    MoveToAnotherProjectOrSnippetExample(scene, game);
 }
 
 void Update(Scene scene, GameTime time)
@@ -58,44 +55,6 @@ void GenerateRandomSpheres()
     var totalShapes = shapeGenerator?.Generate(ShapeCount, Primitive3D.Sphere(0.3f));
 
     uiManager?.UpdateTextBlock($"Total Shapes: {totalShapes ?? 0}");
-}
-
-static void MoveToAnotherProjectOrSnippetExample(Scene scene, Game game)
-{
-    var vertices = new VertexPositionTexture[4];
-    vertices[0].Position = new Vector3(0f, 0f, 1f);
-    vertices[1].Position = new Vector3(0f, 1f, 0f);
-    vertices[2].Position = new Vector3(0f, 1f, 1f);
-    //vertices[3].Position = new Vector3(1f, 0f, 1f);
-    var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(game.GraphicsDevice, vertices,
-                                                         GraphicsResourceUsage.Dynamic);
-    int[] indices = { 0, 2, 1 };
-    var indexBuffer = Stride.Graphics.Buffer.Index.New(game.GraphicsDevice, indices);
-
-    var customMesh = new Mesh
-    {
-        Draw = new MeshDraw
-        {
-            /* Vertex buffer and index buffer setup */
-            PrimitiveType = PrimitiveType.TriangleList,
-            DrawCount = indices.Length,
-            IndexBuffer = new IndexBufferBinding(indexBuffer, true, indices.Length),
-            VertexBuffers = new[] { new VertexBufferBinding(vertexBuffer,
-                                  VertexPositionTexture.Layout, vertexBuffer.ElementCount) },
-        }
-    };
-
-    var entity = new Entity();
-
-    var model = new Model();
-
-    model.Meshes.Add(customMesh);
-
-    model.Materials.Add(game.CreateMaterial());
-
-    entity.Components.Add(new ModelComponent(model));
-
-    entity.Scene = scene;
 }
 /*
 ---example-metadata

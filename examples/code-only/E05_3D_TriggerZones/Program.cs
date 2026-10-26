@@ -44,23 +44,23 @@ var zoneColour = new Color(90, 200, 120);
 var plateColour = new Color(255, 190, 60);
 var crateColour = new Color(220, 90, 80);
 
-var inside = new HashSet<CollidableComponent>();
+HashSet<CollidableComponent> inside = [];
 var entries = 0;
 var plate = new TouchCounter();
 var impact = new ImpactMeter();
-var balls = new List<Entity>();
+List<Entity> balls = [];
 var random = new Random(5);
 
-Entity? pad = null;
-Entity? plateEntity = null;
-Entity? crate = null;
-ImmediateDebugRenderSystem? debugDraw = null;
-Material? idleMaterial = null;
-Material? zoneMaterial = null;
-Material? plateMaterial = null;
-Material? hitMaterial = null;
-Material? crateMaterial = null;
-Material? ballMaterial = null;
+Entity pad = null!;
+Entity plateEntity = null!;
+Entity crate = null!;
+ImmediateDebugRenderSystem debugDraw = null!;
+Material idleMaterial = null!;
+Material zoneMaterial = null!;
+Material plateMaterial = null!;
+Material hitMaterial = null!;
+Material crateMaterial = null!;
+Material ballMaterial = null!;
 
 using var game = new Game();
 
@@ -77,13 +77,12 @@ void Start(Scene scene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Trigger zones - Stride Community Toolkit";
 
-    game.AddDebugShapes();
+    debugDraw = game.AddDebugShapes();
+    debugDraw.Visible = true;
+
     // F11 shows the debug meshes with the contacts the solver is resolving, which is what this example is about
     game.AddPhysicsDebug(contactsVisible: true);
     game.AddGrabber();
-
-    debugDraw = game.Services.GetService<ImmediateDebugRenderSystem>() ?? throw new InvalidOperationException("AddDebugShapes registers the renderer first");
-    debugDraw.Visible = true;
 
     idleMaterial = game.CreateMaterial(idle, metalness: 0f, glossiness: 0.3f);
     zoneMaterial = game.CreateMaterial(zoneColour, metalness: 0f, glossiness: 0.3f);
@@ -102,23 +101,27 @@ void Start(Scene scene)
     // A first batch, so the stations have something to report straight away
     DropBalls(scene);
 
-    TextOverlay.GetOrCreate(game).AddSection("Trigger zones", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Trigger zones", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
 {
-    if (game.Input.IsKeyPressed(Keys.Space)) DropBalls(scene);
+    if (game.Input.IsKeyPressed(Keys.Space))
+    {
+        DropBalls(scene);
+    }
+
     if (game.Input.IsKeyPressed(Keys.R)) Reset();
 
     // The zone has no model: the box is drawn here, in the colour of its state
-    debugDraw!.DrawCube(zoneCentre, zoneSize, color: inside.Count > 0 ? zoneColour : idle);
+    debugDraw.DrawCube(zoneCentre, zoneSize, color: inside.Count > 0 ? zoneColour : idle);
 
-    pad!.Get<ModelComponent>().Materials[0] = inside.Count > 0 ? zoneMaterial! : idleMaterial!;
-    plateEntity!.Get<ModelComponent>().Materials[0] = plate.Touching.Count > 0 ? plateMaterial! : idleMaterial!;
+    pad.Get<ModelComponent>().Materials[0] = inside.Count > 0 ? zoneMaterial : idleMaterial;
+    plateEntity.Get<ModelComponent>().Materials[0] = plate.Touching.Count > 0 ? plateMaterial : idleMaterial;
 
     // The crate flashes white for a moment after a hit
     impact.FlashLeft = MathF.Max(0f, impact.FlashLeft - (float)time.Elapsed.TotalSeconds);
-    crate!.Get<ModelComponent>().Materials[0] = impact.FlashLeft > 0f ? hitMaterial! : crateMaterial!;
+    crate.Get<ModelComponent>().Materials[0] = impact.FlashLeft > 0f ? hitMaterial : crateMaterial;
 }
 
 /// <summary>
@@ -148,9 +151,14 @@ void BuildZone(Scene scene)
     zone.Transform.Position = zoneCentre;
     zone.Scene = scene;
 
-    pad = game.CreatePrimitive(Primitive3D.Box(new Vector3(zoneSize.X, 0.06f, zoneSize.Z)), new BepuPhysicsOptions { Material = idleMaterial, Body = BodyMode.None });
-    pad.Name = "Zone pad";
-    pad.Transform.Position = new Vector3(zoneCentre.X, 0.03f, zoneCentre.Z);
+    pad = game.CreatePrimitive(Primitive3D.Box(new Vector3(zoneSize.X, 0.06f, zoneSize.Z)), new BepuPhysicsOptions
+    {
+        EntityName = "Zone pad",
+        Material = idleMaterial,
+        Body = BodyMode.None,
+        Position = new Vector3(zoneCentre.X, 0.03f, zoneCentre.Z),
+    });
+
     pad.Scene = scene;
 }
 
@@ -159,12 +167,12 @@ void BuildPlate(Scene scene)
 {
     plateEntity = game.CreatePrimitive(Primitive3D.Box(new Vector3(3f, 0.3f, 3f)), new BepuPhysicsOptions
     {
+        EntityName = "Plate",
         Material = idleMaterial,
         Component = new StaticComponent { Collider = new CompoundCollider(), ContactEventHandler = plate },
+        Position = plateCentre,
     });
 
-    plateEntity.Name = "Plate";
-    plateEntity.Transform.Position = plateCentre;
     plateEntity.Scene = scene;
 }
 
@@ -173,12 +181,12 @@ void BuildCrate(Scene scene)
 {
     crate = game.CreatePrimitive(Primitive3D.Cube(1.2f), new BepuPhysicsOptions
     {
+        EntityName = "Crate",
         Material = crateMaterial,
         Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated, ContactEventHandler = impact },
+        Position = crateStart,
     });
 
-    crate.Name = "Crate";
-    crate.Transform.Position = crateStart;
     crate.Scene = scene;
 }
 
@@ -189,11 +197,11 @@ void DropBalls(Scene scene)
     {
         var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
         {
+            EntityName = $"Ball {balls.Count + 1}",
             Material = ballMaterial,
+            Position = new Vector3(x + random.NextSingle() * 0.6f - 0.3f, 6f, random.NextSingle() * 0.6f - 0.3f),
         });
 
-        ball.Name = $"Ball {balls.Count + 1}";
-        ball.Transform.Position = new Vector3(x + random.NextSingle() * 0.6f - 0.3f, 6f, random.NextSingle() * 0.6f - 0.3f);
         ball.Scene = scene;
 
         balls.Add(ball);
@@ -217,7 +225,7 @@ void Reset()
     plate.Reset();
     impact.Reset();
 
-    var body = crate!.Get<BodyComponent>();
+    var body = crate.Get<BodyComponent>();
 
     body.Teleport(crateStart, Quaternion.Identity);
     body.Awake = true;
@@ -236,7 +244,7 @@ void AddLabel(Scene scene, string text, float x)
     label.Scene = scene;
 }
 
-IReadOnlyList<TextElement> OverlayLines() =>
+IReadOnlyList<TextElement> BuildOverlayLines() =>
 [
     new("Space", "Drop a ball over each station", Color.Gold),
     new("Left mouse", "Grab a ball and carry it", Color.Gold),

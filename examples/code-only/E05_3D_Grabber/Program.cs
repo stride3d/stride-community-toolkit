@@ -9,6 +9,7 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Input;
 
 // A gravity gun: click any body to pick it up, carry it around on the end of the camera ray, and
@@ -26,10 +27,10 @@ using Stride.Input;
 
 const float SpawnHeight = 0.5f;
 
-var masses = new[] { 1f, 3f, 10f, 30f, 100f };
-var spawned = new List<Entity>();
+float[] masses = [1f, 3f, 10f, 30f, 100f];
+List<Entity> spawned = [];
 
-GrabberScript? grabber = null;
+GrabberScript grabber = null!;
 
 using var game = new Game();
 
@@ -50,14 +51,13 @@ void Start(Scene scene)
     AddInstructions();
 }
 
-void Update(Scene scene, Stride.Games.GameTime time)
+void Update(Scene scene, GameTime time)
 {
     if (game.Input.IsKeyPressed(Keys.R))
     {
-        grabber?.Release();
+        grabber.Release();
 
-        foreach (var entity in spawned)
-            entity.Scene = null;
+        foreach (var entity in spawned) entity.Scene = null;
 
         spawned.Clear();
         BuildScene(scene);
@@ -72,11 +72,12 @@ void BuildScene(Scene scene)
         var shade = (byte)(230 - i * 35);
         var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions
         {
+            EntityName = $"{masses[i]:0} kg",
             Material = game.CreateMaterial(new Color(shade, (byte)(120 + i * 20), (byte)(80 + i * 30))),
             Component = new BodyComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Mass = masses[i] } } } },
             Position = new Vector3(3 - i * 1.5f, SpawnHeight, 0),
         });
-        cube.Name = $"{masses[i]:0} kg";
+
         Place(cube, scene);
     }
 
@@ -85,20 +86,22 @@ void BuildScene(Scene scene)
     {
         var sphere = game.CreatePrimitive(Primitive3D.Sphere(0.35f), new()
         {
+            EntityName = "ball",
             Material = game.CreateMaterial(new Color(120, 200, 255)),
             Position = new Vector3(2.5f - i * 1.7f, SpawnHeight, 3),
         });
-        sphere.Name = "ball";
+
         Place(sphere, scene);
     }
 
     // A capsule whose rotation is locked once it is in the simulation: it can be dragged, never turned.
     var lockedBody = game.CreatePrimitive(Primitive3D.Capsule(), new()
     {
+        EntityName = "locked rotation",
         Material = game.CreateMaterial(new Color(255, 200, 80)),
         Position = new Vector3(-4.5f, 1, 1.5f),
     });
-    lockedBody.Name = "locked rotation";
+
     Place(lockedBody, scene);
 
     var locked = lockedBody.Get<BodyComponent>();
@@ -108,13 +111,14 @@ void BuildScene(Scene scene)
     // A wall to throw at.
     var wall = game.CreatePrimitive(Primitive3D.Box(new Vector3(8, 3, 0.4f)), new BepuPhysicsOptions
     {
+        EntityName = "wall",
         Material = game.CreateMaterial(new Color(140, 140, 150)),
         // An empty compound: the helper adds the box that fits the wall's size. A box given here
         // would be kept as the wall's collider, at its own default size
         Body = BodyMode.Static,
         Position = new Vector3(0, 1.5f, 7),
     });
-    wall.Name = "wall";
+
     Place(wall, scene);
 
     // Remembered, so that R can take the scene away before building it again
@@ -127,19 +131,17 @@ void BuildScene(Scene scene)
 
 void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Grabber", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Grabber", () =>
     {
-        var held = grabber?.Held;
-        var lines = new List<TextElement>
-        {
+        var held = grabber.Held;
+        List<TextElement> lines =
+        [
             new("Left mouse", "Grab and carry; release to drop or throw"),
             new("Mouse wheel", "Carry distance"),
             new("T", "Hold and move the mouse to turn the held body"),
             new("R", "Reset the scene"),
             new(""),
-        };
+        ];
 
         if (held is null)
         {
@@ -150,7 +152,7 @@ void AddInstructions()
             var mass = held.BodyInertia.InverseMass > 0 ? 1 / held.BodyInertia.InverseMass : 0;
             var locked = Bodies.HasLockedInertia(held.BodyInertia.InverseInertiaTensor);
 
-            lines.Add(new($"Holding {held.Entity.Name}, {mass:0.0} kg, at {grabber!.HoldDistance:0.0} m", Color.Yellow));
+            lines.Add(new($"Holding {held.Entity.Name}, {mass:0.0} kg, at {grabber.HoldDistance:0.0} m", Color.Yellow));
             lines.Add(new($"Servo {GrabberForce(held):0} N linear cap{(locked ? ", no angular servo" : "")}"));
         }
 
@@ -158,7 +160,7 @@ void AddInstructions()
     });
 
     float GrabberForce(BodyComponent body)
-        => body.BodyInertia.InverseMass > 0 ? grabber!.ForcePerKilogram / body.BodyInertia.InverseMass : 0;
+        => body.BodyInertia.InverseMass > 0 ? grabber.ForcePerKilogram / body.BodyInertia.InverseMass : 0;
 }
 
 /*

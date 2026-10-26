@@ -151,17 +151,12 @@ public static class RopeBuilder
     /// lands on the collider shape Bepu reads it from.
     /// </remarks>
     private static Entity CreateSphere(Game game, string name, Color color, Vector3 position, float radius, float mass, bool kinematic)
-    {
-        var entity = game.CreatePrimitive(Primitive3D.Sphere(radius), new BepuPhysicsOptions
+        => game.CreatePrimitive(Primitive3D.Sphere(radius), new BepuPhysicsOptions
         {
             EntityName = name,
             Material = game.CreateMaterial(color),
             Mass = mass,
-            Component = new BodyComponent { Kinematic = kinematic, Collider = new CompoundCollider() }
+            Component = new BodyComponent { Kinematic = kinematic, Collider = new CompoundCollider() },
+            Position = position,
         });
-
-        entity.Transform.Position = position;
-
-        return entity;
-    }
 }

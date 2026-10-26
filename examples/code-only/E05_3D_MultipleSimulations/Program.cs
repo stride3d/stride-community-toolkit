@@ -7,6 +7,7 @@ using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Input;
 
 // Two physics simulations in one game, each with its own gravity, running side by side.
@@ -33,7 +34,7 @@ var moonGravity = new Vector3(0, -1.62f, 0);
 var laneOffset = new Vector3(-6, 0, 0);
 var dropHeight = 7f;
 
-var spawned = new List<Entity>();
+List<Entity> spawned = [];
 
 using var game = new Game();
 
@@ -68,9 +69,7 @@ void AddInstructions()
 {
     // One shared on-screen block with the camera help: the overlay draws itself, so nothing here
     // runs per frame
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Simulations", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Simulations", () =>
     [
         new("Space", "Drop everything again", Color.Yellow),
         new(""),
@@ -81,15 +80,13 @@ void AddInstructions()
     ]);
 }
 
-void Update(Scene scene, Stride.Games.GameTime time)
+void Update(Scene scene, GameTime time)
 {
     if (game.Input.IsKeyPressed(Keys.Space))
     {
-        foreach (var entity in spawned)
-            entity.Scene = null;
+        foreach (var entity in spawned) entity.Scene = null;
 
         spawned.Clear();
-
         Spawn(scene);
     }
 }
@@ -103,7 +100,7 @@ void AddGround(string name, Vector3 position, int simulation)
     });
 
     // Changing the selector on an attached collidable moves it to the other simulation.
-    ground.Get<StaticComponent>()!.SimulationSelector = new IndexBasedSimulationSelector { Index = simulation };
+    ground.Get<StaticComponent>().SimulationSelector = new IndexBasedSimulationSelector { Index = simulation };
 }
 
 void Spawn(Scene scene)
@@ -123,10 +120,10 @@ void Spawn(Scene scene)
     {
         EntityName = "Ghost Ball",
         Material = game.CreateMaterial(Color.Orange),
+        Position = -laneOffset + new Vector3(-2.5f, dropHeight - 2, -3),
     });
 
-    ghost.Transform.Position = -laneOffset + new Vector3(-2.5f, dropHeight - 2, -3);
-    ghost.Get<BodyComponent>()!.SimulationSelector = new IndexBasedSimulationSelector { Index = Moon };
+    ghost.Get<BodyComponent>().SimulationSelector = new IndexBasedSimulationSelector { Index = Moon };
     ghost.Scene = scene;
 
     spawned.Add(ghost);
@@ -138,12 +135,11 @@ void SpawnCube(string name, Color color, Vector3 position, int simulation, Scene
     {
         EntityName = name,
         Material = game.CreateMaterial(color),
+        Position = position,
     });
 
-    cube.Transform.Position = position;
-
     // Set before the entity joins the scene, so the body attaches to the right simulation from the start.
-    cube.Get<BodyComponent>()!.SimulationSelector = new IndexBasedSimulationSelector { Index = simulation };
+    cube.Get<BodyComponent>().SimulationSelector = new IndexBasedSimulationSelector { Index = simulation };
 
     cube.Scene = scene;
 

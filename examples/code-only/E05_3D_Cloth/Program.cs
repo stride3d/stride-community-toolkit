@@ -94,14 +94,14 @@ void Start(Scene scene)
 void Update(Scene scene, GameTime time)
 {
     // The menu owns the digit keys while it is open.
-    if (sizeMenu is not null && sizeMenu.Update(game.Input))
-        return;
+    if (sizeMenu?.Update(game.Input) == true) return;
 
     if (game.Input.IsKeyPressed(Keys.N))
+    {
         DropBall(scene);
+    }
 
-    if (game.Input.IsKeyPressed(Keys.R))
-        Rebuild();
+    if (game.Input.IsKeyPressed(Keys.R)) Rebuild();
 }
 
 void Rebuild()
@@ -122,7 +122,6 @@ void Rebuild()
 
 void SetupInstancing(Scene scene)
 {
-
     instancing = new BufferedEntityInstancing(new BepuEntityInstancing());
 
     master = new Entity("ClothMaster") { new ModelComponent(ModelFor(nodeRadius)), new InstancingComponent { Type = instancing } };
@@ -244,7 +243,9 @@ void DrapeSheet(Scene scene, Vector3 centre, float distanceHertz, float? areaHer
     for (var row = 0; row < size; row++)
     {
         for (var column = 0; column < size; column++)
+        {
             grid[row, column] = Node(scene, corner + new Vector3(column * spacing, 0, row * spacing), groupId, row, column, pinned: false);
+        }
     }
 
     Lace(grid, distanceHertz, areaHertz);
@@ -284,8 +285,15 @@ void Lace(Entity[,] grid, float distanceHertz, float? areaHertz)
     {
         for (var column = 0; column < columns; column++)
         {
-            if (column + 1 < columns) Limit(grid[row, column], grid[row, column + 1], distanceHertz);
-            if (row + 1 < rows) Limit(grid[row, column], grid[row + 1, column], distanceHertz);
+            if (column + 1 < columns)
+            {
+                Limit(grid[row, column], grid[row, column + 1], distanceHertz);
+            }
+
+            if (row + 1 < rows)
+            {
+                Limit(grid[row, column], grid[row + 1, column], distanceHertz);
+            }
 
             if (row + 1 < rows && column + 1 < columns)
             {

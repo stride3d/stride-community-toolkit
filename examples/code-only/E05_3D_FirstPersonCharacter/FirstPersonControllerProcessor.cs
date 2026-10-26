@@ -12,38 +12,52 @@ namespace E05_3D_FirstPersonCharacter;
 //           transform directly while the physics body is parked.
 public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControllerComponent>
 {
-    const float MaxPitch = MathUtil.PiOverTwo * 0.99f;
+    private const float MaxPitch = MathUtil.PiOverTwo * 0.99f;
 
     // How long a Space press stays live waiting for ground support (jump buffering). Keep it
     // shorter than any jump's airtime, so a buffered press can never fire twice.
-    const float JumpBufferSeconds = 0.15f;
+    private const float JumpBufferSeconds = 0.15f;
 
     // Characters feel floaty under real-earth gravity (-9.81); most games run ~1.5–2×.
-    const float Gravity = -17f;
+    private const float Gravity = -17f;
 
     public override void Update(GameTime time)
     {
         var input = Services.GetService<InputManager>();
-        if (input == null) return;
-        float dt = (float)time.Elapsed.TotalSeconds;
+
+        if (input is null) return;
+
+        var dt = (float)time.Elapsed.TotalSeconds;
 
         foreach (var pair in ComponentDatas)
+        {
             UpdateOne(pair.Key, pair.Key.Entity, input, dt);
+        }
     }
 
-    void UpdateOne(FirstPersonControllerComponent c, Entity entity, InputManager input, float dt)
+    private void UpdateOne(FirstPersonControllerComponent c, Entity entity, InputManager input, float dt)
     {
         if (!c.Initialized)
         {
             SetMouseLock(c, input, true);
-            if (c.Character != null)
+
+            if (c.Character is not null)
+            {
                 c.FlyPosition = c.Character.Entity.Transform.Position + new Vector3(0, c.EyeHeight, 0);
+            }
+
             c.Initialized = true;
         }
 
         // Escape frees the cursor; clicking the window grabs it again.
-        if (input.IsKeyPressed(Keys.Escape)) SetMouseLock(c, input, false);
-        else if (!c.MouseLocked && input.IsMouseButtonPressed(MouseButton.Left)) SetMouseLock(c, input, true);
+        if (input.IsKeyPressed(Keys.Escape))
+        {
+            SetMouseLock(c, input, false);
+        }
+        else if (!c.MouseLocked && input.IsMouseButtonPressed(MouseButton.Left))
+        {
+            SetMouseLock(c, input, true);
+        }
 
         // Mouse look (both modes). Row-vector convention: RotationX*RotationY = intrinsic
         // yaw-then-local-pitch.
@@ -55,36 +69,56 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         }
 
         var character = c.Character;
-        if (character == null) return;
+
+        if (character is null) return;
 
         // Set world gravity once the body has joined the simulation (Simulation is null before
         // the entity's first physics tick).
-        if (!c.GravityApplied && character.Simulation != null)
+        if (!c.GravityApplied && character.Simulation is not null)
         {
             character.Simulation.PoseGravity = new Vector3(0f, Gravity, 0f);
             c.GravityApplied = true;
         }
 
-        if (input.IsKeyPressed(Keys.V)) SetFly(c, !c.Fly);
+        if (input.IsKeyPressed(Keys.V))
+        {
+            SetFly(c, !c.Fly);
+        }
 
-        if (c.Fly) UpdateFly(c, entity, input, dt);
-        else UpdateWalk(c, entity, input, dt);
+        if (c.Fly)
+        {
+            UpdateFly(c, entity, input, dt);
+        }
+        else
+        {
+            UpdateWalk(c, entity, input, dt);
+        }
     }
 
-    void SetMouseLock(FirstPersonControllerComponent c, InputManager input, bool locked)
+    private void SetMouseLock(FirstPersonControllerComponent c, InputManager input, bool locked)
     {
-        if (locked) input.LockMousePosition(true);
-        else input.UnlockMousePosition();
+        if (locked)
+        {
+            input.LockMousePosition(true);
+        }
+        else
+        {
+            input.UnlockMousePosition();
+        }
 
         var game = Services.GetService<IGame>();
-        if (game != null) game.IsMouseVisible = !locked;
+
+        if (game is not null) game.IsMouseVisible = !locked;
+
         c.MouseLocked = locked;
     }
 
-    static void SetFly(FirstPersonControllerComponent c, bool on)
+    private static void SetFly(FirstPersonControllerComponent c, bool on)
     {
         c.Fly = on;
-        if (c.Character == null) return;
+
+        if (c.Character is null) return;
+
         if (on)
         {
             // Enter fly from the current eye position; park the body. MoveVector PERSISTS - every
@@ -106,15 +140,14 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         }
     }
 
-    static void UpdateWalk(FirstPersonControllerComponent c, Entity entity, InputManager input, float dt)
+    private static void UpdateWalk(FirstPersonControllerComponent c, Entity entity, InputManager input, float dt)
     {
         // Horizontal axes from yaw only (no vertical component when walking).
-        var sinY = MathF.Sin(c.Yaw);
-        var cosY = MathF.Cos(c.Yaw);
+        var (sinY, cosY) = MathF.SinCos(c.Yaw);
         var forward = new Vector3(-sinY, 0, -cosY);
         var right = new Vector3(cosY, 0, -sinY);
-
         var move = Vector3.Zero;
+
         if (input.IsKeyDown(Keys.W)) move += forward;
         if (input.IsKeyDown(Keys.S)) move -= forward;
         if (input.IsKeyDown(Keys.A)) move -= right;
@@ -125,7 +158,9 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
 
         // Sprint: Shift scales the move vector (MoveVector treats vector length as a speed factor).
         if (input.IsKeyDown(Keys.LeftShift) && move.LengthSquared() > 0)
+        {
             move *= c.SprintMultiplier;
+        }
 
         // MoveVector is the XZ plane of the old Move(Vector3): X stays X, world Z becomes its Y
         character.MoveVector = new Vector2(move.X, move.Z);
@@ -136,6 +171,7 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         // the first supported tick executes it. Re-arming right after a successful jump is
         // harmless: the character is airborne (unsupported) for far longer than the buffer.
         if (input.IsKeyPressed(Keys.Space)) c.JumpBuffer = JumpBufferSeconds;
+
         if (c.JumpBuffer > 0f)
         {
             character.TryJump();
@@ -146,14 +182,14 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         entity.Transform.Position = character.Entity.Transform.Position + new Vector3(0, c.EyeHeight, 0);
     }
 
-    static void UpdateFly(FirstPersonControllerComponent c, Entity entity, InputManager input, float dt)
+    private static void UpdateFly(FirstPersonControllerComponent c, Entity entity, InputManager input, float dt)
     {
         // Full 3D axes from the camera orientation (W follows where you look).
         var rotation = entity.Transform.Rotation;
         var forward = Vector3.Transform(-Vector3.UnitZ, rotation);
         var right = Vector3.Transform(Vector3.UnitX, rotation);
-
         var move = Vector3.Zero;
+
         if (input.IsKeyDown(Keys.W)) move += forward;
         if (input.IsKeyDown(Keys.S)) move -= forward;
         if (input.IsKeyDown(Keys.A)) move -= right;
@@ -162,7 +198,8 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         if (input.IsKeyDown(Keys.LeftCtrl)) move -= Vector3.UnitY;
         if (move.LengthSquared() > 0) move.Normalize();
 
-        float speed = c.FlySpeed * (input.IsKeyDown(Keys.LeftShift) ? c.FlyBoost : 1f);
+        var speed = c.FlySpeed * (input.IsKeyDown(Keys.LeftShift) ? c.FlyBoost : 1f);
+
         c.FlyPosition += move * speed * dt;
         entity.Transform.Position = c.FlyPosition;
         // The body stays parked on its own: motor target zeroed and gravity off since SetFly.

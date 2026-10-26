@@ -84,8 +84,7 @@ void Start(Scene scene)
     BuildCourse(scene);
     car = BuildCar(scene, start);
 
-    var cameraEntity = game.GetCameraEntity();
-    cameraEntity.Add(new ChaseCamera { Target = car.Chassis.Entity });
+    game.GetCameraEntity().Add(new ChaseCamera { Target = car.Chassis.Entity });
     game.AddGrabber();
 
     AddInstructions();
@@ -98,7 +97,10 @@ void Update(Scene scene, GameTime time)
     var input = game.Input;
     var dt = (float)time.Elapsed.TotalSeconds;
 
-    if (input.IsKeyPressed(Keys.R)) ResetCar(car);
+    if (input.IsKeyPressed(Keys.R))
+    {
+        ResetCar(car);
+    }
 
     // Steering eases toward the key at a fixed rate, as a wheel turned by hand would.
     var steerTarget = ((input.IsKeyDown(Keys.A) ? 1 : 0) - (input.IsKeyDown(Keys.D) ? 1 : 0)) * MaxSteeringAngle;
@@ -107,7 +109,9 @@ void Update(Scene scene, GameTime time)
     steeringAngle = Math.Clamp(steeringAngle + change, -MaxSteeringAngle, MaxSteeringAngle);
 
     if (steeringAngle != previousSteering)
+    {
         Steer(car, steeringAngle);
+    }
 
     var throttle = (input.IsKeyDown(Keys.W) ? 1 : 0) - (input.IsKeyDown(Keys.S) ? 1 : 0);
     var zoom = input.IsKeyDown(Keys.LeftShift) || input.IsKeyDown(Keys.RightShift);
@@ -323,14 +327,9 @@ Wheel BuildWheel(Scene scene, BodyComponent chassis, Vector3 mount)
     return new Wheel(wheel, motor, hinge, mount);
 }
 
+// The core, physics-free primitive: the body is on the parent, this is only the look.
 Entity Model(Primitive3D shape, Material material, Vector3 localPosition)
-{
-    // The core, physics-free primitive: the body is on the parent, this is only the look.
-    var entity = game.CreatePrimitive(shape, new PrimitiveEntityOptions { Body = BodyMode.None, Material = material });
-    entity.Transform.Position = localPosition;
-
-    return entity;
-}
+    => game.CreatePrimitive(shape, new PrimitiveEntityOptions { Body = BodyMode.None, Material = material, Position = localPosition });
 
 // A ramp, a slalom of pillars, and a wall of crates to drive through or throw with the grabber.
 void BuildCourse(Scene scene)
@@ -376,9 +375,7 @@ void BuildCourse(Scene scene)
 
 void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Car", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Car", () =>
     {
         var speed = car?.Chassis.LinearVelocity.Length() ?? 0;
 

@@ -84,9 +84,9 @@ void Start(Scene scene)
         {
             Body = BodyMode.None,
             Material = game.CreateMaterial(shapes[i].Colour, metalness: 0f, glossiness: 0.5f),
+            Position = new Vector3(0f, -100f, 0f),
         });
 
-        prototype.Transform.Position = new Vector3(0f, -100f, 0f);
         prototype.Scene = scene;
         models[i] = prototype.Get<ModelComponent>().Model;
 
@@ -124,7 +124,7 @@ void Start(Scene scene)
             (Keys)(Keys.D1 + pair.Index), pair.Item.Name, () => fountain.Kind = pair.Index, pair.Item.Colour))],
     };
 
-    TextOverlay.GetOrCreate(game).AddSection("Cube fountain", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Cube fountain", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -171,16 +171,13 @@ void Update(Scene scene, GameTime time)
     }
 }
 
-IReadOnlyList<TextElement> OverlayLines()
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
-    List<TextElement> lines = [];
+    if (fountain is null) return shapeMenu?.GetLines() ?? [];
 
-    if (shapeMenu is not null) lines.AddRange(shapeMenu.GetLines());
-
-    if (fountain is null) return lines;
-
-    lines.AddRange(
+    return
     [
+        .. shapeMenu?.GetLines() ?? [],
         new(["J", "K"], "Fewer or more bodies per second", Color.Gold),
         new(["+", "-"], "Simulation speed, from paused to 5x", Color.Gold),
         new("I", interpolated ? "Interpolation on: smooth between steps" : "Interpolation off: moved on steps only", Color.Gold),
@@ -192,9 +189,7 @@ IReadOnlyList<TextElement> OverlayLines()
         new(timeScales[timeScaleIndex] > 0f ? $"Simulation at {timeScales[timeScaleIndex]:0.##}x" : "Simulation paused", Color.LightGreen),
         new("The rate is counted in physics steps,", Color.LightGray),
         new("so the fountain keeps the simulation's time.", Color.LightGray),
-    ]);
-
-    return lines;
+    ];
 }
 
 InterpolationMode Interpolation() => interpolated ? InterpolationMode.Interpolated : InterpolationMode.None;
@@ -228,7 +223,10 @@ Entity CreateBody(Scene scene, int kind, Vector3 position)
 /// <summary>Takes a body out of its master's instances and out of the scene.</summary>
 void RemoveBody(Entity body)
 {
-    foreach (var master in masters) master.RemoveInstance(body);
+    foreach (var master in masters)
+    {
+        master.RemoveInstance(body);
+    }
 
     body.Scene = null;
 }
@@ -258,9 +256,9 @@ void BuildBasin(Scene scene)
         {
             Material = stone,
             Body = BodyMode.Static,
+            Position = position,
         });
 
-        entity.Transform.Position = position;
         entity.Scene = scene;
     }
 }

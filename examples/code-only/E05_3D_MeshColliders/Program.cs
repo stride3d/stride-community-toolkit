@@ -45,7 +45,7 @@ var hullColour = new Color(240, 160, 70);
 var meshColour = new Color(90, 190, 200);
 var ballColour = new Color(235, 235, 240);
 
-var stations = new List<DropStation>();
+List<DropStation> stations = [];
 var launched = false;
 
 using var game = new Game();
@@ -76,7 +76,7 @@ void Start(Scene scene)
     BuildShellStation(scene, "3. Mesh shell", x + 2 * StationSpacing);
     BuildMovingRingStation(scene, "4. Mesh on mesh", x + 3 * StationSpacing);
 
-    TextOverlay.GetOrCreate(game).AddSection("Mesh colliders", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Mesh colliders", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -112,10 +112,10 @@ void BuildShellStation(Scene scene, string label, float x)
     {
         Material = game.CreateMaterial(meshColour, metalness: 0f, glossiness: 0.4f),
         Body = BodyMode.None,
+        Position = new Vector3(x, RestHeight, 0f),
     });
 
     shell.Add(new StaticComponent { Collider = new MeshCollider { Model = shell.Get<ModelComponent>().Model, Closed = true } });
-    shell.Transform.Position = new Vector3(x, RestHeight, 0f);
     shell.Scene = scene;
 
     var outer = AddBall(scene, new Vector3(x, RestHeight + DropHeight, 0f));
@@ -153,6 +153,7 @@ Entity AddRing(Scene scene, Vector3 position, bool mesh, bool moving)
     var options = new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(mesh ? meshColour : hullColour, metalness: 0f, glossiness: 0.4f),
+        Position = position,
     };
 
     if (mesh)
@@ -183,7 +184,6 @@ Entity AddRing(Scene scene, Vector3 position, bool mesh, bool moving)
             : new StaticComponent { Collider = collider });
     }
 
-    ring.Transform.Position = position;
     ring.Scene = scene;
 
     return ring;
@@ -195,9 +195,9 @@ BodyComponent AddBall(Scene scene, Vector3 position)
     var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(ballColour, metalness: 0f, glossiness: 0.6f),
+        Position = position,
     });
 
-    ball.Transform.Position = position;
     ball.Scene = scene;
 
     return ball.Get<BodyComponent>();
@@ -215,7 +215,7 @@ void AddLabel(Scene scene, string text, float x)
     label.Scene = scene;
 }
 
-IReadOnlyList<TextElement> OverlayLines()
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
     List<TextElement> lines =
     [
@@ -226,7 +226,10 @@ IReadOnlyList<TextElement> OverlayLines()
         new("Where each came to rest", Color.LightGray),
     ];
 
-    foreach (var station in stations) lines.Add(new(station.Line, station.Colour));
+    foreach (var station in stations)
+    {
+        lines.Add(new(station.Line, station.Colour));
+    }
 
     return lines;
 }

@@ -19,8 +19,9 @@ void Start(Scene rootScene)
     var otherShape = game.CreatePrimitive(Primitive2D.Rectangle(0.5f, 0.8f), new()
     {
         Material = game.CreateFlatMaterial(Color.Gold),
+        Position = new Vector3(0.2f, 4f, 0),
     });
-    otherShape.Transform.Position = new Vector3(0.2f, 4f, 0);
+
     otherShape.Scene = rootScene;
 
     for (int i = 0; i < ShapeCount; i++)
@@ -28,13 +29,14 @@ void Start(Scene rootScene)
         var shape = game.CreatePrimitive(Primitive2D.Capsule(), new BepuPhysicsOptions
         {
             Material = game.CreateFlatMaterial(Color.White),
-            Component = new Body2DComponent()
+            Component = new Body2DComponent
             {
                 Collider = new CompoundCollider(),
                 FrictionCoefficient = 0.35f
-            }
+            },
+            Position = new Vector3(0.001f * i, 10 + i * 2, 0)
         });
-        shape.Transform.Position = new Vector3(0.001f * i, 10 + i * 2, 0);
+
         shape.Scene = rootScene;
     }
 }
