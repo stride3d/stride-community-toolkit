@@ -44,7 +44,7 @@ var panelSize = new Vector2(PanelWidth, PanelHeight);
 var stripeAxisX = Vector3.Normalize(new Vector3(1f, 0.42f, 0f));
 var stripeAxisY = Vector3.Normalize(new Vector3(-0.42f, 1f, 0f));
 
-ShapeBatch? shapes = null;
+ShapeBatch shapes = null!;                 // created in Start
 SpriteFont? sansFont = null;
 SpriteFont? boldFont = null;
 SpriteFont? italicFont = null;
@@ -254,14 +254,13 @@ void Start(Scene scene)
     };
 
     var overlay = TextOverlay.GetOrCreate(game);
+
     overlay.SectionGap = 0;
-    overlay.AddSection("Panels", OverlayLines);
+    overlay.AddSection("Panels", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime gameTime)
 {
-    if (shapes is null) return;
-
     themeMenu?.Update(game.Input);
 
     hoveredPanel = shapes.TryPick(game.Input.MousePosition, out var hit) ? hit.Tag as GalleryStation : null;
@@ -288,7 +287,7 @@ void DrawPanel(GalleryStation station, Vector3 center, Theme theme)
 
     // Kept just inside the panel, slant included, so it never pokes out of a cell and gets mistaken
     // for part of the panel
-    shapes!.DrawRectangle(center, stripeAxisX, stripeAxisY, new Vector2(PanelWidth * 0.85f, 0.5f), new Color(118, 130, 150));
+    shapes.DrawRectangle(center, stripeAxisX, stripeAxisY, new Vector2(PanelWidth * 0.85f, 0.5f), new Color(118, 130, 150));
 
     // Tagged with its station, so a pick hands the station back; the one under the mouse gets a
     // heavier border
@@ -376,7 +375,7 @@ void DrawPolygon(Vector3 center, int sides, float radius, Color color, float cor
         vertices[i] = new Vector2(cos, sin) * (radius - cornerRadius);
     }
 
-    shapes!.DrawSolidPolygon(vertices, new Vector2(center.X, center.Y), 0f, color, cornerRadius);
+    shapes.DrawSolidPolygon(vertices, new Vector2(center.X, center.Y), 0f, color, cornerRadius);
 }
 
 /// <summary>
@@ -392,7 +391,7 @@ void DrawBracket(Vector3 center, Color color)
     var c = new Vector2(center.X, center.Y);
 
     // The fill, borderless, a touch inside the stroke
-    var borderWidth = shapes!.BorderWidth;
+    var borderWidth = shapes.BorderWidth;
 
     shapes.BorderWidth = 0f;
     shapes.DrawRectangle(center.XY(), panelSize - new Vector2(0.12f, 2f * Notch + 0.12f), color);
@@ -438,7 +437,7 @@ void DrawRoute(Vector3 center, Theme theme)
 
     Reset();
 
-    shapes!.Dash.Set(7f, 5f, time * 25f);
+    shapes.Dash.Set(7f, 5f, time * 25f);
     shapes.DrawPixelPolyline(route, 2f, theme.Accent);
 
     Reset();
@@ -456,17 +455,17 @@ void DrawOrnaments(Vector3 center, Theme theme)
 
     Reset();
 
-    foreach (var (signX, signY) in new[] { (-1f, -1f), (-1f, 1f), (1f, -1f), (1f, 1f) })
+    foreach (var (signX, signY) in (ReadOnlySpan<(float X, float Y)>)[(-1f, -1f), (-1f, 1f), (1f, -1f), (1f, 1f)])
     {
         var corner = center + new Vector3(signX * half.X, signY * half.Y, 0f);
 
-        shapes!.DrawPixelLine(corner, corner - new Vector3(signX * TickLength, 0f, 0f), 2f, theme.Accent);
+        shapes.DrawPixelLine(corner, corner - new Vector3(signX * TickLength, 0f, 0f), 2f, theme.Accent);
         shapes.DrawPixelLine(corner, corner - new Vector3(0f, signY * TickLength, 0f), 2f, theme.Accent);
     }
 
     var divider = center + new Vector3(0f, -PanelHeight / 2f + 0.5f, 0f);
 
-    shapes!.DrawPixelLine(
+    shapes.DrawPixelLine(
         divider - new Vector3(PanelWidth / 2f - 0.35f, 0f, 0f),
         divider + new Vector3(PanelWidth / 2f - 0.35f, 0f, 0f),
         1f,
@@ -491,7 +490,7 @@ void DrawDashes(Vector3 center, Theme theme)
 {
     Reset();
 
-    shapes!.BorderWidth = 1.5f;
+    shapes.BorderWidth = 1.5f;
     shapes.Dash.Set(6f, 4f, time * 20f);
     shapes.DrawArc(new Vector2(center.X - PanelWidth / 2f + 0.75f, center.Y), 0.5f, 0f, MathF.Tau, theme.Accent);
 
@@ -504,7 +503,7 @@ void DrawDashes(Vector3 center, Theme theme)
 /// <summary>Every piece of captured state back to its default, so no panel inherits the last one's.</summary>
 void Reset()
 {
-    shapes!.BorderWidth = 0f;
+    shapes.BorderWidth = 0f;
     shapes.Fill.Set(null, 1f);
     shapes.Glow.Clear();
     shapes.Dash.Clear();
@@ -521,7 +520,7 @@ void AddText(Scene scene, Vector3 position, string content, float lineHeight, Ac
         Text = content,
         // Height is the whole block, so scaling it by the line count keeps one-line and two-line
         // stations at the same letter size - the point of a comparison gallery
-        Height = lineHeight * (content.Count(character => character == '\n') + 1),
+        Height = lineHeight * (content.AsSpan().Count('\n') + 1),
         FontSize = 48,
         Font = font,
         Anchor = anchor,
@@ -567,29 +566,18 @@ Vector3 CellCenter(int station, bool withText)
         0f);
 }
 
-IReadOnlyList<TextElement> OverlayLines()
-{
-    List<TextElement> lines = [];
-
-    if (themeMenu is not null)
-    {
-        lines.AddRange(themeMenu.GetLines());
-        lines.Add(new(string.Empty));
-    }
-
-    lines.AddRange(
-    [
-        new("Mouse wheel", "Zoom", Color.Gold),
-        new(string.Empty),
-        new(hoveredPanel is { } hovered ? $"Under the mouse: panel {hovered.Number}" : "Under the mouse: nothing", Color.LightGray),
-        new("Panels: ShapeBatch, one draw call for all 48", Color.LightGreen),
-        new("Upper row of each pair is the panel alone", Color.LightGray),
-        new("Corner numbers match the stations array in Program.cs", Color.LightGray),
-        new("Borders, glows and dashes keep their pixel size", Color.LightGray),
-    ]);
-
-    return lines;
-}
+IReadOnlyList<TextElement> BuildOverlayLines() =>
+[
+    .. themeMenu?.GetLines() ?? [],
+    new(""),
+    new("Mouse wheel", "Zoom", Color.Gold),
+    new(""),
+    new(hoveredPanel is { } hovered ? $"Under the mouse: panel {hovered.Number}" : "Under the mouse: nothing", Color.LightGray),
+    new("Panels: ShapeBatch, one draw call for all 48", Color.LightGreen),
+    new("Upper row of each pair is the panel alone", Color.LightGray),
+    new("Corner numbers match the stations array in Program.cs", Color.LightGray),
+    new("Borders, glows and dashes keep their pixel size", Color.LightGray),
+];
 
 /// <summary>The same colour at a different alpha.</summary>
 static Color WithAlpha(Color color, byte alpha) => new(color.R, color.G, color.B, alpha);

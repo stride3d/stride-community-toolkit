@@ -34,7 +34,7 @@ void Start(Scene scene)
 
     // --- Row 1: placement ----------------------------------------------------------------------
 
-    AddStation(scene, new Vector3(-4.5f, 0, -2), "Plain label\n(all defaults)", label => { });
+    AddStation(scene, new Vector3(-4.5f, 0, -2), "Plain label\n(all defaults)");
 
     AddStation(scene, new Vector3(-1.5f, 0, -2), "Anchor = BottomCenter\nOffset = (0, -12)", label =>
     {
@@ -45,10 +45,7 @@ void Start(Scene scene)
         label.Offset = new Vector2(0, -12);
     });
 
-    AddStation(scene, new Vector3(1.5f, 0, -2), "FontSize = 26", label =>
-    {
-        label.FontSize = 26;
-    });
+    AddStation(scene, new Vector3(1.5f, 0, -2), "FontSize = 26", label => label.FontSize = 26);
 
     AddStation(scene, new Vector3(4.5f, 0, -2), "Scale = 1.6\n(cheaper to animate\nthan FontSize)", label =>
     {
@@ -59,15 +56,8 @@ void Start(Scene scene)
 
     // --- Row 2: readability --------------------------------------------------------------------
 
-    AddStation(scene, new Vector3(-4.5f, 0, 1), "EnableShadow = true", label =>
-    {
-        label.EnableShadow = true;
-    });
-
-    AddStation(scene, new Vector3(-1.5f, 0, 1), "EnableBackground = true", label =>
-    {
-        label.EnableBackground = true;
-    });
+    AddStation(scene, new Vector3(-4.5f, 0, 1), "EnableShadow = true", label => label.EnableShadow = true);
+    AddStation(scene, new Vector3(-1.5f, 0, 1), "EnableBackground = true", label => label.EnableBackground = true);
 
     AddStation(scene, new Vector3(1.5f, 0, 1), "TextColor = Orange\nOpacity = 0.55", label =>
     {
@@ -75,10 +65,7 @@ void Start(Scene scene)
         label.Opacity = 0.55f;
     });
 
-    AddStation(scene, new Vector3(4.5f, 0, 1), "Rotation = 0.35 rad", label =>
-    {
-        label.Rotation = 0.35f;
-    });
+    AddStation(scene, new Vector3(4.5f, 0, 1), "Rotation = 0.35 rad", label => label.Rotation = 0.35f);
 
     // --- Row 3: distance -----------------------------------------------------------------------
 
@@ -112,49 +99,47 @@ void Start(Scene scene)
 
     // Anchored mode snaps to a window corner and survives resizing; the entity's own position is
     // ignored entirely, so a HUD entity can sit anywhere
-    var hud = new Entity("Hud");
-
-    hud.Add(new EntityTextComponent
+    var hud = new Entity("Hud")
     {
-        Text = "PositionMode = Anchored, TopLeft",
-        PositionMode = TextPositionMode.Anchored,
-        ScreenAnchor = ScreenAnchor.TopLeft,
-        Offset = new Vector2(16, 16),
-        EnableShadow = true,
-    });
-
-    hud.Add(new EntityTextComponent
-    {
-        Text = "Anchored, BottomRight\n(resize the window - I stay put)",
-        PositionMode = TextPositionMode.Anchored,
-        ScreenAnchor = ScreenAnchor.BottomRight,
-        Offset = new Vector2(16, 40),
-        EnableShadow = true,
-    });
-
-    hud.Add(new EntityTextComponent
-    {
-        Text = "PositionMode = Screen at (16, 300)",
-        PositionMode = TextPositionMode.Screen,
-        ScreenPosition = new Vector2(16, 300),
-        TextColor = Color.LightGreen,
-        EnableShadow = true,
-    });
+        new EntityTextComponent
+        {
+            Text = "PositionMode = Anchored, TopLeft",
+            PositionMode = TextPositionMode.Anchored,
+            ScreenAnchor = ScreenAnchor.TopLeft,
+            Offset = new Vector2(16, 16),
+            EnableShadow = true,
+        },
+        new EntityTextComponent
+        {
+            Text = "Anchored, BottomRight\n(resize the window - I stay put)",
+            PositionMode = TextPositionMode.Anchored,
+            ScreenAnchor = ScreenAnchor.BottomRight,
+            Offset = new Vector2(16, 40),
+            EnableShadow = true,
+        },
+        new EntityTextComponent
+        {
+            Text = "PositionMode = Screen at (16, 300)",
+            PositionMode = TextPositionMode.Screen,
+            ScreenPosition = new Vector2(16, 300),
+            TextColor = Color.LightGreen,
+            EnableShadow = true,
+        },
+    };
 
     hud.Scene = scene;
 }
 
 // Creates one gallery station: a pole with a label above it, then hands the label over for the
 // station's own settings. Returns the pole so a station can add more components to it.
-Entity AddStation(Scene scene, Vector3 position, string text, Action<EntityTextComponent> configure)
+Entity AddStation(Scene scene, Vector3 position, string text, Action<EntityTextComponent>? configure = null)
 {
     var pole = game.CreatePrimitive(Primitive3D.Cylinder(0.15f, 1f), new PrimitiveEntityOptions
     {
         Body = BodyMode.None,
         EntityName = "Pole",
+        Position = position + new Vector3(0, 0.5f, 0),
     });
-
-    pole.Transform.Position = position + new Vector3(0, 0.5f, 0);
 
     var label = new EntityTextComponent
     {
@@ -163,7 +148,7 @@ Entity AddStation(Scene scene, Vector3 position, string text, Action<EntityTextC
         Alignment = TextAlignment.Center,
     };
 
-    configure(label);
+    configure?.Invoke(label);
     pole.Add(label);
 
     pole.Scene = scene;

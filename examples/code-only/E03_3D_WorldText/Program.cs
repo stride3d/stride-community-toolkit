@@ -5,6 +5,7 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Graphics;
 
 // A gallery of everything WorldTextComponent can do. Each station on the ground demonstrates one
 // setting, and the text itself names the setting that produced it.
@@ -173,7 +174,7 @@ Entity AddText(Scene scene, Vector3 position, Action<WorldTextComponent> configu
     {
         Text = string.Empty,
         Height = 0.35f,
-        Alignment = Stride.Graphics.TextAlignment.Center,
+        Alignment = TextAlignment.Center,
     };
 
     configure(component);

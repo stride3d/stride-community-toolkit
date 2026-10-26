@@ -61,11 +61,15 @@ internal static class HudStack
     /// <summary>The size each unsized slot gets: what the sized slots and the gaps leave, shared equally.</summary>
     internal static float Shared(HudSlot[] slots, float available, float gap)
     {
-        var unsized = slots.Count(slot => slot.Size <= 0f);
+        var unsized = 0;
+        var sized = 0f;
 
-        if (unsized == 0) return 0f;
+        foreach (var slot in slots)
+        {
+            if (slot.Size > 0f) sized += slot.Size; else unsized++;
+        }
 
-        return (available - slots.Sum(slot => slot.Size) - gap * (slots.Length - 1)) / unsized;
+        return unsized == 0 ? 0f : (available - sized - gap * (slots.Length - 1)) / unsized;
     }
 
     /// <summary>Draws a widget. A row or a column passes through; anything else is next in the fade-in.</summary>

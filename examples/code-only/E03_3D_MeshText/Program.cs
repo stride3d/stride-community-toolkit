@@ -34,7 +34,6 @@ var dropped = 0;
 var random = new Random(1);
 
 MeshFont? systemFont = null;
-Material? dropMaterial = null;
 
 using var game = new Game();
 
@@ -86,7 +85,10 @@ void Start(Scene scene)
     counter.Scene = scene;
 
     // Three words to begin with, each higher than the last, so they land on each other
-    for (var i = 0; i < 3; i++) DropWord(scene);
+    for (var i = 0; i < 3; i++)
+    {
+        DropWord(scene);
+    }
 
     TextOverlay.GetOrCreate(game).AddSection("3D text", () =>
     [
@@ -128,9 +130,8 @@ void AddText(Scene scene, MeshFont font, string text, Vector3 position, Material
 /// </summary>
 void DropWord(Scene scene)
 {
-    dropMaterial = game.CreateMaterial(random.NextColor(), metalness: 0.1f, glossiness: 0.5f);
-
-    var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new BepuPhysicsOptions { Material = dropMaterial });
+    var material = game.CreateMaterial(random.NextColor(), metalness: 0.1f, glossiness: 0.5f);
+    var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new BepuPhysicsOptions { Material = material });
 
     word.Transform.Position = new Vector3(-2.2f, 4f + dropped * 0.7f, 2.2f);
     word.Transform.Rotation = faceCamera;
