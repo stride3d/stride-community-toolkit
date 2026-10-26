@@ -60,7 +60,7 @@ public class GlyphShapeTests
     public void AContourInsideAnotherIsItsHole_WoundTheOtherWay()
     {
         // A font winds a hole the other way from its outside; that is what makes it a hole
-        var shape = GlyphShape.FromContours([Square(0, 0, 4), Reverse(Square(1, 1, 2))]);
+        var shape = GlyphShape.FromContours([TestGeometry.Square(0, 0, 4), Reverse(TestGeometry.Square(1, 1, 2))]);
 
         var polygon = Assert.Single(shape.Polygons);
         var hole = Assert.Single(polygon.Holes);
@@ -73,7 +73,7 @@ public class GlyphShapeTests
     public void TheOutsidesWindingDoesNotMatter()
     {
         // A clockwise outside with a counter-clockwise hole: still opposite, still a hole
-        var shape = GlyphShape.FromContours([Reverse(Square(0, 0, 4)), Square(1, 1, 2)]);
+        var shape = GlyphShape.FromContours([Reverse(TestGeometry.Square(0, 0, 4)), TestGeometry.Square(1, 1, 2)]);
 
         var polygon = Assert.Single(shape.Polygons);
 
@@ -84,7 +84,7 @@ public class GlyphShapeTests
     [Fact]
     public void SeparateContoursAreSeparatePolygons()
     {
-        var shape = GlyphShape.FromContours([Square(0, 0, 1), Square(0, 2, 1)]);
+        var shape = GlyphShape.FromContours([TestGeometry.Square(0, 0, 1), TestGeometry.Square(0, 2, 1)]);
 
         Assert.Equal(2, shape.Polygons.Count);
         Assert.All(shape.Polygons, p => Assert.Empty(p.Holes));
@@ -94,7 +94,7 @@ public class GlyphShapeTests
     public void AnIslandInsideAHoleIsAnOutsideAgain()
     {
         // The dot of a copyright sign: ring, hole, dot, each wound the other way from the one around it
-        var shape = GlyphShape.FromContours([Square(0, 0, 6), Reverse(Square(1, 1, 4)), Square(2, 2, 2)]);
+        var shape = GlyphShape.FromContours([TestGeometry.Square(0, 0, 6), Reverse(TestGeometry.Square(1, 1, 4)), TestGeometry.Square(2, 2, 2)]);
 
         Assert.Equal(2, shape.Polygons.Count);
         Assert.Single(shape.Polygons[0].Holes);
@@ -104,16 +104,13 @@ public class GlyphShapeTests
     [Fact]
     public void DegenerateContoursAreIgnored()
     {
-        var shape = GlyphShape.FromContours([Square(0, 0, 1), [Vector2.Zero, Vector2.UnitX], [Vector2.Zero, Vector2.UnitX, Vector2.UnitX * 2]]);
+        var shape = GlyphShape.FromContours([TestGeometry.Square(0, 0, 1), [Vector2.Zero, Vector2.UnitX], [Vector2.Zero, Vector2.UnitX, Vector2.UnitX * 2]]);
 
         Assert.Single(shape.Polygons);
     }
 
     [Fact]
     public void NoContoursIsEmpty() => Assert.True(GlyphShape.FromContours([]).IsEmpty);
-
-    private static Vector2[] Square(float x, float y, float size)
-        => [new(x, y), new(x + size, y), new(x + size, y + size), new(x, y + size)];
 
     private static Vector2[] Reverse(Vector2[] polygon) => [.. polygon.Reverse()];
 }

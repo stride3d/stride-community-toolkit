@@ -169,7 +169,7 @@ foreach (var name in names)
         var drift = Compare(capturePath, secondPath, Resolve(rules, scene.Name), Path.Combine(reviewDirectory, $"{scene.Name}-noise.png"));
 
         Console.WriteLine($"    run-to-run: {drift.Describe()}");
-        results.Add(new Result(scene.Name, drift.Passed ? Outcome.Pass : Outcome.Fail, drift.Describe(), drift));
+        results.Add(new Result(scene.Name, drift.Passed ? Outcome.Pass : Outcome.Fail, drift.Describe()));
         continue;
     }
 
@@ -191,7 +191,7 @@ foreach (var name in names)
     var stats = Compare(capturePath, goldPath, Resolve(rules, scene.Name), Path.Combine(reviewDirectory, $"{scene.Name}-diff.png"));
 
     Console.WriteLine($"    {(stats.Passed ? "✅" : "✖")} {stats.Describe()}");
-    results.Add(new Result(scene.Name, stats.Passed ? Outcome.Pass : Outcome.Fail, stats.Describe(), stats));
+    results.Add(new Result(scene.Name, stats.Passed ? Outcome.Pass : Outcome.Fail, stats.Describe()));
 }
 
 Console.WriteLine();
@@ -384,13 +384,10 @@ static Stats Compare(string actualPath, string expectedPath, AllowBucket[] bucke
     }
 }
 
-// scenes.jsonc: [{ "name": "shapes-2d", "frame": 60 }]. Comments with // are stripped before parsing.
+// scenes.jsonc: [{ "name": "shapes-2d", "frame": 60 }]
 static Scene[] LoadScenes(string path)
 {
-    var json = Regex.Replace(File.ReadAllText(path), @"//.*?$", "", RegexOptions.Multiline);
-
-    // Read by hand: file-based apps run with reflection serialisation disabled.
-    using var document = JsonDocument.Parse(json);
+    using var document = ParseJsonc(path);
 
     return document.RootElement.EnumerateArray()
         .Select(element => new Scene(Text(element, "name") ?? throw new InvalidOperationException("A scene in scenes.jsonc has no name."), Int(element, "frame")))
@@ -399,44 +396,30 @@ static Scene[] LoadScenes(string path)
 
 // thresholds.jsonc: [{ "image": "shapes-3d", "allow": { "3-5": 2000, "6-15": 300, "16+": 50 } }]
 // A bucket not listed for a matching rule is unlimited; an image with no rule gets the default,
-// which allows nothing at 3 or above. Comments with // are stripped before parsing.
+// which allows nothing at 3 or above.
 static Rule[] LoadRules(string path)
 {
     if (!File.Exists(path)) return [];
 
-    var json = Regex.Replace(File.ReadAllText(path), @"//.*?$", "", RegexOptions.Multiline);
+    using var document = ParseJsonc(path);
 
-    using var document = JsonDocument.Parse(json);
-    var rules = new List<Rule>();
-
-    foreach (var element in document.RootElement.EnumerateArray())
-    {
-        var allow = new Dictionary<string, int>();
-
-        if (element.TryGetProperty("allow", out var allowElement) && allowElement.ValueKind == JsonValueKind.Object)
-        {
-            foreach (var pair in allowElement.EnumerateObject())
-            {
-                allow[pair.Name] = pair.Value.GetInt32();
-            }
-        }
-
-        rules.Add(new Rule(Text(element, "image"), allow));
-    }
-
-    return rules.ToArray();
+    return document.RootElement.EnumerateArray()
+        .Select(element => new Rule(Text(element, "image"), element.TryGetProperty("allow", out var allow) && allow.ValueKind == JsonValueKind.Object
+            ? allow.EnumerateObject().ToDictionary(pair => pair.Name, pair => pair.Value.GetInt32())
+            : []))
+        .ToArray();
 }
+
+// Comments with // are stripped before parsing. Read by hand: file-based apps run with reflection serialisation disabled.
+static JsonDocument ParseJsonc(string path) => JsonDocument.Parse(Regex.Replace(File.ReadAllText(path), @"//.*?$", "", RegexOptions.Multiline));
 
 static AllowBucket[] Resolve(Rule[] rules, string name)
 {
     var rule = rules.FirstOrDefault(r => string.Equals(r.Image, name, StringComparison.OrdinalIgnoreCase));
 
-    if (rule?.Allow is null || rule.Allow.Count == 0)
-    {
-        return [new AllowBucket(3, int.MaxValue, 0)];
-    }
-
-    return rule.Allow.Select(pair => AllowBucket.Parse(pair.Key, pair.Value)).ToArray();
+    return rule?.Allow is { Count: > 0 } allow
+        ? allow.Select(pair => AllowBucket.Parse(pair.Key, pair.Value)).ToArray()
+        : [new AllowBucket(3, int.MaxValue, 0)];
 }
 
 // One row per scene: golden, new capture and the diff mask side by side, with the numbers.
@@ -489,7 +472,7 @@ enum Outcome { Pass, Fail, Updated, Error }
 
 record Scene(string Name, int? Frame);
 
-record Result(string Name, Outcome Outcome, string Message, Stats? Stats = null);
+record Result(string Name, Outcome Outcome, string Message);
 
 record Rule(string? Image, Dictionary<string, int>? Allow);
 

@@ -24,7 +24,7 @@ internal sealed class RenderTextureScene : IGoldScene
 {
     private Entity? _ball;
 
-    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+    public SceneSetup Setup => GoldSetup.Perspective;
 
     public void Start(Game game, Scene scene)
     {
@@ -34,14 +34,7 @@ internal sealed class RenderTextureScene : IGoldScene
 
         // Something for the feeds to look at: a floor, three pillars of different heights and
         // colours, and a bright emissive ball on an orbit - the thing the thermal feed calls hot
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(40f, 0.5f, 40f)), new PrimitiveEntityOptions
-        {
-            EntityName = "Ground",
-            Material = game.CreateMaterial(new Color(52, 56, 64), metalness: 0.05f, glossiness: 0.3f),
-            Position = new Vector3(0f, -0.25f, 0f),
-        });
-
-        ground.Scene = scene;
+        GoldSetup.AddGround(game, scene, 40f, new Color(52, 56, 64), metalness: 0.05f, glossiness: 0.3f);
 
         ReadOnlySpan<(Vector3 At, float Height, Color Colour)> pillars =
         [

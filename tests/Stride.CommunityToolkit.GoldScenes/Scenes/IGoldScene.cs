@@ -16,6 +16,6 @@ internal interface IGoldScene
     /// <summary>Builds the scene: camera, geometry, renderers.</summary>
     void Start(Game game, Scene scene);
 
-    /// <summary>Submits the frame's immediate-mode drawing; a function of the simulated time only.</summary>
-    void Update(Game game, Scene scene, GameTime time);
+    /// <summary>Submits the frame's immediate-mode drawing; a function of the simulated time only. A scene built entirely in <see cref="Start"/> leaves it alone.</summary>
+    void Update(Game game, Scene scene, GameTime time) { }
 }

@@ -4,7 +4,6 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
 
@@ -19,7 +18,7 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal sealed class Text3DScene : IGoldScene
 {
-    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+    public SceneSetup Setup => GoldSetup.Perspective;
 
     public void Start(Game game, Scene scene)
     {
@@ -30,13 +29,7 @@ internal sealed class Text3DScene : IGoldScene
         // down the world axes light solids from every side, as the example does
         game.AddAllDirectionLighting(intensity: 20f, showLightGizmo: false);
 
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new PrimitiveEntityOptions
-        {
-            EntityName = "Ground",
-            Material = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f),
-            Position = new Vector3(0f, -0.25f, 0f),
-        });
-        ground.Scene = scene;
+        GoldSetup.AddGround(game, scene);
 
         var gold = game.CreateMaterial(new Color(240, 180, 60), metalness: 0.2f, glossiness: 0.5f);
         var silver = game.CreateMaterial(new Color(210, 215, 225), metalness: 0.1f, glossiness: 0.4f);
@@ -72,9 +65,5 @@ internal sealed class Text3DScene : IGoldScene
             entity.Transform.Position = position;
             entity.Scene = scene;
         }
-    }
-
-    public void Update(Game game, Scene scene, GameTime time)
-    {
     }
 }

@@ -1,6 +1,5 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -19,31 +18,17 @@ internal sealed class ScreenShapesScene : IGoldScene
 {
     private ShapeBatch? _shapes;
 
-    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+    public SceneSetup Setup => GoldSetup.Perspective;
 
     public void Start(Game game, Scene scene)
     {
         game.SetCameraPosition(new Vector3(0f, 5f, 12f));
         game.SetCameraRotation(new Vector3(0f, -18f, 0f));
 
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new PrimitiveEntityOptions
-        {
-            EntityName = "Ground",
-            Material = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f),
-            Position = new Vector3(0f, -0.25f, 0f),
-        });
-
-        ground.Scene = scene;
+        GoldSetup.AddGround(game, scene);
 
         // A pillar in the middle of the view: the crosshair and the panel sit over it, not behind it
-        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.6f, 4f, 1.6f)), new PrimitiveEntityOptions
-        {
-            EntityName = "Pillar",
-            Material = game.CreateMaterial(new Color(96, 103, 116), metalness: 0.1f, glossiness: 0.35f),
-            Position = new Vector3(0f, 2f, 0f),
-        });
-
-        pillar.Scene = scene;
+        GoldSetup.AddPillar(game, scene, "Pillar", Vector3.Zero, 4f);
 
         _shapes = game.AddShapeBatch(depthTest: true);
     }

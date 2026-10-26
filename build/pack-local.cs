@@ -280,10 +280,7 @@ static string? FindRepositoryRoot([CallerFilePath] string scriptPath = "")
 
     while (!string.IsNullOrEmpty(directory))
     {
-        if (File.Exists(Path.Combine(directory, "Stride.CommunityToolkit.slnx")))
-        {
-            return directory;
-        }
+        if (File.Exists(Path.Combine(directory, "Stride.CommunityToolkit.slnx"))) return directory;
 
         directory = Path.GetDirectoryName(directory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
     }
@@ -297,15 +294,9 @@ static void PurgeCachedExtractions(string version)
 {
     var packagesRoot = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
 
-    if (string.IsNullOrEmpty(packagesRoot))
-    {
-        packagesRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages");
-    }
+    if (string.IsNullOrEmpty(packagesRoot)) packagesRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages");
 
-    if (!Directory.Exists(packagesRoot))
-    {
-        return;
-    }
+    if (!Directory.Exists(packagesRoot)) return;
 
     var purged = 0;
 
@@ -313,10 +304,7 @@ static void PurgeCachedExtractions(string version)
     {
         var versionDirectory = Path.Combine(packageDirectory, version);
 
-        if (!Directory.Exists(versionDirectory))
-        {
-            continue;
-        }
+        if (!Directory.Exists(versionDirectory)) continue;
 
         Directory.Delete(versionDirectory, recursive: true);
         purged++;
@@ -330,10 +318,7 @@ static void PurgeCachedExtractions(string version)
 
 static void RemoveStalePackages(string feedDirectory, string version)
 {
-    if (!Directory.Exists(feedDirectory))
-    {
-        return;
-    }
+    if (!Directory.Exists(feedDirectory)) return;
 
     foreach (var package in Directory.GetFiles(feedDirectory, $"*.{version}.nupkg"))
     {
@@ -351,10 +336,7 @@ static bool RunDotnet(string arguments)
 
     using var process = Process.Start(startInfo);
 
-    if (process is null)
-    {
-        return false;
-    }
+    if (process is null) return false;
 
     var standardOutput = process.StandardOutput.ReadToEnd();
     var standardError = process.StandardError.ReadToEnd();

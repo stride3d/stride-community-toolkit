@@ -4,7 +4,6 @@ using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
 using Stride.Graphics;
 
 namespace Stride.CommunityToolkit.GoldScenes.Scenes;
@@ -16,21 +15,14 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal sealed class TextScene : IGoldScene
 {
-    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+    public SceneSetup Setup => GoldSetup.Perspective;
 
     public void Start(Game game, Scene scene)
     {
         game.SetCameraPosition(new Vector3(0f, 4f, 12f));
         game.SetCameraRotation(new Vector3(0f, -15f, 0f));
 
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new PrimitiveEntityOptions
-        {
-            EntityName = "Ground",
-            Material = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f),
-            Position = new Vector3(0f, -0.25f, 0f),
-        });
-
-        ground.Scene = scene;
+        GoldSetup.AddGround(game, scene);
 
         var cube = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions
         {
@@ -119,9 +111,5 @@ internal sealed class TextScene : IGoldScene
             entity.Transform.Rotation = rotation;
             entity.Scene = scene;
         }
-    }
-
-    public void Update(Game game, Scene scene, GameTime time)
-    {
     }
 }
