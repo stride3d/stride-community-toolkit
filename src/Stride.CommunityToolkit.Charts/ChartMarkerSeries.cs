@@ -24,9 +24,7 @@ public sealed class ChartMarkerSeries : ChartSeries
     }
 
     /// <summary>Nothing to do: the glyphs are filtered against the ranges as they are drawn.</summary>
-    internal override void Rebuild()
-    {
-    }
+    internal override void Rebuild() { }
 
     /// <summary>Submits a glyph for every point inside the chart's ranges.</summary>
     internal override void Draw(ShapeBatch batch, in ChartView view)

@@ -11,7 +11,9 @@ namespace Stride.CommunityToolkit.Charts;
 /// are text entities rebuilt whenever the series change; the swatches are drawn every frame, and the whole
 /// block is laid out in pixels each frame too, so it keeps its size on screen at any zoom or distance.
 /// </summary>
-internal sealed class ChartLegend : IDisposable
+/// <param name="game">The game the names' text renderer is registered with.</param>
+/// <param name="chart">The chart whose series the legend lists.</param>
+internal sealed class ChartLegend(IGame game, Chart chart) : IDisposable
 {
     // The layout, in pixels: the inset from the chart's corner, the swatch, the gap before the name, and
     // the row pitch as a multiple of the text height
@@ -21,16 +23,8 @@ internal sealed class ChartLegend : IDisposable
     private const float Gap = 8f;
     private const float RowPitch = 1.6f;
 
-    private readonly IGame _game;
-    private readonly Chart _chart;
     private readonly List<Row> _rows = [];
     private bool _visible = true;
-
-    internal ChartLegend(IGame game, Chart chart)
-    {
-        _game = game;
-        _chart = chart;
-    }
 
     /// <summary>Shows or hides the legend without rebuilding it.</summary>
     internal void SetVisible(bool visible)
@@ -47,18 +41,18 @@ internal sealed class ChartLegend : IDisposable
     {
         Teardown();
 
-        if (_chart.Series.Count == 0)
+        if (chart.Series.Count == 0)
             return;
 
-        var o = _chart.Options;
+        var o = chart.Options;
 
-        ChartText.EnsureRenderer(_game, o.Labels.Mode);
+        ChartText.EnsureRenderer(game, o.Labels.Mode);
 
-        foreach (var series in _chart.Series)
+        foreach (var series in chart.Series)
         {
             var label = new ChartText(o.Labels, $"Legend {series.Name}");
             label.Set(series.Name, TextAnchor.MiddleLeft, Vector2.Zero);
-            _chart.Root.AddChild(label.Entity);
+            chart.Root.AddChild(label.Entity);
             _rows.Add(new Row(series, label));
         }
 
@@ -75,7 +69,7 @@ internal sealed class ChartLegend : IDisposable
         if (!_visible || _rows.Count == 0)
             return;
 
-        var o = _chart.Options;
+        var o = chart.Options;
         var z = 3f * Chart.LayerStep;
         var corner = new Vector3(o.Range.XMin, o.Range.YMax, z);
         var unitsPerPixel = view.UnitsPerPixel(corner);

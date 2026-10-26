@@ -505,6 +505,7 @@ public sealed class Chart : IDisposable
 
         // Keep the viewing direction and back away along it until every corner of the box fits the frustum
         transform.UpdateWorldMatrix();
+
         var forward = transform.WorldMatrix.Forward;
 
         if (forward.LengthSquared() < MathUtil.ZeroTolerance)
@@ -514,10 +515,8 @@ public sealed class Chart : IDisposable
 
         forward.Normalize();
 
-        var right = transform.WorldMatrix.Right;
-        right.Normalize();
-        var up = transform.WorldMatrix.Up;
-        up.Normalize();
+        var right = Vector3.Normalize(transform.WorldMatrix.Right);
+        var up = Vector3.Normalize(transform.WorldMatrix.Up);
 
         var fov = MathUtil.DegreesToRadians(camera.VerticalFieldOfView);
         var distance = ChartFraming.PerspectiveDistance(in box, right, up, forward, aspect, fov, padding);

@@ -46,16 +46,7 @@ public static class ChartFraming
     /// <returns>The tick values in ascending order.</returns>
     public static IEnumerable<float> TickValues(float min, float max, float step)
     {
-        if (step <= 0f)
-            yield break;
-
-        var first = (int)MathF.Ceiling(min / step - 1e-4f);
-        var last = (int)MathF.Floor(max / step + 1e-4f);
-
-        for (var i = first; i <= last; i++)
-        {
-            yield return i * step;
-        }
+        foreach (var value in TickRange.Of(min, max, step)) yield return value;
     }
 
     /// <summary>

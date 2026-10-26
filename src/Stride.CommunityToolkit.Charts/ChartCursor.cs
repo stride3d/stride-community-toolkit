@@ -56,8 +56,7 @@ internal sealed class ChartCursor : IDisposable
     internal void Update(CameraComponent camera, Vector2 screenPosition, in ChartView view)
     {
         var world = view.World;
-        var normal = Vector3.TransformNormal(Vector3.UnitZ, world);
-        normal.Normalize();
+        var normal = Vector3.Normalize(Vector3.TransformNormal(Vector3.UnitZ, world));
 
         var ray = camera.GetPickRay(screenPosition);
         var facing = Vector3.Dot(normal, ray.Direction);

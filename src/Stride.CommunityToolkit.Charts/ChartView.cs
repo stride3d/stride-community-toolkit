@@ -49,8 +49,7 @@ internal readonly struct ChartView
         var transform = camera.Entity.Transform;
         transform.UpdateWorldMatrix();
         _eye = transform.WorldMatrix.TranslationVector;
-        _forward = transform.WorldMatrix.Forward;
-        _forward.Normalize();
+        _forward = Vector3.Normalize(transform.WorldMatrix.Forward);
 
         _orthographic = camera.Projection == CameraProjectionMode.Orthographic;
         _orthographicSize = camera.OrthographicSize;

@@ -138,9 +138,7 @@ public sealed class ChartTrajectory : ChartSeries
     }
 
     /// <summary>Nothing to rebuild: the recorded geometry is kept, and the ranges are read as points arrive.</summary>
-    internal override void Rebuild()
-    {
-    }
+    internal override void Rebuild() { }
 
     /// <inheritdoc />
     internal override void Draw(ShapeBatch batch, in ChartView view)

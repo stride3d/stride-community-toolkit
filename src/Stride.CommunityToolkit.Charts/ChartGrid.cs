@@ -9,27 +9,24 @@ namespace Stride.CommunityToolkit.Charts;
 /// built or kept, so every grid option is live, and a view-driven chart's grid covers the screen simply
 /// because its ranges do.
 /// </summary>
-internal sealed class ChartGrid
+/// <param name="chart">The chart whose ranges and grid options are read each frame.</param>
+internal sealed class ChartGrid(Chart chart)
 {
-    private readonly Chart _chart;
-
-    internal ChartGrid(Chart chart)
-    {
-        _chart = chart;
-    }
-
     /// <summary>Submits the grid lines for this frame, or nothing while the grid is hidden.</summary>
     internal void Draw(ShapeBatch batch, in ChartView view)
     {
-        var o = _chart.Options;
+        var o = chart.Options;
 
         if (!o.Grid.Visible)
             return;
 
-        var planes = _chart.Is3D ? o.Grid.Planes : o.Grid.Planes & ChartGridPlanes.XY;
+        var planes = chart.Is3D ? o.Grid.Planes : o.Grid.Planes & ChartGridPlanes.XY;
         var step = o.Range.TickStep;
 
-        foreach (var plane in new[] { ChartGridPlanes.XY, ChartGridPlanes.XZ, ChartGridPlanes.YZ })
+        // A span over constants is read from the assembly's data, so the loop allocates nothing per frame
+        ReadOnlySpan<ChartGridPlanes> all = [ChartGridPlanes.XY, ChartGridPlanes.XZ, ChartGridPlanes.YZ];
+
+        foreach (var plane in all)
         {
             if ((planes & plane) == 0)
                 continue;
@@ -49,13 +46,13 @@ internal sealed class ChartGrid
     /// </summary>
     private void DrawLines(ShapeBatch batch, in ChartView view, ChartGridPlanes plane, in Weight w)
     {
-        var r = _chart.Options.Range;
+        var r = chart.Options.Range;
 
         // The plane sits on the third coordinate's zero, or its nearest edge, nudged behind the axes
         var anchor = new Vector3(
             Math.Clamp(0f, r.XMin, r.XMax) + w.Offset,
             Math.Clamp(0f, r.YMin, r.YMax) + w.Offset,
-            (_chart.Is3D ? Math.Clamp(0f, r.ZMin, r.ZMax) : 0f) + w.Offset);
+            (chart.Is3D ? Math.Clamp(0f, r.ZMin, r.ZMax) : 0f) + w.Offset);
 
         // Each case: first the lines across one spanned axis, then across the other, at the anchor on the
         // third
@@ -111,16 +108,7 @@ internal sealed class ChartGrid
     /// </summary>
     private readonly record struct Weight(float Step, float Skip, Color Color, float Width, float Offset)
     {
-        /// <summary>The tick values of this weight's step, leaving out those that are also multiples of <see cref="Skip"/>.</summary>
-        internal IEnumerable<float> Ticks(float min, float max)
-        {
-            foreach (var value in ChartFraming.TickValues(min, max, Step))
-            {
-                if (Skip > 0f && MathF.Abs(value / Skip - MathF.Round(value / Skip)) < 1e-4f)
-                    continue;
-
-                yield return value;
-            }
-        }
+        /// <summary>The tick values of this weight's step, leaving out those that are also multiples of <see cref="Skip"/>; walked without allocating.</summary>
+        internal TickRange Ticks(float min, float max) => TickRange.Of(min, max, Step, Skip);
     }
 }

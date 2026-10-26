@@ -135,16 +135,12 @@ internal static class PolylineMeshBuilder
 
     internal static Vector3 NormalOf(PolylineOptions options)
     {
-        var normal = options.Normal;
-
-        if (normal.LengthSquared() <= MathUtil.ZeroTolerance)
+        if (options.Normal.LengthSquared() <= MathUtil.ZeroTolerance)
         {
             throw new ArgumentException("The plane normal must not be zero.", nameof(options));
         }
 
-        normal.Normalize();
-
-        return normal;
+        return Vector3.Normalize(options.Normal);
     }
 
     /// <summary>
@@ -158,6 +154,7 @@ internal static class PolylineMeshBuilder
 
         // Distance along the line at each point, for the U texture coordinate
         var distances = new float[count];
+
         for (var i = 1; i < count; i++)
         {
             distances[i] = distances[i - 1] + Vector3.Distance(points[i - 1], points[i]);
@@ -174,11 +171,7 @@ internal static class PolylineMeshBuilder
         // the plane the options chose; U tracks distance travelled, V marks the two edges
         for (var i = 0; i < count; i++)
         {
-            var tangent = TangentAt(points, i, closed);
-            var side = Vector3.Cross(normal, tangent);
-            side.Normalize();
-            side *= halfWidth;
-
+            var side = Vector3.Normalize(Vector3.Cross(normal, TangentAt(points, i, closed))) * halfWidth;
             var u = totalLength > 0 ? distances[i] / totalLength : 0f;
 
             vertices.Add(new VertexPositionNormalTexture(points[i] - side, normal, new Vector2(u, 0f)));
@@ -218,6 +211,7 @@ internal static class PolylineMeshBuilder
         };
 
         var positions = new Vector3[vertices.Length];
+
         for (var i = 0; i < vertices.Length; i++)
         {
             positions[i] = vertices[i].Position;
@@ -267,14 +261,7 @@ internal static class PolylineMeshBuilder
 
         var tangent = incoming + outgoing;
 
-        // The line doubles back on itself: average is zero, fall back to the outgoing direction
-        if (tangent.LengthSquared() <= MathUtil.ZeroTolerance)
-        {
-            tangent = outgoing;
-        }
-
-        tangent.Normalize();
-
-        return tangent;
+        // The line doubles back on itself: the average is zero, so the outgoing direction stands in
+        return Vector3.Normalize(tangent.LengthSquared() <= MathUtil.ZeroTolerance ? outgoing : tangent);
     }
 }
