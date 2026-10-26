@@ -130,10 +130,10 @@ public static class RopeBuilder
         return new Rope(links, weight, linkConstraints, weightConstraint, skipConstraints, settings);
     }
 
-    /// <remarks>
+    /// <summary>
     /// A minimum of a tenth of the maximum is what makes this behave like rope rather than a rigid
     /// rod: the segments may drift together freely and are only stopped from pulling apart.
-    /// </remarks>
+    /// </summary>
     private static DistanceLimitConstraintComponent CreateLimit(BodyComponent a, BodyComponent b, Vector3 offsetA, Vector3 offsetB, float maximumDistance) => new()
     {
         A = a,
@@ -146,10 +146,10 @@ public static class RopeBuilder
         SpringDampingRatio = 1,
     };
 
-    /// <remarks>
+    /// <summary>
     /// The mass ratio is the whole point of this example, so each sphere's mass goes on the options and
     /// lands on the collider shape Bepu reads it from.
-    /// </remarks>
+    /// </summary>
     private static Entity CreateSphere(Game game, string name, Color color, Vector3 position, float radius, float mass, bool kinematic)
         => game.CreatePrimitive(Primitive3D.Sphere(radius), new BepuPhysicsOptions
         {
