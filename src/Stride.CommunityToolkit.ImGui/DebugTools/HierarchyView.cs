@@ -13,15 +13,13 @@ namespace Stride.CommunityToolkit.ImGui.DebugTools;
 /// </summary>
 public class HierarchyView : BaseWindow
 {
-    /// <summary>
-    /// Based on hashcodes, it doesn't have to be exact, we just don't want to keep references from being collected
-    /// </summary>
-    readonly HashSet<Guid> _recursingThrough = new HashSet<Guid>();
-    readonly List<IIdentifiable> _searchResult = new List<IIdentifiable>();
-    string _searchTerm = "";
+    private const float DummyWidth = 19;
+    private const float Indentation = DummyWidth + 8;
 
-    const float DUMMY_WIDTH = 19;
-    const float INDENTATION2 = DUMMY_WIDTH + 8;
+    // Ids rather than references, so the view never keeps an entity alive
+    private readonly HashSet<Guid> _recursingThrough = [];
+    private readonly List<IIdentifiable> _searchResult = [];
+    private string _searchTerm = "";
 
     /// <summary>
     /// Creates the window and registers it with the game's systems; it draws from the next frame on.
@@ -32,22 +30,18 @@ public class HierarchyView : BaseWindow
     /// <inheritdoc />
     protected override void OnDraw(bool collapsed)
     {
-        if (collapsed)
-            return;
+        if (collapsed) return;
 
         if (InputText("Search", ref _searchTerm, 64))
         {
             _searchResult.Clear();
-            if (!string.IsNullOrWhiteSpace(_searchTerm))
-                RecursiveSearch(_searchResult, _searchTerm.ToLower(), Game.SceneSystem.SceneInstance.RootScene);
+
+            if (!string.IsNullOrWhiteSpace(_searchTerm)) RecursiveSearch(_searchResult, _searchTerm.ToLower(), Game.SceneSystem.SceneInstance.RootScene);
         }
 
         using (Child())
         {
-            foreach (IIdentifiable identifiable in _searchResult)
-            {
-                RecursiveDrawing(identifiable);
-            }
+            foreach (var identifiable in _searchResult) RecursiveDrawing(identifiable);
 
             if (_searchResult.Count > 0)
             {
@@ -55,109 +49,86 @@ public class HierarchyView : BaseWindow
                 Spacing();
             }
 
-            foreach (var child in EnumerateChildren(Game.SceneSystem.SceneInstance.RootScene))
-                RecursiveDrawing(child);
+            DrawChildren(Game.SceneSystem.SceneInstance.RootScene);
         }
-    }
-
-    static void RecursiveSearch(List<IIdentifiable> result, string term, IIdentifiable source)
-    {
-        if (source == null)
-            return;
-
-        foreach (var child in EnumerateChildren(source))
-        {
-            RecursiveSearch(result, term, child);
-        }
-
-        string strLwr;
-        if (source is Entity entity)
-            strLwr = entity.Name.ToLower();
-        else if (source is Scene scene)
-            strLwr = scene.Name.ToLower();
-        else
-            return;
-
-        if (term.Contains(strLwr) || strLwr.Contains(term))
-            result.Add(source);
     }
 
     /// <inheritdoc />
     protected override void OnDestroy() { }
 
-    void RecursiveDrawing(IIdentifiable source)
+    private static void RecursiveSearch(List<IIdentifiable> result, string term, IIdentifiable source)
     {
-        if (source == null) return;
+        foreach (var child in EnumerateChildren(source)) RecursiveSearch(result, term, child);
 
-        string label;
-        bool canRecurse;
+        var name = source switch { Entity entity => entity.Name, Scene scene => scene.Name, _ => null };
+
+        if (name is null) return;
+
+        var lower = name.ToLower();
+
+        if (term.Contains(lower) || lower.Contains(term)) result.Add(source);
+    }
+
+    private void RecursiveDrawing(IIdentifiable source)
+    {
+        var (label, canRecurse) = source switch
         {
-            if (source is Entity entity)
-            {
-                label = entity.Name;
-                canRecurse = entity.Transform.Children.Count > 0;
-            }
-            else if (source is Scene scene)
-            {
-                label = scene.Name;
-                canRecurse = scene.Children.Count > 0 || scene.Entities.Count > 0;
-            }
-            else
-            {
-                return;
-            }
-        }
+            Entity entity => (entity.Name, entity.Transform.Children.Count > 0),
+            Scene scene => (scene.Name, scene.Children.Count > 0 || scene.Entities.Count > 0),
+            _ => (default(string), false),
+        };
+
+        if (label is null) return;
 
         using (ID(source.Id.GetHashCode()))
         {
-            bool recursingThrough = _recursingThrough.Contains(source.Id);
-            bool recurse = canRecurse && recursingThrough;
-            if (canRecurse)
+            var recurse = canRecurse && _recursingThrough.Contains(source.Id);
+
+            if (!canRecurse)
             {
-                if (ArrowButton("", recurse ? ImGuiDir.Down : ImGuiDir.Right))
-                {
-                    if (recurse)
-                        _recursingThrough.Remove(source.Id);
-                    else
-                        _recursingThrough.Add(source.Id);
-                }
+                Dummy(new Vector2(DummyWidth, 1));
             }
-            else
+            else if (ArrowButton("", recurse ? ImGuiDir.Down : ImGuiDir.Right) && !_recursingThrough.Remove(source.Id))
             {
-                Dummy(new Vector2(DUMMY_WIDTH, 1));
+                _recursingThrough.Add(source.Id);
             }
 
             SameLine();
 
-            if (Button(label))
-                Inspector.FindFreeInspector(Services).Target = source;
+            if (Button(label)) Inspector.FindFreeInspector(Services).Target = source;
 
-            using (UIndent(INDENTATION2))
+            using (UIndent(Indentation))
             {
-                if (recurse)
-                {
-                    foreach (var child in EnumerateChildren(source))
-                    {
-                        RecursiveDrawing(child);
-                    }
-                }
+                if (recurse) DrawChildren(source);
             }
         }
     }
 
-    static IEnumerable<IIdentifiable> EnumerateChildren(IIdentifiable source)
+    // Spelled out per type rather than through the iterator, so drawing an open tree allocates nothing per node
+    private void DrawChildren(IIdentifiable source)
+    {
+        switch (source)
+        {
+            case Entity entity:
+                foreach (var child in entity.Transform.Children) RecursiveDrawing(child.Entity);
+                break;
+            case Scene scene:
+                foreach (var entity in scene.Entities) RecursiveDrawing(entity);
+                foreach (var child in scene.Children) RecursiveDrawing(child);
+                break;
+        }
+    }
+
+    private static IEnumerable<IIdentifiable> EnumerateChildren(IIdentifiable source)
     {
         if (source is Entity entity)
         {
-            foreach (var child in entity.Transform.Children)
-                yield return child.Entity;
+            foreach (var child in entity.Transform.Children) yield return child.Entity;
         }
         else if (source is Scene scene)
         {
-            foreach (var childEntity in scene.Entities)
-                yield return childEntity;
-            foreach (var childScene in scene.Children)
-                yield return childScene;
+            foreach (var childEntity in scene.Entities) yield return childEntity;
+            foreach (var childScene in scene.Children) yield return childScene;
         }
     }
 }

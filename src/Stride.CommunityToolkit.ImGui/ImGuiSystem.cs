@@ -23,6 +23,39 @@ namespace Stride.CommunityToolkit.ImGui;
 /// </remarks>
 public class ImGuiSystem : GameSystemBase
 {
+    private const int InitialVertexBufferSize = 128;
+    private const int InitialIndexBufferSize = 128;
+    private const bool Is32BitIndices = false;
+
+    // The Stride keys with an ImGui counterpart; everything else only reaches ImGui as text
+    private static readonly Dictionary<Keys, ImGuiKey> _keys = new()
+    {
+        [Keys.Tab] = ImGuiKey.Tab,
+        [Keys.Left] = ImGuiKey.LeftArrow,
+        [Keys.Right] = ImGuiKey.RightArrow,
+        [Keys.Up] = ImGuiKey.UpArrow,
+        [Keys.Down] = ImGuiKey.DownArrow,
+        [Keys.PageUp] = ImGuiKey.PageUp,
+        [Keys.PageDown] = ImGuiKey.PageDown,
+        [Keys.Home] = ImGuiKey.Home,
+        [Keys.End] = ImGuiKey.End,
+        [Keys.Delete] = ImGuiKey.Delete,
+        [Keys.Back] = ImGuiKey.Backspace,
+        [Keys.Enter] = ImGuiKey.Enter,
+        [Keys.Escape] = ImGuiKey.Escape,
+        [Keys.Space] = ImGuiKey.Space,
+        [Keys.A] = ImGuiKey.A,
+        [Keys.C] = ImGuiKey.C,
+        [Keys.V] = ImGuiKey.V,
+        [Keys.X] = ImGuiKey.X,
+        [Keys.Y] = ImGuiKey.Y,
+        [Keys.Z] = ImGuiKey.Z,
+    };
+
+    // Kept in static fields because ImGui holds raw pointers to these delegates
+    [FixedAddressValueType] private static SetClipboardDelegate? _setClipboardFn;
+    [FixedAddressValueType] private static GetClipboardDelegate? _getClipboardFn;
+
     /// <summary>
     /// The ImGui context this system created and renders. Pass it to add-on libraries (ImNodes, ImPlot) that need to
     /// share the context.
@@ -33,37 +66,27 @@ public class ImGuiSystem : GameSystemBase
     /// A UI scale factor windows can read through <see cref="BaseWindow.Scale"/> to size themselves for the display's DPI.
     /// Defaults to <c>1</c>; it is not applied automatically.
     /// </summary>
-    public float Scale
-    {
-        get => _scale;
-        set => _scale = value;
-    }
-    private float _scale = 1;
-
-    const int INITIAL_VERTEX_BUFFER_SIZE = 128;
-    const int INITIAL_INDEX_BUFFER_SIZE = 128;
+    public float Scale { get; set; } = 1;
 
     private ImGuiIOPtr _io;
     private ImGuiPlatformIOPtr _platform;
 
     // dependencies
     private readonly GameBase _game;
-    private readonly InputManager input;
-    private readonly GraphicsDevice device;
-    private readonly GraphicsDeviceManager deviceManager;
-    private readonly GraphicsContext context;
-    private readonly EffectSystem effectSystem;
-    private readonly CommandList commandList;
-
-    // device objects
-    private PipelineState imPipeline;
-    private VertexDeclaration imVertLayout;
-    private VertexBufferBinding vertexBinding;
-    private IndexBufferBinding indexBinding;
-    private EffectInstance imShader;
+    private readonly InputManager _input;
+    private readonly GraphicsDevice _device;
+    private readonly GraphicsContext _context;
+    private readonly EffectSystem _effectSystem;
+    private readonly CommandList _commandList;
     private readonly ImGuiTextureManager _textures;
 
-    private Dictionary<Keys, ImGuiKey> _keys = [];
+    // device objects
+    private PipelineState _pipeline;
+    private VertexDeclaration _vertexLayout;
+    private VertexBufferBinding _vertexBinding;
+    private IndexBufferBinding _indexBinding;
+    private EffectInstance _shader;
+
     private bool _isFirstFrame = true;
 
     /// <summary>
@@ -100,13 +123,12 @@ public class ImGuiSystem : GameSystemBase
         ArgumentNullException.ThrowIfNull(graphicsDeviceManager);
 
         _game = Game ?? throw new InvalidOperationException("ImGuiSystem: IGame must be available!");
-        input = inputManager ?? Services.GetService<InputManager>() ?? throw new InvalidOperationException("ImGuiSystem: InputManager must be available!");
-        deviceManager = graphicsDeviceManager;
-        device = deviceManager.GraphicsDevice ?? throw new InvalidOperationException("ImGuiSystem: GraphicsDevice must be available!");
-        context = Services.GetService<GraphicsContext>() ?? throw new InvalidOperationException("ImGuiSystem: GraphicsContext must be available!");
-        effectSystem = Services.GetService<EffectSystem>() ?? throw new InvalidOperationException("ImGuiSystem: EffectSystem must be available!");
-        commandList = context.CommandList;
-        _textures = new ImGuiTextureManager(device, commandList);
+        _input = inputManager ?? Services.GetService<InputManager>() ?? throw new InvalidOperationException("ImGuiSystem: InputManager must be available!");
+        _device = graphicsDeviceManager.GraphicsDevice ?? throw new InvalidOperationException("ImGuiSystem: GraphicsDevice must be available!");
+        _context = Services.GetService<GraphicsContext>() ?? throw new InvalidOperationException("ImGuiSystem: GraphicsContext must be available!");
+        _effectSystem = Services.GetService<EffectSystem>() ?? throw new InvalidOperationException("ImGuiSystem: EffectSystem must be available!");
+        _commandList = _context.CommandList;
+        _textures = new ImGuiTextureManager(_device, _commandList);
 
         ImGuiContext = CreateContext();
         SetCurrentContext(ImGuiContext);
@@ -114,10 +136,7 @@ public class ImGuiSystem : GameSystemBase
         _io = GetIO();
         _platform = GetPlatformIO();
 
-        // SETTO
         SetupInput();
-
-        // vbos etc
         CreateDeviceObjects();
 
         // Opt into the Dear ImGui 1.92+ texture management protocol so NewFrame() doesn't assert on IsBuilt()
@@ -138,39 +157,17 @@ public class ImGuiSystem : GameSystemBase
     protected override void Destroy()
     {
         _textures.Dispose();
-        vertexBinding.Buffer?.Dispose();
-        indexBinding?.Buffer?.Dispose();
-        imPipeline?.Dispose();
-        imShader?.Dispose();
+        _vertexBinding.Buffer?.Dispose();
+        _indexBinding?.Buffer?.Dispose();
+        _pipeline?.Dispose();
+        _shader?.Dispose();
         DestroyContext(ImGuiContext);
         base.Destroy();
     }
 
-    unsafe void SetupInput()
+    private unsafe void SetupInput()
     {
-        // keyboard nav yes
         _io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
-
-        _keys.Add(Keys.Tab, ImGuiKey.Tab);
-        _keys.Add(Keys.Left, ImGuiKey.LeftArrow);
-        _keys.Add(Keys.Right, ImGuiKey.RightArrow);
-        _keys.Add(Keys.Up, ImGuiKey.UpArrow);
-        _keys.Add(Keys.Down, ImGuiKey.DownArrow);
-        _keys.Add(Keys.PageUp, ImGuiKey.PageUp);
-        _keys.Add(Keys.PageDown, ImGuiKey.PageDown);
-        _keys.Add(Keys.Home, ImGuiKey.Home);
-        _keys.Add(Keys.End, ImGuiKey.End);
-        _keys.Add(Keys.Delete, ImGuiKey.Delete);
-        _keys.Add(Keys.Back, ImGuiKey.Backspace);
-        _keys.Add(Keys.Enter, ImGuiKey.Enter);
-        _keys.Add(Keys.Escape, ImGuiKey.Escape);
-        _keys.Add(Keys.Space, ImGuiKey.Space);
-        _keys.Add(Keys.A, ImGuiKey.A);
-        _keys.Add(Keys.C, ImGuiKey.C);
-        _keys.Add(Keys.V, ImGuiKey.V);
-        _keys.Add(Keys.X, ImGuiKey.X);
-        _keys.Add(Keys.Y, ImGuiKey.Y);
-        _keys.Add(Keys.Z, ImGuiKey.Z);
 
         _setClipboardFn = SetClipboard;
         _getClipboardFn = GetClipboard;
@@ -179,48 +176,29 @@ public class ImGuiSystem : GameSystemBase
         _platform.PlatformGetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(_getClipboardFn);
     }
 
-    [FixedAddressValueType]
-    static SetClipboardDelegate? _setClipboardFn;
-
-    [FixedAddressValueType]
-    static GetClipboardDelegate? _getClipboardFn;
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private unsafe delegate void SetClipboardDelegate(ImGuiContextPtr ctx, byte* text);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    unsafe delegate void SetClipboardDelegate(ImGuiContextPtr ctx, byte* text);
+    private unsafe delegate byte* GetClipboardDelegate(ImGuiContextPtr ctx);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    unsafe delegate byte* GetClipboardDelegate(ImGuiContextPtr ctx);
+    // The clipboard is not bridged to the OS: text stays within ImGui's own buffer
+    private static unsafe void SetClipboard(ImGuiContextPtr ctx, byte* text) { }
 
-    static unsafe void SetClipboard(ImGuiContextPtr ctx, byte* text)
+    private unsafe byte* GetClipboard(ImGuiContextPtr ctx) => (byte*)_platform.PlatformClipboardUserData;
+
+    [MemberNotNull(nameof(_shader), nameof(_vertexLayout), nameof(_pipeline), nameof(_indexBinding))]
+    private void CreateDeviceObjects()
     {
-    }
+        _shader = new EffectInstance(_effectSystem.LoadEffect("ImGuiShader").WaitForResult());
+        _shader.UpdateEffect(_device);
 
-    unsafe byte* GetClipboard(ImGuiContextPtr ctx)
-    {
-        return (byte*)_platform.PlatformClipboardUserData;
-    }
+        _vertexLayout = new VertexDeclaration(VertexElement.Position<Vector2>(), VertexElement.TextureCoordinate<Vector2>(), VertexElement.Color(PixelFormat.R8G8B8A8_UNorm));
 
-    [MemberNotNull(nameof(imShader), nameof(imVertLayout), nameof(imPipeline), nameof(indexBinding))]
-    void CreateDeviceObjects()
-    {
-        // compile de shader
-        imShader = new EffectInstance(effectSystem.LoadEffect("ImGuiShader").WaitForResult());
-        imShader.UpdateEffect(device);
-
-        var layout = new VertexDeclaration(
-            VertexElement.Position<Vector2>(),
-            VertexElement.TextureCoordinate<Vector2>(),
-            VertexElement.Color(PixelFormat.R8G8B8A8_UNorm)
-        );
-
-        imVertLayout = layout;
-
-        // de pipeline desc
-        var pipeline = new PipelineStateDescription()
+        var pipeline = new PipelineStateDescription
         {
             BlendState = BlendStates.NonPremultiplied,
-
-            RasterizerState = new RasterizerStateDescription()
+            RasterizerState = new RasterizerStateDescription
             {
                 CullMode = CullMode.None,
                 DepthBias = 0,
@@ -229,31 +207,23 @@ public class ImGuiSystem : GameSystemBase
                 ScissorTestEnable = true,
                 SlopeScaleDepthBias = 0,
             },
-
             PrimitiveType = PrimitiveType.TriangleList,
-            InputElements = imVertLayout.CreateInputElements(),
+            InputElements = _vertexLayout.CreateInputElements(),
             DepthStencilState = DepthStencilStates.Default,
-
-            EffectBytecode = imShader.Effect.Bytecode,
-            RootSignature = imShader.RootSignature,
-
+            EffectBytecode = _shader.Effect.Bytecode,
+            RootSignature = _shader.RootSignature,
             Output = new RenderOutputDescription(PixelFormat.R8G8B8A8_UNorm)
         };
 
-        // finally set up the pipeline
-        var pipelineState = PipelineState.New(device, pipeline);
-        imPipeline = pipelineState;
+        _pipeline = PipelineState.New(_device, pipeline);
 
-        var is32Bits = false;
-        var indexBuffer = Stride.Graphics.Buffer.Index.New(device, INITIAL_INDEX_BUFFER_SIZE * sizeof(ushort), GraphicsResourceUsage.Dynamic);
-        var indexBufferBinding = new IndexBufferBinding(indexBuffer, is32Bits, 0);
-        indexBinding = indexBufferBinding;
+        _indexBinding = new IndexBufferBinding(Stride.Graphics.Buffer.Index.New(_device, InitialIndexBufferSize * sizeof(ushort), GraphicsResourceUsage.Dynamic), Is32BitIndices, 0);
 
         // BufferFlags is passed explicitly: without it, C# picks the generic New<T>(device, ref readonly T value, usage)
         // overload with T = int (it needs no default argument) and creates a 4-byte buffer holding the size value.
-        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(device, INITIAL_VERTEX_BUFFER_SIZE * imVertLayout.CalculateSize(), GraphicsResourceUsage.Dynamic, BufferFlags.None);
-        var vertexBufferBinding = new VertexBufferBinding(vertexBuffer, layout, 0);
-        vertexBinding = vertexBufferBinding;
+        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(_device, InitialVertexBufferSize * _vertexLayout.CalculateSize(), GraphicsResourceUsage.Dynamic, BufferFlags.None);
+
+        _vertexBinding = new VertexBufferBinding(vertexBuffer, _vertexLayout, 0);
     }
 
     /// <summary>
@@ -263,13 +233,13 @@ public class ImGuiSystem : GameSystemBase
     /// <inheritdoc />
     public override void Update(GameTime gameTime)
     {
-        var deltaTime = (float)gameTime.Elapsed.TotalSeconds;
-        if (_isFirstFrame)
-        {
-            _isFirstFrame = false;
-            deltaTime = 1 / 60f;
-        }
+        // The first frame has no elapsed time worth reporting
+        var deltaTime = _isFirstFrame ? 1 / 60f : (float)gameTime.Elapsed.TotalSeconds;
+
+        _isFirstFrame = false;
+
         var surfaceSize = _game.Window.ClientBounds;
+
         _io.DisplaySize = new System.Numerics.Vector2(surfaceSize.Width, surfaceSize.Height);
         _io.DeltaTime = deltaTime;
 
@@ -277,76 +247,62 @@ public class ImGuiSystem : GameSystemBase
 
         // An update that never reached a draw left a frame open. Close it before starting the next one,
         // discarding its draw data - the frame it belonged to is not being presented anyway.
-        if (_frameBegun)
-        {
-            Hexa.NET.ImGui.ImGui.EndFrame();
-        }
+        if (_frameBegun) Hexa.NET.ImGui.ImGui.EndFrame();
 
         Hexa.NET.ImGui.ImGui.NewFrame();
         _frameBegun = true;
     }
 
-
     /// <summary>
     /// Feeds one frame of Stride input into ImGui: mouse position and buttons, text, keys, wheel and
     /// modifiers. Skipped while the mouse is position-locked.
     /// </summary>
-    void FeedInput()
+    private void FeedInput()
     {
-        if (input.HasMouse == false || input.IsMousePositionLocked == false)
-        {
-            var mousePos = input.AbsoluteMousePosition;
-            _io.AddMousePosEvent(mousePos.X, mousePos.Y);
+        if (_input.HasMouse && _input.IsMousePositionLocked) return;
 
-            if (_io.WantTextInput)
-            {
-                input.TextInput.EnabledTextInput();
-            }
-            else
-            {
-                input.TextInput.DisableTextInput();
-            }
+        var mousePos = _input.AbsoluteMousePosition;
 
-            ForwardInputEvents();
-            ForwardMouseButtonsAndModifiers();
-        }
+        _io.AddMousePosEvent(mousePos.X, mousePos.Y);
+
+        if (_io.WantTextInput) _input.TextInput.EnabledTextInput();
+        else _input.TextInput.DisableTextInput();
+
+        ForwardInputEvents();
+        ForwardMouseButtonsAndModifiers();
     }
 
-
     /// <summary>Forwards this frame's text, key and wheel events to ImGui.</summary>
-    void ForwardInputEvents()
+    private void ForwardInputEvents()
     {
-        // handle input events
-        foreach (InputEvent ev in input.Events)
+        foreach (var ev in _input.Events)
         {
             switch (ev)
             {
-            case TextInputEvent tev:
-                if (tev.Text == "\t") continue;
-                _io.AddInputCharactersUTF8(tev.Text);
-                break;
-            case KeyEvent kev:
-                if (_keys.TryGetValue(kev.Key, out var imGuiKey))
-                    _io.AddKeyEvent(imGuiKey, input.IsKeyDown(kev.Key));
-                break;
-            case MouseWheelEvent mw:
-                _io.AddMouseWheelEvent(0, mw.WheelDelta);
-                break;
+                case TextInputEvent tev when tev.Text != "\t":
+                    _io.AddInputCharactersUTF8(tev.Text);
+                    break;
+                case KeyEvent kev when _keys.TryGetValue(kev.Key, out var imGuiKey):
+                    _io.AddKeyEvent(imGuiKey, _input.IsKeyDown(kev.Key));
+                    break;
+                case MouseWheelEvent mw:
+                    _io.AddMouseWheelEvent(0, mw.WheelDelta);
+                    break;
             }
         }
     }
 
     /// <summary>Forwards the mouse button and modifier key states to ImGui.</summary>
-    void ForwardMouseButtonsAndModifiers()
+    private void ForwardMouseButtonsAndModifiers()
     {
-        _io.AddMouseButtonEvent(0, input.IsMouseButtonDown(MouseButton.Left));
-        _io.AddMouseButtonEvent(1, input.IsMouseButtonDown(MouseButton.Right));
-        _io.AddMouseButtonEvent(2, input.IsMouseButtonDown(MouseButton.Middle));
+        _io.AddMouseButtonEvent(0, _input.IsMouseButtonDown(MouseButton.Left));
+        _io.AddMouseButtonEvent(1, _input.IsMouseButtonDown(MouseButton.Right));
+        _io.AddMouseButtonEvent(2, _input.IsMouseButtonDown(MouseButton.Middle));
 
-        _io.AddKeyEvent(ImGuiKey.ModAlt, input.IsKeyDown(Keys.LeftAlt) || input.IsKeyDown(Keys.RightAlt));
-        _io.AddKeyEvent(ImGuiKey.ModShift, input.IsKeyDown(Keys.LeftShift) || input.IsKeyDown(Keys.RightShift));
-        _io.AddKeyEvent(ImGuiKey.ModCtrl, input.IsKeyDown(Keys.LeftCtrl) || input.IsKeyDown(Keys.RightCtrl));
-        _io.AddKeyEvent(ImGuiKey.ModSuper, input.IsKeyDown(Keys.LeftWin) || input.IsKeyDown(Keys.RightWin));
+        _io.AddKeyEvent(ImGuiKey.ModAlt, _input.IsKeyDown(Keys.LeftAlt) || _input.IsKeyDown(Keys.RightAlt));
+        _io.AddKeyEvent(ImGuiKey.ModShift, _input.IsKeyDown(Keys.LeftShift) || _input.IsKeyDown(Keys.RightShift));
+        _io.AddKeyEvent(ImGuiKey.ModCtrl, _input.IsKeyDown(Keys.LeftCtrl) || _input.IsKeyDown(Keys.RightCtrl));
+        _io.AddKeyEvent(ImGuiKey.ModSuper, _input.IsKeyDown(Keys.LeftWin) || _input.IsKeyDown(Keys.RightWin));
     }
 
     /// <summary>
@@ -357,120 +313,98 @@ public class ImGuiSystem : GameSystemBase
     {
         // Nothing to present when the draw is not paired with an update - Render() without a preceding
         // NewFrame() asserts just as loudly as the reverse.
-        if (!_frameBegun)
-        {
-            return;
-        }
+        if (!_frameBegun) return;
 
         Hexa.NET.ImGui.ImGui.Render();
         _frameBegun = false;
 
         var drawData = Hexa.NET.ImGui.ImGui.GetDrawData();
+
         _textures.ProcessTextureUpdates(drawData);
         RenderDrawLists(drawData);
         ImGuiExtension.ClearTextures();
     }
 
-    void CheckBuffers(ImDrawDataPtr drawData)
+    // Grows the buffers, with headroom, when this frame's draw data does not fit
+    private void CheckBuffers(ImDrawDataPtr drawData)
     {
-        uint totalVBOSize = (uint)(drawData.TotalVtxCount * Unsafe.SizeOf<ImDrawVert>());
-        if (totalVBOSize > vertexBinding.Buffer.SizeInBytes)
+        var vertexBytes = (uint)(drawData.TotalVtxCount * Unsafe.SizeOf<ImDrawVert>());
+
+        if (vertexBytes > _vertexBinding.Buffer.SizeInBytes)
         {
-            vertexBinding.Buffer.Dispose();
-            var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(device, (int)(totalVBOSize * 1.5f));
-            vertexBinding = new VertexBufferBinding(vertexBuffer, imVertLayout, 0);
+            _vertexBinding.Buffer.Dispose();
+            _vertexBinding = new VertexBufferBinding(Stride.Graphics.Buffer.Vertex.New(_device, (int)(vertexBytes * 1.5f)), _vertexLayout, 0);
         }
 
-        uint totalIBOSize = (uint)(drawData.TotalIdxCount * sizeof(ushort));
-        if (totalIBOSize > indexBinding.Buffer.SizeInBytes)
+        var indexBytes = (uint)(drawData.TotalIdxCount * sizeof(ushort));
+
+        if (indexBytes > _indexBinding.Buffer.SizeInBytes)
         {
-            indexBinding.Buffer.Dispose();
-            var is32Bits = false;
-            var indexBuffer = Stride.Graphics.Buffer.Index.New(device, (int)(totalIBOSize * 1.5f));
-            indexBinding = new IndexBufferBinding(indexBuffer, is32Bits, 0);
+            _indexBinding.Buffer.Dispose();
+            _indexBinding = new IndexBufferBinding(Stride.Graphics.Buffer.Index.New(_device, (int)(indexBytes * 1.5f)), Is32BitIndices, 0);
         }
     }
 
-    unsafe void UpdateBuffers(ImDrawDataPtr drawData)
+    private unsafe void UpdateBuffers(ImDrawDataPtr drawData)
     {
-        // copy de dators
-        int vtxOffsetBytes = 0;
-        int idxOffsetBytes = 0;
+        var vtxOffsetBytes = 0;
+        var idxOffsetBytes = 0;
 
-        for (int n = 0; n < drawData.CmdListsCount; n++)
+        for (var n = 0; n < drawData.CmdListsCount; n++)
         {
             ImDrawListPtr cmdList = drawData.CmdLists[n];
-            vertexBinding.Buffer.SetData(commandList, new ReadOnlySpan<ImDrawVert>(cmdList.VtxBuffer.Data, cmdList.VtxBuffer.Size), vtxOffsetBytes);
-            indexBinding.Buffer.SetData(commandList, new ReadOnlySpan<ushort>(cmdList.IdxBuffer.Data, cmdList.IdxBuffer.Size), idxOffsetBytes);
+
+            _vertexBinding.Buffer.SetData(_commandList, new ReadOnlySpan<ImDrawVert>(cmdList.VtxBuffer.Data, cmdList.VtxBuffer.Size), vtxOffsetBytes);
+            _indexBinding.Buffer.SetData(_commandList, new ReadOnlySpan<ushort>(cmdList.IdxBuffer.Data, cmdList.IdxBuffer.Size), idxOffsetBytes);
             vtxOffsetBytes += cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>();
             idxOffsetBytes += cmdList.IdxBuffer.Size * sizeof(ushort);
         }
     }
 
-    void RenderDrawLists(ImDrawDataPtr drawData)
+    private void RenderDrawLists(ImDrawDataPtr drawData)
     {
-        // view proj
         var surfaceSize = _game.Window.ClientBounds;
         var projMatrix = Matrix.OrthoRH(surfaceSize.Width, -surfaceSize.Height, -1, 1);
 
-        CheckBuffers(drawData); // potentially resize buffers first if needed
-        UpdateBuffers(drawData); // updeet em now
+        CheckBuffers(drawData);
+        UpdateBuffers(drawData);
 
-        // set pipeline stuff
-        var is32Bits = false;
-        commandList.SetPipelineState(imPipeline);
-        commandList.SetVertexBuffer(0, vertexBinding.Buffer, 0, Unsafe.SizeOf<ImDrawVert>());
-        commandList.SetIndexBuffer(indexBinding.Buffer, 0, is32Bits);
+        _commandList.SetPipelineState(_pipeline);
+        _commandList.SetVertexBuffer(0, _vertexBinding.Buffer, 0, Unsafe.SizeOf<ImDrawVert>());
+        _commandList.SetIndexBuffer(_indexBinding.Buffer, 0, Is32BitIndices);
+
+        // The projection and colour space hold for the whole frame. ImGui's colours are sRGB bytes; the
+        // shader decodes them only when the device says the backbuffer is sRGB (the default).
+        _shader.Parameters.Set(ImGuiShaderKeys.proj, ref projMatrix);
+        _shader.Parameters.Set(ImGuiShaderKeys.LinearOutput, _device.ColorSpace == ColorSpace.Linear ? 1u : 0u);
 
         // Seed with the first available managed texture (font atlas) as the initial shader binding
-        Texture? currentTexture = _textures.FirstTexture();
-        if (currentTexture != null)
-            imShader.Parameters.Set(ImGuiShaderKeys.tex, currentTexture);
+        if (_textures.FirstTexture() is { } fontAtlas) _shader.Parameters.Set(ImGuiShaderKeys.tex, fontAtlas);
 
-        int vtxOffset = 0;
-        int idxOffset = 0;
-        for (int n = 0; n < drawData.CmdListsCount; n++)
+        var vtxOffset = 0;
+        var idxOffset = 0;
+
+        for (var n = 0; n < drawData.CmdListsCount; n++)
         {
             ImDrawListPtr cmdList = drawData.CmdLists[n];
 
-            for (int i = 0; i < cmdList.CmdBuffer.Size; i++)
+            for (var i = 0; i < cmdList.CmdBuffer.Size; i++)
             {
                 ImDrawCmd cmd = cmdList.CmdBuffer[i];
 
-                // Resolve the texture for this draw command:
-                // managed (font atlas, ImGui-internal) textures have high-bit IDs;
-                // user textures registered via ImGuiExtension use small sequential IDs.
+                // Managed textures (the font atlas, ImGui's own) have high-bit ids; user textures registered
+                // through ImGuiExtension use small sequential ids
                 var texId = cmd.TexRef.GetTexID();
-                if (_textures.TryGet(texId, out var managedTexture))
-                {
-                    imShader.Parameters.Set(ImGuiShaderKeys.tex, managedTexture);
-                }
-                else if (ImGuiExtension.TryGetTexture((ulong)(nint)texId, out var userTexture))
-                {
-                    imShader.Parameters.Set(ImGuiShaderKeys.tex, userTexture);
-                }
 
-                // Set the scissor rectangle for clipping
-                commandList.SetScissorRectangle(
-                    new Rectangle(
-                        (int)cmd.ClipRect.X,
-                        (int)cmd.ClipRect.Y,
-                        (int)(cmd.ClipRect.Z - cmd.ClipRect.X),
-                        (int)(cmd.ClipRect.W - cmd.ClipRect.Y)
-                    )
-                );
+                if (_textures.TryGet(texId, out var managedTexture)) _shader.Parameters.Set(ImGuiShaderKeys.tex, managedTexture);
+                else if (ImGuiExtension.TryGetTexture((ulong)(nint)texId, out var userTexture)) _shader.Parameters.Set(ImGuiShaderKeys.tex, userTexture);
 
-                // Set the projection matrix and apply shader. ImGui's colours are sRGB bytes; the
-                // shader decodes them only when the device says the backbuffer is sRGB (the default).
-                imShader.Parameters.Set(ImGuiShaderKeys.proj, ref projMatrix);
-                imShader.Parameters.Set(ImGuiShaderKeys.LinearOutput, device.ColorSpace == ColorSpace.Linear ? 1u : 0u);
-                imShader.Apply(context);
+                _commandList.SetScissorRectangle(new Rectangle((int)cmd.ClipRect.X, (int)cmd.ClipRect.Y, (int)(cmd.ClipRect.Z - cmd.ClipRect.X), (int)(cmd.ClipRect.W - cmd.ClipRect.Y)));
 
-                // Draw the indexed vertices
-                commandList.DrawIndexed((int)cmd.ElemCount, idxOffset, vtxOffset);
+                _shader.Apply(_context);
+                _commandList.DrawIndexed((int)cmd.ElemCount, idxOffset, vtxOffset);
 
                 idxOffset += (int)cmd.ElemCount;
-
             }
 
             vtxOffset += cmdList.VtxBuffer.Size;

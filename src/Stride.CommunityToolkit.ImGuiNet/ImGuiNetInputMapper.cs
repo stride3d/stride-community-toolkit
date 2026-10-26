@@ -14,35 +14,29 @@ internal static class ImGuiNetInputMapper
     {
         var io = ImGui.GetIO();
 
-        // Update mouse position
         if (inputManager.HasMouse && !inputManager.IsMousePositionLocked)
         {
             var mousePos = inputManager.AbsoluteMousePosition;
-            io.MousePos = new Vector2(mousePos.X, mousePos.Y);
 
-            // Mouse buttons
+            io.MousePos = new Vector2(mousePos.X, mousePos.Y);
             io.MouseDown[0] = inputManager.IsMouseButtonDown(MouseButton.Left);
             io.MouseDown[1] = inputManager.IsMouseButtonDown(MouseButton.Right);
             io.MouseDown[2] = inputManager.IsMouseButtonDown(MouseButton.Middle);
         }
 
-        // Handle input events
         foreach (var inputEvent in inputManager.Events)
         {
             switch (inputEvent)
             {
-                case TextInputEvent textEvent:
-                    if (textEvent.Text != "\t")
-                        ImGui.GetIO().AddInputCharactersUTF8(textEvent.Text);
+                case TextInputEvent textEvent when textEvent.Text != "\t":
+                    io.AddInputCharactersUTF8(textEvent.Text);
                     break;
-
                 case MouseWheelEvent wheelEvent:
                     io.MouseWheel += wheelEvent.WheelDelta;
                     break;
             }
         }
 
-        // Modifier keys
         io.KeyAlt = inputManager.IsKeyDown(Keys.LeftAlt) || inputManager.IsKeyDown(Keys.RightAlt);
         io.KeyShift = inputManager.IsKeyDown(Keys.LeftShift) || inputManager.IsKeyDown(Keys.RightShift);
         io.KeyCtrl = inputManager.IsKeyDown(Keys.LeftCtrl) || inputManager.IsKeyDown(Keys.RightCtrl);

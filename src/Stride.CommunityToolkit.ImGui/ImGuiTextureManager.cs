@@ -8,25 +8,25 @@ namespace Stride.CommunityToolkit.ImGui;
 /// creates, updates and destroys them as the draw data requests, and resolves texture ids at draw
 /// time. Split out of <see cref="ImGuiSystem"/>, which forwards the protocol events here.
 /// </summary>
-internal sealed class ImGuiTextureManager : IDisposable
+/// <param name="device">The device the textures are created on.</param>
+/// <param name="commandList">The command list the pixels are uploaded through.</param>
+internal sealed class ImGuiTextureManager(GraphicsDevice device, CommandList commandList) : IDisposable
 {
-    private readonly GraphicsDevice _device;
-    private readonly CommandList _commandList;
-    private readonly Dictionary<ImTextureID, Texture> _managedTextures = new();
+    // Managed ids carry a high bit, so they never collide with the small sequential ids of ImGuiExtension's user textures
+    private const uint ManagedIdFlag = 0x80000000u;
 
-    internal ImGuiTextureManager(GraphicsDevice device, CommandList commandList)
-    {
-        _device = device;
-        _commandList = commandList;
-    }
+    private readonly Dictionary<ImTextureID, Texture> _managedTextures = [];
 
     internal unsafe void ProcessTextureUpdates(ImDrawDataPtr drawData)
     {
         if (drawData.Handle->Textures == null) return;
+
         var textures = drawData.Textures;
-        for (int i = 0; i < textures.Size; i++)
+
+        for (var i = 0; i < textures.Size; i++)
         {
             ImTextureDataPtr textureData = textures.Data[i];
+
             switch (textureData.Status)
             {
                 case ImTextureStatus.WantCreate:
@@ -42,70 +42,71 @@ internal sealed class ImGuiTextureManager : IDisposable
         }
     }
 
-    private unsafe void CreateManagedTexture(ImTextureDataPtr textureData)
+    private void CreateManagedTexture(ImTextureDataPtr textureData)
     {
-        var pixelFormat = textureData.Format == ImTextureFormat.Rgba32
-            ? PixelFormat.R8G8B8A8_UNorm
-            : PixelFormat.R8_UNorm;
-        var newTexture = Texture.New2D(_device, textureData.Width, textureData.Height, pixelFormat, TextureFlags.ShaderResource);
-        newTexture.SetData(_commandList, new ReadOnlySpan<byte>(textureData.Pixels, textureData.GetSizeInBytes()));
+        var managedId = (ImTextureID)(nint)(ManagedIdFlag | (uint)textureData.UniqueID);
 
-        // Use high-bit sentinel to distinguish ImGui-managed IDs from ImGuiExtension user-texture IDs (which start from 1)
-        var managedId = (ImTextureID)(nint)(0x80000000u | (uint)textureData.UniqueID);
+        _managedTextures[managedId] = Create(textureData);
         textureData.SetTexID(managedId);
-        _managedTextures[managedId] = newTexture;
         textureData.SetStatus(ImTextureStatus.Ok);
     }
 
-    private unsafe void UpdateManagedTexture(ImTextureDataPtr textureData)
+    // A texture of the same size is updated in place; a resized one is made afresh
+    private void UpdateManagedTexture(ImTextureDataPtr textureData)
     {
         var texId = textureData.GetTexID();
+
         if (_managedTextures.TryGetValue(texId, out var existing))
         {
-            var pixelFormat = textureData.Format == ImTextureFormat.Rgba32
-                ? PixelFormat.R8G8B8A8_UNorm
-                : PixelFormat.R8_UNorm;
             if (existing.Width != textureData.Width || existing.Height != textureData.Height)
             {
                 existing.Dispose();
-                var newTexture = Texture.New2D(_device, textureData.Width, textureData.Height, pixelFormat, TextureFlags.ShaderResource);
-                newTexture.SetData(_commandList, new ReadOnlySpan<byte>(textureData.Pixels, textureData.GetSizeInBytes()));
-                _managedTextures[texId] = newTexture;
+                _managedTextures[texId] = Create(textureData);
             }
             else
             {
-                existing.SetData(_commandList, new ReadOnlySpan<byte>(textureData.Pixels, textureData.GetSizeInBytes()));
+                Upload(existing, textureData);
             }
         }
+
         textureData.SetStatus(ImTextureStatus.Ok);
     }
 
     private void DestroyManagedTexture(ImTextureDataPtr textureData)
     {
-        var texId = textureData.GetTexID();
-        if (_managedTextures.TryGetValue(texId, out var texture))
-        {
-            texture.Dispose();
-            _managedTextures.Remove(texId);
-        }
+        if (_managedTextures.Remove(textureData.GetTexID(), out var texture)) texture.Dispose();
+
         textureData.SetStatus(ImTextureStatus.Ok);
     }
 
+    private Texture Create(ImTextureDataPtr textureData)
+    {
+        var pixelFormat = textureData.Format == ImTextureFormat.Rgba32 ? PixelFormat.R8G8B8A8_UNorm : PixelFormat.R8_UNorm;
+        var texture = Texture.New2D(device, textureData.Width, textureData.Height, pixelFormat, TextureFlags.ShaderResource);
+
+        Upload(texture, textureData);
+
+        return texture;
+    }
+
+    private unsafe void Upload(Texture texture, ImTextureDataPtr textureData)
+        => texture.SetData(commandList, new ReadOnlySpan<byte>(textureData.Pixels, textureData.GetSizeInBytes()));
+
     /// <summary>Resolves a managed texture id to its texture, when the id is one of ours.</summary>
-    internal bool TryGet(ImTextureID texId, out Texture texture)
-        => _managedTextures.TryGetValue(texId, out texture!);
+    internal bool TryGet(ImTextureID texId, out Texture texture) => _managedTextures.TryGetValue(texId, out texture!);
 
     /// <summary>The first managed texture, in practice the font atlas; <see langword="null"/> before the atlas exists.</summary>
     internal Texture? FirstTexture()
     {
         foreach (var texture in _managedTextures.Values) return texture;
+
         return null;
     }
 
     public void Dispose()
     {
-        foreach (var texture in _managedTextures.Values)
-            texture.Dispose();
+        foreach (var texture in _managedTextures.Values) texture.Dispose();
+
         _managedTextures.Clear();
     }
 }

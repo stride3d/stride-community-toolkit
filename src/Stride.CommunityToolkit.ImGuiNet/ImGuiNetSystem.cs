@@ -20,14 +20,11 @@ namespace Stride.CommunityToolkit.ImGuiNet;
 /// </summary>
 public class ImGuiNetSystem : GameSystemBase
 {
-    private static readonly Logger Logger = GlobalLogger.GetLogger("ImGuiNet");
+    private static readonly Logger _logger = GlobalLogger.GetLogger("ImGuiNet");
 
     // GameSystemBase.Game is nullable; resolve it once so every later access is a plain dereference.
     private readonly GameBase _game;
-
     private readonly ImGuiNetTextOverlay _textOverlay = new();
-    private bool _showUI = true;
-    private bool _initialized = false;
 
     /// <summary>
     /// Whether <c>NewFrame</c> has been called without a matching <c>Render</c> yet.
@@ -39,7 +36,7 @@ public class ImGuiNetSystem : GameSystemBase
     /// <c>IsFixedTimeStep</c> is set, because the game then runs extra updates to catch up whenever a
     /// frame overruns. The startup shader compile causes exactly that, and two <c>NewFrame</c> calls in a
     /// row abort the process from native code with "Forgot to call Render() or EndFrame() at the end of
-    /// the previous frame?" - an abort, so neither the <see cref="_initialized"/> guard nor the
+    /// the previous frame?" - an abort, so neither the <see cref="IsInitialized"/> guard nor the
     /// try/catch in <see cref="EndDraw"/> can intercept it.
     /// </remarks>
     private bool _frameBegun;
@@ -62,7 +59,7 @@ public class ImGuiNetSystem : GameSystemBase
     private IntPtr _context;
 
     // DPI / scaling state
-    private float _dpiScale = 1.0f;
+    private float _dpiScale = 1f;
     private bool _pendingFontRebuild;
 
     /// <summary>
@@ -85,16 +82,12 @@ public class ImGuiNetSystem : GameSystemBase
     /// <summary>
     /// Gets or sets whether UI elements should be displayed.
     /// </summary>
-    public bool ShowUI
-    {
-        get => _showUI;
-        set => _showUI = value;
-    }
+    public bool ShowUI { get; set; } = true;
 
     /// <summary>
     /// Gets whether the ImGui system is initialized and ready for use.
     /// </summary>
-    public bool IsInitialized => _initialized;
+    public bool IsInitialized { get; private set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ImGuiNetSystem"/> class.
@@ -121,9 +114,7 @@ public class ImGuiNetSystem : GameSystemBase
     /// <param name="color">The text color (optional, defaults to light gray).</param>
     public void DrawString(int x, int y, string message, Vector4? color = null)
     {
-        if (!_showUI || !_initialized) return;
-
-        _textOverlay.AddScreenText(x, y, message, color);
+        if (ShowUI && IsInitialized) _textOverlay.AddScreenText(x, y, message, color);
     }
 
     /// <summary>
@@ -134,9 +125,7 @@ public class ImGuiNetSystem : GameSystemBase
     /// <param name="color">The text color (optional, defaults to light gray).</param>
     public void DrawString(Vector3 worldPosition, string message, Vector4? color = null)
     {
-        if (!_showUI || !_initialized) return;
-
-        _textOverlay.AddWorldText(worldPosition, message, color);
+        if (ShowUI && IsInitialized) _textOverlay.AddWorldText(worldPosition, message, color);
     }
 
     /// <summary>
@@ -146,26 +135,21 @@ public class ImGuiNetSystem : GameSystemBase
     /// </summary>
     public void SetDpiScale(float dpiScale)
     {
-        if (dpiScale <= 0) return;
-        if (MathF.Abs(dpiScale - _dpiScale) < 0.01f) return;
+        if (dpiScale <= 0 || MathF.Abs(dpiScale - _dpiScale) < 0.01f) return;
 
         var old = _dpiScale;
+
         _dpiScale = dpiScale;
         _pendingFontRebuild = true;
 
         // Scale ImGui style sizes proportionally to maintain UI sizing
         try
         {
-            var style = ImGui.GetStyle();
-            if (old > 0)
-            {
-                var factor = _dpiScale / old;
-                style.ScaleAllSizes(factor);
-            }
+            if (old > 0) ImGui.GetStyle().ScaleAllSizes(_dpiScale / old);
         }
         catch { /* ignore if context not ready */ }
 
-        Logger.Info($"ImGuiNetSystem: DPI scale updated to {_dpiScale:F2} (pending font rebuild)");
+        _logger.Info($"ImGuiNetSystem: DPI scale updated to {_dpiScale:F2} (pending font rebuild)");
     }
 
     /// <inheritdoc/>
@@ -176,12 +160,11 @@ public class ImGuiNetSystem : GameSystemBase
         _inputManager = Services.GetService<InputManager>();
         _graphicsDevice = _game.GraphicsDevice;
         _graphicsContext = _game.GraphicsContext;
-        var sceneSystem = _game.Services.GetService<SceneSystem>();
         _commandList = _graphicsContext?.CommandList;
 
-        if (_graphicsDevice == null)
+        if (_graphicsDevice is null)
         {
-            Logger.Warning("ImGuiNetSystem: GraphicsDevice not available");
+            _logger.Warning("ImGuiNetSystem: GraphicsDevice not available");
             return;
         }
 
@@ -191,6 +174,7 @@ public class ImGuiNetSystem : GameSystemBase
             ImGui.SetCurrentContext(_context);
 
             var io = ImGui.GetIO();
+
             io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
 
             // The backbuffer-to-window ratio alone is 1 on Windows at any scaling; the display
@@ -205,61 +189,48 @@ public class ImGuiNetSystem : GameSystemBase
                 if (AutoScaleFonts) SetDpiScale(displayScale.Value);
             };
 
-            Logger.Info($"ImGuiNetSystem: display scale {_dpiScale:F2}");
+            _logger.Info($"ImGuiNetSystem: display scale {_dpiScale:F2}");
 
             // Build the font atlas at the current DPI - this keeps fonts crisp
             SetupFontAtlas(_dpiScale);
-
-            // Create rendering resources
             CreateRenderingResources();
 
-            _camera = sceneSystem?.SceneInstance.RootScene.GetCamera();
+            _camera = _game.Services.GetService<SceneSystem>()?.SceneInstance.RootScene.GetCamera();
+            IsInitialized = true;
 
-            _initialized = true;
-
-            Logger.Info("ImGuiNetSystem initialized successfully");
+            _logger.Info("ImGuiNetSystem initialized successfully");
         }
         catch (Exception ex)
         {
-            Logger.Error($"Failed to initialize ImGuiNetSystem: {ex.Message}");
+            _logger.Error($"Failed to initialize ImGuiNetSystem: {ex.Message}");
         }
     }
 
     private void CreateRenderingResources()
     {
-        if (_graphicsDevice == null || _graphicsContext == null) return;
+        if (_graphicsDevice is null || _graphicsContext is null) return;
 
-        // Load or create ImGui shader (reuse existing one or create a fallback)
-        var effectSystem = Services.GetService<EffectSystem>();
-        if (effectSystem != null)
+        if (Services.GetService<EffectSystem>() is { } effectSystem)
         {
             try
             {
-                // Try to reuse the existing ImGui shader from the other ImGui implementation
-                var effect = effectSystem.LoadEffect("ImGuiNetShader").WaitForResult();
-                _imguiShader = new EffectInstance(effect);
+                _imguiShader = new EffectInstance(effectSystem.LoadEffect("ImGuiNetShader").WaitForResult());
                 _imguiShader.UpdateEffect(_graphicsDevice);
-                Logger.Info("Using ImGuiNetShader for rendering");
+                _logger.Info("Using ImGuiNetShader for rendering");
             }
             catch
             {
-                Logger.Warning("Could not load any ImGui shader, text will not be visible");
+                _logger.Warning("Could not load any ImGui shader, text will not be visible");
                 return;
             }
         }
 
-        // Create vertex layout
-        _vertexLayout = new VertexDeclaration(
-            VertexElement.Position<Vector2>(),
-            VertexElement.TextureCoordinate<Vector2>(),
-            VertexElement.Color(PixelFormat.R8G8B8A8_UNorm)
-        );
+        _vertexLayout = new VertexDeclaration(VertexElement.Position<Vector2>(), VertexElement.TextureCoordinate<Vector2>(), VertexElement.Color(PixelFormat.R8G8B8A8_UNorm));
 
-        // Create pipeline state
-        var pipelineDesc = new PipelineStateDescription()
+        var pipelineDesc = new PipelineStateDescription
         {
             BlendState = BlendStates.NonPremultiplied,
-            RasterizerState = new RasterizerStateDescription()
+            RasterizerState = new RasterizerStateDescription
             {
                 CullMode = CullMode.None,
                 DepthBias = 0,
@@ -278,16 +249,13 @@ public class ImGuiNetSystem : GameSystemBase
 
         _pipelineState = PipelineState.New(_graphicsDevice, pipelineDesc);
 
-        // Create initial buffers.
-        // Note: the 'bufferSize'/'usage' arguments must be named. Buffer.Vertex.New also exposes a
-        // generic New<T>(device, ref readonly T value, usage) overload, and positional arguments bind
-        // to it (T = int) instead of the size-based overload, producing a 4-byte buffer.
-        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(_graphicsDevice,
-            bufferSize: 1024 * _vertexLayout.CalculateSize(), usage: GraphicsResourceUsage.Dynamic);
-        _vertexBinding = new VertexBufferBinding(vertexBuffer, _vertexLayout, 0);
+        // The 'bufferSize'/'usage' arguments must be named. Buffer.Vertex.New also exposes a generic
+        // New<T>(device, ref readonly T value, usage) overload, and positional arguments bind to it
+        // (T = int) instead of the size-based overload, producing a 4-byte buffer.
+        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(_graphicsDevice, bufferSize: 1024 * _vertexLayout.CalculateSize(), usage: GraphicsResourceUsage.Dynamic);
+        var indexBuffer = Stride.Graphics.Buffer.Index.New(_graphicsDevice, bufferSize: 2048 * sizeof(ushort), usage: GraphicsResourceUsage.Dynamic);
 
-        var indexBuffer = Stride.Graphics.Buffer.Index.New(_graphicsDevice,
-            bufferSize: 2048 * sizeof(ushort), usage: GraphicsResourceUsage.Dynamic);
+        _vertexBinding = new VertexBufferBinding(vertexBuffer, _vertexLayout, 0);
         _indexBinding = new IndexBufferBinding(indexBuffer, false, 0);
     }
 
@@ -295,48 +263,22 @@ public class ImGuiNetSystem : GameSystemBase
     {
         var io = ImGui.GetIO();
 
-        // Clear existing fonts
         io.Fonts.Clear();
 
-        bool customFontLoaded = false;
-        try
-        {
-            if (!string.IsNullOrWhiteSpace(FontPath) && File.Exists(FontPath))
-            {
-                io.Fonts.AddFontFromFileTTF(FontPath, MathF.Max(1.0f, FontSize * dpiScale));
-                customFontLoaded = true;
-                Logger.Info($"Loaded custom ImGui font: '{FontPath}' at {FontSize * dpiScale:F1}px (scale {dpiScale:F2})");
-            }
-        }
-        catch (Exception ex)
-        {
-            Logger.Warning($"Failed to load custom font '{FontPath}': {ex.Message}. Falling back to default font.");
-            customFontLoaded = false;
-        }
+        // Bake default font (wrapper does not expose size for default font), will be scaled by style/font scaling
+        if (!TryLoadCustomFont(io, dpiScale)) io.Fonts.AddFontDefault();
 
-        if (!customFontLoaded)
-        {
-            // Bake default font (wrapper does not expose size for default font), will be scaled by style/font scaling
-            io.Fonts.AddFontDefault();
-        }
-
-        // Build the font atlas
-        byte* pixels;
-        int width, height, bytesPerPixel;
-        io.Fonts.GetTexDataAsRGBA32(out pixels, out width, out height, out bytesPerPixel);
+        io.Fonts.GetTexDataAsRGBA32(out byte* pixels, out var width, out var height, out var bytesPerPixel);
 
         _fontTexture?.Dispose();
         _fontTexture = null;
 
-        if (_graphicsDevice != null && pixels != null)
+        if (_graphicsDevice is not null && pixels != null)
         {
             // Create Stride texture from ImGui font data
             _fontTexture = Texture.New2D(_graphicsDevice, width, height, PixelFormat.R8G8B8A8_UNorm, TextureFlags.ShaderResource);
 
-            if (_commandList != null)
-            {
-                _fontTexture.SetData(_commandList, new ReadOnlySpan<byte>(pixels, width * height * bytesPerPixel));
-            }
+            if (_commandList is not null) _fontTexture.SetData(_commandList, new ReadOnlySpan<byte>(pixels, width * height * bytesPerPixel));
 
             // Set a simple texture ID for ImGui (using texture hashcode as a simple identifier)
             io.Fonts.SetTexID((IntPtr)_fontTexture.GetHashCode());
@@ -350,47 +292,57 @@ public class ImGuiNetSystem : GameSystemBase
             io.Fonts.SetTexID(IntPtr.Zero);
         }
 
-        Logger.Info($"Font atlas built successfully: {width}x{height}, {bytesPerPixel} bpp (dpiScale={dpiScale:F2})");
+        _logger.Info($"Font atlas built successfully: {width}x{height}, {bytesPerPixel} bpp (dpiScale={dpiScale:F2})");
+    }
+
+    private bool TryLoadCustomFont(ImGuiIOPtr io, float dpiScale)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(FontPath) || !File.Exists(FontPath)) return false;
+
+            io.Fonts.AddFontFromFileTTF(FontPath, MathF.Max(1f, FontSize * dpiScale));
+            _logger.Info($"Loaded custom ImGui font: '{FontPath}' at {FontSize * dpiScale:F1}px (scale {dpiScale:F2})");
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.Warning($"Failed to load custom font '{FontPath}': {ex.Message}. Falling back to default font.");
+
+            return false;
+        }
     }
 
     /// <inheritdoc/>
     public override void Update(GameTime gameTime)
     {
-        if (!_initialized) return;
+        if (!IsInitialized) return;
 
-        var deltaTime = (float)gameTime.Elapsed.TotalSeconds;
         var io = ImGui.GetIO();
 
         UpdateDisplayMetrics(io);
 
-        // Rebuild fonts if requested
         if (_pendingFontRebuild)
         {
             SetupFontAtlas(_dpiScale);
             _pendingFontRebuild = false;
         }
 
+        var deltaTime = (float)gameTime.Elapsed.TotalSeconds;
+
         io.DeltaTime = deltaTime > 0 ? deltaTime : 1f / 60f;
 
-        // Handle input if available
-        if (_inputManager != null)
-        {
-            ImGuiNetInputMapper.Update(_inputManager);
-        }
+        if (_inputManager is not null) ImGuiNetInputMapper.Update(_inputManager);
 
         // An update that never reached a draw left a frame open. Close it before starting the next one,
         // discarding its draw data - the frame it belonged to is not being presented anyway.
-        if (_frameBegun)
-        {
-            ImGui.EndFrame();
-        }
+        if (_frameBegun) ImGui.EndFrame();
 
-        // Start new ImGui frame
         ImGui.NewFrame();
         _frameBegun = true;
 
-        // Process draw commands
-        _textOverlay.Draw(_showUI, _camera, GraphicsDevice);
+        _textOverlay.Draw(ShowUI, _camera, GraphicsDevice);
     }
 
     /// <summary>
@@ -400,29 +352,22 @@ public class ImGuiNetSystem : GameSystemBase
     /// </summary>
     private void UpdateDisplayMetrics(ImGuiIOPtr io)
     {
-        // Update display size
         var clientBounds = _game.Window.ClientBounds;
+
         io.DisplaySize = new Vector2(clientBounds.Width, clientBounds.Height);
 
         // HiDPI/backbuffer scaling (matches Box2D.NET pattern)
-        if (_graphicsDevice?.Presenter?.BackBuffer == null) return;
-        if (clientBounds.Width <= 0 || clientBounds.Height <= 0) return;
+        if (_graphicsDevice?.Presenter?.BackBuffer is not { } back || clientBounds.Width <= 0 || clientBounds.Height <= 0) return;
 
-        var back = _graphicsDevice.Presenter.BackBuffer;
-
-        io.DisplayFramebufferScale = new Vector2(
-            back.Width / (float)clientBounds.Width,
-            back.Height / (float)clientBounds.Height);
+        io.DisplayFramebufferScale = new Vector2(back.Width / (float)clientBounds.Width, back.Height / (float)clientBounds.Height);
     }
 
     /// <inheritdoc/>
     public override void EndDraw()
     {
-        if (!_initialized) return;
-
         // Nothing to present when the draw is not paired with an update - Render() without a preceding
         // NewFrame() asserts just as loudly as the reverse.
-        if (!_frameBegun) return;
+        if (!IsInitialized || !_frameBegun) return;
 
         try
         {
@@ -433,30 +378,26 @@ public class ImGuiNetSystem : GameSystemBase
         }
         catch (Exception ex)
         {
-            Logger.Warning($"Error in ImGui EndDraw: {ex.Message}");
+            _logger.Warning($"Error in ImGui EndDraw: {ex.Message}");
         }
     }
 
     private unsafe void RenderImGuiDrawData()
     {
         var drawData = ImGui.GetDrawData();
-        if (drawData.CmdListsCount == 0 || _commandList == null || _imguiShader == null || _pipelineState == null)
-            return;
 
-        // Set up projection matrix
+        if (drawData.CmdListsCount == 0 || _commandList is null || _imguiShader is null || _pipelineState is null) return;
+
         var clientBounds = _game.Window.ClientBounds;
         var projMatrix = Matrix.OrthoRH(clientBounds.Width, -clientBounds.Height, -1, 1);
 
-        // Set pipeline state
         _commandList.SetPipelineState(_pipelineState);
 
-        // Set shader parameters using the existing ImGui shader keys
         if (!TrySetShaderParameters(ref projMatrix)) return;
 
         _imguiShader.Apply(_graphicsContext);
 
-        // Render each command list
-        for (int n = 0; n < drawData.CmdListsCount; n++)
+        for (var n = 0; n < drawData.CmdListsCount; n++)
         {
             var cmdList = drawData.CmdLists[n];
 
@@ -481,39 +422,37 @@ public class ImGuiNetSystem : GameSystemBase
             // ImGui's colours are sRGB bytes; the shader decodes them only when the device says the
             // backbuffer is sRGB (the default), the way Stride's own SpriteBatch does
             _imguiShader.Parameters.Set(ImGuiNetShaderKeys.LinearOutput, _graphicsDevice!.ColorSpace == ColorSpace.Linear ? 1u : 0u);
+
             return true;
         }
         catch
         {
-            // Fallback to string-based parameter setting
-            Logger.Warning("Using fallback shader parameter setting");
-            return false; // Skip rendering if we can't set parameters
+            _logger.Warning("Using fallback shader parameter setting");
+
+            return false;
         }
     }
 
     /// <summary>
     /// Grows the vertex and index buffers when this command list does not fit in them.
     /// </summary>
-    private unsafe void EnsureBufferCapacity(ImDrawListPtr cmdList)
+    private void EnsureBufferCapacity(ImDrawListPtr cmdList)
     {
-        // Update vertex buffer if needed (see CreateRenderingResources for why the arguments are named)
-        if (cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>() > _vertexBinding.Buffer.SizeInBytes)
+        // See CreateRenderingResources for why the arguments are named
+        var vertexBytes = cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>();
+
+        if (vertexBytes > _vertexBinding.Buffer.SizeInBytes)
         {
-            var newVertexBuffer = Stride.Graphics.Buffer.Vertex.New(_graphicsDevice,
-                bufferSize: cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>() * 2,
-                usage: GraphicsResourceUsage.Dynamic);
             _vertexBinding.Buffer?.Dispose();
-            _vertexBinding = new VertexBufferBinding(newVertexBuffer, _vertexLayout, 0);
+            _vertexBinding = new VertexBufferBinding(Stride.Graphics.Buffer.Vertex.New(_graphicsDevice, bufferSize: vertexBytes * 2, usage: GraphicsResourceUsage.Dynamic), _vertexLayout, 0);
         }
 
-        // Update index buffer if needed
-        if (cmdList.IdxBuffer.Size * sizeof(ushort) > _indexBinding!.Buffer.SizeInBytes)
+        var indexBytes = cmdList.IdxBuffer.Size * sizeof(ushort);
+
+        if (indexBytes > _indexBinding!.Buffer.SizeInBytes)
         {
-            var newIndexBuffer = Stride.Graphics.Buffer.Index.New(_graphicsDevice,
-                bufferSize: cmdList.IdxBuffer.Size * sizeof(ushort) * 2,
-                usage: GraphicsResourceUsage.Dynamic);
             _indexBinding.Buffer?.Dispose();
-            _indexBinding = new IndexBufferBinding(newIndexBuffer, false, 0);
+            _indexBinding = new IndexBufferBinding(Stride.Graphics.Buffer.Index.New(_graphicsDevice, bufferSize: indexBytes * 2, usage: GraphicsResourceUsage.Dynamic), false, 0);
         }
     }
 
@@ -522,13 +461,9 @@ public class ImGuiNetSystem : GameSystemBase
     /// </summary>
     private unsafe void UploadCommandListData(ImDrawListPtr cmdList)
     {
-        // Upload vertex and index data
-        _vertexBinding.Buffer.SetData(_commandList,
-            new ReadOnlySpan<ImDrawVert>((void*)cmdList.VtxBuffer.Data, cmdList.VtxBuffer.Size));
-        _indexBinding!.Buffer.SetData(_commandList,
-            new ReadOnlySpan<ushort>((void*)cmdList.IdxBuffer.Data, cmdList.IdxBuffer.Size));
+        _vertexBinding.Buffer.SetData(_commandList, new ReadOnlySpan<ImDrawVert>((void*)cmdList.VtxBuffer.Data, cmdList.VtxBuffer.Size));
+        _indexBinding!.Buffer.SetData(_commandList, new ReadOnlySpan<ushort>((void*)cmdList.IdxBuffer.Data, cmdList.IdxBuffer.Size));
 
-        // Set buffers
         _commandList!.SetVertexBuffer(0, _vertexBinding.Buffer, 0, Unsafe.SizeOf<ImDrawVert>());
         _commandList.SetIndexBuffer(_indexBinding.Buffer, 0, false);
     }
@@ -538,22 +473,15 @@ public class ImGuiNetSystem : GameSystemBase
     /// </summary>
     private void DrawCommandList(ImDrawListPtr cmdList)
     {
-        // Render draw commands
-        int idxOffset = 0;
-        for (int i = 0; i < cmdList.CmdBuffer.Size; i++)
+        var idxOffset = 0;
+
+        for (var i = 0; i < cmdList.CmdBuffer.Size; i++)
         {
             var cmd = cmdList.CmdBuffer[i];
 
-            // Set scissor rectangle
-            _commandList!.SetScissorRectangle(new Rectangle(
-                (int)cmd.ClipRect.X,
-                (int)cmd.ClipRect.Y,
-                (int)(cmd.ClipRect.Z - cmd.ClipRect.X),
-                (int)(cmd.ClipRect.W - cmd.ClipRect.Y)
-            ));
-
-            // Draw indexed
+            _commandList!.SetScissorRectangle(new Rectangle((int)cmd.ClipRect.X, (int)cmd.ClipRect.Y, (int)(cmd.ClipRect.Z - cmd.ClipRect.X), (int)(cmd.ClipRect.W - cmd.ClipRect.Y)));
             _commandList.DrawIndexed((int)cmd.ElemCount, idxOffset, 0);
+
             idxOffset += (int)cmd.ElemCount;
         }
     }
@@ -567,10 +495,8 @@ public class ImGuiNetSystem : GameSystemBase
         _indexBinding?.Buffer?.Dispose();
         _imguiShader?.Dispose();
 
-        if (_initialized && _context != IntPtr.Zero)
-        {
-            ImGui.DestroyContext(_context);
-        }
+        if (IsInitialized && _context != IntPtr.Zero) ImGui.DestroyContext(_context);
+
         base.Destroy();
     }
 }

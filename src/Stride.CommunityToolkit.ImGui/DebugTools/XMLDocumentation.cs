@@ -11,135 +11,81 @@ namespace Stride.CommunityToolkit.ImGui.DebugTools;
 /// </summary>
 internal static class XMLDocumentation
 {
-    static readonly ConcurrentDictionary<Assembly, XmlDocument?> _documents = new();
-    static readonly ConcurrentDictionary<MemberInfo, CachedDocumentation?> _documentation = new();
-
-    // Two-level cache: one xml document per assembly, one parsed entry per member. A member without
-    // documentation is cached as null so the file is not searched again.
-    static bool TryGetDocumentation(MemberInfo member, [NotNullWhen(true)] out CachedDocumentation? documentation)
-    {
-        if (!_documentation.TryGetValue(member, out documentation))
-        {
-            // Load and cache the xml documentation file sitting next to the member's assembly.
-            var assembly = member.Module.Assembly;
-
-            if (!_documents.TryGetValue(assembly, out XmlDocument? document))
-            {
-                var filepath = assembly.Location;
-
-                const string LOCAL_PREFIX = "file:///";
-                if (filepath.StartsWith(LOCAL_PREFIX))
-                {
-                    filepath = filepath.Substring(LOCAL_PREFIX.Length);
-                    filepath = Path.ChangeExtension(filepath, ".xml");
-                    try
-                    {
-                        using var streamReader = new StreamReader(filepath);
-                        document = new XmlDocument();
-                        document.Load(streamReader);
-                    }
-                    catch (FileNotFoundException)
-                    {
-                        document = null;
-                    }
-                }
-                else
-                {
-                    // not sure how to safely deal with other prefixes
-                    document = null;
-                }
-
-                _documents.TryAdd(assembly, document);
-            }
-
-            if (document is null)
-            {
-                documentation = null;
-            }
-            else
-            {
-                // Build the doc-comment id the compiler writes: M:Type.Method(Params), T:Type, P:/F: for the rest.
-                string fullName;
-                switch (member)
-                {
-                    case MethodInfo methodInfo:
-                        var parameters = string.Join(",", methodInfo.GetParameters().Select(p => p.ParameterType.FullName));
-
-                        if (parameters.Length > 0)
-                            parameters = $"({parameters})";
-
-                        fullName = $"M:{methodInfo.DeclaringType?.FullName}.{methodInfo.Name}{parameters}";
-                        break;
-                    case Type type:
-                        fullName = $"T:{type.FullName}";
-                        break;
-                    default:
-                        fullName = $"{member.MemberType.ToString()[0]}:{member.DeclaringType}.{member.Name}";
-                        break;
-                }
-
-                // A member without an entry is cached as null so the document is not searched again.
-                if (document["doc"]?["members"]?.SelectSingleNode($"member[@name='{fullName}']") is XmlElement element)
-                    documentation = new CachedDocumentation(element);
-                else
-                    documentation = null;
-            }
-
-            _documentation.TryAdd(member, documentation);
-        }
-
-        return documentation != null;
-    }
+    // Two-level cache: one xml document per assembly, one parsed entry per member. An assembly without a
+    // documentation file, and a member without an entry, are cached as null so the search is not repeated
+    private static readonly ConcurrentDictionary<Assembly, XmlDocument?> _documents = new();
+    private static readonly ConcurrentDictionary<MemberInfo, CachedDocumentation?> _documentation = new();
 
     /// <summary> Returns false if the documentation file wasn't found </summary>
     internal static bool TryGetSummary(MemberInfo member, [NotNullWhen(true)] out string? summary)
     {
-        if (TryGetDocumentation(member, out CachedDocumentation? doc))
-        {
-            summary = doc.CleanSummary;
-            return true;
-        }
+        summary = TryGetDocumentation(member, out var doc) ? doc.CleanSummary : null;
 
-        summary = null;
-        return false;
+        return summary is not null;
     }
 
-    private sealed class CachedDocumentation
+    private static bool TryGetDocumentation(MemberInfo member, [NotNullWhen(true)] out CachedDocumentation? documentation)
     {
-        private XmlElement Element { get; }
-
-        internal string CleanSummary
+        if (!_documentation.TryGetValue(member, out documentation))
         {
-            get
-            {
-                lock (_lock)
-                {
-                    return _cleanSummary ??= GetCleanSummary();
-                }
-            }
+            var document = _documents.GetOrAdd(member.Module.Assembly, LoadDocument);
+
+            documentation = document?["doc"]?["members"]?.SelectSingleNode($"member[@name='{DocumentationId(member)}']") is XmlElement element
+                ? new CachedDocumentation(element)
+                : null;
+
+            _documentation.TryAdd(member, documentation);
         }
 
-        string? _cleanSummary;
+        return documentation is not null;
+    }
 
-        readonly object _lock = new();
+    // The xml file the compiler writes next to the assembly, when the build produced one
+    private static XmlDocument? LoadDocument(Assembly assembly)
+    {
+        if (string.IsNullOrEmpty(assembly.Location)) return null;
 
-        internal CachedDocumentation(XmlElement elem)
+        var path = Path.ChangeExtension(assembly.Location, ".xml");
+
+        if (!File.Exists(path)) return null;
+
+        var document = new XmlDocument();
+
+        document.Load(path);
+
+        return document;
+    }
+
+    // The id the compiler writes: M:Type.Method(Params), T:Type, P: or F: for the rest
+    private static string DocumentationId(MemberInfo member)
+    {
+        switch (member)
         {
-            Element = elem;
+            case MethodInfo method:
+                var parameters = string.Join(",", method.GetParameters().Select(p => p.ParameterType.FullName));
+
+                return $"M:{method.DeclaringType?.FullName}.{method.Name}{(parameters.Length > 0 ? $"({parameters})" : "")}";
+            case Type type:
+                return $"T:{type.FullName}";
+            default:
+                return $"{member.MemberType.ToString()[0]}:{member.DeclaringType}.{member.Name}";
         }
+    }
 
-        string GetCleanSummary()
+    private sealed class CachedDocumentation(XmlElement element)
+    {
+        private readonly Lazy<string> _cleanSummary = new(() => CleanUp(element));
+
+        internal string CleanSummary => _cleanSummary.Value;
+
+        private static string CleanUp(XmlElement element)
         {
-            string? rawString = Element.SelectSingleNode("summary")?.InnerXml;
-            if (rawString is null)
-                return "";
+            if (element.SelectSingleNode("summary")?.InnerXml is not { } raw) return "";
 
-            // Decodes xml entities like '&amp;'
-            rawString = WebUtility.HtmlDecode(rawString);
-            rawString = rawString.Replace("<see cref=", "").Replace("/>", "");
+            // Decode xml entities such as '&amp;' and strip the cref markup, then the indentation of each line
+            raw = WebUtility.HtmlDecode(raw).Replace("<see cref=", "").Replace("/>", "");
 
-            // cleanup tabs and spaces on new line
-            return string.Join('\n', rawString.Split('\n').Select(line => line.Trim()).SkipWhile(line => line.Length == 0));
+            return string.Join('\n', raw.Split('\n').Select(line => line.Trim()).SkipWhile(line => line.Length == 0));
         }
     }
 }

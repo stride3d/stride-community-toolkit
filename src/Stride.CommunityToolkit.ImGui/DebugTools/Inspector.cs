@@ -15,30 +15,31 @@ namespace Stride.CommunityToolkit.ImGui.DebugTools;
 /// </summary>
 public class Inspector : BaseWindow
 {
+    internal const float DummyWidth = 19;
+    private const float Indentation = DummyWidth + 8;
+
     /// <summary>Array of all possible <see cref="Filter"/> values</summary>
-    static readonly Filter[] _filterValues = Enum.GetValues<Filter>();
-    internal const float DUMMY_WIDTH = 19;
-    const float INDENTATION2 = DUMMY_WIDTH + 8;
+    private static readonly Filter[] _filterValues = Enum.GetValues<Filter>();
+
+    /// <summary>Any live inspectors</summary>
+    private static readonly List<Inspector> _inspectors = [];
 
     /// <summary>A UI handler function to draw and modify values</summary>
     public delegate bool ValueHandler(string label, ref object value);
+
     /// <summary>Add your drawing functions to explicitly override drawing for objects of the given type</summary>
     public static ConcurrentDictionary<Type, ValueHandler> ValueDrawingHandlers { get; } = new();
 
-    /// <summary>Any live inspectors</summary>
-    static readonly List<Inspector> _inspectors = [];
-
-
-    readonly Dictionary<Type, TypeCache> _cachedTypeData = [];
+    private readonly Dictionary<Type, TypeCache> _cachedTypeData = [];
     /// <summary>Opened sub object of the inspected object in the tree view</summary>
-    readonly HashSet<int> _openedId = [];
+    private readonly HashSet<int> _openedId = [];
     /// <summary>Lets not keep references from being GCed</summary>
-    readonly WeakReference<object?> _target = new(null);
-
+    private readonly WeakReference<object?> _target = new(null);
+    private readonly InspectorCollectionsView _collectionsView;
 
     // Settings
     /// <summary>When <see langword="true"/>, <see cref="FindFreeInspector"/> skips this inspector, so its target is kept.</summary>
-    public bool Locked = false;
+    public bool Locked;
     /// <summary>Show specialized interface to handle IEnumerable types</summary>
     public bool EnumerableView = true;
     /// <summary>
@@ -49,17 +50,15 @@ public class Inspector : BaseWindow
     /// <summary>Members shown within the interface</summary>
     public Filter MemberFilter
     {
-        get => _memberFilter;
+        get;
         set
         {
-            if (_memberFilter == value)
-                return;
-            _memberFilter = value;
+            if (field == value) return;
+
+            field = value;
             _cachedTypeData.Clear();
         }
-    }
-
-    Filter _memberFilter = Filter.Public | Filter.Inherited | Filter.Properties | Filter.Fields | Filter.Instance;
+    } = Filter.Public | Filter.Inherited | Filter.Properties | Filter.Fields | Filter.Instance;
 
     /// <summary>The object to inspect</summary>
     public object? Target
@@ -71,9 +70,6 @@ public class Inspector : BaseWindow
             _openedId.Clear();
         }
     }
-
-
-    readonly InspectorCollectionsView _collectionsView;
 
     /// <summary>
     /// Creates a new inspector window and registers it with the game's systems. Prefer <see cref="FindFreeInspector"/> to reuse an open window that is not <see cref="Locked"/>.
@@ -92,45 +88,37 @@ public class Inspector : BaseWindow
     /// <returns>An inspector whose <see cref="Target"/> can be set.</returns>
     public static Inspector FindFreeInspector(IServiceRegistry services)
     {
-        foreach (Inspector inspector in _inspectors)
+        foreach (var inspector in _inspectors)
         {
-            if (!inspector.Locked)
-                return inspector;
+            if (!inspector.Locked) return inspector;
         }
 
         return new Inspector(services);
     }
 
     /// <inheritdoc />
-    protected override void OnDestroy()
-    {
-        _inspectors.Remove(this);
-    }
+    protected override void OnDestroy() => _inspectors.Remove(this);
 
     /// <inheritdoc />
     protected override void OnDraw(bool collapsed)
     {
-        if (collapsed)
-            return;
+        if (collapsed) return;
 
         Checkbox("Locked", ref Locked);
-        using (UCombo("Filter", MemberFilter.ToString(), out bool open))
+
+        using (UCombo("Filter", MemberFilter.ToString(), out var open))
         {
             if (open)
             {
-                foreach (Filter o in _filterValues)
+                foreach (var flag in _filterValues)
                 {
-                    bool selected = (MemberFilter & o) == o;
-                    if (Selectable(o.ToString(), selected))
-                    {
-                        if (selected) // unselect this value
-                            MemberFilter = MemberFilter & ~o;
-                        else // select new value
-                            MemberFilter = MemberFilter | o;
-                    }
+                    var selected = (MemberFilter & flag) == flag;
+
+                    if (Selectable(flag.ToString(), selected)) MemberFilter = selected ? MemberFilter & ~flag : MemberFilter | flag;
                 }
             }
         }
+
         Checkbox("Enumerable view", ref EnumerableView);
         SameLine();
         Checkbox("Type as static ref", ref TypeAsStatic);
@@ -142,48 +130,42 @@ public class Inspector : BaseWindow
 
         using (Child())
         {
-            if (Target is { } target)
-                DrawMembers(target, target.GetType().GetHashCode());
+            if (Target is { } target) DrawMembers(target, target.GetType().GetHashCode());
         }
     }
 
-    bool DrawMembers(object target, int hashcodeSource)
+    private bool DrawMembers(object target, int hashcodeSource)
     {
-        if (target == null)
-            return false;
+        var type = TypeAsStatic && target is Type asType ? asType : target.GetType();
+        var hasChanged = false;
 
-        Type type = TypeAsStatic && target is Type ? (Type)target : target.GetType();
-        MemberInfo[] members = GetTypeData(type).FilteredMembers;
-
-        bool hasChanged = false;
-        using (UIndent(INDENTATION2))
+        using (UIndent(Indentation))
         {
-            foreach (var member in members)
+            foreach (var member in GetTypeData(type).FilteredMembers)
             {
-                GetMemberValue(member, target, out object? value, out bool readOnly);
+                var (value, readOnly) = GetMemberValue(member, target);
 
                 if (XMLDocumentation.TryGetSummary(member, out var summary))
                 {
                     SetCursorPosX(-0.5f);
                     Button("?");
+
                     if (IsItemHovered())
                     {
-                        using (Tooltip())
-                            TextUnformatted(summary);
+                        using (Tooltip()) TextUnformatted(summary);
                     }
 
                     SameLine();
                 }
 
-                bool changed = DrawValue(member.Name, ref value, readOnly, hashcodeSource);
-                if (changed && !readOnly)
+                if (DrawValue(member.Name, ref value, readOnly, hashcodeSource) && !readOnly)
                 {
                     hasChanged = true;
                     SetMemberValue(member, target, value);
                 }
             }
-            if (EnumerableView && target is IEnumerable ienum)
-                _collectionsView.Draw(target, ienum, hashcodeSource);
+
+            if (EnumerableView && target is IEnumerable ienum) _collectionsView.Draw(target, ienum, hashcodeSource);
         }
 
         // structs have to bubble up their changes since the object
@@ -191,172 +173,139 @@ public class Inspector : BaseWindow
         return hasChanged && target.GetType().IsValueType;
     }
 
-    static void GetMemberValue(MemberInfo member, object target, out object? value, out bool readOnly)
+    private static (object? value, bool readOnly) GetMemberValue(MemberInfo member, object target)
     {
         try
         {
-            if (member is FieldInfo fi)
+            return member switch
             {
-                value = fi.GetValue(target);
-                readOnly = fi.IsInitOnly;
-            }
-            else if (member is PropertyInfo pi && pi.CanRead)
-            {
-                value = pi.GetValue(target);
-                readOnly = !pi.CanWrite;
-            }
-            else if (member is Type asType)
-            {
-                value = asType;
-                readOnly = true;
-            }
-            else
-            {
-                throw new NotSupportedException($"UI handler for type {member.GetType()} not implemented");
-            }
+                FieldInfo field => (field.GetValue(target), field.IsInitOnly),
+                PropertyInfo { CanRead: true } property => (property.GetValue(target), !property.CanWrite),
+                Type type => (type, true),
+                _ => throw new NotSupportedException($"UI handler for type {member.GetType()} not implemented"),
+            };
         }
         catch (Exception e)
         {
-            value = $"x Exception: {e.Message}";
-            readOnly = true;
+            return ($"x Exception: {e.Message}", true);
         }
     }
 
-    static void SetMemberValue(MemberInfo member, object target, object? value)
+    private static void SetMemberValue(MemberInfo member, object target, object? value)
     {
         try
         {
-            if (member is FieldInfo fi)
-                fi.SetValue(target, value);
-            else if (member is PropertyInfo pi)
-                pi.SetValue(target, value);
-            else
-                throw new NotSupportedException();
+            switch (member)
+            {
+                case FieldInfo field: field.SetValue(target, value); break;
+                case PropertyInfo property: property.SetValue(target, value); break;
+                default: throw new NotSupportedException();
+            }
         }
         catch (Exception e)
         {
-            Console.Out?.WriteLine(e);
+            Console.WriteLine(e);
         }
     }
 
     internal bool DrawValue(string constantName, ref object? value, bool readOnly, int hashcodeSource)
     {
-        // Deterministic way to provide a hashcode in a hierarchic/recursive manner
-        // The hashcode created here, properly create one specific code for this object at this place in the hierarchy
-        // of course hashcodes still aren't unique but this should work well enough for now
-        int memberInHierarchyId = (hashcodeSource, constantName).GetHashCode();
+        // A deterministic id for this member at this place in the hierarchy: the parent's id combined with the
+        // member name. Hash codes are not unique, but this has worked well enough so far
+        var memberInHierarchyId = (hashcodeSource, constantName).GetHashCode();
+
         using (ID(memberInHierarchyId))
         {
-            if (value == null)
+            if (value is null)
             {
-                Dummy(new Vector2(DUMMY_WIDTH, 1));
+                Dummy(new Vector2(DummyWidth, 1));
+
                 using (UColumns(2))
                 {
-                    Dummy(new Vector2(DUMMY_WIDTH, 1));
+                    Dummy(new Vector2(DummyWidth, 1));
                     SameLine();
                     TextUnformatted(constantName);
                     NextColumn();
                     TextUnformatted("null");
                 }
+
                 return false;
             }
-            Type type = TypeAsStatic && value is Type ? (Type)value : value.GetType();
-            TypeCache typeData = GetTypeData(type);
-            bool valueChanged = false;
+
+            var type = TypeAsStatic && value is Type asType ? asType : value.GetType();
+
             if (ValueDrawingHandlers.TryGetValue(type, out var handler))
             {
                 // The public handler contract takes a non-null value; it is only reached past the null check above
                 object handled = value;
-                valueChanged = handler(constantName, ref handled);
+                var handledChanged = handler(constantName, ref handled);
+
                 value = handled;
-                return valueChanged;
+
+                return handledChanged;
             }
 
-            bool recursable = IsRecursable(type, typeData, value);
-
-            bool recurse = recursable && _openedId.Contains(memberInHierarchyId);
+            var typeData = GetTypeData(type);
+            var isObject = Type.GetTypeCode(type) == TypeCode.Object;
+            var recursable = isObject && (typeData.FilteredMembers.Length > 0 || ReadableIEnumerable(value));
+            var recurse = recursable && _openedId.Contains(memberInHierarchyId);
 
             using (UColumns(2))
             {
-                // Present button to recurse through value
                 DrawRecurseArrow(recursable, recurse, memberInHierarchyId);
-
                 SameLine();
                 TextUnformatted(constantName);
-
                 NextColumn();
 
-                // Complex object: present button to swap inspect target to this object ?
-                if (Type.GetTypeCode(type) == TypeCode.Object && type.IsClass)
+                if (isObject && type.IsClass)
                 {
-                    if (Button(value.ToString()))
-                        Target = value;
-                    goto RECURSE;
+                    // A complex object: the button swaps the inspected target to it
+                    if (Button(value.ToString())) Target = value;
                 }
-                // Basic value type: Present UI handler for values
-                else if (!readOnly && InspectorValueDrawers.TryDrawScalar(ref value, out valueChanged))
+                else if (!readOnly && InspectorValueDrawers.TryDrawScalar(ref value, out var valueChanged))
                 {
                     return valueChanged;
                 }
-                if (typeData.AsEnum != null)
+                else if (typeData.AsEnum is { } enumInfo)
                 {
-                    return InspectorValueDrawers.DrawEnum(typeData.AsEnum.Value, ref value);
+                    return InspectorValueDrawers.DrawEnum(enumInfo, ref value);
                 }
-
-                // Otherwise, present basic read-only text
-                // value is only reassigned by TryDrawScalar, which never writes null; the compiler loses that across the ref.
-                TextUnformatted(value!.ToString());
-            }
-
-RECURSE:
-
-            if (recurse) // Pass in this member's id to properly offset sub-members' hash
-                valueChanged = valueChanged || DrawMembers(value, memberInHierarchyId);
-
-            return valueChanged;
-        }
-    }
-
-    static bool IsRecursable(Type type, TypeCache typeData, object value)
-    {
-        bool recursable = Type.GetTypeCode(type) == TypeCode.Object;
-        return recursable && (typeData.FilteredMembers.Length > 0 || ReadableIEnumerable(value));
-    }
-
-    void DrawRecurseArrow(bool recursable, bool recurse, int memberInHierarchyId)
-    {
-        if (recursable)
-        {
-            if (ArrowButton("", recurse ? ImGuiDir.Down : ImGuiDir.Right))
-            {
-                if (recurse)
-                    _openedId.Remove(memberInHierarchyId);
                 else
-                    _openedId.Add(memberInHierarchyId);
+                {
+                    // Anything else is read-only text. TryDrawScalar never writes null; the compiler loses that across the ref
+                    TextUnformatted(value!.ToString());
+                }
             }
-        }
-        else
-        {
-            Dummy(new Vector2(DUMMY_WIDTH, 1));
+
+            // Sub-members hash from this member's id, so their ids differ per branch
+            return recurse && DrawMembers(value!, memberInHierarchyId);
         }
     }
 
-    internal TypeCache GetTypeData(Type t)
+    private void DrawRecurseArrow(bool recursable, bool recurse, int memberInHierarchyId)
     {
-        if (_cachedTypeData.TryGetValue(t, out var output))
-            return output;
-
-        output = new TypeCache(t, MemberFilter);
-        _cachedTypeData.Add(t, output);
-        return output;
+        if (!recursable)
+        {
+            Dummy(new Vector2(DummyWidth, 1));
+        }
+        else if (ArrowButton("", recurse ? ImGuiDir.Down : ImGuiDir.Right) && !_openedId.Remove(memberInHierarchyId))
+        {
+            _openedId.Add(memberInHierarchyId);
+        }
     }
 
-    static bool ReadableIEnumerable(object source)
+    internal TypeCache GetTypeData(Type type)
+    {
+        if (!_cachedTypeData.TryGetValue(type, out var data)) _cachedTypeData[type] = data = new TypeCache(type, MemberFilter);
+
+        return data;
+    }
+
+    private static bool ReadableIEnumerable(object source)
     {
         if (source is IEnumerable ienum)
         {
-            foreach (object o in ienum)
-                return true;
+            foreach (var _ in ienum) return true;
         }
 
         return false;
@@ -386,153 +335,76 @@ RECURSE:
         Inherited = Instance << 1,
     }
 
-    internal sealed class TypeCache
+    /// <summary>What the inspector needs to know about one type, resolved once per type and filter.</summary>
+    internal sealed class TypeCache(Type type, Filter filter)
     {
-        internal readonly MemberInfo[] FilteredMembers;
-        internal readonly (Type key, Type value, MethodInfo? getKey, MethodInfo? getValue)? AsDictionary;
-        internal readonly Type? AsList;
-        internal readonly (bool flags, Array values)? AsEnum;
-        readonly Type _type;
-        readonly Filter _filter;
+        internal readonly MemberInfo[] FilteredMembers = [.. GetAllMembers(type).Where(m => PassesFilter(type, filter, m))];
+        internal readonly (Type key, Type value, MethodInfo? getKey, MethodInfo? getValue)? AsDictionary = DictionaryShape(type);
+        internal readonly Type? AsList = ListItemType(type);
+        internal readonly (bool flags, Array values)? AsEnum = type.IsEnum ? (type.IsDefined(typeof(FlagsAttribute)), Enum.GetValues(type)) : null;
 
-        internal TypeCache(Type t, Filter filter)
+        internal object? NewObject() => type == typeof(string) ? string.Empty : type.IsValueType ? Activator.CreateInstance(type) : type.GetConstructor(Type.EmptyTypes)?.Invoke(null);
+
+        // The key and value types of an IDictionary<,> (or object for a plain IDictionary), with the Keys and Values getters
+        private static (Type key, Type value, MethodInfo? getKey, MethodInfo? getValue)? DictionaryShape(Type type)
         {
-            _type = t;
-            _filter = filter;
-            FilteredMembers = GetAllMembers(_type).Where(m => PassesFilter(_type, m)).ToArray();
+            var generics = GenericArguments(type, typeof(IDictionary<,>));
 
-            var generics = GetGenericsFromBaseType(_type, typeof(IDictionary<,>));
-            if (generics == null && typeof(IDictionary).IsAssignableFrom(_type))
-                AsDictionary = (typeof(object), typeof(object), null, null);
-            else if (generics != null)
-                AsDictionary = (generics[0], generics[1], null, null);
+            if (generics is null && !typeof(IDictionary).IsAssignableFrom(type)) return null;
 
-            if (AsDictionary != null)
-            {
-                (Type key, Type value, _, _) = AsDictionary.Value;
-                // IDictionary.Keys
-                var getKey = _type.GetProperty(nameof(IDictionary.Keys), BindingFlags.Public | BindingFlags.Instance)?.GetMethod;
-                // IDictionary.Values
-                var getValue = _type.GetProperty(nameof(IDictionary.Values), BindingFlags.Public | BindingFlags.Instance)?.GetMethod;
-                AsDictionary = (key, value, getKey, getValue);
-            }
+            var (key, value) = generics is null ? (typeof(object), typeof(object)) : (generics[0], generics[1]);
 
-            generics = GetGenericsFromBaseType(_type, typeof(IList<>));
-            if (generics == null && typeof(IList).IsAssignableFrom(_type))
-                AsList = typeof(object);
-            else if (generics != null)
-                AsList = generics[0];
-
-            if (_type.IsEnum)
-            {
-                AsEnum = (_type.IsDefined(typeof(FlagsAttribute)), Enum.GetValues(_type));
-            }
+            return (key, value, Getter(type, nameof(IDictionary.Keys)), Getter(type, nameof(IDictionary.Values)));
         }
 
-        static Type[]? GetGenericsFromBaseType(Type impl, Type type)
+        private static Type? ListItemType(Type type)
         {
-            Type? t = impl.GetInterfaces()
-                .Where(i => i.IsGenericType)
-                .FirstOrDefault(i => i.GetGenericTypeDefinition() == type);
-            return t?.GenericTypeArguments;
+            var generics = GenericArguments(type, typeof(IList<>));
+
+            return generics is not null ? generics[0] : typeof(IList).IsAssignableFrom(type) ? typeof(object) : null;
         }
 
-        internal object? NewObject()
+        private static Type[]? GenericArguments(Type type, Type definition)
+            => type.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == definition)?.GenericTypeArguments;
+
+        private static MethodInfo? Getter(Type type, string property) => type.GetProperty(property, BindingFlags.Public | BindingFlags.Instance)?.GetMethod;
+
+        private static bool PassesFilter(Type classType, Filter filter, MemberInfo member)
         {
-            if (_type == typeof(string))
-                return string.Empty;
-            return _type.IsValueType ? Activator.CreateInstance(_type) : _type.GetConstructor(Type.EmptyTypes)?.Invoke(null);
-        }
+            // The categories the member belongs to; it is shown only when the filter includes every one of them
+            var categories = classType != member.DeclaringType ? Filter.Inherited : 0;
 
-        bool PassesFilter(Type classType, MemberInfo m)
-        {
-            if (!(m is FieldInfo || m is PropertyInfo || m is Type))
-                return false;
-
-            // Build the categories this member belongs to; it is shown only when the
-            // current filter includes every one of them.
-            Filter memberFilter = 0;
-
-            if (classType != m.DeclaringType)
-                memberFilter |= Filter.Inherited;
-
-            if (m is FieldInfo fi)
+            switch (member)
             {
-                if (IsBackingField(fi))
+                case FieldInfo field when !IsBackingField(field):
+                    categories |= Filter.Fields | Category(field.IsStatic, field.IsPublic);
+                    break;
+                case PropertyInfo { GetMethod: { } getter } when getter.GetParameters().Length == 0:
+                    categories |= Filter.Properties | Category(getter.IsStatic, getter.IsPublic);
+                    break;
+                case Type inner:
+                    categories |= Filter.SubTypes | Category(inner.IsAbstract && inner.IsSealed, inner.IsPublic || inner.IsNestedPublic);
+                    break;
+                default:
                     return false;
-
-                memberFilter |= Filter.Fields;
-                if (fi.IsStatic)
-                    memberFilter |= Filter.Static;
-                else
-                    memberFilter |= Filter.Instance;
-
-                if (fi.IsPublic)
-                    memberFilter |= Filter.Public;
-                else
-                    memberFilter |= Filter.NonPublic;
             }
 
-            if (m is PropertyInfo pi)
-            {
-                var method = pi.GetMethod;
-                if (method == null || method.GetParameters().Length != 0)
-                    return false;
-
-                memberFilter |= Filter.Properties;
-                if (method.IsStatic)
-                    memberFilter |= Filter.Static;
-                else
-                    memberFilter |= Filter.Instance;
-
-                if (method.IsPublic)
-                    memberFilter |= Filter.Public;
-                else
-                    memberFilter |= Filter.NonPublic;
-            }
-
-            if (m is Type innerType)
-            {
-                memberFilter |= Filter.SubTypes;
-                if (innerType.IsAbstract && innerType.IsSealed)
-                    memberFilter |= Filter.Static;
-                else
-                    memberFilter |= Filter.Instance;
-
-                if (innerType.IsPublic || innerType.IsNestedPublic)
-                    memberFilter |= Filter.Public;
-                else
-                    memberFilter |= Filter.NonPublic;
-            }
-
-            // Every category of the member must be included in the active filter.
-            return memberFilter != 0 && (memberFilter & _filter) == memberFilter;
+            return (categories & filter) == categories;
         }
 
-        static bool IsBackingField(FieldInfo fi)
-        {
-            if (!fi.IsPrivate)
-                return false;
+        private static Filter Category(bool isStatic, bool isPublic) => (isStatic ? Filter.Static : Filter.Instance) | (isPublic ? Filter.Public : Filter.NonPublic);
 
-            if (fi.Name[0] != '<' || !fi.Name.EndsWith(">k__BackingField"))
-                return false;
-
-            return fi.IsDefined(typeof(CompilerGeneratedAttribute), true);
-        }
+        private static bool IsBackingField(FieldInfo field)
+            => field.IsPrivate && field.Name[0] == '<' && field.Name.EndsWith(">k__BackingField") && field.IsDefined(typeof(CompilerGeneratedAttribute), true);
 
         /// <summary>Reflection doesn't provide private inherited fields for some reason, this resolves that issue</summary>
-        static IEnumerable<MemberInfo> GetAllMembers(Type t)
+        private static IEnumerable<MemberInfo> GetAllMembers(Type type)
         {
-            foreach (MemberInfo member in t.GetMembers(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
+            foreach (var member in type.GetMembers(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)) yield return member;
+
+            for (Type? current = type; current is not null; current = current.BaseType)
             {
-                yield return member;
-            }
-            for (Type? current = t; current != null; current = current.BaseType)
-            {
-                foreach (MemberInfo member in current.GetMembers(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly))
-                {
-                    yield return member;
-                }
+                foreach (var member in current.GetMembers(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)) yield return member;
             }
         }
     }

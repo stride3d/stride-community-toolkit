@@ -13,50 +13,31 @@ namespace Stride.CommunityToolkit.ImGuiNet;
 /// </summary>
 internal sealed class ImGuiNetTextOverlay
 {
+    private static readonly Vector4 DefaultColor = new(0.9f, 0.9f, 0.9f, 1.0f);
+
     private readonly List<DrawCommand> _drawCommands = [];
 
     internal void AddScreenText(int x, int y, string message, Vector4? color)
-    {
-        _drawCommands.Add(new DrawCommand
-        {
-            Type = DrawCommandType.ScreenText,
-            ScreenPosition = new Vector2(x, y),
-            Message = message,
-            Color = color ?? new Vector4(0.9f, 0.9f, 0.9f, 1.0f)
-        });
-    }
+        => _drawCommands.Add(new DrawCommand(DrawCommandType.ScreenText, new Vector2(x, y), default, message, color ?? DefaultColor));
 
     internal void AddWorldText(Vector3 worldPosition, string message, Vector4? color)
-    {
-        _drawCommands.Add(new DrawCommand
-        {
-            Type = DrawCommandType.WorldText,
-            WorldPosition = worldPosition,
-            Message = message,
-            Color = color ?? new Vector4(0.9f, 0.9f, 0.9f, 1.0f)
-        });
-    }
+        => _drawCommands.Add(new DrawCommand(DrawCommandType.WorldText, default, worldPosition, message, color ?? DefaultColor));
 
     /// <summary>Draws the buffered strings into one overlay window and clears the buffer for the next frame.</summary>
     internal void Draw(bool showUI, CameraComponent? camera, GraphicsDevice graphicsDevice)
     {
         if (!showUI || _drawCommands.Count == 0) return;
 
-        // Create a single, fullscreen transparent overlay window and place all items into it
-        var io = ImGui.GetIO();
+        // One fullscreen, transparent overlay window holds every item
         ImGui.SetNextWindowPos(Vector2.Zero);
-        ImGui.SetNextWindowSize(io.DisplaySize);
-        ImGui.SetNextWindowBgAlpha(0.0f); // no background without needing NoBackground flag
+        ImGui.SetNextWindowSize(ImGui.GetIO().DisplaySize);
+        ImGui.SetNextWindowBgAlpha(0.0f);
 
-        ImGui.Begin("Overlay",
-            ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoInputs |
-            ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings);
+        ImGui.Begin("Overlay", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoSavedSettings);
 
         foreach (var command in _drawCommands)
         {
-            Vector2 screenPos = command.Type == DrawCommandType.ScreenText
-                ? command.ScreenPosition
-                : WorldToScreen(camera, graphicsDevice, command.WorldPosition);
+            var screenPos = command.Type == DrawCommandType.ScreenText ? command.ScreenPosition : WorldToScreen(camera, graphicsDevice, command.WorldPosition);
 
             ImGui.SetCursorPos(screenPos);
             ImGui.TextColored(command.Color, command.Message);
@@ -64,18 +45,11 @@ internal sealed class ImGuiNetTextOverlay
 
         ImGui.End();
 
-        // Clear commands for next frame
         _drawCommands.Clear();
     }
 
     private static Vector2 WorldToScreen(CameraComponent? camera, GraphicsDevice graphicsDevice, Vector3 worldPosition)
-    {
-        if (camera is null) return Vector2.Zero;
-
-        var result = camera.WorldToScreenPoint(ref worldPosition, graphicsDevice);
-
-        return result;
-    }
+        => camera is null ? Vector2.Zero : camera.WorldToScreenPoint(ref worldPosition, graphicsDevice);
 
     private enum DrawCommandType
     {
@@ -83,12 +57,5 @@ internal sealed class ImGuiNetTextOverlay
         WorldText
     }
 
-    private readonly record struct DrawCommand
-    {
-        internal DrawCommandType Type { get; init; }
-        internal Vector2 ScreenPosition { get; init; }
-        internal Vector3 WorldPosition { get; init; }
-        internal required string Message { get; init; }
-        internal Vector4 Color { get; init; }
-    }
+    private readonly record struct DrawCommand(DrawCommandType Type, Vector2 ScreenPosition, Vector3 WorldPosition, string Message, Vector4 Color);
 }
