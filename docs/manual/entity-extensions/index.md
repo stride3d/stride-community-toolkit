@@ -16,8 +16,9 @@ var (model, light) = entity.Get<ModelComponent, LightComponent>();
 
 ## Finding entities
 
-- [`FindEntity()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity(Stride.Engine.Entity,System.String)) - Finds a direct child by name.
-- [`FindEntityRecursive()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.FindEntityRecursive(Stride.Engine.Entity,System.String)) - Searches the whole subtree, not only the immediate children.
+- [`scene.FindEntity()`](xref:Stride.CommunityToolkit.Engine.SceneExtensions.FindEntity(Stride.Engine.Scene,System.String,System.Boolean)) - Finds an entity by name among the scene's top-level entities, or with `recursive: true` among their descendants too. Search once, in `Start`, and keep the result.
+- [`FindEntity()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity(Stride.Engine.Entity,System.String)) - The same search, started from an entity that is already in the scene: its top-level entities, not this entity's children.
+- [`FindEntityRecursive()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.FindEntityRecursive(Stride.Engine.Entity,System.String)) - The same from an entity, descendants included. Both throw an `InvalidOperationException` that says what to do when the entity is not in a scene yet.
 - [`WorldPosition()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity,System.Boolean)) - The entity's position in world space rather than relative to its parent, updating the transform hierarchy first unless you ask it not to.
 - [`Remove()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Remove(Stride.Engine.Entity)) - Takes the entity out of its scene by setting `Scene` to `null`.
 

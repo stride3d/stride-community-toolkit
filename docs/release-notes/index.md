@@ -97,6 +97,10 @@ One family of helpers on the caller's own `Random`, so a world built from `new R
 |---|---|---|
 | `new TranslationGizmo(device)` had a constructor of its own | binds to `TranslationGizmo(device, xColor, yColor, zColor)`, whose colours default | Source-compatible; the gizmo also lost five private lists that were filled and never read, and builds each mesh once rather than once per axis. |
 
+### 🎉 New Features
+
+- `scene.FindEntity(name, recursive: false)`: the first entity with a name among a scene's top-level entities, or with `recursive: true` among their descendants too. `entity.FindEntity` and `entity.FindEntityRecursive` now call it on the entity's scene, and an entity that is not in a scene gets an `InvalidOperationException` that names the entity and says what to do, instead of a `NullReferenceException`.
+
 ## 1.0.0.0-preview.68
 
 ## What's Changed

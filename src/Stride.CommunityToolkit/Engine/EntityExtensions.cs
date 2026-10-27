@@ -151,30 +151,36 @@ public static partial class EntityExtensions
         => entity.Scene = null;
 
     /// <summary>
-    /// Searches for an entity by name within the top-level entities of the current scene.
+    /// Finds an entity by name among the top-level entities of the scene this entity is in.
     /// </summary>
-    /// <param name="entity">The reference entity used to access the scene.</param>
+    /// <param name="entity">An entity in the scene to search; it is only the way to reach that scene.</param>
     /// <param name="name">The name of the entity to find.</param>
-    /// <returns>The first entity matching the specified name, or null if no match is found. This search does not include child entities.</returns>
+    /// <returns>The first top-level entity with that name, or <see langword="null"/> if none has it. Children are not searched; see <see cref="FindEntityRecursive"/>.</returns>
+    /// <exception cref="InvalidOperationException">The entity is not in a scene, so there is nothing to search.</exception>
+    /// <remarks>The same as <see cref="SceneExtensions.FindEntity(Scene, string, bool)"/> on <c>entity.Scene</c>; call that directly where the scene is at hand.</remarks>
     public static Entity? FindEntity(this Entity entity, string name)
-        => entity.Scene.Entities.FirstOrDefault(other => other.Name == name);
+        => SceneOf(entity, name).FindEntity(name);
 
     /// <summary>
-    /// Searches the scene's top-level entities and all their descendants for an entity by name.
+    /// Finds an entity by name among the top-level entities of the scene this entity is in and all their descendants.
     /// </summary>
-    /// <param name="parent">The reference entity used to access the scene.</param>
+    /// <param name="entity">An entity in the scene to search; it is only the way to reach that scene.</param>
     /// <param name="name">The name of the entity to find.</param>
-    /// <returns>The first entity with the specified name, or null if none is found.</returns>
-    public static Entity? FindEntityRecursive(this Entity parent, string name)
+    /// <returns>The first entity with that name, or <see langword="null"/> if none has it.</returns>
+    /// <exception cref="InvalidOperationException">The entity is not in a scene, so there is nothing to search.</exception>
+    /// <remarks>The same as <see cref="SceneExtensions.FindEntity(Scene, string, bool)"/> with <c>recursive: true</c> on <c>entity.Scene</c>; call that directly where the scene is at hand.</remarks>
+    public static Entity? FindEntityRecursive(this Entity entity, string name)
+        => SceneOf(entity, name).FindEntity(name, recursive: true);
+
+    // Names both parties, says why, and gives the fix as code: what a beginner needs from an exception
+    private static Scene SceneOf(Entity entity, string name)
     {
-        foreach (var entity in parent.Scene.Entities)
-        {
-            if (entity.Name == name) return entity;
+        ArgumentNullException.ThrowIfNull(entity);
 
-            if (entity.FindChild(name) is { } child) return child;
-        }
-
-        return null;
+        return entity.Scene ?? throw new InvalidOperationException(
+            $"Entity '{entity.Name}' is not in a scene, so it cannot look for '{name}'. " +
+            "Add the entity to a scene first (entity.Scene = scene), or search the scene you have: " +
+            $"scene.FindEntity(\"{name}\"). A script's Entity has a scene from Start onwards, not in its constructor.");
     }
 
     /// <summary>
