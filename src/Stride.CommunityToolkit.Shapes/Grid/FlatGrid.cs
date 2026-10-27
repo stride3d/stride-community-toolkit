@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 
 namespace Stride.CommunityToolkit.Shapes;
@@ -68,19 +68,19 @@ internal static class FlatGrid
         {
             if (i == 0 || i % layout.Divisions != 0 || !view.Project(new Vector3(i * layout.Minor, 0f, 0f), out var at)) continue;
 
-            canvas.Label(GridSteps.Format(i * layout.Minor, layout.Major), new Vector2(at.X + 3f, axisY + 2f), TextAnchor.TopLeft, ReferenceGrid.AxisXColor);
+            canvas.Label(GridSteps.Format(i * layout.Minor, layout.Major), new Vector2(at.X + 3f, axisY + 2f), Anchor.TopLeft, ReferenceGrid.AxisXColor);
         }
 
         for (var i = layout.FirstY; i <= layout.LastY; i++)
         {
             if (i == 0 || i % layout.Divisions != 0 || !view.Project(new Vector3(0f, i * layout.Minor, 0f), out var at)) continue;
 
-            canvas.Label(GridSteps.Format(i * layout.Minor, layout.Major), new Vector2(axisX + 4f, at.Y - 2f), TextAnchor.BottomLeft, ReferenceGrid.AxisYColor);
+            canvas.Label(GridSteps.Format(i * layout.Minor, layout.Major), new Vector2(axisX + 4f, at.Y - 2f), Anchor.BottomLeft, ReferenceGrid.AxisYColor);
         }
 
-        canvas.Label("0", new Vector2(axisX + 4f, axisY + 2f), TextAnchor.TopLeft, Color.White);
-        canvas.Label("X", new Vector2(view.Size.X - GridCanvas.EdgeMargin, axisY - 2f), TextAnchor.BottomRight, ReferenceGrid.AxisXColor);
-        canvas.Label("Y", new Vector2(axisX - 4f, GridCanvas.EdgeMargin), TextAnchor.TopRight, ReferenceGrid.AxisYColor);
+        canvas.Label("0", new Vector2(axisX + 4f, axisY + 2f), Anchor.TopLeft, Color.White);
+        canvas.Label("X", new Vector2(view.Size.X - GridCanvas.EdgeMargin, axisY - 2f), Anchor.BottomRight, ReferenceGrid.AxisXColor);
+        canvas.Label("Y", new Vector2(axisX - 4f, GridCanvas.EdgeMargin), Anchor.TopRight, ReferenceGrid.AxisYColor);
     }
 
     /// <summary>Which lines a frame draws: the part of the plane in view, cut into steps.</summary>

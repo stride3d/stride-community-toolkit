@@ -177,7 +177,7 @@ void Start(Scene rootScene)
     var overlay = TextOverlay.GetOrCreate(game);
 
     // The chart fills the window, so the help goes in a corner rather than across the figure (F3 moves it)
-    overlay.Position = ScreenAnchor.BottomLeft;
+    overlay.Position = Anchor.BottomLeft;
 
     overlay.AddSection("Chart", () =>
     [

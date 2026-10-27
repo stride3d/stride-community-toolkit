@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -75,11 +76,11 @@ internal sealed class GridCanvas(ReferenceGrid settings, ShapeBatch world, Shape
     {
         if (!view.Project(world, out var at) || at.X < 0f || at.Y < 0f || at.X > view.Size.X || at.Y > view.Size.Y) return;
 
-        Label(text, at + new Vector2(4f, 2f), TextAnchor.TopLeft, colour);
+        Label(text, at + new Vector2(4f, 2f), Anchor.TopLeft, colour);
     }
 
     /// <summary>Takes the next label from the pool, making one when the pool is used up.</summary>
-    internal EntityTextComponent Label(string text, Vector2 position, TextAnchor anchor, Color colour)
+    internal EntityTextComponent Label(string text, Vector2 position, Anchor anchor, Color colour)
     {
         if (_labelsUsed == _labels.Count)
         {

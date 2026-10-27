@@ -80,7 +80,7 @@ void Start(Scene scene)
 
     var overlay = TextOverlay.GetOrCreate(game);
 
-    overlay.Position = ScreenAnchor.TopLeft;
+    overlay.Position = Anchor.TopLeft;
     overlay.SectionGap = 0;
     overlay.AddSection("HUD", BuildOverlayLines);
 }

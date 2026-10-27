@@ -391,7 +391,7 @@ public static partial class GameExtensions
     /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
     /// <param name="showHelp"><see langword="false"/> keeps the controller but puts no key help on the overlay.</param>
     public static Entity Add3DCameraController(this IGame game,
-        ScreenAnchor? helpPosition = null,
+        Anchor? helpPosition = null,
         string? cameraName = CameraDefaults.MainCameraName,
         Keys helpToggleKey = Keys.F2,
         bool helpCollapsed = true,

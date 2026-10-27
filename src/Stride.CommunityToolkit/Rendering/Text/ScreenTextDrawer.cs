@@ -137,9 +137,9 @@ internal static class ScreenTextDrawer
 
     /// <summary>
     /// Maps an anchor to the fraction of the text's width and height sitting before the anchor point.
-    /// <see cref="TextAnchor"/> is laid out as a 3 by 3 grid row by row, so the ordinal gives the column and the row.
+    /// <see cref="Anchor"/> is laid out as a 3 by 3 grid row by row, so the ordinal gives the column and the row.
     /// </summary>
-    internal static Vector2 GetAnchorFactor(TextAnchor anchor) => new Vector2((int)anchor % 3, (int)anchor / 3) * 0.5f;
+    internal static Vector2 GetAnchorFactor(Anchor anchor) => new Vector2((int)anchor % 3, (int)anchor / 3) * 0.5f;
 
     /// <summary>
     /// Applies a distance cutoff and fade to <paramref name="opacity"/>: nothing beyond <paramref name="maxDistance"/>,

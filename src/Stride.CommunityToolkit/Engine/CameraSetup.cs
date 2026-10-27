@@ -19,7 +19,7 @@ namespace Stride.CommunityToolkit.Engine;
 /// <param name="HelpPosition">Where the 3D controller's key help goes, or <see langword="null"/> for the overlay's own anchor.</param>
 /// <param name="OrthographicSize">The height of the view in world units for an orthographic camera, or <see langword="null"/> for the engine's default of 10.</param>
 /// <param name="ShowHelp">Whether the 3D controller puts its key help on the overlay at all.</param>
-public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Position, Vector3 Rotation, bool Controller = false, string Name = CameraDefaults.MainCameraName, ScreenAnchor? HelpPosition = null, float? OrthographicSize = null, bool ShowHelp = true)
+public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Position, Vector3 Rotation, bool Controller = false, string Name = CameraDefaults.MainCameraName, Anchor? HelpPosition = null, float? OrthographicSize = null, bool ShowHelp = true)
 {
     /// <summary>A perspective camera, at <see cref="CameraDefaults.Initial3DPosition"/> looking at the origin unless told otherwise.</summary>
     /// <param name="position">The initial position, or <see langword="null"/> for <see cref="CameraDefaults.Initial3DPosition"/>.</param>
@@ -37,7 +37,7 @@ public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Positi
     /// <summary>The same camera with the controller: the 3D one for a perspective camera, the 2D one for an orthographic camera.</summary>
     /// <param name="helpPosition">Where the 3D controller's key help goes; <see langword="null"/> leaves the overlay's own anchor.</param>
     /// <param name="showHelp"><see langword="false"/> keeps the 3D controller but puts no key help on the overlay.</param>
-    public CameraSetup WithController(ScreenAnchor? helpPosition = null, bool showHelp = true) => this with { Controller = true, HelpPosition = helpPosition, ShowHelp = showHelp };
+    public CameraSetup WithController(Anchor? helpPosition = null, bool showHelp = true) => this with { Controller = true, HelpPosition = helpPosition, ShowHelp = showHelp };
 
     internal Entity Apply(Game game)
     {

@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.Engine;
 using Stride.Rendering;
@@ -18,7 +18,7 @@ namespace E03_3D_MeshText;
 /// </remarks>
 public class FrameCounterScript : SyncScript
 {
-    private readonly TextMeshOptions _options = new() { Size = 1.2f, Anchor = TextAnchor.MiddleCenter };
+    private readonly TextMeshOptions _options = new() { Size = 1.2f, Anchor = Anchor.MiddleCenter };
 
     private readonly ModelComponent _modelComponent = new();
     private int _frames;

@@ -23,7 +23,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// entity.Add(new EntityTextComponent
 /// {
 ///     Text = "Player",
-///     Anchor = TextAnchor.BottomCenter,
+///     Anchor = Anchor.BottomCenter,
 ///     Offset = new Vector2(0, -12),
 ///     EnableShadow = true
 /// });
@@ -34,7 +34,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// {
 ///     Text = "Score: 0",
 ///     PositionMode = TextPositionMode.Anchored,
-///     ScreenAnchor = ScreenAnchor.TopLeft,
+///     ScreenAnchor = Anchor.TopLeft,
 ///     Offset = new Vector2(16, 16),
 ///     FontSize = 20
 /// });
@@ -138,7 +138,7 @@ public class EntityTextComponent : EntityComponent
     /// Gets or sets the point of the window the text is pinned to when <see cref="PositionMode"/> is
     /// <see cref="TextPositionMode.Anchored"/>: a corner, the middle of an edge or the centre. Defaults to the top-left.
     /// </summary>
-    public ScreenAnchor ScreenAnchor { get; set; } = ScreenAnchor.TopLeft;
+    public Anchor ScreenAnchor { get; set; } = Anchor.TopLeft;
 
     /// <summary>
     /// Gets or sets a pixel offset applied after the position is resolved, in every position mode.
@@ -152,9 +152,9 @@ public class EntityTextComponent : EntityComponent
 
     /// <summary>
     /// Gets or sets which point of the text is placed on the resolved position. Defaults to
-    /// <see cref="TextAnchor.TopLeft"/>.
+    /// <see cref="Anchor.TopLeft"/>.
     /// </summary>
-    public TextAnchor Anchor { get; set; } = TextAnchor.TopLeft;
+    public Anchor Anchor { get; set; } = Anchor.TopLeft;
 
     /// <summary>
     /// Gets or sets how the lines of a multi-line text sit relative to one another. Defaults to

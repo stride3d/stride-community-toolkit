@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
@@ -273,7 +274,7 @@ static Entity Label(string text, Vector2 position, float fontSize, Color colour)
             Text = text,
             FontSize = fontSize,
             TextColor = colour,
-            Anchor = TextAnchor.TopCenter,
+            Anchor = Anchor.TopCenter,
             Alignment = TextAlignment.Center,
         },
     };

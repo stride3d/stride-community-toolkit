@@ -5,6 +5,7 @@ using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.DebugShapes;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -287,7 +288,7 @@ void BuildLauncher(Scene scene)
 
     var label = new Entity("Label")
     {
-        new EntityTextComponent { Text = "Launcher", FontSize = 14, Anchor = TextAnchor.MiddleCenter, EnableShadow = true },
+        new EntityTextComponent { Text = "Launcher", FontSize = 14, Anchor = Anchor.MiddleCenter, EnableShadow = true },
     };
 
     label.Transform.Position = launcher - new Vector3(0f, 1.2f, 0f);

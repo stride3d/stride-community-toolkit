@@ -546,17 +546,17 @@ public class TextureCanvas : IDisposable
         // centred on the leftover space. The two switches are separate because Anchor combines both.
         var alignmentX = anchor switch
         {
-            Anchor.Left or Anchor.TopLeft or Anchor.BottomLeft => 0,
-            Anchor.Top or Anchor.Center or Anchor.Bottom => (destinationRect.Width - finalWidth) / 2,
-            Anchor.TopRight or Anchor.Right or Anchor.BottomRight => destinationRect.Width - finalWidth,
+            Anchor.MiddleLeft or Anchor.TopLeft or Anchor.BottomLeft => 0,
+            Anchor.TopCenter or Anchor.MiddleCenter or Anchor.BottomCenter => (destinationRect.Width - finalWidth) / 2,
+            Anchor.TopRight or Anchor.MiddleRight or Anchor.BottomRight => destinationRect.Width - finalWidth,
             _ => throw new ArgumentOutOfRangeException(nameof(anchor), anchor, null),
         };
 
         var alignmentY = anchor switch
         {
-            Anchor.TopLeft or Anchor.Top or Anchor.TopRight => 0,
-            Anchor.Left or Anchor.Center or Anchor.Right => (destinationRect.Height - finalHeight) / 2,
-            Anchor.BottomLeft or Anchor.Bottom or Anchor.BottomRight => destinationRect.Height - finalHeight,
+            Anchor.TopLeft or Anchor.TopCenter or Anchor.TopRight => 0,
+            Anchor.MiddleLeft or Anchor.MiddleCenter or Anchor.MiddleRight => (destinationRect.Height - finalHeight) / 2,
+            Anchor.BottomLeft or Anchor.BottomCenter or Anchor.BottomRight => destinationRect.Height - finalHeight,
             _ => throw new ArgumentOutOfRangeException(nameof(anchor), anchor, null),
         };
 

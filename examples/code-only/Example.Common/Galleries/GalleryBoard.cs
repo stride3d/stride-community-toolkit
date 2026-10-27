@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Engine;
@@ -72,7 +73,7 @@ internal sealed class GalleryBoard
             TextColor = new Color(130, 205, 255),
             GlowColor = new Color(0, 140, 255, 120),
             GlowSize = 3f,
-            Anchor = TextAnchor.TopLeft,
+            Anchor = Anchor.TopLeft,
             Alignment = TextAlignment.Left,
             Billboard = false,
         };

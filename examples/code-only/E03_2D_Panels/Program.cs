@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
@@ -238,7 +239,7 @@ void Start(Scene scene)
 
             AddText(scene, corner, $"{station.Number:00}", 0.2f,
                 (text, theme) => text.TextColor = WithAlpha(theme.Accent, 170),
-                anchor: TextAnchor.TopLeft, font: monoFont);
+                anchor: Anchor.TopLeft, font: monoFont);
         }
     }
 
@@ -513,7 +514,7 @@ void Reset()
 }
 
 /// <summary>Creates one text entity, styled through the same delegate a theme change re-runs.</summary>
-void AddText(Scene scene, Vector3 position, string content, float lineHeight, Action<WorldTextComponent, Theme> restyle, bool themed = true, TextAnchor anchor = TextAnchor.MiddleCenter, SpriteFont? font = null)
+void AddText(Scene scene, Vector3 position, string content, float lineHeight, Action<WorldTextComponent, Theme> restyle, bool themed = true, Anchor anchor = Anchor.MiddleCenter, SpriteFont? font = null)
 {
     var component = new WorldTextComponent
     {

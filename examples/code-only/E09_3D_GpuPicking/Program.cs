@@ -74,7 +74,7 @@ void Start(Scene scene)
 
     var overlay = TextOverlay.GetOrCreate(game);
     overlay.AddSection("Picking", BuildOverlayLines);
-    overlay.SetPosition(ScreenAnchor.BottomLeft);
+    overlay.SetPosition(Anchor.BottomLeft);
 }
 
 void Update(Scene scene, GameTime time)

@@ -1,4 +1,3 @@
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Engine;
 
 namespace Stride.CommunityToolkit.Rendering.Overlay;
@@ -76,13 +75,13 @@ public class EntityInfoRendererOptions
 
     /// <summary>
     /// Gets or sets which point of the label sits on the entity's projected position. Default is
-    /// <see cref="TextAnchor.TopLeft"/>.
+    /// <see cref="Anchor.TopLeft"/>.
     /// </summary>
     /// <remarks>
-    /// <see cref="TextAnchor.BottomCenter"/> is usually the one wanted for a label floating over an
+    /// <see cref="Anchor.BottomCenter"/> is usually the one wanted for a label floating over an
     /// object, together with a negative Y <see cref="Offset"/>.
     /// </remarks>
-    public TextAnchor Anchor { get; set; } = TextAnchor.TopLeft;
+    public Anchor Anchor { get; set; } = Anchor.TopLeft;
 
     /// <summary>
     /// Gets or sets a value indicating whether to display a background behind the text.

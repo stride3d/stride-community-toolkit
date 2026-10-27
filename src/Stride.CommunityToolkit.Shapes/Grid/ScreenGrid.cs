@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 
 namespace Stride.CommunityToolkit.Shapes;
@@ -49,18 +49,18 @@ internal static class ScreenGrid
         // Along the top edge, each number just right of its line
         for (var i = divisions; i <= last.X; i += divisions)
         {
-            canvas.Label(GridSteps.Format(i * minor, major), new Vector2(i * minor + 3f, margin), TextAnchor.TopLeft, ReferenceGrid.AxisXColor);
+            canvas.Label(GridSteps.Format(i * minor, major), new Vector2(i * minor + 3f, margin), Anchor.TopLeft, ReferenceGrid.AxisXColor);
         }
 
         // Down the left edge, each number just above its line
         for (var i = divisions; i <= last.Y; i += divisions)
         {
-            canvas.Label(GridSteps.Format(i * minor, major), new Vector2(margin, i * minor - 2f), TextAnchor.BottomLeft, ReferenceGrid.AxisYColor);
+            canvas.Label(GridSteps.Format(i * minor, major), new Vector2(margin, i * minor - 2f), Anchor.BottomLeft, ReferenceGrid.AxisYColor);
         }
 
         // The origin in its corner, and each letter at the far end of its axis
-        canvas.Label("0", new Vector2(margin, margin), TextAnchor.TopLeft, Color.White);
-        canvas.Label("X", new Vector2(size.X - margin, margin + fontSize + 4f), TextAnchor.TopRight, ReferenceGrid.AxisXColor);
-        canvas.Label("Y", new Vector2(margin + fontSize * 2.5f, size.Y - margin), TextAnchor.BottomLeft, ReferenceGrid.AxisYColor);
+        canvas.Label("0", new Vector2(margin, margin), Anchor.TopLeft, Color.White);
+        canvas.Label("X", new Vector2(size.X - margin, margin + fontSize + 4f), Anchor.TopRight, ReferenceGrid.AxisXColor);
+        canvas.Label("Y", new Vector2(margin + fontSize * 2.5f, size.Y - margin), Anchor.BottomLeft, ReferenceGrid.AxisYColor);
     }
 }

@@ -101,7 +101,7 @@ public class TranslationGizmo : AxialGizmoBase
                 Height = 0.3f,
                 TextColor = color,
                 Billboard = billboard,
-                Anchor = TextAnchor.MiddleCenter,
+                Anchor = Anchor.MiddleCenter,
             }
         };
 

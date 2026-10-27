@@ -1,6 +1,5 @@
-using Stride.CommunityToolkit.Rendering.Text;
-using System.Runtime.InteropServices;
 using Stride.Graphics.Font;
+using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 

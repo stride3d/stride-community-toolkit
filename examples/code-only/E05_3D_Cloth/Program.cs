@@ -71,7 +71,7 @@ var sceneSetup = new SceneSetup3D
         bepu.BepuSimulations.Add(new BepuSimulation { PoseGravity = new Vector3(0, -10, 0), SolverSubStep = 8, SolverIteration = 1 });
     },
     // Aimed at the sheets from the front, with the camera help out of the menu's way
-    Camera = CameraSetup.Perspective(position: new Vector3(-1, 8, -26), rotation: new Vector3(180, -12, 0)).WithController(ScreenAnchor.BottomRight),
+    Camera = CameraSetup.Perspective(position: new Vector3(-1, 8, -26), rotation: new Vector3(180, -12, 0)).WithController(Anchor.BottomRight),
     Ground = GroundSetup.Plane(new Vector2(40)),
     Profiler = true
 }.UseBepu().UseSkybox();

@@ -116,12 +116,12 @@ void Start(Scene rootScene)
     #region Step5Create
     game.AddEntityTextRenderer();
 
-    healthLabel = AddLabel(rootScene, TextAnchor.BottomLeft);
-    energyLabel = AddLabel(rootScene, TextAnchor.MiddleCenter);
+    healthLabel = AddLabel(rootScene, Anchor.BottomLeft);
+    energyLabel = AddLabel(rootScene, Anchor.MiddleCenter);
     #endregion
 
     #region Step6Create
-    warningLabel = AddLabel(rootScene, TextAnchor.MiddleCenter);
+    warningLabel = AddLabel(rootScene, Anchor.MiddleCenter);
     warningLabel.Text = "WARNING";
     warningLabel.TextColor = hurt;
     warningLabel.FontSize = 20;
@@ -222,7 +222,7 @@ Vector2 PanelCentre()
     var panelY = -panelSize.Y * 0.5f;
 
     // Start from the bottom left corner, and keep a margin from the window's edges
-    return shapeBatch.Anchor(ScreenAnchor.BottomLeft) + new Vector2(panelX, panelY) + new Vector2(Margin, -Margin);
+    return shapeBatch.AnchorPoint(Anchor.BottomLeft) + new Vector2(panelX, panelY) + new Vector2(Margin, -Margin);
 }
 #endregion
 
@@ -266,7 +266,7 @@ void DrawHealthBar()
 #region Step3
 /// <summary>The middle of the dial: a margin in from the bottom right corner of the window.</summary>
 Vector2 DialCentre()
-    => shapeBatch.Anchor(ScreenAnchor.BottomRight) + new Vector2(-Margin - DialRadius - DialWidth, -Margin - DialRadius - DialWidth);
+    => shapeBatch.AnchorPoint(Anchor.BottomRight) + new Vector2(-Margin - DialRadius - DialWidth, -Margin - DialRadius - DialWidth);
 
 void DrawEnergyDial()
 {
@@ -304,7 +304,7 @@ void DrawCrosshair()
 
 #region Step5
 /// <summary>A piece of text on the screen. It is made once and then only moved and rewritten.</summary>
-EntityTextComponent AddLabel(Scene scene, TextAnchor anchor)
+EntityTextComponent AddLabel(Scene scene, Anchor anchor)
 {
     var label = new EntityTextComponent
     {

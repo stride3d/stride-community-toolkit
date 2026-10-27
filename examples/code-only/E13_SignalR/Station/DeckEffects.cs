@@ -1,4 +1,5 @@
 using E13_SignalR_Shared;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -54,7 +55,7 @@ public sealed class DeckEffects
         {
             Text = $"#{container.Id} {container.Size.ToString().ToUpperInvariant()}",
             FontSize = 13,
-            Anchor = TextAnchor.BottomCenter,
+            Anchor = Anchor.BottomCenter,
             Offset = new Vector2(0, -14),
             TextColor = console.Accent,
             EnableShadow = true,

@@ -2,8 +2,8 @@ using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.Core.Mathematics;
 using Stride.Graphics;
@@ -145,7 +145,7 @@ public static class TextCollider
     }
 
     /// <summary>A snapshot of everything but the font that shapes the hulls; the options object itself can change after the call.</summary>
-    private readonly record struct HullKey(string Text, float Size, float Depth, int CurveQuality, TextAnchor? Anchor, float LetterSpacing, float LineSpacing, TextAlignment Alignment, bool Kerning, float BevelSize, float BevelThickness, int BevelSegments)
+    private readonly record struct HullKey(string Text, float Size, float Depth, int CurveQuality, Anchor? Anchor, float LetterSpacing, float LineSpacing, TextAlignment Alignment, bool Kerning, float BevelSize, float BevelThickness, int BevelSegments)
     {
         internal static HullKey For(string text, TextMeshOptions options)
             => new(text, options.Size, options.Depth, options.CurveQuality, options.Anchor, options.LetterSpacing, options.LineSpacing, options.Alignment, options.Kerning,

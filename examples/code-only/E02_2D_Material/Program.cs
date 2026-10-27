@@ -68,7 +68,7 @@ Entity Square(Scene scene, int column, float y, Material material, string? label
         {
             Text = label,
             FontSize = 14,
-            Anchor = TextAnchor.TopCenter,
+            Anchor = Anchor.TopCenter,
             Offset = new Vector2(0, 40),
             EnableShadow = true,
         });

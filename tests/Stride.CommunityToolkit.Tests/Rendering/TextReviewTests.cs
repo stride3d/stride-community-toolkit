@@ -1,5 +1,4 @@
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.Core.Mathematics;
 using Stride.Graphics;
@@ -416,14 +415,14 @@ public class TextReviewTests
     [Fact]
     public void MeshDataBoundsCoverTheVertices()
     {
-        var data = TextMesh.Create(Font, "Hello", new TextMeshOptions { Anchor = TextAnchor.MiddleCenter });
+        var data = TextMesh.Create(Font, "Hello", new TextMeshOptions { Anchor = Anchor.MiddleCenter });
         var (box, sphere) = data.Bounds();
 
         Assert.All(data.Vertices, v => { var position = v.Position; Assert.Equal(ContainmentType.Contains, box.Contains(ref position)); });
         Assert.All(data.Vertices, v => Assert.True((v.Position - sphere.Center).Length() <= sphere.Radius + 1e-5f));
 
         // The ink sits inside the typographic block the anchor centred, bearings and all
-        var block = TextMesh.Measure(Font, "Hello", new TextMeshOptions { Anchor = TextAnchor.MiddleCenter });
+        var block = TextMesh.Measure(Font, "Hello", new TextMeshOptions { Anchor = Anchor.MiddleCenter });
 
         Assert.True(box.Minimum.X >= block.Minimum.X - 1e-4f && box.Maximum.X <= block.Maximum.X + 1e-4f);
         Assert.True(box.Minimum.Y >= block.Minimum.Y - 1e-4f && box.Maximum.Y <= block.Maximum.Y + 1e-4f);

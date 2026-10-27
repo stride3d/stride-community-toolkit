@@ -118,12 +118,12 @@ public class OrientationGizmoGameTests
 
         var sameInstance = false;
         var renderers = -1;
-        var anchor = ScreenAnchor.TopLeft;
+        var anchor = Anchor.TopLeft;
 
         game.Run(new SceneSetup3D { Camera = null, Lighting = null, Skybox = null, Ground = null }, start: _ =>
         {
-            var first = game.AddOrientationGizmo(ScreenAnchor.BottomRight);
-            var second = game.AddOrientationGizmo(ScreenAnchor.BottomRight);
+            var first = game.AddOrientationGizmo(Anchor.BottomRight);
+            var second = game.AddOrientationGizmo(Anchor.BottomRight);
 
             sameInstance = ReferenceEquals(first, second);
             anchor = second.Anchor;
@@ -134,6 +134,6 @@ public class OrientationGizmoGameTests
 
         Assert.True(sameInstance);
         Assert.Equal(1, renderers);
-        Assert.Equal(ScreenAnchor.BottomRight, anchor);
+        Assert.Equal(Anchor.BottomRight, anchor);
     }
 }

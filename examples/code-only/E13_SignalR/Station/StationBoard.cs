@@ -1,5 +1,5 @@
 using E13_SignalR_Shared;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Input;
@@ -50,8 +50,8 @@ public sealed class StationBoard
         _board = new Board(center, facing, new Vector2(Width, Height));
         _labels = labels;
 
-        labels.Add("title", 0.66f, labels.Bold, (t, c) => { t.TextColor = c.Text; t.GlowColor = c.Glow; }, TextAnchor.MiddleLeft, glow: 4f);
-        labels.Add("subtitle", 0.36f, labels.Sans, (t, c) => t.TextColor = Hex.WithAlpha(c.Accent, 190), TextAnchor.MiddleLeft);
+        labels.Add("title", 0.66f, labels.Bold, (t, c) => { t.TextColor = c.Text; t.GlowColor = c.Glow; }, Anchor.MiddleLeft, glow: 4f);
+        labels.Add("subtitle", 0.36f, labels.Sans, (t, c) => t.TextColor = Hex.WithAlpha(c.Accent, 190), Anchor.MiddleLeft);
 
         // Coloured per frame by the scheme each button stands for, not by the current one
         for (var i = 0; i < Schemes.All.Length; i++)
@@ -59,8 +59,8 @@ public sealed class StationBoard
             labels.Add($"scheme-{i}", 0.36f, labels.Bold, (_, _) => { });
         }
 
-        labels.Add("link", 0.42f, labels.Sans, (_, _) => { }, TextAnchor.MiddleLeft);
-        labels.Add("uptime", 0.42f, labels.Mono, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 170), TextAnchor.MiddleRight);
+        labels.Add("link", 0.42f, labels.Sans, (_, _) => { }, Anchor.MiddleLeft);
+        labels.Add("uptime", 0.42f, labels.Mono, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 170), Anchor.MiddleRight);
 
         foreach (var counter in Counters)
         {
@@ -68,20 +68,20 @@ public sealed class StationBoard
             labels.Add($"{counter}-caption", 0.36f, labels.Bold, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 150));
         }
 
-        labels.Add("by-size", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, TextAnchor.MiddleLeft);
-        labels.Add("by-paint", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, TextAnchor.MiddleLeft);
-        labels.Add("dropping", 0.38f, labels.Sans, (t, c) => t.TextColor = c.Accent, TextAnchor.MiddleLeft);
+        labels.Add("by-size", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, Anchor.MiddleLeft);
+        labels.Add("by-paint", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, Anchor.MiddleLeft);
+        labels.Add("dropping", 0.38f, labels.Sans, (t, c) => t.TextColor = c.Accent, Anchor.MiddleLeft);
 
         for (var i = 0; i < SizeNames.Length; i++)
         {
-            labels.Add($"size-{i}", 0.42f, labels.Sans, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleLeft);
-            labels.Add($"size-{i}-count", 0.42f, labels.Mono, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleRight);
+            labels.Add($"size-{i}", 0.42f, labels.Sans, (t, c) => t.TextColor = c.Text, Anchor.MiddleLeft);
+            labels.Add($"size-{i}-count", 0.42f, labels.Mono, (t, c) => t.TextColor = c.Text, Anchor.MiddleRight);
         }
 
         for (var i = 0; i < Paints.All.Length; i++)
         {
-            labels.Add($"paint-{i}", 0.4f, labels.Sans, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleLeft);
-            labels.Add($"paint-{i}-count", 0.4f, labels.Mono, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleRight);
+            labels.Add($"paint-{i}", 0.4f, labels.Sans, (t, c) => t.TextColor = c.Text, Anchor.MiddleLeft);
+            labels.Add($"paint-{i}-count", 0.4f, labels.Mono, (t, c) => t.TextColor = c.Text, Anchor.MiddleRight);
         }
     }
 

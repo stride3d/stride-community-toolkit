@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -127,12 +127,12 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
             if (IsZero(x) && IsZero(axisY))
                 continue;
 
-            Place(Format(x), new Vector3(x, axisY, axisZ), TextAnchor.TopCenter, below);
+            Place(Format(x), new Vector3(x, axisY, axisZ), Anchor.TopCenter, below);
         }
 
         foreach (var y in TickValues(o.Range.YMin, o.Range.YMax, o.Range.TickStep))
         {
-            Place(Format(y), new Vector3(axisX, y, axisZ), TextAnchor.MiddleRight, left);
+            Place(Format(y), new Vector3(axisX, y, axisZ), Anchor.MiddleRight, left);
         }
 
         if (!chart.Is3D)
@@ -144,7 +144,7 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
             if (IsZero(z) && IsZero(axisY))
                 continue;
 
-            Place(Format(z), new Vector3(axisX, axisY, z), TextAnchor.MiddleRight, left);
+            Place(Format(z), new Vector3(axisX, axisY, z), Anchor.MiddleRight, left);
         }
     }
 
@@ -168,7 +168,7 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
                 chart.Root.AddChild(_title.Entity);
             }
 
-            _title.Set(title, TextAnchor.TopCenter, new Vector2(0f, 10f));
+            _title.Set(title, Anchor.TopCenter, new Vector2(0f, 10f));
             _title.Position = new Vector3((o.Range.XMin + o.Range.XMax) * 0.5f, o.Range.YMax, 0f);
             _title.Visible = true;
         }
@@ -179,22 +179,22 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
 
         if (o.Axes.XTitle is { Length: > 0 } xTitle)
         {
-            Place(xTitle, new Vector3(o.Range.XMax, axisY, 0f), TextAnchor.TopRight, new Vector2(-4f, 10f));
+            Place(xTitle, new Vector3(o.Range.XMax, axisY, 0f), Anchor.TopRight, new Vector2(-4f, 10f));
         }
 
         if (o.Axes.YTitle is { Length: > 0 } yTitle)
         {
-            Place(yTitle, new Vector3(axisX, o.Range.YMax, 0f), TextAnchor.TopLeft, new Vector2(10f, 4f));
+            Place(yTitle, new Vector3(axisX, o.Range.YMax, 0f), Anchor.TopLeft, new Vector2(10f, 4f));
         }
 
         if (chart.Is3D && o.Axes.ZTitle is { Length: > 0 } zTitle)
         {
-            Place(zTitle, new Vector3(axisX, axisY, o.Range.ZMax), TextAnchor.TopLeft, new Vector2(10f, 4f));
+            Place(zTitle, new Vector3(axisX, axisY, o.Range.ZMax), Anchor.TopLeft, new Vector2(10f, 4f));
         }
     }
 
     /// <summary>Takes the next text from the pool - or grows it - and sets it up.</summary>
-    private void Place(string text, Vector3 position, TextAnchor anchor, Vector2 pixelOffset)
+    private void Place(string text, Vector3 position, Anchor anchor, Vector2 pixelOffset)
     {
         if (_used == _pool.Count)
         {

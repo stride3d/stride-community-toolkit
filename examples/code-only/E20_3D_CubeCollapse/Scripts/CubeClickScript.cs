@@ -4,6 +4,7 @@ using CubeCollapse.Setup;
 using CubeCollapse.Shared;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -302,7 +303,7 @@ public class CubeClickScript : AsyncScript
                 Text = text,
                 FontSize = GetFontSize(result.Tier),
                 TextColor = cubeColour is { } colour ? PopupColour?.Invoke(colour) ?? colour : GetTierColour(result.Tier),
-                Anchor = TextAnchor.MiddleCenter,
+                Anchor = Anchor.MiddleCenter,
                 Alignment = TextAlignment.Center,
                 // A white ring round the cube's own colour, so the score reads over cubes of that colour
                 EnableOutline = true,

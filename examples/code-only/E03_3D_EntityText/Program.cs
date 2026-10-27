@@ -41,7 +41,7 @@ void Start(Scene scene)
         // The label floats centred above its pole. This pairing is what "put a name over a thing"
         // means, and it is Anchor doing the centring - not Alignment, which only arranges the lines
         // of a multi-line block relative to each other.
-        label.Anchor = TextAnchor.BottomCenter;
+        label.Anchor = Anchor.BottomCenter;
         label.Offset = new Vector2(0, -12);
     });
 
@@ -80,7 +80,7 @@ void Start(Scene scene)
     // Two components on one entity: a name and a subtitle. LayerDepth decides who wins overlaps.
     var titled = AddStation(scene, new Vector3(-1.5f, 0, 4), "Two components,\none entity", label =>
     {
-        label.Anchor = TextAnchor.BottomCenter;
+        label.Anchor = Anchor.BottomCenter;
         label.Offset = new Vector2(0, -26);
         label.EnableShadow = true;
     });
@@ -90,7 +90,7 @@ void Start(Scene scene)
         Text = "(the subtitle)",
         FontSize = 12,
         TextColor = Color.LightGray,
-        Anchor = TextAnchor.BottomCenter,
+        Anchor = Anchor.BottomCenter,
         Offset = new Vector2(0, -12),
         EnableShadow = true,
     });
@@ -105,7 +105,7 @@ void Start(Scene scene)
         {
             Text = "PositionMode = Anchored, TopLeft",
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = ScreenAnchor.TopLeft,
+            ScreenAnchor = Anchor.TopLeft,
             Offset = new Vector2(16, 16),
             EnableShadow = true,
         },
@@ -113,7 +113,7 @@ void Start(Scene scene)
         {
             Text = "Anchored, BottomRight\n(resize the window - I stay put)",
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = ScreenAnchor.BottomRight,
+            ScreenAnchor = Anchor.BottomRight,
             Offset = new Vector2(16, 40),
             EnableShadow = true,
         },
@@ -179,7 +179,7 @@ description:
     Text v prostoru obrazovky si drží velikost v pixelech na jakoukoli vzdálenost a geometrie ho nikdy nezakryje.
 concepts:
   - "Registering the text renderer once: AddEntityTextRenderer"
-  - Centring a label over an object with TextAnchor, not TextAlignment
+  - Centring a label over an object with Anchor, not TextAlignment
   - Shadow and background for readability over a 3D scene
   - Scale as the cheap way to resize, instead of FontSize
   - Distance fading with FadeStartDistance and MaxDistance

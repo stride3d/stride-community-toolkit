@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Effects.PostProcessing;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
@@ -237,7 +238,7 @@ void BuildMonitors(Scene scene)
             Text = $"{i + 1}  {feeds[i].Name}",
             FontSize = 18,
             TextColor = Color.White,
-            Anchor = TextAnchor.BottomCenter,
+            Anchor = Anchor.BottomCenter,
             EnableBackground = true,
             BackgroundColor = new Color4(0.03f, 0.05f, 0.09f, 0.8f),
         });

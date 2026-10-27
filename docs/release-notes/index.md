@@ -31,7 +31,7 @@ Unchanged, because they are debugging aids: `AddPhysicsDebug`, the collider gizm
 
 | Before | After | Note |
 |---|---|---|
-| `using Stride.CommunityToolkit.Rendering.Text;` for `EntityTextComponent`, `WorldTextComponent`, their renderers, `TextElement`, `TextAnchor`, `TextPositionMode`, `SystemFonts` | unchanged | Text drawn with a font stays. |
+| `using Stride.CommunityToolkit.Rendering.Text;` for `EntityTextComponent`, `WorldTextComponent`, their renderers, `TextElement`, `TextPositionMode`, `SystemFonts` | unchanged | Text drawn with a font stays. |
 | `using Stride.CommunityToolkit.Rendering.Text;` for `MeshFont`, `TextMesh`, `TextMeshOptions`, `TextBevel`, `GlyphMesh`, `GlyphOutline`, `GlyphContour`, `GlyphShape`, `GlyphPolygon`, `OutlineSegment`, `OutlineSegmentKind` | `using Stride.CommunityToolkit.Rendering.Text.Meshes;` | Lettering as meshes. `Primitive3D.Text` and `TextCollider` stay where they were. |
 | `using Stride.CommunityToolkit.Rendering.Text;` for `TextOverlay`, `TextOverlaySection`, `TextOverlayFontFamily`, `TextOverlayFontResolver`, `KeyMenu`, `KeyMenuItem`, `EntityInfoRenderer`, `EntityInfoRendererOptions`, `AddEntityInfoRenderer()` | `using Stride.CommunityToolkit.Rendering.Overlay;` | The overlay and the entity labels. `TextElement`, which sections return, stays in `Rendering.Text`, so an overlay section usually needs both. |
 
@@ -96,6 +96,19 @@ One family of helpers on the caller's own `Random`, so a world built from `new R
 | Before | After | Note |
 |---|---|---|
 | `new TranslationGizmo(device)` had a constructor of its own | binds to `TranslationGizmo(device, xColor, yColor, zColor)`, whose colours default | Source-compatible; the gizmo also lost five private lists that were filled and never read, and builds each mesh once rather than once per axis. |
+
+#### One anchor enum
+
+`ScreenAnchor`, `TextAnchor` and the texture canvas's `Anchor` named the same nine points of a rectangle three times, two of them with identical members. One `Anchor` enum in `Stride.CommunityToolkit.Rendering` replaces all three.
+
+| Before | After | Note |
+|---|---|---|
+| `ScreenAnchor.TopLeft` (the overlay, anchored text, the shape batch, the orientation gizmo, the camera controller's help) | `Anchor.TopLeft` | The same nine members; replace the type name, and add `using Stride.CommunityToolkit.Rendering;` where only `.Rendering.Text` was imported. |
+| `TextAnchor.MiddleCenter` (the text components, mesh text, the entity info renderer) | `Anchor.MiddleCenter` | The same nine members; replace the type name and the using as above. |
+| `TextureCanvas` anchors `Anchor.Top`, `Left`, `Center`, `Right`, `Bottom` | `Anchor.TopCenter`, `MiddleLeft`, `MiddleCenter`, `MiddleRight`, `BottomCenter` | The corner names are unchanged, and the numeric values are the same, so an `(Anchor)int` cast still means the same point. |
+| `ScreenAnchorExtensions.At` | `AnchorExtensions.At` | The same method. |
+| `EntityTextComponent.ScreenAnchor` and `.Anchor` | unchanged property names, both typed `Anchor` | Which point of the screen the text is pinned to, and which point of the text sits there. |
+| `shapeBatch.Anchor(Anchor.BottomLeft)` | `shapeBatch.AnchorPoint(Anchor.BottomLeft)` | The shape batch's method that answers where an anchor is; its name no longer repeats the enum's. |
 
 ### 🎉 New Features
 

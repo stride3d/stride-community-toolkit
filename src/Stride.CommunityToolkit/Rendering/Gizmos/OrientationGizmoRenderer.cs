@@ -55,7 +55,7 @@ public sealed class OrientationGizmoRenderer : SceneRendererBase
     private DisplayScale? _displayScale;
 
     /// <summary>The corner or edge of the screen the gizmo sits in. The default is the bottom left.</summary>
-    public ScreenAnchor Anchor { get; set; } = ScreenAnchor.BottomLeft;
+    public Anchor Anchor { get; set; } = Anchor.BottomLeft;
 
     /// <summary>The length of an arrow from the centre to its tip, in pixels before the display scale. The other sizes follow it.</summary>
     public float Size { get; set; } = 40f;

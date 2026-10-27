@@ -31,7 +31,7 @@ public static partial class EntityExtensions
     /// <param name="showHelp"><see langword="false"/> keeps the controller but puts no key help on the overlay.</param>
     /// <returns>The controller, already on the entity.</returns>
     public static Basic3DCameraController Add3DCameraController(this Entity entity,
-        ScreenAnchor? helpPosition = null,
+        Anchor? helpPosition = null,
         Keys helpToggleKey = Keys.F2,
         bool helpCollapsed = true,
         bool showHelp = true)

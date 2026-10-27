@@ -2,7 +2,6 @@ using E03_3D_TextShaders;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -80,7 +79,7 @@ void Update(Scene scene, GameTime time)
 /// <summary>One word, bevelled, at a height, with a material.</summary>
 void AddText(Scene scene, string word, float y, Material material)
 {
-    var options = new TextMeshOptions { Size = 0.75f, Depth = 0.25f, Anchor = TextAnchor.MiddleCenter, Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 3) };
+    var options = new TextMeshOptions { Size = 0.75f, Depth = 0.25f, Anchor = Anchor.MiddleCenter, Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 3) };
 
     var entity = new Entity($"Text {word}")
     {

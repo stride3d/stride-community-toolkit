@@ -229,7 +229,7 @@ public sealed partial class ShapeBatch : RenderObject
     /// </para>
     /// <para>
     /// The coordinates are the display's scaled pixels when <see cref="AutoScale"/> is on, so a
-    /// layout is the same size to the eye on every display, and <see cref="Anchor"/> and
+    /// layout is the same size to the eye on every display, and <see cref="AnchorPoint"/> and
     /// <see cref="ScreenSize"/> speak the same units. A pixel-measured width, a dash or a glow
     /// means exactly what it means in the world.
     /// </para>
@@ -240,7 +240,7 @@ public sealed partial class ShapeBatch : RenderObject
     /// A rectangle of the screen, in pixels from the top left, that screen shapes are placed
     /// relative to: a chart draws in its own coordinates and lands where the rectangle is. The
     /// default <c>null</c> is the whole viewport. The rectangle offsets and sizes
-    /// <see cref="Anchor"/>; nothing is clipped to it.
+    /// <see cref="AnchorPoint"/>; nothing is clipped to it.
     /// </summary>
     public RectangleF? Viewport { get; set; }
 
@@ -258,7 +258,7 @@ public sealed partial class ShapeBatch : RenderObject
     /// </summary>
     /// <param name="anchor">Which point: a corner, the middle of an edge or the centre.</param>
     /// <returns>The point, in the same coordinates the draw calls take.</returns>
-    public Vector2 Anchor(ScreenAnchor anchor)
+    public Vector2 AnchorPoint(Anchor anchor)
         => anchor.At(Viewport is { } viewport ? new Vector2(viewport.Width, viewport.Height) : ScreenSize);
 
     // Where the window's size comes from, in scaled pixels; set by AddShapeBatch

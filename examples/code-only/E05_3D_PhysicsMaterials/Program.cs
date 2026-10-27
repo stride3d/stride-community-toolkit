@@ -3,6 +3,7 @@ using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -212,7 +213,7 @@ void BuildBounceLane(Scene scene, BounceLane lane, float x)
     balls.Add(new Ball(lane, entity.Get<BodyComponent>(), start, surface));
 
     // The ball's number in the overlay, on the ground in front of it
-    AddLabel(scene, $"{balls.Count}", new Vector3(x, 0f, BounceRowZ + 1.2f), TextAnchor.MiddleCenter);
+    AddLabel(scene, $"{balls.Count}", new Vector3(x, 0f, BounceRowZ + 1.2f), Anchor.MiddleCenter);
 }
 
 /// <summary>One lane with its own friction, and a box at its left end.</summary>
@@ -245,7 +246,7 @@ void BuildFrictionLane(Scene scene, FrictionLane lane, float z)
 
     boxes.Add(new Box(lane, entity.Get<BodyComponent>(), start));
 
-    AddLabel(scene, lane.Label, new Vector3(-LaneLength * 0.5f - 0.3f, LaneThickness, z), TextAnchor.MiddleRight);
+    AddLabel(scene, lane.Label, new Vector3(-LaneLength * 0.5f - 0.3f, LaneThickness, z), Anchor.MiddleRight);
 }
 
 /// <summary>A wall across the far end of the lanes, so a box on ice stays in the picture.</summary>
@@ -264,7 +265,7 @@ void BuildEndWall(Scene scene)
 }
 
 /// <summary>Screen-space text anchored to a point in the world.</summary>
-void AddLabel(Scene scene, string text, Vector3 position, TextAnchor anchor)
+void AddLabel(Scene scene, string text, Vector3 position, Anchor anchor)
 {
     var label = new Entity("Label")
     {

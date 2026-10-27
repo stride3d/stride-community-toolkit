@@ -2,6 +2,7 @@ using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -112,7 +113,7 @@ void Start(Scene rootScene)
     }
 
     // The score, as a label pinned to a point in the world
-    scoreText = new EntityTextComponent { Text = "Score 0", FontSize = 22, TextColor = Color.White, Anchor = TextAnchor.MiddleLeft };
+    scoreText = new EntityTextComponent { Text = "Score 0", FontSize = 22, TextColor = Color.White, Anchor = Anchor.MiddleLeft };
 
     var scoreEntity = new Entity("Score") { scoreText };
 
@@ -265,7 +266,7 @@ void PopNextCoin()
 
 static Entity Label(string text, Vector3 position, Scene scene)
 {
-    var entity = new Entity($"Popup {text}") { new EntityTextComponent { Text = text, FontSize = 18, TextColor = new Color(250, 210, 60), Anchor = TextAnchor.MiddleCenter } };
+    var entity = new Entity($"Popup {text}") { new EntityTextComponent { Text = text, FontSize = 18, TextColor = new Color(250, 210, 60), Anchor = Anchor.MiddleCenter } };
 
     entity.Transform.Position = position;
     entity.Scene = scene;

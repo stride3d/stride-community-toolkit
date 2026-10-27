@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -79,7 +80,7 @@ void Cube(Scene scene, Vector3 position, Material material, string label)
     {
         Text = label,
         FontSize = 14,
-        Anchor = TextAnchor.BottomCenter,
+        Anchor = Anchor.BottomCenter,
         Offset = new Vector2(0, -34),
         EnableShadow = true,
     });

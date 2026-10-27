@@ -33,10 +33,10 @@ public sealed class SimpleHud
 
         game.AddEntityTextRenderer();
 
-        _healthLabel = AddLabel(scene, TextAnchor.BottomLeft);
-        _energyLabel = AddLabel(scene, TextAnchor.MiddleCenter);
+        _healthLabel = AddLabel(scene, Anchor.BottomLeft);
+        _energyLabel = AddLabel(scene, Anchor.MiddleCenter);
 
-        _warningLabel = AddLabel(scene, TextAnchor.MiddleCenter);
+        _warningLabel = AddLabel(scene, Anchor.MiddleCenter);
         _warningLabel.Text = "WARNING";
         _warningLabel.TextColor = style.Hurt;
         _warningLabel.FontSize = 20;
@@ -82,10 +82,10 @@ public sealed class SimpleHud
     #endregion
 
     private Vector2 PanelCentre
-        => _shapeBatch.Anchor(ScreenAnchor.BottomLeft) + new Vector2(_style.PanelSize.X * 0.5f, -_style.PanelSize.Y * 0.5f) + new Vector2(_style.Margin, -_style.Margin);
+        => _shapeBatch.AnchorPoint(Anchor.BottomLeft) + new Vector2(_style.PanelSize.X * 0.5f, -_style.PanelSize.Y * 0.5f) + new Vector2(_style.Margin, -_style.Margin);
 
     private Vector2 DialCentre
-        => _shapeBatch.Anchor(ScreenAnchor.BottomRight) + new Vector2(-_style.Margin - _style.DialRadius - _style.DialWidth, -_style.Margin - _style.DialRadius - _style.DialWidth);
+        => _shapeBatch.AnchorPoint(Anchor.BottomRight) + new Vector2(-_style.Margin - _style.DialRadius - _style.DialWidth, -_style.Margin - _style.DialRadius - _style.DialWidth);
 
     private void Outline(float width = 2f)
     {
@@ -144,7 +144,7 @@ public sealed class SimpleHud
         _shapeBatch.DrawPixelDisc(new Vector3(centre, 0f), 2f, Color.White);
     }
 
-    private static EntityTextComponent AddLabel(Scene scene, TextAnchor anchor)
+    private static EntityTextComponent AddLabel(Scene scene, Anchor anchor)
     {
         var label = new EntityTextComponent
         {

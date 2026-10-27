@@ -25,7 +25,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// {
 ///     Text = "Spawn",
 ///     Height = 0.4f,
-///     Anchor = TextAnchor.BottomCenter,
+///     Anchor = Anchor.BottomCenter,
 ///     Billboard = true
 /// });
 /// </code>
@@ -103,13 +103,13 @@ public class WorldTextComponent : EntityComponent
 
     /// <summary>
     /// Gets or sets which point of the text sits on the entity's position. Defaults to
-    /// <see cref="TextAnchor.MiddleCenter"/>.
+    /// <see cref="Anchor.MiddleCenter"/>.
     /// </summary>
     /// <remarks>
     /// Centred by default, unlike the screen-space component: world text is usually placed <em>at</em>
     /// a thing rather than hung off the corner of one.
     /// </remarks>
-    public TextAnchor Anchor { get; set; } = TextAnchor.MiddleCenter;
+    public Anchor Anchor { get; set; } = Anchor.MiddleCenter;
 
     /// <summary>
     /// Gets or sets how the lines of a multi-line text sit relative to one another.

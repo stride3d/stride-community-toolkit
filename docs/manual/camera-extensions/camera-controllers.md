@@ -35,7 +35,7 @@ void Start(Scene scene)
 ```
 
 Both helpers accept the help overlay's toggle key and whether it starts collapsed; the 3D one also
-takes an optional `ScreenAnchor` for the overlay's corner, edge or centre - leave it out and the
+takes an optional `Anchor` for the overlay's corner, edge or centre - leave it out and the
 overlay keeps whatever position it already has - and `showHelp: false` registers no help at all.
 These must be decided up front - the overlay section is created in `Start()` - which is why they are
 parameters rather than properties you set later.

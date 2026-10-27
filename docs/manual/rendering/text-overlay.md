@@ -9,7 +9,7 @@ Use it instead of `game.DebugTextSystem.Print(...)` from several scripts, whose 
 overlap and are unreadable on a high-DPI display.
 
 `TextOverlay`, `TextOverlaySection` and `KeyMenu` live in the `Stride.CommunityToolkit.Rendering.Overlay`
-namespace; `TextElement` in `Stride.CommunityToolkit.Rendering.Text`; `ScreenAnchor` in
+namespace; `TextElement` in `Stride.CommunityToolkit.Rendering.Text`; `Anchor` in
 `Stride.CommunityToolkit.Rendering`.
 
 ## Adding text
@@ -61,7 +61,7 @@ drawn as given.
 |---|---|---|
 | `ToggleKey` | <kbd>F4</kbd> | Hides and shows the whole overlay. |
 | `RepositionKey` | <kbd>F3</kbd> | Cycles the corners: top-left, top-right, bottom-right, bottom-left. |
-| `Position` | `TopRight` | The `ScreenAnchor`: a corner, the middle of an edge or the centre. `null` uses `CustomPosition` instead; `Visible = false` draws nothing. |
+| `Position` | `TopRight` | The `Anchor`: a corner, the middle of an edge or the centre. `null` uses `CustomPosition` instead; `Visible = false` draws nothing. |
 | `Margin` | `5, 10` | Distance from the edges, in unscaled pixels. |
 
 Section keys are read even while the overlay is hidden, so a collapse toggle pressed with everything

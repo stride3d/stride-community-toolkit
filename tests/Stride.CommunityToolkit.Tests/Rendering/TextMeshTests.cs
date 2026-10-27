@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.Core.Mathematics;
 using Stride.Graphics;
@@ -119,12 +119,12 @@ public class TextMeshTests
     [Fact]
     public void TheAnchorMovesTheBlockNotTheLetters()
     {
-        var box = TextMesh.Measure(Font, "Hello", new TextMeshOptions { Anchor = TextAnchor.MiddleCenter });
+        var box = TextMesh.Measure(Font, "Hello", new TextMeshOptions { Anchor = Anchor.MiddleCenter });
 
         Assert.Equal(0f, (box.Minimum.X + box.Maximum.X) * 0.5f, 4);
         Assert.Equal(0f, (box.Minimum.Y + box.Maximum.Y) * 0.5f, 4);
 
-        var topRight = TextMesh.Measure(Font, "Hello", new TextMeshOptions { Anchor = TextAnchor.TopRight });
+        var topRight = TextMesh.Measure(Font, "Hello", new TextMeshOptions { Anchor = Anchor.TopRight });
 
         Assert.Equal(0f, topRight.Maximum.X, 4);
         Assert.Equal(0f, topRight.Maximum.Y, 4);

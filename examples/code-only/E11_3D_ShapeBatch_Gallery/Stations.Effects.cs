@@ -360,7 +360,7 @@ public static class EffectStations
         shapes.DrawPixelLine(new Vector2(centre.X, centre.Y + 10f), new Vector2(centre.X, centre.Y + 40f), 2f, Color.White);
 
         // A radial gauge in the bottom-left corner, clockwise from twelve because Y is down
-        var gauge = shapes.Anchor(ScreenAnchor.BottomLeft) + new Vector2(110f, -110f);
+        var gauge = shapes.AnchorPoint(Anchor.BottomLeft) + new Vector2(110f, -110f);
         var level = (MathF.Sin(s.Seconds * 0.8f) + 1f) * 0.5f;
 
         shapes.Fill.Alpha = 0.25f;
@@ -369,7 +369,7 @@ public static class EffectStations
         shapes.DrawArc(gauge, 50f, -MathF.PI * 0.5f, MathF.Tau * level, Color.LimeGreen, width: 14f);
 
         // A panel in the bottom-right corner, HUD style, with a dashed ring turning inside it
-        var panel = shapes.Anchor(ScreenAnchor.BottomRight) + new Vector2(-150f, -90f);
+        var panel = shapes.AnchorPoint(Anchor.BottomRight) + new Vector2(-150f, -90f);
 
         shapes.Fill.Set(HudFill, 0.7f);
         shapes.BorderWidth = 1.5f;

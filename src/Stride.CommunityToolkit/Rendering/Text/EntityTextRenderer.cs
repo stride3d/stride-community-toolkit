@@ -160,7 +160,7 @@ public class EntityTextRenderer : SceneRendererBase
         // up as text half off the edge of the window. Screen mode is there when the caller wants to
         // place and anchor text independently. The two enums share one layout, so the text anchor
         // of the same name is the cast.
-        DrawAt(data, ResolveAnchoredPosition(component.ScreenAnchor, offset, screenSize), opacity, (TextAnchor)component.ScreenAnchor, display);
+        DrawAt(data, ResolveAnchoredPosition(component.ScreenAnchor, offset, screenSize), opacity, component.ScreenAnchor, display);
     }
 
     /// <summary>
@@ -191,16 +191,16 @@ public class EntityTextRenderer : SceneRendererBase
     /// Resolves a point of the window into a pixel position, with the offset always pointing inwards: away from
     /// a right edge or a bottom edge, and as given from the left, the top or the middle.
     /// </summary>
-    private static Vector2 ResolveAnchoredPosition(ScreenAnchor anchor, Vector2 offset, Vector2 screenSize)
+    private static Vector2 ResolveAnchoredPosition(Anchor anchor, Vector2 offset, Vector2 screenSize)
     {
-        var x = anchor is ScreenAnchor.TopRight or ScreenAnchor.MiddleRight or ScreenAnchor.BottomRight ? -offset.X : offset.X;
-        var y = anchor is ScreenAnchor.BottomLeft or ScreenAnchor.BottomCenter or ScreenAnchor.BottomRight ? -offset.Y : offset.Y;
+        var x = anchor is Anchor.TopRight or Anchor.MiddleRight or Anchor.BottomRight ? -offset.X : offset.X;
+        var y = anchor is Anchor.BottomLeft or Anchor.BottomCenter or Anchor.BottomRight ? -offset.Y : offset.Y;
 
         return anchor.At(screenSize) + new Vector2(x, y);
     }
 
     // display: the display's scale, applied to every pixel figure; 1 when not following it
-    private void DrawAt(EntityTextRenderData data, Vector2 position, float opacity, TextAnchor anchor, float display)
+    private void DrawAt(EntityTextRenderData data, Vector2 position, float opacity, Anchor anchor, float display)
     {
         var component = data.Component;
         var font = component.Font ?? _defaultFont!;

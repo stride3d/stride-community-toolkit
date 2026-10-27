@@ -233,7 +233,7 @@ shapes.DrawDisc(new Vector3(0f, 0.02f, 1.5f), Vector3.UnitY, 3f, Color.OrangeRed
 shapes.Screen = true;
 var centre = shapes.ScreenSize * 0.5f;
 shapes.DrawRing(centre, 22f, Color.White);
-shapes.DrawArc(shapes.Anchor(ScreenAnchor.BottomLeft) + new Vector2(100f, -90f), 50f, -MathF.PI * 0.5f, MathF.Tau * health, Color.LimeGreen, width: 14f);
+shapes.DrawArc(shapes.AnchorPoint(Anchor.BottomLeft) + new Vector2(100f, -90f), 50f, -MathF.PI * 0.5f, MathF.Tau * health, Color.LimeGreen, width: 14f);
 shapes.Screen = false;
 ```
 
@@ -241,8 +241,8 @@ shapes.Screen = false;
 |---|---|
 | `Screen` | Per-draw state. World and screen shapes can share a batch |
 | `ScreenSize` | The window size in the units the batch draws in |
-| `Anchor(ScreenAnchor)` | The position of a window corner, the middle of an edge or the centre |
-| `Viewport` | A rectangle that offsets screen shapes and sizes `Anchor()` |
+| `AnchorPoint(Anchor)` | The position of a window corner, the middle of an edge or the centre |
+| `Viewport` | A rectangle that offsets screen shapes and sizes `AnchorPoint()` |
 
 Remarks:
 

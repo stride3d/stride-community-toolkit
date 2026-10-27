@@ -1,7 +1,6 @@
-using Stride.CommunityToolkit.Rendering.Text;
-using System.Text;
 using Stride.Graphics;
 using Stride.Rendering;
+using System.Text;
 
 namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
@@ -300,21 +299,21 @@ public static class TextMesh
             return new Layout(placed, block, ShiftFor(options.Anchor, block));
         }
 
-        private static Vector2 ShiftFor(TextAnchor? anchor, Block block)
+        private static Vector2 ShiftFor(Anchor? anchor, Block block)
         {
             if (anchor is null) return Vector2.Zero;
 
             var x = anchor switch
             {
-                TextAnchor.TopLeft or TextAnchor.MiddleLeft or TextAnchor.BottomLeft => block.Min.X,
-                TextAnchor.TopRight or TextAnchor.MiddleRight or TextAnchor.BottomRight => block.Max.X,
+                Anchor.TopLeft or Anchor.MiddleLeft or Anchor.BottomLeft => block.Min.X,
+                Anchor.TopRight or Anchor.MiddleRight or Anchor.BottomRight => block.Max.X,
                 _ => (block.Min.X + block.Max.X) * 0.5f,
             };
 
             var y = anchor switch
             {
-                TextAnchor.TopLeft or TextAnchor.TopCenter or TextAnchor.TopRight => block.Max.Y,
-                TextAnchor.BottomLeft or TextAnchor.BottomCenter or TextAnchor.BottomRight => block.Min.Y,
+                Anchor.TopLeft or Anchor.TopCenter or Anchor.TopRight => block.Max.Y,
+                Anchor.BottomLeft or Anchor.BottomCenter or Anchor.BottomRight => block.Min.Y,
                 _ => (block.Min.Y + block.Max.Y) * 0.5f,
             };
 

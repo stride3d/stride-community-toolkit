@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -51,7 +51,7 @@ internal sealed class ChartLegend(IGame game, Chart chart) : IDisposable
         foreach (var series in chart.Series)
         {
             var label = new ChartText(o.Labels, $"Legend {series.Name}");
-            label.Set(series.Name, TextAnchor.MiddleLeft, Vector2.Zero);
+            label.Set(series.Name, Anchor.MiddleLeft, Vector2.Zero);
             chart.Root.AddChild(label.Entity);
             _rows.Add(new Row(series, label));
         }

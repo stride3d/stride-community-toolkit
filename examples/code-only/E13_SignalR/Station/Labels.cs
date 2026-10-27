@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -43,7 +44,7 @@ public sealed class Labels
     /// everything, for tags and banners that float in the scene rather than lie on a board.
     /// </summary>
     public WorldTextComponent Add(string key, float lineHeight, SpriteFont? font, Action<WorldTextComponent, StationConsole> restyle,
-        TextAnchor anchor = TextAnchor.MiddleCenter, float glow = 0f, bool overlay = false)
+        Anchor anchor = Anchor.MiddleCenter, float glow = 0f, bool overlay = false)
     {
         var text = new WorldTextComponent
         {

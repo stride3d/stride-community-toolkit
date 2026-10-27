@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
@@ -303,7 +304,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         //    FontSize = 12,
         //    Font = _labelFont,
         //    TextColor = Color.White,
-        //    Anchor = TextAnchor.MiddleLeft,
+        //    Anchor = Anchor.MiddleLeft,
         //    AutoScale = true,
         //    Offset = new Vector3(1, 0f, 0f),
         //    Billboard = false
@@ -314,7 +315,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
             FontSize = 20,
             Font = _labelFont,
             TextColor = Color.White,
-            Anchor = TextAnchor.MiddleLeft,
+            Anchor = Anchor.MiddleLeft,
             Offset = new Vector2(10f, 0f),
             EnableBackground = true,
             BackgroundColor = new Color4(0.03f, 0.05f, 0.09f, 0.85f),

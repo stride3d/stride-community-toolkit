@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
@@ -73,7 +74,7 @@ void AddVertexLabels(Entity parent, ReadOnlySpan<Vector3> localPositions, string
                 Offset = new Vector2(0, -18),
                 TextColor = Color.White,
                 // Anchor centres the label over its vertex; TextAlignment only arranges the lines of a block
-                Anchor = TextAnchor.BottomCenter,
+                Anchor = Anchor.BottomCenter,
                 EnableBackground = true,
                 BackgroundColor = new Color4(0, 0, 0, 0.5f),
                 Padding = new Vector2(2)

@@ -2,9 +2,9 @@ using E03_3D_MeshText;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -56,7 +56,7 @@ void Start(Scene scene)
     // The embedded font: Open Sans Regular, so the lettering is the same on every machine. A bevel rounds
     // the edge between the caps and the walls, which is what catches the light on a title
     AddText(scene, MeshFont.Default, "Stride Community Toolkit", new Vector3(0f, 3.6f, 0f), gold,
-        new TextMeshOptions { Size = 0.6f, Depth = 0.2f, Anchor = TextAnchor.MiddleCenter, Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 4) });
+        new TextMeshOptions { Size = 0.6f, Depth = 0.2f, Anchor = Anchor.MiddleCenter, Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 4) });
 
     // An installed font by family name and style; null when this machine has no such family, so the
     // embedded one stands in and the line says so
@@ -65,12 +65,12 @@ void Start(Scene scene)
         ?? MeshFont.FromFamily("Liberation Sans", FontStyle.Bold);
 
     AddText(scene, systemFont ?? MeshFont.Default, systemFont is null ? "No bold system font here" : $"{systemFont.Name}, installed here", new Vector3(0f, 2.7f, 0f), silver,
-        new TextMeshOptions { Size = 0.45f, Depth = 0.15f, Anchor = TextAnchor.MiddleCenter });
+        new TextMeshOptions { Size = 0.45f, Depth = 0.15f, Anchor = Anchor.MiddleCenter });
 
     // Several lines in one mesh: centred on each other, a little closer than the font's own line
     // height, and a lower curve quality that is still smooth at this size
     AddText(scene, MeshFont.Default, "lines of text\nalign to each other\nand share one mesh", new Vector3(0f, 2.1f, 0f), blue,
-        new TextMeshOptions { Size = 0.3f, Depth = 0.1f, Alignment = TextAlignment.Center, LineSpacing = 0.9f, Anchor = TextAnchor.TopCenter, CurveQuality = 16 });
+        new TextMeshOptions { Size = 0.3f, Depth = 0.1f, Alignment = TextAlignment.Center, LineSpacing = 0.9f, Anchor = Anchor.TopCenter, CurveQuality = 16 });
 
     // The counter: a script that replaces its digit mesh whenever the number changes
     var counter = new Entity("FrameCounter")

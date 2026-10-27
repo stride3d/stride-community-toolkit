@@ -5,6 +5,7 @@ using Stride.BepuPhysics.Definitions.Contacts;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.DebugShapes;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -237,7 +238,7 @@ void AddLabel(Scene scene, string text, float x)
 {
     var label = new Entity("Label")
     {
-        new EntityTextComponent { Text = text, FontSize = 14, Anchor = TextAnchor.MiddleCenter, EnableShadow = true },
+        new EntityTextComponent { Text = text, FontSize = 14, Anchor = Anchor.MiddleCenter, EnableShadow = true },
     };
 
     label.Transform.Position = new Vector3(x, 0f, 2.6f);

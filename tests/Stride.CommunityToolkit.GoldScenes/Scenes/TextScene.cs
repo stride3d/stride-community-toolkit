@@ -76,7 +76,7 @@ internal sealed class TextScene : IGoldScene
             Text = "cube",
             FontSize = 18,
             Offset = new Vector2(0f, -30f),
-            Anchor = TextAnchor.BottomCenter,
+            Anchor = Anchor.BottomCenter,
             EnableShadow = true,
             ShadowColor = new Color(0, 0, 0, 200),
         });
@@ -86,7 +86,7 @@ internal sealed class TextScene : IGoldScene
             Text = "SCREEN TEXT, TOP LEFT",
             FontSize = 20,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = ScreenAnchor.TopLeft,
+            ScreenAnchor = Anchor.TopLeft,
             Offset = new Vector2(16f, 16f),
             TextColor = Color.LightGreen,
         });
@@ -96,7 +96,7 @@ internal sealed class TextScene : IGoldScene
             Text = "with a background",
             FontSize = 20,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = ScreenAnchor.BottomRight,
+            ScreenAnchor = Anchor.BottomRight,
             Offset = new Vector2(16f, 16f),
             EnableBackground = true,
             BackgroundColor = new Color4(0f, 0f, 0f, 0.6f),

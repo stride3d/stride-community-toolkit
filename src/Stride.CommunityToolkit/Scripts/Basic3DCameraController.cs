@@ -19,7 +19,7 @@ namespace Stride.CommunityToolkit.Scripts;
 public class Basic3DCameraController : SyncScript
 {
     private const float MaximumPitch = MathUtil.PiOverTwo * 0.99f;
-    private readonly ScreenAnchor? _helpPosition;
+    private readonly Anchor? _helpPosition;
     private Vector3 _translation;
     private Vector3 _defaultCameraPosition;
     private Quaternion _defaultCameraRotation;
@@ -73,7 +73,7 @@ public class Basic3DCameraController : SyncScript
     /// drawn. <see langword="null"/>, the default, leaves the overlay where it is, so a position set elsewhere
     /// (for example before the controller starts) is kept.
     /// </param>
-    public Basic3DCameraController(ScreenAnchor? helpPosition = null)
+    public Basic3DCameraController(Anchor? helpPosition = null)
     {
         _helpPosition = helpPosition;
     }

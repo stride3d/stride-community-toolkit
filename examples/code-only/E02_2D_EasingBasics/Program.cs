@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
@@ -72,8 +73,8 @@ void Start(Scene rootScene)
 
     for (var lane = 0; lane < laneY.Length; lane++)
     {
-        rootScene.Entities.Add(Label(titles[lane], new Vector2(StartX, laneY[lane] + 1.3f), 16, Color.White, TextAnchor.BottomLeft));
-        rootScene.Entities.Add(Label(code[lane], new Vector2(EndX + 2.2f, laneY[lane]), 13, new Color(170, 210, 255), TextAnchor.MiddleLeft));
+        rootScene.Entities.Add(Label(titles[lane], new Vector2(StartX, laneY[lane] + 1.3f), 16, Color.White, Anchor.BottomLeft));
+        rootScene.Entities.Add(Label(code[lane], new Vector2(EndX + 2.2f, laneY[lane]), 13, new Color(170, 210, 255), Anchor.MiddleLeft));
     }
 
     TextOverlay.GetOrCreate(game).AddSection("Easing basics", BuildOverlayLines);
@@ -181,7 +182,7 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
     new("the same curve, less code each time.", Color.LightGray),
 ];
 
-static Entity Label(string text, Vector2 position, float fontSize, Color colour, TextAnchor anchor)
+static Entity Label(string text, Vector2 position, float fontSize, Color colour, Anchor anchor)
 {
     var entity = new Entity($"Label {text.Split('\n')[0]}")
     {
