@@ -83,10 +83,7 @@ public class SlidingCubeComponent : BodyComponent, ISimulationUpdate
 
         // Deliberately ahead of the sleep check. Turning off Kinematic hands the cube its full shape
         // inertia back, which quietly undoes the rotation lock
-        if (_lockedWhileKinematic != Kinematic)
-        {
-            ApplyRotationLock();
-        }
+        if (_lockedWhileKinematic != Kinematic) ApplyRotationLock();
 
         if (!Awake) return;
 

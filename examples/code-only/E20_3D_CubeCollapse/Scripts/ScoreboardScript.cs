@@ -126,10 +126,7 @@ public class ScoreboardScript : SyncScript
             // faster rather than taking proportionally longer. Every clear feels the same length.
             _displayedScore += Math.Max((target - _displayedScore) / CountUpSeconds, 1f) * deltaTime;
 
-            if (_displayedScore >= target)
-            {
-                _displayedScore = target;
-            }
+            if (_displayedScore >= target) _displayedScore = target;
         }
         else if (_displayedScore > target)
         {
@@ -139,18 +136,10 @@ public class ScoreboardScript : SyncScript
 
         TotalText.Text = $"{Label}: {(int)_displayedScore:N0}";
 
-        if (_punchRemaining > 0f)
-        {
-            _punchRemaining = Math.Max(0f, _punchRemaining - deltaTime);
+        // A spent punch is zero, which is scale 1
+        _punchRemaining = Math.Max(0f, _punchRemaining - deltaTime);
 
-            var punch = _punchRemaining / PunchDuration;
-
-            TotalText.Scale = 1f + (PunchScale - 1f) * punch;
-        }
-        else
-        {
-            TotalText.Scale = 1f;
-        }
+        TotalText.Scale = 1f + (PunchScale - 1f) * (_punchRemaining / PunchDuration);
     }
 
     private void UpdateCombo()
@@ -161,10 +150,7 @@ public class ScoreboardScript : SyncScript
         {
             ComboText.IsVisible = false;
 
-            if (ComboBarText is not null)
-            {
-                ComboBarText.IsVisible = false;
-            }
+            if (ComboBarText is not null) ComboBarText.IsVisible = false;
 
             return;
         }

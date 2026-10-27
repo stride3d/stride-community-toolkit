@@ -60,12 +60,7 @@ public static class MatchFinder
 
                 if (!visited.Add(next)) continue;
 
-                var neighbour = grid.Get(next);
-
-                if (neighbour?.Get<CubeComponent>()?.Color != colour)
-                {
-                    continue;
-                }
+                if (grid.Get(next)?.Get<CubeComponent>()?.Color != colour) continue;
 
                 pending.Enqueue(next);
             }
@@ -120,10 +115,7 @@ public static class MatchFinder
 
             if (colour is null) continue;
 
-            if (IsClearable(MeasureGroup(grid, coordinate, colour.Value, visited)))
-            {
-                return true;
-            }
+            if (IsClearable(MeasureGroup(grid, coordinate, colour.Value, visited))) return true;
         }
 
         return false;
@@ -154,10 +146,7 @@ public static class MatchFinder
 
             if (colour is null) continue;
 
-            if (IsClearable(MeasureGroup(grid, coordinate, colour.Value, visited)))
-            {
-                moves++;
-            }
+            if (IsClearable(MeasureGroup(grid, coordinate, colour.Value, visited))) moves++;
         }
 
         return moves;

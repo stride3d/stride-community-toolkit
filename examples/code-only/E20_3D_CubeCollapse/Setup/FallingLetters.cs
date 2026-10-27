@@ -133,7 +133,7 @@ public static class FallingLetters
         ArgumentNullException.ThrowIfNull(text);
         ArgumentNullException.ThrowIfNull(material);
 
-        var entity = new Entity(Shared.EntityNames.GameOverMenu)
+        var entity = new Entity(EntityNames.GameOverMenu, position)
         {
             new ModelComponent
             {
@@ -142,7 +142,6 @@ public static class FallingLetters
             new FaceCameraScript()
         };
 
-        entity.Transform.Position = position;
         entity.Transform.Scale = new Vector3(scale);
         entity.Scene = scene;
 
@@ -162,9 +161,7 @@ public static class FallingLetters
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        var model = entity.Get<ModelComponent>()?.Model;
-
-        if (model is not null)
+        if (entity.Get<ModelComponent>()?.Model is { } model)
         {
             foreach (var mesh in model.Meshes)
             {
@@ -181,7 +178,6 @@ public static class FallingLetters
     }
 
     /// <summary>The extents of a glyph mesh, which is centred on its origin, for the box that collides in its place.</summary>
-
     private static Vector3 BoxOf(GeometricMeshData<VertexPositionNormalTexture> mesh)
     {
         var max = Vector3.Zero;

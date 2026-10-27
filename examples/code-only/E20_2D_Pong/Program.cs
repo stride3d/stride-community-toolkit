@@ -28,8 +28,8 @@ var court = new Color(14, 18, 28);
 var chalk = new Color(230, 236, 245);
 var glow = new Color(120, 190, 255, 140);
 
-Referee? referee = null;
-TextOverlaySection? keys = null;
+Referee referee = null!;
+TextOverlaySection keys = null!;
 var foldedKeys = false;
 
 using var game = new Game();
@@ -54,7 +54,6 @@ void Start(Scene scene)
 
     for (var y = -Court.HalfHeight + 0.3f; y < Court.HalfHeight; y += 0.6f)
     {
-
         // A little behind the rest, so the ball passes in front of the net
         Rectangle("Net", new Vector2(0.08f, 0.3f), new Vector3(0f, y, -0.1f), faint);
     }
@@ -62,11 +61,7 @@ void Start(Scene scene)
     var leftPaddle = Rectangle("Left paddle", Court.PaddleSize, new Vector3(-Court.PaddleX, 0f, 0f), material);
     var rightPaddle = Rectangle("Right paddle", Court.PaddleSize, new Vector3(Court.PaddleX, 0f, 0f), material);
 
-    var ballEntity = game.CreatePrimitive(Primitive2D.Circle(Court.BallSize * 0.5f), new PrimitiveEntityOptions
-    {
-        EntityName = "Ball",
-        Material = material,
-    });
+    var ballEntity = game.CreatePrimitive(Primitive2D.Circle(Court.BallSize * 0.5f), new PrimitiveEntityOptions { EntityName = "Ball", Material = material });
 
     ballEntity.Scene = scene;
 
@@ -110,13 +105,8 @@ void Start(Scene scene)
 
     Entity Rectangle(string name, Vector2 size, Vector3 position, Material fill)
     {
-        var entity = game.CreatePrimitive(Primitive2D.Rectangle(size.X, size.Y), new PrimitiveEntityOptions
-        {
-            EntityName = name,
-            Material = fill,
-        });
+        var entity = game.CreatePrimitive(Primitive2D.Rectangle(size.X, size.Y), new PrimitiveEntityOptions { EntityName = name, Material = fill, Position = position });
 
-        entity.Transform.Position = position;
         entity.Scene = scene;
 
         return entity;
@@ -135,10 +125,7 @@ void Start(Scene scene)
             Billboard = false,
         };
 
-        var entity = new Entity(name) { component };
-
-        entity.Transform.Position = position;
-        scene.Entities.Add(entity);
+        scene.Entities.Add(new Entity(name, position) { component });
 
         return component;
     }
@@ -146,8 +133,6 @@ void Start(Scene scene)
 
 void Update(Scene scene, GameTime time)
 {
-    if (referee is null || keys is null) return;
-
     if (game.Input.IsKeyPressed(Keys.P)) referee.TwoPlayers = !referee.TwoPlayers;
 
     // Once, when the first match starts

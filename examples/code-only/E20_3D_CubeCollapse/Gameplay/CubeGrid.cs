@@ -56,10 +56,7 @@ public class CubeGrid
         ArgumentNullException.ThrowIfNull(cube);
 
         _cubes[coordinate] = cube;
-
-        var component = cube.Get<CubeComponent>();
-
-        component?.GridPosition = coordinate;
+        cube.Get<CubeComponent>()?.GridPosition = coordinate;
     }
 
     /// <summary>
@@ -133,10 +130,7 @@ public class CubeGrid
 
                 _cubes.Remove(from);
                 _cubes[to] = cube;
-
-                var component = cube.Get<CubeComponent>();
-
-                component?.GridPosition = to;
+                cube.Get<CubeComponent>()?.GridPosition = to;
 
                 moved.Add((cube, readLayer - writeLayer));
             }

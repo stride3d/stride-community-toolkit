@@ -57,11 +57,7 @@ public class GameAudio
     }
 
     private static SoundInstance? Load(Game game, string assetName)
-    {
-        var sound = game.Content.Load<Sound>(assetName);
-
-        return sound?.CreateInstance(game.Audio.AudioEngine.DefaultListener);
-    }
+        => game.Content.Load<Sound>(assetName)?.CreateInstance(game.Audio.AudioEngine.DefaultListener);
 
     /// <summary>
     /// Plays the sound for a successful clear.
@@ -124,17 +120,11 @@ public class GameAudio
     {
         if (instance is null) return;
 
-        if (_engine.State == AudioEngineState.Paused)
-        {
-            _engine.ResumeAudio();
-        }
+        if (_engine.State == AudioEngineState.Paused) _engine.ResumeAudio();
 
         // An instance cannot overlap itself, so restarting is the only option once it is busy. The
         // round-robin above is what keeps that from being the common case.
-        if (instance.PlayState == PlayState.Playing)
-        {
-            instance.Stop();
-        }
+        if (instance.PlayState == PlayState.Playing) instance.Stop();
 
         instance.Play();
     }

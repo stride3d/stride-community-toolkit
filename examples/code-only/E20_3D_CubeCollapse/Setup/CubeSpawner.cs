@@ -58,12 +58,9 @@ public class CubeSpawner(Game game, Scene scene, CubeGrid grid, LevelState level
         {
             for (var z = 0; z < level.Rows; z++)
             {
-                var cube = CreateCube();
-
-                cube.Transform.Position = GridToWorld(level, x, layer, z);
+                var cube = CreateCube(GridToWorld(level, x, layer, z));
 
                 AddCollider(cube);
-
                 grid.Add(new Int3(x, layer, z), cube);
 
                 cube.Scene = scene;
@@ -92,14 +89,15 @@ public class CubeSpawner(Game game, Scene scene, CubeGrid grid, LevelState level
         (layer + 0.5f) * GameSettings.CubeSize.Y,
         z * GameSettings.CubeSize.Z + level.GridOrigin);
 
-    private Entity CreateCube()
+    private Entity CreateCube(Vector3 position)
     {
         var colour = _colours[_random.Next(0, _colours.Count)];
 
-        var cube = game.CreatePrimitive(Primitive3D.Box(GameSettings.CubeSize), new PrimitiveEntityOptions()
+        var cube = game.CreatePrimitive(Primitive3D.Box(GameSettings.CubeSize), new PrimitiveEntityOptions
         {
             EntityName = EntityNames.Cube,
             Material = _materials?[colour],
+            Position = position,
 
             // The scene setup chose Bepu, so CreatePrimitive would give the cube a dynamic body of its own; the
             // spawner adds the SlidingCubeComponent below instead, and two bodies on one cube push each other apart
