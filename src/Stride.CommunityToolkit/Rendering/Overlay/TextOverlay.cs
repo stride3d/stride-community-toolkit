@@ -177,12 +177,6 @@ public sealed class TextOverlay : GameSystemBase
     /// </summary>
     public float TextNudge { get; set; } = -1f;
 
-    /// <summary>
-    /// Gets or sets the assumed width of one character, in pixels, used to right-align the overlay.
-    /// </summary>
-    [Obsolete("Text is measured with the font since the overlay draws with a SpriteFont; this value is no longer used.")]
-    public int CharacterWidth { get; set; } = 8;
-
     /// <summary>Gets or sets the gap kept between the overlay and the edge of the screen, in pixels.</summary>
     public Int2 Margin { get; set; } = new(5, 10);
 

@@ -22,11 +22,12 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: (Scene rootScene) =>
+game.Run(new SceneSetup3D
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "DPI-Aware Window";
-
+    WindowTitle = "DPI-Aware Window",
+    Resizable = true,
+}.UseBepu().UseSkybox(), start: (Scene rootScene) =>
+{
     var entity = game.CreatePrimitive(Primitive3D.Capsule());
     entity.Transform.Position = new Vector3(0, 8, 0);
     entity.Scene = rootScene;

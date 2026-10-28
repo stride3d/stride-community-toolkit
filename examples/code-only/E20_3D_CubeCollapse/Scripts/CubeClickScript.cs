@@ -94,9 +94,7 @@ public class CubeClickScript : AsyncScript
     /// <inheritdoc />
     public override async Task Execute()
     {
-        var camera = Entity.Scene.GetCamera();
-
-        if (camera is null) return;
+        var camera = Game.GetCameraEntity().Get<CameraComponent>();
 
         while (Game.IsRunning)
         {

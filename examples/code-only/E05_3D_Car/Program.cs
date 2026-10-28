@@ -4,6 +4,7 @@ using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
@@ -124,24 +125,16 @@ void Update(Scene scene, GameTime time)
 // steering and the motor targets start over.
 void ResetCar(Car car)
 {
-    Place(car.Chassis, start, Quaternion.Identity);
+    car.Chassis.TeleportAtRest(start);
 
     foreach (var wheel in new[] { car.FrontLeft, car.FrontRight, car.RearLeft, car.RearRight })
     {
-        Place(wheel.Body, start + wheel.Mount + suspensionDirection * SuspensionLength, wheelTurn);
+        wheel.Body.TeleportAtRest(start + wheel.Mount + suspensionDirection * SuspensionLength, wheelTurn);
     }
 
     steeringAngle = 0;
     Steer(car, 0);
     previousTargetSpeed = float.NaN;
-
-    static void Place(BodyComponent body, Vector3 position, Quaternion rotation)
-    {
-        body.Teleport(position, rotation);
-        body.LinearVelocity = Vector3.Zero;
-        body.AngularVelocity = Vector3.Zero;
-        body.Awake = true;
-    }
 }
 
 // The demo's Ackermann steering: on a turn the inner wheel turns more than the outer one, so
@@ -424,13 +417,8 @@ public sealed class ChaseCamera : SyncScript
         var blend = 1 - MathF.Exp(-Smoothing * (float)Game.UpdateTime.Elapsed.TotalSeconds);
         var position = Vector3.Lerp(Entity.Transform.Position, wanted, blend);
 
-        // A view matrix looks down -Z; its inverse is the camera's world pose.
-        var view = Matrix.LookAtRH(position, targetPosition + Vector3.UnitY * 0.8f, Vector3.UnitY);
-        Matrix.Invert(ref view, out var world);
-        world.Decompose(out _, out Quaternion rotation, out _);
-
         Entity.Transform.Position = position;
-        Entity.Transform.Rotation = rotation;
+        Entity.Transform.Rotation = QuaternionUtil.LookAt(position, targetPosition + Vector3.UnitY * 0.8f);
     }
 }
 

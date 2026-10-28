@@ -29,7 +29,7 @@ public static class HeightmapExtensions
     /// Divisor applied to each stored sample before it is mapped into <see cref="Heightmap.HeightRange"/>;
     /// 255 suits 8-bit greyscale heightmaps.
     /// </summary>
-    public static readonly float HeightMultiplier = 255.0f;
+    public const float HeightMultiplier = 255.0f;
 
     // The vertex colour of a terrain mesh, an earthy brown
     private static readonly Vector4 TerrainColor = new(149, 135, 118, 255);
@@ -40,10 +40,10 @@ public static class HeightmapExtensions
     /// <param name="heightmap">Source heightmap.</param>
     /// <param name="ray">Ray in heightmap local space.</param>
     /// <param name="point">Closest intersection point if any.</param>
-    /// <param name="m_QuadSideWidthX">Horizontal spacing between height samples in world units (X axis).</param>
-    /// <param name="m_QuadSideWidthZ">Horizontal spacing between height samples in world units (Z axis).</param>
+    /// <param name="quadWidthX">Horizontal spacing between height samples in world units (X axis).</param>
+    /// <param name="quadWidthZ">Horizontal spacing between height samples in world units (Z axis).</param>
     /// <returns><c>true</c> if the ray intersects at least one sample; otherwise <c>false</c>.</returns>
-    public static bool IntersectsRay(this Heightmap heightmap, Ray ray, out Vector3 point, float m_QuadSideWidthX = 1.0f, float m_QuadSideWidthZ = 1.0f)
+    public static bool IntersectsRay(this Heightmap heightmap, Ray ray, out Vector3 point, float quadWidthX = 1.0f, float quadWidthZ = 1.0f)
     {
         var sphere = new BoundingSphere(Vector3.Zero, 1.5f);
         var nearest = float.MaxValue;
@@ -55,7 +55,7 @@ public static class HeightmapExtensions
         {
             for (var x = 0; x < heightmap.Size.X; x++)
             {
-                sphere.Center = new Vector3(x * m_QuadSideWidthX, heightmap.GetHeightAt(x, z), z * m_QuadSideWidthZ);
+                sphere.Center = new Vector3(x * quadWidthX, heightmap.GetHeightAt(x, z), z * quadWidthZ);
 
                 if (!sphere.Intersects(ref ray, out Vector3 hit)) continue;
 
@@ -174,13 +174,13 @@ public static class HeightmapExtensions
     /// </summary>
     /// <param name="heightmap">Source heightmap.</param>
     /// <param name="graphicsDevice">Graphics device used for buffer allocation.</param>
-    /// <param name="m_QuadSideWidthX">Width of a single height sample quad along X.</param>
-    /// <param name="m_QuadSideWidthZ">Width of a single height sample quad along Z.</param>
-    /// <param name="TEXTURE_REPEAT">If &gt; 0, number of times the texture repeats across the terrain extents.</param>
+    /// <param name="quadWidthX">Width of a single height sample quad along X.</param>
+    /// <param name="quadWidthZ">Width of a single height sample quad along Z.</param>
+    /// <param name="textureRepeat">If &gt; 0, number of times the texture repeats across the terrain extents.</param>
     /// <param name="terrainPoints">Output array of vertex positions.</param>
     /// <param name="tessellation">Stride between samples (1 = full resolution).</param>
     /// <returns>Constructed mesh.</returns>
-    public static Mesh ToMesh(this Heightmap heightmap, GraphicsDevice graphicsDevice, float m_QuadSideWidthX, float m_QuadSideWidthZ, float TEXTURE_REPEAT, out Vector3[] terrainPoints, int tessellation)
+    public static Mesh ToMesh(this Heightmap heightmap, GraphicsDevice graphicsDevice, float quadWidthX, float quadWidthZ, float textureRepeat, out Vector3[] terrainPoints, int tessellation)
     {
         var quadsX = (heightmap.Size.X - 1) / tessellation;
         var quadsZ = (heightmap.Size.Y - 1) / tessellation;
@@ -190,7 +190,7 @@ public static class HeightmapExtensions
 
         // The terrain starts at the origin and spans one quad width per sample
         var minBounds = Vector3.Zero;
-        var maxBounds = new Vector3((heightmap.Size.X - 1) * m_QuadSideWidthX, 0, (heightmap.Size.Y - 1) * m_QuadSideWidthZ);
+        var maxBounds = new Vector3((heightmap.Size.X - 1) * quadWidthX, 0, (heightmap.Size.Y - 1) * quadWidthZ);
         var stepX = tessellation * (maxBounds.X - minBounds.X) / (heightmap.Size.X - 1);
         var stepZ = tessellation * (maxBounds.Z - minBounds.Z) / (heightmap.Size.Y - 1);
 
@@ -206,16 +206,18 @@ public static class HeightmapExtensions
 
             for (var x = 0; x < vertsX; x++)
             {
-                var vertexPosition = new Vector3(position.X, heightmap.GetHeightAt(x, z), position.Z);
+                // The vertex at (x, z) stands on the sample tessellation steps away; sampling (x, z) itself
+                // would stretch the heights of one corner over the whole terrain
+                var vertexPosition = new Vector3(position.X, heightmap.GetHeightAt(x * tessellation, z * tessellation), position.Z);
 
                 terrainPoints[count] = vertexPosition;
 
-                // TEXTURE_REPEAT > 0 tiles the texture over the whole terrain; otherwise each quad gets one copy.
-                var texCoord = TEXTURE_REPEAT > 0
-                    ? new Vector2(m_QuadSideWidthX * TEXTURE_REPEAT * x / (float)vertsX * tessellation, m_QuadSideWidthZ * TEXTURE_REPEAT * (z * 1.0f) / (float)vertsZ * tessellation)
-                    : new Vector2(m_QuadSideWidthX * x * tessellation, m_QuadSideWidthZ * z * tessellation);
+                // textureRepeat > 0 tiles the texture over the whole terrain; otherwise each quad gets one copy.
+                var texCoord = textureRepeat > 0
+                    ? new Vector2(quadWidthX * textureRepeat * x / (float)vertsX * tessellation, quadWidthZ * textureRepeat * (z * 1.0f) / (float)vertsZ * tessellation)
+                    : new Vector2(quadWidthX * x * tessellation, quadWidthZ * z * tessellation);
 
-                vertices[count] = new VertexTypePosTexNormColor(vertexPosition, heightmap.GetNormal(x, z), heightmap.GetTangent(x, z), texCoord, TerrainColor);
+                vertices[count] = new VertexTypePosTexNormColor(vertexPosition, heightmap.GetNormal(x * tessellation, z * tessellation), heightmap.GetTangent(x * tessellation, z * tessellation), texCoord, TerrainColor);
                 position.X += stepX;
                 count++;
             }
@@ -262,7 +264,7 @@ public static class HeightmapExtensions
     /// <summary>
     /// Converts all sample heights to world-space points using the provided quad spacing.
     /// </summary>
-    public static Vector3[] ToWorldPoints(this Heightmap heightmap, float m_QuadSideWidthX, float m_QuadSideWidthZ)
+    public static Vector3[] ToWorldPoints(this Heightmap heightmap, float quadWidthX, float quadWidthZ)
     {
         var vertsX = heightmap.Size.X;
         var vertsZ = heightmap.Size.Y;
@@ -273,7 +275,7 @@ public static class HeightmapExtensions
         {
             for (var x = 0; x < vertsX; x++)
             {
-                points[count++] = new Vector3(x * m_QuadSideWidthX, heightmap.GetHeightAt(x, z), z * m_QuadSideWidthZ);
+                points[count++] = new Vector3(x * quadWidthX, heightmap.GetHeightAt(x, z), z * quadWidthZ);
             }
         }
 

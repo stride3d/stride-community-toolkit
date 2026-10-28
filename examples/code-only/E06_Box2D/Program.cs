@@ -8,10 +8,6 @@ using Stride.Games;
 
 // Box2D.NET in Stride: a 2D simulation with shapes, collisions and interactive controls
 
-// Per-monitor DPI awareness, so a 150% display gets a sharp window rather than a stretched one;
-// it has to happen before the window exists
-WindowsDpiManager.EnablePerMonitorV2();
-
 SceneManager sceneManager = null!;
 
 using var game = new Game();
@@ -21,16 +17,16 @@ var sceneSetup = new SceneSetup2D
 {
     ClearColor = new Color(0.2f),
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Box2D Physics Example - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 };
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Box2D Physics Example - Stride Community Toolkit";
-
     // Shapes render through the toolkit's Box2D debug draw - testbed-style fill and pixel-constant
     // borders from an SDF shader, replacing the old per-mesh outline render features
     var shapeBatch = game.AddShapeBatch();
@@ -46,7 +42,7 @@ void Start(Scene rootScene)
     ConfigurePhysicsWorld();
 
     // Left mouse picks any shape up and throws it; a click on empty space still spawns one
-    game.GetCameraEntity().Add(new Grabber2DScript { Simulation = simulation });
+    game.AddGrabber2D(simulation);
 
     sceneManager = new SceneManager(game, rootScene, simulation);
     sceneManager.Initialize();

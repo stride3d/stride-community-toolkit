@@ -38,7 +38,7 @@ public struct VertexTypePosTexNormColor : IEquatable<VertexTypePosTexNormColor>,
     public Vector4 Color;
 
     /// <summary>Size of the vertex struct in bytes.</summary>
-    public static readonly int Size = 60;
+    public const int Size = 60;
 
     /// <summary>Stride vertex declaration describing the layout.</summary>
     public static readonly VertexDeclaration Layout = new(

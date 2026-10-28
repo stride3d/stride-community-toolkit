@@ -23,8 +23,6 @@ using Stride.Rendering;
 // its physics with it. The step cap matters at speed: at 4x and 60 frames a second the simulation
 // needs four fixed steps a frame, and the default cap of three would let it fall behind the clock.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float DropInterval = 0.5f;
 const float SpinSpeed = 2.5f;       // Radians per second, on the physics clock
 const float BallRadius = 0.3f;
@@ -53,16 +51,16 @@ using var game = new Game();
 var sceneSetup = new SceneSetup3D
 {
     Camera = CameraSetup.Perspective(position: new Vector3(0f, 7f, 14f), rotation: new Vector3(0f, -24f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Time control - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Time control - Stride Community Toolkit";
-
     game.AddGrabber();
 
     ballMaterial = game.CreateMaterial(new Color(80, 170, 255), metalness: 0f, glossiness: 0.6f);

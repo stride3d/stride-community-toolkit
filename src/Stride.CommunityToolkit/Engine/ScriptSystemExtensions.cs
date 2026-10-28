@@ -26,10 +26,10 @@ namespace Stride.CommunityToolkit.Engine;
 /// });
 /// </code>
 ///
-/// <para>Example 3: Delaying an action for 3 real-time seconds (unaffected by time warp): </para>
+/// <para>Example 3: Delaying an action for 3 seconds of game time, unaffected by time warp: </para>
 /// <code>
 /// await scriptSystem.Delay(3.0f);
-/// // Action will be delayed for exactly 3 real seconds.
+/// // Action will be delayed for 3 seconds of game time, however the time warp is set.
 /// </code>
 /// </example>
 /// <remarks>
@@ -48,14 +48,15 @@ public static class ScriptSystemExtensions
         => RunFor(script, seconds, warped: true, action: null);
 
     /// <summary>
-    /// Waits for a specified amount of real time (not accounting for any time warp factors).
+    /// Waits <paramref name="seconds"/> of game time, counted frame by frame and not scaled by the time warp;
+    /// <see cref="DelayWarped"/> is the scaled one.
     /// </summary>
     /// <param name="script">The <see cref="ScriptSystem"/> instance used to execute the delay.</param>
-    /// <param name="seconds">The number of seconds to delay execution.</param>
+    /// <param name="seconds">The number of seconds to wait.</param>
     /// <returns>A <see cref="Task"/> representing the delay.</returns>
-    /// <remarks>This delay operates in real time without considering the game's time warp.</remarks>
+    /// <remarks>The wait is on the game's clock, so it does not count while the game is paused, and it ends early when the game stops.</remarks>
     public static Task Delay(this ScriptSystem script, float seconds)
-        => Task.Delay((int)(seconds * 1000f));
+        => RunFor(script, seconds, warped: false, action: null);
 
     /// <summary>
     /// Executes an action every frame for a specified duration, adjusting for any time warp factors.

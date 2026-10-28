@@ -4,8 +4,8 @@ Extension methods for `Entity`, in the `Stride.CommunityToolkit.Engine` namespac
 
 ## Components
 
-- [`GetComponent<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent``1(Stride.Engine.Entity)) - The first component of type `T`, or `null`.
-- [`GetComponents<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents``1(Stride.Engine.Entity)) - Every component of type `T` on the entity.
+- [`GetComponent<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent``1(Stride.Engine.Entity)) - The first component of type `T`, or `null`. This is Stride's own `entity.Get<T>()` under the name other engines use; prefer `Get<T>()` in new code.
+- [`GetComponents<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents``1(Stride.Engine.Entity)) - Every component of type `T` on the entity: Stride's own `entity.GetAll<T>()`.
 - [`TryGetComponent<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent``1(Stride.Engine.Entity,``0@)) - The `Try` form, for when a missing component is expected rather than a bug.
 - [`GetComponentInDescendantsAndSelf<T>()`](xref:Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInDescendantsAndSelf``1(Stride.Engine.Entity,System.Boolean)) - The entity first, then its descendants depth-first, which is where the component usually is on an imported model. [`GetComponentInChildren<T>()`](xref:Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInChildren``1(Stride.Engine.Entity,System.Boolean)) searches the descendants only, breadth-first.
 - [`Get<T1, T2, …>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Get``2(Stride.Engine.Entity)) - Fetches several components in one pass and returns them as a tuple, so you can deconstruct them into named locals. Overloads exist for two through sixteen types.

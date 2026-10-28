@@ -62,16 +62,15 @@ var sceneSetup = new SceneSetup2D
     ClearColor = background,
     Camera = CameraSetup.Orthographic(orthographicSize: 22).WithController(),
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Box2D Car - Stride Community Toolkit",
+    Resizable = true,
 };
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Box2D Car - Stride Community Toolkit";
-
     var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
 
@@ -79,7 +78,7 @@ void Start(Scene rootScene)
     shapeBatch.BorderWidth = 1f;
     shapeBatch.Fill.Alpha = 0.4f;
 
-    cameraEntity.Add(new Grabber2DScript { Simulation = simulation });
+    game.AddGrabber2D(simulation);
 
     BuildTerrain();
     SpawnCar(rootScene, new Vector2(0, 1));

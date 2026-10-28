@@ -79,16 +79,15 @@ game.Run(new SceneSetup3D
     Camera = CameraSetup.Perspective(position: new Vector3(0, 0, 80), rotation: Vector3.Zero).WithController(),
     Lighting = null,
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Stress Pile Example - Stride Community Toolkit",
+    Resizable = true,
 }.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
-
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Stress Pile Example - Stride Community Toolkit";
 
     scene = rootScene;
 

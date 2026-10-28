@@ -7,8 +7,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 
-const string SphereEntityName = "Sphere";
-
 ImmediateDebugRenderSystem? debugDraw = null;
 
 // The spheres are kept in a list, so the update does not search the scene by name every frame
@@ -20,17 +18,11 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene rootScene)
 {
-    game.AddDebugShapes();
+    debugDraw = game.AddDebugShapes();
+    debugDraw.Visible = true; // force visible in non-debug builds
+    debugDraw.PrimitiveColor = Color.Lime;
 
     CreateSpheres(rootScene, 6);
-
-    debugDraw = game.Services.GetService<ImmediateDebugRenderSystem>();
-
-    if (debugDraw is not null)
-    {
-        debugDraw.Visible = true; // force visible in non-debug builds
-        debugDraw.PrimitiveColor = Color.Lime;
-    }
 }
 
 void CreateSpheres(Scene rootScene, int count)
@@ -39,7 +31,7 @@ void CreateSpheres(Scene rootScene, int count)
 
     for (var i = -half; i < half; i++)
     {
-        var entity = game.CreatePrimitive(Primitive3D.Sphere(), new() { EntityName = SphereEntityName });
+        var entity = game.CreatePrimitive(Primitive3D.Sphere());
         entity.Transform.Position = new Vector3(i * 0.99f, 8, 0);
         entity.Scene = rootScene;
         spheres.Add(entity);

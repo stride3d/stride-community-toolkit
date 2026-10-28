@@ -149,7 +149,7 @@ public class CharacterMover2DTests
     private static void Run(CharacterMover2D mover, Box2DSimulation simulation, int steps)
     {
         for (var i = 0; i < steps; i++)
-            mover.Step(simulation.GetWorldId(), Step);
+            mover.Step(simulation.WorldId, Step);
     }
 
     // A wide static floor whose top is at y = 0.5, in the static category.

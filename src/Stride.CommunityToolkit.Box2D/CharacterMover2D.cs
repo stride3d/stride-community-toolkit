@@ -208,14 +208,9 @@ public sealed class CharacterMover2D : IBox2DSimulationUpdate
         => b2Shape_SetUserData(shapeId, B2UserData.Ref(new MoverShapeResponse(maxPush, clipVelocity)));
 
     /// <inheritdoc />
-    public void SimulationUpdate(Box2DSimulation simulation, float deltaTime)
-    {
-        // Nothing before the step: the mover responds to where the bodies end up.
-    }
-
-    /// <inheritdoc />
+    /// <remarks>Nothing runs before the step: the mover responds to where the bodies end up.</remarks>
     public void AfterSimulationUpdate(Box2DSimulation simulation, float deltaTime)
-        => Step(simulation.GetWorldId(), deltaTime);
+        => Step(simulation.WorldId, deltaTime);
 
     /// <summary>
     /// Advances the mover by one step of <paramref name="deltaTime"/> seconds in

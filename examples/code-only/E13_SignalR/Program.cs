@@ -35,8 +35,6 @@ const float HeartbeatSeconds = 1f;
 var console = new StationConsole();
 var link = new StationLink(ResolveHubUrl(), new StrideLoggerAdapter<SignalRHubClient>(GlobalLogger.GetLogger("SignalR")));
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 // Not `using`: the disposal order at the bottom is deliberate, and `using` would reverse it
 var game = new Game();
 
@@ -68,7 +66,10 @@ game.Run(new SceneSetup3D
     // The station aims its own sun and lays its own deck
     Lighting = null,
     Skybox = null,
-    Ground = null
+    Ground = null,
+    WindowTitle = $"{Constants.StationName} - Stride + SignalR",
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu(), start: Start, update: Update);
 
 // Shutdown order is load-bearing, and so is the fact that neither line awaits.
@@ -85,9 +86,6 @@ game.Dispose();
 
 void Start(Scene scene)
 {
-    game.Window.Title = $"{Constants.StationName} - Stride + SignalR";
-    game.Window.AllowUserResizing = true;
-
     var labels = new Labels(scene, game, console);
 
     station.Build(scene, labels, console);

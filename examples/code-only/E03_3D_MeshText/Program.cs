@@ -25,8 +25,6 @@ using Stride.Rendering;
 // For ordinary text in a real font - labels, HUDs, signs - use E03_3D_EntityText (screen-space) or
 // E03_3D_WorldText (in-scene) instead: they draw a font, which is far cheaper than geometry.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 // The default camera starts at (6, 6, 6) looking at the origin, so the gallery is turned 45 degrees
 // to face it square-on. Fly around it: these are solids, not billboards
 var faceCamera = Quaternion.RotationY(MathUtil.DegreesToRadians(45));
@@ -37,12 +35,16 @@ MeshFont? systemFont = null;
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
+game.Run(new SceneSetup3D
+{
+    Profiler = true,
+    WindowTitle = "3D text from a font - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
+}.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "3D text from a font - Stride Community Toolkit";
     game.AddGrabber();
 
     // The base scene's single directional light shines from behind this gallery, leaving the front

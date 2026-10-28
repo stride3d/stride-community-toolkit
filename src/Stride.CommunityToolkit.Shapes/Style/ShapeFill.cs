@@ -23,7 +23,7 @@ public sealed class ShapeFill
     /// The fill intensity the Box2D testbed draws with. Assign it to <see cref="Alpha"/>, with no
     /// <see cref="Color"/>, for the testbed look: a bright outline around a dimmed, see-through inside.
     /// </summary>
-    public static readonly float TestbedAlpha = 0.6f;
+    public const float TestbedAlpha = 0.6f;
 
     /// <summary>
     /// The fill's own colour, or <c>null</c> (the default) to fill with the outline colour. Set it when

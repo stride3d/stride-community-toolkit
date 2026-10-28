@@ -42,24 +42,22 @@ ShapeBatch shapes = null!;
 PickResult? selected = null;
 HighlightShell hover = null!;
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
 var sceneSetup = new SceneSetup3D
 {
     Ground = null,
     Camera = CameraSetup.Perspective(position: new Vector3(0f, 9f, 22f), rotation: new Vector3(0f, -20f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "GPU Picking - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseSkybox().UseInstancing();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "GPU Picking - Stride Community Toolkit";
-
     BuildScene(scene);
 
     shapes = game.AddShapeBatch(depthTest: false);

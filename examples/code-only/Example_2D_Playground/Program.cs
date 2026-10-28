@@ -15,8 +15,6 @@ using Stride.Input;
 //
 // Its 3D twin is Example_Bepu_Playground.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const string ShapeName = "Shape";
 
 var theme = ColorThemes.Default;
@@ -35,13 +33,16 @@ var created = 0;
 
 using var game = new Game();
 
-game.Run(new SceneSetup2D { Profiler = true }.UseBepu(), start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    Profiler = true,
+    WindowTitle = "2D playground",
+    Resizable = true,
+    DpiAware = true,
+}.UseBepu(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "2D playground";
-
     // G steps the grid through off, world and screen. On the command line, "--screen" starts it
     // in screen space and "--no-cursor" leaves out the coordinates under the mouse
     var grid = game.AddGrid();

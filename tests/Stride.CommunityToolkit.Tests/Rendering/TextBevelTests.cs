@@ -21,8 +21,8 @@ public class TextBevelTests
         {
             var data = TextMesh.Create(Font, character.ToString(), Bevelled);
 
-            TextMeshTests.AssertWatertight(data);
-            TextMeshTests.AssertOutwardWinding(data);
+            MeshAssertions.AssertWatertight(data);
+            MeshAssertions.AssertOutwardWinding(data);
         }
     }
 
@@ -71,7 +71,7 @@ public class TextBevelTests
         // A chamfer adds one ring of quads per side on top of the walls; four segments add four
         Assert.True(plain.Vertices.Length < chamfer.Vertices.Length);
         Assert.True(chamfer.Vertices.Length < round.Vertices.Length);
-        TextMeshTests.AssertWatertight(chamfer);
+        MeshAssertions.AssertWatertight(chamfer);
     }
 
     [Fact]
@@ -80,8 +80,8 @@ public class TextBevelTests
         // A bevel of 0.2 against stems about 0.09 wide at this size: the cap would fold; the size halves until it fits
         var data = TextMesh.Create(Font, "I", new TextMeshOptions { Depth = 0.3f, Bevel = new TextBevel(size: 0.2f, thickness: 0.05f) });
 
-        TextMeshTests.AssertWatertight(data);
-        TextMeshTests.AssertOutwardWinding(data);
+        MeshAssertions.AssertWatertight(data);
+        MeshAssertions.AssertOutwardWinding(data);
     }
 
     [Theory]
@@ -93,8 +93,8 @@ public class TextBevelTests
         // No wall is built for a remainder of a hair, so the two bevels must end at the same depth, exactly
         var data = TextMesh.Create(MeshFont.Default, "H", new TextMeshOptions { Depth = 0.1f, Bevel = new TextBevel(0.01f, thickness) });
 
-        TextMeshTests.AssertWatertight(data);
-        TextMeshTests.AssertOutwardWinding(data);
+        MeshAssertions.AssertWatertight(data);
+        MeshAssertions.AssertOutwardWinding(data);
         Assert.Equal(0.05f, data.Vertices.Max(v => v.Position.Z));
     }
 
@@ -103,7 +103,7 @@ public class TextBevelTests
     {
         var data = TextMesh.Create(Font, "H", new TextMeshOptions { Depth = 0.1f, Bevel = new TextBevel(size: 0.01f, thickness: 1f) });
 
-        TextMeshTests.AssertWatertight(data);
+        MeshAssertions.AssertWatertight(data);
         Assert.Equal(0.05f, data.Vertices.Max(v => v.Position.Z), 5);
     }
 
@@ -131,6 +131,6 @@ public class TextBevelTests
         var glyphs = TextMesh.CreateGlyphs(Font, "AB", Bevelled);
 
         Assert.Equal(2, glyphs.Count);
-        Assert.All(glyphs, g => TextMeshTests.AssertWatertight(g.Mesh));
+        Assert.All(glyphs, g => MeshAssertions.AssertWatertight(g.Mesh));
     }
 }

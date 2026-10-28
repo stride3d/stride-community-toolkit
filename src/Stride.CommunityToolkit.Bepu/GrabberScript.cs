@@ -272,7 +272,7 @@ public class GrabberScript : SyncScript
         if (held is not Body2DComponent && _camera.Projection != CameraProjectionMode.Orthographic)
             HoldDistance = MathF.Max(MinimumHoldDistance, HoldDistance + Input.MouseWheelDelta * WheelDistanceStep);
 
-        var ray = _camera.GetPickRay(Input.MousePosition);
+        var ray = _camera.ScreenToWorldRay(Input.MousePosition);
 
         _linear.Target = GrabberMath.TargetPoint(ray.Position, ray.Direction, HoldDistance);
 

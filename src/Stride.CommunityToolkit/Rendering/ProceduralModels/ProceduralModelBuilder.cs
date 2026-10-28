@@ -45,7 +45,7 @@ public static class ProceduralModelBuilder
         {
             Primitive2D.RectangleShape rectangle => new RectangleProceduralModel { Size = rectangle.Size },
             Primitive2D.CircleShape circle => new CircleProceduralModel { Radius = circle.Radius, Tessellation = circle.Tessellation },
-            Primitive2D.CapsuleShape capsule => new Capsule2DProceduralModel { Radius = capsule.Radius, TotalHeight = capsule.Height, Tessellation = capsule.Tessellation },
+            Primitive2D.CapsuleShape capsule => new Capsule2DProceduralModel { Radius = capsule.Radius, Height = capsule.Height, Tessellation = capsule.Tessellation },
             Primitive2D.TriangleShape triangle => new TriangleProceduralModel { Size = triangle.Size },
             Primitive2D.RegularPolygonShape polygon => new PolygonProceduralModel { Radius = polygon.Radius, Sides = polygon.Sides },
             Primitive2D.PolygonShape polygon => new PolygonProceduralModel { Vertices = polygon.Vertices },

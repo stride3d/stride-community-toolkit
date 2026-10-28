@@ -16,13 +16,13 @@ namespace Stride.CommunityToolkit.Engine;
 public static class CameraComponentExtensions
 {
     /// <summary>
-    /// Calculates a 2D point where the camera ray intersects the Z=0 plane.
-    /// Useful for 2D physics engines like Box2D that operate in the XY plane.
+    /// The world point where the ray through a screen position meets the XY plane, Z = 0: a mouse position as a
+    /// 2D world position, which is what a 2D physics world such as Box2D works in.
     /// </summary>
-    /// <param name="camera">The camera component used for the ray calculation.</param>
-    /// <param name="screenPosition">The normalized screen position (typically mouse position).</param>
-    /// <returns>A Vector2 representing the intersection point on the Z=0 plane, or null if no intersection.</returns>
-    public static Vector2? CalculateRayPlaneIntersectionPoint(this CameraComponent camera, Vector2 screenPosition)
+    /// <param name="camera">The camera the ray starts from.</param>
+    /// <param name="screenPosition">The normalized screen position, typically the mouse position, from (0,0) at the top-left to (1,1) at the bottom-right.</param>
+    /// <returns>The point on the plane, or <see langword="null"/> when the ray is parallel to the plane or the plane lies outside the camera's near and far planes.</returns>
+    public static Vector2? ScreenToWorldPointOnXYPlane(this CameraComponent camera, Vector2 screenPosition)
     {
         var ray = camera.ScreenToWorldRaySegment(screenPosition);
         var direction = ray.End - ray.Start;
@@ -41,22 +41,13 @@ public static class CameraComponentExtensions
     }
 
     /// <summary>
-    /// Calculates a ray from the camera's position through a specified point on the screen, projecting from screen space into the 3D world space.
+    /// The two ends of the ray through a screen position, as a tuple: the same points as the <see cref="RaySegment.Start"/>
+    /// and <see cref="RaySegment.End"/> of <see cref="ScreenToWorldRaySegment(CameraComponent, Vector2)"/>.
     /// </summary>
-    /// <param name="camera">The <see cref="CameraComponent"/> used to generate the view and projection matrices for the calculation.</param>
-    /// <param name="screenPosition">
-    /// The normalized screen position (typically the mouse position), from (0,0) at the top-left to (1,1) at the bottom-right.
-    /// </param>
-    /// <returns>
-    /// A tuple containing two points:
-    /// <c>nearPoint</c>, which is the world-space position on the near plane, and
-    /// <c>farPoint</c>, which is the world-space position on the far plane.
-    /// These two points define the ray from the camera into the 3D world through the specified screen position.
-    /// </returns>
-    /// <remarks>
-    /// This method is typically used for raycasting and object picking in 3D space, where you need to determine what objects lie under a particular screen-space position, such as the mouse cursor.
-    /// The ray is defined by transforming the screen position into world space, calculating points on the near and far planes of the camera's view frustum.
-    /// </remarks>
+    /// <param name="camera">The camera the ray starts from.</param>
+    /// <param name="screenPosition">The normalized screen position, from (0,0) at the top-left to (1,1) at the bottom-right.</param>
+    /// <returns>The world-space points on the near and far planes.</returns>
+    [Obsolete("Use ScreenToWorldRaySegment(screenPosition): its Start and End are these two points. This method will be removed in a later release.")]
     public static (Vector3 nearPoint, Vector3 farPoint) CalculateRayFromScreenPosition(this CameraComponent camera, Vector2 screenPosition)
     {
         var ray = camera.ScreenToWorldRaySegment(screenPosition);
@@ -65,20 +56,13 @@ public static class CameraComponentExtensions
     }
 
     /// <summary>
-    /// Calculates a ray from the camera through a specified point on the screen, projecting into the 3D world space.
+    /// A <see cref="Ray"/> from the camera through a screen position, into the world: the starting point of picking
+    /// and of a physics ray cast.
     /// </summary>
-    /// <param name="camera">The <see cref="CameraComponent"/> used for the ray calculation.</param>
-    /// <param name="screenPosition">
-    /// The normalized screen position, typically the mouse position, from (0,0) at the top-left to (1,1) at the bottom-right.
-    /// </param>
-    /// <returns>
-    /// A <see cref="Ray"/> starting from the camera and pointing into the 3D world through the specified screen position.
-    /// </returns>
-    /// <remarks>
-    /// This method is commonly used for object picking or raycasting operations, where interaction with 3D objects is based on screen space coordinates (e.g., mouse cursor).
-    /// The ray is calculated by transforming the screen position into world space, creating a direction vector from the camera's near plane to its far plane.
-    /// </remarks>
-    public static Ray GetPickRay(this CameraComponent camera, Vector2 screenPosition)
+    /// <param name="camera">The camera the ray starts from.</param>
+    /// <param name="screenPosition">The normalized screen position, typically the mouse position, from (0,0) at the top-left to (1,1) at the bottom-right.</param>
+    /// <returns>The ray, starting on the camera's near plane with a unit direction towards the far plane.</returns>
+    public static Ray ScreenToWorldRay(this CameraComponent camera, Vector2 screenPosition)
     {
         var ray = camera.ScreenToWorldRaySegment(screenPosition);
         var direction = ray.End - ray.Start;
@@ -311,5 +295,62 @@ public static class CameraComponentExtensions
         var windowSize = graphicsDevice.GetWindowSize();
 
         return new Vector2(screenPoint.X * windowSize.X, screenPoint.Y * windowSize.Y);
+    }
+
+    /// <summary>
+    /// Where a world position lands on screen when it is in view: in front of the camera, between its near and far
+    /// planes and inside the sides of the view. A label hung on an object, or a marker on a target, drawn only while
+    /// there is something on screen to point at.
+    /// </summary>
+    /// <param name="cameraComponent">The camera component used to perform the calculation.</param>
+    /// <param name="position">The world space position.</param>
+    /// <param name="screenPoint">The screen position in normalized X, Y coordinates, top-left (0,0) to bottom-right (1,1), with Z in world units from the near plane, when the method returns <see langword="true"/>; otherwise default.</param>
+    /// <returns><see langword="true"/> when the position is in view.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="cameraComponent"/> is <see langword="null"/>.</exception>
+    /// <remarks>
+    /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
+    /// </remarks>
+    public static bool TryWorldToScreenPoint(this CameraComponent cameraComponent, Vector3 position, out Vector3 screenPoint)
+    {
+        ArgumentNullException.ThrowIfNull(cameraComponent);
+
+        // In clip space the view volume is |x|, |y| <= w and 0 <= z <= w; w <= 0 is behind the camera
+        var clip = Vector4.Transform(new Vector4(position, 1f), cameraComponent.ViewProjectionMatrix);
+
+        if (clip.W <= 0f || MathF.Abs(clip.X) > clip.W || MathF.Abs(clip.Y) > clip.W || clip.Z < 0f || clip.Z > clip.W)
+        {
+            screenPoint = default;
+
+            return false;
+        }
+
+        cameraComponent.WorldToScreenPoint(ref position, out screenPoint);
+
+        return true;
+    }
+
+    /// <summary>
+    /// Where a world position lands on screen, in pixels of the <paramref name="graphicsDevice"/>'s window, when it is
+    /// in view; see <see cref="TryWorldToScreenPoint(CameraComponent, Vector3, out Vector3)"/>.
+    /// </summary>
+    /// <param name="cameraComponent">The camera component used to perform the calculation.</param>
+    /// <param name="position">The world space position.</param>
+    /// <param name="graphicsDevice">The graphics device providing the window size.</param>
+    /// <param name="screenPoint">The screen position in pixels when the method returns <see langword="true"/>; otherwise default.</param>
+    /// <returns><see langword="true"/> when the position is in view.</returns>
+    public static bool TryWorldToScreenPoint(this CameraComponent cameraComponent, Vector3 position, GraphicsDevice graphicsDevice, out Vector2 screenPoint)
+    {
+        if (!cameraComponent.TryWorldToScreenPoint(position, out var normalized))
+        {
+            screenPoint = default;
+
+            return false;
+        }
+
+        var windowSize = graphicsDevice.GetWindowSize();
+
+        screenPoint = new Vector2(normalized.X * windowSize.X, normalized.Y * windowSize.Y);
+
+        return true;
     }
 }

@@ -108,6 +108,10 @@ The callbacks run on the main thread after the physics step, so they may change 
 
 A simulation running faster than the game needs more fixed steps per frame: at four times the speed and sixty frames a second it needs four, and the default `MaxStepPerFrame` of three lets it fall behind the clock. Raise the cap when a game runs fast. To read the simulation's clock exactly, give a component `ISimulationUpdate`: it is called once per fixed step with the step's length, before the step and after it. `E05_3D_TimeControl` puts a dropper on the game clock and a spinning bar on the physics clock, so the difference can be watched.
 
+### Putting a body back
+
+- [`TeleportAtRest()`](xref:Stride.CommunityToolkit.Bepu.BodyComponentExtensions.TeleportAtRest(Stride.BepuPhysics.BodyComponent,Stride.Core.Mathematics.Vector3,System.Nullable{Stride.Core.Mathematics.Quaternion})) - Teleports a body to a pose and leaves it still and awake. `Teleport()` alone keeps the body's velocity, its spin and its sleep, so a reset key or a respawn wants this one.
+
 ### Grabbing bodies
 
 - [`GrabberScript`](xref:Stride.CommunityToolkit.Bepu.GrabberScript) - `game.AddGrabber()` puts it on the camera entity, or add it there in Game Studio under Physics, and any dynamic body can be picked up with the mouse, carried on the end of the camera ray, and thrown. The wheel changes the carry distance; <kbd>T</kbd> plus mouse movement turns the held body. The pick looks through trigger volumes, so a body inside a zone can still be grabbed; a solid static in front still hides what is behind it. It works through a linear and an angular servo constraint rather than by moving the body, so the held body still collides and pushes, and its force caps scale with mass so heavy and light bodies drag alike. [`Grab()`](xref:Stride.CommunityToolkit.Bepu.GrabberScript.Grab(Stride.BepuPhysics.BodyComponent,Stride.Core.Mathematics.Vector3,System.Single)) and [`Release()`](xref:Stride.CommunityToolkit.Bepu.GrabberScript.Release) do the same from code.
@@ -211,6 +215,20 @@ debugDraw.Draw(simulation);
 
 - [`PhysicsQueries2D.CastCircleClosest()`](xref:Stride.CommunityToolkit.Box2D.PhysicsQueries2D.CastCircleClosest(Box2D.NET.B2WorldId,Stride.Core.Mathematics.Vector2,System.Single,Stride.Core.Mathematics.Vector2,Box2D.NET.B2QueryFilter)) and [`CastSegmentClosest()`](xref:Stride.CommunityToolkit.Box2D.PhysicsQueries2D.CastSegmentClosest(Box2D.NET.B2WorldId,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector2,Box2D.NET.B2QueryFilter)) - Shape casts: sweep a circle, a point or a segment along a displacement and get the closest hit with its point, normal and fraction, filtered by category bits. `CastShapeClosest()` takes any convex proxy. The same calls exist on `Box2DSimulation`, alongside the raycasts and overlaps.
 
+### Collision groups
+
+- [`Box2DCollisionMatrix`](xref:Stride.CommunityToolkit.Box2D.Box2DCollisionMatrix) - Which groups collide with which, as a symmetric table over positive group numbers; every pair collides until `SetCollision(a, b, false)` says otherwise. The simulation's own is [`Box2DSimulation.CollisionMatrix`](xref:Stride.CommunityToolkit.Box2D.Box2DSimulation.CollisionMatrix), and it is the one consulted.
+- [`ShapeFixtureBuilder.InCollisionGroup()`](xref:Stride.CommunityToolkit.Box2D.ShapeFixtureBuilder.InCollisionGroup(Box2D.NET.B2ShapeDef,System.Int32)) - Puts a shape definition in a group: Box2D's `groupIndex`, with custom filtering switched on so the matrix is asked about that shape's pairs. Shapes in no group are untouched, and category and mask bits still apply first.
+
+```csharp
+simulation.CollisionMatrix.SetCollision(Debris, Player, false);
+
+var debrisDef = ShapeFixtureBuilder.CreateDefaultShapeDef().InCollisionGroup(Debris);
+ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(0.2f), bodyId, debrisDef);
+```
+
+Configure the matrix between updates: the simulation reads it from its worker threads during a step.
+
 ### Characters
 
 - [`CharacterMover2D`](xref:Stride.CommunityToolkit.Box2D.CharacterMover2D) - A platformer character with no rigid body, on Box2D v3's mover API: a capsule the game moves itself, Quake style, that asks the world only what it touches - collect the contact planes, solve a translation that respects them, sweep it - with a pogo shape cast from the feet that floats it above the ground and decides whether it is standing. Register it with the simulation and it steps after every fixed physics step; set `Throttle` and call `Jump()` from your update; give it an `Entity` and it moves the transform. How hard a shape pushes back is per shape through `SetResponse()`: a small push limit makes a soft obstacle the mover walks through, an elevator gets a firm one and velocity clipping so it carries the mover.
@@ -233,5 +251,5 @@ if (input.IsKeyPressed(Keys.Space)) mover.Jump();
 - [`Grabber2DScript`](xref:Stride.CommunityToolkit.Box2D.Grabber2DScript) - The 2D counterpart of `GrabberScript`: on the camera entity, given the simulation, the left button picks any dynamic body up, drags it and throws it. Box2D v3 has no mouse joint, so it uses a kinematic anchor moved to the cursor and a motor joint with a mass-scaled force cap and angular friction, the idiom of Box2D's own sample browser. Every Box2D example carries it.
 
 ```csharp
-game.GetCameraEntity().Add(new Grabber2DScript { Simulation = simulation });
+game.AddGrabber2D(simulation);
 ```

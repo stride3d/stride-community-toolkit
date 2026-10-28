@@ -36,7 +36,7 @@ public static class GameExtensions
     /// game.AddSkybox();
     /// </code>
     /// </example>
-    public static Entity AddSkybox(this IGame game, string? entityName = "Skybox")
+    public static Entity AddSkybox(this IGame game, string entityName = "Skybox")
     {
         ArgumentNullException.ThrowIfNull(game);
 

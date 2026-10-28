@@ -234,21 +234,20 @@ public static class GraphicsCompositorExtensions
     /// </summary>
     /// <remarks>This method configures the graphics compositor to support particle rendering by adding a <see
     /// cref="ParticleEmitterRenderFeature"/>. It requires the presence of both "Opaque" and "Transparent" render stages
-    /// in the compositor. The method will throw a <see cref="NullReferenceException"/> if either stage is
-    /// missing.</remarks>
+    /// in the compositor, which <c>AddGraphicsCompositor()</c> creates.</remarks>
     /// <param name="graphicsCompositor">The graphics compositor to which the particle stages and features will be added.</param>
     /// <returns>The compositor, so a chain of setup calls continues.</returns>
-    /// <exception cref="NullReferenceException">Thrown if the "Opaque" or "Transparent" render stage is not found in the graphics compositor.</exception>
+    /// <exception cref="InvalidOperationException">The "Opaque" or "Transparent" render stage is not in the graphics compositor.</exception>
     public static GraphicsCompositor AddParticleStagesAndFeatures(this GraphicsCompositor graphicsCompositor)
     {
         if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
         {
-            throw new NullReferenceException("Opaque RenderStage not found");
+            throw new InvalidOperationException("The graphics compositor has no 'Opaque' render stage, which the particle feature draws into. AddGraphicsCompositor() creates it.");
         }
 
         if (!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
         {
-            throw new NullReferenceException("Transparent RenderStage not found");
+            throw new InvalidOperationException("The graphics compositor has no 'Transparent' render stage, which the particle feature draws into. AddGraphicsCompositor() creates it.");
         }
 
         graphicsCompositor.RenderFeatures.Add(new ParticleEmitterRenderFeature()

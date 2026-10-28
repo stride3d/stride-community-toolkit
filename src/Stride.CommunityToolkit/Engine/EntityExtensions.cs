@@ -128,20 +128,26 @@ public static partial class EntityExtensions
     }
 
     /// <summary>
-    /// Retrieves the first component of the specified type from the entity.
+    /// The first component of type <typeparamref name="T"/> on the entity, or <see langword="null"/>: Stride's own
+    /// <see cref="Entity.Get{T}()"/> under the name readers from other engines look for.
     /// </summary>
-    /// <typeparam name="T">The type of component to retrieve.</typeparam>
-    /// <returns>The first component of the specified type, or null if no such component exists.</returns>
-    public static T? GetComponent<T>(this Entity entity)
-        => entity.OfType<T>().FirstOrDefault();
+    /// <typeparam name="T">The component type.</typeparam>
+    /// <param name="entity">The entity to look on.</param>
+    /// <returns>The first component of that type, or <see langword="null"/>.</returns>
+    /// <remarks>Prefer <c>entity.Get&lt;T&gt;()</c> in new code; this forwarder may be removed in a later release.</remarks>
+    public static T? GetComponent<T>(this Entity entity) where T : EntityComponent
+        => entity.Get<T>();
 
     /// <summary>
-    /// Retrieves all components of the specified type from the entity.
+    /// Every component of type <typeparamref name="T"/> on the entity: Stride's own <see cref="Entity.GetAll{T}()"/>
+    /// under the name readers from other engines look for.
     /// </summary>
-    /// <typeparam name="T">The type of components to retrieve.</typeparam>
-    /// <returns>An <see cref="IEnumerable{T}"/> of components of the specified type.</returns>
-    public static IEnumerable<T> GetComponents<T>(this Entity entity)
-        => entity.OfType<T>();
+    /// <typeparam name="T">The component type.</typeparam>
+    /// <param name="entity">The entity to look on.</param>
+    /// <returns>The components of that type, in the order they were added.</returns>
+    /// <remarks>Prefer <c>entity.GetAll&lt;T&gt;()</c> in new code; this forwarder may be removed in a later release.</remarks>
+    public static IEnumerable<T> GetComponents<T>(this Entity entity) where T : EntityComponent
+        => entity.GetAll<T>();
 
     /// <summary>
     /// Removes the entity from its current scene by setting its <see cref="Scene"/> property to null.
@@ -184,18 +190,16 @@ public static partial class EntityExtensions
     }
 
     /// <summary>
-    /// Tries to retrieve a component of type <typeparamref name="T"/> from the given entity.
+    /// The first component of type <typeparamref name="T"/> on the entity, as a <c>Try</c> method: for when a missing
+    /// component is expected rather than a bug.
     /// </summary>
-    /// <typeparam name="T">The type of component to retrieve.</typeparam>
-    /// <param name="entity">The entity from which to retrieve the component.</param>
-    /// <param name="result">When this method returns, the first component of type <typeparamref name="T"/>, or the default value if none exists.</param>
-    /// <returns>
-    /// <c>true</c> if a component of type <typeparamref name="T"/> is found in the entity;
-    /// otherwise, <c>false</c>.
-    /// </returns>
-    public static bool TryGetComponent<T>(this Entity entity, [MaybeNullWhen(false)] out T result)
+    /// <typeparam name="T">The component type.</typeparam>
+    /// <param name="entity">The entity to look on.</param>
+    /// <param name="result">The first component of that type, or <see langword="null"/> when there is none.</param>
+    /// <returns><see langword="true"/> when the entity has such a component.</returns>
+    public static bool TryGetComponent<T>(this Entity entity, [MaybeNullWhen(false)] out T result) where T : EntityComponent
     {
-        result = entity.GetComponent<T>();
+        result = entity.Get<T>();
 
         return result is not null;
     }

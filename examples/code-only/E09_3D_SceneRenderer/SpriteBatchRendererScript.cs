@@ -46,22 +46,8 @@ public class SpriteBatchRendererScript : StartupScript
     {
         if (_spriteBatch is null || _font is null || _camera is null) return;
 
-        // ViewProjection transforms a world-space position into clip space (pre-perspective divide)
-        var viewProjection = _camera.ViewProjectionMatrix;
-
-        var worldPos = Entity.Transform.Position;
-
-        // Transform to clip space; behind the camera is out
-        var clipPosition = Vector4.Transform(new Vector4(worldPos, 1f), viewProjection);
-
-        if (clipPosition.W <= 0f) return;
-
-        // Perspective divide to normalized device coordinates, then the clip test: x and y in [-1,1], z in [0,1]
-        var ndc = new Vector3(clipPosition.X, clipPosition.Y, clipPosition.Z) / clipPosition.W;
-
-        if (ndc.Z < 0f || ndc.Z > 1f || MathF.Abs(ndc.X) > 1f || MathF.Abs(ndc.Y) > 1f) return;
-
-        var screen = _camera.WorldToScreenPoint(ref worldPos, GraphicsDevice);
+        // Only while the entity is in front of the camera and on screen
+        if (!_camera.TryWorldToScreenPoint(Entity.Transform.Position, GraphicsDevice, out var screen)) return;
 
         _spriteBatch.Begin(drawContext.GraphicsContext);
 

@@ -15,16 +15,12 @@ using Stride.Graphics;
 // it. For text that must always be readable at the same size, such as a HUD, see
 // E03_3D_EntityText.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
+game.Run(new SceneSetup3D { Resizable = true, DpiAware = true }.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-
     // One call, however much text the scene has. Without the renderer, world text simply never
     // appears - there is no error for a missing renderer.
     game.AddWorldTextRenderer();

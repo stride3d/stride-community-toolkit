@@ -165,9 +165,16 @@ foreach (var example in examples)
     var mediaName = reviewing ? $"{slug}.webp" : Text(example, "media") ?? $"{slug}.webp";
     var webpPath = Path.Combine(reviewing ? reviewDirectory! : mediaDirectory, mediaName);
 
+    if (updateIndex)
+    {
+        Console.WriteLine($"  {counter} - {slug}: index only");
+        skipped++;
+        continue;
+    }
+
     // An existing screenshot was almost certainly taken and reviewed by a person. Replacing 25 of those
     // in one unattended run, silently, is not something a script should be able to do by accident.
-    if (File.Exists(webpPath) && !force && !reviewing || updateIndex)
+    if (File.Exists(webpPath) && !force && !reviewing)
     {
         Console.WriteLine($"  {counter} - {slug}: already has {mediaName}, pass --force to replace it");
         skipped++;

@@ -29,8 +29,6 @@ using Stride.Rendering.Materials.ComputeColors;
 // keys classes they produce (TextWaveKeys, TextDissolveKeys, TextRimKeys) are generated with them.
 // E02_3D_Material_Gallery has the same ideas on primitives, and more of them.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 Material? dissolve = null;
 
 using var game = new Game();
@@ -40,15 +38,15 @@ var sceneSetup = new SceneSetup3D
     // Straight in front of the words and a little to the right, so they sit left of the overlay
     Camera = CameraSetup.Perspective(position: new Vector3(1.4f, 2.3f, 6.2f), rotation: new Vector3(0f, -4f, 0f)).WithController(),
     Profiler = true,
+    WindowTitle = "3D text shaders - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "3D text shaders - Stride Community Toolkit";
-
     // Six lights down the world axes, so the lettering reads from every side
     game.AddAllDirectionLighting(intensity: 20f, showLightGizmo: false);
 

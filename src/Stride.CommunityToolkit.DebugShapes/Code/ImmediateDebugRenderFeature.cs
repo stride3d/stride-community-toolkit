@@ -79,11 +79,11 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
             // render with depth test first
             _primitiveRenderer.SetPrimitiveRenderingPipelineState(commandList, depthTest: true, selectedFillMode: debugObject.CurrentFillMode, hasTransparency: objectHasTransparency);
-            _primitiveRenderer.DrawPrimitives(context, renderView, ref debugObject.instanceOffsets, ref debugObject.primitivesToDraw, depthTest: true, fillMode: debugObject.CurrentFillMode, hasTransparency: objectHasTransparency);
+            debugObject.Draw(_primitiveRenderer, context, renderView, depthTest: true, objectHasTransparency);
 
             // render without depth test second
             _primitiveRenderer.SetPrimitiveRenderingPipelineState(commandList, depthTest: false, selectedFillMode: debugObject.CurrentFillMode, hasTransparency: objectHasTransparency);
-            _primitiveRenderer.DrawPrimitives(context, renderView, ref debugObject.instanceOffsetsNoDepth, ref debugObject.primitivesToDrawNoDepth, depthTest: false, fillMode: debugObject.CurrentFillMode, hasTransparency: objectHasTransparency);
+            debugObject.Draw(_primitiveRenderer, context, renderView, depthTest: false, objectHasTransparency);
         }
     }
 

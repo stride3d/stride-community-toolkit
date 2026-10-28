@@ -13,7 +13,7 @@ internal static class RendererDefaults
     /// <summary>
     /// Content path of the default font used for on-screen debug/overlay text.
     /// </summary>
-    public static readonly string DefaultFontPath = "/Stride.Engine/StrideDefaultFont";
+    public const string DefaultFontPath = "/Stride.Engine/StrideDefaultFont";
 
     /// <summary>
     /// Default background color used behind on-screen debug/overlay text.

@@ -158,7 +158,6 @@ using System.Diagnostics.CodeAnalysis;
 
 // --- Box2D: the simulation facade ---
 [assembly: SuppressMessage("NDepend", "ND1001:AvoidTypesWithTooManyMethods", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.Box2DSimulation", Justification = "The public facade over world, bridge, queries and events - the Box2D counterpart of BepuSimulation; its methods are one-line delegations to those parts.")]
-[assembly: SuppressMessage("NDepend", "ND1207:NonStaticClassesShouldBeInstantiatedOrTurnedToStatic", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.Box2DCollisionMatrix", Justification = "Library API instantiated by consumers; nothing in the toolkit itself needs one yet.")]
 [assembly: SuppressMessage("NDepend", "ND2500:DontCreateThreadsExplicitly", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.Box2DTaskScheduler..ctor(Int32)", Justification = "Deliberate: Box2D requires each concurrently running task callback to hold a distinct worker index, which dedicated threads guarantee structurally; the workers also park in a blocking dequeue for the world lifetime, which thread-pool threads must never do.")]
 // SimulationJoints2D is the simulation.Joints facade: the factories fill in the world id, and Destroy,
 // IsValid and GetAnchors need none, so the rule is right that they could be static. They stay instance

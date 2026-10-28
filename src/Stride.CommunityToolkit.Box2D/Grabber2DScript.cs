@@ -32,7 +32,7 @@ namespace Stride.CommunityToolkit.Box2D;
 /// </remarks>
 /// <example>
 /// <code>
-/// game.GetCameraEntity().Add(new Grabber2DScript { Simulation = simulation });
+/// game.AddGrabber2D(simulation);
 /// </code>
 /// </example>
 [DataContract(nameof(Grabber2DScript))]
@@ -123,7 +123,7 @@ public class Grabber2DScript : SyncScript
         if (Simulation is null || Held is not null || !b2Body_IsValid(body) || b2Body_GetType(body) != B2BodyType.b2_dynamicBody)
             return false;
 
-        var world = Simulation.GetWorldId();
+        var world = Simulation.WorldId;
 
         // The anchor: a kinematic body at the grab point that never sleeps, moved each frame.
         var anchorDef = b2DefaultBodyDef();
@@ -190,5 +190,5 @@ public class Grabber2DScript : SyncScript
         Released?.Invoke(held);
     }
 
-    private Vector2? MouseWorldPoint() => _camera?.CalculateRayPlaneIntersectionPoint(Input.MousePosition);
+    private Vector2? MouseWorldPoint() => _camera?.ScreenToWorldPointOnXYPlane(Input.MousePosition);
 }

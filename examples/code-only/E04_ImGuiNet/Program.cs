@@ -9,9 +9,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 
-// Per-monitor DPI awareness has to be enabled before the window exists, otherwise Windows
-// hands us a stretched, blurry window on high-DPI displays.
-WindowsDpiManager.EnablePerMonitorV2();
 WindowsDpiManager.LogDpiInfo("Before Game: ");
 
 // Path the cube travels along
@@ -48,13 +45,16 @@ WorldLabel[] worldLabels =
     new(new Vector3(0, 1, -2), "Blue Text", 0, 0, 255)
 ];
 
-game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
+game.Run(new SceneSetup3D
+{
+    Profiler = true,
+    WindowTitle = "ImGui.NET Text Rendering",
+    Resizable = true,
+    DpiAware = true,
+}.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "ImGui.NET Text Rendering";
-
     imGuiSystem = game.AddImGuiNet();
 
     orbitingCube = CreateOrbitingCube(rootScene);

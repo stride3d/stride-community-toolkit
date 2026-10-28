@@ -21,7 +21,7 @@ namespace Stride.CommunityToolkit.Shapes;
 /// camera, a render-to-texture pass or the editor's view sees the same shapes as the first, and a
 /// batch whose stage never runs does not keep growing.
 /// </remarks>
-public class ShapeBatchFeature : RootRenderFeature
+public sealed class ShapeBatchFeature : RootRenderFeature
 {
     /// <summary>The GPU timing scope around each batch's draw, for Stride's profiler and for a frame capture.</summary>
     public static readonly ProfilingKey ProfilingKey = new("ShapeBatch");

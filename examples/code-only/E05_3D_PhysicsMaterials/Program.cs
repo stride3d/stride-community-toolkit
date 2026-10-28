@@ -41,8 +41,6 @@ using Stride.Input;
 //   since, and with it every box stops in a quarter of the distance. The order of the lanes, which
 //   is the lesson, stays the same.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float BallRadius = 0.4f;
 const float DropHeight = 3f;
 const float PadHeight = 0.2f;
@@ -94,16 +92,16 @@ var sceneSetup = new SceneSetup3D
 {
     // To the right of the scene and looking straight ahead, which leaves the overlay's side clear
     Camera = CameraSetup.Perspective(position: new Vector3(3.4f, 9.5f, 19.5f), rotation: new Vector3(0f, -26f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Physics materials - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Physics materials - Stride Community Toolkit";
-
     game.AddEntityTextRenderer();
 
     for (var i = 0; i < bounceLanes.Length; i++)
@@ -156,11 +154,8 @@ void Replay()
 
     static void Reset(BodyComponent body, Vector3 position, Vector3 velocity)
     {
-        // Teleport moves the body and nothing else: it keeps its velocity, its spin and its sleep
-        body.Teleport(position, Quaternion.Identity);
-        body.Awake = true;
+        body.TeleportAtRest(position);
         body.LinearVelocity = velocity;
-        body.AngularVelocity = Vector3.Zero;
     }
 }
 

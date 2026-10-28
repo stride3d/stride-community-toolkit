@@ -48,7 +48,7 @@ public class CameraRotationScript : SyncScript
         // Falls back to the ground, then to the origin - previously a missing ground returned early
         // and silently took the instructions overlay down with it
         _rotationCentre = RotationCentre
-            ?? SceneSystem.SceneInstance.RootScene.FindEntity(EntityNames.Ground)?.Transform.Position
+            ?? SceneSystem.SceneInstance.RootScene.FindEntity(GameDefaults.DefaultGroundName)?.Transform.Position
             ?? Vector3.Zero;
 
         // Runs every frame the overlay is drawn, so the camera position readout stays live

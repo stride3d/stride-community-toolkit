@@ -27,8 +27,6 @@ using Stride.Rendering;
 // ghost shows where it would first touch; T throws a real ball along the same line, without gravity,
 // and it stops where the ghost was. A sweep is a straight line: gravity is the caller's to add.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float ProbeHeight = 1.5f;
 const float BallRadius = 0.35f;
 const float ThrowSpeed = 14f;
@@ -57,16 +55,16 @@ var sceneSetup = new SceneSetup3D
 {
     // Above and in front of the field, shifted right so the launcher on the left clears the overlay
     Camera = CameraSetup.Perspective(position: new Vector3(0f, 11f, 15.5f), rotation: new Vector3(0f, -34f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Shape queries - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Shape queries - Stride Community Toolkit";
-
     debugDraw = game.AddDebugShapes();
     debugDraw.Visible = true;
 
@@ -101,7 +99,7 @@ void FollowMouse()
 {
     if (game.Input.MouseDelta == Vector2.Zero) return;
 
-    var ray = camera.GetPickRay(game.Input.MousePosition);
+    var ray = camera.ScreenToWorldRay(game.Input.MousePosition);
     var ground = new Plane(Vector3.UnitY, 0f);
 
     if (ray.Intersects(ref ground, out Vector3 point)) aim = point;
@@ -300,11 +298,7 @@ void Reset()
 {
     foreach (var field in bodies)
     {
-        // Teleport moves the body and nothing else: it keeps its velocity, its spin and its sleep
-        field.Body.Teleport(field.Start, field.Rotation);
-        field.Body.Awake = true;
-        field.Body.LinearVelocity = Vector3.Zero;
-        field.Body.AngularVelocity = Vector3.Zero;
+        field.Body.TeleportAtRest(field.Start, field.Rotation);
     }
 
     foreach (var ball in thrown) ball.Scene = null;

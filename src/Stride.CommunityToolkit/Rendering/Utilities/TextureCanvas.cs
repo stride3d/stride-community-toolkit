@@ -255,7 +255,7 @@ public class TextureCanvas : IDisposable
             ".bmp" => ImageFileType.Bmp,
             ".tiff" => ImageFileType.Tiff,
             ".tga" => ImageFileType.Tga,
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException($"'{Path.GetExtension(path)}' is not an image format the canvas can write. Use .png, .jpg, .bmp, .gif, .tiff, .tga, .dds or .stride, or pass the fileType.")
         };
         Store(stream, fileType.Value);
     }

@@ -56,28 +56,19 @@ public class ExampleProvider
 
         if (process is null) return;
 
-        process.EnableRaisingEvents = true;
-        process.Exited += (_, _) =>
-        {
-            try { process.Dispose(); } catch { /* ignore */ }
-        };
+        // stdout and stderr are read concurrently, each on its own thread, and the process is disposed once
+        // both have drained, so a fast example's last lines are not lost to an early exit
+        var drained = Task.WhenAll(
+            Task.Run(() => ReadStreamLines(process.StandardOutput, isError: false)),
+            Task.Run(() => ReadStreamLines(process.StandardError, isError: true)));
 
-        // stdout and stderr are read concurrently, each on its own thread
-        _ = Task.Run(() => ReadStreamLines(process.StandardOutput, isError: false));
-        _ = Task.Run(() => ReadStreamLines(process.StandardError, isError: true));
+        _ = drained.ContinueWith(_ => process.Dispose(), TaskScheduler.Default);
     }
 
     private void ReadStreamLines(StreamReader reader, bool isError)
     {
-        while (true)
+        while (reader.ReadLine() is { } line)
         {
-            string? line;
-
-            // The process may be disposed from its Exited handler while a read is pending
-            try { line = reader.ReadLine(); } catch { break; }
-
-            if (line is null) break;
-
             if (OutputFilter.IsSuppressed(line))
             {
                 _justSuppressed = true;
@@ -125,5 +116,5 @@ public class ExampleProvider
         Console.ForegroundColor = previous;
     }
 
-    private string GetIndex() => Interlocked.Increment(ref _index).ToString();
+    private string GetIndex() => (++_index).ToString();
 }

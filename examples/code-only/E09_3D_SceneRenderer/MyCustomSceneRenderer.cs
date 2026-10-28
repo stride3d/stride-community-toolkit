@@ -87,25 +87,15 @@ public class MyCustomSceneRenderer : SceneRendererBase
 
         _spriteBatch.End();
 
-        var viewProjection = _camera.ViewProjectionMatrix;
-
         _spriteBatch.Begin(drawContext.GraphicsContext);
 
         foreach (var entity in _scene.Entities)
         {
             var worldPos = entity.Transform.Position;
 
-            // Transform to clip space; behind the camera is out
-            var clipPosition = Vector4.Transform(new Vector4(worldPos, 1f), viewProjection);
+            // Only what is in front of the camera and on screen gets a label
+            if (!_camera.TryWorldToScreenPoint(worldPos, GraphicsDevice, out var screenPosition)) continue;
 
-            if (clipPosition.W <= 0f) continue;
-
-            // Perspective divide to normalized device coordinates, then the clip test: x and y in [-1,1], z in [0,1]
-            var ndc = new Vector3(clipPosition.X, clipPosition.Y, clipPosition.Z) / clipPosition.W;
-
-            if (ndc.Z < 0f || ndc.Z > 1f || MathF.Abs(ndc.X) > 1f || MathF.Abs(ndc.Y) > 1f) continue;
-
-            var screenPosition = _camera.WorldToScreenPoint(ref worldPos, GraphicsDevice);
             var finalPosition = screenPosition + _offset;
 
             var text = $"{entity.Name}: {worldPos:N1}";

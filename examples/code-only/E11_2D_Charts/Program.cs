@@ -23,9 +23,6 @@ using System.Globalization;
 // ball, A pauses the animated curve. The keys share a screen block with the camera help - F2 collapses
 // it, F3 moves it, F4 hides it.
 
-// Without this a scaled-up 4K desktop hands the game a scaled, blurred window. A no-op off Windows.
-WindowsDpiManager.EnablePerMonitorV2();
-
 // "--zoom 61" starts zoomed out to that view height - handy for seeing how the view-driven chart adapts
 // its tick step, sampling density and line widths
 var zoomArg = 0f;
@@ -61,14 +58,14 @@ game.Run(new SceneSetup2D
     // A paper-like background and MSAA, since thin lines flicker without it; no ground, a chart has no physics
     ClearColor = new Color(250, 250, 250),
     Msaa = MultisampleCount.X4,
-    Ground = null
+    Ground = null,
+    WindowTitle = "Charts 2D",
+    Resizable = true,
+    DpiAware = true,
 }, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Charts 2D";
-
     var cameraEntity = game.GetCameraEntity();
     var controller = cameraEntity.Get<Basic2DCameraController>()!;
 

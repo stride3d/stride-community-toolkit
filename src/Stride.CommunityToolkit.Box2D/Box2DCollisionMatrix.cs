@@ -1,8 +1,10 @@
 namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
-/// Simple symmetric collision matrix for filtering collisions between group pairs.
-/// Pairs default to colliding until configured otherwise.
+/// Which collision groups collide with which: a symmetric table over positive group numbers, where every pair
+/// collides until <see cref="SetCollision"/> says otherwise. <see cref="Box2DSimulation.CollisionMatrix"/> is the
+/// one the simulation consults, for the shapes that joined a group through
+/// <see cref="ShapeFixtureBuilder.InCollisionGroup"/>.
 /// </summary>
 public sealed class Box2DCollisionMatrix
 {

@@ -58,7 +58,9 @@ using var game = new Game();
 var sceneSetup = new SceneSetup3D
 {
     Camera = CameraSetup.Perspective(position: new Vector3(0f, 7f, 14f), rotation: new Vector3(0f, -25f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Myra control panel - Stride Community Toolkit",
+    Resizable = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
@@ -68,9 +70,6 @@ void Start(Scene scene)
     game.AddGrabber();
 
     rootScene = scene;
-
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Myra control panel - Stride Community Toolkit";
 
     sun = scene.Entities.Select(e => e.Get<LightComponent>()).First(l => l is not null);
     physicsDebug = game.AddPhysicsDebug();

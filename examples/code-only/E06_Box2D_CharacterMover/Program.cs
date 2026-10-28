@@ -71,16 +71,15 @@ var sceneSetup = new SceneSetup2D
     ClearColor = background,
     Camera = CameraSetup.Orthographic(orthographicSize: 18).WithController(),
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Box2D Character Mover - Stride Community Toolkit",
+    Resizable = true,
 };
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Box2D Character Mover - Stride Community Toolkit";
-
     var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
 
@@ -92,7 +91,7 @@ void Start(Scene scene)
     // Box2D's own view of the contacts, for when the planes the mover collects are not enough.
     debugDraw = new Box2DDebugDraw(shapeBatch) { DrawShapes = false, DrawJoints = false, DrawContactPoints = true, DrawContactNormals = true, FillAlpha = shapeBatch.Fill.Alpha };
 
-    cameraEntity.Add(new Grabber2DScript { Simulation = simulation });
+    game.AddGrabber2D(simulation);
 
     // The two grounds sit side by side; the bridge spans the gap between them.
     var ground1 = BuildGround(GroundPath1, new Vector2(0, 0), new Vector2(-50, -200));
@@ -420,8 +419,6 @@ public sealed class Elevator(B2BodyId body, Vector2 origin, float amplitude) : I
 
         b2Body_SetTargetTransform(body, in target, deltaTime, true);
     }
-
-    public void AfterSimulationUpdate(Box2DSimulation simulation, float deltaTime) { }
 }
 
 // The two grounds of the samples' Mover scene, as drawn in Inkscape.

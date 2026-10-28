@@ -43,8 +43,6 @@ Gallery<MaterialStation>? gallery = null;
 MaterialTextures? textures = null;
 KeyMenu? viewMenu = null;
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
 game.Run(new SceneSetup3D
@@ -55,7 +53,10 @@ game.Run(new SceneSetup3D
     // The sun is aimed by the stations, so it is added by hand below
     Lighting = null,
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Material Gallery - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseSkybox(), start: Start, update: Update);
 
 // The textures loaded in Start are this example's own: released once the game has ended
@@ -63,9 +64,6 @@ textures?.Dispose();
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Material Gallery - Stride Community Toolkit";
-
     var sun = game.AddDirectionalLight();
 
     // The editor's view modes for a code-only game: M opens the list, a digit picks the stream every

@@ -17,6 +17,12 @@ public static class ManifestLoader
     /// <summary>The manifest filename, copied next to the launcher executable at build time.</summary>
     public const string ManifestFileName = "examples-manifest.json";
 
+    /// <summary>
+    /// An environment variable naming the manifest to load instead of the one next to the executable, for a test
+    /// or a tool that supplies its own.
+    /// </summary>
+    public const string ManifestPathVariable = "STRIDE_TOOLKIT_EXAMPLES_MANIFEST";
+
     private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
 
     private static readonly string[] ProjectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
@@ -33,8 +39,8 @@ public static class ManifestLoader
     {
         var manifestPath = FindManifest()
             ?? throw new InvalidOperationException(
-                $"{ManifestFileName} was not found next to the executable. It is generated before the build " +
-                "by tools/ExamplesManifest.targets - build the launcher rather than running a stale binary.");
+                $"{ManifestFileName} was not found next to the executable, and {ManifestPathVariable} names no other. It is generated " +
+                "before the build by tools/ExamplesManifest.targets - build the launcher rather than running a stale binary.");
 
         var manifest = Read(manifestPath);
         var examplesRoot = FindExamplesRoot();
@@ -123,11 +129,11 @@ public static class ManifestLoader
     }
 
     /// <summary>
-    /// Locates the manifest next to the executable.
+    /// Locates the manifest: the one <see cref="ManifestPathVariable"/> names, otherwise the one next to the executable.
     /// </summary>
     private static string? FindManifest()
     {
-        var candidate = Path.Combine(AppContext.BaseDirectory, ManifestFileName);
+        var candidate = Environment.GetEnvironmentVariable(ManifestPathVariable) ?? Path.Combine(AppContext.BaseDirectory, ManifestFileName);
 
         return File.Exists(candidate) ? candidate : null;
     }

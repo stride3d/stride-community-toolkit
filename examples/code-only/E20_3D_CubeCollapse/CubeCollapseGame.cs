@@ -107,8 +107,6 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         _progress = _progressStore.Load();
         _levels.Current = LevelRules.ForNumber(_progress.Level);
 
-        game.Window.AllowUserResizing = true;
-
         var cameraEntity = AddCamera();
 
         game.AddSceneRenderer(new EntityTextRenderer());

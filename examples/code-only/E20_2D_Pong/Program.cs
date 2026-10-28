@@ -22,8 +22,6 @@ using Stride.Rendering;
 // This file only builds the scene. Start with Ball.cs for the game's rules, then Referee.cs for
 // how a match is written as one method.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 var court = new Color(14, 18, 28);
 var chalk = new Color(230, 236, 245);
 var glow = new Color(120, 190, 255, 140);
@@ -35,13 +33,18 @@ var foldedKeys = false;
 using var game = new Game();
 
 // No camera controller: the court does not move, and W and S belong to the left paddle
-game.Run(new SceneSetup2D { ClearColor = court, Camera = CameraSetup.Orthographic(orthographicSize: 10f), Ground = null }, start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    ClearColor = court,
+    Camera = CameraSetup.Orthographic(orthographicSize: 10f),
+    Ground = null,
+    WindowTitle = "Pong - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
+}, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Pong - Stride Community Toolkit";
-
     game.AddWorldTextRenderer();
 
     var material = game.CreateFlatMaterial(chalk);

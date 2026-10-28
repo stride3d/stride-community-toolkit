@@ -29,8 +29,6 @@ using Stride.Rendering;
 // Space drops a ball over every station, and the grabber carries bodies from one to another. The
 // callbacks run on the main thread, after the physics step, so they may touch entities and materials.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float StationSpacing = 5f;
 const float BallRadius = 0.4f;
 const int BallsKept = 30;
@@ -68,16 +66,16 @@ using var game = new Game();
 var sceneSetup = new SceneSetup3D
 {
     Camera = CameraSetup.Perspective(position: new Vector3(1f, 8f, 13f), rotation: new Vector3(0f, -28f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Trigger zones - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Trigger zones - Stride Community Toolkit";
-
     debugDraw = game.AddDebugShapes();
     debugDraw.Visible = true;
 
@@ -226,12 +224,7 @@ void Reset()
     plate.Reset();
     impact.Reset();
 
-    var body = crate.Get<BodyComponent>();
-
-    body.Teleport(crateStart, Quaternion.Identity);
-    body.Awake = true;
-    body.LinearVelocity = Vector3.Zero;
-    body.AngularVelocity = Vector3.Zero;
+    crate.Get<BodyComponent>().TeleportAtRest(crateStart);
 }
 
 void AddLabel(Scene scene, string text, float x)

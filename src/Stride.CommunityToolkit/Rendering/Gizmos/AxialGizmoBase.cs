@@ -92,9 +92,9 @@ public abstract class AxialGizmoBase
     protected void CreateMaterials()
     {
         DefaultOriginMaterial = CreateEmissiveColorMaterial(Color.White);
-        RedUniformMaterial = CreateEmissiveColorMaterial(GetRedColor());
-        GreenUniformMaterial = CreateEmissiveColorMaterial(GetGreenColor());
-        BlueUniformMaterial = CreateEmissiveColorMaterial(GetBlueColor());
+        RedUniformMaterial = CreateEmissiveColorMaterial(RedColor);
+        GreenUniformMaterial = CreateEmissiveColorMaterial(GreenColor);
+        BlueUniformMaterial = CreateEmissiveColorMaterial(BlueColor);
     }
 
     /// <summary>
@@ -123,21 +123,12 @@ public abstract class AxialGizmoBase
     protected Material CreateEmissiveColorMaterial(Color color)
         => GizmoEmissiveColorMaterial.Create(GraphicsDevice, color, 0.75f);
 
-    /// <summary>
-    /// Retrieves the color for the X-axis (Red). Returns the default red color if none is specified.
-    /// </summary>
-    /// <returns>The color for the X-axis.</returns>
-    protected Color GetRedColor() => _redColor ?? _redUniformColor;
+    /// <summary>The colour of the X axis: the one given to the constructor, or the default red.</summary>
+    protected Color RedColor => _redColor ?? _redUniformColor;
 
-    /// <summary>
-    /// Retrieves the color for the Y-axis (Green). Returns the default green color if none is specified.
-    /// </summary>
-    /// <returns>The color for the Y-axis.</returns>
-    protected Color GetGreenColor() => _greenColor ?? _greenUniformColor;
+    /// <summary>The colour of the Y axis: the one given to the constructor, or the default green.</summary>
+    protected Color GreenColor => _greenColor ?? _greenUniformColor;
 
-    /// <summary>
-    /// Retrieves the color for the Z-axis (Blue). Returns the default blue color if none is specified.
-    /// </summary>
-    /// <returns>The color for the Z-axis.</returns>
-    protected Color GetBlueColor() => _blueColor ?? _blueUniformColor;
+    /// <summary>The colour of the Z axis: the one given to the constructor, or the default blue.</summary>
+    protected Color BlueColor => _blueColor ?? _blueUniformColor;
 }

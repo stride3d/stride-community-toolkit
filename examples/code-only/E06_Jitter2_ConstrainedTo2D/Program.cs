@@ -31,12 +31,15 @@ var accumulatedTime = 0f;
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D { Ground = null, Profiler = true }.UseSkybox(), start: Start, update: Update);
+game.Run(new SceneSetup3D
+{
+    Ground = null,
+    Profiler = true,
+    WindowTitle = "Jitter 2 Physics Axis Locking Example - Stride Community Toolkit",
+}.UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.Title = "Jitter 2 Physics Axis Locking Example - Stride Community Toolkit";
-
     CreateGround(rootScene);
     CreateCubes(rootScene, count: 350);
 }

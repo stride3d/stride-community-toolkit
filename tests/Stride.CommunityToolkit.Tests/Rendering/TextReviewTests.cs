@@ -50,7 +50,7 @@ public class TextReviewTests
 
         Assert.Equal(unit.Indices.Length, scaled.Indices.Length);
         Assert.Equal(unit.Vertices.Length, scaled.Vertices.Length);
-        TextMeshTests.AssertWatertight(scaled);
+        MeshAssertions.AssertWatertight(scaled);
     }
 
     [Fact]
@@ -123,8 +123,8 @@ public class TextReviewTests
     {
         var data = TextMesh.Create(Font, text, new TextMeshOptions { Depth = 0.3f, Bevel = new TextBevel(0.2f, 0.03f) });
 
-        TextMeshTests.AssertWatertight(data);
-        TextMeshTests.AssertOutwardWinding(data);
+        MeshAssertions.AssertWatertight(data);
+        MeshAssertions.AssertOutwardWinding(data);
     }
 
     [Fact]
@@ -256,8 +256,8 @@ public class TextReviewTests
         {
             var data = TextMesh.Create(Font, character.ToString());
 
-            TextMeshTests.AssertWatertight(data);
-            TextMeshTests.AssertOutwardWinding(data);
+            MeshAssertions.AssertWatertight(data);
+            MeshAssertions.AssertOutwardWinding(data);
         }
     }
 

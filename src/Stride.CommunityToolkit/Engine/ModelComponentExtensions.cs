@@ -12,20 +12,12 @@ namespace Stride.CommunityToolkit.Engine;
 public static class ModelComponentExtensions
 {
     /// <summary>
-    /// Calculates the height, width, and length of the model represented by the ModelComponent.
+    /// The size of the model's bounding box: its width along X, height along Y and depth along Z.
     /// </summary>
-    /// <param name="modelComponent">The ModelComponent whose model dimensions are to be calculated.</param>
-    /// <returns>A Vector3 representing the height, width, and length of the model.</returns>
-    /// <remarks>
-    /// The dimensions are calculated based on the model's bounding box. The returned Vector3 contains the height (Y-axis),
-    /// width (X-axis), and length (Z-axis) of the bounding box.
-    /// </remarks>
-    public static Vector3 GetMeshHWL(this ModelComponent modelComponent)
-    {
-        var size = modelComponent.Model.BoundingBox.Maximum - modelComponent.Model.BoundingBox.Minimum;
-
-        return new Vector3(size.Y, size.X, size.Z);
-    }
+    /// <param name="modelComponent">The component whose model is measured.</param>
+    /// <returns>The extent of the bounding box on each axis, in the model's own units.</returns>
+    public static Vector3 GetModelSize(this ModelComponent modelComponent)
+        => modelComponent.Model.BoundingBox.Maximum - modelComponent.Model.BoundingBox.Minimum;
 
     /// <summary>
     /// Calculates the height of the model represented by the ModelComponent.

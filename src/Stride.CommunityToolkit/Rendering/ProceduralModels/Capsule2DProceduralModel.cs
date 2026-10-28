@@ -11,9 +11,9 @@ namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
 {
     /// <summary>
-    /// Gets or sets the total height of the capsule (including the two semicircles).
+    /// Gets or sets the height of the capsule: the whole shape end to end, the two semicircles included.
     /// </summary>
-    public float TotalHeight { get; set; } = 1.2f;
+    public float Height { get; set; } = 1.2f;
 
     /// <summary>
     /// Gets or sets the radius of the capsule.
@@ -30,7 +30,7 @@ public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
     /// <summary>
     /// Creates mesh data using current property values, honoring UV scale.
     /// </summary>
-    protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData() => New(TotalHeight, Radius, Tessellation, UvScale.X, UvScale.Y);
+    protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData() => New(Height, Radius, Tessellation, UvScale.X, UvScale.Y);
 
     /// <summary>
     /// Retrieves (or builds and caches) a capsule mesh with the specified dimensions and options.

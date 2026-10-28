@@ -7,7 +7,6 @@ using Stride.Input;
 using Stride.Rendering;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using static Hexa.NET.ImGui.ImGui;
 
 namespace Stride.CommunityToolkit.ImGui;
@@ -52,15 +51,11 @@ public class ImGuiSystem : GameSystemBase
         [Keys.Z] = ImGuiKey.Z,
     };
 
-    // Kept in static fields because ImGui holds raw pointers to these delegates
-    [FixedAddressValueType] private static SetClipboardDelegate? _setClipboardFn;
-    [FixedAddressValueType] private static GetClipboardDelegate? _getClipboardFn;
-
     /// <summary>
     /// The ImGui context this system created and renders. Pass it to add-on libraries (ImNodes, ImPlot) that need to
     /// share the context.
     /// </summary>
-    public readonly ImGuiContextPtr ImGuiContext;
+    public ImGuiContextPtr ImGuiContext { get; private set; }
 
     /// <summary>
     /// A UI scale factor windows can read through <see cref="BaseWindow.Scale"/> to size themselves for the display's DPI.
@@ -163,27 +158,9 @@ public class ImGuiSystem : GameSystemBase
         base.Destroy();
     }
 
-    private unsafe void SetupInput()
-    {
-        _io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
-
-        _setClipboardFn = SetClipboard;
-        _getClipboardFn = GetClipboard;
-
-        _platform.PlatformSetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(_setClipboardFn);
-        _platform.PlatformGetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(_getClipboardFn);
-    }
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private unsafe delegate void SetClipboardDelegate(ImGuiContextPtr ctx, byte* text);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private unsafe delegate byte* GetClipboardDelegate(ImGuiContextPtr ctx);
-
-    // The clipboard is not bridged to the OS: text stays within ImGui's own buffer
-    private static unsafe void SetClipboard(ImGuiContextPtr ctx, byte* text) { }
-
-    private unsafe byte* GetClipboard(ImGuiContextPtr ctx) => (byte*)_platform.PlatformClipboardUserData;
+    // The clipboard hooks are left to dear imgui: on Windows its defaults are the Win32 clipboard, so a text
+    // field copies and pastes with the rest of the desktop; elsewhere it keeps a buffer of its own
+    private void SetupInput() => _io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
 
     [MemberNotNull(nameof(_shader), nameof(_vertexLayout), nameof(_pipeline), nameof(_indexBinding))]
     private void CreateDeviceObjects()

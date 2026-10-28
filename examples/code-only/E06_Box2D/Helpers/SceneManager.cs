@@ -24,7 +24,6 @@ public class SceneManager
     private readonly CameraComponent _camera;
     private readonly ShapeFactory _shapeFactory;
     private readonly UiHelper _uiHelper;
-    private readonly InputManager _inputManager;
     private readonly ShapeSpawner _shapeSpawner;
 
     private string _lastAction = "Initialized";
@@ -53,7 +52,6 @@ public class SceneManager
         _camera = game.GetCameraEntity().Get<CameraComponent>();
         _shapeFactory = new ShapeFactory(scene);
         _uiHelper = new UiHelper(game);
-        _inputManager = new InputManager(game, _camera);
         _shapeSpawner = new ShapeSpawner(scene, simulation, _shapeFactory);
     }
 
@@ -95,7 +93,7 @@ public class SceneManager
             var x = -25f + i;
             var box = b2MakeOffsetBox(0.55f, 0.5f, new B2Vec2(x, -3f), b2Rot_identity);
             b2CreatePolygonShape(groundId, in shapeDef, in box);
-            AddStaticSquare(new Vector2(x, -3f), 0.55f, 0.5f);
+            AddStaticSquare(new Vector2(x, -3f), new Vector2(1.1f, 1f));
         }
 
         for (var i = 0; i < 10; i++)
@@ -106,26 +104,16 @@ public class SceneManager
             {
                 var box = b2MakeOffsetBox(0.5f, 0.55f, new B2Vec2(x, y), b2Rot_identity);
                 b2CreatePolygonShape(groundId, in shapeDef, in box);
-                AddStaticSquare(new Vector2(x, y), 0.5f, 0.55f);
+                AddStaticSquare(new Vector2(x, y), new Vector2(1f, 1.1f));
             }
         }
     }
 
-    private void AddStaticSquare(Vector2 position, float halfWidth, float halfHeight)
+    private void AddStaticSquare(Vector2 position, Vector2 size)
     {
         var entity = new Entity(GameConfig.WallName)
         {
-            new ShapeComponent
-            {
-                Vertices =
-                [
-                    new(-halfWidth, -halfHeight),
-                    new(halfWidth, -halfHeight),
-                    new(halfWidth, halfHeight),
-                    new(-halfWidth, halfHeight),
-                ],
-                Color = GameConfig.GroundColor,
-            }
+            new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = GameConfig.GroundColor }
         };
         entity.Transform.Position = new Vector3(position, 0);
         entity.Scene = _scene;
@@ -219,7 +207,7 @@ public class SceneManager
         if (!_game.Input.IsMouseButtonPressed(MouseButton.Left)) return;
 
         var mousePosition = _game.Input.MousePosition;
-        var worldPoint = _inputManager.GetWorldPointFromMouse(mousePosition);
+        var worldPoint = _camera.ScreenToWorldPointOnXYPlane(mousePosition);
 
         if (worldPoint is null)
         {

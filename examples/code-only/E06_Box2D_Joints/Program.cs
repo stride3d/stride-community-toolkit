@@ -52,18 +52,15 @@ var sceneSetup = new SceneSetup2D
     ClearColor = background,
     Camera = CameraSetup.Orthographic(position: new Vector3(0, 7, 50), orthographicSize: 26).WithController(),
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Box2D Joints - Stride Community Toolkit",
+    Resizable = true,
 };
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Box2D Joints - Stride Community Toolkit";
-
-    var cameraEntity = game.GetCameraEntity();
-
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;
     shapeBatch.Fill.Alpha = 0.4f;
@@ -73,7 +70,7 @@ void Start(Scene rootScene)
     debugDraw = new Box2DDebugDraw(shapeBatch) { DrawShapes = false, DrawJointExtras = true, FillAlpha = shapeBatch.Fill.Alpha };
 
     // The 2D grabber: left mouse picks any dynamic body up. Every rig below is built to be pulled.
-    cameraEntity.Add(new Grabber2DScript { Simulation = simulation });
+    game.AddGrabber2D(simulation);
 
     BuildScene(rootScene);
     AddInstructions();
@@ -241,7 +238,7 @@ void Reset(Scene scene)
 
 void Ground(Scene scene)
 {
-    var entity = new Entity("Ground") { new ShapeComponent { Vertices = [.. RectangleVertices(24, 0.5f)], Color = paleGreen } };
+    var entity = new Entity("Ground") { new ShapeComponent { Vertices = [.. ShapeComponent.Box(new Vector2(48, 1))], Color = paleGreen } };
     entity.Transform.Position = new Vector3(0, -0.5f, 0);
     entity.Scene = scene;
     spawned.Add(entity);
@@ -252,7 +249,7 @@ void Ground(Scene scene)
 
 Entity StaticBox(Scene scene, Vector2 centre, Vector2 size)
 {
-    var entity = new Entity("Static") { new ShapeComponent { Vertices = [.. RectangleVertices(size.X / 2, size.Y / 2)], Color = paleGreen } };
+    var entity = new Entity("Static") { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = paleGreen } };
     entity.Transform.Position = new Vector3(centre, 0);
     entity.Scene = scene;
     spawned.Add(entity);
@@ -265,7 +262,7 @@ Entity StaticBox(Scene scene, Vector2 centre, Vector2 size)
 
 Entity DynamicBox(Scene scene, Vector2 centre, Vector2 size, Color color)
 {
-    var entity = new Entity("Box") { new ShapeComponent { Vertices = [.. RectangleVertices(size.X / 2, size.Y / 2)], Color = color } };
+    var entity = new Entity("Box") { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = color } };
     entity.Transform.Position = new Vector3(centre, 0);
     entity.Scene = scene;
     spawned.Add(entity);
@@ -308,14 +305,6 @@ void AddInstructions()
         new("motor joint", Color.LightGray),
     ]);
 }
-
-static Vector2[] RectangleVertices(float halfWidth, float halfHeight) =>
-[
-    new(-halfWidth, -halfHeight),
-    new(halfWidth, -halfHeight),
-    new(halfWidth, halfHeight),
-    new(-halfWidth, halfHeight),
-];
 
 /*
 ---example-metadata

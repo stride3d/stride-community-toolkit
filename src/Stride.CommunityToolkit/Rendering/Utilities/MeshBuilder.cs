@@ -13,42 +13,42 @@ namespace Stride.CommunityToolkit.Rendering;
 public class MeshBuilder : IDisposable
 {
     /// <summary>
-    ///     The min capacity of elements
+    /// The min capacity of elements
     /// </summary>
     private const int MinCapacity = 256;
 
     /// <summary>
-    ///     The list of vertex elements added to this mesh builder
+    /// The list of vertex elements added to this mesh builder
     /// </summary>
     private readonly List<VertexElementWithOffset> _vertexElements = [];
 
     /// <summary>
-    ///     A type erased buffer for the indices
+    /// A type erased buffer for the indices
     /// </summary>
     private byte[] _indexBuffer = [];
 
     /// <summary>
-    ///     The size of an index can be 0, 2 (int16) or 4 (int32)
+    /// The size of an index can be 0, 2 (int16) or 4 (int32)
     /// </summary>
     private int _indexStride;
 
     /// <summary>
-    ///     The backing field for <see cref="PrimitiveType" /> as we use a runtime check in the setter
+    /// The backing field for <see cref="PrimitiveType" /> as we use a runtime check in the setter
     /// </summary>
     private PrimitiveType _primitiveType = PrimitiveType.TriangleList;
 
     /// <summary>
-    ///     A type erased buffer for vertex elements
+    /// A type erased buffer for vertex elements
     /// </summary>
     private byte[] _vertexBuffer = [];
 
     /// <summary>
-    ///     The size in bytes for single combination of vertex elements
+    /// The size in bytes for single combination of vertex elements
     /// </summary>
     private int _vertexStride;
 
     /// <summary>
-    ///     The selected primitive type (default: <see cref="PrimitiveType.TriangleList" />)
+    /// The selected primitive type (default: <see cref="PrimitiveType.TriangleList" />)
     /// </summary>
     public PrimitiveType PrimitiveType
     {
@@ -57,7 +57,7 @@ public class MeshBuilder : IDisposable
     }
 
     /// <summary>
-    ///     The selected index type (default: <see cref="IndexingType.None" />)
+    /// The selected index type (default: <see cref="IndexingType.None" />)
     /// </summary>
     public IndexingType IndexType
     {
@@ -66,17 +66,17 @@ public class MeshBuilder : IDisposable
     }
 
     /// <summary>
-    ///     The vertex elements including offsets
+    /// The vertex elements including offsets
     /// </summary>
     public IReadOnlyList<VertexElementWithOffset> VertexElements => _vertexElements;
 
     /// <summary>
-    ///     The current vertex count
+    /// The current vertex count
     /// </summary>
     public int VertexCount { get; private set; }
 
     /// <summary>
-    ///     The current index count
+    /// The current index count
     /// </summary>
     public int IndexCount { get; private set; }
 
@@ -88,12 +88,12 @@ public class MeshBuilder : IDisposable
     }
 
     /// <summary>
-    ///     Changes the selected primitive type.
+    /// Changes the selected primitive type.
     /// </summary>
     /// <param name="primitiveType">The selected primitive type</param>
     /// <exception cref="InvalidOperationException">
-    ///     If vertices were already added changing the primitive type is no longer
-    ///     allowed
+    /// If vertices were already added changing the primitive type is no longer
+    /// allowed
     /// </exception>
     public void WithPrimitiveType(PrimitiveType primitiveType)
     {
@@ -106,12 +106,12 @@ public class MeshBuilder : IDisposable
     }
 
     /// <summary>
-    ///     Changes the selected indexing type.
+    /// Changes the selected indexing type.
     /// </summary>
     /// <param name="indexingType">The selected indexing type</param>
     /// <exception cref="InvalidOperationException">
-    ///     If vertices were already added changing the indexing type is no longer
-    ///     allowed
+    /// If vertices were already added changing the indexing type is no longer
+    /// allowed
     /// </exception>
     public void WithIndexType(IndexingType indexingType)
     {
@@ -162,7 +162,7 @@ public class MeshBuilder : IDisposable
         WithElement<T>(semanticIndex, semanticName, pixelFormat);
 
     /// <summary>
-    ///     Registers a new vertex element
+    /// Registers a new vertex element
     /// </summary>
     /// <param name="semanticIndex">The semantic index</param>
     /// <param name="semanticName">The semantic name</param>
@@ -189,7 +189,7 @@ public class MeshBuilder : IDisposable
     }
 
     /// <summary>
-    ///     Adds a new vertex index
+    /// Adds a new vertex index
     /// </summary>
     /// <param name="vertexIndex">The vertex index</param>
     /// <exception cref="ArgumentOutOfRangeException">The vertex index was outside the range of the currently added vertices</exception>
@@ -236,15 +236,15 @@ public class MeshBuilder : IDisposable
     }
 
     /// <summary>
-    ///     Reads back a previously added index.
+    /// Reads back a previously added index.
     /// </summary>
     /// <param name="indexPosition">The position within the index list, from 0 to <see cref="IndexCount" /> - 1</param>
     /// <returns>The vertex index stored at that position</returns>
     /// <exception cref="ArgumentOutOfRangeException">The position is outside the added indices</exception>
     /// <remarks>
-    ///     The read-side counterpart of <see cref="AddIndex" />, mirroring what
-    ///     <see cref="GetElement{T}(int,int)" /> is to <see cref="SetElement{T}(int,int,T)" />. Winding
-    ///     order lives in the indices, so without this it cannot be inspected or tested at all.
+    /// The read-side counterpart of <see cref="AddIndex" />, mirroring what
+    /// <see cref="GetElement{T}(int,int)" /> is to <see cref="SetElement{T}(int,int,T)" />. Winding
+    /// order lives in the indices, so without this it cannot be inspected or tested at all.
     /// </remarks>
     public int GetIndex(int indexPosition)
     {
@@ -264,11 +264,11 @@ public class MeshBuilder : IDisposable
     }
 
     /// <summary>
-    ///     Adds a new vertex
+    /// Adds a new vertex
     /// </summary>
     /// <returns>
-    ///     The vertex index (Can be used in <see cref="GetElement{T}(int,int)" /> and
-    ///     <see cref="SetElement{T}(int,int,T)" />)
+    /// The vertex index (Can be used in <see cref="GetElement{T}(int,int)" /> and
+    /// <see cref="SetElement{T}(int,int,T)" />)
     /// </returns>
     public int AddVertex()
     {
@@ -281,15 +281,15 @@ public class MeshBuilder : IDisposable
     }
 
     /// <summary>
-    ///     Rents a buffer of at least the requested size, copies the old one into it, zeroes the
-    ///     rest, and returns the old buffer to the pool.
+    /// Rents a buffer of at least the requested size, copies the old one into it, zeroes the
+    /// rest, and returns the old buffer to the pool.
     /// </summary>
     /// <remarks>
-    ///     The zeroing is not cosmetic. Pooled arrays arrive holding whatever their previous renter
-    ///     left in them, and two kinds of byte in the vertex buffer are never written afterwards:
-    ///     the alignment padding between elements, and any element the caller forgets to set. Both
-    ///     end up on the GPU, so without this they would be nondeterministic garbage instead of a
-    ///     predictable zero.
+    /// The zeroing is not cosmetic. Pooled arrays arrive holding whatever their previous renter
+    /// left in them, and two kinds of byte in the vertex buffer are never written afterwards:
+    /// the alignment padding between elements, and any element the caller forgets to set. Both
+    /// end up on the GPU, so without this they would be nondeterministic garbage instead of a
+    /// predictable zero.
     /// </remarks>
     private static byte[] RentZeroed(int capacity, byte[] previous)
     {
@@ -307,11 +307,11 @@ public class MeshBuilder : IDisposable
     }
 
     /// <summary>
-    ///     Gets the value for the specified element index
+    /// Gets the value for the specified element index
     /// </summary>
     /// <remarks>
-    ///     This overload always targets the last vertex and is a convenience version of
-    ///     <see cref="GetElement{T}(int,int)" />
+    /// This overload always targets the last vertex and is a convenience version of
+    /// <see cref="GetElement{T}(int,int)" />
     /// </remarks>
     /// <param name="elementIndex">The element index</param>
     /// <typeparam name="T">The element type to retrieve</typeparam>
@@ -322,7 +322,7 @@ public class MeshBuilder : IDisposable
     public T GetElement<T>(int elementIndex) where T : unmanaged => GetElementRef<T>(VertexCount - 1, elementIndex);
 
     /// <summary>
-    ///     Gets the value for the specified element index
+    /// Gets the value for the specified element index
     /// </summary>
     /// <param name="vertexIndex">The vertex index</param>
     /// <param name="elementIndex">The element index</param>
@@ -335,11 +335,11 @@ public class MeshBuilder : IDisposable
         GetElementRef<T>(vertexIndex, elementIndex);
 
     /// <summary>
-    ///     Sets the value for the specified element index
+    /// Sets the value for the specified element index
     /// </summary>
     /// <remarks>
-    ///     This overload always targets the last vertex and is a convenience version of
-    ///     <see cref="SetElement{T}(int,int,T)" />
+    /// This overload always targets the last vertex and is a convenience version of
+    /// <see cref="SetElement{T}(int,int,T)" />
     /// </remarks>
     /// <param name="elementIndex">The element index</param>
     /// <param name="value">The value to set</param>
@@ -351,7 +351,7 @@ public class MeshBuilder : IDisposable
         GetElementRef<T>(VertexCount - 1, elementIndex) = value;
 
     /// <summary>
-    ///     Sets the value for the specified element index
+    /// Sets the value for the specified element index
     /// </summary>
     /// <param name="vertexIndex">The vertex index</param>
     /// <param name="elementIndex">The element index</param>
@@ -364,7 +364,7 @@ public class MeshBuilder : IDisposable
         GetElementRef<T>(vertexIndex, elementIndex) = value;
 
     /// <summary>
-    ///     Base method to get or set element values in the type erased buffer
+    /// Base method to get or set element values in the type erased buffer
     /// </summary>
     private ref T GetElementRef<T>(int vertexIndex, int elementIndex) where T : unmanaged
     {
@@ -397,7 +397,7 @@ public class MeshBuilder : IDisposable
     }
 
     /// <summary>
-    ///     Creates a new mesh draw instance
+    /// Creates a new mesh draw instance
     /// </summary>
     /// <param name="device">The graphics device</param>
     /// <param name="clear">Determines if the mesh builder should be reset after this call</param>
@@ -406,9 +406,9 @@ public class MeshBuilder : IDisposable
     /// <exception cref="InvalidOperationException">The primitive type was not set to a valid value</exception>
     /// <exception cref="InvalidOperationException">No vertices were added, or indexing was configured but no indices were added</exception>
     /// <remarks>
-    ///     The caller owns the two GPU buffers this creates. They are not tracked by any content
-    ///     manager, so rebuilding a mesh repeatedly without disposing the previous draw's buffers
-    ///     leaks GPU memory.
+    /// The caller owns the two GPU buffers this creates. They are not tracked by any content
+    /// manager, so rebuilding a mesh repeatedly without disposing the previous draw's buffers
+    /// leaks GPU memory.
     /// </remarks>
     public MeshDraw ToMeshDraw(GraphicsDevice device, bool clear = true)
     {
@@ -475,7 +475,7 @@ public class MeshBuilder : IDisposable
     }
 
     /// <summary>
-    ///     Clears all buffers and elements configured in this instance
+    /// Clears all buffers and elements configured in this instance
     /// </summary>
     public void Clear()
     {

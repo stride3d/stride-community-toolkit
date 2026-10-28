@@ -1,3 +1,5 @@
+using System.Collections.Frozen;
+
 namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Core;
 
 /// <summary>
@@ -28,25 +30,25 @@ public static class DocPaths
     /// a package missing from that list belongs here, and one added there comes off this list at
     /// the release that ships it.
     /// </summary>
-    public static readonly IReadOnlySet<string> PackagesNotOnNuGet = new HashSet<string>(StringComparer.Ordinal)
+    public static readonly FrozenSet<string> PackagesNotOnNuGet = new[]
     {
         "Stride.CommunityToolkit.Box2D",
         "Stride.CommunityToolkit.Charts",
         "Stride.CommunityToolkit.ImGuiNet",
-    };
+    }.ToFrozenSet(StringComparer.Ordinal);
 
     /// <summary>The landing pages that existed before levels replaced the Basic/Advance split.</summary>
     /// <remarks>
     /// They stay in the repository as <c>redirect_url</c> stubs. The redirect is a generated HTML page,
     /// not a build-time rewrite, so deleting the file would break the URL rather than redirect it.
     /// </remarks>
-    public static readonly IReadOnlyDictionary<string, string> LegacyLandingPages = new Dictionary<string, string>(StringComparer.Ordinal)
+    public static readonly FrozenDictionary<string, string> LegacyLandingPages = new Dictionary<string, string>(StringComparer.Ordinal)
     {
         ["basic-examples.md"] = "getting-started-examples.md",
         ["advance-examples.md"] = "advanced-examples.md",
         ["basic-examples-fs.md"] = "getting-started-examples-fs.md",
         ["basic-examples-vb.md"] = "getting-started-examples-vb.md"
-    };
+    }.ToFrozenDictionary(StringComparer.Ordinal);
 
     /// <summary>
     /// Gets the file suffix that distinguishes a language's pages, empty for C#.

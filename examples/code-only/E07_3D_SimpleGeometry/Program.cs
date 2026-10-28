@@ -8,7 +8,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
 using Stride.Rendering;
-using Stride.Rendering.ProceduralModels;
 using Buffer = Stride.Graphics.Buffer;
 
 using var game = new Game();
@@ -87,32 +86,6 @@ void AddVertexLabels(Entity parent, ReadOnlySpan<Vector3> localPositions, string
     }
 }
 
-public class QuadPrimitiveModel : PrimitiveProceduralModelBase
-{
-    /// <summary>The size of the quad: a custom property, which shows up in Game Studio.</summary>
-    public Vector3 Size { get; set; } = Vector3.One;
-
-    /// <summary>Local-space vertex positions used for the generated quad. Useful for debug labels.</summary>
-    public IReadOnlyList<Vector3> Vertices { get; private set; } = [];
-
-    protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
-    {
-        // A quad facing +Z
-        var normal = Vector3.UnitZ;
-        var vertices = new VertexPositionNormalTexture[4];
-        vertices[0] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.5f, 0) * Size, normal, new Vector2(0, 0));
-        vertices[1] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.5f, 0) * Size, normal, new Vector2(1, 0));
-        vertices[2] = new VertexPositionNormalTexture(new Vector3(-0.5f, -0.5f, 0) * Size, normal, new Vector2(0, 1));
-        vertices[3] = new VertexPositionNormalTexture(new Vector3(0.5f, -0.5f, 0) * Size, normal, new Vector2(1, 1));
-
-        // Kept for the labels
-        Vertices = [vertices[0].Position, vertices[1].Position, vertices[2].Position, vertices[3].Position];
-
-        int[] indices = [0, 1, 2, 1, 3, 2];
-
-        return new GeometricMeshData<VertexPositionNormalTexture>(vertices, indices, isLeftHanded: false) { Name = "MyModel" };
-    }
-}
 /*
 ---example-metadata
 slug: simple-geometry

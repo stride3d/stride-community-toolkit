@@ -36,7 +36,7 @@ public class Grabber2DTests
         camera.Update(Aspect);
 
         // A quarter of the way across, half way down: a quarter of the view's width left of centre
-        var ray = camera.GetPickRay(new Vector2(0.25f, 0.5f));
+        var ray = camera.ScreenToWorldRay(new Vector2(0.25f, 0.5f));
 
         Assert.Equal(-OrthographicSize * Aspect / 4f, ray.Position.X, 0.01f);
         Assert.Equal(0f, ray.Position.Y, 0.01f);
@@ -113,7 +113,7 @@ public class Grabber2DTests
             {
                 // Where the carry pulls: the cursor's ray at the hold distance, read once the camera's
                 // world matrix has been through the transform processor
-                var ray = camera.GetPickRay(game.Input.MousePosition);
+                var ray = camera.ScreenToWorldRay(game.Input.MousePosition);
                 target = ray.Position + ray.Direction * (CameraZ - camera.NearClipPlane - 0.5f);
 
                 end = body.Position;

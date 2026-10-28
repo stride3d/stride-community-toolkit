@@ -16,18 +16,12 @@ using Stride.Graphics;
 // entity is, and it is never hidden by geometry. For text that lives inside the scene - shrinking
 // with distance, blocked by walls - see E03_3D_WorldText.
 
-// Before the window exists: a sharp window on a scaled display, and every label then sizes itself -
-// this is screen-space text, so a 150% display draws it 1.5x, rasterised at that size rather than stretched
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
+game.Run(new SceneSetup3D { Resizable = true, DpiAware = true }.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-
     // One call, however much text the scene has. Without the renderer, components collect quietly
     // and nothing appears - there is no error for a missing renderer.
     game.AddEntityTextRenderer();

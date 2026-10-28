@@ -32,8 +32,6 @@ using Stride.Input;
 // scale scales the mesh with it. Closed says the surface has no holes, which is what the inertia of a
 // moving mesh is computed from; the ring is closed, a bowl or a terrain is not.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float RingRadius = 1.2f;      // From the centre to the middle of the tube
 const float TubeRadius = 0.35f;     // So the hole is 0.85 across from the centre, and the ball fits
 const float ShellRadius = 1.2f;
@@ -55,16 +53,16 @@ var sceneSetup = new SceneSetup3D
 {
     // Above and in front of the stations, shifted right so they stay clear of the overlay
     Camera = CameraSetup.Perspective(position: new Vector3(4.8f, 9.5f, 15.5f), rotation: new Vector3(0f, -30f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Mesh colliders - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Mesh colliders - Stride Community Toolkit";
-
     game.AddEntityTextRenderer();
 
     // P draws every collider, so the hull's lid and the mesh's triangles can be seen
@@ -257,14 +255,7 @@ sealed record DropStation(string Label, BodyComponent Body, Color Colour, Func<f
     }
 
     /// <summary>Puts the body back where it started, still.</summary>
-    internal void Replay()
-    {
-        // Teleport moves the body and nothing else: it keeps its velocity, its spin and its sleep
-        Body.Teleport(Start, Quaternion.Identity);
-        Body.Awake = true;
-        Body.LinearVelocity = Vector3.Zero;
-        Body.AngularVelocity = Vector3.Zero;
-    }
+    internal void Replay() => Body.TeleportAtRest(Start);
 }
 
 /*

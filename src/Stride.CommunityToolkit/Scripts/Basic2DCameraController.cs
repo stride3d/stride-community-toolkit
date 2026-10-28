@@ -56,7 +56,7 @@ public class Basic2DCameraController : SyncScript
     /// default, restores the size the camera had when the controller started - so a scene that set
     /// its own framing gets that framing back, not a fixed number.
     /// </summary>
-    public float? OrthographicSizeDefault { get; set; }
+    public float? DefaultOrthographicSize { get; set; }
 
     /// <summary>
     /// Gets or sets the fraction by which the visible area scales per mouse-wheel notch. Defaults to 0.1 (10 %).
@@ -192,21 +192,26 @@ public class Basic2DCameraController : SyncScript
     public MouseButton MouseDragButton { get; set; } = MouseButton.Right;
 
     /// <summary>
-    /// Gets or sets whether on-screen camera instructions are displayed.
+    /// Gets or sets whether the camera's key help is shown on the shared <see cref="TextOverlay"/>. Defaults to
+    /// <see langword="true"/>, and can be set before the script starts or at any time after.
     /// </summary>
     /// <remarks>
     /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
     /// it, is toggled with <see cref="TextOverlay.ToggleKey"/>.
     /// </remarks>
-    public bool ShowInstructions
+    public bool ShowHelp
     {
-        get => _instructions?.Enabled ?? false;
-        set { if (_instructions is not null) _instructions.Enabled = value; }
-    }
+        get;
+        set
+        {
+            field = value;
+            _instructions?.Enabled = value;
+        }
+    } = true;
 
     private CameraComponent? _camera;
     private Vector3 _defaultCameraPosition;
-    private float _defaultOrthographicSize = 10f;
+    private float _startOrthographicSize = 10f;
     private Vector3 _targetPosition;
     private float _targetOrthographicSize;
     private Vector2? _lastMousePosition;
@@ -283,6 +288,8 @@ public class Basic2DCameraController : SyncScript
 
                 return lines;
             }, HelpCollapsed, order: -100);
+
+        _instructions.Enabled = ShowHelp;
     }
 
     /// <summary>
@@ -310,7 +317,7 @@ public class Basic2DCameraController : SyncScript
             // Captured here rather than in Start: a scene sets its framing in its own Start, which
             // runs before this script's first update, and this is what H restores
             _targetOrthographicSize = _camera.OrthographicSize;
-            _defaultOrthographicSize = _camera.OrthographicSize;
+            _startOrthographicSize = _camera.OrthographicSize;
         }
 
         // Process follow target first (the highest priority)
@@ -479,7 +486,7 @@ public class Basic2DCameraController : SyncScript
     /// Resets the camera to its default position and orthographic size when the 'H' key is pressed.
     /// </summary>
     /// <remarks>
-    /// <para>The camera returns to the position it started at and to <see cref="OrthographicSizeDefault"/>, or
+    /// <para>The camera returns to the position it started at and to <see cref="DefaultOrthographicSize"/>, or
     /// to the orthographic size it started with when that is not set. Both the target values (for
     /// smoothing) and the actual camera are updated immediately.</para>
     /// </remarks>
@@ -490,7 +497,7 @@ public class Basic2DCameraController : SyncScript
         _targetPosition = _defaultCameraPosition;
         Entity.Transform.Position = _defaultCameraPosition;
 
-        var size = OrthographicSizeDefault ?? _defaultOrthographicSize;
+        var size = DefaultOrthographicSize ?? _startOrthographicSize;
 
         _targetOrthographicSize = size;
         _camera!.OrthographicSize = size;

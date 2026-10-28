@@ -393,7 +393,7 @@ public class ImGuiNetSystem : GameSystemBase
 
         _commandList.SetPipelineState(_pipelineState);
 
-        if (!TrySetShaderParameters(ref projMatrix)) return;
+        SetShaderParameters(ref projMatrix);
 
         _imguiShader.Apply(_graphicsContext);
 
@@ -410,27 +410,13 @@ public class ImGuiNetSystem : GameSystemBase
     /// <summary>
     /// Puts the projection matrix and font texture on the shader.
     /// </summary>
-    /// <returns>
-    /// <see langword="false"/> if the parameters could not be set, in which case the frame is skipped.
-    /// </returns>
-    private bool TrySetShaderParameters(ref Matrix projMatrix)
+    private void SetShaderParameters(ref Matrix projMatrix)
     {
-        try
-        {
-            _imguiShader!.Parameters.Set(ImGuiNetShaderKeys.proj, ref projMatrix);
-            _imguiShader.Parameters.Set(ImGuiNetShaderKeys.tex, _fontTexture);
-            // ImGui's colours are sRGB bytes; the shader decodes them only when the device says the
-            // backbuffer is sRGB (the default), the way Stride's own SpriteBatch does
-            _imguiShader.Parameters.Set(ImGuiNetShaderKeys.LinearOutput, _graphicsDevice!.ColorSpace == ColorSpace.Linear ? 1u : 0u);
-
-            return true;
-        }
-        catch
-        {
-            _logger.Warning("Using fallback shader parameter setting");
-
-            return false;
-        }
+        _imguiShader!.Parameters.Set(ImGuiNetShaderKeys.proj, ref projMatrix);
+        _imguiShader.Parameters.Set(ImGuiNetShaderKeys.tex, _fontTexture);
+        // ImGui's colours are sRGB bytes; the shader decodes them only when the device says the
+        // backbuffer is sRGB (the default), the way Stride's own SpriteBatch does
+        _imguiShader.Parameters.Set(ImGuiNetShaderKeys.LinearOutput, _graphicsDevice!.ColorSpace == ColorSpace.Linear ? 1u : 0u);
     }
 
     /// <summary>

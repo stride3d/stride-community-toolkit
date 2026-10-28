@@ -24,7 +24,7 @@ public class MeshOutlineRenderFeature : RootRenderFeature
     /// vertex normals before the world matrix, so the entity's scale multiplies this).
     /// A unit-diameter sphere has a radius of 0.5, so 0.03 gives a rim about 6% of the radius.
     /// </summary>
-    public float Thickness = 0.001f;
+    public float Thickness { get; set; } = 0.001f;
 
     /// <summary>
     /// This feature draws meshes that belong to Stride's own <c>MeshRenderFeature</c>, so it never

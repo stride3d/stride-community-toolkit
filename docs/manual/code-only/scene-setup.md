@@ -43,6 +43,9 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 | `TextOverlay` | `false` | Creates the [text overlay](../rendering/text-overlay.md), so the first section added shows at once. |
 | `Profiler` | `false` | Adds the frame-time profiler readout. |
 | `Instancing` | `false` | Puts the instancing render feature in the compositor, so instanced masters draw from the first frame. Set through `UseInstancing()`. Without it a master draws as one model and the run loop warns. |
+| `WindowTitle` | `null` | The window's title; `null` leaves the engine's. |
+| `Resizable` | `false` | Whether the window can be resized by dragging its edges. |
+| `DpiAware` | `false` | Declares per-monitor DPI awareness before the window is created, so a 150% display gets a sharp window rather than a stretched one. The code route of [DPI-aware window](examples/dpi-aware.md); not needed where the manifest declares it. |
 
 ## SceneSetup2D
 
@@ -54,7 +57,7 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 | `Msaa` | `MultisampleCount.None` | As in 3D. Thin lines flicker without it; charts use `X4`. |
 | `Camera` | `CameraSetup.Orthographic().WithController()` | At `CameraDefaults.Initial2DPosition`, `(0, 0, 50)`, with the pan-and-zoom controller. `null` for no camera. |
 | `Ground` | `GroundSetup.Plane(…)` | A box `GameDefaults.Default2DGroundSize` wide and high at `GameDefaults.Default2DGroundPosition`, with a static collider when the setup has a physics engine. `null` for none. |
-| `Physics`, `PostEffects`, `GameSettings`, `TextOverlay`, `Profiler`, `Instancing` | as in 3D | Asking for `PostEffects` installs the clean post-effect set, tone map included. |
+| `Physics`, `PostEffects`, `GameSettings`, `TextOverlay`, `Profiler`, `Instancing`, `WindowTitle`, `Resizable`, `DpiAware` | as in 3D | Asking for `PostEffects` installs the clean post-effect set, tone map included. |
 
 ## The pieces
 

@@ -26,8 +26,6 @@ using Stride.Input;
 // Next: E02_2D_Easing shows every curve at once; E02_2D_EasingInGame and E02_3D_EasingInGame use
 // tweens in physics scenes.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float Duration = 2f;
 const float Hold = 1f;
 const float StartX = -19f;
@@ -60,13 +58,18 @@ ShapeBatch? shapes = null;
 
 using var game = new Game();
 
-game.Run(new SceneSetup2D { ClearColor = new Color(24, 26, 32), Camera = CameraSetup.Orthographic(orthographicSize: 26f), Ground = null }, start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    ClearColor = new Color(24, 26, 32),
+    Camera = CameraSetup.Orthographic(orthographicSize: 26f),
+    Ground = null,
+    WindowTitle = "Easing Basics - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
+}, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Easing Basics - Stride Community Toolkit";
-
     game.AddEntityTextRenderer();
 
     shapes = game.AddShapeBatch();

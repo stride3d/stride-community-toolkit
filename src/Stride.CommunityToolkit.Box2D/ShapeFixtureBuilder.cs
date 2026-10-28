@@ -185,6 +185,25 @@ public static class ShapeFixtureBuilder
         return shapeDef;
     }
 
+    /// <summary>
+    /// The shape definition with its shape in a collision group, so <see cref="Box2DSimulation.CollisionMatrix"/>
+    /// decides what the shape collides with. The group is Box2D's <c>groupIndex</c> and must be positive: zero is
+    /// no group, and a negative group is Box2D's own "never collide with each other".
+    /// </summary>
+    /// <param name="shapeDef">The definition to put in the group; the copy returned is the one to attach shapes with.</param>
+    /// <param name="group">The group number, 1 or more.</param>
+    /// <returns>The definition in the group, with Box2D's custom filtering enabled so the matrix is consulted.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="group"/> is not positive.</exception>
+    public static B2ShapeDef InCollisionGroup(this B2ShapeDef shapeDef, int group)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(group);
+
+        shapeDef.filter.groupIndex = group;
+        shapeDef.enableCustomFiltering = true;
+
+        return shapeDef;
+    }
+
     private static void AttachBox(Vector2 size, B2BodyId bodyId, in B2ShapeDef shapeDef)
     {
         var box = b2MakeBox(size.X / 2, size.Y / 2);

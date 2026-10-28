@@ -75,13 +75,7 @@ public class ShapeFactory(Scene scene)
         },
         Primitive2D.RectangleShape rectangle => new()
         {
-            Vertices =
-            [
-                new(-rectangle.Size.X * 0.5f, -rectangle.Size.Y * 0.5f),
-                new(rectangle.Size.X * 0.5f, -rectangle.Size.Y * 0.5f),
-                new(rectangle.Size.X * 0.5f, rectangle.Size.Y * 0.5f),
-                new(-rectangle.Size.X * 0.5f, rectangle.Size.Y * 0.5f),
-            ],
+            Vertices = [.. ShapeComponent.Box(rectangle.Size)],
             Color = color,
         },
         _ => throw new NotSupportedException($"No outline for a {shape.Type.Name}."),

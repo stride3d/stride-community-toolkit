@@ -19,7 +19,7 @@ An Avalonia-based launcher application for browsing and running Stride Community
 ### Running the Launcher
 
 ```bash
-cd src/Stride.CommunityToolkit.Examples.Launcher
+cd tools/Stride.CommunityToolkit.Examples.Launcher
 dotnet run
 ```
 

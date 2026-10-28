@@ -56,17 +56,12 @@ public static class PhysicsQueries2D
     /// <param name="origin">World-space ray origin.</param>
     /// <param name="direction">Normalized direction vector.</param>
     /// <param name="maxDistance">Maximum ray length.</param>
-    /// <returns>
-    /// Tuple: (hit flag, body id, shape id, point, normal, fraction). When hit is false, the remaining values are unspecified.
-    /// </returns>
-    public static (bool hit, B2BodyId bodyId, B2ShapeId shapeId, Vector2 point, Vector2 normal, float fraction) RaycastClosest(
-        B2WorldId worldId, Vector2 origin, Vector2 direction, float maxDistance)
+    /// <returns>The closest hit, or <see langword="null"/> when the ray strikes nothing.</returns>
+    public static QueryRaycastHit? RaycastClosest(B2WorldId worldId, Vector2 origin, Vector2 direction, float maxDistance)
     {
         var result = b2World_CastRayClosest(worldId, origin.ToB2Vec2(), (direction * maxDistance).ToB2Vec2(), b2DefaultQueryFilter());
 
-        if (!result.hit) return (false, default, default, default, default, 0f);
-
-        return (true, b2Shape_GetBody(result.shapeId), result.shapeId, result.point.ToVector2(), result.normal.ToVector2(), result.fraction);
+        return result.hit ? new QueryRaycastHit(b2Shape_GetBody(result.shapeId), result.shapeId, result.point.ToVector2(), result.normal.ToVector2(), result.fraction) : null;
     }
 
     /// <summary>

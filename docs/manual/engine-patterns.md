@@ -155,8 +155,8 @@ the same two steps: unproject the cursor into a ray, intersect the ray with some
 also shows the production-hardened details: limiting the projection angle so a grazing ray does not
 produce a point kilometres away, and validating the inverted view matrix before trusting it.
 
-**In the toolkit:** `CameraComponentExtensions` (`GetPickRay`, `ScreenToWorldPoint`,
-`CalculateRayFromScreenPosition`) provides the same steps for game code; the chart library's
+**In the toolkit:** `CameraComponentExtensions` (`ScreenToWorldRay`, `ScreenToWorldPoint`,
+`ScreenToWorldRaySegment`) provides the same steps for game code; the chart library's
 cursor readout intersects that ray with the chart's plane and works identically under an orthographic
 2D camera and a free 3D camera.
 

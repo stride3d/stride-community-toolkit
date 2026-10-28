@@ -37,6 +37,7 @@ public static class CameraComponentExtensions
     /// <param name="collisionGroups">Optional. The collision filter group to consider during the raycasting. Default is <see cref="CollisionFilterGroups.DefaultFilter"/>.</param>
     /// <param name="collisionFilterGroupFlags">Optional. The collision filter group flags to consider during the raycasting. Default is <see cref="CollisionFilterGroupFlags.DefaultFilter"/>.</param>
     /// <returns>A <see cref="HitResult"/> containing information about the hit result, including the hit location and other collision data.</returns>
+    [Obsolete("Use Raycast(simulation, screenPosition, ...): the same cast, under a name that does not say mouse for a position that can be any screen point. This method will be removed in a later release.")]
     public static HitResult RaycastMouse(this CameraComponent camera, Simulation simulation, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
         => camera.Raycast(simulation, screenPosition, collisionGroups, collisionFilterGroupFlags);
 
@@ -68,9 +69,9 @@ public static class CameraComponentExtensions
     /// </remarks>
     public static HitResult Raycast(this CameraComponent camera, Simulation simulation, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
     {
-        var (nearPoint, farPoint) = camera.CalculateRayFromScreenPosition(screenPosition);
+        var ray = camera.ScreenToWorldRaySegment(screenPosition);
 
         // Perform the raycast from the near point to the far point and return the result
-        return simulation.Raycast(nearPoint, farPoint, collisionGroups, collisionFilterGroupFlags);
+        return simulation.Raycast(ray.Start, ray.End, collisionGroups, collisionFilterGroupFlags);
     }
 }

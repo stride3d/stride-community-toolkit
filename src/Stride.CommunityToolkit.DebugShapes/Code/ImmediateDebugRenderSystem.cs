@@ -36,12 +36,12 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     public Color PrimitiveColor { get; set; } = Color.LightGreen;
 
     /// <summary>
-    /// Maximum number of one-frame primitives stored and rendered per update.
+    /// Maximum number of one-frame primitives stored and rendered per update; past it, the oldest is dropped for each new one.
     /// </summary>
     public int MaxPrimitives { get; set; } = 100;
 
     /// <summary>
-    /// Maximum number of lifetime-based primitives stored and rendered per update.
+    /// Maximum number of lifetime-based primitives stored and rendered per update; past it, the oldest is dropped for each new one.
     /// </summary>
     public int MaxPrimitivesWithLifetime { get; set; } = 100;
 
@@ -66,14 +66,15 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         UpdateOrder = -100100; //before script
     }
 
-    // A full queue ignores the new shape. The original added it and then removed the last entry, which
-    // was the shape just added, so this is the same behaviour without the add
+    // A full queue drops its oldest shape for the new one, so what is drawn is always the latest asked for
     private void PushMessage(in DebugRenderable msg)
     {
         var timed = msg.Lifetime > 0f;
         var queue = timed ? _renderMessagesWithLifetime : _renderMessages;
 
-        if (queue.Count < (timed ? MaxPrimitivesWithLifetime : MaxPrimitives)) queue.Add(msg);
+        if (queue.Count >= (timed ? MaxPrimitivesWithLifetime : MaxPrimitives)) queue.RemoveAt(0);
+
+        queue.Add(msg);
     }
 
     /// <summary>The colour asked for, or <see cref="PrimitiveColor"/> for the default.</summary>
@@ -395,31 +396,31 @@ public class ImmediateDebugRenderSystem : GameSystemBase
             switch (msg.Type)
             {
                 case DebugPrimitiveType.Quad:
-                    ChooseRenderer(msg.Flags, msg.QuadData.Color.A).DrawQuad(ref msg.QuadData.Position, ref msg.QuadData.Size, ref msg.QuadData.Rotation, ref msg.QuadData.Color, depthTest: useDepthTest);
+                    ChooseRenderer(msg.Flags, msg.QuadData.Color.A).DrawQuad(in msg.QuadData.Position, in msg.QuadData.Size, in msg.QuadData.Rotation, in msg.QuadData.Color, depthTest: useDepthTest);
                     break;
                 case DebugPrimitiveType.Circle:
-                    ChooseRenderer(msg.Flags, msg.CircleData.Color.A).DrawCircle(ref msg.CircleData.Position, msg.CircleData.Radius, ref msg.CircleData.Rotation, ref msg.CircleData.Color, depthTest: useDepthTest);
+                    ChooseRenderer(msg.Flags, msg.CircleData.Color.A).DrawCircle(in msg.CircleData.Position, msg.CircleData.Radius, in msg.CircleData.Rotation, in msg.CircleData.Color, depthTest: useDepthTest);
                     break;
                 case DebugPrimitiveType.Line:
-                    ChooseRenderer(msg.Flags, msg.LineData.Color.A).DrawLine(ref msg.LineData.Start, ref msg.LineData.End, ref msg.LineData.Color, depthTest: useDepthTest);
+                    ChooseRenderer(msg.Flags, msg.LineData.Color.A).DrawLine(in msg.LineData.Start, in msg.LineData.End, in msg.LineData.Color, depthTest: useDepthTest);
                     break;
                 case DebugPrimitiveType.Cube:
-                    ChooseRenderer(msg.Flags, msg.CubeData.Color.A).DrawCube(ref msg.CubeData.Start, ref msg.CubeData.End, ref msg.CubeData.Rotation, ref msg.CubeData.Color, depthTest: useDepthTest);
+                    ChooseRenderer(msg.Flags, msg.CubeData.Color.A).DrawCube(in msg.CubeData.Start, in msg.CubeData.End, in msg.CubeData.Rotation, in msg.CubeData.Color, depthTest: useDepthTest);
                     break;
                 case DebugPrimitiveType.Sphere:
-                    ChooseRenderer(msg.Flags, msg.SphereData.Color.A).DrawSphere(ref msg.SphereData.Position, msg.SphereData.Radius, ref msg.SphereData.Color, depthTest: useDepthTest);
+                    ChooseRenderer(msg.Flags, msg.SphereData.Color.A).DrawSphere(in msg.SphereData.Position, msg.SphereData.Radius, in msg.SphereData.Color, depthTest: useDepthTest);
                     break;
                 case DebugPrimitiveType.HalfSphere:
-                    ChooseRenderer(msg.Flags, msg.HalfSphereData.Color.A).DrawHalfSphere(ref msg.HalfSphereData.Position, msg.HalfSphereData.Radius, ref msg.HalfSphereData.Rotation, ref msg.HalfSphereData.Color, depthTest: useDepthTest);
+                    ChooseRenderer(msg.Flags, msg.HalfSphereData.Color.A).DrawHalfSphere(in msg.HalfSphereData.Position, msg.HalfSphereData.Radius, in msg.HalfSphereData.Rotation, in msg.HalfSphereData.Color, depthTest: useDepthTest);
                     break;
                 case DebugPrimitiveType.Capsule:
-                    ChooseRenderer(msg.Flags, msg.CapsuleData.Color.A).DrawCapsule(ref msg.CapsuleData.Position, msg.CapsuleData.Height, msg.CapsuleData.Radius, ref msg.CapsuleData.Rotation, ref msg.CapsuleData.Color, depthTest: useDepthTest);
+                    ChooseRenderer(msg.Flags, msg.CapsuleData.Color.A).DrawCapsule(in msg.CapsuleData.Position, msg.CapsuleData.Height, msg.CapsuleData.Radius, in msg.CapsuleData.Rotation, in msg.CapsuleData.Color, depthTest: useDepthTest);
                     break;
                 case DebugPrimitiveType.Cylinder:
-                    ChooseRenderer(msg.Flags, msg.CylinderData.Color.A).DrawCylinder(ref msg.CylinderData.Position, msg.CylinderData.Height, msg.CylinderData.Radius, ref msg.CylinderData.Rotation, ref msg.CylinderData.Color, depthTest: useDepthTest);
+                    ChooseRenderer(msg.Flags, msg.CylinderData.Color.A).DrawCylinder(in msg.CylinderData.Position, msg.CylinderData.Height, msg.CylinderData.Radius, in msg.CylinderData.Rotation, in msg.CylinderData.Color, depthTest: useDepthTest);
                     break;
                 case DebugPrimitiveType.Cone:
-                    ChooseRenderer(msg.Flags, msg.ConeData.Color.A).DrawCone(ref msg.ConeData.Position, msg.ConeData.Height, msg.ConeData.Radius, ref msg.ConeData.Rotation, ref msg.ConeData.Color, depthTest: useDepthTest);
+                    ChooseRenderer(msg.Flags, msg.ConeData.Color.A).DrawCone(in msg.ConeData.Position, msg.ConeData.Height, msg.ConeData.Radius, in msg.ConeData.Rotation, in msg.ConeData.Color, depthTest: useDepthTest);
                     break;
             }
         }

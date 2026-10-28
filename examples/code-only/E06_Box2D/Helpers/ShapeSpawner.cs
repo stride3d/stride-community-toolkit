@@ -21,7 +21,7 @@ namespace E06_Box2D.Helpers;
 /// <param name="shapeFactory">Supplies the models and entities the bodies are attached to.</param>
 public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeFactory shapeFactory)
 {
-    private readonly B2WorldId _worldId = simulation.GetWorldId();
+    private readonly B2WorldId _worldId = simulation.WorldId;
 
     /// <summary>Gets how many shapes have been spawned since the last <see cref="Clear"/>.</summary>
     public int TotalCreated { get; private set; }

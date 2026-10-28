@@ -173,18 +173,19 @@ GalleryStation[] stations =
         Bracket: true),
 ];
 
-// Per-monitor DPI awareness has to be enabled before the window exists, otherwise Windows
-// hands us a stretched, blurry window on high-DPI displays.
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
-game.Run(new SceneSetup2D { ClearColor = new Color(6, 8, 14), Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight).WithController(), Ground = null }, start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    ClearColor = new Color(6, 8, 14),
+    Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight).WithController(),
+    Ground = null,
+    Resizable = true,
+    DpiAware = true,
+}, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-
     // No ground and no physics: this is a gallery, and the default 2D ground would cut through it
     game.AddWorldTextRenderer();
 

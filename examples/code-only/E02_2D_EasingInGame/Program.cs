@@ -25,8 +25,6 @@ using Stride.Input;
 //
 // New to Tween? E02_2D_EasingBasics builds the same motion by hand first, then with a tween.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float LiftLow = -2.6f;
 const float LiftHigh = 2.4f;
 
@@ -55,13 +53,16 @@ using var game = new Game();
 
 // Closer than the default view, so the lift and the coins fill the window; the controller reads the
 // size on its first frame and returns to it when H resets the camera
-game.Run(new SceneSetup2D { Camera = CameraSetup.Orthographic(orthographicSize: 14f).WithController() }.UseBepu(), start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    Camera = CameraSetup.Orthographic(orthographicSize: 14f).WithController(),
+    WindowTitle = "Easing in a 2D game - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
+}.UseBepu(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Easing in a 2D game - Stride Community Toolkit";
-
     game.AddEntityTextRenderer();
 
     // The lift: a kinematic body, so it carries what lands on it and nothing pushes it back
@@ -244,10 +245,7 @@ void HandleInput(Scene scene)
     {
         for (var i = 0; i < boxes.Length; i++)
         {
-            boxes[i].Teleport(boxHomes[i] with { Y = boxHomes[i].Y + 3f }, Quaternion.Identity);
-            boxes[i].LinearVelocity = Vector3.Zero;
-            boxes[i].AngularVelocity = Vector3.Zero;
-            boxes[i].Awake = true;
+            boxes[i].TeleportAtRest(boxHomes[i] with { Y = boxHomes[i].Y + 3f });
         }
     }
 }

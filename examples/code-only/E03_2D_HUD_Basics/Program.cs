@@ -22,9 +22,6 @@ using System.Globalization;
 // Steps 1 to 7 are written here, in one file, as local functions. Step 8 draws the same HUD from
 // SimpleHud.cs and HudStyle.cs.
 
-// Pixel sizes then mean the same on a scaled display as on a 100% one
-WindowsDpiManager.EnablePerMonitorV2();
-
 const int LastStep = 8;
 
 string[] stepNames =
@@ -93,13 +90,15 @@ SimpleHud hud = null!;
 
 using var game = new Game();
 
-game.Run(new SceneSetup2D().UseBepu(), start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    WindowTitle = "HUD basics - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
+}.UseBepu(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "HUD basics - Stride Community Toolkit";
-
     // Something for the HUD to sit over: the scene of E01_2D_FallingShapes
     AddFallingShapes(rootScene);
 

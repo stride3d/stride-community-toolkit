@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Effects.PostProcessing;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -37,8 +38,6 @@ Entity ball = null!;
 Entity chaseCamera = null!;
 var selected = 0;
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
 var sceneSetup = new SceneSetup3D
@@ -46,16 +45,16 @@ var sceneSetup = new SceneSetup3D
     Ground = null,
     // Looking at the monitors from the scene's side, with the scene in the foreground
     Camera = CameraSetup.Perspective(position: new(-1, 15, 27), rotation: new(0, -17, 0)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Render to Texture - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Render to Texture - Stride Community Toolkit";
-
     game.AddEntityTextRenderer();
 
     BuildScene(scene);
@@ -185,7 +184,7 @@ Entity FixedCamera(Scene scene, string name, Vector3 position, Vector3 target)
     var camera = new Entity(name);
 
     camera.Transform.Position = position;
-    camera.Transform.Rotation = LookAt(position, target);
+    camera.Transform.Rotation = QuaternionUtil.LookAt(position, target);
     camera.Scene = scene;
 
     return camera;
@@ -200,15 +199,7 @@ void FollowBall()
     var eye = ballPosition + tangent * 4f + Vector3.UnitY * 1.5f;
 
     chaseCamera.Transform.Position = eye;
-    chaseCamera.Transform.Rotation = LookAt(eye, ballPosition);
-}
-
-/// <summary>A camera rotation looking from one point at another. A camera looks down its -Z; yaw turns that towards -X, pitch lifts it.</summary>
-static Quaternion LookAt(Vector3 eye, Vector3 target)
-{
-    var direction = Vector3.Normalize(target - eye);
-
-    return Quaternion.RotationYawPitchRoll(MathF.Atan2(-direction.X, -direction.Z), MathF.Asin(direction.Y), 0f);
+    chaseCamera.Transform.Rotation = QuaternionUtil.LookAt(eye, ballPosition);
 }
 
 // ---- The monitors ---------------------------------------------------------------------------

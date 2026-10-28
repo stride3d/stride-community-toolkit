@@ -322,7 +322,7 @@ Limitations:
   pixels at 150 %. Set `AutoScale = false` to use physical pixels.
 - **Components.** `ShapeComponent` draws a shape from an entity's transform and appears in Game Studio. It
   needs no `AddShapeBatch` call. If the game has a batch, the component uses it. Otherwise a depth-tested batch
-  is registered automatically.
+  is registered automatically. `ShapeComponent.Box(size)` gives the four corners of a rectangle for `Vertices`.
 
 ## Colour and blending
 

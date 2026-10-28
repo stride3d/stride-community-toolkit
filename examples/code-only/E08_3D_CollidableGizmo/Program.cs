@@ -5,8 +5,6 @@ using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-const string CubeEntityName = "Cube";
-
 using var game = new Game();
 
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
@@ -42,7 +40,7 @@ void CreateCubes(Scene rootScene, int count)
 
     for (var i = -half; i < half; i++)
     {
-        var entity = game.CreatePrimitive(Primitive3D.Cube(), new() { EntityName = CubeEntityName });
+        var entity = game.CreatePrimitive(Primitive3D.Cube());
         entity.Transform.Position = new Vector3(i * 0.99f, 1, 0);
         entity.Scene = rootScene;
     }

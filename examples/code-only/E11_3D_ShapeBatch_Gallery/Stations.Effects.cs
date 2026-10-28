@@ -434,13 +434,7 @@ public static class EffectStations
         // the other stations' shapes are not lit from afar
         var hovered = s.IsCurrent && shapes.TryPick(s.Game.Input.MousePosition, out var hit, slackPixels: 4f) ? hit : (ShapeHit?)null;
 
-        Tagged("disc", () => shapes.DrawDisc(s.At(-2.6f, Lift, 1.5f), s.Up, 1.1f, Color.DeepSkyBlue));
-        Tagged("ring", () => shapes.DrawRing(s.At(0f, Lift, 1.5f), s.Up, 1.1f, Color.Gold));
-        Tagged("sector", () => shapes.DrawSector(s.At(2.6f, Lift, 1.5f), s.Up, 1.2f, 0.4f, 4.4f, Color.Orange));
-        Tagged("panel", () => shapes.DrawRectangle(s.At(-2.2f, 2f, -1f), s.Right, s.Up, new Vector2(2.4f, 1.4f), Color.MediumPurple, cornerRadius: 0.3f));
-        Tagged("line", () => shapes.DrawLine(s.At(-0.4f, 1.2f, -1f), s.At(2.6f, 3f, -1f), 0.12f, Color.LimeGreen));
-        Tagged("marker", () => shapes.DrawPixelDisc(s.At(2.6f, 1.2f, -1f), 12f, Color.White));
-        Tagged("polyline", () => shapes.DrawPixelPolyline([new(-2.6f, 0f), new(-1.3f, 1f), new(0f, 0f), new(1.3f, 1f), new(2.6f, 0f)], s.At(0f, Lift, -3f), s.Right, s.Forward, 3f, Color.Tomato));
+        foreach (var name in PickingTags) Draw(name);
 
         if (s.State is WorldTextComponent label)
         {
@@ -450,8 +444,9 @@ public static class EffectStations
         }
 
         // Every shape drawn under its own tag; the hovered one with a fuller fill and a glow of its
-        // own colour, the style put back after each
-        void Tagged(string name, Action draw)
+        // own colour, the style put back after each. A switch rather than a closure per shape, so a
+        // station visited every frame allocates nothing.
+        void Draw(string name)
         {
             shapes.Tag = name;
 
@@ -463,9 +458,21 @@ public static class EffectStations
                 shapes.Glow.Additive = true;
             }
 
-            draw();
+            switch (name)
+            {
+                case "disc": shapes.DrawDisc(s.At(-2.6f, Lift, 1.5f), s.Up, 1.1f, Color.DeepSkyBlue); break;
+                case "ring": shapes.DrawRing(s.At(0f, Lift, 1.5f), s.Up, 1.1f, Color.Gold); break;
+                case "sector": shapes.DrawSector(s.At(2.6f, Lift, 1.5f), s.Up, 1.2f, 0.4f, 4.4f, Color.Orange); break;
+                case "panel": shapes.DrawRectangle(s.At(-2.2f, 2f, -1f), s.Right, s.Up, new Vector2(2.4f, 1.4f), Color.MediumPurple, cornerRadius: 0.3f); break;
+                case "line": shapes.DrawLine(s.At(-0.4f, 1.2f, -1f), s.At(2.6f, 3f, -1f), 0.12f, Color.LimeGreen); break;
+                case "marker": shapes.DrawPixelDisc(s.At(2.6f, 1.2f, -1f), 12f, Color.White); break;
+                case "polyline": shapes.DrawPixelPolyline([new(-2.6f, 0f), new(-1.3f, 1f), new(0f, 0f), new(1.3f, 1f), new(2.6f, 0f)], s.At(0f, Lift, -3f), s.Right, s.Forward, 3f, Color.Tomato); break;
+            }
+
             s.ResetStyle(shapes);
             shapes.Tag = null;
         }
     }
+
+    private static readonly string[] PickingTags = ["disc", "ring", "sector", "panel", "line", "marker", "polyline"];
 }

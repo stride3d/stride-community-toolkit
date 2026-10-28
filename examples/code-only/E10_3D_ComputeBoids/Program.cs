@@ -30,8 +30,6 @@ using Buffer = Stride.Graphics.Buffer;
 
 int[] boidCounts = [2048, 4096, 8192];
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
 // Compute shaders with more than one writable buffer need shader model 5, which is Direct3D
@@ -49,15 +47,15 @@ var sceneSetup = new SceneSetup3D
 {
     GameSettings = settings => settings.GetOrCreateConfiguration<RenderingSettings>().DefaultGraphicsProfile = GraphicsProfile.Level_11_0,
     Camera = CameraSetup.Perspective(position: new Vector3(0, 9f, 26f), rotation: new Vector3(0, -8f, 0)).WithController(),
-    Profiler = true
+    Profiler = true,
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-
     // Code-only projects have to register the instancing render feature themselves; without it an
     // InstancingComponent draws its model once, at the entity, and the flock is one cone
     game.AddInstancingSupport();

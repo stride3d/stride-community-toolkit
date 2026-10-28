@@ -33,8 +33,6 @@ using Stride.Rendering;
 //   Drawing many bodies at once - see E10_3D_Instancing_EntityTransform. The bodies here have no
 //                                 model of their own; one master entity per shape draws them all.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float NozzleHeight = 1.4f;
 const float BasinHalfSize = 5f;
 const float ThrowSpeed = 22f;
@@ -64,7 +62,10 @@ using var game = new Game();
 var sceneSetup = new SceneSetup3D
 {
     Camera = CameraSetup.Perspective(position: new Vector3(0f, 6.5f, 15f), rotation: new Vector3(0f, -14f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Cube fountain - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
@@ -73,9 +74,6 @@ foreach (var master in masters) master?.Dispose();
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Cube fountain - Stride Community Toolkit";
-
     for (var i = 0; i < shapes.Length; i++)
     {
         // The model, owned by a prototype parked out of sight

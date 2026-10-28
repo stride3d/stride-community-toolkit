@@ -44,9 +44,9 @@ public class TranslationGizmo : AxialGizmoBase
     {
         CreateMaterials();
 
-        _planeMaterials[0] = CreateUniformColorMaterial(GetRedColor().WithAlpha(86));
-        _planeMaterials[1] = CreateUniformColorMaterial(GetGreenColor().WithAlpha(86));
-        _planeMaterials[2] = CreateUniformColorMaterial(GetBlueColor().WithAlpha(86));
+        _planeMaterials[0] = CreateUniformColorMaterial(RedColor.WithAlpha(86));
+        _planeMaterials[1] = CreateUniformColorMaterial(GreenColor.WithAlpha(86));
+        _planeMaterials[2] = CreateUniformColorMaterial(BlueColor.WithAlpha(86));
 
         var axisRootEntities = new[] { new Entity("Root X axis"), new Entity("Root Y axis"), new Entity("Root Z axis") };
 
@@ -78,9 +78,9 @@ public class TranslationGizmo : AxialGizmoBase
     {
         if (!showAxisName) return;
 
-        entity.AddChild(CreateAxisLabel("X", new Vector3(1.1f, 0.15f, 0f), GetRedColor(), rotateAxisNames));
-        entity.AddChild(CreateAxisLabel("Y", new Vector3(0f, 1.15f, 0f), GetGreenColor(), rotateAxisNames));
-        entity.AddChild(CreateAxisLabel("Z", new Vector3(0f, 0.15f, 1.1f), GetBlueColor(), rotateAxisNames));
+        entity.AddChild(CreateAxisLabel("X", new Vector3(1.1f, 0.15f, 0f), RedColor, rotateAxisNames));
+        entity.AddChild(CreateAxisLabel("Y", new Vector3(0f, 1.15f, 0f), GreenColor, rotateAxisNames));
+        entity.AddChild(CreateAxisLabel("Z", new Vector3(0f, 0.15f, 1.1f), BlueColor, rotateAxisNames));
     }
 
     /// <summary>

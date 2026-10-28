@@ -140,7 +140,7 @@ public sealed class Box2DDebugDraw
     {
         ArgumentNullException.ThrowIfNull(simulation);
 
-        Draw(simulation.GetWorldId());
+        Draw(simulation.WorldId);
     }
 
     private void DrawPolygon(ReadOnlySpan<B2Vec2> vertices, int vertexCount, B2HexColor color, object context)

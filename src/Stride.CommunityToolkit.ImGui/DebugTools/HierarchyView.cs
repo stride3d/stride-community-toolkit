@@ -36,7 +36,7 @@ public class HierarchyView : BaseWindow
         {
             _searchResult.Clear();
 
-            if (!string.IsNullOrWhiteSpace(_searchTerm)) RecursiveSearch(_searchResult, _searchTerm.ToLower(), Game.SceneSystem.SceneInstance.RootScene);
+            if (!string.IsNullOrWhiteSpace(_searchTerm)) RecursiveSearch(_searchResult, _searchTerm, Game.SceneSystem.SceneInstance.RootScene);
         }
 
         using (Child())
@@ -64,9 +64,7 @@ public class HierarchyView : BaseWindow
 
         if (name is null) return;
 
-        var lower = name.ToLower();
-
-        if (term.Contains(lower) || lower.Contains(term)) result.Add(source);
+        if (name.Contains(term, StringComparison.OrdinalIgnoreCase) || term.Contains(name, StringComparison.OrdinalIgnoreCase)) result.Add(source);
     }
 
     private void RecursiveDrawing(IIdentifiable source)

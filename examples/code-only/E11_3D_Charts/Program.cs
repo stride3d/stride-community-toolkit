@@ -25,9 +25,6 @@ using Stride.Rendering.Images;
 // T removes or restores tan, Space throws the ball, A pauses the animated curve, V switches between
 // the chart look and the showcase look.
 
-// Without this a scaled-up 4K desktop hands the game a scaled, blurred window. A no-op off Windows.
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
 Chart? chart = null;
@@ -72,14 +69,14 @@ game.Run(new SceneSetup3D
     },
     Lighting = null,
     Skybox = null,
-    Ground = null
+    Ground = null,
+    WindowTitle = "Charts 3D",
+    Resizable = true,
+    DpiAware = true,
 }, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Charts 3D";
-
     keyLight = game.AddDirectionalLight(intensity: ChartLight).Get<LightComponent>();
 
     // Glow3D is the lit preset: bright palette, emissive intensity above 1, which the default

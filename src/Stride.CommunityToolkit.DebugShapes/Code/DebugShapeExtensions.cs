@@ -42,8 +42,8 @@ public static class DebugShapeExtensions
     /// "Opaque" and "Transparent" render stages.
     /// </summary>
     /// <param name="graphicsCompositor">The <see cref="GraphicsCompositor"/> to modify.</param>
-    /// <exception cref="NullReferenceException">
-    /// Thrown when the "Opaque" or "Transparent" render stages are not found in the <paramref name="graphicsCompositor"/>.
+    /// <exception cref="InvalidOperationException">
+    /// The "Opaque" or "Transparent" render stage is not in the <paramref name="graphicsCompositor"/>.
     /// </exception>
     /// <returns>The feature now in the compositor: the existing one, or the one just added.</returns>
     public static ImmediateDebugRenderFeature AddImmediateDebugRenderFeature(this GraphicsCompositor graphicsCompositor)
@@ -55,12 +55,12 @@ public static class DebugShapeExtensions
 
         if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
         {
-            throw new NullReferenceException("Opaque RenderStage not found");
+            throw new InvalidOperationException("The graphics compositor has no 'Opaque' render stage, which the debug shapes draw into. AddGraphicsCompositor() creates it.");
         }
 
         if (!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
         {
-            throw new NullReferenceException("Transparent RenderStage not found");
+            throw new InvalidOperationException("The graphics compositor has no 'Transparent' render stage, which the debug shapes draw into. AddGraphicsCompositor() creates it.");
         }
 
         var renderFeature = new ImmediateDebugRenderFeature

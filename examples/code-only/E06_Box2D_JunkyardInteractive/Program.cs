@@ -66,13 +66,9 @@ ShapeDefinition[] catalogue =
     new("Pentagon", FibonacciPentagon(0.4f), 0f),
     new("Circle", [Vector2.Zero], 0.35f),
     new("Capsule", [new(0, -0.25f), new(0, 0.25f)], 0.25f),
-    new("Box", RectangleVertices(0.35f, 0.35f), 0f),
+    new("Box", ShapeComponent.Box(new Vector2(0.7f, 0.7f)), 0f),
 ];
 var currentShape = 0;
-
-// Per-monitor DPI awareness, so a 150% display gets a sharp window rather than a stretched one;
-// it has to happen before the window exists
-WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 using var simulation = new Box2DSimulation();
@@ -82,16 +78,16 @@ var sceneSetup = new SceneSetup2D
     ClearColor = background,
     Camera = CameraSetup.Orthographic(position: new Vector3(8, 25, 50), orthographicSize: 60).WithController(),
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Junkyard Playground Box2D Example - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 };
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Junkyard Playground Box2D Example - Stride Community Toolkit";
-
     var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
 
@@ -105,7 +101,7 @@ void Start(Scene rootScene)
 
     // Pick shapes up and throw them with the left mouse button: a kinematic anchor and a motor joint
     // under the cursor, so the held shape still collides with the pile and the plow.
-    cameraEntity.Add(new Grabber2DScript { Simulation = simulation });
+    game.AddGrabber2D(simulation);
 
     CreateGround(rootScene);
     CreateSensorGate(rootScene);
@@ -123,8 +119,8 @@ void CreateGround(Scene scene)
     var groundId = simulation.CreateStaticBody(Vector3.Zero);
     var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
 
-    var floorSquare = RectangleVertices(0.55f * GridSize, 0.5f * GridSize);
-    var wallSquare = RectangleVertices(0.5f * GridSize, 0.55f * GridSize);
+    var floorSquare = ShapeComponent.Box(new Vector2(1.1f * GridSize, GridSize));
+    var wallSquare = ShapeComponent.Box(new Vector2(GridSize, 1.1f * GridSize));
 
     var y = 0.0f;
     var x = -80.0f * GridSize;
@@ -167,7 +163,7 @@ void AddStaticSquare(Scene scene, Vector2[] vertices, float x, float y)
 /// </summary>
 void CreateSensorGate(Scene scene)
 {
-    var gateVertices = RectangleVertices(8f, 3f);
+    var gateVertices = ShapeComponent.Box(new Vector2(16f, 6f));
 
     var entity = new Entity("SensorGate") { new ShapeComponent { Vertices = [.. gateVertices], Color = wheat } };
 
@@ -323,14 +319,14 @@ void HandleInput(Scene rootScene)
 
     // The left button belongs to the grabber on the camera: pick a shape up, carry it, throw it.
     // N drops a new one of the selected kind at the cursor.
-    if (game.Input.IsKeyPressed(Keys.N) && camera.CalculateRayPlaneIntersectionPoint(game.Input.MousePosition) is { } dropPoint)
+    if (game.Input.IsKeyPressed(Keys.N) && camera.ScreenToWorldPointOnXYPlane(game.Input.MousePosition) is { } dropPoint)
     {
         Spawn(rootScene, catalogue[currentShape], dropPoint);
     }
 
     if (game.Input.IsMouseButtonPressed(MouseButton.Middle))
     {
-        var world = camera.CalculateRayPlaneIntersectionPoint(game.Input.MousePosition);
+        var world = camera.ScreenToWorldPointOnXYPlane(game.Input.MousePosition);
 
         if (world is { } point && simulation.OverlapPoint(point) is { } bodyId)
         {
@@ -382,14 +378,6 @@ IReadOnlyList<TextElement> BuildOverlayLines()
 
     return lines;
 }
-
-static Vector2[] RectangleVertices(float halfWidth, float halfHeight) =>
-[
-    new(-halfWidth, -halfHeight),
-    new(halfWidth, -halfHeight),
-    new(halfWidth, halfHeight),
-    new(-halfWidth, halfHeight),
-];
 
 /// <summary>
 /// The junkyard's rock outline: five points on a circle by the Fibonacci sphere algorithm, sorted
@@ -467,8 +455,6 @@ public sealed class PusherDriver(B2BodyId pusherId) : IBox2DSimulationUpdate
 
         b2Body_SetTargetTransform(pusherId, in target, deltaTime, true);
     }
-
-    public void AfterSimulationUpdate(Box2DSimulation simulation, float deltaTime) { }
 }
 
 /*

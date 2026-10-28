@@ -50,7 +50,7 @@ public static class CameraComponentExtensions
     {
         ArgumentNullException.ThrowIfNull(camera);
 
-        var ray = camera.GetPickRay(screenPosition);
+        var ray = camera.ScreenToWorldRay(screenPosition);
 
         return camera.Entity.GetSimulation().RayCast(ray.Position, ray.Direction, maxDistance, out hit, collisionMask);
     }

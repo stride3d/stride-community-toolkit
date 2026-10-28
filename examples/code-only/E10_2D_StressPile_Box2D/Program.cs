@@ -92,14 +92,13 @@ game.Run(new SceneSetup3D
     Camera = CameraSetup.Perspective(position: new Vector3(0, 0, 80), rotation: Vector3.Zero).WithController(),
     Lighting = null,
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Stress Pile Box2D Example - Stride Community Toolkit",
+    Resizable = true,
 }.UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Stress Pile Box2D Example - Stride Community Toolkit";
-
     scene = rootScene;
 
     // The default aim shines toward +Z, which leaves the faces turned towards the camera unlit
@@ -109,11 +108,11 @@ void Start(Scene rootScene)
     // Cap how fast anything may move. The boxes fall ~190 units into the funnel and arrive at
     // ~60 m/s; at Box2D's default cap (400) those impacts squeeze bodies out of the pile like
     // popcorn and over the walls, and the endlessly falling escapees then keep the scene awake.
-    b2World_SetMaximumLinearSpeed(simulation.GetWorldId(), 40f);
+    b2World_SetMaximumLinearSpeed(simulation.WorldId, 40f);
 
     // Left mouse picks a body out of the pile and throws it back in. The camera is a perspective
     // one here; the grabber picks on the XY plane the bodies live in.
-    game.GetCameraEntity().Add(new Grabber2DScript { Simulation = simulation });
+    game.AddGrabber2D(simulation);
 
     CreateWall(new Vector3(-WallWidth / 2, 0, 0), wallSize);
     CreateWall(new Vector3(WallWidth / 2, 0, 0), wallSize);

@@ -2,6 +2,7 @@ using Box2D.NET;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using static Box2D.NET.B2Joints;
+using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Worlds;
 
 namespace Stride.CommunityToolkit.Box2D;
@@ -23,6 +24,15 @@ public sealed class Box2DSimulation : IDisposable
     private readonly Action<float> _beforeFixedStep;
     private readonly Action<float> _afterFixedStep;
 
+    // One delegate for every simulation: Box2D calls it, from its worker threads, for the pairs where a shape
+    // asked for custom filtering, and the context is the simulation whose matrix answers
+    private static readonly b2CustomFilterFcn CollisionMatrixFilter = static (shapeA, shapeB, context) =>
+    {
+        var matrix = ((Box2DSimulation)context).CollisionMatrix;
+
+        return matrix.CanCollide(b2Shape_GetFilter(shapeA).groupIndex, b2Shape_GetFilter(shapeB).groupIndex);
+    };
+
     /// <summary>Creates a new simulation instance with a fresh Box2D world.</summary>
     /// <param name="settings">Optional stepping and threading configuration; defaults to <see cref="PhysicsStepSettings"/> defaults.</param>
     public Box2DSimulation(PhysicsStepSettings? settings = null)
@@ -33,6 +43,8 @@ public sealed class Box2DSimulation : IDisposable
         _beforeFixedStep = BeforeFixedStep;
         _afterFixedStep = AfterFixedStep;
         Joints = new SimulationJoints2D(_world, _bridge);
+
+        b2World_SetCustomFilterCallback(_world.WorldId, CollisionMatrixFilter, this);
     }
 
     /// <summary>Whether simulation stepping and event processing should occur.</summary>
@@ -68,6 +80,14 @@ public sealed class Box2DSimulation : IDisposable
     /// created bodies for. See <see cref="Joints2D"/> for the joint types and their options.
     /// </summary>
     public SimulationJoints2D Joints { get; }
+
+    /// <summary>
+    /// Which collision groups collide with which. Every pair collides until <see cref="Box2DCollisionMatrix.SetCollision"/>
+    /// says otherwise. A shape joins a group through <see cref="ShapeFixtureBuilder.InCollisionGroup"/> on its shape
+    /// definition; shapes in no group are not affected. Configure it between updates: the simulation reads it from its
+    /// worker threads during a step.
+    /// </summary>
+    public Box2DCollisionMatrix CollisionMatrix { get; } = new();
 
     /// <summary>
     /// Registers a handler whose <see cref="IBox2DSimulationUpdate.SimulationUpdate"/> runs before and
@@ -197,18 +217,16 @@ public sealed class Box2DSimulation : IDisposable
     /// <param name="entity">The entity whose body should be removed.</param>
     public void RemoveBody(Entity entity) => _bridge.RemoveBody(entity);
 
-    /// <summary>Gets the underlying Box2D world id.</summary>
-    /// <returns>The native world id.</returns>
-    public B2WorldId GetWorldId() => _world.WorldId;
+    /// <summary>The underlying Box2D world id, for calls straight into Box2D.NET.</summary>
+    public B2WorldId WorldId => _world.WorldId;
 
     /// <summary>Gets the entity previously registered for the given body id (or null).</summary>
     /// <param name="bodyId">The body to look up.</param>
     /// <returns>The associated entity, or null when the body has none.</returns>
     public Entity? GetEntity(B2BodyId bodyId) => _bridge.GetEntity(bodyId);
 
-    /// <summary>Returns a snapshot list of all body ids tracked by the bridge.</summary>
-    /// <returns>A new list with every tracked body id.</returns>
-    public List<B2BodyId> GetAllBodyIds() => _bridge.Bodies.ToList();
+    /// <summary>Every body the simulation created, as a live view: do not create or remove bodies while enumerating it.</summary>
+    public IEnumerable<B2BodyId> Bodies => _bridge.Bodies;
 
     /// <summary>
     /// Tests if a point overlaps with any physics shape in the world.
@@ -227,11 +245,7 @@ public sealed class Box2DSimulation : IDisposable
     /// <param name="maxDistance">Maximum distance to cast.</param>
     /// <returns>First hit or null if no hit.</returns>
     public RaycastHit? Raycast(Vector2 origin, Vector2 direction, float maxDistance)
-    {
-        var (hit, bodyId, shapeId, point, normal, fraction) = PhysicsQueries2D.RaycastClosest(_world.WorldId, origin, direction, maxDistance);
-
-        return hit ? Resolve(new QueryRaycastHit(bodyId, shapeId, point, normal, fraction), maxDistance) : null;
-    }
+        => PhysicsQueries2D.RaycastClosest(_world.WorldId, origin, direction, maxDistance) is { } hit ? Resolve(hit, maxDistance) : null;
 
     /// <summary>
     /// Performs a raycast and returns all hits along the ray.

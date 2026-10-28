@@ -54,15 +54,11 @@ B2BodyId pusherId = default;
 var pentagon = FibonacciPentagon(Radius);
 
 // Static square outlines, reused for every floor and wall submission
-var floorSquare = RectangleVertices(0.55f * GridSize, 0.5f * GridSize);
-var wallSquare = RectangleVertices(0.5f * GridSize, 0.55f * GridSize);
+var floorSquare = ShapeComponent.Box(new Vector2(1.1f * GridSize, GridSize));
+var wallSquare = ShapeComponent.Box(new Vector2(GridSize, 1.1f * GridSize));
 
 // The pusher plow: a 4 x 8 box whose shape sits 4 units above the body origin
 Vector2[] pusherBoxVertices = [new(-2, 0), new(2, 0), new(2, 8), new(-2, 8)];
-
-// Per-monitor DPI awareness, so a 150% display gets a sharp window rather than a stretched one;
-// it has to happen before the window exists
-WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 using var simulation = new Box2DSimulation();
@@ -75,16 +71,16 @@ var sceneSetup = new SceneSetup2D
     // mouse wheel zooms; the shader keeps borders pixel-constant at any zoom on its own
     Camera = CameraSetup.Orthographic(position: new Vector3(8, 25, 50), orthographicSize: 60).WithController(),
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Junkyard Box2D Example - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 };
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Junkyard Box2D Example - Stride Community Toolkit";
-
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;
     shapeBatch.Fill.Alpha = 0.4f;
@@ -95,7 +91,7 @@ void Start(Scene rootScene)
     simulation.MaxStepsPerFrame = 1;
 
     // Left mouse picks a rock up and throws it - the one interaction the replica adds to the testbed
-    game.GetCameraEntity().Add(new Grabber2DScript { Simulation = simulation });
+    game.AddGrabber2D(simulation);
 
     TextOverlay.GetOrCreate(game).AddSection("Junkyard", static () =>
     [
@@ -245,14 +241,6 @@ Color BodyColor(B2BodyId bodyId)
     return velocity.X * velocity.X + velocity.Y * velocity.Y > FastSpeed * FastSpeed ? salmon : pink;
 }
 
-static Vector2[] RectangleVertices(float halfWidth, float halfHeight) =>
-[
-    new(-halfWidth, -halfHeight),
-    new(halfWidth, -halfHeight),
-    new(halfWidth, halfHeight),
-    new(-halfWidth, halfHeight),
-];
-
 /// <summary>
 /// The sample's rock outline: five points on a circle of the given radius by the Fibonacci sphere
 /// algorithm, sorted by angle so the convex hull and the shader's SDF see them in CCW order.
@@ -289,8 +277,6 @@ public sealed class PusherDriver(B2BodyId pusherId) : IBox2DSimulationUpdate
 
         b2Body_SetTargetTransform(pusherId, in target, deltaTime, true);
     }
-
-    public void AfterSimulationUpdate(Box2DSimulation simulation, float deltaTime) { }
 }
 
 /*

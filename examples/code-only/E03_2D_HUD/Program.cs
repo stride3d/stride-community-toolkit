@@ -48,18 +48,20 @@ var heldPointerClicked = false;
 HudCanvas? canvas = null;
 KeyMenu? themeMenu = null;
 
-// Before the window exists: a sharp window on a scaled display
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
-game.Run(new SceneSetup2D { ClearColor = new Color(5, 7, 12), Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight).WithController(), Ground = null }, start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    ClearColor = new Color(5, 7, 12),
+    Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight).WithController(),
+    Ground = null,
+    WindowTitle = "Ship HUD",
+    Resizable = true,
+    DpiAware = true,
+}, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Ship HUD";
-
     game.AddWorldTextRenderer();
 
     // One batch for everything. Its fill source is the panels' glass, a shader class of the

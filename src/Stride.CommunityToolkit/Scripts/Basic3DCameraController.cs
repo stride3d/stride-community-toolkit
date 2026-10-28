@@ -47,23 +47,22 @@ public class Basic3DCameraController : SyncScript
     public bool HelpCollapsed { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets whether the camera's help is put on the shared <see cref="TextOverlay"/> at all. Defaults to
-    /// <see langword="true"/>, and must be set before the script starts.
-    /// </summary>
-    public bool ShowHelp { get; set; } = true;
-
-    /// <summary>
-    /// Gets or sets whether the camera's help section is shown.
+    /// Gets or sets whether the camera's key help is shown on the shared <see cref="TextOverlay"/>. Defaults to
+    /// <see langword="true"/>, and can be set before the script starts or at any time after.
     /// </summary>
     /// <remarks>
     /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
     /// it, is toggled with <see cref="TextOverlay.ToggleKey"/>.
     /// </remarks>
-    public bool ShowInstructions
+    public bool ShowHelp
     {
-        get => _instructions?.Enabled ?? false;
-        set { if (_instructions is not null) _instructions.Enabled = value; }
-    }
+        get;
+        set
+        {
+            field = value;
+            _instructions?.Enabled = value;
+        }
+    } = true;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class, optionally moving the
@@ -128,45 +127,44 @@ public class Basic3DCameraController : SyncScript
         // The overlay is shared, and this Start runs a frame after the game's own start callback, so
         // its position is only touched when an anchor was asked for explicitly - otherwise a position
         // set by the example before the controller started would be silently overwritten
-        if (ShowHelp)
+        var overlay = TextOverlay.GetOrCreate(Game);
+
+        if (_helpPosition is { } position)
         {
-            var overlay = TextOverlay.GetOrCreate(Game);
-
-            if (_helpPosition is { } position)
-            {
-                overlay.Position = position;
-            }
-
-            // Not static: the last two lines read the live transform. The factory runs every frame the
-            // section is drawn expanded, so the numbers track the camera as it is flown around.
-            _instructions = overlay.AddCollapsibleSection("Camera", "Camera controls", HelpToggleKey, () =>
-            {
-                var position = Entity.Transform.Position;
-
-                // Printed as yaw/pitch/roll in degrees, which is what Add3DCamera's initialRotation and
-                // SetCameraRotation both take - X is Yaw, Y is Pitch, Z is Roll. Printing plain XYZ Euler
-                // here would give numbers that look right, paste cleanly, and aim the camera somewhere
-                // else entirely.
-                var rotation = Entity.Transform.Rotation.YawPitchRoll;
-
-                return
-                [
-                    // Keys first, one per line, each in the brackets the title uses, then the live
-                    // values with two fixed decimals so they stop changing width as the camera flies
-                    new("F3", "Reposition help", Color.LightGoldenrodYellow),
-                    new("F4", "Hide help", Color.LightGoldenrodYellow),
-                    new("H", "Reset camera", Color.LightGreen),
-                    new("W A S D", "Move", Color.LightGreen),
-                    new("Arrow keys", "Move", Color.LightGreen),
-                    new(["Q", "E"], "Ascend / descend", Color.LightGreen),
-                    new("Numpad 2 4 6 8", "Rotate", Color.LightGreen),
-                    new("Shift", "Hold to move faster", Color.LightGreen),
-                    new("Right drag", "Rotate", Color.LightGreen),
-                    new($"Position: {position.X:0.00}, {position.Y:0.00}, {position.Z:0.00}", Color.Yellow),
-                    new($"Rotation (YPR): {MathUtil.RadiansToDegrees(rotation.X):0.00}, {MathUtil.RadiansToDegrees(rotation.Y):0.00}, {MathUtil.RadiansToDegrees(rotation.Z):0.00}", Color.Yellow),
-                ];
-            }, HelpCollapsed, order: -100);
+            overlay.Position = position;
         }
+
+        // Not static: the last two lines read the live transform. The factory runs every frame the
+        // section is drawn expanded, so the numbers track the camera as it is flown around.
+        _instructions = overlay.AddCollapsibleSection("Camera", "Camera controls", HelpToggleKey, () =>
+        {
+            var position = Entity.Transform.Position;
+
+            // Printed as yaw/pitch/roll in degrees, which is what Add3DCamera's initialRotation and
+            // SetCameraRotation both take - X is Yaw, Y is Pitch, Z is Roll. Printing plain XYZ Euler
+            // here would give numbers that look right, paste cleanly, and aim the camera somewhere
+            // else entirely.
+            var rotation = Entity.Transform.Rotation.YawPitchRoll;
+
+            return
+            [
+                // Keys first, one per line, each in the brackets the title uses, then the live
+                // values with two fixed decimals so they stop changing width as the camera flies
+                new("F3", "Reposition help", Color.LightGoldenrodYellow),
+                new("F4", "Hide help", Color.LightGoldenrodYellow),
+                new("H", "Reset camera", Color.LightGreen),
+                new("W A S D", "Move", Color.LightGreen),
+                new("Arrow keys", "Move", Color.LightGreen),
+                new(["Q", "E"], "Ascend / descend", Color.LightGreen),
+                new("Numpad 2 4 6 8", "Rotate", Color.LightGreen),
+                new("Shift", "Hold to move faster", Color.LightGreen),
+                new("Right drag", "Rotate", Color.LightGreen),
+                new($"Position: {position.X:0.00}, {position.Y:0.00}, {position.Z:0.00}", Color.Yellow),
+                new($"Rotation (YPR): {MathUtil.RadiansToDegrees(rotation.X):0.00}, {MathUtil.RadiansToDegrees(rotation.Y):0.00}, {MathUtil.RadiansToDegrees(rotation.Z):0.00}", Color.Yellow),
+            ];
+        }, HelpCollapsed, order: -100);
+
+        _instructions.Enabled = ShowHelp;
 
         _defaultCameraPosition = Entity.Transform.Position;
         _defaultCameraRotation = Entity.Transform.Rotation;

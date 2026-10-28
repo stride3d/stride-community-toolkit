@@ -58,7 +58,7 @@ internal sealed class ChartCursor : IDisposable
         var world = view.World;
         var normal = Vector3.Normalize(Vector3.TransformNormal(Vector3.UnitZ, world));
 
-        var ray = camera.GetPickRay(screenPosition);
+        var ray = camera.ScreenToWorldRay(screenPosition);
         var facing = Vector3.Dot(normal, ray.Direction);
 
         // Parallel to the plane, or the plane is behind the camera

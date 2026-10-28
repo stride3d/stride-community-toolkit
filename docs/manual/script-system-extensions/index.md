@@ -6,7 +6,7 @@ Extension methods for `ScriptSystem`, in the `Stride.CommunityToolkit.Engine` na
 
 Every method here comes in a plain and a *warped* flavour. Warped time is scaled by the game's update time factor, so a warped wait slows down when the game does; the plain version does not.
 
-- [`Delay()`](xref:Stride.CommunityToolkit.Engine.ScriptSystemExtensions.Delay(Stride.Engine.Processors.ScriptSystem,System.Single)) - Waits the given number of seconds, ignoring the update time factor.
+- [`Delay()`](xref:Stride.CommunityToolkit.Engine.ScriptSystemExtensions.Delay(Stride.Engine.Processors.ScriptSystem,System.Single)) - Waits the given number of seconds of game time, ignoring the update time factor; the wait pauses with the game.
 - [`DelayWarped()`](xref:Stride.CommunityToolkit.Engine.ScriptSystemExtensions.DelayWarped(Stride.Engine.Processors.ScriptSystem,System.Single)) - Waits the given number of seconds in game time, so slow motion stretches the wait.
 - [`WaitFor()`](xref:Stride.CommunityToolkit.Engine.ScriptSystemExtensions.WaitFor(Stride.Engine.Processors.ScriptSystem,System.TimeSpan)) - The same as `Delay()` but takes a `TimeSpan`. Throws if the delay is zero or negative.
 

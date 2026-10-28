@@ -214,7 +214,7 @@ public class ManifestService(
     /// </summary>
     /// <param name="messages">The findings to report.</param>
     /// <returns>The number of error-severity findings.</returns>
-    public int ReportValidation(IReadOnlyList<ValidationMessage> messages)
+    private int ReportValidation(IReadOnlyList<ValidationMessage> messages)
     {
         var errorCount = 0;
 

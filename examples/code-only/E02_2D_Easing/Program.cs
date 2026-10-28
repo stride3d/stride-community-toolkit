@@ -21,8 +21,6 @@ using Stride.Input;
 // or in-out family, 0 shows all, Space pauses the clock, Left / Right change how long one run
 // takes, R restarts the clock. Click a tile to select it.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const int Columns = 6;
 const float ViewHeight = 24f;
 const float TileSize = 2.1f;
@@ -60,13 +58,18 @@ using var game = new Game();
 // leaves more of the view to the panel
 game.SetWindowSize(1920, 1080);
 
-game.Run(new SceneSetup2D { ClearColor = new Color(24, 26, 32), Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight), Ground = null }, start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    ClearColor = new Color(24, 26, 32),
+    Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight),
+    Ground = null,
+    WindowTitle = "Easing - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
+}, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Easing - Stride Community Toolkit";
-
     game.AddEntityTextRenderer();
 
     shapes = game.AddShapeBatch();

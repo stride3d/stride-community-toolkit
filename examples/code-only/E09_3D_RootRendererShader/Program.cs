@@ -11,7 +11,8 @@ var sceneSetup = new SceneSetup3D
 {
     Camera = CameraSetup.Perspective(),
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    Resizable = true,
 };
 
 game.Run(sceneSetup, start: Start);
@@ -34,7 +35,6 @@ void Start(Scene scene)
     });
 
     game.Window.Position = new Int2(50, 50);
-    game.Window.AllowUserResizing = true;
 }
 
 // The render feature that draws a RibbonBackgroundComponent, in the opaque stage
