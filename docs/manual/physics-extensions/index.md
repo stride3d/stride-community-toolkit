@@ -45,6 +45,21 @@ var lift = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions
 });
 ```
 
+### Collision filtering
+
+Which pairs of bodies collide is Bepu's own, in two rules, one on top of the other. The two examples show them side by side and say when each fits.
+
+- **Layers and the matrix.** Every collidable sits on one `CollisionLayer`, of 32, and the simulation's `CollisionMatrix` says for each pair of layers whether they collide. A `CollisionMask` is a set of layers; the raycast and shape-query helpers below take one, so a query obeys the same table as the solver. [Collision Layer](../code-only/examples/collision-layer.md) drops a cube of every layer onto a shelf of every layer, with the matrix drawn beside the scene and a key that flips each pair.
+- **Groups and the index rule.** Inside a layer, a `CollisionGroup` is a number rule: bodies with the same group `Id` ignore each other when their `IndexA` values are the same or next to each other, and collide when two or more apart; `IndexB` and `IndexC` add two more such axes, and `Id` 0 is no group. [Collision Group](../code-only/examples/collision-group.md) runs two teams of spheres at each other in three lanes and hangs a chain whose neighbouring links are ignored and whose two ends still collide.
+
+| The rule you have | Reach for | As in |
+|---|---|---|
+| A table of named pairs: players never touch enemies, debris ignores shots | Layers and the matrix | Players, enemies, shots and debris on their shelves |
+| A formula over many bodies of one kind: teammates pass through each other, the pieces of one object ignore each other | Groups, one `Id` per team or object | A team, a chain, the debris of one explosion |
+| A query that sees some layers and not others: the ground but not the units | A `CollisionMask` on the raycast or the shape query | A pick that ignores enemies |
+
+The rules are read as pairs meet, so both examples drop or wake their bodies after a change, and the new rule is applied from a fresh contact.
+
 ### Raycasting
 
 - [`Raycast()`](xref:Stride.CommunityToolkit.Bepu.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,System.Single,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)) - Casts from the camera through a screen position and reports the first hit.

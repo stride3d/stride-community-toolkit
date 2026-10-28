@@ -20,9 +20,9 @@ A Stride subsystem used directly, or several concepts combined. These assume you
 - [Shape Queries](shape-queries.md): Two questions a raycast cannot answer: what is inside this volume right now, and what would this shape touch first if it moved that way.
 - [Ship HUD](hud.md): A cockpit HUD composed from the toolkit's shapes and world text, with one widget per file.
 - [Spatial Sound](spatial-sound.md): 3D positional audio for a runtime sound: a looping pad on an orb that circles a pillar, heard from the camera.
-- [Collision Group](collision-group.md): Two players and an enemy, where the players collide with each other but the enemy passes through both.
+- [Collision Group](collision-group.md): Collision groups are a number rule inside a layer: bodies with the same group Id ignore each other when their indexes are the same or adjacent, and collide when two or more apart.
 - [Cube Fountain](cube-fountain.md): A fountain of cubes, spheres and cylinders that runs on the physics clock.
-- [Collision Layer](collision-layer.md): The same players-and-enemy scene as the collision group example, solved the other way.
+- [Collision Layer](collision-layer.md): Four layers, Players, Enemies, Shots and Debris, and the collision matrix that says which pairs collide, shown twice: as a grid on screen and as the scene itself.
 - [Box2D Joints](box2d-joints.md): Every Box2D joint, one rig each, in a row you can pull on: a hinge pendulum with a motor and a limit, a slider on a spring, a wheel on a suspension, a rope of distance joints, a soft weld and a motor joint that springs its box back home.
 - [Box2D Car](box2d-car.md): A car on two wheel joints over hilly terrain: the wheel joint pins the wheel, lets it turn, springs it along the suspension axis with a travel limit, and drives it with a motor whose speed is the throttle and whose zero is the brake.
 - [Box2D Character Mover](box2d-character-mover.md): A platformer character with no rigid body, on Box2D v3's mover API: a capsule the game moves itself, Quake style, asking the world only what it touches - collect the contact planes, solve a translation that respects them, sweep it - with a pogo shape cast from the feet that floats it above the ground.

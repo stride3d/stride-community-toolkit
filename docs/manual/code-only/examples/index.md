@@ -522,7 +522,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="collision-group.md">Collision Group</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
-                <p class="card-text">Two players and an enemy, where the players collide with each other but the enemy passes through both.</p>
+                <p class="card-text">Collision groups are a number rule inside a layer: bodies with the same group Id ignore each other when their indexes are the same or adjacent, and...</p>
             </div>
         </div>
     </div>
@@ -542,7 +542,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="collision-layer.md">Collision Layer</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
-                <p class="card-text">The same players-and-enemy scene as the collision group example, solved the other way.</p>
+                <p class="card-text">Four layers, Players, Enemies, Shots and Debris, and the collision matrix that says which pairs collide, shown twice: as a grid on screen and as the...</p>
             </div>
         </div>
     </div>

@@ -296,6 +296,18 @@ A physics raycast hits colliders only. Give the model a collider, or use
 [GPU picking](rendering/gpu-picking.md), which picks what is drawn. See the
 [raycast example](code-only/examples/raycast.md).
 
+### How do I make one object pass through another?
+
+Bepu decides it per pair, in two rules. Put the bodies on `CollisionLayer`s and tell the simulation's
+`CollisionMatrix` which pairs of layers collide, for rules that are a table of named kinds; or give
+bodies of one kind the same `CollisionGroup.Id`, for a team or a chain whose members ignore each other.
+A raycast's `CollisionMask` filters a query the same way. The
+[Collision Layer](code-only/examples/collision-layer.md) and
+[Collision Group](code-only/examples/collision-group.md) examples show both, and
+[collision filtering](physics-extensions/index.md#collision-filtering) says when to use which. For a
+body that reports contacts without stopping anything, a trigger, see
+[Trigger Zones](code-only/examples/trigger-zones.md).
+
 ### How do I make physics 2D?
 
 With Bepu, use the toolkit's `Body2DComponent`, which keeps a body in the XY plane and lets it turn
