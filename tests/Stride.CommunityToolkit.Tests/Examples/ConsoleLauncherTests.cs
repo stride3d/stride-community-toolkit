@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Reflection;
 using Stride.CommunityToolkit.Examples.Core;
 using Xunit;
 
@@ -79,6 +80,11 @@ public class ConsoleLauncherTests
             };
             startInfo.ArgumentList.Add("run");
             startInfo.ArgumentList.Add("--no-build");
+
+            // The launcher's build in the configuration this test assembly was built in: dotnet run
+            // otherwise looks for Debug, which a Release-only build (the CI workflow) does not have
+            startInfo.ArgumentList.Add("--configuration");
+            startInfo.ArgumentList.Add(BuildConfiguration);
             startInfo.ArgumentList.Add("--project");
             startInfo.ArgumentList.Add(LauncherProject());
             startInfo.Environment["NO_COLOR"] = "1";
@@ -113,6 +119,10 @@ public class ConsoleLauncherTests
             Directory.Delete(directory, recursive: true);
         }
     }
+
+    /// <summary>Debug or Release: what the test assembly, and so the launcher it references, was built in.</summary>
+    private static readonly string BuildConfiguration =
+        typeof(ConsoleLauncherTests).Assembly.GetCustomAttribute<AssemblyConfigurationAttribute>()?.Configuration ?? "Debug";
 
     /// <summary>The console launcher's project file, found by walking up from the test assembly to the repository root.</summary>
     private static string LauncherProject()
