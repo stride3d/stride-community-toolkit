@@ -19,4 +19,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E08_3D_DebugShapes_QuickStart).
 
-[!code-csharp[](../../../../examples/code-only/E08_3D_DebugShapes_QuickStart/Program.cs?start=1&end=59)]
+[!code-csharp[](../../../../examples/code-only/E08_3D_DebugShapes_QuickStart/Program.cs?start=1&end=52)]

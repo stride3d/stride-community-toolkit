@@ -17,10 +17,10 @@ The `Program.cs` file shows how to:
 - Closing the ends with fan-triangulated caps
 - Why the two caps must wind in opposite directions
 - Keeping index arithmetic readable by splitting the build into stages
-- Using helpers: SceneSetup3D, UseSkybox
+- Using helpers: SceneSetup3D, UseSkybox, CreateMaterial
 
 ![Cylinder Mesh](media/cylinder-mesh.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_CylinderMesh).
 
-[!code-csharp[](../../../../examples/code-only/E07_3D_CylinderMesh/Program.cs?start=1&end=157)]
+[!code-csharp[](../../../../examples/code-only/E07_3D_CylinderMesh/Program.cs?start=1&end=106)]

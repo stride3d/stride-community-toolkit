@@ -23,7 +23,7 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E04_Myra_DraggableWindow).
 
-[!code-csharp[](../../../../examples/code-only/E04_Myra_DraggableWindow/Program.cs?start=1&end=38)]
+[!code-csharp[](../../../../examples/code-only/E04_Myra_DraggableWindow/Program.cs?start=1&end=26)]
 <!-- #endregion generated -->
 
 ## MyraSceneRenderer.cs

@@ -23,4 +23,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E04_StrideUI_BasicWindow).
 
-[!code-csharp[](../../../../examples/code-only/E04_StrideUI_BasicWindow/Program.cs?start=1&end=85)]
+[!code-csharp[](../../../../examples/code-only/E04_StrideUI_BasicWindow/Program.cs?start=1&end=71)]

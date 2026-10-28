@@ -22,4 +22,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E08_3D_DebugShapes).
 
-[!code-csharp[](../../../../examples/code-only/E08_3D_DebugShapes/Program.cs?start=1&end=30)]
+[!code-csharp[](../../../../examples/code-only/E08_3D_DebugShapes/Program.cs?start=1&end=20)]

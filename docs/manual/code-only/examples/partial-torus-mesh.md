@@ -17,10 +17,10 @@ The `Program.cs` file shows how to:
 - Computing correct normals for smooth shading
 - Reusing vertices between adjacent triangles through indexing
 - Getting triangle winding right so faces are not culled
-- Using helpers: SceneSetup3D, UseSkybox
+- Using helpers: SceneSetup3D, UseSkybox, CreateMaterial
 
 ![Partial Torus Mesh](media/partial-torus-mesh.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_PartialTorus).
 
-[!code-csharp[](../../../../examples/code-only/E07_3D_PartialTorus/Program.cs?start=1&end=141)]
+[!code-csharp[](../../../../examples/code-only/E07_3D_PartialTorus/Program.cs?start=1&end=100)]

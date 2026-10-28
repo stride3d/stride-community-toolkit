@@ -27,4 +27,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E04_2D_SpawnMenu).
 
-[!code-csharp[](../../../../examples/code-only/E04_2D_SpawnMenu/Program.cs?start=1&end=109)]
+[!code-csharp[](../../../../examples/code-only/E04_2D_SpawnMenu/Program.cs?start=1&end=99)]
