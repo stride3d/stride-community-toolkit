@@ -23,6 +23,7 @@
         <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ManifestExample.cs" Link="Core\ManifestExample.cs" />
         <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ExampleEntry.cs" Link="Core\ExampleEntry.cs" />
         <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ManifestLoader.cs" Link="Core\ManifestLoader.cs" />
+        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\OutputFilter.cs" Link="Core\OutputFilter.cs" />
     </ItemGroup>
 
     <!--

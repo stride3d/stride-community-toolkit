@@ -177,7 +177,7 @@ void Update(Scene scene, GameTime time)
     var panelY = -panelSize.Y * 0.5f;
 
     // Start from the bottom left corner, and keep a margin from the window's edges
-    var panelCentre = shapeBatch.Anchor(ScreenAnchor.BottomLeft) + new Vector2(panelX, panelY) + new Vector2(Margin, -Margin);
+    var panelCentre = shapeBatch.AnchorPoint(Anchor.BottomLeft) + new Vector2(panelX, panelY) + new Vector2(Margin, -Margin);
 
     shapeBatch.Screen = true;
     shapeBatch.DrawRectangle(panelCentre, panelSize, panelEdge);
@@ -227,7 +227,7 @@ What to notice:
   left corner and Y points down, which is why the panel's offset from the bottom corner has a minus.
 - **`Screen` stays set.** It is a setting of the batch, not of one draw call. Everything drawn while it
   is `true` is in pixels, which is why `Update` sets it back to `false` at the end.
-- **A corner and an offset.** `Anchor(ScreenAnchor.BottomLeft)` is asked for every frame, so the panel
+- **A corner and an offset.** `AnchorPoint(Anchor.BottomLeft)` is asked for every frame, so the panel
   stays in its corner when the window is resized. Try it.
 - **Outline and fill.** Every shape is an outline and a fill. The outline takes the colour you pass
   to the draw call. `BorderWidth` sets how wide it is, and `Fill` sets what is inside: here a colour of
@@ -371,7 +371,7 @@ What to notice:
   and then only rewritten.
 - **The same pixels.** `ScreenPosition` uses the same coordinates as the shapes, so the label is
   placed from `PanelCentre()` like the bar under it.
-- **Anchors.** `TextAnchor.BottomLeft` puts the position at the text's bottom left corner, so the
+- **Anchors.** `Anchor.BottomLeft` puts the position at the text's bottom left corner, so the
   label sits on a line above the bar. `MiddleCenter` centres the number in the dial.
 
 More: [Text, display scale and components](../../manual/rendering/shape-batch.md#text-display-scale-and-components),

@@ -95,7 +95,7 @@ and a steep narrow one shade differently.
 |---|---|
 | `TextMesh.cs` | The entry points, and three private parts: `Layout` places the glyphs, `PreparedGlyph` holds a glyph's polygons, triangles and bevel rings, and `Emitter` writes vertices and indices. |
 | `TextMeshOptions.cs` | Size, depth, bevel, curve quality, anchor, letter and line spacing, alignment, kerning. |
-| `TextAnchor.cs` | The nine-point anchor on the block of text; `null` keeps the typographic origin at the first baseline. |
+| `Anchor.cs`, in `Rendering/` | The nine-point anchor, shared with the text components and the screen; a `null` anchor in the options keeps the typographic origin at the first baseline. |
 | `GlyphMesh.cs` | What `CreateGlyphs` returns: one mesh per glyph, centred on itself, with its place in the text. |
 
 ```mermaid

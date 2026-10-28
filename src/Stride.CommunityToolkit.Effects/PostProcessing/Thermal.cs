@@ -19,9 +19,7 @@ namespace Stride.CommunityToolkit.Effects.PostProcessing;
 public sealed class Thermal : ColorTransform
 {
     /// <summary>Creates the transform with its defaults.</summary>
-    public Thermal() : base("ThermalShader")
-    {
-    }
+    public Thermal() : base("ThermalShader") { }
 
     /// <summary>Scales the luminance before it is mapped. Defaults to 2.5.</summary>
     [DataMember(10)]

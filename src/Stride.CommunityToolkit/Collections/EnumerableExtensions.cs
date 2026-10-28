@@ -12,9 +12,7 @@ public static class EnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to check.</param>
     /// <returns>Returns <see langword="true"/> if <paramref name="enumerable"/> is <see langword="null"/> or empty, otherwise <see langword="false"/>.</returns>
     public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
-    {
-        return enumerable == null || !enumerable.Any();
-    }
+        => enumerable is null || !enumerable.Any();
 
     /// <summary>
     /// Concatenates two sequences.

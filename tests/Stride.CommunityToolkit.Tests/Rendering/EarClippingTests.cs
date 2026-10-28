@@ -105,29 +105,29 @@ public class EarClippingTests
 
     [Fact]
     public void ASquareWithASquareHoleIsARing()
-        => AssertValidTriangulation(Square(0, 0, 4), [Square(1, 1, 2)]);
+        => AssertValidTriangulation(TestGeometry.Square(0, 0, 4), [TestGeometry.Square(1, 1, 2)]);
 
     [Fact]
     public void HoleWindingDoesNotMatter()
     {
-        AssertValidTriangulation(Square(0, 0, 4), [Square(1, 1, 2).Reverse().ToArray()]);
-        AssertValidTriangulation(Square(0, 0, 4).Reverse().ToArray(), [Square(1, 1, 2)]);
+        AssertValidTriangulation(TestGeometry.Square(0, 0, 4), [TestGeometry.Square(1, 1, 2).Reverse().ToArray()]);
+        AssertValidTriangulation(TestGeometry.Square(0, 0, 4).Reverse().ToArray(), [TestGeometry.Square(1, 1, 2)]);
     }
 
     [Fact]
     public void TwoHolesSideBySide()
         // A B: two holes, the right one bridged first; the second bridge must not cross the first
-        => AssertValidTriangulation(Square(0, 0, 6), [Square(1, 1, 1.5f), Square(3.5f, 1, 1.5f)]);
+        => AssertValidTriangulation(TestGeometry.Square(0, 0, 6), [TestGeometry.Square(1, 1, 1.5f), TestGeometry.Square(3.5f, 1, 1.5f)]);
 
     [Fact]
     public void TwoHolesStacked()
         // An 8: the holes share their X range, so the upper hole's ray meets the first bridge's edges
-        => AssertValidTriangulation(Square(0, 0, 4), [Square(1, 0.5f, 2), Square(1, 3f, 0.8f)]);
+        => AssertValidTriangulation(TestGeometry.Square(0, 0, 4), [TestGeometry.Square(1, 0.5f, 2), TestGeometry.Square(1, 3f, 0.8f)]);
 
     [Fact]
     public void AHoleLevelWithAnotherHolesCorner()
         // The second hole's ray runs along the first hole's top edge; the corner on the ray is the bridge
-        => AssertValidTriangulation(Square(0, 0, 6), [Square(1, 1, 1.5f), Square(3.5f, 1, 1.5f)]);
+        => AssertValidTriangulation(TestGeometry.Square(0, 0, 6), [TestGeometry.Square(1, 1, 1.5f), TestGeometry.Square(3.5f, 1, 1.5f)]);
 
     [Fact]
     public void AHoleWhoseRayMeetsAReflexCorner()
@@ -139,14 +139,14 @@ public class EarClippingTests
     [Fact]
     public void NoHolesIsThePlainCase()
     {
-        var triangles = EarClipping.Triangulate(Square(0, 0, 1), []);
+        var triangles = EarClipping.Triangulate(TestGeometry.Square(0, 0, 1), []);
 
         Assert.Equal(6, triangles.Count);
     }
 
     [Fact]
     public void AHoleOutsideThePolygonIsReported()
-        => Assert.Throws<InvalidOperationException>(() => EarClipping.Triangulate(Square(0, 0, 1), [Square(5, 5, 1)]));
+        => Assert.Throws<InvalidOperationException>(() => EarClipping.Triangulate(TestGeometry.Square(0, 0, 1), [TestGeometry.Square(5, 5, 1)]));
 
     [Fact]
     public void EveryGlyphOfTheEmbeddedFontTriangulates()
@@ -161,9 +161,6 @@ public class EarClippingTests
             }
         }
     }
-
-    private static Vector2[] Square(float x, float y, float size)
-        => [new(x, y), new(x + size, y), new(x + size, y + size), new(x, y + size)];
 
     // --- Extrusion ------------------------------------------------------------------------------
 
@@ -261,7 +258,6 @@ public class EarClippingTests
         var position = builder.WithPosition<Vector3>();
         var normal = builder.WithNormal<Vector3>();
 
-        Assert.Throws<ArgumentOutOfRangeException>(
-            () => builder.AddExtrudedPolygon([new(0, 0), new(1, 0), new(0, 1)], 0f, position, normal));
+        Assert.Throws<ArgumentOutOfRangeException>(() => builder.AddExtrudedPolygon([new(0, 0), new(1, 0), new(0, 1)], 0f, position, normal));
     }
 }

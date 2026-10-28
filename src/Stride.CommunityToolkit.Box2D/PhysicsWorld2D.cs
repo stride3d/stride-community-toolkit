@@ -13,7 +13,7 @@ namespace Stride.CommunityToolkit.Box2D;
 /// </summary>
 public sealed class PhysicsWorld2D : IDisposable
 {
-    private static readonly Logger _log = GlobalLogger.GetLogger("Box2D");
+    private static readonly Logger Log = GlobalLogger.GetLogger("Box2D");
 
     private B2WorldId _worldId;
     private PhysicsStepSettings _settings;
@@ -31,14 +31,14 @@ public sealed class PhysicsWorld2D : IDisposable
     }
 
     // The library only logs trouble - a pair buffer overflowing, a body going unstable - hence Warning
-    private static void LogMessage(in string message) => _log.Warning(message.TrimEnd());
+    private static void LogMessage(in string message) => Log.Warning(message.TrimEnd());
 
     // Asserts are compiled out of the Box2D.NET NuGet package (they need B2_ENABLE_ASSERT), so this
     // only hears from a build that has them. Returning non-zero keeps the library's own throw, so
     // the failure is logged and still stops the game rather than being swallowed
     private static int ReportAssert(string condition, string fileName, int lineNumber)
     {
-        _log.Error($"Assertion failed: {condition} ({fileName}:{lineNumber})");
+        Log.Error($"Assertion failed: {condition} ({fileName}:{lineNumber})");
 
         return 1;
     }
@@ -78,7 +78,9 @@ public sealed class PhysicsWorld2D : IDisposable
     public PhysicsWorld2D(PhysicsStepSettings? settings = null)
     {
         _settings = settings ?? new PhysicsStepSettings();
+
         var def = b2DefaultWorldDef();
+
         def.gravity = new B2Vec2(0f, -10f);
 
         // b2DefaultWorldDef gives a single-threaded world - without task callbacks every solve runs
@@ -130,11 +132,10 @@ public sealed class PhysicsWorld2D : IDisposable
     {
         if (deltaSeconds <= 0f) return 0;
 
-        var scaled = deltaSeconds * _settings.TimeScale;
-        _accumulator += scaled;
+        _accumulator += deltaSeconds * _settings.TimeScale;
 
         var fixedStep = _settings.FixedDeltaSeconds;
-        int performed = 0;
+        var performed = 0;
 
         while (_accumulator >= fixedStep && performed < _settings.MaxStepsPerFrame)
         {

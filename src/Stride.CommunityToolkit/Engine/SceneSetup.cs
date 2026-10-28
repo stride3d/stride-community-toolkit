@@ -75,9 +75,25 @@ public abstract class SceneSetup
     /// </summary>
     public bool Instancing { get; set; }
 
-    /// <summary>What runs before the engine starts: the settings and the physics service, which the start callback may need.</summary>
+    /// <summary>The window's title, set once the window exists. <see langword="null"/>, the default, leaves the engine's.</summary>
+    public string? WindowTitle { get; set; }
+
+    /// <summary>Whether the window can be resized by dragging its edges. Defaults to <see langword="false"/>, the engine's own default.</summary>
+    public bool Resizable { get; set; }
+
+    /// <summary>
+    /// Whether the process declares per-monitor DPI awareness before the window is created, so a 150% display gets
+    /// a sharp window rather than a stretched one: <see cref="WindowsDpiManager.EnablePerMonitorV2"/>. Defaults to
+    /// <see langword="false"/>. Not needed where the game's own manifest declares it.
+    /// </summary>
+    public bool DpiAware { get; set; }
+
+    /// <summary>What runs before the engine starts: DPI awareness, the settings and the physics service, which the start callback may need.</summary>
     internal virtual void Prepare(Game game)
     {
+        if (DpiAware)
+            WindowsDpiManager.EnablePerMonitorV2();
+
         if (GameSettings is { } configure)
             game.UseGameSettings(configure);
 
@@ -90,6 +106,12 @@ public abstract class SceneSetup
 
     private protected void ApplyCommon(Game game)
     {
+        if (WindowTitle is { } title)
+            game.Window.Title = title;
+
+        if (Resizable)
+            game.Window.AllowUserResizing = true;
+
         if (Instancing)
             InstancingSupport.Ensure(game.SceneSystem.GraphicsCompositor);
 

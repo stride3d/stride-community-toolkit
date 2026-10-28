@@ -1,5 +1,7 @@
 using Stride.CommunityToolkit.Effects.PostProcessing;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Mathematics;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
@@ -9,7 +11,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Engine.Processors;
 using Stride.Games;
-using Stride.Graphics;
 using Stride.Input;
 using Stride.Rendering;
 
@@ -32,12 +33,10 @@ const int FeedSize = 512;
 
 Feed[] feeds = [];
 Material[] monitorMaterials = [];
-ModelComponent? bigScreen = null;
-Entity? ball = null;
-Entity? chaseCamera = null;
+ModelComponent bigScreen = null!;
+Entity ball = null!;
+Entity chaseCamera = null!;
 var selected = 0;
-
-WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
@@ -46,16 +45,16 @@ var sceneSetup = new SceneSetup3D
     Ground = null,
     // Looking at the monitors from the scene's side, with the scene in the foreground
     Camera = CameraSetup.Perspective(position: new(-1, 15, 27), rotation: new(0, -17, 0)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Render to Texture - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Render to Texture - Stride Community Toolkit";
-
     game.AddEntityTextRenderer();
 
     BuildScene(scene);
@@ -73,7 +72,7 @@ void Start(Scene scene)
 
     var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
-    overlay.AddSection("Feeds", OverlayLines);
+    overlay.AddSection("Feeds", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -92,12 +91,10 @@ void Update(Scene scene, GameTime time)
 /// </summary>
 void BuildScene(Scene scene)
 {
-    var groundMaterial = game.CreateMaterial(new Color(52, 56, 64), metalness: 0.05f, glossiness: 0.3f);
-
     var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(40f, 0.5f, 40f)), new PrimitiveEntityOptions
     {
         EntityName = "Ground",
-        Material = groundMaterial,
+        Material = game.CreateMaterial(new Color(52, 56, 64), metalness: 0.05f, glossiness: 0.3f),
         Position = new Vector3(0f, -0.25f, 0f),
     });
 
@@ -132,19 +129,15 @@ void BuildScene(Scene scene)
     ball = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new PrimitiveEntityOptions
     {
         EntityName = "Ball",
-        Material = EmissiveMaterial(new Color(255, 200, 120), 6f),
+        Material = game.CreateEmissiveMaterial(new Color(255, 200, 120), 6f),
         Position = new Vector3(5f, 1f, 0f),
     });
 
     ball.Scene = scene;
-
-    Material EmissiveMaterial(Color colour, float intensity) => game.CreateEmissiveMaterial(colour, intensity);
 }
 
 void MoveScene(float seconds)
 {
-    if (ball is null) return;
-
     var angle = seconds * 0.7f;
 
     ball.Transform.Position = new Vector3(MathF.Cos(angle) * 5f, 1f + MathF.Sin(seconds * 2.3f) * 0.4f, MathF.Sin(angle) * 5f);
@@ -167,38 +160,31 @@ RenderTextureCamera Map(Scene scene)
 /// <summary>Behind and above the ball, re-aimed every frame in <see cref="FollowBall"/>.</summary>
 RenderTextureCamera Chase(Scene scene)
 {
-    chaseCamera = new Entity("Chase camera");
-    chaseCamera.Scene = scene;
+    chaseCamera = new Entity("Chase camera") { Scene = scene };
 
     return game.AddRenderTextureCamera(chaseCamera, FeedSize, FeedSize);
 }
 
 /// <summary>A fixed camera in a high corner, the way a security camera is mounted.</summary>
 RenderTextureCamera Cctv(Scene scene)
-{
-    return game.AddRenderTextureCamera(FixedCamera(scene, "CCTV camera", new Vector3(14f, 9f, 14f), new Vector3(0f, 1f, 0f)), FeedSize, FeedSize);
-}
+    => game.AddRenderTextureCamera(FixedCamera(scene, "CCTV camera", new Vector3(14f, 9f, 14f), new Vector3(0f, 1f, 0f)), FeedSize, FeedSize);
 
 /// <summary>The same kind of fixed camera with a night-vision transform on its post-effects chain.</summary>
 RenderTextureCamera NightVisionFeed(Scene scene)
-{
-    return game.AddRenderTextureCamera(FixedCamera(scene, "Night vision camera", new Vector3(-14f, 4f, 11f), new Vector3(0f, 1.2f, 0f)), FeedSize, FeedSize,
+    => game.AddRenderTextureCamera(FixedCamera(scene, "Night vision camera", new Vector3(-14f, 4f, 11f), new Vector3(0f, 1.2f, 0f)), FeedSize, FeedSize,
         postEffects: fx => fx.ColorTransforms.Transforms.Add(new NightVision()));
-}
 
 /// <summary>A fixed camera with a thermal transform: luminance painted as temperature.</summary>
 RenderTextureCamera ThermalFeed(Scene scene)
-{
-    return game.AddRenderTextureCamera(FixedCamera(scene, "Thermal camera", new Vector3(-12f, 6f, -9f), new Vector3(0f, 1.2f, 0f)), FeedSize, FeedSize,
+    => game.AddRenderTextureCamera(FixedCamera(scene, "Thermal camera", new Vector3(-12f, 6f, -9f), new Vector3(0f, 1.2f, 0f)), FeedSize, FeedSize,
         postEffects: fx => fx.ColorTransforms.Transforms.Add(new Thermal()));
-}
 
 Entity FixedCamera(Scene scene, string name, Vector3 position, Vector3 target)
 {
     var camera = new Entity(name);
 
     camera.Transform.Position = position;
-    camera.Transform.Rotation = LookAt(position, target);
+    camera.Transform.Rotation = QuaternionUtil.LookAt(position, target);
     camera.Scene = scene;
 
     return camera;
@@ -206,8 +192,6 @@ Entity FixedCamera(Scene scene, string name, Vector3 position, Vector3 target)
 
 void FollowBall()
 {
-    if (ball is null || chaseCamera is null) return;
-
     // Behind the ball along its orbit, a little above, looking at it
     var ballPosition = ball.Transform.Position;
     var outward = Vector3.Normalize(new Vector3(ballPosition.X, 0f, ballPosition.Z));
@@ -215,15 +199,7 @@ void FollowBall()
     var eye = ballPosition + tangent * 4f + Vector3.UnitY * 1.5f;
 
     chaseCamera.Transform.Position = eye;
-    chaseCamera.Transform.Rotation = LookAt(eye, ballPosition);
-}
-
-/// <summary>A camera rotation looking from one point at another. A camera looks down its -Z; yaw turns that towards -X, pitch lifts it.</summary>
-static Quaternion LookAt(Vector3 eye, Vector3 target)
-{
-    var direction = Vector3.Normalize(target - eye);
-
-    return Quaternion.RotationYawPitchRoll(MathF.Atan2(-direction.X, -direction.Z), MathF.Asin(direction.Y), 0f);
+    chaseCamera.Transform.Rotation = QuaternionUtil.LookAt(eye, ballPosition);
 }
 
 // ---- The monitors ---------------------------------------------------------------------------
@@ -239,7 +215,8 @@ void BuildMonitors(Scene scene)
 
     for (var i = 0; i < feeds.Length; i++)
     {
-        monitorMaterials[i] = MonitorMaterial(feeds[i].Camera.Texture);
+        // A screen: the feed as an unlit, clamped emissive texture - the toolkit's CreateScreenMaterial is that bag
+        monitorMaterials[i] = game.CreateScreenMaterial(feeds[i].Camera.Texture);
 
         var x = (i - (feeds.Length - 1) * 0.5f) * 4.2f;
 
@@ -252,7 +229,7 @@ void BuildMonitors(Scene scene)
             Text = $"{i + 1}  {feeds[i].Name}",
             FontSize = 18,
             TextColor = Color.White,
-            Anchor = TextAnchor.BottomCenter,
+            Anchor = Anchor.BottomCenter,
             EnableBackground = true,
             BackgroundColor = new Color4(0.03f, 0.05f, 0.09f, 0.8f),
         });
@@ -276,9 +253,6 @@ void BuildMonitors(Scene scene)
 
         return monitor;
     }
-
-    // A screen: the feed as an unlit, clamped emissive texture - the toolkit's CreateScreenMaterial is that bag
-    Material MonitorMaterial(Texture texture) => game.CreateScreenMaterial(texture);
 }
 
 void HandleInput()
@@ -294,14 +268,10 @@ void HandleInput()
 void Select(int index)
 {
     selected = index;
-
-    if (bigScreen is not null)
-    {
-        bigScreen.Materials[0] = monitorMaterials[selected];
-    }
+    bigScreen.Materials[0] = monitorMaterials[selected];
 }
 
-IReadOnlyList<TextElement> OverlayLines()
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
     List<TextElement> lines =
     [

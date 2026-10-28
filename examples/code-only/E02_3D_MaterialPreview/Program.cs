@@ -122,14 +122,25 @@ void Start(Scene scene)
     Rebuild(scene);
     SetGameLook(scene, gameLook);
 
-    TextOverlay.GetOrCreate(game).AddSection("Preview", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Preview", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
 {
+    if (shapeMenu is null || materialMenu is null) return;
+
     // One list open at a time, so their digit keys can overlap
-    if (shapeMenu?.Update(game.Input) == true) { if (materialMenu is not null) materialMenu.IsOpen = false; return; }
-    if (materialMenu?.Update(game.Input) == true) { if (shapeMenu is not null) shapeMenu.IsOpen = false; return; }
+    if (shapeMenu.Update(game.Input))
+    {
+        materialMenu.IsOpen = false;
+        return;
+    }
+
+    if (materialMenu.Update(game.Input))
+    {
+        shapeMenu.IsOpen = false;
+        return;
+    }
 
     if (game.Input.IsKeyPressed(Keys.G)) SetGameLook(scene, !gameLook);
 }
@@ -241,20 +252,14 @@ MaterialDescriptor Brick()
     return descriptor;
 }
 
-IReadOnlyList<TextElement> OverlayLines()
-{
-    List<TextElement> lines = [];
-
-    if (shapeMenu is not null) lines.AddRange(shapeMenu.GetLines());
-    if (materialMenu is not null) lines.AddRange(materialMenu.GetLines());
-
-    lines.Add(new("G", gameLook ? "Look: a game - post effects, skybox" : "Look: the editor's thumbnail", Color.Gold));
-    lines.Add(new(""));
-    lines.Add(new(gameLook ? "Tone mapped, lit by the sky too" : "No post effects, no environment", Color.LightGray));
-
-    return lines;
-}
-
+IReadOnlyList<TextElement> BuildOverlayLines() =>
+[
+    .. shapeMenu?.GetLines() ?? [],
+    .. materialMenu?.GetLines() ?? [],
+    new("G", gameLook ? "Look: a game - post effects, skybox" : "Look: the editor's thumbnail", Color.Gold),
+    new(""),
+    new(gameLook ? "Tone mapped, lit by the sky too" : "No post effects, no environment", Color.LightGray),
+];
 
 /*
 ---example-metadata

@@ -1,20 +1,19 @@
 using E04_StrideUI_DragAndDrop;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Graphics;
 
-UIManager? _uiManager = null;
-PrimitiveGenerator? _shapeGenerator = null;
-
 const int ShapeCount = 100;
 const int RemovalThresholdY = -30;
-const string TotalShapesLabel = "Total Shapes:";
+
+UIManager? uiManager = null;
+PrimitiveGenerator? shapeGenerator = null;
 
 using var game = new Game();
 
@@ -22,18 +21,16 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene scene)
 {
-    game.AddEntityInfoRenderer(new()
-    {
-        EnableBackground = true
-    });
+    game.AddGrabber();
+    game.AddEntityInfoRenderer(new() { EnableBackground = true });
 
-    _shapeGenerator = new PrimitiveGenerator(game, scene);
+    shapeGenerator = new PrimitiveGenerator(game, scene);
+    uiManager = new UIManager(game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont"), GenerateRandomSpheres);
+    uiManager.Entity.Scene = scene;
 
-    var font = game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
-
-    CreateAndAddUI(scene, font);
-
-    AddExampleShape(scene);
+    var capsule = game.CreatePrimitive(Primitive3D.Capsule());
+    capsule.Transform.Position = new Vector3(0, 8, 0);
+    capsule.Scene = scene;
 }
 
 void Update(Scene scene, GameTime time)
@@ -48,34 +45,17 @@ void Update(Scene scene, GameTime time)
         {
             entity.Scene = null;
 
-            _shapeGenerator?.SubtractTotalCubes(1);
-
-            _uiManager?.UpdateTextBlock($"{TotalShapesLabel} {_shapeGenerator?.TotalShapes ?? 0}");
+            shapeGenerator?.Subtract(1);
+            uiManager?.UpdateTextBlock($"Total Shapes: {shapeGenerator?.TotalShapes ?? 0}");
         }
     }
 }
 
-void CreateAndAddUI(Scene scene, SpriteFont font)
-{
-    _uiManager = new UIManager(font, GenerateRandomSpheres);
-
-    _uiManager.Entity.Scene = scene;
-}
-
-void AddExampleShape(Scene scene)
-{
-    var entity = game.CreatePrimitive(Primitive3D.Capsule());
-
-    entity.Transform.Position = new Vector3(0, 8, 0);
-
-    entity.Scene = scene;
-}
-
 void GenerateRandomSpheres()
 {
-    var totalShapes = _shapeGenerator?.Generate(ShapeCount, Primitive3D.Sphere(0.3f));
+    var totalShapes = shapeGenerator?.Generate(ShapeCount, Primitive3D.Sphere(0.3f));
 
-    _uiManager?.UpdateTextBlock($"{TotalShapesLabel} {totalShapes ?? 0}");
+    uiManager?.UpdateTextBlock($"Total Shapes: {totalShapes ?? 0}");
 }
 /*
 ---example-metadata

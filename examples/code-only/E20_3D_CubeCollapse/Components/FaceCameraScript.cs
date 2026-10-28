@@ -14,15 +14,14 @@ namespace CubeCollapse.Components;
 /// </remarks>
 public class FaceCameraScript : SyncScript
 {
-    private CameraComponent? _camera;
+    private CameraComponent _camera = null!;
+
+    /// <inheritdoc />
+    public override void Start() => _camera = Game.GetCameraEntity().Get<CameraComponent>();
 
     /// <inheritdoc />
     public override void Update()
     {
-        _camera ??= SceneSystem.SceneInstance.RootScene.GetCamera();
-
-        if (_camera is null) return;
-
         var direction = _camera.Entity.Transform.Position - Entity.Transform.Position;
 
         direction.Y = 0;

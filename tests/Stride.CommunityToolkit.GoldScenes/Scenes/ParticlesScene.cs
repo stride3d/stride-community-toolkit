@@ -1,8 +1,6 @@
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
 using Stride.Particles;
 using Stride.Particles.Components;
 using Stride.Particles.Initializers;
@@ -22,7 +20,7 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal sealed class ParticlesScene : IGoldScene
 {
-    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+    public SceneSetup Setup => GoldSetup.Perspective;
 
     public void Start(Game game, Scene scene)
     {
@@ -30,14 +28,7 @@ internal sealed class ParticlesScene : IGoldScene
         game.SetCameraPosition(new Vector3(0f, 3.5f, 10f));
         game.SetCameraRotation(new Vector3(0f, -12f, 0f));
 
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(20f, 0.5f, 20f)), new PrimitiveEntityOptions
-        {
-            EntityName = "Ground",
-            Material = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f),
-            Position = new Vector3(0f, -0.25f, 0f),
-        });
-
-        ground.Scene = scene;
+        GoldSetup.AddGround(game, scene, 20f);
 
         var fountain = new ParticleEmitter
         {
@@ -77,9 +68,5 @@ internal sealed class ParticlesScene : IGoldScene
 
         entity.Transform.Position = new Vector3(0f, 0.5f, 0f);
         entity.Scene = scene;
-    }
-
-    public void Update(Game game, Scene scene, GameTime time)
-    {
     }
 }

@@ -23,27 +23,12 @@ public static class SceneSearchExtensions
     /// <param name="scene">The scene to search.</param>
     /// <param name="includeChildScenes">Whether the scenes under <see cref="Scene.Children"/> are searched as well.</param>
     /// <returns>The components, in scene order; empty when there are none.</returns>
+    /// <remarks>Disabled components are included.</remarks>
     public static IEnumerable<T> GetComponentsInScene<T>(this Scene scene, bool includeChildScenes = true) where T : EntityComponent
     {
         ArgumentNullException.ThrowIfNull(scene);
 
-        foreach (var entity in scene.Entities)
-        {
-            foreach (var component in entity.GetComponentsInDescendantsAndSelf<T>())
-            {
-                yield return component;
-            }
-        }
-
-        if (!includeChildScenes) yield break;
-
-        foreach (var child in scene.Children)
-        {
-            foreach (var component in child.GetComponentsInScene<T>(includeChildScenes: true))
-            {
-                yield return component;
-            }
-        }
+        return SceneComponents<T>(scene, includeChildScenes);
     }
 
     /// <summary>
@@ -71,17 +56,7 @@ public static class SceneSearchExtensions
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        var sceneInstance = game.GetSceneSystem().SceneInstance;
-
-        if (sceneInstance is null) yield break;
-
-        foreach (var entity in sceneInstance)
-        {
-            foreach (var component in entity.OfType<T>())
-            {
-                yield return component;
-            }
-        }
+        return GameComponents<T>(game.GetSceneSystem().SceneInstance);
     }
 
     /// <summary>
@@ -92,4 +67,40 @@ public static class SceneSearchExtensions
     /// <returns>The first match, or <see langword="null"/>.</returns>
     public static T? GetComponentInScene<T>(this IGame game) where T : EntityComponent
         => game.GetComponentsInScene<T>().FirstOrDefault();
+
+    /// <summary>The lazy walk behind the scene overloads; the null check happens in the caller, at the call.</summary>
+    private static IEnumerable<T> SceneComponents<T>(Scene scene, bool includeChildScenes) where T : EntityComponent
+    {
+        foreach (var entity in scene.Entities)
+        {
+            foreach (var component in entity.GetComponentsInDescendantsAndSelf<T>(includeDisabled: true))
+            {
+                yield return component;
+            }
+        }
+
+        if (!includeChildScenes) yield break;
+
+        foreach (var child in scene.Children)
+        {
+            foreach (var component in SceneComponents<T>(child, includeChildScenes: true))
+            {
+                yield return component;
+            }
+        }
+    }
+
+    /// <summary>The lazy walk behind the game overloads; the null check happens in the caller, at the call.</summary>
+    private static IEnumerable<T> GameComponents<T>(SceneInstance? sceneInstance) where T : EntityComponent
+    {
+        if (sceneInstance is null) yield break;
+
+        foreach (var entity in sceneInstance)
+        {
+            foreach (var component in entity.OfType<T>())
+            {
+                yield return component;
+            }
+        }
+    }
 }

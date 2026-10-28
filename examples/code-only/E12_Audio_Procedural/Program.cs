@@ -7,6 +7,7 @@ using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Input;
 using Stride.Media;
 
@@ -93,38 +94,34 @@ void Fill(Span<short> samples, int sampleRate, int channels)
 
         phase += step;
 
-        if (phase >= 1)
-            phase -= 1;
+        if (phase >= 1) phase -= 1;
     }
 
     level = gain * (float)Math.Sqrt(energy / samples.Length);
 }
 
-void Update(Scene scene, Stride.Games.GameTime time)
+void Update(Scene scene, GameTime time)
 {
     var input = game.Input;
 
     for (var i = 0; i < waveforms.Length; i++)
     {
-        if (input.IsKeyPressed(Keys.D1 + i))
-            waveform = i;
+        if (input.IsKeyPressed(Keys.D1 + i)) waveform = i;
     }
 
     // Hold to sweep: one octave per second, either way.
     var octaves = (input.IsKeyDown(Keys.K) ? 1 : 0) - (input.IsKeyDown(Keys.J) ? 1 : 0);
 
     if (octaves != 0)
+    {
         frequency = Math.Clamp(frequency * MathF.Pow(2, octaves * (float)time.Elapsed.TotalSeconds), MinFrequency, MaxFrequency);
+    }
 
-    if (input.IsKeyPressed(Keys.M))
-        muted = !muted;
+    if (input.IsKeyPressed(Keys.M)) muted = !muted;
 
     if (input.IsKeyPressed(Keys.Space) && tone is not null)
     {
-        if (tone.PlayState == PlayState.Playing)
-            tone.Stop();
-        else
-            tone.Play();
+        if (tone.PlayState == PlayState.Playing) tone.Stop(); else tone.Play();
     }
 
     // The meter is the audio thread's last block; ease toward it so the orb does not flicker.
@@ -138,9 +135,7 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
 void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Procedural sound", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Procedural sound", () =>
     {
         var playing = tone?.PlayState == PlayState.Playing;
 

@@ -38,12 +38,7 @@ public static class DictionaryExtensions
     {
         ArgumentNullException.ThrowIfNull(dictionary);
 
-        if (dictionary.TryGetValue(key, out TValue? result))
-        {
-            return result;
-        }
-
-        return defaultValue;
+        return dictionary.TryGetValue(key, out var result) ? result : defaultValue;
     }
 
     /// <summary>
@@ -56,10 +51,9 @@ public static class DictionaryExtensions
     /// <param name="getValue">The callback delegate to return value if element with specified key does not exist in the <paramref name="dictionary"/>.</param>
     /// <returns>The element with the specified key, or the added value.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="dictionary"/> or <paramref name="getValue"/> are <see langword="null"/>.</exception>
-    public static TValue? GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> getValue)
+    public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> getValue)
     {
         ArgumentNullException.ThrowIfNull(dictionary);
-
         ArgumentNullException.ThrowIfNull(getValue);
 
         if (!dictionary.TryGetValue(key, out TValue? result))
@@ -82,12 +76,10 @@ public static class DictionaryExtensions
     /// <param name="shouldAdd">The callback delegate to determine if the new value should be added to the <paramref name="dictionary"/>.</param>
     /// <returns>The element with the specified key, or the new value.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="dictionary"/>, <paramref name="getValue"/> or <paramref name="shouldAdd"/> are <see langword="null"/>.</exception>
-    public static TValue? GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> getValue, Func<TValue, bool> shouldAdd)
+    public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> getValue, Func<TValue, bool> shouldAdd)
     {
         ArgumentNullException.ThrowIfNull(dictionary);
-
         ArgumentNullException.ThrowIfNull(getValue);
-
         ArgumentNullException.ThrowIfNull(shouldAdd);
 
         if (!dictionary.TryGetValue(key, out TValue? result))

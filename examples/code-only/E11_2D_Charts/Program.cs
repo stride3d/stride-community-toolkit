@@ -23,9 +23,6 @@ using System.Globalization;
 // ball, A pauses the animated curve. The keys share a screen block with the camera help - F2 collapses
 // it, F3 moves it, F4 hides it.
 
-// Without this a scaled-up 4K desktop hands the game a scaled, blurred window. A no-op off Windows.
-WindowsDpiManager.EnablePerMonitorV2();
-
 // "--zoom 61" starts zoomed out to that view height - handy for seeing how the view-driven chart adapts
 // its tick step, sampling density and line widths
 var zoomArg = 0f;
@@ -61,14 +58,14 @@ game.Run(new SceneSetup2D
     // A paper-like background and MSAA, since thin lines flicker without it; no ground, a chart has no physics
     ClearColor = new Color(250, 250, 250),
     Msaa = MultisampleCount.X4,
-    Ground = null
+    Ground = null,
+    WindowTitle = "Charts 2D",
+    Resizable = true,
+    DpiAware = true,
 }, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Charts 2D";
-
     var cameraEntity = game.GetCameraEntity();
     var controller = cameraEntity.Get<Basic2DCameraController>()!;
 
@@ -184,15 +181,8 @@ void Update(Scene scene, GameTime time)
 {
     if (chart is null) return;
 
-    if (game.Input.IsKeyPressed(Keys.G))
-    {
-        chart.Options.Grid.Visible = !chart.Options.Grid.Visible;
-    }
-
-    if (game.Input.IsKeyPressed(Keys.L))
-    {
-        chart.Options.Legend.Visible = !chart.Options.Legend.Visible;
-    }
+    if (game.Input.IsKeyPressed(Keys.G)) chart.Options.Grid.Visible = !chart.Options.Grid.Visible;
+    if (game.Input.IsKeyPressed(Keys.L)) chart.Options.Legend.Visible = !chart.Options.Legend.Visible;
 
     // Remove frees the ribbon's GPU buffers; plotting again builds new ones
     if (game.Input.IsKeyPressed(Keys.T))
@@ -208,15 +198,8 @@ void Update(Scene scene, GameTime time)
         }
     }
 
-    if (game.Input.IsKeyPressed(Keys.Space))
-    {
-        ThrowBall();
-    }
-
-    if (game.Input.IsKeyPressed(Keys.A))
-    {
-        animate = !animate;
-    }
+    if (game.Input.IsKeyPressed(Keys.Space)) ThrowBall();
+    if (game.Input.IsKeyPressed(Keys.A)) animate = !animate;
 
     // Swapping the function rebuilds one mesh in place - same entity, same colour, same legend row - so
     // it is cheap enough to do every frame
@@ -231,7 +214,7 @@ void Update(Scene scene, GameTime time)
     // The chart's frame: applies whatever changed in its options since last time (the G and L toggles
     // above, the range the follower derives from the camera) and moves the cursor readout. The camera is
     // explicit because a scene can hold several, and only you know which one is looking at this chart.
-    camera ??= scene.Entities.Select(e => e.Get<CameraComponent>()).FirstOrDefault(c => c != null);
+    camera ??= scene.GetCamera();
 
     if (camera is not null && batch is not null)
     {

@@ -13,7 +13,7 @@ Screen-space text keeps its pixel size at any distance and is never hidden by ge
 The `Program.cs` file shows how to:
 
 - Registering the text renderer once: AddEntityTextRenderer
-- Centring a label over an object with TextAnchor, not TextAlignment
+- Centring a label over an object with Anchor, not TextAlignment
 - Shadow and background for readability over a 3D scene
 - Scale as the cheap way to resize, instead of FontSize
 - Distance fading with FadeStartDistance and MaxDistance

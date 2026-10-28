@@ -4,6 +4,7 @@ using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
@@ -84,8 +85,7 @@ void Start(Scene scene)
     BuildCourse(scene);
     car = BuildCar(scene, start);
 
-    var cameraEntity = game.GetCameraEntity();
-    cameraEntity.Add(new ChaseCamera { Target = car.Chassis.Entity });
+    game.GetCameraEntity().Add(new ChaseCamera { Target = car.Chassis.Entity });
     game.AddGrabber();
 
     AddInstructions();
@@ -98,7 +98,10 @@ void Update(Scene scene, GameTime time)
     var input = game.Input;
     var dt = (float)time.Elapsed.TotalSeconds;
 
-    if (input.IsKeyPressed(Keys.R)) ResetCar(car);
+    if (input.IsKeyPressed(Keys.R))
+    {
+        ResetCar(car);
+    }
 
     // Steering eases toward the key at a fixed rate, as a wheel turned by hand would.
     var steerTarget = ((input.IsKeyDown(Keys.A) ? 1 : 0) - (input.IsKeyDown(Keys.D) ? 1 : 0)) * MaxSteeringAngle;
@@ -107,7 +110,9 @@ void Update(Scene scene, GameTime time)
     steeringAngle = Math.Clamp(steeringAngle + change, -MaxSteeringAngle, MaxSteeringAngle);
 
     if (steeringAngle != previousSteering)
+    {
         Steer(car, steeringAngle);
+    }
 
     var throttle = (input.IsKeyDown(Keys.W) ? 1 : 0) - (input.IsKeyDown(Keys.S) ? 1 : 0);
     var zoom = input.IsKeyDown(Keys.LeftShift) || input.IsKeyDown(Keys.RightShift);
@@ -120,24 +125,16 @@ void Update(Scene scene, GameTime time)
 // steering and the motor targets start over.
 void ResetCar(Car car)
 {
-    Place(car.Chassis, start, Quaternion.Identity);
+    car.Chassis.TeleportAtRest(start);
 
     foreach (var wheel in new[] { car.FrontLeft, car.FrontRight, car.RearLeft, car.RearRight })
     {
-        Place(wheel.Body, start + wheel.Mount + suspensionDirection * SuspensionLength, wheelTurn);
+        wheel.Body.TeleportAtRest(start + wheel.Mount + suspensionDirection * SuspensionLength, wheelTurn);
     }
 
     steeringAngle = 0;
     Steer(car, 0);
     previousTargetSpeed = float.NaN;
-
-    static void Place(BodyComponent body, Vector3 position, Quaternion rotation)
-    {
-        body.Teleport(position, rotation);
-        body.LinearVelocity = Vector3.Zero;
-        body.AngularVelocity = Vector3.Zero;
-        body.Awake = true;
-    }
 }
 
 // The demo's Ackermann steering: on a turn the inner wheel turns more than the outer one, so
@@ -147,7 +144,7 @@ void Steer(Car car, float angle)
     float left, right;
     var magnitude = MathF.Abs(angle);
 
-    if (magnitude > 1e-6f)
+    if (!MathUtil.IsZero(magnitude))
     {
         var turnRadius = MathF.Abs(WheelBaseLength * MathF.Tan(MathF.PI * 0.5f - magnitude));
         var halfWidth = WheelBaseWidth * 0.5f;
@@ -323,14 +320,9 @@ Wheel BuildWheel(Scene scene, BodyComponent chassis, Vector3 mount)
     return new Wheel(wheel, motor, hinge, mount);
 }
 
+// The core, physics-free primitive: the body is on the parent, this is only the look.
 Entity Model(Primitive3D shape, Material material, Vector3 localPosition)
-{
-    // The core, physics-free primitive: the body is on the parent, this is only the look.
-    var entity = game.CreatePrimitive(shape, new PrimitiveEntityOptions { Body = BodyMode.None, Material = material });
-    entity.Transform.Position = localPosition;
-
-    return entity;
-}
+    => game.CreatePrimitive(shape, new PrimitiveEntityOptions { Body = BodyMode.None, Material = material, Position = localPosition });
 
 // A ramp, a slalom of pillars, and a wall of crates to drive through or throw with the grabber.
 void BuildCourse(Scene scene)
@@ -376,9 +368,7 @@ void BuildCourse(Scene scene)
 
 void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Car", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Car", () =>
     {
         var speed = car?.Chassis.LinearVelocity.Length() ?? 0;
 
@@ -427,13 +417,8 @@ public sealed class ChaseCamera : SyncScript
         var blend = 1 - MathF.Exp(-Smoothing * (float)Game.UpdateTime.Elapsed.TotalSeconds);
         var position = Vector3.Lerp(Entity.Transform.Position, wanted, blend);
 
-        // A view matrix looks down -Z; its inverse is the camera's world pose.
-        var view = Matrix.LookAtRH(position, targetPosition + Vector3.UnitY * 0.8f, Vector3.UnitY);
-        Matrix.Invert(ref view, out var world);
-        world.Decompose(out _, out Quaternion rotation, out _);
-
         Entity.Transform.Position = position;
-        Entity.Transform.Rotation = rotation;
+        Entity.Transform.Rotation = QuaternionUtil.LookAt(position, targetPosition + Vector3.UnitY * 0.8f);
     }
 }
 

@@ -20,7 +20,7 @@ public readonly struct SimpleVector : IEquatable<SimpleVector>
 
     public float Z { get; init; }
 
-    public SimpleVector(float x, float y, float z) : this()
+    public SimpleVector(float x, float y, float z)
     {
         X = x;
         Y = y;

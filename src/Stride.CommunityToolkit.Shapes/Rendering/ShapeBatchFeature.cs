@@ -21,7 +21,7 @@ namespace Stride.CommunityToolkit.Shapes;
 /// camera, a render-to-texture pass or the editor's view sees the same shapes as the first, and a
 /// batch whose stage never runs does not keep growing.
 /// </remarks>
-public class ShapeBatchFeature : RootRenderFeature
+public sealed class ShapeBatchFeature : RootRenderFeature
 {
     /// <summary>The GPU timing scope around each batch's draw, for Stride's profiler and for a frame capture.</summary>
     public static readonly ProfilingKey ProfilingKey = new("ShapeBatch");
@@ -64,10 +64,7 @@ public class ShapeBatchFeature : RootRenderFeature
     /// draws over the scene's other transparent objects and a depth-tested one still hides behind
     /// the opaque geometry it reads.
     /// </summary>
-    public ShapeBatchFeature()
-    {
-        SortKey = 255;
-    }
+    public ShapeBatchFeature() => SortKey = 255;
 
     /// <inheritdoc/>
     public override Type SupportedRenderObjectType => typeof(ShapeBatch);
@@ -89,15 +86,9 @@ public class ShapeBatchFeature : RootRenderFeature
         _vertexDeclaration = new VertexDeclaration(VertexElement.Position<Vector2>());
 
         // A unit quad; the vertex shader grows it per shape to leave room for a thick border
-        _quadBuffer = Buffer.Vertex.New(Context.GraphicsDevice, new[]
-        {
-            new Vector2(-1f, -1f),
-            new Vector2(1f, -1f),
-            new Vector2(-1f, 1f),
-            new Vector2(1f, -1f),
-            new Vector2(1f, 1f),
-            new Vector2(-1f, 1f),
-        });
+        Vector2[] quad = [new(-1f, -1f), new(1f, -1f), new(-1f, 1f), new(1f, -1f), new(1f, 1f), new(-1f, 1f)];
+
+        _quadBuffer = Buffer.Vertex.New(Context.GraphicsDevice, quad);
 
         _instanceBuffer = Buffer.Structured.New<ShapeInstance>(Context.GraphicsDevice, 1);
         _pointBuffer = Buffer.Structured.New<Vector2>(Context.GraphicsDevice, 1);

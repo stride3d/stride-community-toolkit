@@ -5,8 +5,6 @@ using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-const string CubeEntityName = "Cube";
-
 using var game = new Game();
 
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
@@ -29,10 +27,7 @@ void Start(Scene rootScene)
     debug.Scene = rootScene;
 
     // A cube without physics beside the row: no gizmo appears for it, because physics knows nothing of it
-    var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions
-    {
-        Body = BodyMode.None
-    });
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new() { Body = BodyMode.None });
     cube.Transform.Position = new Vector3(1f, 0.5f, 3f);
     cube.Scene = rootScene;
 
@@ -41,11 +36,11 @@ void Start(Scene rootScene)
 
 void CreateCubes(Scene rootScene, int count)
 {
-    int half = count / 2;
+    var half = count / 2;
 
-    for (int i = -half; i < half; i++)
+    for (var i = -half; i < half; i++)
     {
-        var entity = game.CreatePrimitive(Primitive3D.Cube(), new() { EntityName = CubeEntityName });
+        var entity = game.CreatePrimitive(Primitive3D.Cube());
         entity.Transform.Position = new Vector3(i * 0.99f, 1, 0);
         entity.Scene = rootScene;
     }

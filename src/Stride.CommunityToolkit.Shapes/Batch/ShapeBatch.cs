@@ -40,7 +40,7 @@ public sealed partial class ShapeBatch : RenderObject
     // normalized space; an instance says where its run starts
     internal readonly List<Vector2> Points = [];
 
-    // Every space run.s points, a world position with the stroke radius beside it in w, in
+    // Every space run's points, a world position with the stroke radius beside it in w, in
     // submission order; the record says where its piece starts
     internal readonly List<Vector4> SpacePoints = [];
 
@@ -57,6 +57,15 @@ public sealed partial class ShapeBatch : RenderObject
     // very long run; where two runs meet, the shared round cap is drawn twice, which shows wherever
     // the stroke is not opaque: an opacity or a colour alpha below one, or an additive glow.
     private const int PolylineRunLength = 64;
+
+    /// <summary>A stroke with no area: a hollow band of zero depth, which is what a ring or an arc is.</summary>
+    private static readonly ShapeSlice Stroke = new(Hollow: true, RingWidth: 0f, StartAngle: 0f, SweepAngle: 0f, RoundCaps: false);
+
+    /// <summary>The slice of every space run: a polyline, stroked on screen.</summary>
+    private static readonly ShapeSlice SpaceStroke = ShapeSlice.Whole with { Polyline = true, Space = true };
+
+    /// <summary>A stand-in plane for a space run, which has none; the shader never reads it.</summary>
+    private static readonly ShapePlane SpacePlane = new(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, PlaneMode.Fixed);
 
     // Scratch for closing a polyline, so a long closed run costs no allocation per frame; an open
     // run is read where the caller has it
@@ -220,7 +229,7 @@ public sealed partial class ShapeBatch : RenderObject
     /// </para>
     /// <para>
     /// The coordinates are the display's scaled pixels when <see cref="AutoScale"/> is on, so a
-    /// layout is the same size to the eye on every display, and <see cref="Anchor"/> and
+    /// layout is the same size to the eye on every display, and <see cref="AnchorPoint"/> and
     /// <see cref="ScreenSize"/> speak the same units. A pixel-measured width, a dash or a glow
     /// means exactly what it means in the world.
     /// </para>
@@ -231,7 +240,7 @@ public sealed partial class ShapeBatch : RenderObject
     /// A rectangle of the screen, in pixels from the top left, that screen shapes are placed
     /// relative to: a chart draws in its own coordinates and lands where the rectangle is. The
     /// default <c>null</c> is the whole viewport. The rectangle offsets and sizes
-    /// <see cref="Anchor"/>; nothing is clipped to it.
+    /// <see cref="AnchorPoint"/>; nothing is clipped to it.
     /// </summary>
     public RectangleF? Viewport { get; set; }
 
@@ -249,7 +258,7 @@ public sealed partial class ShapeBatch : RenderObject
     /// </summary>
     /// <param name="anchor">Which point: a corner, the middle of an edge or the centre.</param>
     /// <returns>The point, in the same coordinates the draw calls take.</returns>
-    public Vector2 Anchor(ScreenAnchor anchor)
+    public Vector2 AnchorPoint(Anchor anchor)
         => anchor.At(Viewport is { } viewport ? new Vector2(viewport.Width, viewport.Height) : ScreenSize);
 
     // Where the window's size comes from, in scaled pixels; set by AddShapeBatch
@@ -299,9 +308,6 @@ public sealed partial class ShapeBatch : RenderObject
         DiscardPicks();
     }
 
-    /// <summary>A stroke with no area: a hollow band of zero depth, which is what a ring or an arc is.</summary>
-    private static readonly ShapeSlice Stroke = new(Hollow: true, RingWidth: 0f, StartAngle: 0f, SweepAngle: 0f, RoundCaps: false);
-
     private void AddSector(in ShapePlane plane, float radius, float innerRadius, float startAngle, float sweepAngle, Color color)
     {
         if (radius <= 0f || innerRadius >= radius || !ShapeSlice.TryNormalizeSweep(ref startAngle, ref sweepAngle)) return;
@@ -329,19 +335,16 @@ public sealed partial class ShapeBatch : RenderObject
         // No explicit fill colour: the testbed's own formula, where FillAlpha scales the outline
         // colour's brightness as well as its opacity. Keeping it verbatim is what makes the Box2D
         // examples match the testbed side by side. At the default alpha of 1 it is the plain colour.
-        if (Fill.Color is not { } fill)
-        {
-            // The gradient's far end gets the same treatment as the near one: scaled by the fill
-            // alpha in the shader, so the two ends dim together
-            return new(color, color, BorderWidth, Fill.Alpha, Glow.Capture(color), Dash.Capture(), CaptureGradient(color), Opacity, DepthFade, TexturedNow, Screen);
-        }
+        // The gradient's far end gets the same treatment as the near one: scaled by the fill alpha
+        // in the shader, so the two ends dim together
+        if (Fill.Color is not { } fill) return Style(color, color, BorderWidth, Fill.Alpha, CaptureGradient(color));
 
         // An explicit fill colour is used as given. Dimming its brightness the testbed way would
         // turn a chosen colour into a muddy version of itself, so the fill alpha scales opacity only.
         var near = WithFillAlpha(fill);
         var gradient = Gradient.Color is { } to ? new GradientStyle(true, WithFillAlpha(to), Gradient.Direction) : new GradientStyle(false, near, Gradient.Direction);
 
-        return new(color, near, BorderWidth, 1f, Glow.Capture(color), Dash.Capture(), gradient, Opacity, DepthFade, TexturedNow, Screen);
+        return Style(color, near, BorderWidth, 1f, gradient);
     }
 
     /// <summary>A screen shape drawn into a <see cref="Viewport"/> rectangle is moved to it here; every other shape is placed as given.</summary>
@@ -349,16 +352,20 @@ public sealed partial class ShapeBatch : RenderObject
         => style.Screen && Viewport is { } viewport ? plane with { Origin = plane.Origin + new Vector3(viewport.X, viewport.Y, 0f) } : plane;
 
     /// <summary>The current style with the fill turned off, for shapes that are all outline.</summary>
-    private ShapeStyle OutlineStyle(Color color) => new(color, color, BorderWidth, 0f, Glow.Capture(color), Dash.Capture(), new GradientStyle(false, color, Gradient.Direction), Opacity, DepthFade, TexturedNow, Screen);
+    private ShapeStyle OutlineStyle(Color color) => OutlineStyle(color, BorderWidth);
 
     /// <summary>The current style with the fill turned off and its own outline width.</summary>
-    private ShapeStyle OutlineStyle(Color color, float borderWidth) => new(color, color, borderWidth, 0f, Glow.Capture(color), Dash.Capture(), new GradientStyle(false, color, Gradient.Direction), Opacity, DepthFade, TexturedNow, Screen);
+    private ShapeStyle OutlineStyle(Color color, float borderWidth) => Style(color, color, borderWidth, 0f, new GradientStyle(false, color, Gradient.Direction));
 
     /// <summary>
     /// The current style with the fill turned all the way up, for shapes that are drawn solid. A
     /// gradient still applies: a line that fades out along its length is a leader line.
     /// </summary>
-    private ShapeStyle SolidStyle(Color color) => new(color, color, BorderWidth, 1f, Glow.Capture(color), Dash.Capture(), CaptureGradient(color), Opacity, DepthFade, TexturedNow, Screen);
+    private ShapeStyle SolidStyle(Color color) => Style(color, color, BorderWidth, 1f, CaptureGradient(color));
+
+    /// <summary>The batch's current glow, dash, opacity, depth fade, texturing and screen flag around the parts a draw call decides.</summary>
+    private ShapeStyle Style(Color color, Color fill, float borderWidth, float fillAlpha, GradientStyle gradient)
+        => new(color, fill, borderWidth, fillAlpha, Glow.Capture(color), Dash.Capture(), gradient, Opacity, DepthFade, TexturedNow, Screen);
 
     /// <summary>Whether the next draw call is textured: asked for, and with a fill source to sample.</summary>
     private bool TexturedNow => Textured && FillSource is not null;
@@ -377,17 +384,8 @@ public sealed partial class ShapeBatch : RenderObject
     {
         if (points.Length < 2) return;
 
-        var run = points;
-
         // Only a closed run needs a copy, for the point that joins it back to its start
-        if (closed)
-        {
-            _run.Clear();
-            _run.AddRange(points);
-            _run.Add(points[0]);
-
-            run = CollectionsMarshal.AsSpan(_run);
-        }
+        var run = closed ? Closed(points, _run) : points;
 
         const int stride = PolylineRunLength - 1;
 
@@ -408,6 +406,16 @@ public sealed partial class ShapeBatch : RenderObject
         }
     }
 
+    /// <summary>The run with its first point appended, in the scratch list, so a long closed run costs no allocation per frame.</summary>
+    private static ReadOnlySpan<T> Closed<T>(ReadOnlySpan<T> points, List<T> scratch)
+    {
+        scratch.Clear();
+        scratch.AddRange(points);
+        scratch.Add(points[0]);
+
+        return CollectionsMarshal.AsSpan(scratch);
+    }
+
     /// <summary>
     /// Records a space run: its points go to the space point buffer with the stroke radius beside
     /// each, in pieces of at most <see cref="PolylineRunLength"/> points that share an end point,
@@ -418,16 +426,7 @@ public sealed partial class ShapeBatch : RenderObject
     {
         if (points.Length < 2) return;
 
-        var run = points;
-
-        if (closed)
-        {
-            _spaceRun.Clear();
-            _spaceRun.AddRange(points);
-            _spaceRun.Add(points[0]);
-
-            run = CollectionsMarshal.AsSpan(_spaceRun);
-        }
+        var run = closed ? Closed(points, _spaceRun) : points;
 
         for (var start = 0; start + 1 < run.Length; start += PolylineRunLength - 1)
         {
@@ -440,12 +439,6 @@ public sealed partial class ShapeBatch : RenderObject
             RecordSpacePick(piece, style, radius);
         }
     }
-
-    /// <summary>A stand-in plane for a space run, which has none; the shader never reads it.</summary>
-    private static readonly ShapePlane SpacePlane = new(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, PlaneMode.Fixed);
-
-    /// <summary>The slice of every space run: a polyline, stroked on screen.</summary>
-    private static readonly ShapeSlice SpaceStroke = ShapeSlice.Whole with { Polyline = true, Space = true };
 
     /// <summary>
     /// Records one shape: its points shifted and scaled into the 2x2 quad the shader draws, so
@@ -484,7 +477,7 @@ public sealed partial class ShapeBatch : RenderObject
         // Never zero: the shader divides by it. A shape with no extent - a circle of radius zero, a
         // run whose points coincide - is then a dot the width of its border, which is what a
         // stroke of no length is.
-        var localScale = MathF.Max(radius + 0.5f * MathF.Max(extent.X, extent.Y), 0.000001f);
+        var localScale = MathF.Max(radius + 0.5f * MathF.Max(extent.X, extent.Y), MathUtil.ZeroTolerance);
 
         if (!float.IsFinite(localScale)) return;
 
@@ -492,10 +485,7 @@ public sealed partial class ShapeBatch : RenderObject
 
         var offset = Points.Count;
 
-        for (var i = 0; i < vertices.Length; i++)
-        {
-            Points.Add(invScale * (vertices[i] - center));
-        }
+        foreach (var vertex in vertices) Points.Add(invScale * (vertex - center));
 
         Instances.Add(new ShapeInstance(placed, style, slice, new ShapePointRun(offset, vertices.Length, center, localScale), radius, scale));
         RecordPick(vertices, placed, style, slice, radius, scale);

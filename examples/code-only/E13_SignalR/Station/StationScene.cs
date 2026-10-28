@@ -1,6 +1,5 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -8,7 +7,6 @@ using Stride.Engine;
 using Stride.Input;
 using Stride.Rendering;
 using Stride.Rendering.Colors;
-using Stride.Rendering.Images;
 using Stride.Rendering.Lights;
 
 namespace E13_SignalR.Station;
@@ -47,12 +45,12 @@ public sealed class StationScene(Game game)
 
     private readonly Star[] _stars = MakeStars(StarCount, seed: 7);
 
-    private ShapeBatch? _shapes;
-    private Labels? _labels;
+    private ShapeBatch _shapes = null!;
+    private Labels _labels = null!;
     private float _hatchPulse;
 
     /// <summary>The one batch everything in the scene draws with. Created by <see cref="Build"/>.</summary>
-    public ShapeBatch? Shapes => _shapes;
+    public ShapeBatch Shapes => _shapes;
 
     public void Build(Scene scene, Labels labels, StationConsole console)
     {
@@ -122,8 +120,6 @@ public sealed class StationScene(Game game)
     /// <summary>The stars and the markings, resubmitted every frame in the scheme's colours.</summary>
     public void Draw(StationConsole console, float deltaSeconds, float time)
     {
-        if (_shapes is null || _labels is null) return;
-
         _hatchPulse = MathF.Max(0f, _hatchPulse - deltaSeconds * 2f);
 
         DrawStars(time);
@@ -159,7 +155,9 @@ public sealed class StationScene(Game game)
         // Corner ticks on the deck: each a three-point stroke on the deck plane, one round join
         const float Tick = 1.5f;
 
-        foreach (var (signX, signZ) in new[] { (-1f, -1f), (1f, -1f), (-1f, 1f), (1f, 1f) })
+        ReadOnlySpan<(float X, float Z)> corners = [(-1f, -1f), (1f, -1f), (-1f, 1f), (1f, 1f)];
+
+        foreach (var (signX, signZ) in corners)
         {
             var corner = new Vector2(signX * inset, signZ * inset);
 
@@ -201,7 +199,7 @@ public sealed class StationScene(Game game)
     /// </summary>
     private void DrawStars(float time)
     {
-        _shapes!.BorderWidth = 0f;
+        _shapes.BorderWidth = 0f;
         _shapes.Fill.Set(null, 1f);
 
         foreach (var star in _stars)

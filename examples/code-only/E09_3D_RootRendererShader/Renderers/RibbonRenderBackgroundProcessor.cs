@@ -16,7 +16,7 @@ public class RibbonBackgroundRenderProcessor : EntityProcessor<RibbonBackgroundC
     /// <inheritdoc />
     protected override void OnSystemRemove()
     {
-        if (ActiveBackground != null)
+        if (ActiveBackground is not null)
         {
             VisibilityGroup?.RenderObjects.Remove(ActiveBackground);
             ActiveBackground = null;
@@ -27,15 +27,11 @@ public class RibbonBackgroundRenderProcessor : EntityProcessor<RibbonBackgroundC
 
     /// <inheritdoc />
     protected override RibbonRenderBackground GenerateComponentData(Entity entity, RibbonBackgroundComponent component)
-    {
-        return new RibbonRenderBackground { Source = component, RenderGroup = component.RenderGroup };
-    }
+        => new() { Source = component, RenderGroup = component.RenderGroup };
 
     /// <inheritdoc />
     protected override bool IsAssociatedDataValid(Entity entity, RibbonBackgroundComponent component, RibbonRenderBackground associatedData)
-    {
-        return component == associatedData.Source && component.RenderGroup == associatedData.RenderGroup;
-    }
+        => component == associatedData.Source && component.RenderGroup == associatedData.RenderGroup;
 
     /// <inheritdoc />
     public override void Draw(RenderContext context)
@@ -44,10 +40,8 @@ public class RibbonBackgroundRenderProcessor : EntityProcessor<RibbonBackgroundC
         ActiveBackground = null;
 
         // Start by making it not visible
-        foreach (var entityKeyPair in ComponentDatas)
+        foreach (var (backgroundComponent, renderBackground) in ComponentDatas)
         {
-            var backgroundComponent = entityKeyPair.Key;
-            var renderBackground = entityKeyPair.Value;
             if (backgroundComponent.Enabled)
             {
                 // Select the first active background
@@ -65,12 +59,16 @@ public class RibbonBackgroundRenderProcessor : EntityProcessor<RibbonBackgroundC
             }
         }
 
-        if (ActiveBackground != previousBackground)
+        if (ActiveBackground == previousBackground) return;
+
+        if (previousBackground is not null)
         {
-            if (previousBackground != null)
-                VisibilityGroup?.RenderObjects.Remove(previousBackground);
-            if (ActiveBackground != null)
-                VisibilityGroup?.RenderObjects.Add(ActiveBackground);
+            VisibilityGroup?.RenderObjects.Remove(previousBackground);
+        }
+
+        if (ActiveBackground is not null)
+        {
+            VisibilityGroup?.RenderObjects.Add(ActiveBackground);
         }
     }
 }

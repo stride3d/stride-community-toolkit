@@ -1,9 +1,7 @@
 using E13_SignalR_Shared;
-using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
-using Stride.Engine;
 using Stride.Input;
 using System.Globalization;
 
@@ -36,6 +34,15 @@ public sealed class StationBoard
     private static readonly string[] Counters = ["ON DECK", "RELEASED", "LOST", "TONNES"];
     private static readonly float[] CounterColumns = [-6.5f, -2.2f, 2.2f, 6.5f];
     private static readonly string[] SizeNames = ["Small", "Medium", "Large"];
+
+    // The label keys, built once: the boards are drawn every frame, and a key interpolated there would allocate each time
+    private static readonly string[] SchemeKeys = [.. Schemes.All.Select((_, i) => "scheme-" + i)];
+    private static readonly string[] CounterValueKeys = [.. Counters.Select(counter => $"{counter}-value")];
+    private static readonly string[] CounterCaptionKeys = [.. Counters.Select(counter => $"{counter}-caption")];
+    private static readonly string[] SizeKeys = [.. SizeNames.Select((_, i) => "size-" + i)];
+    private static readonly string[] SizeCountKeys = [.. SizeNames.Select((_, i) => "size-" + i + "-count")];
+    private static readonly string[] PaintKeys = [.. Paints.All.Select((_, i) => "paint-" + i)];
+    private static readonly string[] PaintCountKeys = [.. Paints.All.Select((_, i) => "paint-" + i + "-count")];
     private static readonly Color Online = new(80, 245, 150);
     private static readonly Color Offline = new(255, 170, 70);
 
@@ -52,38 +59,38 @@ public sealed class StationBoard
         _board = new Board(center, facing, new Vector2(Width, Height));
         _labels = labels;
 
-        labels.Add("title", 0.66f, labels.Bold, (t, c) => { t.TextColor = c.Text; t.GlowColor = c.Glow; }, TextAnchor.MiddleLeft, glow: 4f);
-        labels.Add("subtitle", 0.36f, labels.Sans, (t, c) => t.TextColor = Hex.WithAlpha(c.Accent, 190), TextAnchor.MiddleLeft);
+        labels.Add("title", 0.66f, labels.Bold, (t, c) => { t.TextColor = c.Text; t.GlowColor = c.Glow; }, Anchor.MiddleLeft, glow: 4f);
+        labels.Add("subtitle", 0.36f, labels.Sans, (t, c) => t.TextColor = Hex.WithAlpha(c.Accent, 190), Anchor.MiddleLeft);
 
         // Coloured per frame by the scheme each button stands for, not by the current one
         for (var i = 0; i < Schemes.All.Length; i++)
         {
-            labels.Add($"scheme-{i}", 0.36f, labels.Bold, (_, _) => { });
+            labels.Add(SchemeKeys[i], 0.36f, labels.Bold, (_, _) => { });
         }
 
-        labels.Add("link", 0.42f, labels.Sans, (_, _) => { }, TextAnchor.MiddleLeft);
-        labels.Add("uptime", 0.42f, labels.Mono, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 170), TextAnchor.MiddleRight);
+        labels.Add("link", 0.42f, labels.Sans, (_, _) => { }, Anchor.MiddleLeft);
+        labels.Add("uptime", 0.42f, labels.Mono, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 170), Anchor.MiddleRight);
 
-        foreach (var counter in Counters)
+        for (var i = 0; i < Counters.Length; i++)
         {
-            labels.Add($"{counter}-value", 1.25f, labels.Mono, (t, c) => { t.TextColor = c.Accent; t.GlowColor = c.Glow; }, glow: 3f);
-            labels.Add($"{counter}-caption", 0.36f, labels.Bold, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 150));
+            labels.Add(CounterValueKeys[i], 1.25f, labels.Mono, (t, c) => { t.TextColor = c.Accent; t.GlowColor = c.Glow; }, glow: 3f);
+            labels.Add(CounterCaptionKeys[i], 0.36f, labels.Bold, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 150));
         }
 
-        labels.Add("by-size", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, TextAnchor.MiddleLeft);
-        labels.Add("by-paint", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, TextAnchor.MiddleLeft);
-        labels.Add("dropping", 0.38f, labels.Sans, (t, c) => t.TextColor = c.Accent, TextAnchor.MiddleLeft);
+        labels.Add("by-size", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, Anchor.MiddleLeft);
+        labels.Add("by-paint", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, Anchor.MiddleLeft);
+        labels.Add("dropping", 0.38f, labels.Sans, (t, c) => t.TextColor = c.Accent, Anchor.MiddleLeft);
 
         for (var i = 0; i < SizeNames.Length; i++)
         {
-            labels.Add($"size-{i}", 0.42f, labels.Sans, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleLeft);
-            labels.Add($"size-{i}-count", 0.42f, labels.Mono, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleRight);
+            labels.Add(SizeKeys[i], 0.42f, labels.Sans, (t, c) => t.TextColor = c.Text, Anchor.MiddleLeft);
+            labels.Add(SizeCountKeys[i], 0.42f, labels.Mono, (t, c) => t.TextColor = c.Text, Anchor.MiddleRight);
         }
 
         for (var i = 0; i < Paints.All.Length; i++)
         {
-            labels.Add($"paint-{i}", 0.4f, labels.Sans, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleLeft);
-            labels.Add($"paint-{i}-count", 0.4f, labels.Mono, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleRight);
+            labels.Add(PaintKeys[i], 0.4f, labels.Sans, (t, c) => t.TextColor = c.Text, Anchor.MiddleLeft);
+            labels.Add(PaintCountKeys[i], 0.4f, labels.Mono, (t, c) => t.TextColor = c.Text, Anchor.MiddleRight);
         }
     }
 
@@ -159,7 +166,7 @@ public sealed class StationBoard
             shapes.Tag = null;
             shapes.Glow.Clear();
 
-            _labels.Set($"scheme-{i}", scheme.Name, _board, center.X, center.Y, selected ? fill : accent);
+            _labels.Set(SchemeKeys[i], scheme.Name, _board, center.X, center.Y, selected ? fill : accent);
         }
 
         shapes.Fill.Set(null, 0f);
@@ -190,8 +197,8 @@ public sealed class StationBoard
 
         for (var i = 0; i < Counters.Length; i++)
         {
-            _labels.Set($"{Counters[i]}-value", values[i], _board, CounterColumns[i], CounterRow);
-            _labels.Set($"{Counters[i]}-caption", Counters[i], _board, CounterColumns[i], CaptionRow);
+            _labels.Set(CounterValueKeys[i], values[i], _board, CounterColumns[i], CounterRow);
+            _labels.Set(CounterCaptionKeys[i], Counters[i], _board, CounterColumns[i], CaptionRow);
         }
     }
 
@@ -205,9 +212,9 @@ public sealed class StationBoard
         {
             var v = FirstBarRow - i * RowStep;
 
-            _labels.Set($"size-{i}", SizeNames[i], _board, -Margin, v);
+            _labels.Set(SizeKeys[i], SizeNames[i], _board, -Margin, v);
             DrawBar(shapes, -6.3f, -1.7f, v, (float)snapshot.BySize[i] / most, console.Accent, console.Text);
-            _labels.Set($"size-{i}-count", snapshot.BySize[i].ToString(), _board, -0.6f, v);
+            _labels.Set(SizeCountKeys[i], snapshot.BySize[i].ToString(), _board, -0.6f, v);
         }
 
         if (pending > 0)
@@ -238,9 +245,9 @@ public sealed class StationBoard
             shapes.Fill.Set(null, 0f);
             shapes.BorderWidth = 1.5f;
 
-            _labels.Set($"paint-{i}", Paints.All[i].ToString(), _board, 1.2f, v);
+            _labels.Set(PaintKeys[i], Paints.All[i].ToString(), _board, 1.2f, v);
             DrawBar(shapes, 3.5f, 7.3f, v, (float)snapshot.ByPaint[i] / most, paint, console.Text);
-            _labels.Set($"paint-{i}-count", snapshot.ByPaint[i].ToString(), _board, Margin, v);
+            _labels.Set(PaintCountKeys[i], snapshot.ByPaint[i].ToString(), _board, Margin, v);
         }
     }
 
@@ -281,7 +288,9 @@ public sealed class StationBoard
         // The arc is a stroke at the border width, so it matches the lines' two pixels
         shapes.BorderWidth = 2f;
 
-        foreach (var (signX, signY) in new[] { (-1f, -1f), (1f, -1f), (-1f, 1f), (1f, 1f) })
+        ReadOnlySpan<(float X, float Y)> corners = [(-1f, -1f), (1f, -1f), (-1f, 1f), (1f, 1f)];
+
+        foreach (var (signX, signY) in corners)
         {
             var corner = new Vector2(signX * half.X, signY * half.Y);
             var elbow = corner - new Vector2(signX * Radius, signY * Radius);

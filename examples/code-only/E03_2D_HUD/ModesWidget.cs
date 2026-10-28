@@ -14,7 +14,14 @@ public sealed class ModesWidget(ShipState ship) : HudWidget
 
     public override void Draw(HudCanvas canvas, HudRect bounds)
     {
-        var content = canvas.Panel(bounds, Name, "MODES", $"{ship.Modes.Count(mode => mode.Engaged)} ENGAGED");
+        var engaged = 0;
+
+        foreach (var mode in ship.Modes)
+        {
+            if (mode.Engaged) engaged++;
+        }
+
+        var content = canvas.Panel(bounds, Name, "MODES", $"{engaged} ENGAGED");
 
         for (var i = 0; i < ship.Modes.Length; i++)
         {

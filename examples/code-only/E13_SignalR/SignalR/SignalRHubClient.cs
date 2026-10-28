@@ -78,17 +78,14 @@ public sealed class SignalRHubClient : IAsyncDisposable
         Connection = builder.Build();
 
         // Apply optional timeouts, if supplied
-        if (options.ServerTimeout.HasValue)
-            Connection.ServerTimeout = options.ServerTimeout.Value;
-        if (options.KeepAliveInterval.HasValue)
-            Connection.KeepAliveInterval = options.KeepAliveInterval.Value;
-        if (options.HandshakeTimeout.HasValue)
-            Connection.HandshakeTimeout = options.HandshakeTimeout.Value;
+        if (options.ServerTimeout is { } serverTimeout) Connection.ServerTimeout = serverTimeout;
+        if (options.KeepAliveInterval is { } keepAlive) Connection.KeepAliveInterval = keepAlive;
+        if (options.HandshakeTimeout is { } handshake) Connection.HandshakeTimeout = handshake;
 
         _minBackoff = options.ReconnectBackoffMin ?? TimeSpan.FromMilliseconds(500);
         _maxBackoff = options.ReconnectBackoffMax ?? TimeSpan.FromMilliseconds(2000);
-        if (_maxBackoff < _minBackoff)
-            (_minBackoff, _maxBackoff) = (_maxBackoff, _minBackoff);
+
+        if (_maxBackoff < _minBackoff) (_minBackoff, _maxBackoff) = (_maxBackoff, _minBackoff);
 
         // Closed only reports. Reconnecting from here was the old design, and it had two faults: it
         // could not tell an intentional StopAsync from a dropped connection, and it never fired at
@@ -185,19 +182,12 @@ public sealed class SignalRHubClient : IAsyncDisposable
     /// </summary>
     public async Task EnsureStartedAsync(CancellationToken ct = default)
     {
-
         // Stopping is terminal for this client - StopAsync is followed by DisposeAsync - so a start
         // arriving afterwards is a race, not a request. Returning is right; throwing would only move
         // the exception from StartAsync to here.
-        if (_stopRequested)
-        {
-            return;
-        }
+        if (_stopRequested) return;
 
-        if (Connection.State == HubConnectionState.Connected)
-        {
-            return;
-        }
+        if (Connection.State == HubConnectionState.Connected) return;
 
         await _connectionLock.WaitAsync(ct).ConfigureAwait(false);
 
@@ -250,10 +240,7 @@ public sealed class SignalRHubClient : IAsyncDisposable
 
         try
         {
-            foreach (var q in _sendQueues)
-            {
-                q.Stop();
-            }
+            foreach (var queue in _sendQueues) queue.Stop();
 
             if (Connection.State != HubConnectionState.Disconnected)
             {
@@ -277,10 +264,7 @@ public sealed class SignalRHubClient : IAsyncDisposable
     {
         await StopAsync().ConfigureAwait(false);
 
-        foreach (var s in _subscriptions)
-        {
-            s.Dispose();
-        }
+        foreach (var subscription in _subscriptions) subscription.Dispose();
 
         _subscriptions.Clear();
 
@@ -302,17 +286,17 @@ public sealed class SignalRHubClient : IAsyncDisposable
         ArgumentException.ThrowIfNullOrWhiteSpace(methodName);
         ArgumentNullException.ThrowIfNull(handler);
 
-        var sub = Connection.On<T>(methodName, (payload) =>
+        var subscription = Connection.On<T>(methodName, payload =>
         {
             if (payload is null) return;
 
             handler(payload);
         });
 
-        _subscriptions.Add(sub);
+        _subscriptions.Add(subscription);
         _logger?.LogDebug("Registered handler for method {Method}", methodName);
 
-        return sub;
+        return subscription;
     }
 
     /// <summary>
@@ -326,12 +310,12 @@ public sealed class SignalRHubClient : IAsyncDisposable
         ArgumentException.ThrowIfNullOrWhiteSpace(methodName);
         ArgumentNullException.ThrowIfNull(handler);
 
-        var sub = Connection.On(methodName, handler);
+        var subscription = Connection.On(methodName, handler);
 
-        _subscriptions.Add(sub);
+        _subscriptions.Add(subscription);
         _logger?.LogDebug("Registered handler for method {Method}", methodName);
 
-        return sub;
+        return subscription;
     }
 
     /// <summary>
@@ -341,12 +325,12 @@ public sealed class SignalRHubClient : IAsyncDisposable
     /// <returns>Outgoing queue instance.</returns>
     public OutgoingQueue CreateOutgoingQueue()
     {
-        var q = new OutgoingQueue(this);
+        var queue = new OutgoingQueue(this);
 
-        _sendQueues.Add(q);
+        _sendQueues.Add(queue);
 
         _logger?.LogDebug("Created outgoing queue");
 
-        return q;
+        return queue;
     }
 }

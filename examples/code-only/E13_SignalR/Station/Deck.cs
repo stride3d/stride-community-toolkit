@@ -1,4 +1,5 @@
 using E13_SignalR_Shared;
+using Stride.BepuPhysics;
 using Stride.Core.Mathematics;
 
 namespace E13_SignalR.Station;
@@ -43,7 +44,6 @@ public sealed class Deck(ContainerFactory factory)
 
     public event Action<int>? Cleared;
 
-
     public int PendingCount => _pending.Count;
 
     /// <summary>The live container with this id, or <see langword="null"/> once it has been lost or cleared.</summary>
@@ -69,7 +69,7 @@ public sealed class Deck(ContainerFactory factory)
             Paint = paint,
             Origin = origin,
             Entity = entity,
-            Body = entity.Get<Stride.BepuPhysics.BodyComponent>(),
+            Body = entity.Get<BodyComponent>(),
             ReleasedAt = _time,
         };
 

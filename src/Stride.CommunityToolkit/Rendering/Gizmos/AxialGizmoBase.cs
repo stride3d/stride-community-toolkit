@@ -18,7 +18,7 @@ public abstract class AxialGizmoBase
     /// <summary>
     /// Gets the graphics device used for rendering the Gizmo.
     /// </summary>
-    protected GraphicsDevice GraphicsDevice { get; private set; }
+    protected GraphicsDevice GraphicsDevice { get; }
 
     /// <summary>
     /// Defines the tessellation level of the Gizmo, which affects how smoothly the object is rendered.
@@ -89,18 +89,12 @@ public abstract class AxialGizmoBase
     /// <summary>
     /// Creates the origin and axis materials. A derived gizmo calls this before it builds its entities.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsDevice"/> is not initialized.</exception>
     protected void CreateMaterials()
     {
-        if (GraphicsDevice == null)
-        {
-            throw new InvalidOperationException("GraphicsDevice has not been initialized");
-        }
-
         DefaultOriginMaterial = CreateEmissiveColorMaterial(Color.White);
-        RedUniformMaterial = CreateEmissiveColorMaterial(GetRedColor());
-        GreenUniformMaterial = CreateEmissiveColorMaterial(GetGreenColor());
-        BlueUniformMaterial = CreateEmissiveColorMaterial(GetBlueColor());
+        RedUniformMaterial = CreateEmissiveColorMaterial(RedColor);
+        GreenUniformMaterial = CreateEmissiveColorMaterial(GreenColor);
+        BlueUniformMaterial = CreateEmissiveColorMaterial(BlueColor);
     }
 
     /// <summary>
@@ -110,8 +104,11 @@ public abstract class AxialGizmoBase
     /// <param name="redColor">Optional custom color for the X-axis (Red). If null, a default red color is used.</param>
     /// <param name="greenColor">Optional custom color for the Y-axis (Green). If null, a default green color is used.</param>
     /// <param name="blueColor">Optional custom color for the Z-axis (Blue). If null, a default blue color is used.</param>
+    /// <exception cref="ArgumentNullException">The graphics device is null.</exception>
     protected AxialGizmoBase(GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null)
     {
+        ArgumentNullException.ThrowIfNull(graphicsDevice);
+
         GraphicsDevice = graphicsDevice;
         _redColor = redColor;
         _greenColor = greenColor;
@@ -126,21 +123,12 @@ public abstract class AxialGizmoBase
     protected Material CreateEmissiveColorMaterial(Color color)
         => GizmoEmissiveColorMaterial.Create(GraphicsDevice, color, 0.75f);
 
-    /// <summary>
-    /// Retrieves the color for the X-axis (Red). Returns the default red color if none is specified.
-    /// </summary>
-    /// <returns>The color for the X-axis.</returns>
-    protected Color GetRedColor() => _redColor ?? _redUniformColor;
+    /// <summary>The colour of the X axis: the one given to the constructor, or the default red.</summary>
+    protected Color RedColor => _redColor ?? _redUniformColor;
 
-    /// <summary>
-    /// Retrieves the color for the Y-axis (Green). Returns the default green color if none is specified.
-    /// </summary>
-    /// <returns>The color for the Y-axis.</returns>
-    protected Color GetGreenColor() => _greenColor ?? _greenUniformColor;
+    /// <summary>The colour of the Y axis: the one given to the constructor, or the default green.</summary>
+    protected Color GreenColor => _greenColor ?? _greenUniformColor;
 
-    /// <summary>
-    /// Retrieves the color for the Z-axis (Blue). Returns the default blue color if none is specified.
-    /// </summary>
-    /// <returns>The color for the Z-axis.</returns>
-    protected Color GetBlueColor() => _blueColor ?? _blueUniformColor;
+    /// <summary>The colour of the Z axis: the one given to the constructor, or the default blue.</summary>
+    protected Color BlueColor => _blueColor ?? _blueUniformColor;
 }

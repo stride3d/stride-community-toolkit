@@ -2,9 +2,9 @@ using E03_3D_MeshText;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -25,8 +25,6 @@ using Stride.Rendering;
 // For ordinary text in a real font - labels, HUDs, signs - use E03_3D_EntityText (screen-space) or
 // E03_3D_WorldText (in-scene) instead: they draw a font, which is far cheaper than geometry.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 // The default camera starts at (6, 6, 6) looking at the origin, so the gallery is turned 45 degrees
 // to face it square-on. Fly around it: these are solids, not billboards
 var faceCamera = Quaternion.RotationY(MathUtil.DegreesToRadians(45));
@@ -34,16 +32,19 @@ var dropped = 0;
 var random = new Random(1);
 
 MeshFont? systemFont = null;
-Material? dropMaterial = null;
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
+game.Run(new SceneSetup3D
+{
+    Profiler = true,
+    WindowTitle = "3D text from a font - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
+}.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "3D text from a font - Stride Community Toolkit";
     game.AddGrabber();
 
     // The base scene's single directional light shines from behind this gallery, leaving the front
@@ -57,7 +58,7 @@ void Start(Scene scene)
     // The embedded font: Open Sans Regular, so the lettering is the same on every machine. A bevel rounds
     // the edge between the caps and the walls, which is what catches the light on a title
     AddText(scene, MeshFont.Default, "Stride Community Toolkit", new Vector3(0f, 3.6f, 0f), gold,
-        new TextMeshOptions { Size = 0.6f, Depth = 0.2f, Anchor = TextAnchor.MiddleCenter, Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 4) });
+        new TextMeshOptions { Size = 0.6f, Depth = 0.2f, Anchor = Anchor.MiddleCenter, Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 4) });
 
     // An installed font by family name and style; null when this machine has no such family, so the
     // embedded one stands in and the line says so
@@ -66,12 +67,12 @@ void Start(Scene scene)
         ?? MeshFont.FromFamily("Liberation Sans", FontStyle.Bold);
 
     AddText(scene, systemFont ?? MeshFont.Default, systemFont is null ? "No bold system font here" : $"{systemFont.Name}, installed here", new Vector3(0f, 2.7f, 0f), silver,
-        new TextMeshOptions { Size = 0.45f, Depth = 0.15f, Anchor = TextAnchor.MiddleCenter });
+        new TextMeshOptions { Size = 0.45f, Depth = 0.15f, Anchor = Anchor.MiddleCenter });
 
     // Several lines in one mesh: centred on each other, a little closer than the font's own line
     // height, and a lower curve quality that is still smooth at this size
     AddText(scene, MeshFont.Default, "lines of text\nalign to each other\nand share one mesh", new Vector3(0f, 2.1f, 0f), blue,
-        new TextMeshOptions { Size = 0.3f, Depth = 0.1f, Alignment = TextAlignment.Center, LineSpacing = 0.9f, Anchor = TextAnchor.TopCenter, CurveQuality = 16 });
+        new TextMeshOptions { Size = 0.3f, Depth = 0.1f, Alignment = TextAlignment.Center, LineSpacing = 0.9f, Anchor = Anchor.TopCenter, CurveQuality = 16 });
 
     // The counter: a script that replaces its digit mesh whenever the number changes
     var counter = new Entity("FrameCounter")
@@ -86,7 +87,10 @@ void Start(Scene scene)
     counter.Scene = scene;
 
     // Three words to begin with, each higher than the last, so they land on each other
-    for (var i = 0; i < 3; i++) DropWord(scene);
+    for (var i = 0; i < 3; i++)
+    {
+        DropWord(scene);
+    }
 
     TextOverlay.GetOrCreate(game).AddSection("3D text", () =>
     [
@@ -128,9 +132,8 @@ void AddText(Scene scene, MeshFont font, string text, Vector3 position, Material
 /// </summary>
 void DropWord(Scene scene)
 {
-    dropMaterial = game.CreateMaterial(random.NextColor(), metalness: 0.1f, glossiness: 0.5f);
-
-    var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new BepuPhysicsOptions { Material = dropMaterial });
+    var material = game.CreateMaterial(random.NextColor(), metalness: 0.1f, glossiness: 0.5f);
+    var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new BepuPhysicsOptions { Material = material });
 
     word.Transform.Position = new Vector3(-2.2f, 4f + dropped * 0.7f, 2.2f);
     word.Transform.Rotation = faceCamera;

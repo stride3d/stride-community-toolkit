@@ -9,7 +9,14 @@ using var game = new Game();
 var cubeCollapse = new CubeCollapseGame(game);
 
 // The game aims its own camera at the platform and lights and lays its own ground
-game.Run(new SceneSetup3D { Camera = null, Lighting = null, Ground = null, Profiler = true }.UseBepu().UseSkybox(), start: cubeCollapse.Start, update: cubeCollapse.Update);
+game.Run(new SceneSetup3D
+{
+    Camera = null,
+    Lighting = null,
+    Ground = null,
+    Profiler = true,
+    Resizable = true,
+}.UseBepu().UseSkybox(), start: cubeCollapse.Start, update: cubeCollapse.Update);
 
 /*
 ---example-metadata

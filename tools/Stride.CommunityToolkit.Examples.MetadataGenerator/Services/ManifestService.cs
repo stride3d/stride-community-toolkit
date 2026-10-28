@@ -33,9 +33,7 @@ public class ManifestService(
     /// <param name="examplesRootPath">The root directory containing example projects.</param>
     /// <param name="cancellationToken">Cancels the scan.</param>
     /// <returns>The parsed examples, including any marked <c>enabled: false</c>, and the failure count.</returns>
-    public async Task<ScanResult> ScanExamplesAsync(
-        DirectoryInfo? examplesRootPath,
-        CancellationToken cancellationToken = default)
+    public async Task<ScanResult> ScanExamplesAsync(DirectoryInfo? examplesRootPath, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(examplesRootPath);
 
@@ -55,25 +53,20 @@ public class ManifestService(
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var projectName = ExampleScanner.GetProjectName(exampleFile);
-
             try
             {
                 var parsed = await metadataParser.ParseMetadataAsync(exampleFile, examplesRootPath.FullName, cancellationToken);
 
-                if (parsed is null)
-                {
-                    continue;
-                }
+                if (parsed is null) continue;
 
                 examples.Add(parsed);
 
-                logger.LogInformation("  ✅ {ProjectName} - {Title}", parsed.Metadata.ProjectName, EnglishTitleOf(parsed));
+                logger.LogInformation("  ✅ {ProjectName} - {Title}", parsed.Metadata.ProjectName, parsed.Metadata.Title?.GetValueOrDefault("en") ?? "(no title)");
             }
             catch (Exception ex)
             {
                 // The message already carries the diagnosis and the file; the stack trace is noise.
-                logger.LogError("  ✖ {ProjectName} - {Message}", projectName, ex.Message);
+                logger.LogError("  ✖ {ProjectName} - {Message}", ExampleScanner.GetProjectName(exampleFile), ex.Message);
 
                 failures++;
             }
@@ -87,6 +80,26 @@ public class ManifestService(
         logger.LogInformation("Scan completed. Found {Count} example(s) with metadata", examples.Count);
 
         return new ScanResult(examples, failures);
+    }
+
+    /// <summary>
+    /// Scans and validates, reporting every finding, and writes nothing.
+    /// </summary>
+    /// <param name="examplesRootPath">The root directory containing example projects.</param>
+    /// <param name="mediaDirectory">The docs media folder, or <see langword="null"/> to skip media checks.</param>
+    /// <param name="cancellationToken">Cancels the run.</param>
+    /// <returns>One of the <c>Exit*</c> codes on this class.</returns>
+    public async Task<int> ScanAndValidateAsync(DirectoryInfo? examplesRootPath, DirectoryInfo? mediaDirectory, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(examplesRootPath);
+
+        var scan = await ScanExamplesAsync(examplesRootPath, cancellationToken);
+
+        if (scan.Examples.Count == 0) return ExitNoExamplesFound;
+
+        var (_, errorCount) = ValidatePublished(scan, examplesRootPath, mediaDirectory);
+
+        return errorCount > 0 ? ExitValidationFailed : ExitSuccess;
     }
 
     /// <summary>
@@ -126,22 +139,7 @@ public class ManifestService(
             return ExitNoExamplesFound;
         }
 
-        // enabled: false means excluded from the manifest entirely, so a disabled example is invisible
-        // to every consumer and takes no part in the uniqueness checks.
-        var published = scan.Examples.Where(example => example.Metadata.Enabled != false).ToList();
-        var disabled = scan.Examples
-            .Where(example => example.Metadata.Enabled == false)
-            .Select(example => example.Metadata.ProjectName)
-            .OfType<string>()
-            .ToHashSet(StringComparer.Ordinal);
-
-        if (disabled.Count > 0)
-        {
-            logger.LogInformation("Excluded {Count} example(s) marked enabled: false", disabled.Count);
-        }
-
-        var messages = metadataValidator.Validate(published, mediaDirectory, ExampleScanner.FindProjectNames(examplesRootPath), disabled);
-        var errorCount = ReportValidation(messages) + scan.Failures;
+        var (published, errorCount) = ValidatePublished(scan, examplesRootPath, mediaDirectory);
 
         if (errorCount > 0 && strict)
         {
@@ -150,9 +148,7 @@ public class ManifestService(
             return ExitValidationFailed;
         }
 
-        var ordered = Sort(published);
-
-        await manifestWriter.WriteManifestAsync(ordered, outputPath, DateTimeOffset.UtcNow, cancellationToken);
+        await manifestWriter.WriteManifestAsync(Sort(published), outputPath, DateTimeOffset.UtcNow, cancellationToken);
 
         logger.LogInformation("Manifest generation completed");
 
@@ -199,15 +195,7 @@ public class ManifestService(
             return ExitNoExamplesFound;
         }
 
-        var published = scan.Examples.Where(example => example.Metadata.Enabled != false).ToList();
-        var disabled = scan.Examples
-            .Where(example => example.Metadata.Enabled == false)
-            .Select(example => example.Metadata.ProjectName)
-            .OfType<string>()
-            .ToHashSet(StringComparer.Ordinal);
-
-        var messages = metadataValidator.Validate(published, mediaDirectory, ExampleScanner.FindProjectNames(examplesRootPath), disabled);
-        var errorCount = ReportValidation(messages) + scan.Failures;
+        var (published, errorCount) = ValidatePublished(scan, examplesRootPath, mediaDirectory);
 
         if (errorCount > 0)
         {
@@ -226,29 +214,50 @@ public class ManifestService(
     /// </summary>
     /// <param name="messages">The findings to report.</param>
     /// <returns>The number of error-severity findings.</returns>
-    public int ReportValidation(IReadOnlyList<ValidationMessage> messages)
+    private int ReportValidation(IReadOnlyList<ValidationMessage> messages)
     {
         var errorCount = 0;
 
         foreach (var message in messages.OrderBy(m => m.ProjectName, StringComparer.Ordinal).ThenBy(m => m.Field, StringComparer.Ordinal))
         {
-            if (message.Severity == ValidationSeverity.Error)
+            switch (message.Severity)
             {
-                errorCount++;
-
-                logger.LogError("  ✖ {ProjectName} [{Field}] {Message}", message.ProjectName, message.Field, message.Message);
-            }
-            else if (message.Severity == ValidationSeverity.Warning)
-            {
-                logger.LogWarning("  ⚠ {ProjectName} [{Field}] {Message}", message.ProjectName, message.Field, message.Message);
-            }
-            else
-            {
-                logger.LogInformation("  ℹ {ProjectName} [{Field}] {Message}", message.ProjectName, message.Field, message.Message);
+                case ValidationSeverity.Error:
+                    errorCount++;
+                    logger.LogError("  ✖ {ProjectName} [{Field}] {Message}", message.ProjectName, message.Field, message.Message);
+                    break;
+                case ValidationSeverity.Warning:
+                    logger.LogWarning("  ⚠ {ProjectName} [{Field}] {Message}", message.ProjectName, message.Field, message.Message);
+                    break;
+                default:
+                    logger.LogInformation("  ℹ {ProjectName} [{Field}] {Message}", message.ProjectName, message.Field, message.Message);
+                    break;
             }
         }
 
         return errorCount;
+    }
+
+    /// <summary>
+    /// Validates the published examples of a scan, reporting every finding.
+    /// </summary>
+    /// <returns>The published examples, and how many findings were errors, parse failures included.</returns>
+    private (List<ParsedExample> published, int errorCount) ValidatePublished(ScanResult scan, DirectoryInfo examplesRootPath, DirectoryInfo? mediaDirectory)
+    {
+        // enabled: false means excluded from the manifest entirely, so a disabled example is invisible
+        // to every consumer and takes no part in the uniqueness checks.
+        var published = scan.Examples.Where(example => example.Metadata.Enabled != false).ToList();
+        var disabled = scan.Examples
+            .Where(example => example.Metadata.Enabled == false)
+            .Select(example => example.Metadata.ProjectName)
+            .OfType<string>()
+            .ToHashSet(StringComparer.Ordinal);
+
+        if (disabled.Count > 0) logger.LogInformation("Excluded {Count} example(s) marked enabled: false", disabled.Count);
+
+        var messages = metadataValidator.Validate(published, mediaDirectory, ExampleScanner.FindProjectNames(examplesRootPath), disabled);
+
+        return (published, ReportValidation(messages) + scan.Failures);
     }
 
     /// <summary>
@@ -267,16 +276,8 @@ public class ManifestService(
     /// </summary>
     private static int IndexIn(ImmutableArray<string> vocabulary, string? value)
     {
-        if (value is null)
-        {
-            return vocabulary.Length;
-        }
-
-        var index = vocabulary.IndexOf(value);
+        var index = value is null ? -1 : vocabulary.IndexOf(value);
 
         return index < 0 ? vocabulary.Length : index;
     }
-
-    private static string EnglishTitleOf(ParsedExample example)
-        => example.Metadata.Title?.GetValueOrDefault("en") ?? "(no title)";
 }

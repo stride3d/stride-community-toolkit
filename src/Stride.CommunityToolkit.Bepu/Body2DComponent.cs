@@ -77,8 +77,6 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
     // body switches back to dynamic and Bepu reinstates the full shape inertia
     private bool _lockedWhileKinematic;
 
-    private float _zTolerance = DefaultZTolerance;
-
     /// <summary>
     /// Gets or sets how far the body may drift off the Z = 0 plane before it is pulled back, in world
     /// units. Defaults to 0.001, one millimetre for a scene built at one unit per metre.
@@ -94,7 +92,7 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
     [Display("Z tolerance", category: CategoryActivity)]
     public float ZTolerance
     {
-        get => _zTolerance;
+        get;
         set
         {
             if (!float.IsFinite(value) || value <= 0f)
@@ -102,9 +100,9 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
                 throw new ArgumentOutOfRangeException(nameof(value), value, "Z tolerance must be a finite value greater than zero.");
             }
 
-            _zTolerance = value;
+            field = value;
         }
-    }
+    } = DefaultZTolerance;
 
     /// <summary>
     /// Initializes a new <see cref="Body2DComponent"/> with interpolation enabled, so rendering stays
@@ -216,8 +214,6 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
     /// </remarks>
     private void RestoreRotationLockIfKinematicChanged()
     {
-        if (_lockedWhileKinematic == Kinematic) return;
-
-        ApplyRotationLock();
+        if (_lockedWhileKinematic != Kinematic) ApplyRotationLock();
     }
 }

@@ -28,8 +28,6 @@ using Stride.Input;
 //
 // New to Tween? E02_2D_EasingBasics builds the same motion by hand first, then with a tween.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float LiftLow = 1f;
 const float LiftHigh = 3.5f;
 
@@ -65,13 +63,15 @@ var lookTarget = new Vector3(0f, 1.5f, 0f);
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
+game.Run(new SceneSetup3D
+{
+    WindowTitle = "Easing in a 3D game - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
+}.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Easing in a 3D game - Stride Community Toolkit";
-
     LookFrom(viewpoints[0]);
 
     // The platform: a kinematic body, so it pushes what it carries and nothing pushes it back
@@ -223,8 +223,7 @@ void HandleInput()
 
     if (input.IsKeyPressed(Keys.L))
     {
-        if (lift.IsRunning) lift.Stop();
-        else lift.Resume();
+        if (lift.IsRunning) lift.Stop(); else lift.Resume();
     }
 
     if (input.IsKeyPressed(Keys.O))
@@ -249,10 +248,7 @@ void HandleInput()
     {
         for (var i = 0; i < riders.Length; i++)
         {
-            riders[i].Teleport(riderHomes[i] with { Y = riderHomes[i].Y + 3f }, Quaternion.Identity);
-            riders[i].LinearVelocity = Vector3.Zero;
-            riders[i].AngularVelocity = Vector3.Zero;
-            riders[i].Awake = true;
+            riders[i].TeleportAtRest(riderHomes[i] with { Y = riderHomes[i].Y + 3f });
         }
     }
 }

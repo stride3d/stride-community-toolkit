@@ -32,7 +32,7 @@ public class ScorePopupScript : SyncScript
     private const float PopDuration = 0.25f;
 
     private Vector3 _startPosition;
-    private EntityTextComponent? _text;
+    private EntityTextComponent _text = null!;
     private float _elapsed;
 
     /// <summary>
@@ -59,17 +59,11 @@ public class ScorePopupScript : SyncScript
 
         Entity.Transform.Position = _startPosition + new Vector3(HorizontalDrift * progress, rise, 0);
 
-        if (_text is not null)
-        {
-            _text.Scale = GetScale();
-            _text.Opacity = GetOpacity(progress);
-        }
+        _text.Scale = GetScale();
+        _text.Opacity = GetOpacity(progress);
 
         // Removed on elapsed time, so every popup plays its whole animation wherever it started
-        if (progress >= 1f)
-        {
-            Entity.Scene = null;
-        }
+        if (progress >= 1f) Entity.Scene = null;
     }
 
     /// <summary>

@@ -20,10 +20,13 @@ public static class GraphicsDeviceExtensions
     /// in which the game or application is running.
     /// </remarks>
     public static Int2 GetWindowSize(this GraphicsDevice graphics)
-    {
-        int width = graphics.Presenter.BackBuffer.Width;
-        int height = graphics.Presenter.BackBuffer.Height;
+        => new(graphics.Presenter.BackBuffer.Width, graphics.Presenter.BackBuffer.Height);
 
-        return new Int2(width, height);
-    }
+    /// <summary>
+    /// The back buffer's width divided by its height: the aspect ratio of the window the game draws into.
+    /// </summary>
+    /// <param name="graphics">The <see cref="GraphicsDevice"/> whose back buffer is measured.</param>
+    /// <returns>Width over height, so 1.777 for a 16:9 window.</returns>
+    public static float GetAspectRatio(this GraphicsDevice graphics)
+        => (float)graphics.Presenter.BackBuffer.Width / graphics.Presenter.BackBuffer.Height;
 }

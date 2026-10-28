@@ -14,7 +14,6 @@ namespace E20_2D_Pong;
 public class Referee : AsyncScript
 {
     private readonly int[] _scores = new int[2];
-    private bool _inMatch;
 
     /// <summary>The left player's paddle.</summary>
     public required Paddle LeftPaddle { get; init; }
@@ -32,7 +31,7 @@ public class Referee : AsyncScript
     public required WorldTextComponent Message { get; init; }
 
     /// <summary>Whether a match is on. False during the demo the game opens with.</summary>
-    public bool InMatch => _inMatch;
+    public bool InMatch { get; private set; }
 
     /// <summary>Whether a second player has the right paddle. The computer plays it otherwise.</summary>
     public bool TwoPlayers
@@ -43,7 +42,7 @@ public class Referee : AsyncScript
             field = value;
 
             // In the demo the computer keeps both paddles whatever this says
-            if (_inMatch) RightPaddle.Computer = !value;
+            if (InMatch) RightPaddle.Computer = !value;
         }
     }
 
@@ -93,7 +92,7 @@ public class Referee : AsyncScript
         // A point from the demo, scored on the very frame Space went down, must not count
         point.Reset();
 
-        _inMatch = true;
+        InMatch = true;
         LeftPaddle.Computer = false;
         RightPaddle.Computer = !TwoPlayers;
 

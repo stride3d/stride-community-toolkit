@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 using System.Globalization;
 
@@ -31,8 +31,8 @@ internal static class GridCursor
         var right = pixel.X < view.Size.X - 170f;
         var below = pixel.Y < view.Size.Y - 60f;
         var anchor = below
-            ? (right ? TextAnchor.TopLeft : TextAnchor.TopRight)
-            : (right ? TextAnchor.BottomLeft : TextAnchor.BottomRight);
+            ? (right ? Anchor.TopLeft : Anchor.TopRight)
+            : (right ? Anchor.BottomLeft : Anchor.BottomRight);
 
         var label = canvas.Label(text, pixel + new Vector2(right ? 16f : -10f, below ? 18f : -8f), anchor, Color.White);
 

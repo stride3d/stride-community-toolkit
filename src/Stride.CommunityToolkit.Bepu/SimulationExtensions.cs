@@ -55,12 +55,10 @@ public static class SimulationExtensions
         ArgumentNullException.ThrowIfNull(simulation);
         ArgumentNullException.ThrowIfNull(hits);
 
-        if (!TryGetRay(raySegment, out var origin, out var direction, out var maxDistance))
+        if (TryGetRay(raySegment, out var origin, out var direction, out var maxDistance))
         {
-            return;
+            simulation.RayCastPenetrating(origin, direction, maxDistance, hits, collisionMask);
         }
-
-        simulation.RayCastPenetrating(origin, direction, maxDistance, hits, collisionMask);
     }
 
     /// <summary>

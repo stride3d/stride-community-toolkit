@@ -21,7 +21,7 @@ public class Ball : SyncScript
     private const float SteepestDegrees = 50f;
 
     private readonly Random _random = new(7);
-    private EventReceiver<Side>? _serve;
+    private EventReceiver<Side> _serve = null!;
 
     /// <summary>The left paddle's entity.</summary>
     public required Entity LeftPaddle { get; init; }
@@ -36,11 +36,11 @@ public class Ball : SyncScript
     public override void Start() => _serve = new EventReceiver<Side>(Court.Serve);
 
     /// <summary>And it listens until it is disposed: a script that leaves the scene must let go of it.</summary>
-    public override void Cancel() => _serve?.Dispose();
+    public override void Cancel() => _serve.Dispose();
 
     public override void Update()
     {
-        if (_serve is not null && _serve.TryReceive(out var towards)) Serve(towards);
+        if (_serve.TryReceive(out var towards)) Serve(towards);
 
         if (Velocity == Vector2.Zero) return;
 

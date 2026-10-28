@@ -16,39 +16,30 @@ using Stride.Graphics;
 // entity is, and it is never hidden by geometry. For text that lives inside the scene - shrinking
 // with distance, blocked by walls - see E03_3D_WorldText.
 
-// Before the window exists: a sharp window on a scaled display, and every label then sizes itself -
-// this is screen-space text, so a 150% display draws it 1.5x, rasterised at that size rather than stretched
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
+game.Run(new SceneSetup3D { Resizable = true, DpiAware = true }.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-
     // One call, however much text the scene has. Without the renderer, components collect quietly
     // and nothing appears - there is no error for a missing renderer.
     game.AddEntityTextRenderer();
 
     // --- Row 1: placement ----------------------------------------------------------------------
 
-    AddStation(scene, new Vector3(-4.5f, 0, -2), "Plain label\n(all defaults)", label => { });
+    AddStation(scene, new Vector3(-4.5f, 0, -2), "Plain label\n(all defaults)");
 
     AddStation(scene, new Vector3(-1.5f, 0, -2), "Anchor = BottomCenter\nOffset = (0, -12)", label =>
     {
         // The label floats centred above its pole. This pairing is what "put a name over a thing"
         // means, and it is Anchor doing the centring - not Alignment, which only arranges the lines
         // of a multi-line block relative to each other.
-        label.Anchor = TextAnchor.BottomCenter;
+        label.Anchor = Anchor.BottomCenter;
         label.Offset = new Vector2(0, -12);
     });
 
-    AddStation(scene, new Vector3(1.5f, 0, -2), "FontSize = 26", label =>
-    {
-        label.FontSize = 26;
-    });
+    AddStation(scene, new Vector3(1.5f, 0, -2), "FontSize = 26", label => label.FontSize = 26);
 
     AddStation(scene, new Vector3(4.5f, 0, -2), "Scale = 1.6\n(cheaper to animate\nthan FontSize)", label =>
     {
@@ -59,15 +50,8 @@ void Start(Scene scene)
 
     // --- Row 2: readability --------------------------------------------------------------------
 
-    AddStation(scene, new Vector3(-4.5f, 0, 1), "EnableShadow = true", label =>
-    {
-        label.EnableShadow = true;
-    });
-
-    AddStation(scene, new Vector3(-1.5f, 0, 1), "EnableBackground = true", label =>
-    {
-        label.EnableBackground = true;
-    });
+    AddStation(scene, new Vector3(-4.5f, 0, 1), "EnableShadow = true", label => label.EnableShadow = true);
+    AddStation(scene, new Vector3(-1.5f, 0, 1), "EnableBackground = true", label => label.EnableBackground = true);
 
     AddStation(scene, new Vector3(1.5f, 0, 1), "TextColor = Orange\nOpacity = 0.55", label =>
     {
@@ -75,10 +59,7 @@ void Start(Scene scene)
         label.Opacity = 0.55f;
     });
 
-    AddStation(scene, new Vector3(4.5f, 0, 1), "Rotation = 0.35 rad", label =>
-    {
-        label.Rotation = 0.35f;
-    });
+    AddStation(scene, new Vector3(4.5f, 0, 1), "Rotation = 0.35 rad", label => label.Rotation = 0.35f);
 
     // --- Row 3: distance -----------------------------------------------------------------------
 
@@ -93,7 +74,7 @@ void Start(Scene scene)
     // Two components on one entity: a name and a subtitle. LayerDepth decides who wins overlaps.
     var titled = AddStation(scene, new Vector3(-1.5f, 0, 4), "Two components,\none entity", label =>
     {
-        label.Anchor = TextAnchor.BottomCenter;
+        label.Anchor = Anchor.BottomCenter;
         label.Offset = new Vector2(0, -26);
         label.EnableShadow = true;
     });
@@ -103,7 +84,7 @@ void Start(Scene scene)
         Text = "(the subtitle)",
         FontSize = 12,
         TextColor = Color.LightGray,
-        Anchor = TextAnchor.BottomCenter,
+        Anchor = Anchor.BottomCenter,
         Offset = new Vector2(0, -12),
         EnableShadow = true,
     });
@@ -112,49 +93,47 @@ void Start(Scene scene)
 
     // Anchored mode snaps to a window corner and survives resizing; the entity's own position is
     // ignored entirely, so a HUD entity can sit anywhere
-    var hud = new Entity("Hud");
-
-    hud.Add(new EntityTextComponent
+    var hud = new Entity("Hud")
     {
-        Text = "PositionMode = Anchored, TopLeft",
-        PositionMode = TextPositionMode.Anchored,
-        ScreenAnchor = ScreenAnchor.TopLeft,
-        Offset = new Vector2(16, 16),
-        EnableShadow = true,
-    });
-
-    hud.Add(new EntityTextComponent
-    {
-        Text = "Anchored, BottomRight\n(resize the window - I stay put)",
-        PositionMode = TextPositionMode.Anchored,
-        ScreenAnchor = ScreenAnchor.BottomRight,
-        Offset = new Vector2(16, 40),
-        EnableShadow = true,
-    });
-
-    hud.Add(new EntityTextComponent
-    {
-        Text = "PositionMode = Screen at (16, 300)",
-        PositionMode = TextPositionMode.Screen,
-        ScreenPosition = new Vector2(16, 300),
-        TextColor = Color.LightGreen,
-        EnableShadow = true,
-    });
+        new EntityTextComponent
+        {
+            Text = "PositionMode = Anchored, TopLeft",
+            PositionMode = TextPositionMode.Anchored,
+            ScreenAnchor = Anchor.TopLeft,
+            Offset = new Vector2(16, 16),
+            EnableShadow = true,
+        },
+        new EntityTextComponent
+        {
+            Text = "Anchored, BottomRight\n(resize the window - I stay put)",
+            PositionMode = TextPositionMode.Anchored,
+            ScreenAnchor = Anchor.BottomRight,
+            Offset = new Vector2(16, 40),
+            EnableShadow = true,
+        },
+        new EntityTextComponent
+        {
+            Text = "PositionMode = Screen at (16, 300)",
+            PositionMode = TextPositionMode.Screen,
+            ScreenPosition = new Vector2(16, 300),
+            TextColor = Color.LightGreen,
+            EnableShadow = true,
+        },
+    };
 
     hud.Scene = scene;
 }
 
 // Creates one gallery station: a pole with a label above it, then hands the label over for the
 // station's own settings. Returns the pole so a station can add more components to it.
-Entity AddStation(Scene scene, Vector3 position, string text, Action<EntityTextComponent> configure)
+Entity AddStation(Scene scene, Vector3 position, string text, Action<EntityTextComponent>? configure = null)
 {
     var pole = game.CreatePrimitive(Primitive3D.Cylinder(0.15f, 1f), new PrimitiveEntityOptions
     {
         Body = BodyMode.None,
         EntityName = "Pole",
+        Position = position + new Vector3(0, 0.5f, 0),
     });
-
-    pole.Transform.Position = position + new Vector3(0, 0.5f, 0);
 
     var label = new EntityTextComponent
     {
@@ -163,7 +142,7 @@ Entity AddStation(Scene scene, Vector3 position, string text, Action<EntityTextC
         Alignment = TextAlignment.Center,
     };
 
-    configure(label);
+    configure?.Invoke(label);
     pole.Add(label);
 
     pole.Scene = scene;
@@ -194,7 +173,7 @@ description:
     Text v prostoru obrazovky si drží velikost v pixelech na jakoukoli vzdálenost a geometrie ho nikdy nezakryje.
 concepts:
   - "Registering the text renderer once: AddEntityTextRenderer"
-  - Centring a label over an object with TextAnchor, not TextAlignment
+  - Centring a label over an object with Anchor, not TextAlignment
   - Shadow and background for readability over a 3D scene
   - Scale as the cheap way to resize, instead of FontSize
   - Distance fading with FadeStartDistance and MaxDistance

@@ -1,6 +1,5 @@
-using Stride.CommunityToolkit.Rendering.Text;
-using System.Runtime.InteropServices;
 using Stride.Graphics.Font;
+using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
@@ -34,10 +33,9 @@ public sealed unsafe class MeshFont : IDisposable
     private static readonly Lazy<nint> Library = new(InitialiseLibrary);
     private static readonly Lazy<MeshFont> DefaultFont = new(LoadDefault);
 
-    private readonly Lock _faceLock = new();
-
     /// <summary>The lock every face operation and the disposal take, for tests that hold one up against the other.</summary>
-    internal Lock FaceLock => _faceLock;
+    internal Lock FaceLock { get; } = new();
+
     private readonly Dictionary<int, GlyphOutline> _glyphs = [];
     private readonly bool _isShared;
     private readonly float _scale;
@@ -167,7 +165,7 @@ public sealed unsafe class MeshFont : IDisposable
     /// <summary>Whether the font has a glyph of its own for the code point, rather than only its "missing glyph" box.</summary>
     public bool HasGlyph(int codepoint)
     {
-        lock (_faceLock)
+        lock (FaceLock)
         {
             ThrowIfDisposed();
 
@@ -190,7 +188,7 @@ public sealed unsafe class MeshFont : IDisposable
     /// <exception cref="InvalidDataException">The font's outline for the glyph breaks FreeType's conventions.</exception>
     public GlyphOutline GetGlyph(int codepoint)
     {
-        lock (_faceLock)
+        lock (FaceLock)
         {
             ThrowIfDisposed();
 
@@ -213,7 +211,7 @@ public sealed unsafe class MeshFont : IDisposable
     /// <returns>The adjustment to the left glyph's advance, in EM units.</returns>
     public float GetKerning(int left, int right)
     {
-        lock (_faceLock)
+        lock (FaceLock)
         {
             ThrowIfDisposed();
 
@@ -278,7 +276,7 @@ public sealed unsafe class MeshFont : IDisposable
     /// </summary>
     private void Release()
     {
-        lock (_faceLock)
+        lock (FaceLock)
         {
             if (_face is not null)
             {

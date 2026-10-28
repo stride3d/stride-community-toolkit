@@ -96,6 +96,8 @@ public class KeyMenu
     /// </remarks>
     public bool CloseOnSelect { get; set; } = true;
 
+    private int _selectedIndex = -1;
+
     /// <summary>
     /// Gets or sets the index of the selected entry, or -1 when nothing has been selected yet.
     /// </summary>
@@ -110,8 +112,6 @@ public class KeyMenu
         get => _selectedIndex >= 0 && _selectedIndex < Items.Count ? _selectedIndex : -1;
         set => _selectedIndex = value;
     }
-
-    private int _selectedIndex = -1;
 
     /// <summary>
     /// Gets the selected entry, or <see langword="null"/> when nothing has been selected yet.

@@ -203,8 +203,7 @@ public class WavSoundTests
             writer.Write(extra.Body.Length);
             writer.Write(extra.Body);
 
-            if ((extra.Body.Length & 1) == 1)
-                writer.Write((byte)0);
+            if ((extra.Body.Length & 1) == 1) writer.Write((byte)0);
         }
 
         writer.Write(Encoding.ASCII.GetBytes("data"));

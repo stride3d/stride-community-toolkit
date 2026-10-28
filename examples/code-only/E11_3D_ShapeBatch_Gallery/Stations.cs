@@ -1,8 +1,8 @@
 using Example.Common.Galleries;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
-using Stride.Rendering.Compositing;
 using Stride.Core.Mathematics;
+using Stride.Rendering.Compositing;
 
 namespace E11_3D_ShapeBatch_Gallery;
 
@@ -44,7 +44,6 @@ public static class Stations
         new("Second camera in a panel", "a live view from another camera, inside a shape", nameof(RenderTextureSceneRenderer), EffectStations.Mirror, EffectStations.MirrorSetup, Pillars: 1, Anchor: new Vector3(-2.5f, 1f, -1f)),
         new("Picking", "which shape is under the mouse: the batch knows, from what it drew", nameof(ShapeBatch.TryPick), EffectStations.Picking, EffectStations.PickingSetup, Anchor: new Vector3(0f, 0.3f, 1.5f)),
     ];
-
 }
 
 /// <summary>The few constants every station shares, so a copied method brings its own numbers.</summary>

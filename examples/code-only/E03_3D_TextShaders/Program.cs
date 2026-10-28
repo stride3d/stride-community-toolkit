@@ -1,7 +1,7 @@
 using E03_3D_TextShaders;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -29,8 +29,6 @@ using Stride.Rendering.Materials.ComputeColors;
 // keys classes they produce (TextWaveKeys, TextDissolveKeys, TextRimKeys) are generated with them.
 // E02_3D_Material_Gallery has the same ideas on primitives, and more of them.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 Material? dissolve = null;
 
 using var game = new Game();
@@ -40,24 +38,24 @@ var sceneSetup = new SceneSetup3D
     // Straight in front of the words and a little to the right, so they sit left of the overlay
     Camera = CameraSetup.Perspective(position: new Vector3(1.4f, 2.3f, 6.2f), rotation: new Vector3(0f, -4f, 0f)).WithController(),
     Profiler = true,
+    WindowTitle = "3D text shaders - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "3D text shaders - Stride Community Toolkit";
-
     // Six lights down the world axes, so the lettering reads from every side
     game.AddAllDirectionLighting(intensity: 20f, showLightGizmo: false);
 
     dissolve = DissolveMaterial();
 
-    Place(scene, "gradient", 3.9f, GradientMaterial());
-    Place(scene, "rim light", 2.8f, RimMaterial());
-    Place(scene, "wave", 1.7f, WaveMaterial());
-    Place(scene, "dissolve", 0.6f, dissolve);
+    AddText(scene, "gradient", 3.9f, GradientMaterial());
+    AddText(scene, "rim light", 2.8f, RimMaterial());
+    AddText(scene, "wave", 1.7f, WaveMaterial());
+    AddText(scene, "dissolve", 0.6f, dissolve);
 
     TextOverlay.GetOrCreate(game).AddSection("Text shaders", static () =>
     [
@@ -77,9 +75,9 @@ void Update(Scene scene, GameTime time)
 }
 
 /// <summary>One word, bevelled, at a height, with a material.</summary>
-void Place(Scene scene, string word, float y, Material material)
+void AddText(Scene scene, string word, float y, Material material)
 {
-    var options = new TextMeshOptions { Size = 0.75f, Depth = 0.25f, Anchor = TextAnchor.MiddleCenter, Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 3) };
+    var options = new TextMeshOptions { Size = 0.75f, Depth = 0.25f, Anchor = Anchor.MiddleCenter, Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 3) };
 
     var entity = new Entity($"Text {word}")
     {
@@ -89,6 +87,9 @@ void Place(Scene scene, string word, float y, Material material)
     entity.Transform.Position = new Vector3(0f, y, 0f);
     entity.Scene = scene;
 }
+
+// Every material here starts from the toolkit's PBR descriptor - a colour, a glossiness, a metalness,
+// Lambert and the microfacet model - and changes one slot. The slot is the lesson.
 
 /// <summary>
 /// A gradient texture, one pixel wide and 64 tall, in the diffuse slot: the caps' texture coordinates
@@ -102,38 +103,27 @@ Material GradientMaterial()
     var top = new Color(255, 215, 90);
     var bottom = new Color(220, 70, 60);
 
-    for (var i = 0; i < Height; i++) pixels[i] = Color.Lerp(top, bottom, i / (float)(Height - 1));
+    for (var i = 0; i < Height; i++)
+    {
+        pixels[i] = Color.Lerp(top, bottom, i / (float)(Height - 1));
+    }
 
     var gradient = Texture.New2D(game.GraphicsDevice, 1, Height, PixelFormat.R8G8B8A8_UNorm_SRgb, pixels);
+    var descriptor = MaterialDescriptors.Pbr(Color.White, metalness: 0f, glossiness: 0.55f);
 
-    return game.CreateMaterial(new MaterialDescriptor
-    {
-        Attributes =
-        {
-            Diffuse = new MaterialDiffuseMapFeature(new ComputeTextureColor(gradient) { AddressModeU = TextureAddressMode.Clamp, AddressModeV = TextureAddressMode.Clamp }),
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.55f)),
-            Specular = new MaterialMetalnessMapFeature(new ComputeFloat(0f)),
-            SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-        },
-    });
+    descriptor.Attributes.Diffuse = new MaterialDiffuseMapFeature(new ComputeTextureColor(gradient) { AddressModeU = TextureAddressMode.Clamp, AddressModeV = TextureAddressMode.Clamp });
+
+    return game.CreateMaterial(descriptor);
 }
 
 /// <summary>A dark surface with a rim of light where it turns away from the eye: a shader class as the emissive colour.</summary>
 Material RimMaterial()
 {
-    var material = game.CreateMaterial(new MaterialDescriptor
-    {
-        Attributes =
-        {
-            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(new Color(18, 24, 40))),
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.7f)),
-            Specular = new MaterialMetalnessMapFeature(new ComputeFloat(0.2f)),
-            SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-            Emissive = new MaterialEmissiveMapFeature(new ComputeShaderClassColor { MixinReference = "TextRim" }) { Intensity = new ComputeFloat(1f), UseAlpha = false },
-        },
-    });
+    var descriptor = MaterialDescriptors.Pbr(new Color(18, 24, 40), metalness: 0.2f, glossiness: 0.7f);
+
+    descriptor.Attributes.Emissive = new MaterialEmissiveMapFeature(new ComputeShaderClassColor { MixinReference = "TextRim" }) { Intensity = new ComputeFloat(1f), UseAlpha = false };
+
+    var material = game.CreateMaterial(descriptor);
 
     // The shader's cbuffer became keys; set once on the pass
     material.Passes[0].Parameters.Set(TextRimKeys.RimColor, new Vector3(0.3f, 1.6f, 2.4f));
@@ -144,34 +134,24 @@ Material RimMaterial()
 
 /// <summary>A plain surface whose vertices move: the feature in the displacement slot does it.</summary>
 Material WaveMaterial()
-    => game.CreateMaterial(new MaterialDescriptor
-    {
-        Attributes =
-        {
-            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(new Color(120, 200, 150))),
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.5f)),
-            Specular = new MaterialMetalnessMapFeature(new ComputeFloat(0f)),
-            SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-            Displacement = new WaveFeature(),
-        },
-    });
+{
+    var descriptor = MaterialDescriptors.Pbr(new Color(120, 200, 150), metalness: 0f, glossiness: 0.5f);
+
+    descriptor.Attributes.Displacement = new WaveFeature();
+
+    return game.CreateMaterial(descriptor);
+}
 
 /// <summary>A surface that dissolves with a glowing edge: the feature in the transparency slot, and an emissive slot for the edge to write into.</summary>
 Material DissolveMaterial()
-    => game.CreateMaterial(new MaterialDescriptor
-    {
-        Attributes =
-        {
-            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(new Color(200, 205, 215))),
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.4f)),
-            Specular = new MaterialMetalnessMapFeature(new ComputeFloat(0f)),
-            SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-            Emissive = new MaterialEmissiveMapFeature(new ComputeColor(Color.Black)) { Intensity = new ComputeFloat(1f) },
-            Transparency = new DissolveFeature(),
-        },
-    });
+{
+    var descriptor = MaterialDescriptors.Pbr(new Color(200, 205, 215), metalness: 0f, glossiness: 0.4f);
+
+    descriptor.Attributes.Emissive = new MaterialEmissiveMapFeature(new ComputeColor(Color.Black)) { Intensity = new ComputeFloat(1f) };
+    descriptor.Attributes.Transparency = new DissolveFeature();
+
+    return game.CreateMaterial(descriptor);
+}
 
 /*
 ---example-metadata

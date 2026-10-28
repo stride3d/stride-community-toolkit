@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -74,7 +75,7 @@ internal sealed class ChartText : IDisposable
     /// <param name="text">The text.</param>
     /// <param name="anchor">Which point of the text sits at the entity's position.</param>
     /// <param name="pixelOffset">A nudge from that position, in screen pixels, y down.</param>
-    internal void Set(string text, TextAnchor anchor, Vector2 pixelOffset)
+    internal void Set(string text, Anchor anchor, Vector2 pixelOffset)
     {
         if (_screen is not null)
         {

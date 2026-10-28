@@ -90,7 +90,6 @@ public static class SurfaceStations
             },
         });
 
-
         s.Place(Primitive3D.Sphere(0.8f), s.Material(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f)), new Vector3(-2.8f, 0.8f, -2.4f));
         s.Place(Primitive3D.Cube(1.4f), s.Material(Recipes.Pbr(new Color(60, 160, 90), 0.5f, 0f)), new Vector3(2.8f, 0.8f, -2.4f));
         s.PlaceTrio(glass);
@@ -352,5 +351,4 @@ public static class SurfaceStations
 
         s.PlaceTrio(s.Material(descriptor));
     }
-
 }

@@ -28,8 +28,6 @@ namespace Stride.CommunityToolkit.Rendering.Instancing;
 /// </remarks>
 public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisposable
 {
-    private readonly EntityInstancing _gather;
-
     private bool _needUpload;
     private Buffer[]? _retiredThisFrame;
     private Buffer[]? _retiredLastFrame;
@@ -42,19 +40,19 @@ public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisp
     /// The instancing that collects the matrices. Use <c>BepuEntityInstancing</c> for physics bodies
     /// so settled scenes skip both the gather and the upload.
     /// </param>
-    public BufferedEntityInstancing(EntityInstancing? gather = null) => _gather = gather ?? new EntityInstancing();
+    public BufferedEntityInstancing(EntityInstancing? gather = null) => Gather = gather ?? new EntityInstancing();
 
     /// <summary>Gets the instancing that collects the matrices.</summary>
-    public EntityInstancing Gather => _gather;
+    public EntityInstancing Gather { get; }
 
     /// <summary>Gets the number of registered instances.</summary>
-    public int RegisteredInstanceCount => _gather.RegisteredInstanceCount;
+    public int RegisteredInstanceCount => Gather.RegisteredInstanceCount;
 
     /// <inheritdoc cref="EntityInstancing.LastUpdateMilliseconds" />
-    public double LastUpdateMilliseconds => _gather.LastUpdateMilliseconds;
+    public double LastUpdateMilliseconds => Gather.LastUpdateMilliseconds;
 
     /// <inheritdoc cref="EntityInstancing.UpdateSkippedLastFrame" />
-    public bool UpdateSkippedLastFrame => _gather.UpdateSkippedLastFrame;
+    public bool UpdateSkippedLastFrame => Gather.UpdateSkippedLastFrame;
 
     /// <summary>Gets a value indicating whether the last frame sent no data to the GPU.</summary>
     public bool UploadSkippedLastFrame { get; private set; }
@@ -64,13 +62,13 @@ public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisp
     public override ModelTransformUsage ModelTransformUsage => ModelTransformUsage.Ignore;
 
     /// <inheritdoc cref="EntityInstancing.AddInstance" />
-    public bool AddInstance(Entity entity) => _gather.AddInstance(entity);
+    public bool AddInstance(Entity entity) => Gather.AddInstance(entity);
 
     /// <inheritdoc cref="EntityInstancing.RemoveInstance" />
-    public bool RemoveInstance(Entity entity) => _gather.RemoveInstance(entity);
+    public bool RemoveInstance(Entity entity) => Gather.RemoveInstance(entity);
 
     /// <inheritdoc cref="EntityInstancing.Clear" />
-    public void Clear() => _gather.Clear();
+    public void Clear() => Gather.Clear();
 
     /// <summary>
     /// Called by Stride's instancing processor once per frame, possibly on a worker thread. Does CPU
@@ -82,17 +80,17 @@ public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisp
     /// </remarks>
     public new void Update()
     {
-        _gather.Update();
+        Gather.Update();
 
         // Clamp to the buffers the render feature already holds. EnsureCapacity has not run for this
         // frame yet, so a frame that grows the set must not claim more instances than currently fit -
         // the render feature would bind a buffer too small for the count, or none at all
         var capacity = InstanceWorldBuffer?.ElementCount ?? 0;
 
-        InstanceCount = Math.Min(_gather.InstanceCount, capacity);
-        BoundingBox = _gather.BoundingBox;
+        InstanceCount = Math.Min(Gather.InstanceCount, capacity);
+        BoundingBox = Gather.BoundingBox;
 
-        if (!_gather.UpdateSkippedLastFrame)
+        if (!Gather.UpdateSkippedLastFrame)
         {
             _needUpload = true;
         }
@@ -116,7 +114,7 @@ public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisp
         _retiredLastFrame = _retiredThisFrame;
         _retiredThisFrame = null;
 
-        var needed = _gather.RegisteredInstanceCount;
+        var needed = Gather.RegisteredInstanceCount;
 
         if (needed == 0 || (InstanceWorldBuffer is not null && InstanceWorldBuffer.ElementCount >= needed)) return;
 
@@ -138,7 +136,7 @@ public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisp
     /// <param name="commandList">The command list to record the upload on.</param>
     internal void Upload(CommandList commandList)
     {
-        if (_gather.InstanceCount == 0)
+        if (Gather.InstanceCount == 0)
         {
             // Nothing to send and nothing pending: don't leave the flag armed while the scene is
             // empty, the next gather re-arms it when instances come back
@@ -148,7 +146,7 @@ public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisp
             return;
         }
 
-        var count = Math.Min(_gather.InstanceCount, InstanceWorldBuffer?.ElementCount ?? 0);
+        var count = Math.Min(Gather.InstanceCount, InstanceWorldBuffer?.ElementCount ?? 0);
 
         if (!_needUpload || count <= 0)
         {
@@ -158,8 +156,8 @@ public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisp
         }
 
         // Pinned: see SetDataPinned for what the engine's Direct3D 11 upload does with an unpinned array
-        InstanceWorldBuffer!.SetDataPinned(commandList, (ReadOnlySpan<Matrix>)_gather.WorldMatrices.AsSpan(0, count));
-        InstanceWorldInverseBuffer.SetDataPinned(commandList, (ReadOnlySpan<Matrix>)_gather.WorldInverseMatrices.AsSpan(0, count));
+        InstanceWorldBuffer!.SetDataPinned(commandList, (ReadOnlySpan<Matrix>)Gather.WorldMatrices.AsSpan(0, count));
+        InstanceWorldInverseBuffer.SetDataPinned(commandList, (ReadOnlySpan<Matrix>)Gather.WorldInverseMatrices.AsSpan(0, count));
 
         _needUpload = false;
         UploadSkippedLastFrame = false;

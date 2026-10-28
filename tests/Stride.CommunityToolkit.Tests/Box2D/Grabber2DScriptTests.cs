@@ -7,6 +7,7 @@ using Stride.Engine;
 using Stride.Games;
 using Xunit;
 using static Box2D.NET.B2Bodies;
+using static Stride.CommunityToolkit.Tests.Box2D.Box2DFixtures;
 
 namespace Stride.CommunityToolkit.Tests.Box2D;
 
@@ -43,7 +44,7 @@ public class Grabber2DScriptTests
             var camera = new Entity("camera") { new CameraComponent(), grabber };
             camera.Scene = scene;
 
-            body = Joints2DTests.Box(simulation, Vector3.Zero);
+            body = Box(simulation, Vector3.Zero);
         }, update: (_, _) =>
         {
             frames++;
@@ -98,8 +99,7 @@ public class Grabber2DScriptTests
             wall = simulation.CreateStaticBody(Vector3.Zero);
         }, update: (_, _) =>
         {
-            if (++frames < 2)
-                return;
+            if (++frames < 2) return;
 
             grabbed = grabber!.Grab(wall, Vector2.Zero);
             game.Exit();

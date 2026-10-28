@@ -66,13 +66,9 @@ public class ManifestWriter(ILogger<ManifestWriter> logger)
     {
         var outputDirectory = Path.GetDirectoryName(outputPath);
 
-        if (string.IsNullOrEmpty(outputDirectory) || Directory.Exists(outputDirectory))
-        {
-            return;
-        }
+        if (string.IsNullOrEmpty(outputDirectory) || Directory.Exists(outputDirectory)) return;
 
         logger.LogInformation("Creating output directory: {Directory}", outputDirectory);
-
         Directory.CreateDirectory(outputDirectory);
     }
 }

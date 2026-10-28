@@ -35,7 +35,7 @@ void Start(Scene scene)
 ```
 
 Both helpers accept the help overlay's toggle key and whether it starts collapsed; the 3D one also
-takes an optional `ScreenAnchor` for the overlay's corner, edge or centre - leave it out and the
+takes an optional `Anchor` for the overlay's corner, edge or centre - leave it out and the
 overlay keeps whatever position it already has - and `showHelp: false` registers no help at all.
 These must be decided up front - the overlay section is created in `Start()` - which is why they are
 parameters rather than properties you set later.
@@ -52,7 +52,7 @@ parameters rather than properties you set later.
 | Hold <kbd>Shift</kbd> | Move and zoom faster | `SpeedFactor` (×5) |
 | Mouse wheel | Zoom toward the cursor, 10 % of the view per notch | `ZoomStep` (0.1), `ZoomToCursor` (on), `MinOrthographicSize` (0.1), `MaxOrthographicSize` (100) |
 | Right mouse drag | Pan - the point under the cursor stays under the cursor | `EnableMouseDragPan` (on), `MouseDragButton` (right) |
-| <kbd>H</kbd> | Reset to where the camera *started*, at the zoom it started with (or `OrthographicSizeDefault` if set) | `OrthographicSizeDefault` |
+| <kbd>H</kbd> | Reset to where the camera *started*, at the zoom it started with (or `DefaultOrthographicSize` if set) | `DefaultOrthographicSize` |
 
 Three defaults to know:
 
@@ -152,7 +152,7 @@ void Start(Scene scene) => game.GetCameraEntity().Add(new MyOrbitCameraControlle
 ```
 
 If you keep a controller but want the on-screen help gone, pass `showHelp: false` to the 3D helper,
-or set `ShowInstructions = false` on either script after it has started. Hiding the
+or set `ShowHelp = false` on either script, before it starts or at any time after. Hiding the
 whole overlay with <kbd>F4</kbd> is the runtime equivalent.
 
 ## See them in use

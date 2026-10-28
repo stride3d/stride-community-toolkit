@@ -4,7 +4,6 @@ using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
 using Stride.Graphics;
 
 namespace Stride.CommunityToolkit.GoldScenes.Scenes;
@@ -16,21 +15,14 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal sealed class TextScene : IGoldScene
 {
-    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+    public SceneSetup Setup => GoldSetup.Perspective;
 
     public void Start(Game game, Scene scene)
     {
         game.SetCameraPosition(new Vector3(0f, 4f, 12f));
         game.SetCameraRotation(new Vector3(0f, -15f, 0f));
 
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new PrimitiveEntityOptions
-        {
-            EntityName = "Ground",
-            Material = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f),
-            Position = new Vector3(0f, -0.25f, 0f),
-        });
-
-        ground.Scene = scene;
+        GoldSetup.AddGround(game, scene);
 
         var cube = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions
         {
@@ -84,7 +76,7 @@ internal sealed class TextScene : IGoldScene
             Text = "cube",
             FontSize = 18,
             Offset = new Vector2(0f, -30f),
-            Anchor = TextAnchor.BottomCenter,
+            Anchor = Anchor.BottomCenter,
             EnableShadow = true,
             ShadowColor = new Color(0, 0, 0, 200),
         });
@@ -94,7 +86,7 @@ internal sealed class TextScene : IGoldScene
             Text = "SCREEN TEXT, TOP LEFT",
             FontSize = 20,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = ScreenAnchor.TopLeft,
+            ScreenAnchor = Anchor.TopLeft,
             Offset = new Vector2(16f, 16f),
             TextColor = Color.LightGreen,
         });
@@ -104,7 +96,7 @@ internal sealed class TextScene : IGoldScene
             Text = "with a background",
             FontSize = 20,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = ScreenAnchor.BottomRight,
+            ScreenAnchor = Anchor.BottomRight,
             Offset = new Vector2(16f, 16f),
             EnableBackground = true,
             BackgroundColor = new Color4(0f, 0f, 0f, 0.6f),
@@ -119,9 +111,5 @@ internal sealed class TextScene : IGoldScene
             entity.Transform.Rotation = rotation;
             entity.Scene = scene;
         }
-    }
-
-    public void Update(Game game, Scene scene, GameTime time)
-    {
     }
 }

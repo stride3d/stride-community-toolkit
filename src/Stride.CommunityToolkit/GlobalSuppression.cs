@@ -48,13 +48,11 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("NDepend", "ND1905:AFieldMustNotBeAssignedFromOutsideItsParentHierarchyTypes", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.Primitives", Scope = "field", Justification = "Per-primitive vertex/index ranges filled by the mesh builders (SetupPrimitiveOffsets, BuildVertexData, BuildIndexData); plain data struct by design.")]
 
 // --- Deliberate design the rules read as a defect ------------------------------------------------
-[assembly: SuppressMessage("NDepend", "ND1901:AvoidNonReadOnlyStaticFields", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Mathematics.VectorHelper._defaultRandom", Justification = "Reassigned by SeedRandom, which is the point: an example that seeds the helper gets the same layout every run. Making it readonly would delete that API.")]
 [assembly: SuppressMessage("NDepend", "ND1306:NestedTypesShouldNotBeVisible", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Engine.WindowsDpiManager+ProcessDpiAwareness", Justification = "Returned by WindowsDpiManager.GetProcessDpiAwareness and meaningful only next to it; un-nesting would break callers for a purely taxonomic gain, as for the ImGui nested types below.")]
 
 // --- Deliberate naming / API mirroring ---------------------------------------------------------
 [assembly: SuppressMessage("NDepend", "ND2020:AvoidVariousCapitalizationsForMethodName", Target = "Stride.CommunityToolkit.Bepu:Stride.CommunityToolkit.Bepu.SimulationExtensions", Scope = "deep", Justification = "RayCast/RayCastPenetrating mirror Stride.BepuPhysics.BepuSimulation's own casing; the Bullet wrapper mirrors Stride.Physics.Simulation.Raycast. Each wrapper matches its engine on purpose.")]
 [assembly: SuppressMessage("NDepend", "ND2020:AvoidVariousCapitalizationsForMethodName", Target = "Stride.CommunityToolkit.Bullet:Stride.CommunityToolkit.Bullet.SimulationExtensions", Scope = "deep", Justification = "Raycast/RaycastPenetrating mirror Stride.Physics.Simulation's own casing; the Bepu wrapper mirrors Stride.BepuPhysics.BepuSimulation.RayCast. Each wrapper matches its engine on purpose.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Mathematics.VectorHelper", Scope = "deep", Justification = "Gameplay randomness (positions, directions); nothing security-related, and a seedable System.Random is the point.")]
 // --- Constants that have to stay const ----------------------------------------------------------
 // ND1804 warns that a public const is inlined into consumers, so a later value change does not reach
 // them. These three are kept const on purpose; the other public constants became static readonly.
@@ -160,7 +158,6 @@ using System.Diagnostics.CodeAnalysis;
 
 // --- Box2D: the simulation facade ---
 [assembly: SuppressMessage("NDepend", "ND1001:AvoidTypesWithTooManyMethods", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.Box2DSimulation", Justification = "The public facade over world, bridge, queries and events - the Box2D counterpart of BepuSimulation; its methods are one-line delegations to those parts.")]
-[assembly: SuppressMessage("NDepend", "ND1207:NonStaticClassesShouldBeInstantiatedOrTurnedToStatic", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.Box2DCollisionMatrix", Justification = "Library API instantiated by consumers; nothing in the toolkit itself needs one yet.")]
 [assembly: SuppressMessage("NDepend", "ND2500:DontCreateThreadsExplicitly", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.Box2DTaskScheduler..ctor(Int32)", Justification = "Deliberate: Box2D requires each concurrently running task callback to hold a distinct worker index, which dedicated threads guarantee structurally; the workers also park in a blocking dequeue for the world lifetime, which thread-pool threads must never do.")]
 // SimulationJoints2D is the simulation.Joints facade: the factories fill in the world id, and Destroy,
 // IsValid and GetAnchors need none, so the rule is right that they could be static. They stay instance
@@ -226,7 +223,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("NDepend", "ND1304:ClassesThatAreCandidateToBeTurnedIntoStructures", Target = "E13_SignalR:E13_SignalR.Station.Board", Justification = "72-byte immutable object shared by reference between the boards and the labels; a struct would copy it on every call.")]
 // --- Cube Collapse: a game example ---
 // Colours for the board, positions for the falling game-over letters, and the shuffle behind a
-// spawn. Gameplay randomness, same as Mathematics.VectorHelper above; a seedable System.Random is the
+// spawn. Gameplay randomness, same as the toolkit's RandomExtensions; a seedable System.Random is the
 // point, and CubeSpawner deliberately seeds it so the same board comes up while tuning.
 [assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E20_3D_CubeCollapse:CubeCollapse.Setup.CubeSpawner", Scope = "deep", Justification = "Cube colours; nothing security-related.")]
 [assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E20_3D_CubeCollapse:CubeCollapse.Setup.FallingLetters", Scope = "deep", Justification = "Scatter on the game-over letters; nothing security-related.")]

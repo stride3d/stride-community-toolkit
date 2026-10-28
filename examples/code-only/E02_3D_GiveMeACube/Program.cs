@@ -25,7 +25,6 @@ game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
-    // Camera, directional light and a ground plane
     CreateCentreCube(rootScene);
     CreateLooseCubes(rootScene);
     CreateOrbitingCube(rootScene);
@@ -37,7 +36,7 @@ void Start(Scene rootScene)
 /// </summary>
 void CreateCentreCube(Scene rootScene)
 {
-    var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions());
+    var cube = game.CreatePrimitive(Primitive3D.Cube());
 
     cube.Transform.Position = new Vector3(0, CubeRestingHeight, 0);
     cube.Scene = rootScene;
@@ -55,13 +54,9 @@ void CreateLooseCubes(Scene rootScene)
         var angle = MathF.Tau * (i + 0.5f) / LooseCubeCount;
 
         // Size drives both the generated model and the generated collider
-        var cube = game.CreatePrimitive(Primitive3D.Cube(LooseCubeSize), new BepuPhysicsOptions());
+        var cube = game.CreatePrimitive(Primitive3D.Cube(LooseCubeSize));
 
-        cube.Transform.Position = new Vector3(
-            MathF.Sin(angle) * OrbitRadius,
-            LooseCubeSize / 2,
-            MathF.Cos(angle) * OrbitRadius);
-
+        cube.Transform.Position = new Vector3(MathF.Sin(angle) * OrbitRadius, LooseCubeSize / 2, MathF.Cos(angle) * OrbitRadius);
         cube.Scene = rootScene;
     }
 }

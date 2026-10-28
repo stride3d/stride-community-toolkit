@@ -47,10 +47,7 @@ public sealed record Rope(
         WeightConstraint.MaximumDistance = Settings.LinkSpacing + Settings.LinkRadius - leverArm;
         WeightConstraint.MinimumDistance = WeightConstraint.MaximumDistance * 0.1f;
 
-        foreach (var constraint in SkipConstraints)
-        {
-            constraint.Enabled = stabilised;
-        }
+        foreach (var constraint in SkipConstraints) constraint.Enabled = stabilised;
     }
 
     /// <summary>

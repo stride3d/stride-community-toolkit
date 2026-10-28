@@ -208,10 +208,7 @@ public class MeshBuilderTests
         using var builder = new MeshBuilder { IndexType = IndexingType.Int16 };
 
         // No elements registered, so vertices cost nothing and 40k of them are cheap to add
-        for (var i = 0; i <= 40_000; i++)
-        {
-            builder.AddVertex();
-        }
+        for (var i = 0; i <= 40_000; i++) builder.AddVertex();
 
         builder.AddIndex(short.MaxValue);
 
@@ -226,10 +223,7 @@ public class MeshBuilderTests
         builder.WithPosition<Vector3>();
         builder.AddVertex();
 
-        for (var i = 0; i < 600; i++)
-        {
-            builder.AddIndex(0);
-        }
+        for (var i = 0; i < 600; i++) builder.AddIndex(0);
 
         Assert.Equal(600, builder.IndexCount);
     }

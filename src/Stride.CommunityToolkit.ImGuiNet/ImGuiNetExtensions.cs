@@ -17,8 +17,7 @@ public static class ImGuiNetExtensions
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        var imguiSystem = new ImGuiNetSystem(game.Services);
-        return imguiSystem;
+        return new ImGuiNetSystem(game.Services);
     }
 
     /// <summary>
@@ -33,14 +32,13 @@ public static class ImGuiNetExtensions
     /// <param name="b">Blue component (0-255).</param>
     /// <param name="a">Alpha component (0-255, default 255).</param>
     /// <returns>The ImGui system for fluent chaining.</returns>
-    public static ImGuiNetSystem DrawText(this ImGuiNetSystem system, int x, int y, string text,
-        byte r, byte g, byte b, byte a = 255)
+    public static ImGuiNetSystem DrawText(this ImGuiNetSystem system, int x, int y, string text, byte r, byte g, byte b, byte a = 255)
     {
         ArgumentNullException.ThrowIfNull(system);
         ArgumentNullException.ThrowIfNull(text);
 
-        var color = new Vector4(r / 255f, g / 255f, b / 255f, a / 255f);
-        system.DrawString(x, y, text, color);
+        system.DrawString(x, y, text, Rgba(r, g, b, a));
+
         return system;
     }
 
@@ -55,14 +53,13 @@ public static class ImGuiNetExtensions
     /// <param name="b">Blue component (0-255).</param>
     /// <param name="a">Alpha component (0-255, default 255).</param>
     /// <returns>The ImGui system for fluent chaining.</returns>
-    public static ImGuiNetSystem DrawText(this ImGuiNetSystem system, Vector3 worldPosition, string text,
-        byte r, byte g, byte b, byte a = 255)
+    public static ImGuiNetSystem DrawText(this ImGuiNetSystem system, Vector3 worldPosition, string text, byte r, byte g, byte b, byte a = 255)
     {
         ArgumentNullException.ThrowIfNull(system);
         ArgumentNullException.ThrowIfNull(text);
 
-        var color = new Vector4(r / 255f, g / 255f, b / 255f, a / 255f);
-        system.DrawString(worldPosition, text, color);
+        system.DrawString(worldPosition, text, Rgba(r, g, b, a));
+
         return system;
     }
 
@@ -80,6 +77,7 @@ public static class ImGuiNetExtensions
         ArgumentNullException.ThrowIfNull(text);
 
         system.DrawString(x, y, text);
+
         return system;
     }
 
@@ -96,6 +94,7 @@ public static class ImGuiNetExtensions
         ArgumentNullException.ThrowIfNull(text);
 
         system.DrawString(worldPosition, text);
+
         return system;
     }
 
@@ -107,6 +106,9 @@ public static class ImGuiNetExtensions
     public static ImGuiNetSystem? GetImGuiNetSystem(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
+
         return game.Services.GetService<ImGuiNetSystem>();
     }
+
+    private static Vector4 Rgba(byte r, byte g, byte b, byte a) => new(r / 255f, g / 255f, b / 255f, a / 255f);
 }

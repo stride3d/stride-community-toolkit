@@ -30,18 +30,10 @@ public class Box2DBodyComponent : EntityComponent
     [DataMemberIgnore]
     public Vector2 LinearVelocity
     {
-        get
-        {
-            if (!b2Body_IsValid(BodyId)) return default;
-
-            var velocity = b2Body_GetLinearVelocity(BodyId);
-
-            return new Vector2(velocity.X, velocity.Y);
-        }
+        get => b2Body_IsValid(BodyId) ? b2Body_GetLinearVelocity(BodyId).ToVector2() : default;
         set
         {
-            if (b2Body_IsValid(BodyId))
-                b2Body_SetLinearVelocity(BodyId, new B2Vec2(value.X, value.Y));
+            if (b2Body_IsValid(BodyId)) b2Body_SetLinearVelocity(BodyId, value.ToB2Vec2());
         }
     }
 
@@ -55,8 +47,7 @@ public class Box2DBodyComponent : EntityComponent
         get => b2Body_IsValid(BodyId) ? b2Body_GetAngularVelocity(BodyId) : 0f;
         set
         {
-            if (b2Body_IsValid(BodyId))
-                b2Body_SetAngularVelocity(BodyId, value);
+            if (b2Body_IsValid(BodyId)) b2Body_SetAngularVelocity(BodyId, value);
         }
     }
 
@@ -69,12 +60,10 @@ public class Box2DBodyComponent : EntityComponent
     {
         if (!b2Body_IsValid(BodyId)) return;
 
-        var b2Force = new B2Vec2(force.X, force.Y);
-
-        if (point.HasValue)
-            b2Body_ApplyForce(BodyId, b2Force, new B2Vec2(point.Value.X, point.Value.Y), true);
+        if (point is { } at)
+            b2Body_ApplyForce(BodyId, force.ToB2Vec2(), at.ToB2Vec2(), true);
         else
-            b2Body_ApplyForceToCenter(BodyId, b2Force, true);
+            b2Body_ApplyForceToCenter(BodyId, force.ToB2Vec2(), true);
     }
 
     /// <summary>
@@ -86,12 +75,10 @@ public class Box2DBodyComponent : EntityComponent
     {
         if (!b2Body_IsValid(BodyId)) return;
 
-        var b2Impulse = new B2Vec2(impulse.X, impulse.Y);
-
-        if (point.HasValue)
-            b2Body_ApplyLinearImpulse(BodyId, b2Impulse, new B2Vec2(point.Value.X, point.Value.Y), true);
+        if (point is { } at)
+            b2Body_ApplyLinearImpulse(BodyId, impulse.ToB2Vec2(), at.ToB2Vec2(), true);
         else
-            b2Body_ApplyLinearImpulseToCenter(BodyId, b2Impulse, true);
+            b2Body_ApplyLinearImpulseToCenter(BodyId, impulse.ToB2Vec2(), true);
     }
 
     /// <summary>
@@ -100,7 +87,6 @@ public class Box2DBodyComponent : EntityComponent
     /// <param name="torque">The torque in newton-meters.</param>
     public void ApplyTorque(float torque)
     {
-        if (b2Body_IsValid(BodyId))
-            b2Body_ApplyTorque(BodyId, torque, true);
+        if (b2Body_IsValid(BodyId)) b2Body_ApplyTorque(BodyId, torque, true);
     }
 }

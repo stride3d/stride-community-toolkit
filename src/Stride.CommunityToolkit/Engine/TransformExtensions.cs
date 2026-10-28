@@ -9,12 +9,10 @@ namespace Stride.CommunityToolkit.Engine;
 public static class TransformExtensions
 {
     /// <summary>
-    /// The world up vector used by the <c>LookAt</c> overloads that do not take an explicit up vector.
-    /// The default is <see cref="Vector3.UnitY"/>; set it once at start-up for projects that use a different up axis (for example Z-up).
+    /// The world up vector used by the <c>LookAt</c> overloads that do not take an explicit up vector. The default is <see cref="Vector3.UnitY"/>; set it once at start-up for projects that use a different up axis (for example Z-up).
     /// </summary>
     /// <remarks>
-    /// Not synchronised. Set it during start-up, before the game loop runs; like the transform APIs it feeds,
-    /// it is intended for the update thread. Overloads that take an explicit up vector ignore this value.
+    /// Not synchronised. Set it during start-up, before the game loop runs; like the transform APIs it feeds, it is intended for the update thread. Overloads that take an explicit up vector ignore this value.
     /// </remarks>
     public static Vector3 WorldUp { get; set; } = Vector3.UnitY;
 
@@ -43,15 +41,9 @@ public static class TransformExtensions
     /// </remarks>
     public static void Translate(this TransformComponent transform, ref Vector3 translation, Space relativeTo = Space.Self)
     {
-        ArgumentNullException.ThrowIfNull(transform);
-
-        if (!transform.UseTRS)
-        {
-            throw new ArgumentException("Must use TRS", nameof(transform));
-        }
+        RequireTrs(transform);
 
         var localTranslation = translation;
-
 
         if (relativeTo == Space.Self)
         {
@@ -69,21 +61,9 @@ public static class TransformExtensions
         transform.UpdateWorldMatrix();
     }
 
-    /// <summary>
-    /// Moves the given <see cref="TransformComponent"/> position by the specified <paramref name="translation"/> in the coordinate space defined by <paramref name="relativeTo"/>.
-    /// </summary>
-    /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
-    /// <param name="translation">The translation vector to move by.</param>
-    /// <param name="relativeTo">The coordinate space to perform the translation in.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
-    /// <remarks>
-    /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
-    /// </remarks>
+    /// <inheritdoc cref="Translate(TransformComponent, ref Vector3, Space)"/>
     public static void Translate(this TransformComponent transform, Vector3 translation, Space relativeTo = Space.Self)
-    {
-        transform.Translate(ref translation, relativeTo);
-    }
+        => transform.Translate(ref translation, relativeTo);
 
     /// <summary>
     /// Moves the given <see cref="TransformComponent"/> position by the specified <paramref name="translation"/> relative to the local coordinate space of another <see cref="TransformComponent"/>.
@@ -98,35 +78,17 @@ public static class TransformExtensions
     /// </remarks>
     public static void Translate(this TransformComponent transform, ref Vector3 translation, TransformComponent relativeTo)
     {
-        ArgumentNullException.ThrowIfNull(transform);
-
-        if (!transform.UseTRS)
-        {
-            throw new ArgumentException("Must use TRS", nameof(transform));
-        }
-
+        RequireTrs(transform);
         ArgumentNullException.ThrowIfNull(relativeTo);
 
         relativeTo.TransformDirection(ref translation, out var localTranslation);
+
         transform.Translate(ref localTranslation, Space.World);
-
     }
 
-    /// <summary>
-    /// Moves the given <see cref="TransformComponent"/> position by the specified <paramref name="translation"/> relative to the local coordinate space of another <see cref="TransformComponent"/>.
-    /// </summary>
-    /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
-    /// <param name="translation">The translation vector to move by.</param>
-    /// <param name="relativeTo">The <see cref="TransformComponent"/> to perform the translation relative to.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> or <paramref name="relativeTo"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
-    /// <remarks>
-    /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
-    /// </remarks>
+    /// <inheritdoc cref="Translate(TransformComponent, ref Vector3, TransformComponent)"/>
     public static void Translate(this TransformComponent transform, Vector3 translation, TransformComponent relativeTo)
-    {
-        transform.Translate(ref translation, relativeTo);
-    }
+        => transform.Translate(ref translation, relativeTo);
 
     /// <summary>
     /// Rotates the given <see cref="TransformComponent"/> by the specified <paramref name="eulerAngles"/> in the coordinate space defined by <paramref name="relativeTo"/>.
@@ -141,49 +103,25 @@ public static class TransformExtensions
     /// </remarks>
     public static void Rotate(this TransformComponent transform, ref Vector3 eulerAngles, Space relativeTo = Space.Self)
     {
-        ArgumentNullException.ThrowIfNull(transform);
+        RequireTrs(transform);
 
-        if (!transform.UseTRS)
-        {
-            throw new ArgumentException("Must use TRS", nameof(transform));
-        }
-
-
-        Quaternion rotation = Quaternion.Identity;
+        var rotation = Quaternion.Identity;
 
         if (relativeTo == Space.Self)
         {
-            //What do I do here???
-            if (eulerAngles.X != 0f)
-            {
-                var right = transform.WorldMatrix.Right; right.Normalize();
-                Quaternion.RotationAxis(ref right, eulerAngles.X, out var axisRotation);
-                Quaternion.Multiply(ref rotation, ref axisRotation, out rotation);
-            }
-
-            if (eulerAngles.Y != 0f)
-            {
-                var up = transform.WorldMatrix.Up; up.Normalize();
-                Quaternion.RotationAxis(ref up, eulerAngles.Y, out var axisRotation);
-                Quaternion.Multiply(ref rotation, ref axisRotation, out rotation);
-            }
-
-            if (eulerAngles.Z != 0f)
-            {
-                var forward = transform.WorldMatrix.Forward; forward.Normalize();
-                Quaternion.RotationAxis(ref forward, eulerAngles.Z, out var axisRotation);
-                Quaternion.Multiply(ref rotation, ref axisRotation, out rotation);
-            }
+            // One axis at a time, about the entity's own world axes
+            RotateAbout(ref rotation, transform.WorldMatrix.Right, eulerAngles.X);
+            RotateAbout(ref rotation, transform.WorldMatrix.Up, eulerAngles.Y);
+            RotateAbout(ref rotation, transform.WorldMatrix.Forward, eulerAngles.Z);
         }
         else
         {
-            //Quaternion.RotationYawPitchRoll(eulerAngles.Y, eulerAngles.X, eulerAngles.Z, out rotation);
             MathUtilEx.ToQuaternion(ref eulerAngles, out rotation);
         }
 
         if (transform.Parent != null)
         {
-            transform.Parent.WorldMatrix.Decompose(out var _, out Quaternion parentRotation, out var _);
+            transform.Parent.WorldMatrix.Decompose(out _, out Quaternion parentRotation, out _);
             parentRotation.Conjugate();
 
             Quaternion.Multiply(ref rotation, ref parentRotation, out rotation);
@@ -192,27 +130,24 @@ public static class TransformExtensions
         Quaternion.Multiply(ref transform.Rotation, ref rotation, out transform.Rotation);
 
         transform.UpdateWorldMatrix();
+
+        static void RotateAbout(ref Quaternion rotation, Vector3 axis, float angle)
+        {
+            if (angle == 0f) return;
+
+            axis.Normalize();
+
+            Quaternion.RotationAxis(ref axis, angle, out var axisRotation);
+            Quaternion.Multiply(ref rotation, ref axisRotation, out rotation);
+        }
     }
 
-    /// <summary>
-    /// Rotates the given <see cref="TransformComponent"/> by the specified <paramref name="eulerAngles"/> in the coordinate space defined by <paramref name="relativeTo"/>.
-    /// </summary>
-    /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
-    /// <param name="eulerAngles">The euler angles in radians to rotate by.</param>
-    /// <param name="relativeTo">The coordinate space to perform the rotation in.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
-    /// <remarks>
-    /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
-    /// </remarks>
+    /// <inheritdoc cref="Rotate(TransformComponent, ref Vector3, Space)"/>
     public static void Rotate(this TransformComponent transform, Vector3 eulerAngles, Space relativeTo = Space.Self)
-    {
-        transform.Rotate(ref eulerAngles, relativeTo);
-    }
+        => transform.Rotate(ref eulerAngles, relativeTo);
 
     /// <summary>
-    /// Rotates the transform about an axis through a point: the position swings round the point and
-    /// the orientation turns by the same angle, as a moon orbits while keeping one face inward.
+    /// Rotates the transform about an axis through a point: the position swings round the point and the orientation turns by the same angle, as a moon orbits while keeping one face inward.
     /// </summary>
     /// <param name="transform">The transform to rotate.</param>
     /// <param name="point">The point the axis passes through, in the parent's space: world space for a root entity.</param>
@@ -221,8 +156,7 @@ public static class TransformExtensions
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentException">If <paramref name="axis"/> has no length.</exception>
     /// <remarks>
-    /// Updates the world matrix afterwards. Call it every frame with <c>angle = speed * deltaTime</c>
-    /// for a continuous orbit; a body under physics should be moved by its velocity instead.
+    /// Updates the world matrix afterwards. Call it every frame with <c>angle = speed * deltaTime</c> for a continuous orbit; a body under physics should be moved by its velocity instead.
     /// </remarks>
     public static void RotateAround(this TransformComponent transform, ref Vector3 point, ref Vector3 axis, float angle)
     {
@@ -257,8 +191,7 @@ public static class TransformExtensions
         => transform.RotateAround(ref point, ref axis, angle);
 
     /// <summary>
-    /// Turns the transform so that its forward axis (-Z) points along a direction, the way a character
-    /// faces the way it moves or a projectile faces its velocity.
+    /// Turns the transform so that its forward axis (-Z) points along a direction, the way a character faces the way it moves or a projectile faces its velocity.
     /// </summary>
     /// <param name="transform">The transform to turn.</param>
     /// <param name="direction">The direction to face, in world space. It need not be normalised; a zero vector leaves the transform as it is.</param>
@@ -266,9 +199,7 @@ public static class TransformExtensions
     /// <param name="smooth">1 snaps to the direction; a value between 0 and 1 turns that fraction of the way, for a turn that eases over several frames.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
     /// <remarks>
-    /// The same as <see cref="LookAt(TransformComponent, Vector3, Vector3, float)"/> at a target one unit
-    /// along the direction from the entity's world position, so a parented entity faces the world
-    /// direction, not its parent's. Updates the world matrix afterwards.
+    /// The same as <see cref="LookAt(TransformComponent, Vector3, Vector3, float)"/> at a target one unit along the direction from the entity's world position, so a parented entity faces the world direction, not its parent's. Updates the world matrix afterwards.
     /// </remarks>
     public static void FaceDirection(this TransformComponent transform, Vector3 direction, Vector3? worldUp = null, float smooth = 1f)
     {
@@ -292,8 +223,7 @@ public static class TransformExtensions
     /// <param name="result">The transformed direction.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
     /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
+    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation. If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
     /// </remarks>
     public static void TransformDirection(this TransformComponent transform, ref Vector3 direction, out Vector3 result)
     {
@@ -302,34 +232,19 @@ public static class TransformExtensions
         Vector3.TransformNormal(ref direction, ref transform.WorldMatrix, out result);
     }
 
-    /// <summary>
-    /// Performs a direction transformation using the given <see cref="TransformComponent.WorldMatrix"/>.
-    /// </summary>
-    /// <param name="transform">The transform to get the world matrix from.</param>
-    /// <param name="direction">The direction vector to transform.</param>
+    /// <inheritdoc cref="TransformDirection(TransformComponent, ref Vector3, out Vector3)"/>
     /// <returns>The transformed direction.</returns>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
-    /// </remarks>
     public static Vector3 TransformDirection(this TransformComponent transform, Vector3 direction)
     {
         transform.TransformDirection(ref direction, out var result);
+
         return result;
     }
 
     /// <summary>
     /// Performs a direction transformation using the inverse of the given <see cref="TransformComponent.WorldMatrix"/>.
     /// </summary>
-    /// <param name="transform">The transform to get the world matrix from.</param>
-    /// <param name="direction">The direction vector to transform.</param>
-    /// <param name="result">The transformed direction.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
-    /// </remarks>
+    /// <inheritdoc cref="TransformDirection(TransformComponent, ref Vector3, out Vector3)"/>
     public static void InverseTransformDirection(this TransformComponent transform, ref Vector3 direction, out Vector3 result)
     {
         ArgumentNullException.ThrowIfNull(transform);
@@ -339,20 +254,12 @@ public static class TransformExtensions
         Vector3.TransformNormal(ref direction, ref inverseMatrix, out result);
     }
 
-    /// <summary>
-    /// Performs a direction transformation using the inverse of the given <see cref="TransformComponent.WorldMatrix"/>.
-    /// </summary>
-    /// <param name="transform">The transform to get the world matrix from.</param>
-    /// <param name="direction">The direction vector to transform.</param>
+    /// <inheritdoc cref="InverseTransformDirection(TransformComponent, ref Vector3, out Vector3)"/>
     /// <returns>The transformed direction.</returns>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
-    /// </remarks>
     public static Vector3 InverseTransformDirection(this TransformComponent transform, Vector3 direction)
     {
         transform.InverseTransformDirection(ref direction, out var result);
+
         return result;
     }
 
@@ -364,8 +271,7 @@ public static class TransformExtensions
     /// <param name="result">The transformed coordinate.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
     /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
+    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation. If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
     /// </remarks>
     public static void TransformPosition(this TransformComponent transform, ref Vector3 position, out Vector3 result)
     {
@@ -374,34 +280,19 @@ public static class TransformExtensions
         Vector3.TransformCoordinate(ref position, ref transform.WorldMatrix, out result);
     }
 
-    /// <summary>
-    /// Performs a coordinate transformation using the given <see cref="TransformComponent.WorldMatrix"/>.
-    /// </summary>
-    /// <param name="transform">The transform to get the world matrix from.</param>
-    /// <param name="position">The coordinate vector to transform.</param>
+    /// <inheritdoc cref="TransformPosition(TransformComponent, ref Vector3, out Vector3)"/>
     /// <returns>The transformed coordinate.</returns>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
-    /// </remarks>
     public static Vector3 TransformPosition(this TransformComponent transform, Vector3 position)
     {
         transform.TransformPosition(ref position, out var result);
+
         return result;
     }
 
     /// <summary>
     /// Performs a coordinate transformation using the inverse of the given <see cref="TransformComponent.WorldMatrix"/>.
     /// </summary>
-    /// <param name="transform">The transform to get the world matrix from.</param>
-    /// <param name="position">The coordinate vector to transform.</param>
-    /// <param name="result">The transformed coordinate.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
-    /// </remarks>
+    /// <inheritdoc cref="TransformPosition(TransformComponent, ref Vector3, out Vector3)"/>
     public static void InverseTransformPosition(this TransformComponent transform, ref Vector3 position, out Vector3 result)
     {
         ArgumentNullException.ThrowIfNull(transform);
@@ -411,20 +302,12 @@ public static class TransformExtensions
         Vector3.TransformCoordinate(ref position, ref inverseMatrix, out result);
     }
 
-    /// <summary>
-    /// Performs a coordinate transformation using the inverse of the given <see cref="TransformComponent.WorldMatrix"/>.
-    /// </summary>
-    /// <param name="transform">The transform to get the world matrix from.</param>
-    /// <param name="position">The coordinate vector to transform.</param>
+    /// <inheritdoc cref="InverseTransformPosition(TransformComponent, ref Vector3, out Vector3)"/>
     /// <returns>The transformed coordinate.</returns>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
-    /// </remarks>
     public static Vector3 InverseTransformPosition(this TransformComponent transform, Vector3 position)
     {
         transform.InverseTransformPosition(ref position, out var result);
+
         return result;
     }
 
@@ -436,8 +319,7 @@ public static class TransformExtensions
     /// <param name="result">The transformed normal.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
     /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
+    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation. If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
     /// </remarks>
     public static void TransformVector(this TransformComponent transform, ref Vector3 vector, out Vector3 result)
     {
@@ -446,34 +328,19 @@ public static class TransformExtensions
         Vector3.TransformNormal(ref vector, ref transform.WorldMatrix, out result);
     }
 
-    /// <summary>
-    /// Performs a normal transformation using the given <see cref="TransformComponent.WorldMatrix"/>.
-    /// </summary>
-    /// <param name="transform">The transform to get the world matrix from.</param>
-    /// <param name="vector">The normal vector to transform.</param>
+    /// <inheritdoc cref="TransformVector(TransformComponent, ref Vector3, out Vector3)"/>
     /// <returns>The transformed normal.</returns>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
-    /// </remarks>
     public static Vector3 TransformVector(this TransformComponent transform, Vector3 vector)
     {
         transform.TransformVector(ref vector, out var result);
+
         return result;
     }
 
     /// <summary>
     /// Performs a normal transformation using the inverse of the given <see cref="TransformComponent.WorldMatrix"/>.
     /// </summary>
-    /// <param name="transform">The transform to get the world matrix from.</param>
-    /// <param name="vector">The normal vector to transform.</param>
-    /// <param name="result">The transformed normal.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
-    /// </remarks>
+    /// <inheritdoc cref="TransformVector(TransformComponent, ref Vector3, out Vector3)"/>
     public static void InverseTransformVector(this TransformComponent transform, ref Vector3 vector, out Vector3 result)
     {
         ArgumentNullException.ThrowIfNull(transform);
@@ -483,20 +350,12 @@ public static class TransformExtensions
         Vector3.TransformNormal(ref vector, ref inverseMatrix, out result);
     }
 
-    /// <summary>
-    /// Performs a normal transformation using the inverse of the given <see cref="TransformComponent.WorldMatrix"/>.
-    /// </summary>
-    /// <param name="transform">The transform to get the world matrix from.</param>
-    /// <param name="vector">The normal vector to transform.</param>
+    /// <inheritdoc cref="InverseTransformVector(TransformComponent, ref Vector3, out Vector3)"/>
     /// <returns>The transformed normal.</returns>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation.
-    /// If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
-    /// </remarks>
     public static Vector3 InverseTransformVector(this TransformComponent transform, Vector3 vector)
     {
         transform.InverseTransformVector(ref vector, out var result);
+
         return result;
     }
 
@@ -514,48 +373,23 @@ public static class TransformExtensions
     /// </remarks>
     public static void LookAt(this TransformComponent transform, TransformComponent target, ref Vector3 worldUp, float smooth = 1.0f)
     {
-        ArgumentNullException.ThrowIfNull(transform);
-
         ArgumentNullException.ThrowIfNull(target);
 
         var targetPosition = target.WorldMatrix.TranslationVector;
+
         transform.LookAt(ref targetPosition, ref worldUp, smooth);
     }
 
-    /// <summary>
-    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
-    /// </summary>
-    /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
-    /// <param name="target">The target to point towards</param>
-    /// <param name="worldUp">A Vector specifying the upward direction.</param>
-    /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> or <paramref name="target"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
-    /// <remarks>
-    /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
-    /// </remarks>
+    /// <inheritdoc cref="LookAt(TransformComponent, TransformComponent, ref Vector3, float)"/>
     public static void LookAt(this TransformComponent transform, TransformComponent target, Vector3 worldUp, float smooth = 1.0f)
-    {
-        transform.LookAt(target, ref worldUp, smooth);
-    }
+        => transform.LookAt(target, ref worldUp, smooth);
 
     /// <summary>
-    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
-    /// The world up vector used is defined by <see cref="WorldUp"/>.
+    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>. The world up vector used is defined by <see cref="WorldUp"/>.
     /// </summary>
-    /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
-    /// <param name="target">The target to point towards</param>
-    /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> or <paramref name="target"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
-    /// <remarks>
-    /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
-    /// </remarks>
+    /// <inheritdoc cref="LookAt(TransformComponent, TransformComponent, ref Vector3, float)"/>
     public static void LookAt(this TransformComponent transform, TransformComponent target, float smooth = 1.0f)
-    {
-        var worldUp = WorldUp;
-        transform.LookAt(target, ref worldUp, smooth);
-    }
+        => transform.LookAt(target, WorldUp, smooth);
 
     /// <summary>
     /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
@@ -571,12 +405,7 @@ public static class TransformExtensions
     /// </remarks>
     public static void LookAt(this TransformComponent transform, ref Vector3 target, ref Vector3 worldUp, float smooth = 1.0f)
     {
-        ArgumentNullException.ThrowIfNull(transform);
-
-        if (!transform.UseTRS)
-        {
-            throw new ArgumentException("Must use TRS", nameof(transform));
-        }
+        RequireTrs(transform);
 
         var localTarget = target;
         var localUp = worldUp;
@@ -600,81 +429,60 @@ public static class TransformExtensions
         // smooth == 1 assigned straight through it.
         if (!IsFinite(lookRotation)) return;
 
-        if (smooth == 1.0f)
+        // Slerping out of a broken rotation would leave it broken forever, so a non-finite current
+        // rotation snaps, which is worse than ignoring the smoothing once
+        if (smooth == 1.0f || !IsFinite(transform.Rotation))
         {
             transform.Rotation = lookRotation;
-        }
-        else if (IsFinite(transform.Rotation))
-        {
-            Quaternion.Slerp(ref transform.Rotation, ref lookRotation, smooth, out transform.Rotation);
         }
         else
         {
-            // There is nothing sensible to interpolate away from, so snap. Slerping out of a broken
-            // rotation would leave it broken forever, which is worse than ignoring the smoothing once.
-            transform.Rotation = lookRotation;
+            Quaternion.Slerp(ref transform.Rotation, ref lookRotation, smooth, out transform.Rotation);
         }
 
         transform.UpdateWorldMatrix();
     }
 
-    /// <summary>
-    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
-    /// </summary>
-    /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
-    /// <param name="target">The target to point towards</param>
-    /// <param name="worldUp">A Vector specifying the upward direction.</param>
-    /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
-    /// <remarks>
-    /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
-    /// </remarks>
+    /// <inheritdoc cref="LookAt(TransformComponent, ref Vector3, ref Vector3, float)"/>
     public static void LookAt(this TransformComponent transform, Vector3 target, Vector3 worldUp, float smooth = 1.0f)
-    {
-        transform.LookAt(ref target, ref worldUp, smooth);
-    }
+        => transform.LookAt(ref target, ref worldUp, smooth);
 
     /// <summary>
-    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
-    /// The world up vector used is defined by <see cref="WorldUp"/>.
+    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>. The world up vector used is defined by <see cref="WorldUp"/>.
     /// </summary>
-    /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
-    /// <param name="target">The target to point towards</param>
-    /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
-    /// <remarks>
-    /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
-    /// </remarks>
+    /// <inheritdoc cref="LookAt(TransformComponent, ref Vector3, ref Vector3, float)"/>
     public static void LookAt(this TransformComponent transform, ref Vector3 target, float smooth = 1.0f)
     {
         var worldUp = WorldUp;
+
         transform.LookAt(ref target, ref worldUp, smooth);
     }
 
-    /// <summary>
-    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
-    /// The world up vector used is defined by <see cref="WorldUp"/>.
-    /// </summary>
-    /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
-    /// <param name="target">The target to point towards</param>
-    /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
-    /// <remarks>
-    /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
-    /// </remarks>
+    /// <inheritdoc cref="LookAt(TransformComponent, ref Vector3, float)"/>
     public static void LookAt(this TransformComponent transform, Vector3 target, float smooth = 1.0f)
+        => transform.LookAt(ref target, smooth);
+
+    /// <summary>
+    /// The transform must exist and be driven by its translation, rotation and scale (TRS): with <see cref="TransformComponent.UseTRS"/>
+    /// on, the default, the engine rebuilds <see cref="TransformComponent.LocalMatrix"/> every frame from <see cref="TransformComponent.Position"/>,
+    /// <see cref="TransformComponent.Rotation"/> and <see cref="TransformComponent.Scale"/>, so writing those three moves the entity. With it off,
+    /// the engine uses the matrix as assigned and ignores the three properties, so a helper that writes them would do nothing;
+    /// throwing says so instead.
+    /// </summary>
+    private static void RequireTrs(TransformComponent transform)
     {
-        var worldUp = WorldUp;
-        transform.LookAt(ref target, ref worldUp, smooth);
+        ArgumentNullException.ThrowIfNull(transform);
+
+        if (!transform.UseTRS)
+        {
+            throw new ArgumentException($"The transform is driven by its matrix, not by position, rotation and scale; set {nameof(TransformComponent.UseTRS)} to true to use this method.", nameof(transform));
+        }
     }
 
     /// <summary>
     /// Returns whether every component of the rotation is a real number.
     /// </summary>
-    private static bool IsFinite(in Quaternion rotation)
+    private static bool IsFinite(Quaternion rotation)
         => float.IsFinite(rotation.X)
         && float.IsFinite(rotation.Y)
         && float.IsFinite(rotation.Z)

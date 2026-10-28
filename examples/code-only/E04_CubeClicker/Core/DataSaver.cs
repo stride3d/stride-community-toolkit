@@ -14,18 +14,11 @@ public class DataSaver<TData>
 
     public async Task SaveAsync()
     {
-        // Create a new file per default
-        var fileMode = VirtualFileMode.CreateNew;
+        // A new file, or the existing one emptied; the application data folder is bin\Debug\net10.0\data
+        var fileMode = VirtualFileSystem.ApplicationData.FileExists(FileName) ? VirtualFileMode.Truncate : VirtualFileMode.CreateNew;
 
-        // if it exists already, empty the file to write the new content to it
-        if (VirtualFileSystem.ApplicationData.FileExists(FileName))
-            fileMode = VirtualFileMode.Truncate;
-
-        // open a virtual file stream to the target path
-        // data are saved in this location: \bin\Debug\net10.0\data\
         await using var fileStream = VirtualFileSystem.ApplicationData.OpenStream(FileName, fileMode, VirtualFileAccess.Write);
 
-        // serialize the object to the stream
         await YamlSerializer.SerializeAsync(Data, fileStream);
     }
 
@@ -35,10 +28,8 @@ public class DataSaver<TData>
     {
         if (!VirtualFileSystem.ApplicationData.FileExists(FileName)) return false;
 
-        // open a stream to the save path
         await using var fileStream = VirtualFileSystem.ApplicationData.OpenStream(FileName, VirtualFileMode.Open, VirtualFileAccess.Read);
 
-        // await the deserialization of the object in the yaml file
         Data = await YamlSerializer.DeserializeAsync<TData>(fileStream);
 
         return true;

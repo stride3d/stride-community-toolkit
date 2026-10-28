@@ -6,35 +6,23 @@ using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 using Stride.Games;
 
-using var game = new Game();
+// Whether the second health bar has been added yet
+var healthBarAdded = false;
 
-// Whether the health bar has been added yet
-bool isHealthBarVisible = false;
+using var game = new Game();
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
-void Start(Scene rootScene)
-{
-    game.AddSceneRenderer(new MyraSceneRenderer());
-}
+void Start(Scene rootScene) => game.AddSceneRenderer(new MyraSceneRenderer());
 
+// The second health bar is added while the game runs, once the renderer has put the view in the services
 void Update(Scene rootScene, GameTime time)
 {
-    InitializeHealthBar();
-}
-
-// Adds the health bar on the first press
-void InitializeHealthBar()
-{
-    if (isHealthBarVisible) return;
-
-    var mainView = game.Services.GetService<MainView>();
-
-    if (mainView == null) return;
+    if (healthBarAdded || game.Services.GetService<MainView>() is not { } mainView) return;
 
     mainView.Widgets.Add(UIUtils.CreateHealthBar(-50, "#FFD961FF"));
 
-    isHealthBarVisible = true;
+    healthBarAdded = true;
 }
 /*
 ---example-metadata

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Reflection;
 using Stride.CommunityToolkit.Examples.Core;
 using Xunit;
 
@@ -53,15 +54,12 @@ public class ConsoleLauncherTests
 
         try
         {
-            // Run the real entry point with an isolated manifest. No source paths means the real
-            // launch action reports a missing project synchronously, never starting a game process.
-            var launcherAssembly = typeof(ExampleProvider).Assembly.Location;
-            var launcherName = Path.GetFileNameWithoutExtension(launcherAssembly);
-            File.Copy(launcherAssembly, Path.Combine(directory, Path.GetFileName(launcherAssembly)));
-            File.Copy(Path.Combine(Path.GetDirectoryName(launcherAssembly)!, "Pastel.dll"), Path.Combine(directory, "Pastel.dll"));
-            var testRuntimeConfig = Path.ChangeExtension(typeof(ConsoleLauncherTests).Assembly.Location, ".runtimeconfig.json");
-            File.Copy(testRuntimeConfig, Path.Combine(directory, $"{launcherName}.runtimeconfig.json"));
-            await File.WriteAllTextAsync(Path.Combine(directory, ManifestLoader.ManifestFileName), """
+            // The real entry point, run from its own build output through dotnet run, reading an isolated
+            // manifest. No source paths means the real launch action reports a missing project synchronously,
+            // never starting a game process.
+            var manifestPath = Path.Combine(directory, ManifestLoader.ManifestFileName);
+
+            await File.WriteAllTextAsync(manifestPath, """
                 {
                   "schemaVersion": 1,
                   "examples": [
@@ -80,8 +78,17 @@ public class ConsoleLauncherTests
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
-            startInfo.ArgumentList.Add(Path.Combine(directory, Path.GetFileName(launcherAssembly)));
+            startInfo.ArgumentList.Add("run");
+            startInfo.ArgumentList.Add("--no-build");
+
+            // The launcher's build in the configuration this test assembly was built in: dotnet run
+            // otherwise looks for Debug, which a Release-only build (the CI workflow) does not have
+            startInfo.ArgumentList.Add("--configuration");
+            startInfo.ArgumentList.Add(BuildConfiguration);
+            startInfo.ArgumentList.Add("--project");
+            startInfo.ArgumentList.Add(LauncherProject());
             startInfo.Environment["NO_COLOR"] = "1";
+            startInfo.Environment[ManifestLoader.ManifestPathVariable] = manifestPath;
 
             using var process = Process.Start(startInfo)!;
 
@@ -111,5 +118,26 @@ public class ConsoleLauncherTests
         {
             Directory.Delete(directory, recursive: true);
         }
+    }
+
+    /// <summary>Debug or Release: what the test assembly, and so the launcher it references, was built in.</summary>
+    private static readonly string BuildConfiguration =
+        typeof(ConsoleLauncherTests).Assembly.GetCustomAttribute<AssemblyConfigurationAttribute>()?.Configuration ?? "Debug";
+
+    /// <summary>The console launcher's project file, found by walking up from the test assembly to the repository root.</summary>
+    private static string LauncherProject()
+    {
+        var directory = AppContext.BaseDirectory;
+
+        while (!string.IsNullOrEmpty(directory))
+        {
+            var candidate = Path.Combine(directory, "tools", "Stride.CommunityToolkit.Examples", "Stride.CommunityToolkit.Examples.csproj");
+
+            if (File.Exists(candidate)) return candidate;
+
+            directory = Path.GetDirectoryName(directory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+        }
+
+        throw new FileNotFoundException("The console launcher's project was not found above the test assembly.");
     }
 }

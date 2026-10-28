@@ -1,4 +1,5 @@
 using E13_SignalR_Shared;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -54,7 +55,7 @@ public sealed class DeckEffects
         {
             Text = $"#{container.Id} {container.Size.ToString().ToUpperInvariant()}",
             FontSize = 13,
-            Anchor = TextAnchor.BottomCenter,
+            Anchor = Anchor.BottomCenter,
             Offset = new Vector2(0, -14),
             TextColor = console.Accent,
             EnableShadow = true,
@@ -113,20 +114,22 @@ public sealed class DeckEffects
         _rings.RemoveAll(ring => ring.Age >= ring.Life);
 
         // A drift borrows a pooled label, so it is hidden rather than removed
-        foreach (var drift in _drifts.Where(drift => drift.Age >= LostSeconds))
+        for (var i = _drifts.Count - 1; i >= 0; i--)
         {
-            _labels.Hide(drift.Key);
-        }
+            if (_drifts[i].Age < LostSeconds) continue;
 
-        _drifts.RemoveAll(drift => drift.Age >= LostSeconds);
+            _labels.Hide(_drifts[i].Key);
+            _drifts.RemoveAt(i);
+        }
 
         // An expired tag comes off its container; a container already gone takes it along anyway
-        foreach (var tag in _tags.Where(tag => _time >= tag.Until))
+        for (var i = _tags.Count - 1; i >= 0; i--)
         {
-            tag.Entity.Remove(tag.Text);
-        }
+            if (_time < _tags[i].Until) continue;
 
-        _tags.RemoveAll(tag => _time >= tag.Until);
+            _tags[i].Entity.Remove(_tags[i].Text);
+            _tags.RemoveAt(i);
+        }
     }
 
     public void Draw(ShapeBatch shapes, StationConsole console)
@@ -211,64 +214,39 @@ public sealed class DeckEffects
         return string.Join('\n', lines);
     }
 
-    // Explicit constructors rather than primary ones: a primary constructor is public, and these
-    // types are private.
-    private sealed class Ring
+    private sealed class Ring(Vector3 center, float from, float to, float life, Color color)
     {
-        internal Ring(Vector3 center, float from, float to, float life, Color color)
-        {
-            Center = center;
-            From = from;
-            To = to;
-            Life = life;
-            Color = color;
-        }
+        internal Vector3 Center { get; } = center;
 
-        internal Vector3 Center { get; }
+        internal float From { get; } = from;
 
-        internal float From { get; }
+        internal float To { get; } = to;
 
-        internal float To { get; }
+        internal float Life { get; } = life;
 
-        internal float Life { get; }
-
-        internal Color Color { get; }
+        internal Color Color { get; } = color;
 
         internal float Age { get; set; }
     }
 
-    private sealed class Tag
+    private sealed class Tag(int id, Entity entity, EntityTextComponent text)
     {
-        internal Tag(int id, Entity entity, EntityTextComponent text)
-        {
-            Id = id;
-            Entity = entity;
-            Text = text;
-        }
+        internal int Id { get; } = id;
 
-        internal int Id { get; }
+        internal Entity Entity { get; } = entity;
 
-        internal Entity Entity { get; }
-
-        internal EntityTextComponent Text { get; }
+        internal EntityTextComponent Text { get; } = text;
 
         internal float Until { get; set; }
     }
 
-    private sealed class Drift
+    private sealed class Drift(string key, string text, Vector3 start)
     {
-        internal Drift(string key, string text, Vector3 start)
-        {
-            Key = key;
-            Text = text;
-            Start = start;
-        }
+        internal string Key { get; } = key;
 
-        internal string Key { get; }
+        internal string Text { get; } = text;
 
-        internal string Text { get; }
-
-        internal Vector3 Start { get; }
+        internal Vector3 Start { get; } = start;
 
         internal float Age { get; set; }
     }

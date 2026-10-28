@@ -35,8 +35,6 @@ const float HeartbeatSeconds = 1f;
 var console = new StationConsole();
 var link = new StationLink(ResolveHubUrl(), new StrideLoggerAdapter<SignalRHubClient>(GlobalLogger.GetLogger("SignalR")));
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 // Not `using`: the disposal order at the bottom is deliberate, and `using` would reverse it
 var game = new Game();
 
@@ -45,9 +43,9 @@ var deck = new Deck(new ContainerFactory(game));
 var commands = new StationCommands(deck, console);
 
 // Built in Start, once there is a scene to put them in
-StationBoard? board = null;
-FeedBoard? feed = null;
-DeckEffects? effects = null;
+StationBoard board = null!;
+FeedBoard feed = null!;
+DeckEffects effects = null!;
 
 var uptime = 0f;
 var untilHeartbeat = HeartbeatSeconds;
@@ -68,7 +66,10 @@ game.Run(new SceneSetup3D
     // The station aims its own sun and lays its own deck
     Lighting = null,
     Skybox = null,
-    Ground = null
+    Ground = null,
+    WindowTitle = $"{Constants.StationName} - Stride + SignalR",
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu(), start: Start, update: Update);
 
 // Shutdown order is load-bearing, and so is the fact that neither line awaits.
@@ -85,9 +86,6 @@ game.Dispose();
 
 void Start(Scene scene)
 {
-    game.Window.Title = $"{Constants.StationName} - Stride + SignalR";
-    game.Window.AllowUserResizing = true;
-
     var labels = new Labels(scene, game, console);
 
     station.Build(scene, labels, console);
@@ -147,7 +145,7 @@ void Start(Scene scene)
     // The overlay keeps only what is genuinely keyboard help; everything else is on the boards.
     var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
-    overlay.AddSection("Station", OverlayLines);
+    overlay.AddSection("Station", BuildOverlayLines);
 
     // A screenshot of an empty deck shows nothing. When the capture harness is driving, drop a
     // batch at once so there is cargo on the deck by the time it takes its frame.
@@ -172,24 +170,20 @@ void Update(Scene scene, GameTime time)
 
     HandleKeys();
 
-    if (station.Shapes is { } picking && board!.Pick(picking, game.Input) is { } clicked)
+    if (board.Pick(station.Shapes, game.Input) is { } clicked)
     {
         console.Select(clicked);
     }
 
     deck.Update(deltaSeconds);
-    effects!.Update(deltaSeconds, uptime);
+    effects.Update(deltaSeconds, uptime);
 
     var snapshot = deck.Snapshot(console.Scheme.Name, uptime);
 
     station.Draw(console, deltaSeconds, uptime);
-
-    if (station.Shapes is { } shapes)
-    {
-        board!.Draw(shapes, console, snapshot, deck.PendingCount, link.IsConnected, uptime, uptime);
-        feed!.Draw(shapes, console, uptime);
-        effects.Draw(shapes, console);
-    }
+    board.Draw(station.Shapes, console, snapshot, deck.PendingCount, link.IsConnected, uptime, uptime);
+    feed.Draw(station.Shapes, console, uptime);
+    effects.Draw(station.Shapes, console);
 
     untilHeartbeat -= deltaSeconds;
 
@@ -219,23 +213,17 @@ void HandleKeys()
     if (input.IsKeyPressed(Keys.X)) deck.Shake();
 }
 
-IReadOnlyList<TextElement> OverlayLines()
-{
-    List<TextElement> lines = [];
-    lines.AddRange(console.MenuLines());
-    lines.AddRange(
-    [
-        new(["1", "2", "3"], "Drop a container of that size", Color.Gold),
-        new("Space", "Drop a random one", Color.Gold),
-        new("B", "Drop a batch", Color.Gold),
-        new("C", "Clear the deck", Color.Gold),
-        new("X", "Shake", Color.Gold),
-        new("Click", "Pick a scheme", Color.Gold),
-        new("Left drag", "Carry a container; R turns it", Color.Gold),
-    ]);
-
-    return lines;
-}
+IReadOnlyList<TextElement> BuildOverlayLines() =>
+[
+    .. console.MenuLines(),
+    new(["1", "2", "3"], "Drop a container of that size", Color.Gold),
+    new("Space", "Drop a random one", Color.Gold),
+    new("B", "Drop a batch", Color.Gold),
+    new("C", "Clear the deck", Color.Gold),
+    new("X", "Shake", Color.Gold),
+    new("Click", "Pick a scheme", Color.Gold),
+    new("Left drag", "Carry a container; R turns it", Color.Gold),
+];
 
 static string Describe(ContainerEvent container) => $"#{container.Id} {container.Size.ToString().ToLowerInvariant()} {container.Paint.ToString().ToLowerInvariant()}";
 

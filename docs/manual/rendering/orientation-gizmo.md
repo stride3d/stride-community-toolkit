@@ -3,7 +3,7 @@
 `OrientationGizmoRenderer` draws the world axes in a corner of the screen, turning with the camera, the
 way Game Studio's space marker shows which way is which in the scene editor. It is screen-space, drawn after the scene and over it,
 and ignores depth, so it is never buried in the scene's content. It is in the
-`Stride.CommunityToolkit.Rendering.Gizmos` namespace, with `AddOrientationGizmo`; `ScreenAnchor` in `Stride.CommunityToolkit.Rendering`.
+`Stride.CommunityToolkit.Rendering.Gizmos` namespace, with `AddOrientationGizmo`; `Anchor` in `Stride.CommunityToolkit.Rendering`.
 
 ```csharp
 game.AddOrientationGizmo();
@@ -33,11 +33,11 @@ straight at or away from the camera is seen end-on, a disc with its letter on it
 
 ## Placement and size
 
-`AddOrientationGizmo` takes the corner or edge as a `ScreenAnchor` and returns the renderer, whose
+`AddOrientationGizmo` takes the corner or edge as an `Anchor` and returns the renderer, whose
 properties cover the rest. Calling it again returns the same renderer and moves it.
 
 ```csharp
-var gizmo = game.AddOrientationGizmo(ScreenAnchor.BottomRight);
+var gizmo = game.AddOrientationGizmo(Anchor.BottomRight);
 
 gizmo.Size = 48;
 gizmo.Opacity = 0.8f;

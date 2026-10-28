@@ -23,46 +23,44 @@ using Stride.Rendering;
 // its physics with it. The step cap matters at speed: at 4x and 60 frames a second the simulation
 // needs four fixed steps a frame, and the default cap of three would let it fall behind the clock.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float DropInterval = 0.5f;
 const float SpinSpeed = 2.5f;       // Radians per second, on the physics clock
 const float BallRadius = 0.3f;
 const int BallsKept = 40;
 
-var gravities = new (string Name, Vector3 Value)[]
-{
+(string Name, Vector3 Value)[] gravities =
+[
     ("Earth", new Vector3(0f, -9.81f, 0f)),
     ("Moon", new Vector3(0f, -1.62f, 0f)),
     ("None", Vector3.Zero),
     ("Upside down", new Vector3(0f, 9.81f, 0f)),
-};
+];
 
 var gravityIndex = 0;
-var balls = new List<Entity>();
+List<Entity> balls = [];
 var clock = new PhysicsClock();
 var random = new Random(9);
 var nextDrop = 0.0;
 
-BodyComponent? spinner = null;
+BodyComponent spinner = null!;
 BepuSimulation? simulation = null;
-Material? ballMaterial = null;
+Material ballMaterial = null!;
 
 using var game = new Game();
 
 var sceneSetup = new SceneSetup3D
 {
     Camera = CameraSetup.Perspective(position: new Vector3(0f, 7f, 14f), rotation: new Vector3(0f, -24f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Time control - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Time control - Stride Community Toolkit";
-
     game.AddGrabber();
 
     ballMaterial = game.CreateMaterial(new Color(80, 170, 255), metalness: 0f, glossiness: 0.6f);
@@ -73,7 +71,7 @@ void Start(Scene scene)
     var clockEntity = new Entity("Physics clock") { clock };
     clockEntity.Scene = scene;
 
-    TextOverlay.GetOrCreate(game).AddSection("Time control", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Time control", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -81,7 +79,7 @@ void Update(Scene scene, GameTime time)
     // The body hands over its simulation once it is attached, which takes a frame
     if (simulation is null)
     {
-        simulation = spinner?.Simulation;
+        simulation = spinner.Simulation;
 
         if (simulation is null) return;
 
@@ -103,7 +101,7 @@ void Update(Scene scene, GameTime time)
     }
 
     // The spin is a velocity, so the physics clock turns the bar: at half speed it turns half as far a second
-    spinner!.AngularVelocity = new Vector3(0f, SpinSpeed, 0f);
+    spinner.AngularVelocity = new Vector3(0f, SpinSpeed, 0f);
     spinner.Awake = true;
 
     // The dropper runs on the game clock, whatever the simulation does
@@ -130,24 +128,24 @@ void BuildSpinner(Scene scene)
 {
     var bar = game.CreatePrimitive(Primitive3D.Box(new Vector3(6f, 0.4f, 0.4f)), new BepuPhysicsOptions
     {
+        EntityName = "Spinner",
         Material = game.CreateMaterial(new Color(230, 170, 60), metalness: 0f, glossiness: 0.4f),
         Body = BodyMode.Kinematic,
+        Position = new Vector3(0f, 0.6f, 0f),
     });
 
-    bar.Name = "Spinner";
-    bar.Transform.Position = new Vector3(0f, 0.6f, 0f);
     bar.Scene = scene;
 
     spinner = bar.Get<BodyComponent>();
 
     var post = game.CreatePrimitive(Primitive3D.Cylinder(0.15f, 0.4f), new BepuPhysicsOptions
     {
+        EntityName = "Post",
         Material = game.CreateMaterial(new Color(150, 150, 160), metalness: 0f, glossiness: 0.3f),
         Body = BodyMode.Static,
+        Position = new Vector3(0f, 0.2f, 0f),
     });
 
-    post.Name = "Post";
-    post.Transform.Position = new Vector3(0f, 0.2f, 0f);
     post.Scene = scene;
 }
 
@@ -156,11 +154,11 @@ void DropBall(Scene scene)
 {
     var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
     {
+        EntityName = $"Ball {balls.Count + 1}",
         Material = ballMaterial,
+        Position = new Vector3(random.NextSingle() * 3f - 1.5f, 7f, random.NextSingle() * 3f - 1.5f),
     });
 
-    ball.Name = $"Ball {balls.Count + 1}";
-    ball.Transform.Position = new Vector3(random.NextSingle() * 3f - 1.5f, 7f, random.NextSingle() * 3f - 1.5f);
     ball.Scene = scene;
 
     balls.Add(ball);
@@ -186,7 +184,7 @@ void Reset()
     simulation.PoseGravity = gravities[0].Value;
 }
 
-IReadOnlyList<TextElement> OverlayLines()
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
     var scale = simulation?.TimeScale ?? 1f;
     var running = simulation?.Enabled ?? true;

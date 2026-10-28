@@ -140,7 +140,7 @@ public sealed class Box2DDebugDraw
     {
         ArgumentNullException.ThrowIfNull(simulation);
 
-        Draw(simulation.GetWorldId());
+        Draw(simulation.WorldId);
     }
 
     private void DrawPolygon(ReadOnlySpan<B2Vec2> vertices, int vertexCount, B2HexColor color, object context)
@@ -152,7 +152,7 @@ public sealed class Box2DDebugDraw
             var a = vertices[i];
             var b = vertices[(i + 1) % vertexCount];
 
-            _batch.DrawPixelLine(new Vector2(a.X, a.Y), new Vector2(b.X, b.Y), LinePixels, stride);
+            _batch.DrawPixelLine(a.ToVector2(), b.ToVector2(), LinePixels, stride);
         }
     }
 
@@ -164,16 +164,16 @@ public sealed class Box2DDebugDraw
         for (var i = 0; i < count; i++)
             local[i] = new Vector2(vertices[i].X, vertices[i].Y);
 
-        _batch.DrawSolidPolygon(local[..count], new Vector2(transform.p.X, transform.p.Y), b2Rot_GetAngle(transform.q), DebugDrawColors.ToColor(color), radius);
+        _batch.DrawSolidPolygon(local[..count], transform.p.ToVector2(), b2Rot_GetAngle(transform.q), DebugDrawColors.ToColor(color), radius);
     }
 
     private void DrawCircle(in B2Vec2 center, float radius, B2HexColor color, object context)
-        => _batch.DrawAnnulus(new Vector2(center.X, center.Y), radius, radius * 0.9f, DebugDrawColors.ToColor(color));
+        => _batch.DrawAnnulus(center.ToVector2(), radius, radius * 0.9f, DebugDrawColors.ToColor(color));
 
     private void DrawSolidCircle(in B2Transform transform, float radius, B2HexColor color, object context)
     {
         var stride = DebugDrawColors.ToColor(color);
-        var centre = new Vector2(transform.p.X, transform.p.Y);
+        var centre = transform.p.ToVector2();
 
         _batch.DrawSolidCircle(centre, radius, stride);
 
@@ -184,13 +184,13 @@ public sealed class Box2DDebugDraw
 
     private void DrawSolidCapsule(in B2Vec2 p1, in B2Vec2 p2, float radius, B2HexColor color, object context)
     {
-        Span<Vector2> ends = [new Vector2(p1.X, p1.Y), new Vector2(p2.X, p2.Y)];
+        Span<Vector2> ends = [p1.ToVector2(), p2.ToVector2()];
 
         _batch.DrawSolidPolygon(ends, Vector2.Zero, 0f, DebugDrawColors.ToColor(color), radius);
     }
 
     private void DrawLine(in B2Vec2 p1, in B2Vec2 p2, B2HexColor color, object context)
-        => _batch.DrawPixelLine(new Vector2(p1.X, p1.Y), new Vector2(p2.X, p2.Y), LinePixels, DebugDrawColors.ToColor(color));
+        => _batch.DrawPixelLine(p1.ToVector2(), p2.ToVector2(), LinePixels, DebugDrawColors.ToColor(color));
 
     private void DrawTransform(in B2Transform transform, object context)
     {
@@ -203,8 +203,8 @@ public sealed class Box2DDebugDraw
     }
 
     private void DrawPoint(in B2Vec2 p, float size, B2HexColor color, object context)
-        => _batch.DrawSolidCircle(new Vector2(p.X, p.Y), size * PointScale, DebugDrawColors.ToColor(color));
+        => _batch.DrawSolidCircle(p.ToVector2(), size * PointScale, DebugDrawColors.ToColor(color));
 
     private void DrawText(in B2Vec2 p, string s, B2HexColor color, object context)
-        => DrawString?.Invoke(new Vector2(p.X, p.Y), s, DebugDrawColors.ToColor(color));
+        => DrawString?.Invoke(p.ToVector2(), s, DebugDrawColors.ToColor(color));
 }

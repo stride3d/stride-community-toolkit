@@ -7,40 +7,34 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 
-const string SphereEntityName = "Sphere";
 ImmediateDebugRenderSystem? debugDraw = null;
 
-// Cache sphere entities to avoid per-frame scene iteration and string comparisons
-List<Entity> sphereEntities = new(capacity: 8);
+// The spheres are kept in a list, so the update does not search the scene by name every frame
+List<Entity> spheres = [];
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: (Scene rootScene) =>
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
+
+void Start(Scene rootScene)
 {
-    game.AddDebugShapes();
+    debugDraw = game.AddDebugShapes();
+    debugDraw.Visible = true; // force visible in non-debug builds
+    debugDraw.PrimitiveColor = Color.Lime;
 
     CreateSpheres(rootScene, 6);
-
-    debugDraw = game.Services.GetService<ImmediateDebugRenderSystem>();
-
-    if (debugDraw != null)
-    {
-        debugDraw.Visible = true; // force visible in non-debug builds
-        debugDraw.PrimitiveColor = Color.Lime;
-    }
-}, update: Update);
+}
 
 void CreateSpheres(Scene rootScene, int count)
 {
-    // Precompute half to avoid recalculating inside loop
-    int half = count / 2;
+    var half = count / 2;
 
-    for (int i = -half; i < half; i++)
+    for (var i = -half; i < half; i++)
     {
-        var entity = game.CreatePrimitive(Primitive3D.Sphere(), new() { EntityName = SphereEntityName });
+        var entity = game.CreatePrimitive(Primitive3D.Sphere());
         entity.Transform.Position = new Vector3(i * 0.99f, 8, 0);
         entity.Scene = rootScene;
-        sphereEntities.Add(entity);
+        spheres.Add(entity);
     }
 }
 
@@ -48,13 +42,12 @@ void Update(Scene scene, GameTime gameTime)
 {
     if (debugDraw is null) return;
 
-    // Iterate cached list – no allocations, no name checks
-    foreach (var entity in sphereEntities)
+    foreach (var sphere in spheres)
     {
-        var position = entity.Transform.Position; // cache struct access
+        var position = sphere.Transform.Position;
 
         debugDraw.DrawSphere(position, 0.5f, Color.Red, solid: false);
-        debugDraw.DrawCircle(position, 0.55f, rotation: entity.Transform.Rotation, color: Color.Orange, solid: false);
+        debugDraw.DrawCircle(position, 0.55f, rotation: sphere.Transform.Rotation, color: Color.Orange, solid: false);
     }
 }
 /*

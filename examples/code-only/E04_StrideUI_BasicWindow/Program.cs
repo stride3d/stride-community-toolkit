@@ -10,7 +10,10 @@ using Stride.UI;
 using Stride.UI.Controls;
 using Stride.UI.Panels;
 
-SpriteFont? _font;
+// One small method per step, on purpose: the assembly order is the lesson. Load a font, build a
+// TextBlock, put it on a Canvas, wrap the canvas in a UIComponent, and attach that to an entity.
+
+SpriteFont? font = null;
 
 using var game = new Game();
 
@@ -19,60 +22,43 @@ game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 void Start(Scene scene)
 {
     AddCapsule(scene);
-
     LoadFont();
-
     AddWindow(scene);
 }
 
 void AddCapsule(Scene scene)
 {
     var entity = game.CreatePrimitive(Primitive3D.Capsule());
-
     entity.Transform.Position = new Vector3(0, 8, 0);
-
     entity.Scene = scene;
 }
 
-void LoadFont()
-{
-    _font = game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
-}
+// Text draws nothing without a font; this one ships with the engine, so the example needs no assets
+void LoadFont() => font = game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
 
-void AddWindow(Scene scene)
-{
-    var uiEntity = CreateUIEntity();
+void AddWindow(Scene scene) => CreateUIEntity().Scene = scene;
 
-    uiEntity.Scene = scene;
-}
-
-Entity CreateUIEntity()
+Entity CreateUIEntity() => new()
 {
-    return new Entity
+    new UIComponent
     {
-        new UIComponent
-        {
-            Page = new UIPage { RootElement = CreateCanvas() },
-            RenderGroup = RenderGroup.Group31
-        }
-    };
-}
+        Page = new UIPage { RootElement = CreateCanvas() },
+        RenderGroup = RenderGroup.Group31
+    }
+};
 
 Canvas CreateCanvas()
 {
     var canvas = new Canvas { Width = 300, Height = 100, BackgroundColor = new Color(248, 177, 149, 100) };
 
-    canvas.Children.Add(CreateTextBlock(_font));
+    canvas.Children.Add(CreateTextBlock(font));
 
     return canvas;
 }
 
-TextBlock CreateTextBlock(SpriteFont? _font)
+TextBlock CreateTextBlock(SpriteFont? font)
 {
-    if (_font is null)
-    {
-        Console.WriteLine("Font is null");
-    }
+    if (font is null) Console.WriteLine("Font is null");
 
     return new TextBlock
     {
@@ -80,7 +66,7 @@ TextBlock CreateTextBlock(SpriteFont? _font)
         TextColor = Color.White,
         TextSize = 20,
         Margin = new Thickness(3, 3, 3, 0),
-        Font = _font
+        Font = font
     };
 }
 /*

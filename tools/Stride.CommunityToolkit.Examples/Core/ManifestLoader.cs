@@ -17,10 +17,15 @@ public static class ManifestLoader
     /// <summary>The manifest filename, copied next to the launcher executable at build time.</summary>
     public const string ManifestFileName = "examples-manifest.json";
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
+    /// <summary>
+    /// An environment variable naming the manifest to load instead of the one next to the executable, for a test
+    /// or a tool that supplies its own.
+    /// </summary>
+    public const string ManifestPathVariable = "STRIDE_TOOLKIT_EXAMPLES_MANIFEST";
+
+    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
+
+    private static readonly string[] ProjectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
 
     /// <summary>
     /// Loads every example that should appear in a launcher.
@@ -34,8 +39,8 @@ public static class ManifestLoader
     {
         var manifestPath = FindManifest()
             ?? throw new InvalidOperationException(
-                $"{ManifestFileName} was not found next to the executable. It is generated before the build " +
-                "by tools/ExamplesManifest.targets - build the launcher rather than running a stale binary.");
+                $"{ManifestFileName} was not found next to the executable, and {ManifestPathVariable} names no other. It is generated " +
+                "before the build by tools/ExamplesManifest.targets - build the launcher rather than running a stale binary.");
 
         var manifest = Read(manifestPath);
         var examplesRoot = FindExamplesRoot();
@@ -62,10 +67,7 @@ public static class ManifestLoader
             throw new InvalidOperationException($"{manifestPath} is not valid JSON: {ex.Message}", ex);
         }
 
-        if (manifest is null)
-        {
-            throw new InvalidOperationException($"{manifestPath} is empty.");
-        }
+        if (manifest is null) throw new InvalidOperationException($"{manifestPath} is empty.");
 
         // A newer manifest may contain fields or semantics this build does not know about. Saying so is
         // better than silently showing a wrong list.
@@ -111,40 +113,27 @@ public static class ManifestLoader
     /// </remarks>
     private static (string RunTarget, bool IsFileBased) ResolveRunTarget(ManifestExample example, string? examplesRoot)
     {
-        if (examplesRoot is null || example.ProjectPath is not { Length: > 0 } relativePath)
-        {
-            return (string.Empty, false);
-        }
+        if (examplesRoot is null || example.ProjectPath is not { Length: > 0 } relativePath) return (string.Empty, false);
 
         var sourceFile = Path.GetFullPath(Path.Combine(examplesRoot, relativePath.Replace('/', Path.DirectorySeparatorChar)));
         var directory = Path.GetDirectoryName(sourceFile);
 
-        if (directory is null || !Directory.Exists(directory))
+        if (directory is null || !Directory.Exists(directory)) return (string.Empty, false);
+
+        foreach (var pattern in ProjectPatterns)
         {
-            return (string.Empty, false);
-        }
-
-        string[] projectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
-
-        foreach (var pattern in projectPatterns)
-        {
-            var project = Directory.EnumerateFiles(directory, pattern, SearchOption.TopDirectoryOnly).FirstOrDefault();
-
-            if (project is not null)
-            {
-                return (project, false);
-            }
+            if (Directory.EnumerateFiles(directory, pattern, SearchOption.TopDirectoryOnly).FirstOrDefault() is { } project) return (project, false);
         }
 
         return File.Exists(sourceFile) ? (sourceFile, true) : (string.Empty, false);
     }
 
     /// <summary>
-    /// Locates the manifest next to the executable.
+    /// Locates the manifest: the one <see cref="ManifestPathVariable"/> names, otherwise the one next to the executable.
     /// </summary>
     private static string? FindManifest()
     {
-        var candidate = Path.Combine(AppContext.BaseDirectory, ManifestFileName);
+        var candidate = Environment.GetEnvironmentVariable(ManifestPathVariable) ?? Path.Combine(AppContext.BaseDirectory, ManifestFileName);
 
         return File.Exists(candidate) ? candidate : null;
     }
@@ -164,10 +153,7 @@ public static class ManifestLoader
         {
             var candidate = Path.Combine(directory, "examples", "code-only");
 
-            if (Directory.Exists(candidate))
-            {
-                return candidate;
-            }
+            if (Directory.Exists(candidate)) return candidate;
 
             directory = Path.GetDirectoryName(directory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
         }

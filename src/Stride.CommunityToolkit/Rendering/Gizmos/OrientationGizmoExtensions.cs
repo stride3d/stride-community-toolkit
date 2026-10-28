@@ -23,7 +23,7 @@ public static class OrientationGizmoExtensions
     /// renderer already in the compositor and moves it to <paramref name="anchor"/>.
     /// </remarks>
     /// <exception cref="InvalidOperationException">The <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
-    public static OrientationGizmoRenderer AddOrientationGizmo(this IGame game, ScreenAnchor anchor = ScreenAnchor.BottomLeft)
+    public static OrientationGizmoRenderer AddOrientationGizmo(this IGame game, Anchor anchor = Anchor.BottomLeft)
     {
         ArgumentNullException.ThrowIfNull(game);
 

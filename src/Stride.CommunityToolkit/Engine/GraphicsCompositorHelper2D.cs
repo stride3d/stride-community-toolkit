@@ -38,38 +38,25 @@ public static class GraphicsCompositorHelper2D
         var opaqueRenderStage = new RenderStage("Opaque", "Main") { SortMode = new StateChangeSortMode() };
         var transparentRenderStage = new RenderStage("Transparent", "Main") { SortMode = new BackToFrontSortMode() };
 
-        var postProcessingEffects = enablePostEffects
-            ? new PostProcessingEffects
-            {
-                ColorTransforms = { Transforms = { new ToneMap() { Enabled = false } } },
-            }
-            : null;
-
-        if (postProcessingEffects != null)
-        {
-            postProcessingEffects.DisableAll();
-            postProcessingEffects.ColorTransforms.Enabled = true;
-        }
-
         var singleView = new ForwardRenderer
         {
             Clear = { Color = clearColor ?? Color.CornflowerBlue },
             OpaqueRenderStage = opaqueRenderStage,
             TransparentRenderStage = transparentRenderStage,
-            PostEffects = postProcessingEffects,
+            PostEffects = enablePostEffects ? CreateQuietPostEffects() : null,
             MSAALevel = msaa,
         };
 
         var forwardLighting = new ForwardLightingRenderFeature
+        {
+            LightRenderers =
             {
-                LightRenderers =
-                {
-                    new LightAmbientRenderer(),
-                    new LightDirectionalGroupRenderer(),
-                    new LightPointGroupRenderer(),
-                    new LightSpotGroupRenderer(),
-                },
-            };
+                new LightAmbientRenderer(),
+                new LightDirectionalGroupRenderer(),
+                new LightPointGroupRenderer(),
+                new LightSpotGroupRenderer(),
+            },
+        };
 
         var cameraSlot = new SceneCameraSlot();
 
@@ -138,5 +125,16 @@ public static class GraphicsCompositorHelper2D
             Editor = singleView,
             SingleView = singleView,
         };
+    }
+
+    /// <summary>Post effects with everything off but the colour-transform group, whose tone map is off too, so flat colours stay as written.</summary>
+    private static PostProcessingEffects CreateQuietPostEffects()
+    {
+        var effects = new PostProcessingEffects { ColorTransforms = { Transforms = { new ToneMap { Enabled = false } } } };
+
+        effects.DisableAll();
+        effects.ColorTransforms.Enabled = true;
+
+        return effects;
     }
 }

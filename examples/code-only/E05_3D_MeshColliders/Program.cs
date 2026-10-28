@@ -3,6 +3,7 @@ using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -31,8 +32,6 @@ using Stride.Input;
 // scale scales the mesh with it. Closed says the surface has no holes, which is what the inertia of a
 // moving mesh is computed from; the ring is closed, a bowl or a terrain is not.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float RingRadius = 1.2f;      // From the centre to the middle of the tube
 const float TubeRadius = 0.35f;     // So the hole is 0.85 across from the centre, and the ball fits
 const float ShellRadius = 1.2f;
@@ -45,7 +44,7 @@ var hullColour = new Color(240, 160, 70);
 var meshColour = new Color(90, 190, 200);
 var ballColour = new Color(235, 235, 240);
 
-var stations = new List<DropStation>();
+List<DropStation> stations = [];
 var launched = false;
 
 using var game = new Game();
@@ -54,16 +53,16 @@ var sceneSetup = new SceneSetup3D
 {
     // Above and in front of the stations, shifted right so they stay clear of the overlay
     Camera = CameraSetup.Perspective(position: new Vector3(4.8f, 9.5f, 15.5f), rotation: new Vector3(0f, -30f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Mesh colliders - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Mesh colliders - Stride Community Toolkit";
-
     game.AddEntityTextRenderer();
 
     // P draws every collider, so the hull's lid and the mesh's triangles can be seen
@@ -76,7 +75,7 @@ void Start(Scene scene)
     BuildShellStation(scene, "3. Mesh shell", x + 2 * StationSpacing);
     BuildMovingRingStation(scene, "4. Mesh on mesh", x + 3 * StationSpacing);
 
-    TextOverlay.GetOrCreate(game).AddSection("Mesh colliders", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Mesh colliders", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -112,10 +111,10 @@ void BuildShellStation(Scene scene, string label, float x)
     {
         Material = game.CreateMaterial(meshColour, metalness: 0f, glossiness: 0.4f),
         Body = BodyMode.None,
+        Position = new Vector3(x, RestHeight, 0f),
     });
 
     shell.Add(new StaticComponent { Collider = new MeshCollider { Model = shell.Get<ModelComponent>().Model, Closed = true } });
-    shell.Transform.Position = new Vector3(x, RestHeight, 0f);
     shell.Scene = scene;
 
     var outer = AddBall(scene, new Vector3(x, RestHeight + DropHeight, 0f));
@@ -153,6 +152,7 @@ Entity AddRing(Scene scene, Vector3 position, bool mesh, bool moving)
     var options = new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(mesh ? meshColour : hullColour, metalness: 0f, glossiness: 0.4f),
+        Position = position,
     };
 
     if (mesh)
@@ -183,7 +183,6 @@ Entity AddRing(Scene scene, Vector3 position, bool mesh, bool moving)
             : new StaticComponent { Collider = collider });
     }
 
-    ring.Transform.Position = position;
     ring.Scene = scene;
 
     return ring;
@@ -195,9 +194,9 @@ BodyComponent AddBall(Scene scene, Vector3 position)
     var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(ballColour, metalness: 0f, glossiness: 0.6f),
+        Position = position,
     });
 
-    ball.Transform.Position = position;
     ball.Scene = scene;
 
     return ball.Get<BodyComponent>();
@@ -208,14 +207,14 @@ void AddLabel(Scene scene, string text, float x)
 {
     var label = new Entity("Label")
     {
-        new EntityTextComponent { Text = text, FontSize = 14, Anchor = TextAnchor.MiddleCenter, EnableShadow = true },
+        new EntityTextComponent { Text = text, FontSize = 14, Anchor = Anchor.MiddleCenter, EnableShadow = true },
     };
 
     label.Transform.Position = new Vector3(x, 0f, RingRadius + 0.8f);
     label.Scene = scene;
 }
 
-IReadOnlyList<TextElement> OverlayLines()
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
     List<TextElement> lines =
     [
@@ -226,7 +225,10 @@ IReadOnlyList<TextElement> OverlayLines()
         new("Where each came to rest", Color.LightGray),
     ];
 
-    foreach (var station in stations) lines.Add(new(station.Line, station.Colour));
+    foreach (var station in stations)
+    {
+        lines.Add(new(station.Line, station.Colour));
+    }
 
     return lines;
 }
@@ -253,14 +255,7 @@ sealed record DropStation(string Label, BodyComponent Body, Color Colour, Func<f
     }
 
     /// <summary>Puts the body back where it started, still.</summary>
-    internal void Replay()
-    {
-        // Teleport moves the body and nothing else: it keeps its velocity, its spin and its sleep
-        Body.Teleport(Start, Quaternion.Identity);
-        Body.Awake = true;
-        Body.LinearVelocity = Vector3.Zero;
-        Body.AngularVelocity = Vector3.Zero;
-    }
+    internal void Replay() => Body.TeleportAtRest(Start);
 }
 
 /*

@@ -1,5 +1,6 @@
 using Box2D.NET;
 using Stride.Core.Mathematics;
+using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2Joints;
 using static Box2D.NET.B2Worlds;
 
@@ -175,7 +176,9 @@ public static class Joints2D
         var def = b2DefaultMotorJointDef();
 
         if (worldPivot is { } pivot)
+        {
             Anchor(ref def.@base, a, b, pivot, pivot);
+        }
         else
         {
             def.@base.bodyIdA = a;
@@ -187,7 +190,7 @@ public static class Joints2D
         if (options is not null)
         {
             if (options.LinearVelocity is { } velocity)
-                def.linearVelocity = new B2Vec2(velocity.X, velocity.Y);
+                def.linearVelocity = velocity.ToB2Vec2();
 
             Set(ref def.maxVelocityForce, options.MaxVelocityForce);
             Set(ref def.angularVelocity, options.AngularVelocity);
@@ -235,8 +238,8 @@ public static class Joints2D
     /// </summary>
     public static (Vector2 A, Vector2 B) GetAnchors(B2JointId joint)
     {
-        var a = JointFrames2D.WorldPoint(B2Bodies.b2Body_GetTransform(b2Joint_GetBodyA(joint)), b2Joint_GetLocalFrameA(joint));
-        var b = JointFrames2D.WorldPoint(B2Bodies.b2Body_GetTransform(b2Joint_GetBodyB(joint)), b2Joint_GetLocalFrameB(joint));
+        var a = JointFrames2D.WorldPoint(b2Body_GetTransform(b2Joint_GetBodyA(joint)), b2Joint_GetLocalFrameA(joint));
+        var b = JointFrames2D.WorldPoint(b2Body_GetTransform(b2Joint_GetBodyB(joint)), b2Joint_GetLocalFrameB(joint));
 
         return (a, b);
     }

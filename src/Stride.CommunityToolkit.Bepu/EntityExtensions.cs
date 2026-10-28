@@ -94,20 +94,16 @@ public static class EntityExtensions
             return supplied;
         }
 
-        switch (options.Body)
-        {
-            case BodyMode.None:
-                return null;
-            case BodyMode.Static:
-                return new StaticComponent { Collider = new CompoundCollider() };
-            default:
-                var component = body();
+        if (options.Body == BodyMode.None) return null;
 
-                component.Kinematic = options.Body == BodyMode.Kinematic;
-                component.InterpolationMode = options.Interpolation ? InterpolationMode.Interpolated : InterpolationMode.None;
+        if (options.Body == BodyMode.Static) return new StaticComponent { Collider = new CompoundCollider() };
 
-                return component;
-        }
+        var component = body();
+
+        component.Kinematic = options.Body == BodyMode.Kinematic;
+        component.InterpolationMode = options.Interpolation ? InterpolationMode.Interpolated : InterpolationMode.None;
+
+        return component;
     }
 
     /// <summary>

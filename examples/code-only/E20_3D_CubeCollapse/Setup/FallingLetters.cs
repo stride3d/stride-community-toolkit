@@ -3,7 +3,6 @@ using CubeCollapse.Shared;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -69,7 +68,7 @@ public static class FallingLetters
         // collider below and the visible letter share a centre, which is also what makes the
         // tumbling look right. The word is laid out along its own X axis and then turned as one
         // piece, so the line of letters stays perpendicular to the viewer whichever way it faces
-        var glyphs = TextMesh.CreateGlyphs(MeshFont.Default, word, new TextMeshOptions { Size = Size, Depth = Depth, LetterSpacing = 0.1f, Anchor = TextAnchor.MiddleCenter });
+        var glyphs = TextMesh.CreateGlyphs(MeshFont.Default, word, new TextMeshOptions { Size = Size, Depth = Depth, LetterSpacing = 0.1f, Anchor = Anchor.MiddleCenter });
         var wordRotation = Quaternion.RotationY(yaw);
         var right = Vector3.Transform(Vector3.UnitX, wordRotation);
 
@@ -133,16 +132,15 @@ public static class FallingLetters
         ArgumentNullException.ThrowIfNull(text);
         ArgumentNullException.ThrowIfNull(material);
 
-        var entity = new Entity(Shared.EntityNames.GameOverMenu)
+        var entity = new Entity(EntityNames.GameOverMenu, position)
         {
             new ModelComponent
             {
-                Model = TextMesh.CreateModel(game.GraphicsDevice, material, MeshFont.Default, text, new TextMeshOptions { Size = Size, Depth = 0.12f, Anchor = TextAnchor.MiddleCenter })
+                Model = TextMesh.CreateModel(game.GraphicsDevice, material, MeshFont.Default, text, new TextMeshOptions { Size = Size, Depth = 0.12f, Anchor = Anchor.MiddleCenter })
             },
             new FaceCameraScript()
         };
 
-        entity.Transform.Position = position;
         entity.Transform.Scale = new Vector3(scale);
         entity.Scene = scene;
 
@@ -162,9 +160,7 @@ public static class FallingLetters
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        var model = entity.Get<ModelComponent>()?.Model;
-
-        if (model is not null)
+        if (entity.Get<ModelComponent>()?.Model is { } model)
         {
             foreach (var mesh in model.Meshes)
             {
@@ -181,7 +177,6 @@ public static class FallingLetters
     }
 
     /// <summary>The extents of a glyph mesh, which is centred on its origin, for the box that collides in its place.</summary>
-
     private static Vector3 BoxOf(GeometricMeshData<VertexPositionNormalTexture> mesh)
     {
         var max = Vector3.Zero;

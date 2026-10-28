@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Stride.CommunityToolkit.Examples.MetadataGenerator.Core;
+using System.Collections.Frozen;
 using System.Text.RegularExpressions;
 
 namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Services;
@@ -15,9 +16,6 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
 {
     [GeneratedRegex(@"^[a-z0-9]+(-[a-z0-9]+)*$")]
     private static partial Regex SlugPattern();
-
-    private static readonly IReadOnlySet<string> EmptyProjects = new HashSet<string>(StringComparer.Ordinal);
-
 
     /// <summary>
     /// Validates a set of parsed examples.
@@ -65,7 +63,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
         ValidateSlugUniqueness(examples, messages);
         ValidateMediaUniqueness(examples, messages);
         ValidateOrderUniqueness(examples, messages);
-        ResolveRelated(examples, knownProjects, disabledProjects ?? EmptyProjects, messages);
+        ResolveRelated(examples, knownProjects, disabledProjects ?? FrozenSet<string>.Empty, messages);
 
         var errors = messages.Count(message => message.Severity == ValidationSeverity.Error);
         var warnings = messages.Count(message => message.Severity == ValidationSeverity.Warning);
@@ -91,10 +89,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
 
         foreach (var key in example.DeclaredKeys)
         {
-            if (MetadataVocabulary.KnownKeys.Contains(key))
-            {
-                continue;
-            }
+            if (MetadataVocabulary.KnownKeys.Contains(key)) continue;
 
             var suggestion = MetadataVocabulary.SuggestKey(key);
             var hint = suggestion is null
@@ -193,19 +188,11 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
 
     private static void ValidateMedia(ParsedExample example, DirectoryInfo? mediaDirectory, List<ValidationMessage> messages)
     {
-        if (mediaDirectory is null || !mediaDirectory.Exists)
-        {
-            return;
-        }
-
-        var metadata = example.Metadata;
+        if (mediaDirectory is null || !mediaDirectory.Exists) return;
 
         // Only an explicit media: entry is an error when missing. A defaulted <slug>.webp that does not
         // exist yet is expected - most examples have no screenshot at all (see plan §5).
-        if (metadata.Media is not { Length: > 0 } media)
-        {
-            return;
-        }
+        if (example.Metadata.Media is not { Length: > 0 } media) return;
 
         if (!File.Exists(Path.Combine(mediaDirectory.FullName, media)))
         {
@@ -214,16 +201,12 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
         }
     }
 
-
     /// <summary>
     /// Warns when a level name is repeated as a tag - the same fact in a place nothing validates.
     /// </summary>
     private static void ValidateTags(ParsedExample example, List<ValidationMessage> messages)
     {
-        if (example.Metadata.Tags is not { Count: > 0 } tags)
-        {
-            return;
-        }
+        if (example.Metadata.Tags is not { Count: > 0 } tags) return;
 
         foreach (var tag in tags)
         {
@@ -332,10 +315,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
 
         foreach (var example in examples)
         {
-            if (example.Metadata.Related is not { Count: > 0 } related)
-            {
-                continue;
-            }
+            if (example.Metadata.Related is not { Count: > 0 } related) continue;
 
             var resolved = new List<string>(related.Count);
 

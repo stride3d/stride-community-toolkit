@@ -8,8 +8,9 @@ shadow, and can carry a physics body. For labels and HUDs, [Entity Text](entity-
 title, a sign, a logo, a word that falls.
 
 `MeshFont`, `TextMesh`, `TextMeshOptions` and `GlyphOutline` live in the
-`Stride.CommunityToolkit.Rendering.Text.Meshes` namespace; `TextAnchor` and `SystemFonts`, which they
-share with the text components, in `Stride.CommunityToolkit.Rendering.Text`; `Primitive3D.Text` in
+`Stride.CommunityToolkit.Rendering.Text.Meshes` namespace; `SystemFonts`, which they share with the
+text components, in `Stride.CommunityToolkit.Rendering.Text`; `Anchor` in `Stride.CommunityToolkit.Rendering`;
+`Primitive3D.Text` in
 `Stride.CommunityToolkit.Rendering.ProceduralModels`. The stages between the font file and
 the mesh, and the files behind each, are on [How 3D text is built](text-3d-pipeline.md).
 
@@ -52,7 +53,7 @@ does not read without a shaping engine, so `GetKerning` is 0 for most fonts, inc
 | `Depth` | 0.25 | How far the lettering extends along Z, centred on zero. |
 | `Bevel` | `null` | A `TextBevel(size, thickness, segments)` rounds the edge between the caps and the walls, front and back; see below. |
 | `CurveQuality` | 32 | Points a full turn of curve gets: a quarter-turn bowl gets a quarter of them. 16 is still smooth at a distance; 64 for a logo the camera gets close to. |
-| `Anchor` | `null` | Which point of the text block sits at the origin. `null` is the typographic origin: the first baseline at y = 0, the pen at x = 0. The nine `TextAnchor` points use the font's ascent-to-descent block over every line, so the anchor does not move with the letters used. |
+| `Anchor` | `null` | Which point of the text block sits at the origin. `null` is the typographic origin: the first baseline at y = 0, the pen at x = 0. The nine `Anchor` points use the font's ascent-to-descent block over every line, so the anchor does not move with the letters used. |
 | `LetterSpacing` | 0 | Extra space after every glyph, in EM units; negative tightens. |
 | `LineSpacing` | 1 | The distance between lines as a multiple of the font's line height. |
 | `Alignment` | `Left` | How lines of different widths line up: `Left`, `Center`, `Right`. |
@@ -68,7 +69,7 @@ var options = new TextMeshOptions
     Depth = 0.1f,
     Alignment = TextAlignment.Center,
     LineSpacing = 0.9f,
-    Anchor = TextAnchor.TopCenter,
+    Anchor = Anchor.TopCenter,
 };
 
 var draw = TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, "two lines\nof text", options);

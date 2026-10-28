@@ -5,7 +5,6 @@ using Stride.CommunityToolkit.Examples.Core;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Stride.CommunityToolkit.Examples.Launcher;
 
@@ -16,15 +15,6 @@ public partial class MainWindow : Window
     private Process? _running;
     private CancellationTokenSource? _cts;
 
-    // Source-generated rather than constructed at runtime: the matcher is built at compile time, so
-    // startup pays neither the pattern parse nor the RegexOptions.Compiled IL emission that the two
-    // static readonly fields used to. Compiled is therefore dropped - it has no meaning here.
-    [GeneratedRegex(@"\bwarning\b", RegexOptions.IgnoreCase)]
-    private static partial Regex GenericWarning();
-
-    [GeneratedRegex(@"\b(effect|shader|hlsl|fx|mixin|compiler)\b.*\bwarning\b|\bwarning\b.*\b(effect|shader|hlsl|fx|mixin|compiler)\b", RegexOptions.IgnoreCase)]
-    private static partial Regex ShaderWarning();
-
     public MainWindow()
     {
         InitializeComponent();
@@ -33,20 +23,21 @@ public partial class MainWindow : Window
 
         LoadExamples();
 
-        SearchBox.PropertyChanged += (s, e) =>
+        SearchBox.PropertyChanged += (_, e) =>
         {
-            if (e.Property.Name == nameof(TextBox.Text))
-                Filter(SearchBox.Text);
+            if (e.Property.Name == nameof(TextBox.Text)) Filter(SearchBox.Text);
         };
 
-        ExamplesList.SelectionChanged += (_, __) => ShowDetails(Current);
+        ExamplesList.SelectionChanged += (_, _) => ShowDetails(Current);
 
-        BtnRun.Click += async (_, __) => await RunSelectedAsync();
-        BtnStop.Click += (_, __) => StopRunning();
-        BtnOpenFolder.Click += (_, __) => OpenFolder();
-        BtnCopyCmd.Click += (_, __) => CopyCommand();
-        BtnClearLog.Click += (_, __) => LogPanel.Text = string.Empty;
+        BtnRun.Click += async (_, _) => await RunSelectedAsync();
+        BtnStop.Click += (_, _) => StopRunning();
+        BtnOpenFolder.Click += (_, _) => OpenFolder();
+        BtnCopyCmd.Click += (_, _) => CopyCommand();
+        BtnClearLog.Click += (_, _) => LogPanel.Text = string.Empty;
     }
+
+    private ExampleEntry? Current => (ExamplesList.SelectedItem as ExampleListItem)?.Entry;
 
     /// <summary>
     /// Fills the list from the generated manifest.
@@ -78,9 +69,9 @@ public partial class MainWindow : Window
 
         _visible.Clear();
 
-        foreach (var entry in _all.Where(entry => Matches(entry, text)))
+        foreach (var entry in _all)
         {
-            _visible.Add(new ExampleListItem(entry));
+            if (Matches(entry, text)) _visible.Add(new ExampleListItem(entry));
         }
 
         var notRunnable = _all.Count(entry => !entry.IsRunnable);
@@ -91,18 +82,13 @@ public partial class MainWindow : Window
     }
 
     private static bool Matches(ExampleEntry entry, string text)
-    {
-        if (text.Length == 0) return true;
-
-        return entry.Title.Contains(text, StringComparison.OrdinalIgnoreCase)
+        => text.Length == 0
+            || entry.Title.Contains(text, StringComparison.OrdinalIgnoreCase)
             || entry.Slug.Contains(text, StringComparison.OrdinalIgnoreCase)
             || entry.ProjectName.Contains(text, StringComparison.OrdinalIgnoreCase)
             || entry.Level.Contains(text, StringComparison.OrdinalIgnoreCase)
-            || (entry.Category?.Contains(text, StringComparison.OrdinalIgnoreCase) ?? false)
+            || entry.Category?.Contains(text, StringComparison.OrdinalIgnoreCase) == true
             || entry.Tags.Any(tag => tag.Contains(text, StringComparison.OrdinalIgnoreCase));
-    }
-
-    private ExampleEntry? Current => (ExamplesList.SelectedItem as ExampleListItem)?.Entry;
 
     private void ShowDetails(ExampleEntry? entry)
     {
@@ -133,17 +119,17 @@ public partial class MainWindow : Window
 
     private async Task RunSelectedAsync()
     {
-        var entry = Current;
-
-        if (entry is null)
+        if (Current is not { } entry)
         {
             AppendLine("⚠️ Please select an example to run.");
+
             return;
         }
 
         if (!entry.IsRunnable)
         {
             AppendLine($"❌ Nothing to run for {entry.ProjectName}: no project or source file found on disk.");
+
             return;
         }
 
@@ -156,30 +142,32 @@ public partial class MainWindow : Window
 
         _cts = new CancellationTokenSource();
 
-        var psi = new ProcessStartInfo
+        var token = _cts.Token;
+        var process = _running = new Process
         {
-            FileName = "dotnet",
-            Arguments = entry.ProcessArguments,
-            WorkingDirectory = entry.Directory ?? Environment.CurrentDirectory,
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            CreateNoWindow = true
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = "dotnet",
+                Arguments = entry.ProcessArguments,
+                WorkingDirectory = entry.Directory ?? Environment.CurrentDirectory,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            },
+            EnableRaisingEvents = true
         };
-
-        _running = new Process { StartInfo = psi, EnableRaisingEvents = true };
-        var process = _running;
 
         try
         {
             process.Start();
-            var readOut = Task.Run(() => ReadLinesAsync(process.StandardOutput, isError: false, _cts.Token));
-            var readErr = Task.Run(() => ReadLinesAsync(process.StandardError, isError: true, _cts.Token));
-            await Task.WhenAll(readOut, readErr);
+
+            await Task.WhenAll(
+                Task.Run(() => ReadLinesAsync(process.StandardOutput, isError: false, token)),
+                Task.Run(() => ReadLinesAsync(process.StandardError, isError: true, token)));
 
             process.WaitForExit();
-            var exitCode = process.ExitCode;
-            AppendLine($"✅ Process exited with code: {exitCode}");
+            AppendLine($"✅ Process exited with code: {process.ExitCode}");
         }
         catch (Exception ex)
         {
@@ -193,6 +181,7 @@ public partial class MainWindow : Window
         try
         {
             _cts?.Cancel();
+
             if (_running is { HasExited: false })
             {
                 AppendLine("⏹️ Stopping process...");
@@ -219,48 +208,37 @@ public partial class MainWindow : Window
         while (!ct.IsCancellationRequested)
         {
             string? line;
-            try { line = await reader.ReadLineAsync(ct); }
-            catch { break; }
+
+            try { line = await reader.ReadLineAsync(ct); } catch { break; }
+
             if (line is null) break;
 
-            if (ShouldSuppress(line)) continue;
-
-            AppendLine(line, isError);
+            if (!OutputFilter.IsSuppressed(line)) AppendLine(line, isError);
         }
-    }
-
-    private static bool ShouldSuppress(string line)
-    {
-        var showAll = string.Equals(Environment.GetEnvironmentVariable("SHOW_WARNINGS"), "1", StringComparison.OrdinalIgnoreCase)
-|| string.Equals(Environment.GetEnvironmentVariable("SHOW_WARNINGS"), "true", StringComparison.OrdinalIgnoreCase);
-        if (showAll) return false;
-
-        if (!GenericWarning().IsMatch(line)) return false;
-        return ShaderWarning().IsMatch(line);
     }
 
     private void AppendLine(string text, bool isError = false)
     {
         Dispatcher.UIThread.Post(() =>
-       {
-           var sb = new StringBuilder(LogPanel.Text ?? string.Empty);
-           if (sb.Length > 0) sb.AppendLine();
-           if (isError) sb.Append("❌ ");
-           sb.Append(text);
-           LogPanel.Text = sb.ToString();
-       });
+        {
+            var log = new StringBuilder(LogPanel.Text ?? string.Empty);
+
+            if (log.Length > 0) log.AppendLine();
+            if (isError) log.Append("❌ ");
+
+            log.Append(text);
+            LogPanel.Text = log.ToString();
+        });
     }
 
     private void OpenFolder()
     {
-        var entry = Current;
-        if (entry is null) return;
+        if (Current is not { } entry) return;
 
-        var dir = entry.Directory;
-
-        if (dir is null || !Directory.Exists(dir))
+        if (entry.Directory is not { } dir || !Directory.Exists(dir))
         {
             AppendLine("⚠️ Folder not found.");
+
             return;
         }
 
@@ -276,8 +254,7 @@ public partial class MainWindow : Window
 
     private void CopyCommand()
     {
-        var entry = Current;
-        if (entry is null) return;
+        if (Current is not { } entry) return;
 
         var cmd = entry.CommandLine;
 
@@ -301,17 +278,9 @@ public partial class MainWindow : Window
     /// <summary>
     /// One row in the list.
     /// </summary>
-    /// <remarks>
-    /// An explicit constructor rather than a primary one, and internal members rather than public:
-    /// the type is private, so public here would only overstate the reach these members actually
-    /// have. Storing the entry in a property is what avoided the CS9124 the primary-constructor
-    /// version warned about; writing the constructor out keeps that and lets it be internal too.
-    /// </remarks>
-    private sealed class ExampleListItem
+    private sealed class ExampleListItem(ExampleEntry entry)
     {
-        internal ExampleListItem(ExampleEntry entry) => Entry = entry;
-
-        internal ExampleEntry Entry { get; }
+        internal ExampleEntry Entry { get; } = entry;
 
         public override string ToString()
         {

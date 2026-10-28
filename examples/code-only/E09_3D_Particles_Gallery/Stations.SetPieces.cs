@@ -132,6 +132,7 @@ public static class SetPieceStations
 
         s.Place(new Vector3(0f, 3f, 0f), 2f, glow, ring, sparks);
     }
+
     /// <summary>
     /// A landing burn, a rocket engine firing down at the pad: a white-blue core of stretched quads at the throat,
     /// an orange plume of flame frames around it, sparks thrown clear, and exhaust smoke that hits

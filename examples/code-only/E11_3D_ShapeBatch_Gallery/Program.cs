@@ -40,25 +40,21 @@ var submitted = 0;
 
 var style = new GalleryStyle();
 
-// Per-monitor DPI awareness, so a 150% display gets a sharp window rather than a stretched one;
-// it has to happen before the window exists
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
 var sceneSetup = new SceneSetup3D
 {
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Shape Gallery - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Shape Gallery - Stride Community Toolkit";
-
     // Depth-tested: scene geometry occludes these, so a disc on the floor goes behind a pillar.
     // Overlay: drawn on top of everything, which is what you want for gizmos and debug marks.
     // Three more carry a fill source - a picture, clamped at its edges, the same picture tiled, and a
@@ -104,8 +100,14 @@ void Start(Scene rootScene)
     };
     gallery.UpdateLabels();
 
-    if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);
-    else gallery.GoHome(instant: true);
+    if (startStation > 0)
+    {
+        gallery.GoTo(startStation - 1, instant: true);
+    }
+    else
+    {
+        gallery.GoHome(instant: true);
+    }
 
     TextOverlay.GetOrCreate(game).AddSection("Gallery", BuildOverlayLines);
 }
@@ -160,10 +162,14 @@ void HandleInput(Gallery<ShapeStation> gallery)
     }
 
     if (game.Input.IsKeyPressed(Keys.OemPlus) || game.Input.IsKeyPressed(Keys.Add))
+    {
         style.BorderWidth = MathF.Min(style.BorderWidth + 1f, 16f);
+    }
 
     if (game.Input.IsKeyPressed(Keys.OemMinus) || game.Input.IsKeyPressed(Keys.Subtract))
+    {
         style.BorderWidth = MathF.Max(style.BorderWidth - 1f, 0f);
+    }
 }
 
 int Submitted() => batches is null ? 0 : batches.Scene.Count + batches.Overlay.Count + batches.Pictures.Count + batches.Stripes.Count + batches.Shaded.Count;

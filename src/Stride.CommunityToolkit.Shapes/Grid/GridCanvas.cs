@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -8,33 +9,23 @@ namespace Stride.CommunityToolkit.Shapes;
 /// What a <see cref="ReferenceGrid"/> draws with: its two batches, a pool of text labels, and the
 /// strokes every grid is made of. One frame is one call to <see cref="Draw"/>.
 /// </summary>
-internal sealed class GridCanvas
+/// <param name="settings">The grid whose properties say what to draw.</param>
+/// <param name="world">The batch for world lines. Depth tested, so the scene hides them.</param>
+/// <param name="overlay">The batch for screen lines, drawn over everything.</param>
+/// <param name="parent">The entity the label entities are added under.</param>
+internal sealed class GridCanvas(ReferenceGrid settings, ShapeBatch world, ShapeBatch overlay, Entity parent)
 {
     /// <summary>How far numbers stay from the window's edge, in pixels.</summary>
     internal const float EdgeMargin = 6f;
 
     private readonly List<EntityTextComponent> _labels = [];
-    private readonly Entity _parent;
     private int _labelsUsed;
 
-    /// <summary>Creates a canvas for a grid to draw on.</summary>
-    /// <param name="settings">The grid whose properties say what to draw.</param>
-    /// <param name="world">The batch for world lines. Depth tested, so the scene hides them.</param>
-    /// <param name="overlay">The batch for screen lines, drawn over everything.</param>
-    /// <param name="parent">The entity the label entities are added under.</param>
-    internal GridCanvas(ReferenceGrid settings, ShapeBatch world, ShapeBatch overlay, Entity parent)
-    {
-        Settings = settings;
-        World = world;
-        Overlay = overlay;
-        _parent = parent;
-    }
+    internal ReferenceGrid Settings { get; } = settings;
 
-    internal ReferenceGrid Settings { get; }
+    internal ShapeBatch World { get; } = world;
 
-    internal ShapeBatch World { get; }
-
-    internal ShapeBatch Overlay { get; }
+    internal ShapeBatch Overlay { get; } = overlay;
 
     /// <summary>Submits this frame's lines and places its labels.</summary>
     /// <param name="view">The camera's view of this frame.</param>
@@ -85,11 +76,11 @@ internal sealed class GridCanvas
     {
         if (!view.Project(world, out var at) || at.X < 0f || at.Y < 0f || at.X > view.Size.X || at.Y > view.Size.Y) return;
 
-        Label(text, at + new Vector2(4f, 2f), TextAnchor.TopLeft, colour);
+        Label(text, at + new Vector2(4f, 2f), Anchor.TopLeft, colour);
     }
 
     /// <summary>Takes the next label from the pool, making one when the pool is used up.</summary>
-    internal EntityTextComponent Label(string text, Vector2 position, TextAnchor anchor, Color colour)
+    internal EntityTextComponent Label(string text, Vector2 position, Anchor anchor, Color colour)
     {
         if (_labelsUsed == _labels.Count)
         {
@@ -100,7 +91,7 @@ internal sealed class GridCanvas
                 EnableShadow = true,
             };
 
-            _parent.AddChild(new Entity("Grid label") { created });
+            parent.AddChild(new Entity("Grid label") { created });
             _labels.Add(created);
         }
 
@@ -120,7 +111,7 @@ internal sealed class GridCanvas
     /// <summary>Takes the label entities out from under their parent.</summary>
     internal void RemoveLabels()
     {
-        foreach (var label in _labels) _parent.RemoveChild(label.Entity);
+        foreach (var label in _labels) parent.RemoveChild(label.Entity);
 
         _labels.Clear();
         _labelsUsed = 0;

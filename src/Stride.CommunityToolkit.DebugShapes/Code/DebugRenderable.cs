@@ -6,80 +6,40 @@ using static Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem;
 
 namespace Stride.CommunityToolkit.DebugShapes;
 
+/// <summary>
+/// One queued debug shape: a tagged union of every payload, with the flags and lifetime it was asked
+/// for. The payload shares one offset, so the struct is as wide as the widest shape and no wider.
+/// </summary>
 [StructLayout(LayoutKind.Explicit)]
 internal struct DebugRenderable
 {
-    internal DebugRenderable(ref Quad q, DebugRenderableFlags renderFlags, float lifetime = 0f) : this()
+    // The payload follows the type, the flags and the lifetime
+    private const int PayloadOffset = sizeof(byte) * 2 + sizeof(float);
+
+    private DebugRenderable(DebugPrimitiveType type, DebugRenderableFlags flags, float lifetime)
     {
-        Type = DebugPrimitiveType.Quad;
-        Flags = renderFlags;
+        Type = type;
+        Flags = flags;
         Lifetime = lifetime;
-        QuadData = q;
     }
 
-    internal DebugRenderable(ref Circle c, DebugRenderableFlags renderFlags, float lifetime = 0f) : this()
-    {
-        Type = DebugPrimitiveType.Circle;
-        Flags = renderFlags;
-        Lifetime = lifetime;
-        CircleData = c;
-    }
+    internal DebugRenderable(in Quad q, DebugRenderableFlags renderFlags, float lifetime = 0f) : this(DebugPrimitiveType.Quad, renderFlags, lifetime) => QuadData = q;
 
-    internal DebugRenderable(ref Line l, DebugRenderableFlags renderFlags, float lifetime = 0f) : this()
-    {
-        Type = DebugPrimitiveType.Line;
-        Flags = renderFlags;
-        Lifetime = lifetime;
-        LineData = l;
-    }
+    internal DebugRenderable(in Circle c, DebugRenderableFlags renderFlags, float lifetime = 0f) : this(DebugPrimitiveType.Circle, renderFlags, lifetime) => CircleData = c;
 
-    internal DebugRenderable(ref Cube b, DebugRenderableFlags renderFlags, float lifetime = 0f) : this()
-    {
-        Type = DebugPrimitiveType.Cube;
-        Flags = renderFlags;
-        Lifetime = lifetime;
-        CubeData = b;
-    }
+    internal DebugRenderable(in Line l, DebugRenderableFlags renderFlags, float lifetime = 0f) : this(DebugPrimitiveType.Line, renderFlags, lifetime) => LineData = l;
 
-    internal DebugRenderable(ref Sphere s, DebugRenderableFlags renderFlags, float lifetime = 0f) : this()
-    {
-        Type = DebugPrimitiveType.Sphere;
-        Flags = renderFlags;
-        Lifetime = lifetime;
-        SphereData = s;
-    }
+    internal DebugRenderable(in Cube b, DebugRenderableFlags renderFlags, float lifetime = 0f) : this(DebugPrimitiveType.Cube, renderFlags, lifetime) => CubeData = b;
 
-    internal DebugRenderable(ref HalfSphere h, DebugRenderableFlags renderFlags, float lifetime = 0f) : this()
-    {
-        Type = DebugPrimitiveType.HalfSphere;
-        Flags = renderFlags;
-        Lifetime = lifetime;
-        HalfSphereData = h;
-    }
+    internal DebugRenderable(in Sphere s, DebugRenderableFlags renderFlags, float lifetime = 0f) : this(DebugPrimitiveType.Sphere, renderFlags, lifetime) => SphereData = s;
 
-    internal DebugRenderable(ref Capsule c, DebugRenderableFlags renderFlags, float lifetime = 0f) : this()
-    {
-        Type = DebugPrimitiveType.Capsule;
-        Flags = renderFlags;
-        Lifetime = lifetime;
-        CapsuleData = c;
-    }
+    internal DebugRenderable(in HalfSphere h, DebugRenderableFlags renderFlags, float lifetime = 0f) : this(DebugPrimitiveType.HalfSphere, renderFlags, lifetime) => HalfSphereData = h;
 
-    internal DebugRenderable(ref Cylinder c, DebugRenderableFlags renderFlags, float lifetime = 0f) : this()
-    {
-        Type = DebugPrimitiveType.Cylinder;
-        Flags = renderFlags;
-        Lifetime = lifetime;
-        CylinderData = c;
-    }
+    internal DebugRenderable(in Capsule c, DebugRenderableFlags renderFlags, float lifetime = 0f) : this(DebugPrimitiveType.Capsule, renderFlags, lifetime) => CapsuleData = c;
 
-    internal DebugRenderable(ref Cone c, DebugRenderableFlags renderFlags, float lifetime = 0f) : this()
-    {
-        Type = DebugPrimitiveType.Cone;
-        Flags = renderFlags;
-        Lifetime = lifetime;
-        ConeData = c;
-    }
+    internal DebugRenderable(in Cylinder c, DebugRenderableFlags renderFlags, float lifetime = 0f) : this(DebugPrimitiveType.Cylinder, renderFlags, lifetime) => CylinderData = c;
+
+    internal DebugRenderable(in Cone c, DebugRenderableFlags renderFlags, float lifetime = 0f) : this(DebugPrimitiveType.Cone, renderFlags, lifetime) => ConeData = c;
 
     [FieldOffset(0)]
     public DebugPrimitiveType Type;
@@ -90,30 +50,30 @@ internal struct DebugRenderable
     [FieldOffset(sizeof(byte) * 2)]
     public float Lifetime;
 
-    [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
+    [FieldOffset(PayloadOffset)]
     public Quad QuadData;
 
-    [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
+    [FieldOffset(PayloadOffset)]
     public Circle CircleData;
 
-    [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
+    [FieldOffset(PayloadOffset)]
     public Line LineData;
 
-    [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
+    [FieldOffset(PayloadOffset)]
     public Cube CubeData;
 
-    [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
+    [FieldOffset(PayloadOffset)]
     public Sphere SphereData;
 
-    [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
+    [FieldOffset(PayloadOffset)]
     public HalfSphere HalfSphereData;
 
-    [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
+    [FieldOffset(PayloadOffset)]
     public Capsule CapsuleData;
 
-    [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
+    [FieldOffset(PayloadOffset)]
     public Cylinder CylinderData;
 
-    [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
+    [FieldOffset(PayloadOffset)]
     public Cone ConeData;
 }

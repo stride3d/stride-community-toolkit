@@ -32,8 +32,7 @@ void Start(Scene scene)
     // A few boxes to walk into and jump onto.
     for (int i = 0; i < 5; i++)
     {
-        var box = game.CreatePrimitive(Primitive3D.Cube());
-        box.Transform.Position = new Vector3(3 + i * 2.5f, 0.5f + i * 0.4f, -4);
+        var box = game.CreatePrimitive(Primitive3D.Cube(), new() { Position = new Vector3(3 + i * 2.5f, 0.5f + i * 0.4f, -4) });
         box.Scene = scene;
     }
 
@@ -47,15 +46,13 @@ void Start(Scene scene)
         Collider = new CompoundCollider(),
         Gravity = true,
     };
-    var body = game.CreatePrimitive(Primitive3D.Capsule(), new BepuPhysicsOptions { Component = character });
-    body.Transform.Position = new Vector3(0, 2f, 0);
+    var body = game.CreatePrimitive(Primitive3D.Capsule(), new BepuPhysicsOptions { Component = character, Position = new Vector3(0, 2f, 0) });
     body.Scene = scene;
 
     // The controller lives on the CAMERA entity and drives the body. Adding the component is all
     // it takes - [DefaultEntityComponentProcessor] spins up FirstPersonControllerProcessor
     // automatically.
-    var camera = scene.GetCamera();
-    camera?.Entity.Add(new FirstPersonControllerComponent { Character = character });
+    game.GetCameraEntity().Add(new FirstPersonControllerComponent { Character = character });
 
     // The keys, then the live state; the callback runs every frame the overlay is drawn
     TextOverlay.GetOrCreate(game).AddSection("Character", () =>

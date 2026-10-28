@@ -16,15 +16,8 @@ public static class GraphicsCompositorExtensions
     private const string TestEffectName = "Test";
     private const string UiStageEffectName = "UiStage";
 
-    /// <summary>
-    /// Generates a RenderGroupMask that includes all defined RenderGroups except for Group31.
-    /// This method dynamically calculates the mask by aggregating all possible RenderGroupMask enum values
-    /// and then bitwise negating Group31 from the result.
-    /// </summary>
-    /// <returns>A RenderGroupMask representing all groups except for Group31.</returns>
-    private static RenderGroupMask RenderGroupMaskAllExcludingGroup31() =>
-            Enum.GetValues<RenderGroupMask>()
-                .Aggregate((mask, next) => mask | next) & ~RenderGroupMask.Group31;
+    /// <summary>Every render group but <see cref="RenderGroupMask.Group31"/>, which the UI stage owns.</summary>
+    private const RenderGroupMask AllExceptGroup31 = RenderGroupMask.All & ~RenderGroupMask.Group31;
 
     /// <summary>
     /// Adds a UI render stage to the given <see cref="GraphicsCompositor"/> and resets its post effects to
@@ -221,14 +214,8 @@ public static class GraphicsCompositorExtensions
     /// </returns>
     public static bool TryGetRenderStage(this GraphicsCompositor graphicsCompositor, string effectName, out RenderStage? renderStage)
     {
-        renderStage = null;
-
-        var renderSystem = graphicsCompositor.RenderSystem;
-
-        for (int i = 0; i < renderSystem.RenderStages.Count; ++i)
+        foreach (var stage in graphicsCompositor.RenderSystem.RenderStages)
         {
-            var stage = renderSystem.RenderStages[i];
-
             if (stage.Name == effectName)
             {
                 renderStage = stage;
@@ -236,6 +223,8 @@ public static class GraphicsCompositorExtensions
                 return true;
             }
         }
+
+        renderStage = null;
 
         return false;
     }
@@ -245,21 +234,20 @@ public static class GraphicsCompositorExtensions
     /// </summary>
     /// <remarks>This method configures the graphics compositor to support particle rendering by adding a <see
     /// cref="ParticleEmitterRenderFeature"/>. It requires the presence of both "Opaque" and "Transparent" render stages
-    /// in the compositor. The method will throw a <see cref="NullReferenceException"/> if either stage is
-    /// missing.</remarks>
+    /// in the compositor, which <c>AddGraphicsCompositor()</c> creates.</remarks>
     /// <param name="graphicsCompositor">The graphics compositor to which the particle stages and features will be added.</param>
     /// <returns>The compositor, so a chain of setup calls continues.</returns>
-    /// <exception cref="NullReferenceException">Thrown if the "Opaque" or "Transparent" render stage is not found in the graphics compositor.</exception>
+    /// <exception cref="InvalidOperationException">The "Opaque" or "Transparent" render stage is not in the graphics compositor.</exception>
     public static GraphicsCompositor AddParticleStagesAndFeatures(this GraphicsCompositor graphicsCompositor)
     {
         if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
         {
-            throw new NullReferenceException("Opaque RenderStage not found");
+            throw new InvalidOperationException("The graphics compositor has no 'Opaque' render stage, which the particle feature draws into. AddGraphicsCompositor() creates it.");
         }
 
         if (!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
         {
-            throw new NullReferenceException("Transparent RenderStage not found");
+            throw new InvalidOperationException("The graphics compositor has no 'Transparent' render stage, which the particle feature draws into. AddGraphicsCompositor() creates it.");
         }
 
         graphicsCompositor.RenderFeatures.Add(new ParticleEmitterRenderFeature()
@@ -270,7 +258,7 @@ public static class GraphicsCompositorExtensions
                 new ParticleEmitterTransparentRenderStageSelector()
                 {
                     EffectName = "ParticleEmitterTransparent",
-                    RenderGroup = RenderGroupMaskAllExcludingGroup31(),
+                    RenderGroup = AllExceptGroup31,
                     OpaqueRenderStage = opaqueRenderStage,
                     TransparentRenderStage = transparentRenderStage
                 }
@@ -306,6 +294,7 @@ public static class GraphicsCompositorExtensions
     private static void AddRenderStagesAndFeatures(GraphicsCompositor graphicsCompositor)
     {
         var cameraSlot = graphicsCompositor.Cameras[0];
+
         // A stage without a sort mode draws its objects in the order the engine collected them, and
         // it collects them on several threads: two objects that overlap would swap from frame to frame
         var uiStage = new RenderStage(UiStageName, MainStageName) { SortMode = new BackToFrontSortMode() };
@@ -315,18 +304,20 @@ public static class GraphicsCompositorExtensions
         graphicsCompositor.RenderFeatures.Add(new UIRenderFeature
         {
             RenderStageSelectors =
+            {
+                new SimpleGroupToRenderStageSelector
                 {
-                    new SimpleGroupToRenderStageSelector {
-                        RenderStage = ((ForwardRenderer)graphicsCompositor.SingleView).TransparentRenderStage,
-                        EffectName = TestEffectName,
-                        RenderGroup = RenderGroupMaskAllExcludingGroup31()
-                    },
-                    new SimpleGroupToRenderStageSelector {
-                        RenderStage = uiStage,
-                        EffectName = UiStageEffectName,
-                        RenderGroup = RenderGroupMask.Group31
-                    }
+                    RenderStage = ((ForwardRenderer)graphicsCompositor.SingleView).TransparentRenderStage,
+                    EffectName = TestEffectName,
+                    RenderGroup = AllExceptGroup31
+                },
+                new SimpleGroupToRenderStageSelector
+                {
+                    RenderStage = uiStage,
+                    EffectName = UiStageEffectName,
+                    RenderGroup = RenderGroupMask.Group31
                 }
+            }
         });
 
         UpdateSceneRendererCollection(graphicsCompositor, cameraSlot, uiStage);
@@ -352,7 +343,7 @@ public static class GraphicsCompositorExtensions
             {
                 Child = singleView,
                 Camera = cameraSlot,
-                RenderMask = RenderGroupMaskAllExcludingGroup31()
+                RenderMask = AllExceptGroup31
             }
         };
 

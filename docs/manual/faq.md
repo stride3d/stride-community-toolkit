@@ -45,9 +45,9 @@ A script runs only while its entity is in a running scene. Add the script with
 ### How do I get a reference to another entity?
 
 The cheapest way is a public `Entity` or component property on your script, set when you create
-the entity. To search by name, use [`FindEntity`](entity-extensions/index.md) on an entity, or
-[`GetCamera`](xref:Stride.CommunityToolkit.Engine.SceneExtensions) for a camera. Search once and keep
-the result; don't search every frame.
+the entity. To search by name, use [`scene.FindEntity`](entity-extensions/index.md) on the scene (or on
+an entity already in it), or [`GetCamera`](xref:Stride.CommunityToolkit.Engine.SceneExtensions) for a
+camera. Search once and keep the result; don't search every frame.
 
 ### Does `entity.Get<T>()` find derived component types?
 

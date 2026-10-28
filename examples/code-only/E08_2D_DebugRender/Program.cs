@@ -7,9 +7,11 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Rendering.Lights;
 
+const int Count = 10;
+
 var random = new Random(1);
-var count = 10;
-List<Primitive2D> primitives = [
+Primitive2D[] primitives =
+[
     Primitive2D.Circle(),
     Primitive2D.Capsule(),
     Primitive2D.Rectangle(),
@@ -21,23 +23,25 @@ List<Primitive2D> primitives = [
 
 using var game = new Game();
 
-game.Run(new SceneSetup2D { Profiler = true }.UseBepu(), start: Start);
+game.Run(new SceneSetup2D
+{
+    Profiler = true,
+    WindowTitle = "Bepu 2D Physics Primitives",
+    Resizable = true,
+}.UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
 
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Bepu 2D Physics Primitives";
-
     var ground = rootScene.Entities.First(e => e.Name == GameDefaults.DefaultGroundName);
     ground.Transform.Position = new Vector3(0, -4, 0);
 
-    // Lighting example for 2D scene
+    // 2D scenes are lit like any other, and look flat without a light
     AddSpotLight(rootScene);
 
-    for (int i = -count / 2; i < count / 2; i++)
+    for (var i = -Count / 2; i < Count / 2; i++)
     {
         foreach (var (index, primitive) in primitives.Index())
         {

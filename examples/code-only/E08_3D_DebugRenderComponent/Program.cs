@@ -5,8 +5,6 @@ using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-const string SphereEntityName = "Sphere";
-
 using var game = new Game();
 
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
@@ -31,11 +29,11 @@ void Start(Scene rootScene)
 
 void CreateSpheres(Scene rootScene, int count)
 {
-    int half = count / 2;
+    var half = count / 2;
 
-    for (int i = -half; i < half; i++)
+    for (var i = -half; i < half; i++)
     {
-        var entity = game.CreatePrimitive(Primitive3D.Sphere(), new() { EntityName = SphereEntityName });
+        var entity = game.CreatePrimitive(Primitive3D.Sphere());
         entity.Transform.Position = new Vector3(i * 0.99f, 1, 0);
         entity.Scene = rootScene;
     }

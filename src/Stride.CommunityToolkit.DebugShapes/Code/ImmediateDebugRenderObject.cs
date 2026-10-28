@@ -12,18 +12,18 @@ namespace Stride.CommunityToolkit.DebugShapes;
 /// </summary>
 public class ImmediateDebugRenderObject : RenderObject
 {
-    /* messages */
-    internal readonly List<Renderable> renderablesWithDepth = [];
-    internal readonly List<Renderable> renderablesNoDepth = [];
+    // This frame's shapes, one list per depth test
+    private readonly List<Renderable> _renderablesWithDepth = [];
+    private readonly List<Renderable> _renderablesNoDepth = [];
 
-    /* accumulators used when data is being pushed to the system */
-    private Primitives totalPrimitives, totalPrimitivesNoDepth;
+    // How many of each kind have been queued this frame
+    private Primitives _totalPrimitives, _totalPrimitivesNoDepth;
 
-    /* used to specify offset into instance data buffers when drawing */
-    internal Primitives instanceOffsets, instanceOffsetsNoDepth;
+    // Where each kind's instances start in the renderer's buffers, set when the frame is extracted
+    private Primitives _instanceOffsets, _instanceOffsetsNoDepth;
 
-    /* used in render stage to know how many of each instance to draw */
-    internal Primitives primitivesToDraw, primitivesToDrawNoDepth;
+    // How many of each kind the render stage draws
+    private Primitives _primitivesToDraw, _primitivesToDrawNoDepth;
 
     /* state set from outside */
     internal FillMode CurrentFillMode { get; set; } = FillMode.Wireframe;
@@ -38,20 +38,11 @@ public class ImmediateDebugRenderObject : RenderObject
     /// <param name="rotation">The rotation of the quad.</param>
     /// <param name="color">The color of the quad.</param>
     /// <param name="depthTest">Whether to use depth testing for rendering.</param>
-    public void DrawQuad(ref Vector3 position, ref Vector2 size, ref Quaternion rotation, ref Color color, bool depthTest = true)
+    public void DrawQuad(in Vector3 position, in Vector2 size, in Quaternion rotation, in Color color, bool depthTest = true)
     {
-        var cmd = new Quad() { Position = position, Size = size, Rotation = rotation, Color = color };
-        var msg = new Renderable(ref cmd);
-        if (depthTest)
-        {
-            renderablesWithDepth.Add(msg);
-            totalPrimitives.Quads++;
-        }
-        else
-        {
-            renderablesNoDepth.Add(msg);
-            totalPrimitivesNoDepth.Quads++;
-        }
+        var cmd = new Quad { Position = position, Size = size, Rotation = rotation, Color = color };
+
+        Push(new Renderable(in cmd), depthTest);
     }
 
     /// <summary>
@@ -62,20 +53,11 @@ public class ImmediateDebugRenderObject : RenderObject
     /// <param name="rotation">The rotation of the circle.</param>
     /// <param name="color">The color of the circle.</param>
     /// <param name="depthTest">Whether to use depth testing for rendering.</param>
-    public void DrawCircle(ref Vector3 position, float radius, ref Quaternion rotation, ref Color color, bool depthTest = true)
+    public void DrawCircle(in Vector3 position, float radius, in Quaternion rotation, in Color color, bool depthTest = true)
     {
-        var cmd = new Circle() { Position = position, Radius = radius, Rotation = rotation, Color = color };
-        var msg = new Renderable(ref cmd);
-        if (depthTest)
-        {
-            renderablesWithDepth.Add(msg);
-            totalPrimitives.Circles++;
-        }
-        else
-        {
-            renderablesNoDepth.Add(msg);
-            totalPrimitivesNoDepth.Circles++;
-        }
+        var cmd = new Circle { Position = position, Radius = radius, Rotation = rotation, Color = color };
+
+        Push(new Renderable(in cmd), depthTest);
     }
 
     /// <summary>
@@ -85,20 +67,11 @@ public class ImmediateDebugRenderObject : RenderObject
     /// <param name="radius">The radius of the sphere.</param>
     /// <param name="color">The color of the sphere.</param>
     /// <param name="depthTest">Whether to use depth testing for rendering.</param>
-    public void DrawSphere(ref Vector3 position, float radius, ref Color color, bool depthTest = true)
+    public void DrawSphere(in Vector3 position, float radius, in Color color, bool depthTest = true)
     {
-        var cmd = new Sphere() { Position = position, Radius = radius, Color = color };
-        var msg = new Renderable(ref cmd);
-        if (depthTest)
-        {
-            renderablesWithDepth.Add(msg);
-            totalPrimitives.Spheres++;
-        }
-        else
-        {
-            renderablesNoDepth.Add(msg);
-            totalPrimitivesNoDepth.Spheres++;
-        }
+        var cmd = new Sphere { Position = position, Radius = radius, Color = color };
+
+        Push(new Renderable(in cmd), depthTest);
     }
 
     /// <summary>
@@ -109,20 +82,11 @@ public class ImmediateDebugRenderObject : RenderObject
     /// <param name="rotation">The rotation of the half-sphere.</param>
     /// <param name="color">The color of the half-sphere.</param>
     /// <param name="depthTest">Whether to use depth testing for rendering.</param>
-    public void DrawHalfSphere(ref Vector3 position, float radius, ref Quaternion rotation, ref Color color, bool depthTest = true)
+    public void DrawHalfSphere(in Vector3 position, float radius, in Quaternion rotation, in Color color, bool depthTest = true)
     {
-        var cmd = new HalfSphere() { Position = position, Radius = radius, Rotation = rotation, Color = color };
-        var msg = new Renderable(ref cmd);
-        if (depthTest)
-        {
-            renderablesWithDepth.Add(msg);
-            totalPrimitives.HalfSpheres++;
-        }
-        else
-        {
-            renderablesNoDepth.Add(msg);
-            totalPrimitivesNoDepth.HalfSpheres++;
-        }
+        var cmd = new HalfSphere { Position = position, Radius = radius, Rotation = rotation, Color = color };
+
+        Push(new Renderable(in cmd), depthTest);
     }
 
     /// <summary>
@@ -133,20 +97,11 @@ public class ImmediateDebugRenderObject : RenderObject
     /// <param name="rotation">The rotation of the cube.</param>
     /// <param name="color">The color of the cube.</param>
     /// <param name="depthTest">Whether to use depth testing for rendering.</param>
-    public void DrawCube(ref Vector3 start, ref Vector3 end, ref Quaternion rotation, ref Color color, bool depthTest = true)
+    public void DrawCube(in Vector3 start, in Vector3 end, in Quaternion rotation, in Color color, bool depthTest = true)
     {
-        var cmd = new Cube() { Start = start, End = end, Rotation = rotation, Color = color };
-        var msg = new Renderable(ref cmd);
-        if (depthTest)
-        {
-            renderablesWithDepth.Add(msg);
-            totalPrimitives.Cubes++;
-        }
-        else
-        {
-            renderablesNoDepth.Add(msg);
-            totalPrimitivesNoDepth.Cubes++;
-        }
+        var cmd = new Cube { Start = start, End = end, Rotation = rotation, Color = color };
+
+        Push(new Renderable(in cmd), depthTest);
     }
 
     /// <summary>
@@ -158,20 +113,11 @@ public class ImmediateDebugRenderObject : RenderObject
     /// <param name="rotation">The rotation of the capsule.</param>
     /// <param name="color">The color of the capsule.</param>
     /// <param name="depthTest">Whether to use depth testing for rendering.</param>
-    public void DrawCapsule(ref Vector3 position, float height, float radius, ref Quaternion rotation, ref Color color, bool depthTest = true)
+    public void DrawCapsule(in Vector3 position, float height, float radius, in Quaternion rotation, in Color color, bool depthTest = true)
     {
-        var cmd = new Capsule() { Position = position, Height = height, Radius = radius, Rotation = rotation, Color = color };
-        var msg = new Renderable(ref cmd);
-        if (depthTest)
-        {
-            renderablesWithDepth.Add(msg);
-            totalPrimitives.Capsules++;
-        }
-        else
-        {
-            renderablesNoDepth.Add(msg);
-            totalPrimitivesNoDepth.Capsules++;
-        }
+        var cmd = new Capsule { Position = position, Height = height, Radius = radius, Rotation = rotation, Color = color };
+
+        Push(new Renderable(in cmd), depthTest);
     }
 
     /// <summary>
@@ -183,20 +129,11 @@ public class ImmediateDebugRenderObject : RenderObject
     /// <param name="rotation">The rotation of the cylinder.</param>
     /// <param name="color">The color of the cylinder.</param>
     /// <param name="depthTest">Whether to use depth testing for rendering.</param>
-    public void DrawCylinder(ref Vector3 position, float height, float radius, ref Quaternion rotation, ref Color color, bool depthTest = true)
+    public void DrawCylinder(in Vector3 position, float height, float radius, in Quaternion rotation, in Color color, bool depthTest = true)
     {
-        var cmd = new Cylinder() { Position = position, Height = height, Radius = radius, Rotation = rotation, Color = color };
-        var msg = new Renderable(ref cmd);
-        if (depthTest)
-        {
-            renderablesWithDepth.Add(msg);
-            totalPrimitives.Cylinders++;
-        }
-        else
-        {
-            renderablesNoDepth.Add(msg);
-            totalPrimitivesNoDepth.Cylinders++;
-        }
+        var cmd = new Cylinder { Position = position, Height = height, Radius = radius, Rotation = rotation, Color = color };
+
+        Push(new Renderable(in cmd), depthTest);
     }
 
     /// <summary>
@@ -208,20 +145,11 @@ public class ImmediateDebugRenderObject : RenderObject
     /// <param name="rotation">The rotation of the cone.</param>
     /// <param name="color">The color of the cone.</param>
     /// <param name="depthTest">Whether to use depth testing for rendering.</param>
-    public void DrawCone(ref Vector3 position, float height, float radius, ref Quaternion rotation, ref Color color, bool depthTest = true)
+    public void DrawCone(in Vector3 position, float height, float radius, in Quaternion rotation, in Color color, bool depthTest = true)
     {
-        var cmd = new Cone() { Position = position, Height = height, Radius = radius, Rotation = rotation, Color = color };
-        var msg = new Renderable(ref cmd);
-        if (depthTest)
-        {
-            renderablesWithDepth.Add(msg);
-            totalPrimitives.Cones++;
-        }
-        else
-        {
-            renderablesNoDepth.Add(msg);
-            totalPrimitivesNoDepth.Cones++;
-        }
+        var cmd = new Cone { Position = position, Height = height, Radius = radius, Rotation = rotation, Color = color };
+
+        Push(new Renderable(in cmd), depthTest);
     }
 
     /// <summary>
@@ -231,19 +159,35 @@ public class ImmediateDebugRenderObject : RenderObject
     /// <param name="end">The ending position of the line.</param>
     /// <param name="color">The color of the line.</param>
     /// <param name="depthTest">Whether to use depth testing for rendering.</param>
-    public void DrawLine(ref Vector3 start, ref Vector3 end, ref Color color, bool depthTest = true)
+    public void DrawLine(in Vector3 start, in Vector3 end, in Color color, bool depthTest = true)
     {
-        var cmd = new Line() { Start = start, End = end, Color = color };
-        var msg = new Renderable(ref cmd);
+        var cmd = new Line { Start = start, End = end, Color = color };
+
+        Push(new Renderable(in cmd), depthTest);
+    }
+
+    /// <summary>Queues one shape in the list its depth test puts it in, and counts it under its kind.</summary>
+    private void Push(in Renderable renderable, bool depthTest)
+    {
+        ref var counts = ref depthTest ? ref _totalPrimitives : ref _totalPrimitivesNoDepth;
+
+        (depthTest ? _renderablesWithDepth : _renderablesNoDepth).Add(renderable);
+        counts.Increment(renderable.Type);
+    }
+
+    /// <summary>
+    /// Draws this frame's shapes through <paramref name="renderer"/>: the depth-tested ones or the others, as
+    /// <see cref="ExtractFrame"/> laid them out.
+    /// </summary>
+    internal void Draw(DebugPrimitiveRenderer renderer, RenderDrawContext context, RenderView renderView, bool depthTest, bool hasTransparency)
+    {
         if (depthTest)
         {
-            renderablesWithDepth.Add(msg);
-            totalPrimitives.Lines++;
+            renderer.DrawPrimitives(context, renderView, ref _instanceOffsets, ref _primitivesToDraw, depthTest: true, CurrentFillMode, hasTransparency);
         }
         else
         {
-            renderablesNoDepth.Add(msg);
-            totalPrimitivesNoDepth.Lines++;
+            renderer.DrawPrimitives(context, renderView, ref _instanceOffsetsNoDepth, ref _primitivesToDrawNoDepth, depthTest: false, CurrentFillMode, hasTransparency);
         }
     }
 
@@ -257,33 +201,31 @@ public class ImmediateDebugRenderObject : RenderObject
     /// <returns>The first free instance and line-vertex slots after this object's data.</returns>
     internal (int InstanceOffset, int LineOffset) ExtractFrame(DebugPrimitiveRenderer renderer, int instanceOffset, int lineOffset)
     {
-        int primitivesWithDepth = DebugPrimitiveRenderer.SumBasicPrimitives(ref totalPrimitives);
-        int primitivesWithoutDepth = DebugPrimitiveRenderer.SumBasicPrimitives(ref totalPrimitivesNoDepth);
+        renderer.EnsureCapacity(_totalPrimitives.InstanceTotal + _totalPrimitivesNoDepth.InstanceTotal, _totalPrimitives.Lines * 2 + _totalPrimitivesNoDepth.Lines * 2);
 
-        renderer.EnsureCapacity(primitivesWithDepth + primitivesWithoutDepth, totalPrimitives.Lines * 2 + totalPrimitivesNoDepth.Lines * 2);
-
-        var primitiveOffsets = DebugPrimitiveRenderer.SetupPrimitiveOffsets(ref totalPrimitives, instanceOffset);
-        var primitiveOffsetsNoDepth = DebugPrimitiveRenderer.SetupPrimitiveOffsets(ref totalPrimitivesNoDepth, primitiveOffsets.Cones + totalPrimitives.Cones);
+        // The depth-tested shapes first, then the rest, each kind in its own run; lines keep a buffer of their own
+        var primitiveOffsets = _totalPrimitives.Offsets(instanceOffset);
+        var primitiveOffsetsNoDepth = _totalPrimitivesNoDepth.Offsets(primitiveOffsets.Cones + _totalPrimitives.Cones);
 
         primitiveOffsets.Lines = lineOffset;
-        primitiveOffsetsNoDepth.Lines = totalPrimitives.Lines * 2 + lineOffset;
+        primitiveOffsetsNoDepth.Lines = _totalPrimitives.Lines * 2 + lineOffset;
 
-        instanceOffsets = primitiveOffsets;
-        instanceOffsetsNoDepth = primitiveOffsetsNoDepth;
+        _instanceOffsets = primitiveOffsets;
+        _instanceOffsetsNoDepth = primitiveOffsetsNoDepth;
 
-        renderer.ProcessRenderables(renderablesWithDepth, ref primitiveOffsets);
-        renderer.ProcessRenderables(renderablesNoDepth, ref primitiveOffsetsNoDepth);
+        renderer.ProcessRenderables(_renderablesWithDepth, ref primitiveOffsets);
+        renderer.ProcessRenderables(_renderablesNoDepth, ref primitiveOffsetsNoDepth);
 
-        primitivesToDraw = totalPrimitives;
-        primitivesToDrawNoDepth = totalPrimitivesNoDepth;
+        _primitivesToDraw = _totalPrimitives;
+        _primitivesToDrawNoDepth = _totalPrimitivesNoDepth;
 
-        var next = (instanceOffsetsNoDepth.Cones + totalPrimitivesNoDepth.Cones, instanceOffsetsNoDepth.Lines + totalPrimitivesNoDepth.Lines * 2);
+        var next = (_instanceOffsetsNoDepth.Cones + _totalPrimitivesNoDepth.Cones, _instanceOffsetsNoDepth.Lines + _totalPrimitivesNoDepth.Lines * 2);
 
         // Clear per-frame message queues
-        renderablesWithDepth.Clear();
-        renderablesNoDepth.Clear();
-        totalPrimitives.Clear();
-        totalPrimitivesNoDepth.Clear();
+        _renderablesWithDepth.Clear();
+        _renderablesNoDepth.Clear();
+        _totalPrimitives.Clear();
+        _totalPrimitivesNoDepth.Clear();
 
         return next;
     }

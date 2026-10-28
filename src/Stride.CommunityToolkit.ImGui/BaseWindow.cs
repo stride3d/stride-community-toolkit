@@ -13,13 +13,17 @@ namespace Stride.CommunityToolkit.ImGui;
 /// </summary>
 public abstract class BaseWindow : GameSystem
 {
+    // The next number for each window type, so two windows of one type get distinct titles
+    private static readonly Dictionary<string, uint> _windowId = [];
+
+    private readonly string _uniqueName;
+    private ImGuiSystem? _imGui;
+
     /// <summary>
     /// The UI scale of the owning <see cref="ImGuiSystem"/>, or <c>1</c> while no system is registered yet.
     /// Multiply pixel sizes by it so windows look the same at every DPI.
     /// </summary>
     public float Scale => _imGui?.Scale ?? 1f;
-
-    private static readonly Dictionary<string, uint> _windowId = new Dictionary<string, uint>();
 
     /// <summary>
     /// Bound to the window's close button. Set it to <see langword="false"/> to close the window; once closed the
@@ -47,58 +51,44 @@ public abstract class BaseWindow : GameSystem
     /// The size applied before the window is begun each frame, or <see langword="null"/> to let ImGui size it.
     /// </summary>
     protected virtual Vector2? WindowSize => null;
-    private readonly string _uniqueName;
-    private ImGuiSystem? _imGui;
 
     ///<inheritdoc />
     protected BaseWindow(IServiceRegistry services) : base(services)
     {
         Game.GameSystems.Add(this);
         Enabled = true;
-        var n = GetType().Name;
+
+        var name = GetType().Name;
+
         lock (_windowId)
         {
-            if (_windowId.TryGetValue(n, out Id) == false)
-            {
-                Id = 1;
-                _windowId.Add(n, Id);
-            }
-
-            _windowId[n] = Id + 1;
+            Id = _windowId.TryGetValue(name, out var next) ? next : 1;
+            _windowId[name] = Id + 1;
         }
-        _uniqueName = Id == 1 ? n : $"{n}({Id})";
 
-        _imGui ??= Services.GetService<ImGuiSystem>();
+        _uniqueName = Id == 1 ? name : $"{name}({Id})";
+        _imGui = Services.GetService<ImGuiSystem>();
     }
 
     ///<inheritdoc />
     public override void Update(GameTime gameTime)
     {
-        // Allow for some leeway to avoid throwing
-        // if imGui as not been set yet
+        // The system may be registered after the window, so look again until it is there
         _imGui ??= Services.GetService<ImGuiSystem>();
 
         if (_imGui is null) return;
 
-        // This component must run after imGui to
-        // avoid throwing and single frame lag
+        // The window must run after the ImGui system, or it draws into a frame that has not begun
         if (UpdateOrder <= _imGui.UpdateOrder)
         {
             UpdateOrder = _imGui.UpdateOrder + 1;
             return;
         }
 
-        if (WindowPos != null)
-        {
-            SetNextWindowPos(WindowPos.Value);
-        }
+        if (WindowPos is { } position) SetNextWindowPos(position);
+        if (WindowSize is { } size) SetNextWindowSize(size);
 
-        if (WindowSize != null)
-        {
-            SetNextWindowSize(WindowSize.Value);
-        }
-
-        using (Window(_uniqueName, ref Open, out bool collapsed, WindowFlags))
+        using (Window(_uniqueName, ref Open, out var collapsed, WindowFlags))
         {
             OnDraw(collapsed);
         }

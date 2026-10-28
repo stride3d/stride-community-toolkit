@@ -1,4 +1,5 @@
 using Stride.Core.Mathematics;
+
 namespace Stride.CommunityToolkit.Shapes;
 
 /// <summary>Where a shape's flat plane sits in the world.</summary>
@@ -7,6 +8,24 @@ internal readonly record struct ShapePlane(Vector3 Origin, Vector3 AxisX, Vector
     /// <summary>The XY plane at a 2D position, the plane every 2D call draws in.</summary>
     internal static ShapePlane XY(Vector2 center)
         => new(new Vector3(center.X, center.Y, 0f), Vector3.UnitX, Vector3.UnitY, PlaneMode.Fixed);
+
+    /// <summary>The XY plane at a 2D position, turned <paramref name="rotation"/> radians about Z.</summary>
+    internal static ShapePlane XY(Vector2 center, float rotation)
+    {
+        var (sin, cos) = MathF.SinCos(rotation);
+
+        return new(new Vector3(center.X, center.Y, 0f), new Vector3(cos, sin, 0f), new Vector3(-sin, cos, 0f), PlaneMode.Fixed);
+    }
+
+    /// <summary>A plane through <paramref name="origin"/> spanned by two axes of any length, normalised here.</summary>
+    internal static ShapePlane Fixed(Vector3 origin, Vector3 axisX, Vector3 axisY)
+        => new(origin, Vector3.Normalize(axisX), Vector3.Normalize(axisY), PlaneMode.Fixed);
+
+    /// <summary>A plane that faces the camera, screen-aligned; the vertex stage supplies the axes.</summary>
+    internal static ShapePlane Billboard(Vector3 center) => new(center, Vector3.UnitX, Vector3.UnitY, PlaneMode.Screen);
+
+    /// <summary>A plane that keeps <paramref name="axisX"/>, a unit vector, and swings about it to face the camera.</summary>
+    internal static ShapePlane Axial(Vector3 center, Vector3 axisX) => new(center, axisX, Vector3.UnitY, PlaneMode.Axial);
 
     /// <summary>
     /// The plane a normal defines, with any two perpendicular unit axes spanning it. Which two

@@ -57,7 +57,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     {
         ArgumentNullException.ThrowIfNull(example);
 
-        var title = example.Title?.GetValueOrDefault("en") ?? example.ProjectName ?? example.Slug ?? "Example";
+        var title = TitleOf(example);
         var body = new StringBuilder();
 
         body.AppendLine($"# {title}");
@@ -75,10 +75,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
             body.AppendLine($"The `{EntryFileName(example)}` file shows how to:");
             body.AppendLine();
 
-            foreach (var concept in concepts)
-            {
-                body.AppendLine($"- {concept}");
-            }
+            foreach (var concept in concepts) body.AppendLine($"- {concept}");
 
             body.AppendLine();
         }
@@ -120,8 +117,8 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     /// are used; anything bespoke here would have to be maintained against future template upgrades.
     /// </para>
     /// <para>
-    /// Every part of a card is emitted by its own <c>AppendCard*</c> method, so dropping the badge, the
-    /// summary or the link is a matter of commenting out one line in <see cref="AppendCard"/>.
+    /// Every part of a card is emitted by its own <c>AppendCard*</c> method, so dropping the badge or
+    /// the summary is a matter of removing one line in <see cref="AppendCard"/>.
     /// </para>
     /// <para>
     /// An example without an image is left out entirely rather than shown with a placeholder: the point
@@ -156,20 +153,14 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
         {
             var cards = group.Examples.Where(example => ExistingMedia(example) is not null).ToList();
 
-            if (cards.Count == 0)
-            {
-                continue;
-            }
+            if (cards.Count == 0) continue;
 
             page.AppendLine();
             page.AppendLine($"## {DocPaths.LanguageName(group.Language)} {group.Level}");
             page.AppendLine();
             page.AppendLine("<div class=\"row g-4 mb-4\">");
 
-            foreach (var example in cards)
-            {
-                AppendCard(page, example);
-            }
+            foreach (var example in cards) AppendCard(page, example);
 
             page.AppendLine("</div>");
         }
@@ -178,7 +169,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     }
 
     /// <summary>
-    /// Emits one card. Comment out a line to drop that part from every card.
+    /// Emits one card. Remove a line to drop that part from every card.
     /// </summary>
     private void AppendCard(StringBuilder page, ExampleMetadata example)
     {
@@ -189,15 +180,11 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
 
         page.AppendLine("            <div class=\"card-body\">");
 
-        //AppendCardTitle(page, example);
         AppendCardLinkTitle(page, example);
         AppendCardBadge(page, example);
         AppendCardText(page, example);
 
         page.AppendLine("            </div>");
-
-        //AppendCardLink(page, example);
-
         page.AppendLine("        </div>");
         page.AppendLine("    </div>");
     }
@@ -215,12 +202,6 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
             $"            <img src=\"{DocPaths.MediaFolder}/{ExistingMedia(example)}\" class=\"card-img-top\" " +
             $"alt=\"Screenshot of the {Escape(TitleOf(example))} example\" width=\"1280\" height=\"720\" loading=\"lazy\">");
 
-    ///// <summary>
-    ///// The title, as a real heading so the page keeps a usable document outline for search engines.
-    ///// </summary>
-    //private static void AppendCardTitle(StringBuilder page, ExampleMetadata example)
-    //    => page.AppendLine($"                <h3 class=\"card-title h6\">{Escape(TitleOf(example))}</h3>");
-
     /// <summary>
     /// The title, as a real heading so the page keeps a usable document outline for search engines.
     /// Wrapped in a <c>stretched-link</c>, which makes the whole card clickable.
@@ -233,12 +214,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     /// </summary>
     private static void AppendCardBadge(StringBuilder page, ExampleMetadata example)
     {
-        if (example.Category is not { Length: > 0 } category)
-        {
-            return;
-        }
-
-        page.AppendLine($"                <p><span class=\"badge text-bg-secondary\">{Escape(category)}</span></p>");
+        if (example.Category is { Length: > 0 } category) page.AppendLine($"                <p><span class=\"badge text-bg-secondary\">{Escape(category)}</span></p>");
     }
 
     /// <summary>
@@ -246,20 +222,8 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     /// </summary>
     private static void AppendCardText(StringBuilder page, ExampleMetadata example)
     {
-        if (Summarise(example.Description?.GetValueOrDefault("en")) is not { Length: > 0 } summary)
-        {
-            return;
-        }
-
-        page.AppendLine($"                <p class=\"card-text\">{Escape(summary)}</p>");
+        if (Summarise(example.Description?.GetValueOrDefault("en")) is { Length: > 0 } summary) page.AppendLine($"                <p class=\"card-text\">{Escape(summary)}</p>");
     }
-
-    ///// <summary>
-    ///// The link. <c>stretched-link</c> makes the whole card clickable, so the text stays short.
-    ///// </summary>
-    //private static void AppendCardLink(StringBuilder page, ExampleMetadata example)
-    //    => page.AppendLine(
-    //        $"            <p class=\"px-3 mb-3\"><a class=\"stretched-link\" href=\"{example.Slug}.md\">Open example</a></p>");
 
     /// <summary>
     /// One paragraph naming the packages that are not on NuGet and the examples built on them, so a
@@ -270,13 +234,10 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     {
         var affected = examples.Where(example => example.RepositoryOnlyPackages is { Count: > 0 }).ToList();
 
-        if (affected.Count == 0)
-        {
-            return;
-        }
+        if (affected.Count == 0) return;
 
         var packages = affected.SelectMany(example => example.RepositoryOnlyPackages!).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToList();
-        var names = affected.Select(example => $"[{Escape(TitleOf(example))}]({example.Slug}.md)").ToList();
+        var names = affected.Select(example => $"[{Escape(TitleOf(example))}]({example.Slug}.md)");
 
         page.AppendLine();
         page.AppendLine("> [!NOTE]");
@@ -324,12 +285,11 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
 
         foreach (var example in examples)
         {
-            var title = example.Title?.GetValueOrDefault("en") ?? example.ProjectName ?? example.Slug;
-            var summary = FirstSentence(example.Description?.GetValueOrDefault("en"));
+            var title = TitleOf(example);
 
-            page.AppendLine(summary is null
-                ? $"- [{title}]({example.Slug}.md)"
-                : $"- [{title}]({example.Slug}.md): {summary}");
+            page.AppendLine(FirstSentence(example.Description?.GetValueOrDefault("en")) is { } summary
+                ? $"- [{title}]({example.Slug}.md): {summary}"
+                : $"- [{title}]({example.Slug}.md)");
         }
 
         page.AppendLine();
@@ -393,13 +353,10 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     };
 
     /// <summary>
-    /// Takes the first sentence of a description, for a one-line list entry.
-    /// </summary>
-    /// <summary>
-    /// The English title, falling back the same way the landing pages and the toc do.
+    /// The English title, falling back to the project name and then the slug, the same way everywhere.
     /// </summary>
     private static string TitleOf(ExampleMetadata example)
-        => example.Title?.GetValueOrDefault("en") ?? example.ProjectName ?? example.Slug ?? string.Empty;
+        => example.Title?.GetValueOrDefault("en") ?? example.ProjectName ?? example.Slug ?? "Example";
 
     /// <summary>
     /// <see cref="FirstSentence"/>, capped to what fits on a card.
@@ -410,10 +367,9 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     /// </remarks>
     private static string? Summarise(string? description)
     {
-        if (FirstSentence(description) is not { Length: > 0 } text || text.Length <= GallerySummaryLength)
-        {
-            return FirstSentence(description);
-        }
+        var text = FirstSentence(description);
+
+        if (text is null || text.Length <= GallerySummaryLength) return text;
 
         var cut = text.LastIndexOf(' ', GallerySummaryLength);
 
@@ -428,12 +384,12 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
                 .Replace("<", "&lt;", StringComparison.Ordinal)
                 .Replace(">", "&gt;", StringComparison.Ordinal);
 
+    /// <summary>
+    /// Takes the first sentence of a description, for a one-line list entry.
+    /// </summary>
     private static string? FirstSentence(string? description)
     {
-        if (description is not { Length: > 0 })
-        {
-            return null;
-        }
+        if (description is not { Length: > 0 }) return null;
 
         // Descriptions are wrapped prose; collapse the newlines before looking for the sentence end.
         var text = string.Join(' ', description.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
@@ -475,10 +431,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     /// </summary>
     private string? ExistingMedia(ExampleMetadata example)
     {
-        if (mediaDirectory is null || !mediaDirectory.Exists || example.EffectiveMedia is not { Length: > 0 } media)
-        {
-            return null;
-        }
+        if (mediaDirectory is null || !mediaDirectory.Exists || example.EffectiveMedia is not { Length: > 0 } media) return null;
 
         return File.Exists(Path.Combine(mediaDirectory.FullName, media)) ? media : null;
     }

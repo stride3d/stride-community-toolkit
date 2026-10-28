@@ -39,17 +39,7 @@ public static class MaterialFactory
     /// intended colour. Balance belongs on the light intensities, not on the colour.
     /// </remarks>
     private static Dictionary<Color, Material> CreateCubeMaterials(Game game, ColourPalette palette)
-    {
-        var colours = palette.Colours;
-        var materials = new Dictionary<Color, Material>();
-
-        foreach (var colour in colours)
-        {
-            materials.Add(colour, Create(game, colour, palette));
-        }
-
-        return materials;
-    }
+        => palette.Colours.ToDictionary(colour => colour, colour => Create(game, colour, palette));
 
     private static Material Create(Game game, Color colour, ColourPalette palette)
         => palette.Glass ? CreateGlassMaterial(game, colour, palette.Glossiness) : game.CreateMaterial(colour);
@@ -59,7 +49,6 @@ public static class MaterialFactory
     /// diffuse colour is the tint, what the glass lets through; there is no diffuse model, or the
     /// glass would go opaque.
     /// </summary>
-
     /// <param name="game">The running game, which owns the graphics device the material is created on.</param>
     /// <param name="tint">What the glass lets through.</param>
     /// <param name="glossiness">The material gallery uses 0.95 clear, 0.85 tinted and 0.45 frosted.</param>

@@ -21,7 +21,7 @@ namespace E06_Box2D.Helpers;
 /// <param name="shapeFactory">Supplies the models and entities the bodies are attached to.</param>
 public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeFactory shapeFactory)
 {
-    private readonly B2WorldId _worldId = simulation.GetWorldId();
+    private readonly B2WorldId _worldId = simulation.WorldId;
 
     /// <summary>Gets how many shapes have been spawned since the last <see cref="Clear"/>.</summary>
     public int TotalCreated { get; private set; }
@@ -93,9 +93,7 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
     /// </summary>
     public void Clear()
     {
-        var shapesToRemove = scene.Entities
-            .Where(e => e.Name.EndsWith(GameConfig.ShapeName))
-            .ToList();
+        var shapesToRemove = scene.Entities.Where(e => e.Name.EndsWith(GameConfig.ShapeName)).ToList();
 
         foreach (var entity in shapesToRemove)
         {
@@ -127,10 +125,7 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
 
         // The second shape is placed a joint length away from the first, so the joint starts at rest
         // rather than yanking the pair together on the first step.
-        entity2.Transform.Position = new Vector3(
-            entity1.Transform.Position.X + GameConfig.DefaultJointLength,
-            entity1.Transform.Position.Y,
-            entity1.Transform.Position.Z);
+        entity2.Transform.Position = entity1.Transform.Position + new Vector3(GameConfig.DefaultJointLength, 0, 0);
 
         CreateDistanceJoint(AttachBody(shapeModel1, entity1), AttachBody(shapeModel2, entity2));
     }

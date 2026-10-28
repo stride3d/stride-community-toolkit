@@ -37,7 +37,20 @@ public sealed class ShapeComponent : ActivableEntityComponent
     /// Assigned to <see cref="BorderWidth"/>, <see cref="FillAlpha"/> or <see cref="GlowWidth"/> to take
     /// the batch's value instead of one set here.
     /// </summary>
-    public static readonly float Inherit = -1f;
+    public const float Inherit = -1f;
+
+    /// <summary>
+    /// The outline of a box of <paramref name="size"/> centred on the origin, counter-clockwise from the bottom-left
+    /// corner: the four vertices a rectangular shape needs, so they are not written out by hand.
+    /// </summary>
+    /// <param name="size">The box's width and height, in world units.</param>
+    /// <returns>A new array of the four corners, for <see cref="Vertices"/> or for a shape batch.</returns>
+    public static Vector2[] Box(Vector2 size)
+    {
+        var half = size * 0.5f;
+
+        return [new(-half.X, -half.Y), new(half.X, -half.Y), new(half.X, half.Y), new(-half.X, half.Y)];
+    }
 
     /// <summary>
     /// The shape outline in local space, counter-clockwise. May be swapped or

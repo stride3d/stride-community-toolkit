@@ -9,6 +9,7 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 using Stride.Rendering.Materials.ComputeColors;
+using System.Globalization;
 
 // A ship's cockpit HUD. Every shape goes through one ShapeBatch and out in one draw call, and
 // every piece of text is a WorldTextComponent. The ship flies itself, so every widget moves.
@@ -47,18 +48,20 @@ var heldPointerClicked = false;
 HudCanvas? canvas = null;
 KeyMenu? themeMenu = null;
 
-// Before the window exists: a sharp window on a scaled display
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
-game.Run(new SceneSetup2D { ClearColor = new Color(5, 7, 12), Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight).WithController(), Ground = null }, start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    ClearColor = new Color(5, 7, 12),
+    Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight).WithController(),
+    Ground = null,
+    WindowTitle = "Ship HUD",
+    Resizable = true,
+    DpiAware = true,
+}, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Ship HUD";
-
     game.AddWorldTextRenderer();
 
     // One batch for everything. Its fill source is the panels' glass, a shader class of the
@@ -79,9 +82,9 @@ void Start(Scene scene)
 
     var overlay = TextOverlay.GetOrCreate(game);
 
-    overlay.Position = ScreenAnchor.TopLeft;
+    overlay.Position = Anchor.TopLeft;
     overlay.SectionGap = 0;
-    overlay.AddSection("HUD", OverlayLines);
+    overlay.AddSection("HUD", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime gameTime)
@@ -122,28 +125,17 @@ void Update(Scene scene, GameTime gameTime)
     shapeCount = canvas.Shapes.Count;
 }
 
-IReadOnlyList<TextElement> OverlayLines()
-{
-    List<TextElement> lines = [];
-
-    if (themeMenu is not null)
-    {
-        lines.AddRange(themeMenu.GetLines());
-        lines.Add(new(string.Empty));
-    }
-
-    lines.AddRange(
-    [
-        new("Click", "Contact, wing tile, mode, power corner", Color.Yellow),
-        new("Tab", "Select the next wing tile", Color.Yellow),
-        new("G", $"Glass: {glassPattern}", Color.Yellow),
-        new("Space", paused ? "Resume" : "Freeze the ship", Color.Yellow),
-        new(string.Empty),
-        new($"{shapeCount} shapes in one draw call, {canvas?.LabelCount ?? 0} labels", Color.LightGreen),
-    ]);
-
-    return lines;
-}
+IReadOnlyList<TextElement> BuildOverlayLines() =>
+[
+    .. themeMenu?.GetLines() ?? [],
+    new(""),
+    new("Click", "Contact, wing tile, mode, power corner", Color.Yellow),
+    new("Tab", "Select the next wing tile", Color.Yellow),
+    new("G", $"Glass: {glassPattern}", Color.Yellow),
+    new("Space", paused ? "Resume" : "Freeze the ship", Color.Yellow),
+    new(""),
+    new($"{shapeCount} shapes in one draw call, {canvas?.LabelCount ?? 0} labels", Color.LightGreen),
+];
 
 // Schemes are listed in the order of their keys: 1 to 9, then 0
 static Keys SchemeKey(int index) => index < 9 ? Keys.D1 + index : Keys.D0;
@@ -174,7 +166,7 @@ static Vector2? PointerFromArguments(string[] args)
 
     if (parts.Length != 2) return null;
 
-    var invariant = System.Globalization.CultureInfo.InvariantCulture;
+    var invariant = CultureInfo.InvariantCulture;
 
     return float.TryParse(parts[0], invariant, out var x) && float.TryParse(parts[1], invariant, out var y) ? new Vector2(x, y) : null;
 }

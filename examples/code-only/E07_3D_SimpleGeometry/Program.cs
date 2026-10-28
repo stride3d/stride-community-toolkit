@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
@@ -7,7 +8,7 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
 using Stride.Rendering;
-using Stride.Rendering.ProceduralModels;
+using Buffer = Stride.Graphics.Buffer;
 
 using var game = new Game();
 
@@ -22,9 +23,6 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: scen
     game.AddSceneRenderer(new EntityTextRenderer());
 
     AddTriangleEntity(scene);
-
-    //// Add screen-space labels for quad vertices (local positions, shown in world via renderer)
-
 });
 
 void AddTriangleEntity(Scene scene)
@@ -37,9 +35,9 @@ void AddTriangleEntity(Scene scene)
     vertices[1].Position = new Vector3(startX + 0.5f, 1f, startZ);
     vertices[2].Position = new Vector3(startX + 1f, 0f, startZ);
 
-    var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(game.GraphicsDevice, vertices, GraphicsResourceUsage.Dynamic);
+    var vertexBuffer = Buffer.Vertex.New(game.GraphicsDevice, vertices, GraphicsResourceUsage.Dynamic);
     int[] indices = [0, 1, 2];
-    var indexBuffer = Stride.Graphics.Buffer.Index.New(game.GraphicsDevice, indices);
+    var indexBuffer = Buffer.Index.New(game.GraphicsDevice, indices);
 
     var mesh = new Mesh
     {
@@ -48,99 +46,46 @@ void AddTriangleEntity(Scene scene)
             PrimitiveType = PrimitiveType.TriangleList,
             DrawCount = indices.Length,
             IndexBuffer = new IndexBufferBinding(indexBuffer, true, indices.Length),
-            VertexBuffers = [ new VertexBufferBinding(vertexBuffer,
-                                  VertexPositionTexture.Layout, vertexBuffer.ElementCount) ],
+            VertexBuffers = [new VertexBufferBinding(vertexBuffer, VertexPositionTexture.Layout, vertexBuffer.ElementCount)],
         }
     };
 
-    var model = new Model() { Meshes = [mesh] };
-    model.Materials.Add(game.CreateFlatMaterial(Color.BlueViolet));
+    var model = new Model { mesh, game.CreateFlatMaterial(Color.BlueViolet) };
+    var entity = new Entity("Triangle", new Vector3(2f, 0, 2f)) { new ModelComponent(model) };
 
-    var entity = new Entity("Triangle", new Vector3(2f, 0, 2f));
-    entity.Components.Add(new ModelComponent(model));
-
-    // Add labels for each triangle vertex (local space positions)
-    AddVertexLabels(scene, entity, [vertices[0].Position, vertices[1].Position, vertices[2].Position], labelPrefix: "t");
+    AddVertexLabels(entity, [vertices[0].Position, vertices[1].Position, vertices[2].Position], "t");
 
     entity.Scene = scene;
 }
 
 // One label entity per local-space point, as children so they follow the parent
-void AddVertexLabels(Scene scene, Entity parent, IReadOnlyCollection<Vector3> localPositions, string? labelPrefix = null)
+void AddVertexLabels(Entity parent, ReadOnlySpan<Vector3> localPositions, string labelPrefix = "v")
 {
-    int i = 0;
-    foreach (var p in localPositions)
+    for (var i = 0; i < localPositions.Length; i++)
     {
-        var labelEntity = new Entity($"{labelPrefix ?? "v"}{i}")
+        var position = localPositions[i];
+        var label = new Entity($"{labelPrefix}{i}")
         {
             new EntityTextComponent
             {
-                Text = $"{(labelPrefix ?? "v")}{i} ({p.X:0.##}, {p.Y:0.##}, {p.Z:0.##})",
+                Text = $"{labelPrefix}{i} ({position.X:0.##}, {position.Y:0.##}, {position.Z:0.##})",
                 FontSize = 14,
                 Offset = new Vector2(0, -18),
                 TextColor = Color.White,
                 // Anchor centres the label over its vertex; TextAlignment only arranges the lines of a block
-                Anchor = TextAnchor.BottomCenter,
+                Anchor = Anchor.BottomCenter,
                 EnableBackground = true,
                 BackgroundColor = new Color4(0, 0, 0, 0.5f),
                 Padding = new Vector2(2)
             }
         };
 
-        // Place in the same local space as mesh vertices so the label follows parent transforms
-        labelEntity.Transform.Position = p;
-        parent.AddChild(labelEntity);
-
-        i++;
+        // In the parent's local space, like the mesh vertices, so the label follows its transform
+        label.Transform.Position = position;
+        parent.AddChild(label);
     }
 }
 
-public class QuadPrimitiveModel : PrimitiveProceduralModelBase
-{
-    // A custom property that shows up in Game Studio
-    /// <summary>
-    /// Gets or sets the size of the model.
-    /// </summary>
-    public Vector3 Size { get; set; } = Vector3.One;
-
-    /// <summary>
-    /// Local-space vertex positions used for the generated quad. Useful for debug labels.
-    /// </summary>
-    public IReadOnlyList<Vector3> Vertices { get; private set; } = Array.Empty<Vector3>();
-
-    protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
-    {
-        var vertexCount = 4;
-        var indexCount = 6;
-        var vertices = new VertexPositionNormalTexture[vertexCount];
-        var indices = new int[indexCount];
-
-        // A quad facing +Z
-        var normal = Vector3.UnitZ;
-        vertices[0] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.5f, 0) * Size, normal, new Vector2(0, 0));
-        vertices[1] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.5f, 0) * Size, normal, new Vector2(1, 0));
-        vertices[2] = new VertexPositionNormalTexture(new Vector3(-0.5f, -0.5f, 0) * Size, normal, new Vector2(0, 1));
-        vertices[3] = new VertexPositionNormalTexture(new Vector3(0.5f, -0.5f, 0) * Size, normal, new Vector2(1, 1));
-
-        // Kept for the labels
-        Vertices =
-        [
-            vertices[0].Position,
-            vertices[1].Position,
-            vertices[2].Position,
-            vertices[3].Position
-        ];
-
-        indices[0] = 0;
-        indices[1] = 1;
-        indices[2] = 2;
-        indices[3] = 1;
-        indices[4] = 3;
-        indices[5] = 2;
-
-        return new GeometricMeshData<VertexPositionNormalTexture>(vertices, indices, isLeftHanded: false) { Name = "MyModel" };
-    }
-}
 /*
 ---example-metadata
 slug: simple-geometry

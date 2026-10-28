@@ -89,14 +89,14 @@ public static class MeshBuilderExtensions
             var edge = to - from;
             var length = edge.Length();
 
-            if (length < 1e-6f) continue;
+            if (MathUtil.IsZero(length)) continue;
 
             var normal = new Vector3(edge.Y / length, -edge.X / length, 0);
 
-            var a = AddWallVertex(builder, new Vector3(from, halfDepth), normal, positionElement, normalElement);
-            var b = AddWallVertex(builder, new Vector3(to, halfDepth), normal, positionElement, normalElement);
-            var c = AddWallVertex(builder, new Vector3(to, -halfDepth), normal, positionElement, normalElement);
-            var d = AddWallVertex(builder, new Vector3(from, -halfDepth), normal, positionElement, normalElement);
+            var a = AddVertex(builder, new Vector3(from, halfDepth), normal, positionElement, normalElement);
+            var b = AddVertex(builder, new Vector3(to, halfDepth), normal, positionElement, normalElement);
+            var c = AddVertex(builder, new Vector3(to, -halfDepth), normal, positionElement, normalElement);
+            var d = AddVertex(builder, new Vector3(from, -halfDepth), normal, positionElement, normalElement);
 
             // Clockwise as seen from outside the wall, matching the caps above
             builder.AddIndex(a);
@@ -109,28 +109,20 @@ public static class MeshBuilderExtensions
         }
     }
 
-    private static int AddCapVertices(
-        MeshBuilder builder,
-        IReadOnlyList<Vector2> corners,
-        Vector2 offset,
-        float z,
-        Vector3 normal,
-        int positionElement,
-        int normalElement)
+    /// <summary>One vertex per corner at depth <paramref name="z"/>, all with the cap's normal; returns the first one's index.</summary>
+    private static int AddCapVertices(MeshBuilder builder, IReadOnlyList<Vector2> corners, Vector2 offset, float z, Vector3 normal, int positionElement, int normalElement)
     {
         var start = builder.VertexCount;
 
         foreach (var corner in corners)
         {
-            builder.AddVertex();
-            builder.SetElement(positionElement, new Vector3(corner + offset, z));
-            builder.SetElement(normalElement, normal);
+            AddVertex(builder, new Vector3(corner + offset, z), normal, positionElement, normalElement);
         }
 
         return start;
     }
 
-    private static int AddWallVertex(MeshBuilder builder, Vector3 position, Vector3 normal, int positionElement, int normalElement)
+    private static int AddVertex(MeshBuilder builder, Vector3 position, Vector3 normal, int positionElement, int normalElement)
     {
         var index = builder.AddVertex();
 

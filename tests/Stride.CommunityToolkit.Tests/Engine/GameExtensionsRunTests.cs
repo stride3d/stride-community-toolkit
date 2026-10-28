@@ -64,13 +64,10 @@ public class GameExtensionsRunTests
             startCompleted = true;
         }, update: (_, _) =>
         {
-            if (startCompleted)
-                updatesAfterStartCompleted++;
-            else
-                updatesBeforeStartCompleted++;
+            if (startCompleted) updatesAfterStartCompleted++;
+            else updatesBeforeStartCompleted++;
 
-            if (updatesAfterStartCompleted >= 3 || game.UpdateTime.FrameCount > FrameBudget)
-                game.Exit();
+            if (updatesAfterStartCompleted >= 3 || game.UpdateTime.FrameCount > FrameBudget) game.Exit();
         }, context: new GameContextHeadless());
 
         Assert.True(startCompleted, "start never completed");
@@ -89,8 +86,7 @@ public class GameExtensionsRunTests
         {
             order.Add("update");
 
-            if (order.Count >= 3 || game.UpdateTime.FrameCount > FrameBudget)
-                game.Exit();
+            if (order.Count >= 3 || game.UpdateTime.FrameCount > FrameBudget) game.Exit();
         }, context: new GameContextHeadless());
 
         Assert.Equal(["start", "update", "update"], order);
@@ -128,10 +124,8 @@ public class GameExtensionsRunTests
             scenesSeen.Add(scene);
 
             // Frame 1: switch scenes the way a game does. Frame 2: check update followed the switch.
-            if (scenesSeen.Count == 1)
-                game.SceneSystem.SceneInstance.RootScene = replacement;
-            else
-                game.Exit();
+            if (scenesSeen.Count == 1) game.SceneSystem.SceneInstance.RootScene = replacement;
+            else game.Exit();
         }, context: new GameContextHeadless());
 
         Assert.Equal(2, scenesSeen.Count);

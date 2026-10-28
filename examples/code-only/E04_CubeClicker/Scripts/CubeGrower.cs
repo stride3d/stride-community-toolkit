@@ -17,8 +17,7 @@ public class CubeGrower : AsyncScript
         {
             elapsedTime += (float)Game.UpdateTime.Elapsed.TotalSeconds;
 
-            var newScale = elapsedTime / GrowDuration;
-            Entity.Transform.Scale = new Vector3(newScale);
+            Entity.Transform.Scale = new Vector3(elapsedTime / GrowDuration);
 
             await Script.NextFrame();
         }

@@ -45,14 +45,13 @@ internal sealed class GrowingPolyline : IDisposable
     private float _halfWidth;
     private readonly BoundingBox? _fixedBounds;
     private bool _hasGrownBounds;
-    private int _count;
     private bool _isDisposed;
 
     /// <summary>The mesh to put in a <see cref="Model"/>; its draw count and bounds are kept up to date.</summary>
     internal Mesh Mesh { get; }
 
     /// <summary>How many points the line holds, over all runs.</summary>
-    internal int Count => _count;
+    internal int Count { get; private set; }
 
     /// <summary>The most points the line can hold; fixed at construction, when the buffers are allocated.</summary>
     internal int Capacity { get; }
@@ -142,7 +141,7 @@ internal sealed class GrowingPolyline : IDisposable
             return true;
         }
 
-        if (_count == Capacity)
+        if (Count == Capacity)
         {
             if (!RollOver)
                 return false;
@@ -151,7 +150,7 @@ internal sealed class GrowingPolyline : IDisposable
         }
 
         run.Add(point);
-        _count++;
+        Count++;
 
         GrowBounds(point);
         Rebuild();
@@ -182,7 +181,7 @@ internal sealed class GrowingPolyline : IDisposable
 
         _runs.Clear();
         _runs.Add([]);
-        _count = 0;
+        Count = 0;
         _vertices.Clear();
         _indices.Clear();
         _draw.DrawCount = 0;
@@ -231,7 +230,7 @@ internal sealed class GrowingPolyline : IDisposable
         var first = _runs[0];
 
         first.RemoveAt(0);
-        _count--;
+        Count--;
 
         // A run reduced to one point draws nothing; drop it too unless it is the only (open) run
         if (first.Count == 0 && _runs.Count > 1)

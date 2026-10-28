@@ -1,11 +1,14 @@
+using CubeCollapse.Components;
 using CubeCollapse.Gameplay;
 using CubeCollapse.Setup;
 using CubeCollapse.Shared;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Graphics;
 using Stride.Input;
 using Stride.Rendering;
 
@@ -91,9 +94,7 @@ public class CubeClickScript : AsyncScript
     /// <inheritdoc />
     public override async Task Execute()
     {
-        var camera = Entity.Scene.GetCamera();
-
-        if (camera is null) return;
+        var camera = Game.GetCameraEntity().Get<CameraComponent>();
 
         while (Game.IsRunning)
         {
@@ -169,9 +170,11 @@ public class CubeClickScript : AsyncScript
             Sounds.PlayComboStep(result.ComboStep);
         }
 
-        Log.Info($"Cleared {group.Count} {cube.Get<Components.CubeComponent>()?.Color} at {cube.Transform.Position}: {result.Breakdown}");
+        var colour = cube.Get<CubeComponent>()?.Color;
 
-        AddScorePopup(cube.Transform.Position, result, cube.Get<Components.CubeComponent>()?.Color);
+        Log.Info($"Cleared {group.Count} {colour} at {cube.Transform.Position}: {result.Breakdown}");
+
+        AddScorePopup(cube.Transform.Position, result, colour);
 
         // The grid collapses immediately, so the next click already matches the finished layout while
         // the cubes are still visibly falling into it. Nothing here moves a body: gravity does that,
@@ -179,10 +182,7 @@ public class CubeClickScript : AsyncScript
         // its own column, so the only place a cube can fall to is the slot the grid just gave it.
         Grid.RemoveAndCollapse(group);
 
-        foreach (var cleared in group)
-        {
-            cleared.Remove();
-        }
+        foreach (var cleared in group) cleared.Remove();
 
         Scoreboard?.Punch();
 
@@ -241,9 +241,8 @@ public class CubeClickScript : AsyncScript
         // letters are ordinary rigid bodies and tumble however they land.
         var yaw = 0f;
         var towardCamera = Vector3.UnitZ;
-        var cameraEntity = scene.GetCamera()?.Entity;
 
-        if (cameraEntity is not null)
+        if (scene.GetCamera()?.Entity is { } cameraEntity)
         {
             var direction = cameraEntity.Transform.Position - Levels.Current.PlatformCentre;
 
@@ -278,10 +277,7 @@ public class CubeClickScript : AsyncScript
     {
         IsGameOver = false;
 
-        if (GameOverText is not null)
-        {
-            GameOverText.IsVisible = false;
-        }
+        if (GameOverText is not null) GameOverText.IsVisible = false;
 
         foreach (var entity in Entity.Scene.Entities.Where(e => e.Name == EntityNames.GameOverMenu).ToList())
         {
@@ -296,20 +292,17 @@ public class CubeClickScript : AsyncScript
             ? $"{result.Total:N0}"
             : $"{tierLabel}\n{result.Total:N0}";
 
-        if (result.Multiplier > 1f)
-        {
-            text += $"  x{result.Multiplier:0.#}";
-        }
+        if (result.Multiplier > 1f) text += $"  x{result.Multiplier:0.#}";
 
         var entity = new Entity(EntityNames.ScorePopup, position)
         {
-            new EntityTextComponent()
+            new EntityTextComponent
             {
                 Text = text,
                 FontSize = GetFontSize(result.Tier),
                 TextColor = cubeColour is { } colour ? PopupColour?.Invoke(colour) ?? colour : GetTierColour(result.Tier),
-                Anchor = TextAnchor.MiddleCenter,
-                Alignment = Stride.Graphics.TextAlignment.Center,
+                Anchor = Anchor.MiddleCenter,
+                Alignment = TextAlignment.Center,
                 // A white ring round the cube's own colour, so the score reads over cubes of that colour
                 EnableOutline = true,
                 OutlineWidth = 1f,

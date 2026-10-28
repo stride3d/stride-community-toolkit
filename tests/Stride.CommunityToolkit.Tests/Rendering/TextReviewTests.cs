@@ -1,7 +1,7 @@
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.Core.Mathematics;
+using Stride.Graphics;
 using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Rendering;
@@ -50,7 +50,7 @@ public class TextReviewTests
 
         Assert.Equal(unit.Indices.Length, scaled.Indices.Length);
         Assert.Equal(unit.Vertices.Length, scaled.Vertices.Length);
-        TextMeshTests.AssertWatertight(scaled);
+        MeshAssertions.AssertWatertight(scaled);
     }
 
     [Fact]
@@ -72,7 +72,9 @@ public class TextReviewTests
         var area = 0f;
 
         for (var i = 0; i < triangles.Count; i += 3)
+        {
             area += EarClipping.SignedArea([polygon[triangles[i]], polygon[triangles[i + 1]], polygon[triangles[i + 2]]]);
+        }
 
         Assert.Equal(9, triangles.Count);
         Assert.Equal(EarClipping.SignedArea(polygon), area, 1e-6f);
@@ -121,8 +123,8 @@ public class TextReviewTests
     {
         var data = TextMesh.Create(Font, text, new TextMeshOptions { Depth = 0.3f, Bevel = new TextBevel(0.2f, 0.03f) });
 
-        TextMeshTests.AssertWatertight(data);
-        TextMeshTests.AssertOutwardWinding(data);
+        MeshAssertions.AssertWatertight(data);
+        MeshAssertions.AssertOutwardWinding(data);
     }
 
     [Fact]
@@ -133,12 +135,10 @@ public class TextReviewTests
         var data = TextMesh.Create(Font, "i", new TextMeshOptions { Depth = 0.3f, Bevel = new TextBevel(0.2f, 0.03f) });
         var plain = TextMesh.Create(Font, "i", new TextMeshOptions { Depth = 0.3f });
 
-        var capWidth = data.Vertices.Where(v => v.Normal.Z > 0.99f && v.Position.Y > 0.6f).Max(v => v.Position.X) - data.Vertices.Where(v => v.Normal.Z > 0.99f && v.Position.Y > 0.6f).Min(v => v.Position.X);
-        var stemWidth = data.Vertices.Where(v => v.Normal.Z > 0.99f && v.Position.Y < 0.4f).Max(v => v.Position.X) - data.Vertices.Where(v => v.Normal.Z > 0.99f && v.Position.Y < 0.4f).Min(v => v.Position.X);
-        var plainDot = plain.Vertices.Where(v => v.Normal.Z > 0.99f && v.Position.Y > 0.6f).Max(v => v.Position.X) - plain.Vertices.Where(v => v.Normal.Z > 0.99f && v.Position.Y > 0.6f).Min(v => v.Position.X);
-        var plainStem = plain.Vertices.Where(v => v.Normal.Z > 0.99f && v.Position.Y < 0.4f).Max(v => v.Position.X) - plain.Vertices.Where(v => v.Normal.Z > 0.99f && v.Position.Y < 0.4f).Min(v => v.Position.X);
+        static bool Dot(VertexPositionNormalTexture v) => v.Normal.Z > 0.99f && v.Position.Y > 0.6f;
+        static bool Stem(VertexPositionNormalTexture v) => v.Normal.Z > 0.99f && v.Position.Y < 0.4f;
 
-        Assert.Equal(plainDot - capWidth, plainStem - stemWidth, 3);
+        Assert.Equal(TestGeometry.Width(plain, Dot) - TestGeometry.Width(data, Dot), TestGeometry.Width(plain, Stem) - TestGeometry.Width(data, Stem), 3);
     }
 
     // F4: a cubic with parallel end tangents still gets its bends
@@ -256,8 +256,8 @@ public class TextReviewTests
         {
             var data = TextMesh.Create(Font, character.ToString());
 
-            TextMeshTests.AssertWatertight(data);
-            TextMeshTests.AssertOutwardWinding(data);
+            MeshAssertions.AssertWatertight(data);
+            MeshAssertions.AssertOutwardWinding(data);
         }
     }
 
@@ -344,8 +344,8 @@ public class TextReviewTests
     public void AFaceThatDoesNotExistIsReported()
     {
         Assert.Equal(1, Font.FaceCount);
-        Assert.Throws<InvalidDataException>(() => MeshFont.Load(ReadDefaultBytes(), "copy", faceIndex: 3));
-        Assert.Throws<ArgumentOutOfRangeException>(() => MeshFont.Load(ReadDefaultBytes(), "copy", faceIndex: -1));
+        Assert.Throws<InvalidDataException>(() => MeshFont.Load(TestGeometry.DefaultFontBytes(), "copy", faceIndex: 3));
+        Assert.Throws<ArgumentOutOfRangeException>(() => MeshFont.Load(TestGeometry.DefaultFontBytes(), "copy", faceIndex: -1));
     }
 
     // F6: a reader that was waiting finds the font gone, not a freed face
@@ -353,7 +353,7 @@ public class TextReviewTests
     [Fact]
     public void AReaderWaitingThroughDisposalIsRefused()
     {
-        var font = MeshFont.Load(ReadDefaultBytes(), "copy");
+        var font = MeshFont.Load(TestGeometry.DefaultFontBytes(), "copy");
 
         font.GetGlyph('A');
 
@@ -391,7 +391,7 @@ public class TextReviewTests
     [Fact]
     public void DisposalWaitsForAReaderInsideTheFace()
     {
-        var font = MeshFont.Load(ReadDefaultBytes(), "copy");
+        var font = MeshFont.Load(TestGeometry.DefaultFontBytes(), "copy");
         var disposed = new ManualResetEventSlim();
 
         // Holding the face lock stands for a reader inside FreeType; disposal must wait for it
@@ -415,24 +415,16 @@ public class TextReviewTests
     [Fact]
     public void MeshDataBoundsCoverTheVertices()
     {
-        var data = TextMesh.Create(Font, "Hello", new TextMeshOptions { Anchor = TextAnchor.MiddleCenter });
+        var data = TextMesh.Create(Font, "Hello", new TextMeshOptions { Anchor = Anchor.MiddleCenter });
         var (box, sphere) = data.Bounds();
 
         Assert.All(data.Vertices, v => { var position = v.Position; Assert.Equal(ContainmentType.Contains, box.Contains(ref position)); });
         Assert.All(data.Vertices, v => Assert.True((v.Position - sphere.Center).Length() <= sphere.Radius + 1e-5f));
 
         // The ink sits inside the typographic block the anchor centred, bearings and all
-        var block = TextMesh.Measure(Font, "Hello", new TextMeshOptions { Anchor = TextAnchor.MiddleCenter });
+        var block = TextMesh.Measure(Font, "Hello", new TextMeshOptions { Anchor = Anchor.MiddleCenter });
 
         Assert.True(box.Minimum.X >= block.Minimum.X - 1e-4f && box.Maximum.X <= block.Maximum.X + 1e-4f);
         Assert.True(box.Minimum.Y >= block.Minimum.Y - 1e-4f && box.Maximum.Y <= block.Maximum.Y + 1e-4f);
-    }
-
-    private static byte[] ReadDefaultBytes()
-    {
-        using var stream = typeof(MeshFont).Assembly.GetManifestResourceStream("Stride.CommunityToolkit.Rendering.Text.Fonts.OpenSans-Regular.ttf")!;
-        var bytes = new byte[stream.Length];
-        stream.ReadExactly(bytes);
-        return bytes;
     }
 }

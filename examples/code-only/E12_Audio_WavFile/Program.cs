@@ -7,6 +7,7 @@ using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Input;
 using Stride.Media;
 using System.Reflection;
@@ -70,7 +71,7 @@ void Start(Scene scene)
     AddInstructions();
 }
 
-void Update(Scene scene, Stride.Games.GameTime time)
+void Update(Scene scene, GameTime time)
 {
     var input = game.Input;
 
@@ -87,10 +88,7 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
     if (input.IsKeyPressed(Keys.L) && padInstance is not null)
     {
-        if (padInstance.PlayState == PlayState.Playing)
-            padInstance.Stop();
-        else
-            padInstance.Play();
+        if (padInstance.PlayState == PlayState.Playing) padInstance.Stop(); else padInstance.Play();
     }
 
     var dt = (float)time.Elapsed.TotalSeconds;
@@ -101,23 +99,20 @@ void Update(Scene scene, Stride.Games.GameTime time)
     {
         volume = Math.Clamp(volume + volumeChange * dt, 0, 1);
 
-        if (padInstance is not null)
-            padInstance.Volume = volume * 0.5f;
+        if (padInstance is not null) padInstance.Volume = volume * 0.5f;
     }
 
     if (panChange != 0)
     {
         pan = Math.Clamp(pan + panChange * dt, -1, 1);
 
-        if (padInstance is not null)
-            padInstance.Pan = pan;
+        if (padInstance is not null) padInstance.Pan = pan;
     }
 
     // A finished instance still holds a native source: dispose it once it reports Stopped.
     chimes.RemoveAll(instance =>
     {
-        if (instance.PlayState != PlayState.Stopped)
-            return false;
+        if (instance.PlayState != PlayState.Stopped) return false;
 
         instance.Dispose();
         return true;
@@ -132,9 +127,7 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
 void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Wav file", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Wav file", () =>
     {
         var padOn = padInstance?.PlayState == PlayState.Playing;
 

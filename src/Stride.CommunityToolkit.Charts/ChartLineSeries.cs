@@ -50,19 +50,7 @@ public sealed class ChartLineSeries : ChartSeries
         _drawClosed = _closed && clipped.Count == 1 && clipped[0].Length == source.Count
             && clipped[0][0] == source[0] && clipped[0][^1] == source[^1];
 
-        var runs = new List<IReadOnlyList<Vector3>>();
-
-        if (_drawClosed)
-        {
-            runs.Add(Points);
-        }
-        else
-        {
-            foreach (var run in clipped)
-            {
-                runs.Add(run);
-            }
-        }
+        List<IReadOnlyList<Vector3>> runs = _drawClosed ? [Points] : [.. clipped];
 
         IsEmpty = runs.Count == 0;
 

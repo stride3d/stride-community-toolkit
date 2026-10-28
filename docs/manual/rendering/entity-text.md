@@ -14,8 +14,8 @@ Two pieces are involved:
 - **`EntityTextRenderer`** is a scene renderer that draws it. `EntityTextProcessor` adds it to the
   compositor when no `AddEntityTextRenderer()` call has.
 
-The component, the renderer, `TextAnchor` and `TextPositionMode` are in the
-`Stride.CommunityToolkit.Rendering.Text` namespace; the `AddEntityTextRenderer()` extension is in
+The component, the renderer and `TextPositionMode` are in the `Stride.CommunityToolkit.Rendering.Text`
+namespace, `Anchor` in `Stride.CommunityToolkit.Rendering`; the `AddEntityTextRenderer()` extension is in
 `Stride.CommunityToolkit.Engine`.
 
 ```csharp
@@ -26,7 +26,7 @@ var entity = game.CreatePrimitive(Primitive3D.Cube());
 entity.Add(new EntityTextComponent
 {
     Text = "Hello",
-    Anchor = TextAnchor.BottomCenter,
+    Anchor = Anchor.BottomCenter,
     Offset = new Vector2(0, -12),
     EnableShadow = true
 });
@@ -42,7 +42,7 @@ entity.Scene = rootScene;
 |---|---|---|---|
 | `World` (default) | The entity's world position, projected to the screen | Yes | Labels on objects in the scene |
 | `Screen` | `ScreenPosition`, in pixels from the top-left | No | Fixed placement you want full control over |
-| `Anchored` | A point of the window, given by `ScreenAnchor`: a corner, the middle of an edge or the centre | No | A HUD that must survive the window being resized |
+| `Anchored` | A point of the window, given by the `ScreenAnchor` property: a corner, the middle of an edge or the centre | No | A HUD that must survive the window being resized |
 
 `Offset` is applied in all three modes. In `Anchored` it acts as a margin and always points *inwards*,
 so `new Vector2(16, 16)` is sixteen pixels in from the chosen corner whichever corner that is. From
@@ -58,7 +58,7 @@ alone is a cutoff.
 ## Anchor is not Alignment
 
 - **`Anchor`** decides which point of the text sits on the position. A label floating above a point
-  wants `Anchor = TextAnchor.BottomCenter`.
+  wants `Anchor = Anchor.BottomCenter`.
 - **`Alignment`** is Stride's `TextAlignment`. It only decides how the lines of a *multi-line* string
   sit relative to one another. **On single-line text it does nothing**: the alignment is computed
   against the width of the whole string, which for one line is the line itself.

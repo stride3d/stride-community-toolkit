@@ -596,9 +596,7 @@ public static class ThrusterStations
     /// </summary>
     private sealed class Engine
     {
-        private Engine()
-        {
-        }
+        private Engine() { }
 
         internal List<Entity> Model { get; } = [];
 

@@ -1,4 +1,3 @@
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -61,7 +60,7 @@ public abstract record Primitive3D
     /// <paramref name="size"/> units per EM, extruded <paramref name="depth"/> along Z, with the <paramref name="anchor"/> of the
     /// text block at the entity's origin: its centre by default, like every other shape.
     /// </summary>
-    public static Primitive3D Text(string text, MeshFont? font = null, float size = 1f, float depth = 0.25f, TextAnchor? anchor = TextAnchor.MiddleCenter)
+    public static Primitive3D Text(string text, MeshFont? font = null, float size = 1f, float depth = 0.25f, Anchor? anchor = Anchor.MiddleCenter)
         => new TextShape(text, font ?? MeshFont.Default, new TextMeshOptions { Size = size, Depth = depth, Anchor = anchor });
 
     /// <summary>Solid lettering with every option of <see cref="TextMeshOptions"/>: lines, alignment, spacing, curve quality.</summary>
@@ -94,6 +93,6 @@ public abstract record Primitive3D
     /// <summary>A triangular prism; <see cref="TriangularPrism(Vector3)"/> makes one.</summary>
     public sealed record TriangularPrismShape(Vector3 Size) : Primitive3D;
 
-    /// <summary>Solid lettering; <see cref="Text(string, MeshFont, float, float, TextAnchor?)"/> makes one.</summary>
+    /// <summary>Solid lettering; <see cref="Text(string, MeshFont, float, float, Anchor?)"/> makes one.</summary>
     public sealed record TextShape(string Content, MeshFont Font, TextMeshOptions Options) : Primitive3D;
 }

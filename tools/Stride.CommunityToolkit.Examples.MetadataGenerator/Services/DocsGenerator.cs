@@ -65,10 +65,7 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
     /// </summary>
     private void WriteExamplePage(DocPageBuilder builder, ExampleMetadata example, DirectoryInfo docsDirectory, bool dryRun)
     {
-        if (example.Slug is not { Length: > 0 } slug)
-        {
-            return;
-        }
+        if (example.Slug is not { Length: > 0 } slug) return;
 
         var path = Path.Combine(docsDirectory.FullName, $"{slug}.md");
 
@@ -264,10 +261,7 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
     /// </summary>
     private static string YamlScalar(string? value)
     {
-        if (value is null)
-        {
-            return "\"\"";
-        }
+        if (value is null) return "\"\"";
 
         var needsQuoting = value.Contains(':') || value.Contains('#') || value.StartsWith('[') || value.StartsWith('{');
 

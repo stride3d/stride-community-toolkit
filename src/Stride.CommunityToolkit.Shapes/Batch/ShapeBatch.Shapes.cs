@@ -17,17 +17,7 @@ public sealed partial class ShapeBatch
     /// <param name="radius">Optional rounding radius around the polygon, in world units.</param>
     /// <exception cref="ArgumentException">No vertices were given.</exception>
     public void DrawSolidPolygon(ReadOnlySpan<Vector2> vertices, Vector2 position, float rotation, Color color, float radius = 0f)
-    {
-        var (sin, cos) = MathF.SinCos(rotation);
-
-        var plane = new ShapePlane(
-            new Vector3(position.X, position.Y, 0f),
-            new Vector3(cos, sin, 0f),
-            new Vector3(-sin, cos, 0f),
-            PlaneMode.Fixed);
-
-        Add(vertices, plane, CurrentStyle(color), ShapeSlice.Whole, radius, 1f);
-    }
+        => Add(vertices, ShapePlane.XY(position, rotation), CurrentStyle(color), ShapeSlice.Whole, radius, 1f);
 
     /// <summary>
     /// Submits a circle in the XY plane, the 2D case.
@@ -50,9 +40,7 @@ public sealed partial class ShapeBatch
     /// <param name="scale">Uniform scale applied to the whole shape, radius included. Zero or less draws nothing.</param>
     /// <exception cref="ArgumentException">No vertices were given.</exception>
     public void DrawSolidPolygon(ReadOnlySpan<Vector2> vertices, Vector3 position, Vector3 axisX, Vector3 axisY, Color color, float radius = 0f, float scale = 1f)
-        => Add(vertices,
-            new ShapePlane(position, Vector3.Normalize(axisX), Vector3.Normalize(axisY), PlaneMode.Fixed),
-            CurrentStyle(color), ShapeSlice.Whole, radius, scale);
+        => Add(vertices, ShapePlane.Fixed(position, axisX, axisY), CurrentStyle(color), ShapeSlice.Whole, radius, scale);
 
     /// <summary>
     /// Submits a convex polygon in the plane a rotation puts the XY plane in.
@@ -78,9 +66,7 @@ public sealed partial class ShapeBatch
     /// <param name="radius">Optional rounding radius around the polygon, in world units.</param>
     /// <exception cref="ArgumentException">No vertices were given.</exception>
     public void DrawBillboard(ReadOnlySpan<Vector2> vertices, Vector3 position, Color color, float radius = 0f)
-        => Add(vertices,
-            new ShapePlane(position, Vector3.UnitX, Vector3.UnitY, PlaneMode.Screen),
-            CurrentStyle(color), ShapeSlice.Whole, radius, 1f);
+        => Add(vertices, ShapePlane.Billboard(position), CurrentStyle(color), ShapeSlice.Whole, radius, 1f);
 
     /// <summary>
     /// Submits a camera-facing circle: a point marker that stays perfectly round from any angle.
@@ -100,7 +86,7 @@ public sealed partial class ShapeBatch
     /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill"/>.</param>
     /// <remarks>Pixel-measured shapes are always billboards: the conversion from pixels to world units is exact only in a screen-aligned plane.</remarks>
     public void DrawPixelDisc(Vector3 center, float pixelRadius, Color color)
-        => Add([Vector2.Zero], new ShapePlane(center, Vector3.UnitX, Vector3.UnitY, PlaneMode.Screen), CurrentStyle(color), ShapeSlice.Whole with { PixelRadius = true }, pixelRadius, 1f);
+        => Add([Vector2.Zero], ShapePlane.Billboard(center), CurrentStyle(color), ShapeSlice.Whole with { PixelRadius = true }, pixelRadius, 1f);
 
     /// <summary>
     /// Submits a camera-facing ring whose radius is measured in pixels on screen, stroked
@@ -111,7 +97,7 @@ public sealed partial class ShapeBatch
     /// <param name="pixelRadius">Radius of the stroke's centreline in pixels on a 100% display.</param>
     /// <param name="color">The stroke colour.</param>
     public void DrawPixelRing(Vector3 center, float pixelRadius, Color color)
-        => Add([Vector2.Zero], new ShapePlane(center, Vector3.UnitX, Vector3.UnitY, PlaneMode.Screen), OutlineStyle(color), Stroke with { PixelRadius = true }, pixelRadius, 1f);
+        => Add([Vector2.Zero], ShapePlane.Billboard(center), OutlineStyle(color), Stroke with { PixelRadius = true }, pixelRadius, 1f);
 
     /// <summary>
     /// Submits a filled disc lying flat in the plane a normal defines - a ground marker, an
@@ -273,9 +259,7 @@ public sealed partial class ShapeBatch
             new(-halfWidth, halfHeight),
         ];
 
-        Add(corners,
-            new ShapePlane(center, Vector3.Normalize(axisX), Vector3.Normalize(axisY), PlaneMode.Fixed),
-            CurrentStyle(color), ShapeSlice.Whole, cornerRadius, 1f);
+        Add(corners, ShapePlane.Fixed(center, axisX, axisY), CurrentStyle(color), ShapeSlice.Whole, cornerRadius, 1f);
     }
 
     /// <summary>

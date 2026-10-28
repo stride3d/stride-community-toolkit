@@ -13,31 +13,32 @@ using Stride.Games;
 // The list of scenes and their capture frames is tests/gold/scenes.jsonc; a scene added here is
 // added there too. The examples stay free to change; these do not, except to pin something new.
 
-var name = args.Length >= 2 && args[0] == "--scene" ? args[1] : null;
-
-IGoldScene? scene = name switch
+var scenes = new Dictionary<string, Func<IGoldScene>>
 {
-    "shapes-2d" => new Shapes2DScene(),
-    "shapes-3d" => new Shapes3DScene(),
-    "text" => new TextScene(),
-    "debug-shapes" => new DebugShapesScene(),
-    "imgui" => new ImGuiScene(),
-    "shapes-textured" => new TexturedShapesScene(),
-    "render-texture" => new RenderTextureScene(),
-    "shapes-screen" => new ScreenShapesScene(),
-    "picking" => new PickingScene(),
-    "particles" => new ParticlesScene(),
-    "easing" => new EasingScene(),
-    "easing-basics" => new EasingBasicsScene(),
-    "text-3d" => new Text3DScene(),
-    _ => null,
+    ["shapes-2d"] = () => new Shapes2DScene(),
+    ["shapes-3d"] = () => new Shapes3DScene(),
+    ["text"] = () => new TextScene(),
+    ["debug-shapes"] = () => new DebugShapesScene(),
+    ["imgui"] = () => new ImGuiScene(),
+    ["shapes-textured"] = () => new TexturedShapesScene(),
+    ["render-texture"] = () => new RenderTextureScene(),
+    ["shapes-screen"] = () => new ScreenShapesScene(),
+    ["picking"] = () => new PickingScene(),
+    ["particles"] = () => new ParticlesScene(),
+    ["easing"] = () => new EasingScene(),
+    ["easing-basics"] = () => new EasingBasicsScene(),
+    ["text-3d"] = () => new Text3DScene(),
 };
 
-if (scene is null)
+var name = args is ["--scene", var requested, ..] ? requested : null;
+
+if (name is null || !scenes.TryGetValue(name, out var create))
 {
-    Console.Error.WriteLine("Usage: --scene shapes-2d | shapes-3d | text | debug-shapes | imgui | shapes-textured | render-texture | shapes-screen | picking | particles | easing | easing-basics");
+    Console.Error.WriteLine($"Usage: --scene {string.Join(" | ", scenes.Keys)}");
     return 2;
 }
+
+var scene = create();
 
 using var game = new Game();
 

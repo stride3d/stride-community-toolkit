@@ -2,6 +2,7 @@ using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -24,8 +25,6 @@ using Stride.Input;
 //
 // New to Tween? E02_2D_EasingBasics builds the same motion by hand first, then with a tween.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float LiftLow = -2.6f;
 const float LiftHigh = 2.4f;
 
@@ -44,6 +43,7 @@ BodyComponent[] boxes = [];
 Vector3[] boxHomes = [];
 Coin[] coins = [];
 List<Popup> popups = [];
+EntityTextComponent? scoreText = null;
 var liftTargetBefore = liftHome;
 var nextCoin = 0;
 var score = 0;
@@ -53,13 +53,16 @@ using var game = new Game();
 
 // Closer than the default view, so the lift and the coins fill the window; the controller reads the
 // size on its first frame and returns to it when H resets the camera
-game.Run(new SceneSetup2D { Camera = CameraSetup.Orthographic(orthographicSize: 14f).WithController() }.UseBepu(), start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    Camera = CameraSetup.Orthographic(orthographicSize: 14f).WithController(),
+    WindowTitle = "Easing in a 2D game - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
+}.UseBepu(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Easing in a 2D game - Stride Community Toolkit";
-
     game.AddEntityTextRenderer();
 
     // The lift: a kinematic body, so it carries what lands on it and nothing pushes it back
@@ -96,21 +99,24 @@ void Start(Scene rootScene)
 
     for (var i = 0; i < coinSpots.Length; i++)
     {
+        var spot = new Vector3(coinSpots[i], 0f);
         var coin = game.CreatePrimitive(Primitive2D.Circle(0.4f), new BepuPhysicsOptions
         {
             EntityName = $"Coin {i + 1}",
             Material = game.CreateFlatMaterial(new Color(250, 210, 60)),
             Body = BodyMode.None,
+            Position = spot,
         });
 
-        coin.Transform.Position = new Vector3(coinSpots[i], 0f);
         coin.Transform.Scale = Vector3.Zero;
         coin.Scene = rootScene;
-        coins[i] = new Coin(coin, new Vector3(coinSpots[i], 0f), new Tween(0.5f, EasingFunction.BackEaseOut), new Tween(0.6f, EasingFunction.QuadraticEaseIn));
+        coins[i] = new Coin(coin, spot, new Tween(0.5f, EasingFunction.BackEaseOut), new Tween(0.6f, EasingFunction.QuadraticEaseIn));
     }
 
     // The score, as a label pinned to a point in the world
-    var scoreEntity = new Entity("Score") { new EntityTextComponent { Text = "Score 0", FontSize = 22, TextColor = Color.White, Anchor = TextAnchor.MiddleLeft } };
+    scoreText = new EntityTextComponent { Text = "Score 0", FontSize = 22, TextColor = Color.White, Anchor = Anchor.MiddleLeft };
+
+    var scoreEntity = new Entity("Score") { scoreText };
 
     scoreEntity.Transform.Position = scoreSpot;
     rootScene.Entities.Add(scoreEntity);
@@ -172,13 +178,15 @@ void Update(Scene scene, GameTime time)
             coin.Entity.Transform.Position = coin.Fly.Lerp(coin.Spot, scoreSpot);
             coin.Entity.Transform.Scale = new Vector3(coin.Fly.Lerp(1f, 0.3f));
 
-            if (coin.Fly.IsComplete && !coin.Counted)
+            if (coin.Fly.IsComplete)
             {
+                var at = scoreSpot + new Vector3(2.4f, 0f, 0f);
+
                 coin.Counted = true;
                 coin.Entity.Transform.Scale = Vector3.Zero;
                 score += 10;
-                scene.Entities.First(e => e.Name == "Score").Get<EntityTextComponent>().Text = $"Score {score}";
-                popups.Add(new Popup(Label("+10", scoreSpot + new Vector3(2.4f, 0f, 0f), scene), scoreSpot + new Vector3(2.4f, 0f, 0f), Tween.Run(0.9f, EasingFunction.QuadraticEaseOut)));
+                scoreText!.Text = $"Score {score}";
+                popups.Add(new Popup(Label("+10", at, scene), at, Tween.Run(0.9f, EasingFunction.QuadraticEaseOut)));
             }
         }
         else
@@ -230,18 +238,14 @@ void HandleInput(Scene scene)
 
     if (input.IsKeyPressed(Keys.L))
     {
-        if (lift.IsRunning) lift.Stop();
-        else lift.Resume();
+        if (lift.IsRunning) lift.Stop(); else lift.Resume();
     }
 
     if (input.IsKeyPressed(Keys.R))
     {
         for (var i = 0; i < boxes.Length; i++)
         {
-            boxes[i].Teleport(boxHomes[i] with { Y = boxHomes[i].Y + 3f }, Quaternion.Identity);
-            boxes[i].LinearVelocity = Vector3.Zero;
-            boxes[i].AngularVelocity = Vector3.Zero;
-            boxes[i].Awake = true;
+            boxes[i].TeleportAtRest(boxHomes[i] with { Y = boxHomes[i].Y + 3f });
         }
     }
 }
@@ -260,7 +264,7 @@ void PopNextCoin()
 
 static Entity Label(string text, Vector3 position, Scene scene)
 {
-    var entity = new Entity($"Popup {text}") { new EntityTextComponent { Text = text, FontSize = 18, TextColor = new Color(250, 210, 60), Anchor = TextAnchor.MiddleCenter } };
+    var entity = new Entity($"Popup {text}") { new EntityTextComponent { Text = text, FontSize = 18, TextColor = new Color(250, 210, 60), Anchor = Anchor.MiddleCenter } };
 
     entity.Transform.Position = position;
     entity.Scene = scene;
@@ -269,26 +273,10 @@ static Entity Label(string text, Vector3 position, Scene scene)
 }
 
 /// <summary>A coin: its entity, where it lives, the tween that brings it in and the tween that takes it to the score.</summary>
-internal sealed class Coin
+sealed record Coin(Entity Entity, Vector3 Spot, Tween Pop, Tween Fly)
 {
-    internal Coin(Entity entity, Vector3 spot, Tween pop, Tween fly)
-    {
-        Entity = entity;
-        Spot = spot;
-        Pop = pop;
-        Fly = fly;
-    }
-
-    internal Entity Entity { get; }
-
-    internal Vector3 Spot { get; }
-
-    internal Tween Pop { get; }
-
-    internal Tween Fly { get; }
-
     /// <summary>Whether this coin's flight has been added to the score, so it counts once.</summary>
-    internal bool Counted { get; set; }
+    public bool Counted { get; set; }
 }
 
 /// <summary>A "+10" on its way up: the label, where it started and the tween that lifts and fades it.</summary>

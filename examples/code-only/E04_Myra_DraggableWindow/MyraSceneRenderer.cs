@@ -16,9 +16,6 @@ public class MyraSceneRenderer : SceneRendererBase
     /// <summary>Myra's root container, which every element hangs off.</summary>
     private Desktop? _desktop;
 
-    /// <summary>The view with the elements the user interacts with.</summary>
-    private MainView? _mainView;
-
     /// <summary>Sets up Myra, the main view and the desktop that holds it.</summary>
     protected override void InitializeCore()
     {
@@ -29,30 +26,12 @@ public class MyraSceneRenderer : SceneRendererBase
         MyraEnvironment.Game = Services.GetService<IGame>() as Game
             ?? throw new InvalidOperationException("Myra needs the running Stride Game to be registered in Services.");
 
-        InitializeMainView();
+        // The view goes into the services, which is how Program.cs finds it to add a widget later
+        var mainView = new MainView();
 
-        InitializeDesktop();
-    }
+        Services.AddService(mainView);
 
-    /// <summary>
-    /// Initializes the main view and adds it to the Stride services.
-    /// </summary>
-    private void InitializeMainView()
-    {
-        _mainView = new MainView();
-
-        Services.AddService(_mainView);
-    }
-
-    /// <summary>
-    /// Initializes the desktop and sets the root view.
-    /// </summary>
-    private void InitializeDesktop()
-    {
-        _desktop = new Desktop
-        {
-            Root = _mainView
-        };
+        _desktop = new Desktop { Root = mainView };
     }
 
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)

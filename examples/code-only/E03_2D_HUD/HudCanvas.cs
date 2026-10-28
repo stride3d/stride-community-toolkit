@@ -222,17 +222,11 @@ public sealed class HudCanvas
     }
 
     /// <summary>A text component, the entity that positions it and the frame it was last drawn in.</summary>
-    private sealed class Label
+    private sealed class Label(Entity entity, WorldTextComponent component)
     {
-        internal Label(Entity entity, WorldTextComponent component)
-        {
-            Entity = entity;
-            Component = component;
-        }
+        internal Entity Entity { get; } = entity;
 
-        internal Entity Entity { get; }
-
-        internal WorldTextComponent Component { get; }
+        internal WorldTextComponent Component { get; } = component;
 
         internal int Frame { get; set; }
     }

@@ -64,9 +64,7 @@ string Suffix(Example example)
     if (example.Entry is not { } entry) return string.Empty;
 
     // The language is already in the group heading, so it is not repeated per line.
-    var detail = entry.Category is { Length: > 0 } category ? category : string.Empty;
-
-    var tail = detail.Length > 0 ? $" ({entry.ProjectName} · {detail})" : $" ({entry.ProjectName})";
+    var tail = entry.Category is { Length: > 0 } category ? $" ({entry.ProjectName} · {category})" : $" ({entry.ProjectName})";
 
     return tail.Pastel(ColorHelper.Lighten(entry.GetColor(), 0.18f));
 }
@@ -94,15 +92,8 @@ void HandleUserInput()
 
         example.Action();
 
-        if (example.Title == Constants.Clear)
-        {
-            DisplayMenu();
-        }
-
-        if (example.Title != Constants.Quit && example.Title != Constants.Clear)
-        {
-            Console.WriteLine("It might take a few moments to start the example...");
-        }
+        if (example.Title == Constants.Clear) DisplayMenu();
+        else if (example.Title != Constants.Quit) Console.WriteLine("It might take a few moments to start the example...");
     }
 
     Console.WriteLine();

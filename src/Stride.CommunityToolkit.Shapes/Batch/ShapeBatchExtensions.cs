@@ -3,8 +3,8 @@ using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
-using Stride.Rendering.Materials;
 using Stride.Rendering;
+using Stride.Rendering.Materials;
 
 namespace Stride.CommunityToolkit.Shapes;
 
@@ -79,6 +79,7 @@ public static class ShapeBatchExtensions
         // Group 31 is the toolkit's UI group: the main view leaves it out and a second camera renderer
         // draws it, in the UI stage, once the post effects have run
         if (afterPostEffects) batch.RenderGroup = RenderGroup.Group31;
+
         var displayScale = DisplayScale.GetOrCreate(game);
 
         // Screen shapes and Corner() work in the display's scaled pixels, so the window is asked each

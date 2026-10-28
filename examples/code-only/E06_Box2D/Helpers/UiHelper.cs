@@ -14,7 +14,7 @@ namespace E06_Box2D.Helpers;
 /// </summary>
 public class UiHelper
 {
-    private int? _shapeCount;
+    private int _shapeCount;
     private int _totalCreated;
     private Box2DSimulation? _simulation;
     private string? _status;
@@ -26,7 +26,7 @@ public class UiHelper
 
         // The callbacks run every frame the overlay is drawn, so the numbers stay live without
         // anything having to push them
-        overlay.AddSection("Box2D", BuildLines);
+        overlay.AddSection("Box2D", BuildOverlayLines);
         overlay.AddCollapsibleSection("Advanced", "More shapes", Keys.Z, AdvancedLines, collapsed: true);
     }
 
@@ -34,13 +34,13 @@ public class UiHelper
     /// Records what the overlay shows this frame. Call it every update; a status message set with
     /// <see cref="RenderStatusMessage"/> lasts until the next call.
     /// </summary>
-    /// <param name="cubeCount">Current number of physics objects</param>
-    /// <param name="totalShapesCreated">How many shapes have been spawned since the start</param>
+    /// <param name="shapeCount">Current number of physics objects</param>
+    /// <param name="totalCreated">How many shapes have been spawned since the start</param>
     /// <param name="simulation">The physics simulation for additional stats</param>
-    public void RenderNavigation(int? cubeCount = 0, int totalShapesCreated = 0, Box2DSimulation? simulation = null)
+    public void RenderNavigation(int shapeCount, int totalCreated, Box2DSimulation simulation)
     {
-        _shapeCount = cubeCount;
-        _totalCreated = totalShapesCreated;
+        _shapeCount = shapeCount;
+        _totalCreated = totalCreated;
         _simulation = simulation;
         _status = null;
     }
@@ -56,7 +56,7 @@ public class UiHelper
         _statusColor = color == default ? Color.White : color;
     }
 
-    private IReadOnlyList<TextElement> BuildLines()
+    private IReadOnlyList<TextElement> BuildOverlayLines()
     {
         List<TextElement> lines =
         [

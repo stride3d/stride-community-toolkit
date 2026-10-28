@@ -16,8 +16,6 @@ using Stride.Input;
 //
 // Its 2D twin is Example_2D_Playground.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const string ShapeName = "Shape";
 
 var theme = ColorThemes.Default;
@@ -36,13 +34,16 @@ var created = 0;
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
+game.Run(new SceneSetup3D
+{
+    Profiler = true,
+    WindowTitle = "3D playground",
+    Resizable = true,
+    DpiAware = true,
+}.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "3D playground";
-
     game.AddGrabber();
 
     // G steps the grid through off, world and screen. On the command line, "--screen" starts it
@@ -70,7 +71,10 @@ void Update(Scene scene, GameTime time)
 
     if (game.Input.IsKeyPressed(Keys.X))
     {
-        foreach (var entity in scene.Entities.Where(entity => entity.Name == ShapeName).ToList()) entity.Scene = null;
+        foreach (var entity in scene.Entities.Where(entity => entity.Name == ShapeName).ToList())
+        {
+            entity.Scene = null;
+        }
     }
 }
 

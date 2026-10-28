@@ -19,7 +19,6 @@ public static class ColourPalettes
     public static readonly ColourPalette Classic = new("Classic",
         [Color.Red, Color.Green, Color.Blue, Color.DarkGoldenrod]);
 
-
     /// <summary>A gentler board: coral, mint, periwinkle and sand.</summary>
     public static readonly ColourPalette Soft = new("Soft",
         [new Color(255, 145, 140), new Color(140, 220, 170), new Color(135, 175, 255), new Color(250, 215, 120)]);
@@ -51,7 +50,6 @@ public static class ColourPalettes
     /// </summary>
     public static readonly ColourPalette FrostedGlass = new("Frosted glass",
         [new Color(240, 205, 205), new Color(205, 240, 210), new Color(225, 230, 235), new Color(240, 230, 195)], Glass: true, Glossiness: 0.45f);
-
 
     /// <summary>Every palette, in the order the key menu offers them.</summary>
     public static readonly IReadOnlyList<ColourPalette> All = [Classic, Soft, HighVisibility, Examples, Glass, FrostedGlass];

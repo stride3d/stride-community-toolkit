@@ -2,6 +2,7 @@ using Box2D.NET;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using static Box2D.NET.B2Joints;
+using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Worlds;
 
 namespace Stride.CommunityToolkit.Box2D;
@@ -15,6 +16,36 @@ public sealed class Box2DSimulation : IDisposable
 {
     private readonly PhysicsWorld2D _world;
     private readonly Box2DStrideBridge _bridge;
+    private readonly PhysicsEventRouter2D _eventRouter = new();
+    private readonly List<IBox2DSimulationUpdate> _simulationUpdates = [];
+
+    // Made once: a method group or lambda handed over on every call would allocate a delegate per frame
+    private readonly Func<B2BodyId, Entity?> _resolveEntity;
+    private readonly Action<float> _beforeFixedStep;
+    private readonly Action<float> _afterFixedStep;
+
+    // One delegate for every simulation: Box2D calls it, from its worker threads, for the pairs where a shape
+    // asked for custom filtering, and the context is the simulation whose matrix answers
+    private static readonly b2CustomFilterFcn CollisionMatrixFilter = static (shapeA, shapeB, context) =>
+    {
+        var matrix = ((Box2DSimulation)context).CollisionMatrix;
+
+        return matrix.CanCollide(b2Shape_GetFilter(shapeA).groupIndex, b2Shape_GetFilter(shapeB).groupIndex);
+    };
+
+    /// <summary>Creates a new simulation instance with a fresh Box2D world.</summary>
+    /// <param name="settings">Optional stepping and threading configuration; defaults to <see cref="PhysicsStepSettings"/> defaults.</param>
+    public Box2DSimulation(PhysicsStepSettings? settings = null)
+    {
+        _world = new PhysicsWorld2D(settings);
+        _bridge = new Box2DStrideBridge(_world);
+        _resolveEntity = _bridge.GetEntity;
+        _beforeFixedStep = BeforeFixedStep;
+        _afterFixedStep = AfterFixedStep;
+        Joints = new SimulationJoints2D(_world, _bridge);
+
+        b2World_SetCustomFilterCallback(_world.WorldId, CollisionMatrixFilter, this);
+    }
 
     /// <summary>Whether simulation stepping and event processing should occur.</summary>
     public bool Enabled { get; set; } = true;
@@ -28,12 +59,6 @@ public sealed class Box2DSimulation : IDisposable
     /// <summary>Target simulation frequency in hertz used to derive the fixed step size.</summary>
     public int TargetHz { get => _world.TargetHz; set => _world.TargetHz = value; }
 
-    // Contact and sensor event system (delegated to the router)
-    private readonly PhysicsEventRouter2D _eventRouter = new();
-
-    // Per-fixed-step handlers (the IBox2DSimulationUpdate pattern)
-    private readonly List<IBox2DSimulationUpdate> _simulationUpdates = new();
-
     /// <summary>Enable dispatch of begin/end contact events.</summary>
     public bool EnableContactEvents { get; set; } = true;
 
@@ -46,15 +71,23 @@ public sealed class Box2DSimulation : IDisposable
     /// <summary>World gravity applied to dynamic bodies.</summary>
     public Vector2 Gravity
     {
-        get
-        {
-            var gravity = b2World_GetGravity(_world.WorldId);
-
-            return new Vector2(gravity.X, gravity.Y);
-        }
-
-        set => b2World_SetGravity(_world.WorldId, new B2Vec2(value.X, value.Y));
+        get => b2World_GetGravity(_world.WorldId).ToVector2();
+        set => b2World_SetGravity(_world.WorldId, value.ToB2Vec2());
     }
+
+    /// <summary>
+    /// Joint factories with world-space anchors, for body ids or the entities this simulation
+    /// created bodies for. See <see cref="Joints2D"/> for the joint types and their options.
+    /// </summary>
+    public SimulationJoints2D Joints { get; }
+
+    /// <summary>
+    /// Which collision groups collide with which. Every pair collides until <see cref="Box2DCollisionMatrix.SetCollision"/>
+    /// says otherwise. A shape joins a group through <see cref="ShapeFixtureBuilder.InCollisionGroup"/> on its shape
+    /// definition; shapes in no group are not affected. Configure it between updates: the simulation reads it from its
+    /// worker threads during a step.
+    /// </summary>
+    public Box2DCollisionMatrix CollisionMatrix { get; } = new();
 
     /// <summary>
     /// Registers a handler whose <see cref="IBox2DSimulationUpdate.SimulationUpdate"/> runs before and
@@ -86,21 +119,6 @@ public sealed class Box2DSimulation : IDisposable
     /// <param name="handler">The handler to remove.</param>
     public void UnregisterSensorEventHandler(ISensorEventHandler handler) => _eventRouter.UnregisterSensorEventHandler(handler);
 
-    /// <summary>Creates a new simulation instance with a fresh Box2D world.</summary>
-    /// <param name="settings">Optional stepping and threading configuration; defaults to <see cref="PhysicsStepSettings"/> defaults.</param>
-    public Box2DSimulation(PhysicsStepSettings? settings = null)
-    {
-        _world = new PhysicsWorld2D(settings);
-        _bridge = new Box2DStrideBridge(_world);
-        Joints = new SimulationJoints2D(_world, _bridge);
-    }
-
-    /// <summary>
-    /// Joint factories with world-space anchors, for body ids or the entities this simulation
-    /// created bodies for. See <see cref="Joints2D"/> for the joint types and their options.
-    /// </summary>
-    public SimulationJoints2D Joints { get; }
-
     /// <summary>
     /// A radial blast: every shape within <paramref name="radius"/> of <paramref name="position"/>
     /// receives an impulse away from it.
@@ -118,7 +136,7 @@ public sealed class Box2DSimulation : IDisposable
     {
         var def = b2DefaultExplosionDef();
 
-        def.position = new B2Vec2(position.X, position.Y);
+        def.position = position.ToB2Vec2();
         def.radius = radius;
         def.falloff = falloff;
         def.impulsePerLength = impulsePerLength;
@@ -150,6 +168,13 @@ public sealed class Box2DSimulation : IDisposable
     public B2BodyId CreateKinematicBody(Entity entity, Vector3 position, float rotation = 0f)
         => _bridge.CreateBody(entity, position, B2BodyType.b2_kinematicBody, rotation);
 
+    /// <summary>Creates a kinematic body without an associated entity at a world position.</summary>
+    /// <param name="position">Initial world position (Z is ignored).</param>
+    /// <param name="rotation">Initial rotation in radians about the Z axis.</param>
+    /// <returns>The id of the created body.</returns>
+    public B2BodyId CreateKinematicBody(Vector3 position, float rotation = 0f)
+        => _bridge.CreateBody(position, B2BodyType.b2_kinematicBody, rotation);
+
     /// <summary>Creates a static body associated with the given entity at a world position.</summary>
     /// <param name="entity">The entity driven by the body.</param>
     /// <param name="position">Initial world position (Z is ignored).</param>
@@ -165,63 +190,43 @@ public sealed class Box2DSimulation : IDisposable
     public B2BodyId CreateStaticBody(Vector3 position, float rotation = 0f)
         => _bridge.CreateBody(position, B2BodyType.b2_staticBody, rotation);
 
-    /// <summary>Creates a kinematic body without an associated entity at a world position.</summary>
-    /// <param name="position">Initial world position (Z is ignored).</param>
-    /// <param name="rotation">Initial rotation in radians about the Z axis.</param>
-    /// <returns>The id of the created body.</returns>
-    public B2BodyId CreateKinematicBody(Vector3 position, float rotation = 0f)
-        => _bridge.CreateBody(position, B2BodyType.b2_kinematicBody, rotation);
-
     /// <summary>Advances the simulation by the elapsed real time, executing zero or more fixed steps.</summary>
     /// <param name="elapsed">Frame time delta.</param>
     public void Update(TimeSpan elapsed)
     {
-        if (!Enabled) return;
-
-        // Delegate fixed-step accumulation to PhysicsWorld2D; process events per fixed step
-        _world.Step((float)elapsed.TotalSeconds,
-            perFixedStep: dt =>
-            {
-                if (EnableContactEvents || EnableHitEvents)
-                    ProcessContactEvents();
-                if (EnableSensorEvents)
-                    ProcessSensorEvents();
-                _bridge.SyncTransformsFromPhysics();
-
-                foreach (var handler in _simulationUpdates) handler.AfterSimulationUpdate(this, dt);
-            },
-            beforeFixedStep: dt =>
-            {
-                foreach (var handler in _simulationUpdates) handler.SimulationUpdate(this, dt);
-            });
+        if (Enabled) _world.Step((float)elapsed.TotalSeconds, perFixedStep: _afterFixedStep, beforeFixedStep: _beforeFixedStep);
     }
 
-    private void ProcessContactEvents() => _eventRouter.ProcessContacts(_world.WorldId, GetEntity, EnableContactEvents, EnableHitEvents);
+    private void BeforeFixedStep(float deltaTime)
+    {
+        foreach (var handler in _simulationUpdates) handler.SimulationUpdate(this, deltaTime);
+    }
 
-    private void ProcessSensorEvents() => _eventRouter.ProcessSensors(_world.WorldId, GetEntity, EnableSensorEvents);
+    // Events first, then the transforms, then the handlers, which see both. The router checks the
+    // enable flags itself and returns at once when there is nothing to do.
+    private void AfterFixedStep(float deltaTime)
+    {
+        _eventRouter.ProcessContacts(_world.WorldId, _resolveEntity, EnableContactEvents, EnableHitEvents);
+        _eventRouter.ProcessSensors(_world.WorldId, _resolveEntity, EnableSensorEvents);
+        _bridge.SyncTransformsFromPhysics();
+
+        foreach (var handler in _simulationUpdates) handler.AfterSimulationUpdate(this, deltaTime);
+    }
 
     /// <summary>Removes the body associated with <paramref name="entity"/> from the world if present.</summary>
     /// <param name="entity">The entity whose body should be removed.</param>
-    public void RemoveBody(Entity entity)
-    {
-        _bridge.RemoveBody(entity);
-    }
+    public void RemoveBody(Entity entity) => _bridge.RemoveBody(entity);
 
-    /// <summary>Gets the underlying Box2D world id.</summary>
-    /// <returns>The native world id.</returns>
-    public B2WorldId GetWorldId() => _world.WorldId;
+    /// <summary>The underlying Box2D world id, for calls straight into Box2D.NET.</summary>
+    public B2WorldId WorldId => _world.WorldId;
 
     /// <summary>Gets the entity previously registered for the given body id (or null).</summary>
     /// <param name="bodyId">The body to look up.</param>
     /// <returns>The associated entity, or null when the body has none.</returns>
-    public Entity? GetEntity(B2BodyId bodyId)
-    {
-        return _bridge.GetEntity(bodyId);
-    }
+    public Entity? GetEntity(B2BodyId bodyId) => _bridge.GetEntity(bodyId);
 
-    /// <summary>Returns a snapshot list of all body ids tracked by the bridge.</summary>
-    /// <returns>A new list with every tracked body id.</returns>
-    public List<B2BodyId> GetAllBodyIds() => _bridge.Bodies.ToList();
+    /// <summary>Every body the simulation created, as a live view: do not create or remove bodies while enumerating it.</summary>
+    public IEnumerable<B2BodyId> Bodies => _bridge.Bodies;
 
     /// <summary>
     /// Tests if a point overlaps with any physics shape in the world.
@@ -240,20 +245,7 @@ public sealed class Box2DSimulation : IDisposable
     /// <param name="maxDistance">Maximum distance to cast.</param>
     /// <returns>First hit or null if no hit.</returns>
     public RaycastHit? Raycast(Vector2 origin, Vector2 direction, float maxDistance)
-    {
-        var hitResult = PhysicsQueries2D.RaycastClosest(_world.WorldId, origin, direction, maxDistance);
-
-        if (!hitResult.hit) return null;
-
-        return new RaycastHit(
-            GetEntity(hitResult.bodyId),
-            hitResult.bodyId,
-            hitResult.shapeId,
-            hitResult.point,
-            hitResult.normal,
-            maxDistance * hitResult.fraction,
-            hitResult.fraction);
-    }
+        => PhysicsQueries2D.RaycastClosest(_world.WorldId, origin, direction, maxDistance) is { } hit ? Resolve(hit, maxDistance) : null;
 
     /// <summary>
     /// Performs a raycast and returns all hits along the ray.
@@ -264,23 +256,17 @@ public sealed class Box2DSimulation : IDisposable
     /// <returns>List of all hits along the ray.</returns>
     public List<RaycastHit> RaycastAll(Vector2 origin, Vector2 direction, float maxDistance)
     {
-        var rawHits = PhysicsQueries2D.RaycastAll(_world.WorldId, origin, direction, maxDistance);
-        var converted = new List<RaycastHit>(rawHits.Count);
+        var hits = PhysicsQueries2D.RaycastAll(_world.WorldId, origin, direction, maxDistance);
+        var resolved = new List<RaycastHit>(hits.Count);
 
-        foreach (var hit in rawHits)
-        {
-            converted.Add(new RaycastHit(
-                GetEntity(hit.BodyId),
-                hit.BodyId,
-                hit.ShapeId,
-                hit.Point,
-                hit.Normal,
-                maxDistance * hit.Fraction,
-                hit.Fraction));
-        }
+        foreach (var hit in hits) resolved.Add(Resolve(hit, maxDistance));
 
-        return converted;
+        return resolved;
     }
+
+    // The raw hit with its entity looked up and its fraction turned into a distance
+    private RaycastHit Resolve(QueryRaycastHit hit, float maxDistance)
+        => new(GetEntity(hit.BodyId), hit.BodyId, hit.ShapeId, hit.Point, hit.Normal, maxDistance * hit.Fraction, hit.Fraction);
 
     /// <summary>
     /// Overlaps an AABB and returns all bodies within it.

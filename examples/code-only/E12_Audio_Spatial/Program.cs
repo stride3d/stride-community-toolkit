@@ -7,6 +7,7 @@ using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Input;
 using Stride.Media;
 using System.Reflection;
@@ -105,12 +106,11 @@ void StartPad()
     emitter!.Instance = padInstance;
 }
 
-void Update(Scene scene, Stride.Games.GameTime time)
+void Update(Scene scene, GameTime time)
 {
     var input = game.Input;
 
-    if (input.IsKeyPressed(Keys.G))
-        orbiting = !orbiting;
+    if (input.IsKeyPressed(Keys.G)) orbiting = !orbiting;
 
     if (input.IsKeyPressed(Keys.T))
     {
@@ -120,10 +120,7 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
     if (input.IsKeyPressed(Keys.Space) && padInstance is not null)
     {
-        if (padInstance.PlayState == PlayState.Playing)
-            padInstance.Stop();
-        else
-            padInstance.Play();
+        if (padInstance.PlayState == PlayState.Playing) padInstance.Stop(); else padInstance.Play();
     }
 
     if (input.IsKeyPressed(Keys.N) && chime is not null && emitter is not null)
@@ -139,25 +136,23 @@ void Update(Scene scene, Stride.Games.GameTime time)
     // A finished instance still holds a native source: dispose it once it reports Stopped
     chimes.RemoveAll(instance =>
     {
-        if (instance.PlayState != PlayState.Stopped)
-            return false;
+        if (instance.PlayState != PlayState.Stopped) return false;
 
         instance.Dispose();
         return true;
     });
 
-    if (orbiting)
-        angle += OrbitSpeed * (float)time.Elapsed.TotalSeconds;
+    if (orbiting) angle += OrbitSpeed * (float)time.Elapsed.TotalSeconds;
 
     if (orb is not null)
+    {
         orb.Transform.Position = new Vector3(MathF.Cos(angle) * OrbitRadius, 1.2f, MathF.Sin(angle) * OrbitRadius);
+    }
 }
 
 void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Spatial sound", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Spatial sound", () =>
     {
         var camera = game.GetCameraEntity().Transform.WorldMatrix;
         var toOrb = orb!.Transform.Position - camera.TranslationVector;

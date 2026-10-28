@@ -32,18 +32,15 @@ internal sealed class PrimitiveGeometryCache
     private (VertexPositionTexture[] Vertices, int[] Indices) _cylinder = default!;
     private (VertexPositionTexture[] Vertices, int[] Indices) _cone = default!;
 
-    private Primitives _vertexOffsets;
-    private Primitives _indexOffsets;
-
     /// <summary>
     /// Vertex offsets into the packed vertex buffer for each primitive type.
     /// </summary>
-    internal Primitives VertexOffsets => _vertexOffsets;
+    internal Primitives VertexOffsets { get; private set; }
 
     /// <summary>
     /// Index offsets into the packed index buffer for each primitive type.
     /// </summary>
-    internal Primitives IndexOffsets => _indexOffsets;
+    internal Primitives IndexOffsets { get; private set; }
 
     /// <summary>
     /// Half-sphere index count (derived from sphere indices).
@@ -73,40 +70,21 @@ internal sealed class PrimitiveGeometryCache
             _cone.Vertices.Length
         ];
 
-        int vertexBufferOffset = 0;
-        var vertexOffsets = default(Primitives);
+        var offsets = default(Primitives);
+        var next = 0;
 
-        Array.Copy(_circle.Vertices, 0, vertexData, vertexBufferOffset, _circle.Vertices.Length);
-        vertexOffsets.Circles = vertexBufferOffset;
-        vertexBufferOffset += _circle.Vertices.Length;
+        // The half sphere is the first half of the sphere's mesh, so it shares the sphere's offset
+        offsets.Circles = Append(_circle.Vertices, vertexData, ref next);
+        offsets.Quads = Append(_plane.Vertices, vertexData, ref next);
+        offsets.Spheres = offsets.HalfSpheres = Append(_sphere.Vertices, vertexData, ref next);
+        offsets.Cubes = Append(_cube.Vertices, vertexData, ref next);
+        offsets.Capsules = Append(_capsule.Vertices, vertexData, ref next);
+        offsets.Cylinders = Append(_cylinder.Vertices, vertexData, ref next);
+        offsets.Cones = Append(_cone.Vertices, vertexData, ref next);
 
-        Array.Copy(_plane.Vertices, 0, vertexData, vertexBufferOffset, _plane.Vertices.Length);
-        vertexOffsets.Quads = vertexBufferOffset;
-        vertexBufferOffset += _plane.Vertices.Length;
-
-        Array.Copy(_sphere.Vertices, 0, vertexData, vertexBufferOffset, _sphere.Vertices.Length);
-        vertexOffsets.Spheres = vertexBufferOffset;
-        vertexOffsets.HalfSpheres = vertexBufferOffset;
-        vertexBufferOffset += _sphere.Vertices.Length;
-
-        Array.Copy(_cube.Vertices, 0, vertexData, vertexBufferOffset, _cube.Vertices.Length);
-        vertexOffsets.Cubes = vertexBufferOffset;
-        vertexBufferOffset += _cube.Vertices.Length;
-
-        Array.Copy(_capsule.Vertices, 0, vertexData, vertexBufferOffset, _capsule.Vertices.Length);
-        vertexOffsets.Capsules = vertexBufferOffset;
-        vertexBufferOffset += _capsule.Vertices.Length;
-
-        Array.Copy(_cylinder.Vertices, 0, vertexData, vertexBufferOffset, _cylinder.Vertices.Length);
-        vertexOffsets.Cylinders = vertexBufferOffset;
-        vertexBufferOffset += _cylinder.Vertices.Length;
-
-        Array.Copy(_cone.Vertices, 0, vertexData, vertexBufferOffset, _cone.Vertices.Length);
-        vertexOffsets.Cones = vertexBufferOffset;
-        vertexBufferOffset += _cone.Vertices.Length;
-
-        _vertexOffsets = vertexOffsets;
+        VertexOffsets = offsets;
         HalfSphereIndexCount = _sphere.Indices.Length / 2;
+
         return vertexData;
     }
 
@@ -125,40 +103,31 @@ internal sealed class PrimitiveGeometryCache
             _cone.Indices.Length
         ];
 
-        int indexBufferOffset = 0;
-        var indexOffsets = default(Primitives);
+        var offsets = default(Primitives);
+        var next = 0;
 
-        Array.Copy(_circle.Indices, 0, indexData, indexBufferOffset, _circle.Indices.Length);
-        indexOffsets.Circles = indexBufferOffset;
-        indexBufferOffset += _circle.Indices.Length;
+        offsets.Circles = Append(_circle.Indices, indexData, ref next);
+        offsets.Quads = Append(_plane.Indices, indexData, ref next);
+        offsets.Spheres = offsets.HalfSpheres = Append(_sphere.Indices, indexData, ref next);
+        offsets.Cubes = Append(_cube.Indices, indexData, ref next);
+        offsets.Capsules = Append(_capsule.Indices, indexData, ref next);
+        offsets.Cylinders = Append(_cylinder.Indices, indexData, ref next);
+        offsets.Cones = Append(_cone.Indices, indexData, ref next);
 
-        Array.Copy(_plane.Indices, 0, indexData, indexBufferOffset, _plane.Indices.Length);
-        indexOffsets.Quads = indexBufferOffset;
-        indexBufferOffset += _plane.Indices.Length;
+        IndexOffsets = offsets;
 
-        Array.Copy(_sphere.Indices, 0, indexData, indexBufferOffset, _sphere.Indices.Length);
-        indexOffsets.Spheres = indexBufferOffset;
-        indexOffsets.HalfSpheres = indexBufferOffset;
-        indexBufferOffset += _sphere.Indices.Length;
-
-        Array.Copy(_cube.Indices, 0, indexData, indexBufferOffset, _cube.Indices.Length);
-        indexOffsets.Cubes = indexBufferOffset;
-        indexBufferOffset += _cube.Indices.Length;
-
-        Array.Copy(_capsule.Indices, 0, indexData, indexBufferOffset, _capsule.Indices.Length);
-        indexOffsets.Capsules = indexBufferOffset;
-        indexBufferOffset += _capsule.Indices.Length;
-
-        Array.Copy(_cylinder.Indices, 0, indexData, indexBufferOffset, _cylinder.Indices.Length);
-        indexOffsets.Cylinders = indexBufferOffset;
-        indexBufferOffset += _cylinder.Indices.Length;
-
-        Array.Copy(_cone.Indices, 0, indexData, indexBufferOffset, _cone.Indices.Length);
-        indexOffsets.Cones = indexBufferOffset;
-        indexBufferOffset += _cone.Indices.Length;
-
-        _indexOffsets = indexOffsets;
         return indexData;
+    }
+
+    /// <summary>Copies <paramref name="source"/> into <paramref name="destination"/> at the next free slot and returns where it starts.</summary>
+    private static int Append<T>(T[] source, T[] destination, ref int next)
+    {
+        var start = next;
+
+        Array.Copy(source, 0, destination, start, source.Length);
+        next += source.Length;
+
+        return start;
     }
 
     // Expose per-primitive index counts for draw calls

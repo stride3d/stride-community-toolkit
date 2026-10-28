@@ -1,8 +1,6 @@
 using E04_Myra_ControlPanel;
 using Myra.Graphics2D.UI;
 using Stride.BepuPhysics;
-using Stride.BepuPhysics.Definitions;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
@@ -26,13 +24,13 @@ using Stride.Rendering.Lights;
 
 const int SpawnLimit = 60;
 
-var gravities = new (string Name, Vector3 Value)[]
-{
+(string Name, Vector3 Value)[] gravities =
+[
     ("Earth", new Vector3(0f, -9.81f, 0f)),
     ("Moon", new Vector3(0f, -1.62f, 0f)),
     ("None", Vector3.Zero),
     ("Upside down", new Vector3(0f, 9.81f, 0f)),
-};
+];
 
 var spawned = new List<Entity>();
 var random = new Random(4);
@@ -60,17 +58,18 @@ using var game = new Game();
 var sceneSetup = new SceneSetup3D
 {
     Camera = CameraSetup.Perspective(position: new Vector3(0f, 7f, 14f), rotation: new Vector3(0f, -25f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Myra control panel - Stride Community Toolkit",
+    Resizable = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    rootScene = scene;
+    game.AddGrabber();
 
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Myra control panel - Stride Community Toolkit";
+    rootScene = scene;
 
     sun = scene.Entities.Select(e => e.Get<LightComponent>()).First(l => l is not null);
     physicsDebug = game.AddPhysicsDebug();
@@ -208,7 +207,10 @@ Grid BuildSceneTab()
 
     var gravity = new ComboView { Tooltip = "Takes effect on every body on the next step" };
 
-    foreach (var (name, _) in gravities) gravity.Widgets.Add(new Label { Text = name });
+    foreach (var (name, _) in gravities)
+    {
+        gravity.Widgets.Add(new Label { Text = name });
+    }
 
     gravity.SelectedIndex = 0;
     gravity.SelectedIndexChanged += (_, _) => { if (simulation is not null && gravity.SelectedIndex is { } i) simulation.PoseGravity = gravities[i].Value; };
@@ -234,7 +236,10 @@ VerticalStackPanel BuildSpawnTab(Desktop desktop)
     var count = new SpinButton { Minimum = 1, Maximum = 50, Value = spawnCount, Integer = true, Width = 80, Tooltip = "How many at once" };
     var shape = new ComboView { Width = 120 };
 
-    foreach (var name in new[] { "Cube", "Sphere", "Capsule" }) shape.Widgets.Add(new Label { Text = name });
+    foreach (var name in (ReadOnlySpan<string>)["Cube", "Sphere", "Capsule"])
+    {
+        shape.Widgets.Add(new Label { Text = name });
+    }
 
     shape.SelectedIndex = 0;
     shape.SelectedIndexChanged += (_, _) => spawnShape = shape.SelectedIndex ?? 0;

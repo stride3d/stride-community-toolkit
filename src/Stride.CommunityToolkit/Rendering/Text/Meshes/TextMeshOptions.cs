@@ -1,4 +1,3 @@
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Graphics;
 
 namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
@@ -36,7 +35,7 @@ public sealed class TextMeshOptions
     /// the font's ascent to its descent over every line, so the anchor does not move with the letters
     /// used.
     /// </summary>
-    public TextAnchor? Anchor { get; set; }
+    public Anchor? Anchor { get; set; }
 
     /// <summary>Extra space after every glyph, in EM units; negative tightens. Defaults to 0.</summary>
     public float LetterSpacing { get; set; }

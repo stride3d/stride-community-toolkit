@@ -154,15 +154,9 @@ public static class SystemFonts
 
             foreach (var file in files)
             {
-                var extension = Path.GetExtension(file);
+                if (Path.GetExtension(file).ToLowerInvariant() is not (".ttf" or ".otf" or ".ttc")) continue;
 
-                if (!extension.Equals(".ttf", StringComparison.OrdinalIgnoreCase)
-                    && !extension.Equals(".otf", StringComparison.OrdinalIgnoreCase)
-                    && !extension.Equals(".ttc", StringComparison.OrdinalIgnoreCase))
-                { continue; }
-
-                if (wanted.Contains(Path.GetFileNameWithoutExtension(file)))
-                    return file;
+                if (wanted.Contains(Path.GetFileNameWithoutExtension(file))) return file;
             }
         }
 
@@ -224,12 +218,12 @@ public static class SystemFonts
 
         var compact = family.Replace(" ", string.Empty);
 
-        var suffixes = styleIndex switch
+        string[] suffixes = styleIndex switch
         {
             3 => ["-BoldItalic", "BoldItalic", " Bold Italic", "bi", "z"],
             1 => ["-Bold", "Bold", " Bold", "bd", "b"],
             2 => ["-Italic", "Italic", " Italic", "i"],
-            _ => new[] { string.Empty, "-Regular", "Regular", " Regular" },
+            _ => [string.Empty, "-Regular", "Regular", " Regular"],
         };
 
         foreach (var suffix in suffixes)

@@ -4,6 +4,7 @@ using Stride.Core.Mathematics;
 using Xunit;
 using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2Shapes;
+using static Stride.CommunityToolkit.Tests.Box2D.Box2DFixtures;
 
 namespace Stride.CommunityToolkit.Tests.Box2D;
 
@@ -38,7 +39,7 @@ public class ChainTests
         // A chain collides on the right of its direction of travel: a floor runs right to left.
         ShapeFixtureBuilder.AttachChain([new(20, 0), new(-20, 0)], ground);
 
-        var box = Joints2DTests.Box(simulation, new Vector3(0, 1, 0));
+        var box = Box(simulation, new Vector3(0, 1, 0));
 
         for (var i = 0; i < 120; i++)
             simulation.Update(TimeSpan.FromSeconds(1 / 60.0));

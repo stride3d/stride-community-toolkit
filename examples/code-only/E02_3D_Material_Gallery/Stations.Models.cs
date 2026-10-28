@@ -274,8 +274,7 @@ public static class ModelStations
     // An override is an entry in the component's material dictionary; no entry means the model's material
     private static void SetOverride(ModelComponent component, Material? material)
     {
-        if (material is null) component.Materials.Remove(0);
-        else component.Materials[0] = material;
+        if (material is null) component.Materials.Remove(0); else component.Materials[0] = material;
     }
 
     private sealed record RuntimeState(int Variation, Model Model, ModelComponent Middle, Material Grey, Material Red, Material Blue, Material? Rebuilt);

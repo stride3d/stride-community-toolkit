@@ -3,8 +3,8 @@ using Stride.BepuPhysics.Constraints;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Gizmos;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -109,7 +109,7 @@ void Start(Scene scene)
     game.AddGroundGizmo(new Vector3(-9, 0, -9), showAxisName: true);
     game.AddOrientationGizmo();
 
-    InitializeTextOverlay();
+    AddInstructions();
 
     CreateMixer(scene);
     CreateMotorisedPendulum(scene);
@@ -138,11 +138,7 @@ void Update(Scene scene, GameTime time)
         swingLimit.Enabled = !swingLimit.Enabled;
     }
 
-    if (game.Input.IsKeyPressed(Keys.P))
-    {
-        PushPendulums();
-    }
-
+    if (game.Input.IsKeyPressed(Keys.P)) PushPendulums();
 }
 
 /// <summary>
@@ -193,10 +189,9 @@ void CreateMixer(Scene scene)
     {
         A = bladeBody,
         TargetVelocity = new Vector3(0, MotorSpeed, 0),
+        MotorDamping = MotorDampingValue,
+        MotorMaximumForce = MotorForceValue,
     };
-
-    mixerMotor.MotorDamping = MotorDampingValue;
-    mixerMotor.MotorMaximumForce = MotorForceValue;
 
     post.Add(hinge);
     blade.Add(mixerMotor);
@@ -328,15 +323,13 @@ void CreateSwingLimitComparison(Scene scene)
 
     // Pins the top of the arm to the pivot while leaving rotation completely free - the joint itself
     // imposes no angle limit at all.
-    var ballSocket = new BallSocketConstraintComponent
+    anchor.Add(new BallSocketConstraintComponent
     {
         A = anchor.Get<BodyComponent>(),
         B = arm.Get<BodyComponent>(),
         LocalOffsetA = new Vector3(0, -PinDrop, 0),
         LocalOffsetB = new Vector3(0, halfArm, 0),
-    };
-
-    anchor.Add(ballSocket);
+    });
 
     anchor.Scene = scene;
     arm.Scene = scene;
@@ -369,9 +362,8 @@ Entity CreateBox(string name, Color color, Vector3 position, Vector3 size, bool 
     {
         EntityName = name,
         Material = game.CreateMaterial(color),
+        Position = position,
     });
-
-    entity.Transform.Position = position;
 
     if (kinematic)
     {
@@ -381,7 +373,7 @@ Entity CreateBox(string name, Color color, Vector3 position, Vector3 size, bool 
     return entity;
 }
 
-IReadOnlyList<TextElement> BuildInstructions()
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
     // Rebuilt every frame rather than patched line by line. Indexing into the existing list means
     // the labels written here and the placeholders written at startup have to be kept in step by
@@ -411,13 +403,11 @@ static string OnOff(bool? enabled) => enabled == true ? "ON" : "OFF";
 
 static string Spin(BodyComponent? body) => body is null ? "-" : MathF.Abs(body.AngularVelocity.Y).ToString("0.0", CultureInfo.InvariantCulture);
 
-void InitializeTextOverlay()
+void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    // BuildInstructions runs every frame the overlay is drawn, which is what puts the live spin
+    // BuildOverlayLines runs every frame the overlay is drawn, which is what puts the live spin
     // readouts on screen without anything having to push them
-    overlay.AddSection("Game", BuildInstructions);
+    TextOverlay.GetOrCreate(game).AddSection("Game", BuildOverlayLines);
 }
 
 /*

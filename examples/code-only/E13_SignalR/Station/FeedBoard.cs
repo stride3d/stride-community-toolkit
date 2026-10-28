@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 
@@ -24,6 +24,9 @@ public sealed class FeedBoard
     private static readonly Color Cleared = new(255, 170, 70);
     private static readonly Color Hail = new(255, 220, 80);
 
+    // The row keys, built once: the board is drawn every frame, and a key interpolated there would allocate each time
+    private static readonly string[] FeedKeys = [.. Enumerable.Range(0, Lines).Select(i => "feed-" + i)];
+
     private readonly Board _board;
     private readonly Labels _labels;
 
@@ -32,13 +35,13 @@ public sealed class FeedBoard
         _board = new Board(center, facing, new Vector2(Width, Height));
         _labels = labels;
 
-        labels.Add("feed-title", 0.32f, labels.Bold, (t, c) => t.TextColor = c.Accent, TextAnchor.MiddleLeft);
-        labels.Add("feed-count", 0.3f, labels.Mono, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 150), TextAnchor.MiddleRight);
+        labels.Add("feed-title", 0.32f, labels.Bold, (t, c) => t.TextColor = c.Accent, Anchor.MiddleLeft);
+        labels.Add("feed-count", 0.3f, labels.Mono, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 150), Anchor.MiddleRight);
 
         for (var i = 0; i < Lines; i++)
         {
             // Colour set per frame by the line's age, so the restyle only has to note the text colour
-            labels.Add($"feed-{i}", LineHeight, labels.Sans, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleLeft);
+            labels.Add(FeedKeys[i], LineHeight, labels.Sans, (t, c) => t.TextColor = c.Text, Anchor.MiddleLeft);
         }
     }
 
@@ -67,7 +70,7 @@ public sealed class FeedBoard
 
         for (var i = 0; i < Lines; i++)
         {
-            var key = $"feed-{i}";
+            var key = FeedKeys[i];
 
             if (i >= log.Count)
             {

@@ -13,8 +13,8 @@ Two pieces are involved:
 - **`WorldTextRenderer`** draws it. `WorldTextProcessor` adds it to the compositor when no
   `AddWorldTextRenderer()` call has.
 
-The component, the renderer and `TextAnchor` are in the `Stride.CommunityToolkit.Rendering.Text`
-namespace; the `AddWorldTextRenderer()` extension is in `Stride.CommunityToolkit.Engine`.
+The component and the renderer are in the `Stride.CommunityToolkit.Rendering.Text` namespace, `Anchor` in
+`Stride.CommunityToolkit.Rendering`; the `AddWorldTextRenderer()` extension is in `Stride.CommunityToolkit.Engine`.
 
 ```csharp
 game.AddWorldTextRenderer();
@@ -25,7 +25,7 @@ var sign = new Entity("Sign")
     {
         Text = "Spawn",
         Height = 0.4f,
-        Anchor = TextAnchor.BottomCenter,
+        Anchor = Anchor.BottomCenter,
     }
 };
 

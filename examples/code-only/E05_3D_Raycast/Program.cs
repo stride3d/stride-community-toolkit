@@ -24,10 +24,10 @@ const float ImpulseStrength = 0.5f;
 const float SphereRadius = 0.5f;
 const float RayLength = 30f;
 
-CameraComponent? mainCamera = null;
-Entity? sphereEntity = null;
-BodyComponent? sphereBody = null;
-Buffer? vertexBuffer = null;
+CameraComponent mainCamera = null!;
+Entity sphereEntity = null!;
+BodyComponent sphereBody = null!;
+Buffer vertexBuffer = null!;
 
 // The sphere's ray as a line: its two ends, in the sphere's local space
 Vector3[] lineVertices = new Vector3[2];
@@ -45,38 +45,30 @@ void Start(Scene scene)
     game.AddOrientationGizmo();
     game.AddGrabber();
 
-    TextOverlay.GetOrCreate(game).AddSection("Raycast", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Raycast", BuildOverlayLines);
 
     // Panels around the sphere, so a ray from it has something to go through
     AddPanels(scene);
 
-    sphereEntity = game.CreatePrimitive(Primitive3D.Sphere());
-    sphereEntity.Transform.Position = new Vector3(0, 8, 0);
+    sphereEntity = game.CreatePrimitive(Primitive3D.Sphere(), new() { Position = new Vector3(0, 8, 0) });
     sphereEntity.Scene = scene;
 
     sphereBody = sphereEntity.Get<BodyComponent>();
-    mainCamera = scene.GetCamera();
+    mainCamera = game.GetCameraEntity().Get<CameraComponent>();
 
     // The line is a child of the sphere, so it moves with it
-    sphereEntity.AddChild(CreateLineEntity(game));
+    sphereEntity.AddChild(CreateLineEntity());
 }
 
 void Update(Scene scene, GameTime time)
 {
-    if (mainCamera is null) return;
-
-    if (game.Input.IsMouseButtonPressed(MouseButton.Left))
-    {
-        ProcessMouseClick();
-    }
+    if (game.Input.IsMouseButtonPressed(MouseButton.Left)) ProcessMouseClick();
 }
 
 // The camera's ray: the mouse position becomes a ray from the camera, and Bepu reports the first
 // thing it hits and where
 void ProcessMouseClick()
 {
-    if (sphereBody is null || sphereEntity is null) return;
-
     if (!mainCamera.Raycast(game.Input.MousePosition, 100, out var hitInfo))
     {
         Console.WriteLine("No hit");
@@ -104,7 +96,7 @@ void ProcessMouseClick()
 // overload takes a segment and sorts the hits by distance. The line is drawn along it
 void ListEverythingInThatDirection(Vector3 clickedPoint)
 {
-    if (sphereEntity is null || sphereBody?.Simulation is not { } simulation) return;
+    if (sphereBody.Simulation is not { } simulation) return;
 
     var start = sphereEntity.Transform.WorldMatrix.TranslationVector;
     var direction = Vector3.Normalize(clickedPoint - start);
@@ -127,26 +119,27 @@ void ListEverythingInThatDirection(Vector3 clickedPoint)
 // Static panels standing around the sphere on the ground: click the ground beyond one and the sphere's ray goes through it
 void AddPanels(Scene scene)
 {
-    var positions = new[] { new Vector3(4f, 1f, 0f), new Vector3(0f, 1f, -5f), new Vector3(-3.5f, 1f, 3.5f), new Vector3(7f, 1f, 1f) };
+    Vector3[] positions = [new(4f, 1f, 0f), new(0f, 1f, -5f), new(-3.5f, 1f, 3.5f), new(7f, 1f, 1f)];
 
     for (var i = 0; i < positions.Length; i++)
     {
         var panel = game.CreatePrimitive(Primitive3D.Box(new Vector3(2.4f, 2f, 0.1f)), new BepuPhysicsOptions
         {
+            EntityName = $"Panel {i + 1}",
             Material = game.CreateMaterial(new Color(120, 170, 220), metalness: 0f, glossiness: 0.5f),
             Body = BodyMode.Static,
+            Position = positions[i],
         });
 
         // Each panel faces the sphere's starting point, so a ray from there meets it square on
         var toCentre = -positions[i];
-        panel.Name = $"Panel {i + 1}";
-        panel.Transform.Position = positions[i];
+
         panel.Transform.Rotation = Quaternion.RotationY(MathF.Atan2(toCentre.X, toCentre.Z));
         panel.Scene = scene;
     }
 }
 
-IReadOnlyList<TextElement> OverlayLines()
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
     List<TextElement> lines =
     [
@@ -159,7 +152,10 @@ IReadOnlyList<TextElement> OverlayLines()
         lines.Add(new(""));
         lines.Add(new("The sphere's ray went through", Color.LightGray));
 
-        foreach (var line in through) lines.Add(new(line, Color.LightSkyBlue));
+        foreach (var line in through)
+        {
+            lines.Add(new(line, Color.LightSkyBlue));
+        }
     }
 
     return lines;
@@ -168,8 +164,6 @@ IReadOnlyList<TextElement> OverlayLines()
 // The line's far end goes to the ray's end, in the sphere's local space since the line is its child
 void UpdateLineVisualization(Vector3 rayEndWorld)
 {
-    if (sphereEntity == null || vertexBuffer == null) return;
-
     lineVertices[1] = Vector3.Transform(rayEndWorld, Matrix.Invert(sphereEntity.Transform.WorldMatrix)).XYZ();
 
     vertexBuffer.SetData(game.GraphicsContext.CommandList, lineVertices);
@@ -178,8 +172,6 @@ void UpdateLineVisualization(Vector3 rayEndWorld)
 // The impulse points from the sphere's centre to the hit point, the same strength whatever the distance
 void ApplyImpulseToSphere(Vector3 hitPointWorld)
 {
-    if (sphereEntity == null || sphereBody == null) return;
-
     var direction = hitPointWorld - sphereEntity.Transform.WorldMatrix.TranslationVector;
 
     direction.Normalize();
@@ -193,30 +185,29 @@ void ApplyImpulseToSphere(Vector3 hitPointWorld)
 
 // A two-vertex line list in a buffer the example owns, so the far end can be rewritten on every click. The
 // line rides on the sphere, so once the sphere rolls on, the line no longer lies along the ray it drew
-Entity CreateLineEntity(Game game)
+Entity CreateLineEntity()
 {
     lineVertices[0] = Vector3.Zero;
     lineVertices[1] = new(-1, 1, 1);
 
     vertexBuffer = Buffer.New(game.GraphicsDevice, lineVertices, BufferFlags.VertexBuffer, GraphicsResourceUsage.Default);
 
-    var indices = new ushort[] { 0, 1 };
+    ushort[] indices = [0, 1];
     var indexBuffer = Buffer.New(game.GraphicsDevice, indices, BufferFlags.IndexBuffer, GraphicsResourceUsage.Default);
 
-    var meshDraw = new MeshDraw
+    var mesh = new Mesh
     {
-        PrimitiveType = PrimitiveType.LineList,
-        VertexBuffers = [new VertexBufferBinding(vertexBuffer, new VertexDeclaration(VertexElement.Position<Vector3>()), lineVertices.Length)],
-        IndexBuffer = new IndexBufferBinding(indexBuffer, is32Bit: false, indices.Length),
-        DrawCount = indices.Length
+        Draw = new MeshDraw
+        {
+            PrimitiveType = PrimitiveType.LineList,
+            VertexBuffers = [new VertexBufferBinding(vertexBuffer, new VertexDeclaration(VertexElement.Position<Vector3>()), lineVertices.Length)],
+            IndexBuffer = new IndexBufferBinding(indexBuffer, is32Bit: false, indices.Length),
+            DrawCount = indices.Length,
+        },
     };
 
-    var mesh = new Mesh { Draw = meshDraw };
-
     // An emissive gizmo material: visible whatever the lighting, and bright enough that bloom gives it a glow
-    var lineModelComponent = new ModelComponent { Model = new Model { mesh, GizmoEmissiveColorMaterial.Create(game.GraphicsDevice, Color.OrangeRed, 4) } };
-
-    return new Entity { lineModelComponent };
+    return new Entity { new ModelComponent { Model = new Model { mesh, GizmoEmissiveColorMaterial.Create(game.GraphicsDevice, Color.OrangeRed, 4) } } };
 }
 
 /*

@@ -1,8 +1,8 @@
 using Box2D.NET;
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -36,9 +36,8 @@ const float Scale = 1f;
 const float DriveSpeed = 35f;          // wheel rad/s at full throttle
 const float Torque = 2.5f * Scale;
 
-Box2DSimulation? simulation = null;
-ShapeBatch? shapeBatch = null;
-Basic2DCameraController? cameraController = null;
+ShapeBatch shapeBatch = null!;
+Basic2DCameraController cameraController = null!;
 
 var pink = new Color(0xFF, 0xC0, 0xCB);
 var paleGreen = new Color(0x98, 0xFB, 0x98);
@@ -47,7 +46,7 @@ var background = new Color(0.2f, 0.2f, 0.2f);
 
 Vector2[] terrain = [];
 List<Entity> spawned = [];
-Entity? chassis = null;
+Entity chassis = null!;
 B2BodyId chassisBody = default;
 B2JointId rearAxle = default;
 B2JointId frontAxle = default;
@@ -56,24 +55,22 @@ var throttle = 0f;
 var autoDrive = true;                  // drives itself until A or D is pressed, so the scene moves from the start
 
 using var game = new Game();
+using var simulation = new Box2DSimulation();
 
 var sceneSetup = new SceneSetup2D
 {
     ClearColor = background,
     Camera = CameraSetup.Orthographic(orthographicSize: 22).WithController(),
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Box2D Car - Stride Community Toolkit",
+    Resizable = true,
 };
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-simulation?.Dispose();
-
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Box2D Car - Stride Community Toolkit";
-
     var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
 
@@ -81,9 +78,7 @@ void Start(Scene rootScene)
     shapeBatch.BorderWidth = 1f;
     shapeBatch.Fill.Alpha = 0.4f;
 
-    simulation = new Box2DSimulation();
-
-    cameraEntity.Add(new Grabber2DScript { Simulation = simulation });
+    game.AddGrabber2D(simulation);
 
     BuildTerrain();
     SpawnCar(rootScene, new Vector2(0, 1));
@@ -95,7 +90,7 @@ void Start(Scene rootScene)
 // built left to right here and reversed before it is attached: right to left, collision side up.
 void BuildTerrain()
 {
-    var points = new List<Vector2> { new(-20, 20), new(-20, 0), new(20, 0) };
+    List<Vector2> points = [new(-20, 20), new(-20, 0), new(20, 0)];
     float[] hills = [0.25f, 1.0f, 4.0f, 0.0f, 0.0f, -1.0f, -2.0f, -2.0f, -1.25f, 0.0f];
     var x = 20f;
 
@@ -118,7 +113,7 @@ void BuildTerrain()
     points.Reverse();
     terrain = [.. points];
 
-    var ground = simulation!.CreateStaticBody(Vector3.Zero);
+    var ground = simulation.CreateStaticBody(Vector3.Zero);
     ShapeFixtureBuilder.AttachChain(terrain, ground, friction: 0.6f);
 }
 
@@ -131,13 +126,13 @@ void SpawnCar(Scene scene, Vector2 position)
         new(-1.5f, -0.5f), new(1.5f, -0.5f), new(1.5f, 0.0f), new(0.0f, 0.9f), new(-1.15f, 0.9f), new(-1.5f, 0.2f),
     ];
 
-    for (var i = 0; i < outline.Length; i++)
-        outline[i] *= 0.85f * Scale;
-
     var hullPoints = new B2Vec2[outline.Length];
 
     for (var i = 0; i < outline.Length; i++)
+    {
+        outline[i] *= 0.85f * Scale;
         hullPoints[i] = new B2Vec2(outline[i].X, outline[i].Y);
+    }
 
     var hull = b2ComputeHull(hullPoints, hullPoints.Length);
     var chassisShape = b2MakePolygon(hull, 0.15f * Scale);
@@ -149,7 +144,7 @@ void SpawnCar(Scene scene, Vector2 position)
     chassis.Scene = scene;
     spawned.Add(chassis);
 
-    chassisBody = simulation!.CreateDynamicBody(chassis, new Vector3(chassisPosition, 0));
+    chassisBody = simulation.CreateDynamicBody(chassis, new Vector3(chassisPosition, 0));
     b2CreatePolygonShape(chassisBody, in chassisDef, in chassisShape);
     chassis.Add(new Box2DBodyComponent { BodyId = chassisBody });
 
@@ -180,7 +175,7 @@ void SpawnCar(Scene scene, Vector2 position)
     rearAxle = simulation.Joints.CreateWheel(chassisBody, rear, rearCentre, Vector2.UnitY, options);
     frontAxle = simulation.Joints.CreateWheel(chassisBody, front, frontCentre, Vector2.UnitY, options);
 
-    cameraController!.FollowTarget = chassis;
+    cameraController.FollowTarget = chassis;
 }
 
 B2BodyId Wheel(Scene scene, Vector2 centre, B2ShapeDef shapeDef)
@@ -191,7 +186,7 @@ B2BodyId Wheel(Scene scene, Vector2 centre, B2ShapeDef shapeDef)
     entity.Scene = scene;
     spawned.Add(entity);
 
-    var body = simulation!.CreateDynamicBody(entity, new Vector3(centre, 0));
+    var body = simulation.CreateDynamicBody(entity, new Vector3(centre, 0));
     ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(radius), body, shapeDef);
     entity.Add(new Box2DBodyComponent { BodyId = body });
 
@@ -200,13 +195,15 @@ B2BodyId Wheel(Scene scene, Vector2 centre, B2ShapeDef shapeDef)
 
 void Update(Scene rootScene, GameTime time)
 {
-    simulation?.Update(time.Elapsed);
+    simulation.Update(time.Elapsed);
 
     var input = game.Input;
 
     // Throttle: the motor's speed. A negative wheel speed - clockwise - rolls the car to the right.
     if (input.IsKeyDown(Keys.A) || input.IsKeyDown(Keys.D))
+    {
         autoDrive = false;
+    }
 
     throttle = autoDrive ? 1 : (input.IsKeyDown(Keys.D) ? 1 : 0) - (input.IsKeyDown(Keys.A) ? 1 : 0);
     SetMotorSpeed(-throttle * DriveSpeed);
@@ -220,15 +217,14 @@ void Update(Scene rootScene, GameTime time)
         b2WheelJoint_SetSpringHertz(frontAxle, hertz);
     }
 
-    if (input.IsKeyPressed(Keys.R))
-        Reset(rootScene);
+    if (input.IsKeyPressed(Keys.R)) Reset(rootScene);
 
     DrawTerrain();
 }
 
 void SetMotorSpeed(float speed)
 {
-    if (!simulation!.Joints.IsValid(rearAxle)) return;
+    if (!simulation.Joints.IsValid(rearAxle)) return;
 
     b2WheelJoint_SetMotorSpeed(rearAxle, speed);
     b2WheelJoint_SetMotorSpeed(frontAxle, speed);
@@ -237,15 +233,15 @@ void SetMotorSpeed(float speed)
 
 void DrawTerrain()
 {
-    if (shapeBatch is null) return;
-
     for (var i = 0; i + 1 < terrain.Length; i++)
+    {
         shapeBatch.DrawPixelLine(terrain[i], terrain[i + 1], 2f, paleGreen);
+    }
 }
 
 void Reset(Scene scene)
 {
-    simulation!.Joints.Destroy(rearAxle);
+    simulation.Joints.Destroy(rearAxle);
     simulation.Joints.Destroy(frontAxle);
 
     foreach (var entity in spawned)
@@ -260,11 +256,9 @@ void Reset(Scene scene)
 
 void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    overlay.AddSection("Car", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Car", () =>
     {
-        var speed = simulation is not null && b2Body_IsValid(chassisBody) ? b2Body_GetLinearVelocity(chassisBody).X : 0;
+        var speed = b2Body_IsValid(chassisBody) ? b2Body_GetLinearVelocity(chassisBody).X : 0;
 
         return
         [

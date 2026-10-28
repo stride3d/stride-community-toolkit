@@ -103,11 +103,7 @@ public class MeshFontTests
     [Fact]
     public void TheSameBytesLoadAsASecondFont()
     {
-        using var stream = typeof(MeshFont).Assembly.GetManifestResourceStream("Stride.CommunityToolkit.Rendering.Text.Fonts.OpenSans-Regular.ttf")!;
-        var bytes = new byte[stream.Length];
-        stream.ReadExactly(bytes);
-
-        using var font = MeshFont.Load(bytes, "copy");
+        using var font = MeshFont.Load(TestGeometry.DefaultFontBytes(), "copy");
 
         Assert.Equal("Open Sans", font.Name);
         Assert.NotSame(MeshFont.Default, font);
@@ -117,7 +113,7 @@ public class MeshFontTests
     [Fact]
     public void ADisposedFontRefuses()
     {
-        var font = MeshFont.Load([.. ReadDefaultBytes()], "copy");
+        var font = MeshFont.Load(TestGeometry.DefaultFontBytes(), "copy");
 
         font.Dispose();
 
@@ -146,13 +142,5 @@ public class MeshFontTests
         Assert.All(corners, c => Assert.InRange(c.X, -0.1f, 1f));
         Assert.All(corners, c => Assert.InRange(c.Y, -0.1f, 1f));
         Assert.Equal(12, corners.Count);
-    }
-
-    private static byte[] ReadDefaultBytes()
-    {
-        using var stream = typeof(MeshFont).Assembly.GetManifestResourceStream("Stride.CommunityToolkit.Rendering.Text.Fonts.OpenSans-Regular.ttf")!;
-        var bytes = new byte[stream.Length];
-        stream.ReadExactly(bytes);
-        return bytes;
     }
 }

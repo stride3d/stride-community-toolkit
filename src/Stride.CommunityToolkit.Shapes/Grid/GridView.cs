@@ -7,7 +7,10 @@ namespace Stride.CommunityToolkit.Shapes;
 /// to the screen and back. Screen positions are in the display's scaled pixels, the units a
 /// <see cref="ShapeBatch"/> draws in with <see cref="ShapeBatch.Screen"/> on.
 /// </summary>
-internal readonly struct GridView
+/// <param name="viewProjection">The camera's view-projection matrix.</param>
+/// <param name="size">The window's size in scaled pixels.</param>
+/// <param name="orthographic">Whether the camera is orthographic, as in a 2D scene.</param>
+internal readonly struct GridView(Matrix viewProjection, Vector2 size, bool orthographic)
 {
     /// <summary>At or below this clip-space W a point is on or behind the camera's plane and has no place on the screen.</summary>
     private const float SmallestW = 0.00001f;
@@ -18,26 +21,17 @@ internal readonly struct GridView
     /// </summary>
     private const float UnmeasuredWorldPerPixel = 1f / GridSteps.TargetMajorPixels;
 
-    private readonly Matrix _viewProjection;
-    private readonly Matrix _inverse;
-
-    internal GridView(Matrix viewProjection, Vector2 size, bool orthographic)
-    {
-        _viewProjection = viewProjection;
-        _inverse = Matrix.Invert(viewProjection);
-        Size = size;
-        Orthographic = orthographic;
-    }
+    private readonly Matrix _inverse = Matrix.Invert(viewProjection);
 
     /// <summary>The window's size in scaled pixels.</summary>
-    internal Vector2 Size { get; }
+    internal Vector2 Size { get; } = size;
 
-    internal bool Orthographic { get; }
+    internal bool Orthographic { get; } = orthographic;
 
     /// <summary>The screen position of a world point, or <see langword="false"/> when it is behind the camera.</summary>
     internal bool Project(Vector3 world, out Vector2 screen)
     {
-        var clip = Vector4.Transform(new Vector4(world, 1f), _viewProjection);
+        var clip = Vector4.Transform(new Vector4(world, 1f), viewProjection);
 
         if (clip.W <= SmallestW)
         {
@@ -86,7 +80,7 @@ internal readonly struct GridView
     /// </summary>
     internal float WorldPerPixel(Vector3 world)
     {
-        var clip = Vector4.Transform(new Vector4(world, 1f), _viewProjection);
+        var clip = Vector4.Transform(new Vector4(world, 1f), viewProjection);
 
         if (clip.W <= SmallestW) return UnmeasuredWorldPerPixel;
 
@@ -117,7 +111,7 @@ internal readonly struct GridView
     {
         t = 0f;
 
-        if (MathF.Abs(direction) < 0.000001f) return false;
+        if (MathUtil.IsZero(direction)) return false;
 
         t = -origin / direction;
 

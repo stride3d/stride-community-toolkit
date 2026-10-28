@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
@@ -24,8 +25,6 @@ using Stride.Input;
 //
 // Next: E02_2D_Easing shows every curve at once; E02_2D_EasingInGame and E02_3D_EasingInGame use
 // tweens in physics scenes.
-
-WindowsDpiManager.EnablePerMonitorV2();
 
 const float Duration = 2f;
 const float Hold = 1f;
@@ -59,21 +58,26 @@ ShapeBatch? shapes = null;
 
 using var game = new Game();
 
-game.Run(new SceneSetup2D { ClearColor = new Color(24, 26, 32), Camera = CameraSetup.Orthographic(orthographicSize: 26f), Ground = null }, start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    ClearColor = new Color(24, 26, 32),
+    Camera = CameraSetup.Orthographic(orthographicSize: 26f),
+    Ground = null,
+    WindowTitle = "Easing Basics - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
+}, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Easing Basics - Stride Community Toolkit";
-
     game.AddEntityTextRenderer();
 
     shapes = game.AddShapeBatch();
 
     for (var lane = 0; lane < laneY.Length; lane++)
     {
-        rootScene.Entities.Add(Label(titles[lane], new Vector2(StartX, laneY[lane] + 1.3f), 16, Color.White, TextAnchor.BottomLeft));
-        rootScene.Entities.Add(Label(code[lane], new Vector2(EndX + 2.2f, laneY[lane]), 13, new Color(170, 210, 255), TextAnchor.MiddleLeft));
+        rootScene.Entities.Add(Label(titles[lane], new Vector2(StartX, laneY[lane] + 1.3f), 16, Color.White, Anchor.BottomLeft));
+        rootScene.Entities.Add(Label(code[lane], new Vector2(EndX + 2.2f, laneY[lane]), 13, new Color(170, 210, 255), Anchor.MiddleLeft));
     }
 
     TextOverlay.GetOrCreate(game).AddSection("Easing basics", BuildOverlayLines);
@@ -181,7 +185,7 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
     new("the same curve, less code each time.", Color.LightGray),
 ];
 
-static Entity Label(string text, Vector2 position, float fontSize, Color colour, TextAnchor anchor)
+static Entity Label(string text, Vector2 position, float fontSize, Color colour, Anchor anchor)
 {
     var entity = new Entity($"Label {text.Split('\n')[0]}")
     {

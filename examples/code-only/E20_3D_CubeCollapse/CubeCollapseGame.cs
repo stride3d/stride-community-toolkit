@@ -12,6 +12,7 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
+using Stride.Graphics;
 using Stride.Input;
 using Stride.Rendering;
 using Stride.Rendering.Colors;
@@ -38,6 +39,19 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// <summary>Seed for cube colours, so the same board comes up every run while tuning.</summary>
     private const int Seed = 1;
 
+    /// <summary>
+    /// How far the ground's visible surface sits below the surface the cubes rest on. A cube's bottom
+    /// face and the floor in the same plane fight for the depth buffer, which the two-sided glass
+    /// shows as a flickering bottom; a centimetre apart they do not. The material gallery stands its
+    /// glass a centimetre up for the same reason.
+    /// </summary>
+    private const float GroundGap = 0.01f;
+
+    /// <summary>
+    /// The glass key light's distance across and up from the board, the gallery's ring radius. Large
+    /// against the board, as the ring is against an exhibit, so every cube gets the same light.
+    /// </summary>
+    private const float KeyDistance = 20f;
 
     private readonly CubeGrid _grid = new();
     private readonly ScoreKeeper _keeper = new();
@@ -54,28 +68,27 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     // palette switch should be a repaint, not an allocation
     private CubeMaterialSet[] _materialSets = [];
     private int _paletteIndex;
-    private KeyMenu? _paletteMenu;
 
-    private CubeMaterialSet? _materials;
-    private CubeSpawner? _spawner;
-    private GameAudio? _audio;
-    private ScoreboardScript? _scoreboard;
-    private CubeClickScript? _clickScript;
-    private HoverHighlightScript? _hover;
-    private CameraRotationScript? _cameraRotation;
-    private BepuSimulation? _simulation;
-    private Scene? _scene;
+    // Built in Start, once there is a scene to put them in
+    private KeyMenu _paletteMenu = null!;
+    private CubeMaterialSet _materials = null!;
+    private CubeSpawner _spawner = null!;
+    private GameAudio _audio = null!;
+    private ScoreboardScript _scoreboard = null!;
+    private CubeClickScript _clickScript = null!;
+    private HoverHighlightScript _hover = null!;
+    private CameraRotationScript _cameraRotation = null!;
+    private Scene _scene = null!;
 
     // Two lighting rigs under one sky, one rig in the scene at a time. For the colour palettes the
     // Bepu playground's: the default directional light, so the cubes look as the playground's shapes
     // do, plus a weak fill from the opposite side so no face of a cube goes dark. For the glass
     // palettes the material gallery's: its steeper sun and its key light, so the glass looks exactly
     // as it does in the gallery
-    private Entity? _light;
-    private Entity? _fillLight;
-    private Entity? _sun;
-    private Entity? _keyLight;
-
+    private Entity _light = null!;
+    private Entity _fillLight = null!;
+    private Entity _sun = null!;
+    private Entity _keyLight = null!;
 
     private double _elapsedTime;
     private int _layer = 1;
@@ -94,9 +107,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         _progress = _progressStore.Load();
         _levels.Current = LevelRules.ForNumber(_progress.Level);
 
-        game.Window.AllowUserResizing = true;
-
-        AddCamera();
+        var cameraEntity = AddCamera();
 
         game.AddSceneRenderer(new EntityTextRenderer());
         _light = game.AddDirectionalLight();
@@ -150,14 +161,10 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         AddScoreboard();
         AddGameManager();
 
-        var camera = scene.GetCamera();
-
         _cameraRotation = new CameraRotationScript { RotationCentre = _levels.Current.PlatformCentre };
-        camera?.Entity.Add(_cameraRotation);
+        cameraEntity.Add(_cameraRotation);
 
-        _simulation = camera?.Entity.GetSimulation();
-
-        ConfigureSolverForLockedStacks();
+        ConfigureSolverForLockedStacks(cameraEntity.GetSimulation());
     }
 
     /// <summary>
@@ -167,7 +174,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// <param name="time">Timing for the current frame.</param>
     public void Update(Scene scene, GameTime time)
     {
-        _paletteMenu?.Update(game.Input);
+        _paletteMenu.Update(game.Input);
 
         _elapsedTime += time.Elapsed.TotalSeconds;
 
@@ -177,7 +184,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         {
             _elapsedTime = 0;
 
-            _spawner?.SpawnLayer(_layer);
+            _spawner.SpawnLayer(_layer);
 
             _layer++;
         }
@@ -237,12 +244,8 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// and divides it back afterwards, so setting it here round-trips correctly.
     /// </para>
     /// </remarks>
-    private void ConfigureSolverForLockedStacks()
-    {
-        if (_simulation is null) return;
-
-        _simulation.Simulation.Solver.SubstepCount = 2;
-    }
+    /// <param name="simulation">The simulation stepping the cubes.</param>
+    private static void ConfigureSolverForLockedStacks(BepuSimulation simulation) => simulation.Simulation.Solver.SubstepCount = 2;
 
     /// <summary>
     /// Adds the camera, aimed at the middle of the platform.
@@ -262,7 +265,8 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// restores. Doing it in this order means H resets to a view of the platform too.
     /// </para>
     /// </remarks>
-    private void AddCamera()
+    /// <returns>The camera entity.</returns>
+    private Entity AddCamera()
     {
         var camera = game.Add3DCamera();
 
@@ -270,6 +274,8 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         camera.Transform.LookAt(_levels.Current.PlatformCentre, Vector3.UnitY);
 
         camera.Add3DCameraController();
+
+        return camera;
     }
 
     /// <summary>
@@ -282,10 +288,9 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// </remarks>
     private void AddOrientationGizmo()
     {
-        var entity = new Entity(EntityNames.OrientationGizmo);
+        var entity = new Entity(EntityNames.OrientationGizmo, new Vector3(-7.5f, 1, -7.5f));
 
         entity.AddGizmo(game.GraphicsDevice, showAxisName: true);
-        entity.Transform.Position = new Vector3(-7.5f, 1, -7.5f);
         entity.Scene = _scene;
     }
 
@@ -295,13 +300,13 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     private void AddGameManager()
     {
         // Centred on screen and hidden until the board runs out of moves
-        var gameOver = new EntityTextComponent()
+        var gameOver = new EntityTextComponent
         {
             Text = string.Empty,
             FontSize = 32,
             PositionMode = TextPositionMode.Screen,
-            Anchor = TextAnchor.MiddleCenter,
-            Alignment = Stride.Graphics.TextAlignment.Center,
+            Anchor = Anchor.MiddleCenter,
+            Alignment = TextAlignment.Center,
             TextColor = new Color(255, 220, 120),
             EnableShadow = true,
             EnableBackground = true,
@@ -310,39 +315,25 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
             IsVisible = false,
         };
 
-        var entity = new Entity(EntityNames.GameManager)
-        {
-            gameOver,
-            new CubeClickScript
-            {
-                Grid = _grid,
-                Keeper = _keeper,
-                Levels = _levels,
-                Sounds = _audio!,
-                Scoreboard = _scoreboard,
-                GameOverText = gameOver,
-                // A score in the colour of the cubes it cleared. Glass tints are too pale to read as
-                // text, so a glass palette shows the deeper colour its hover uses
-                PopupColour = colour => ColourPalettes.All[_paletteIndex].Glass ? MaterialFactory.Deepen(colour) : colour,
-            },
-            new ScreenCentreTextScript { Text = gameOver }
-        };
-
-        _clickScript = entity.Get<CubeClickScript>();
-        _clickScript!.RestartRequested = Restart;
-        _clickScript.NextLevelRequested = NextLevel;
-
-        // The hover preview rides on the same entity: it reads the grid the click writes
-        _hover = new HoverHighlightScript
+        _clickScript = new CubeClickScript
         {
             Grid = _grid,
-            Materials = _materials!,
-            Click = _clickScript,
+            Keeper = _keeper,
+            Levels = _levels,
+            Sounds = _audio,
+            Scoreboard = _scoreboard,
+            GameOverText = gameOver,
+            // A score in the colour of the cubes it cleared. Glass tints are too pale to read as
+            // text, so a glass palette shows the deeper colour its hover uses
+            PopupColour = colour => ColourPalettes.All[_paletteIndex].Glass ? MaterialFactory.Deepen(colour) : colour,
+            RestartRequested = Restart,
+            NextLevelRequested = NextLevel,
         };
 
-        entity.Add(_hover);
+        // The hover preview rides on the same entity: it reads the grid the click writes
+        _hover = new HoverHighlightScript { Grid = _grid, Materials = _materials, Click = _clickScript };
 
-        entity.Scene = _scene;
+        _scene.Entities.Add(new Entity(EntityNames.GameManager) { gameOver, _clickScript, new ScreenCentreTextScript { Text = gameOver }, _hover });
     }
 
     /// <summary>
@@ -365,9 +356,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
                 new KeyMenuItem(Keys.D1 + index, palette.Name, () => ApplyPalette(index)))],
         };
 
-        var overlay = TextOverlay.GetOrCreate(game);
-
-        overlay.AddSection("Palette", () => _paletteMenu.GetLines());
+        TextOverlay.GetOrCreate(game).AddSection("Palette", _paletteMenu.GetLines);
     }
 
     /// <summary>
@@ -377,18 +366,14 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// </summary>
     private void UseLighting(bool glass)
     {
-        if (_light is null || _sun is null || _keyLight is null || _scene is null) return;
-
         _light.Scene = glass ? null : _scene;
-
-        if (_fillLight is not null) _fillLight.Scene = glass ? null : _scene;
+        _fillLight.Scene = glass ? null : _scene;
         _sun.Scene = glass ? _scene : null;
         _keyLight.Scene = glass ? _scene : null;
 
         var cameraSide = Vector3.Normalize(new Vector3(1f, 0f, 1f)) * KeyDistance;
 
         _keyLight.Transform.Position = _levels.Current.PlatformCentre + cameraSide + new Vector3(0f, KeyDistance, 0f);
-
     }
 
     /// <summary>
@@ -409,20 +394,6 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     }
 
     /// <summary>
-    /// How far the ground's visible surface sits below the surface the cubes rest on. A cube's bottom
-    /// face and the floor in the same plane fight for the depth buffer, which the two-sided glass
-    /// shows as a flickering bottom; a centimetre apart they do not. The material gallery stands its
-    /// glass a centimetre up for the same reason.
-    /// </summary>
-    private const float GroundGap = 0.01f;
-
-    /// <summary>
-    /// The glass key light's distance across and up from the board, the gallery's ring radius. Large
-    /// against the board, as the ring is against an exhibit, so every cube gets the same light.
-    /// </summary>
-    private const float KeyDistance = 20f;
-
-    /// <summary>
     /// Moves the ground's model, not its collider, down by <see cref="GroundGap"/>: the cubes are
     /// physics bodies and settle on the collider wherever it is, so only the picture can move.
     /// </summary>
@@ -431,11 +402,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         if (ground.Get<ModelComponent>() is not { } model) return;
 
         ground.Remove(model);
-
-        var surface = new Entity("Ground surface") { model };
-
-        surface.Transform.Position = new Vector3(0f, -GroundGap, 0f);
-        ground.AddChild(surface);
+        ground.AddChild(new Entity("Ground surface", new Vector3(0f, -GroundGap, 0f)) { model });
     }
 
     /// <summary>
@@ -451,7 +418,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// </remarks>
     private void ApplyPalette(int index)
     {
-        if (index == _paletteIndex || _spawner is null) return;
+        if (index == _paletteIndex) return;
 
         var oldColours = ColourPalettes.All[_paletteIndex].Colours;
         var newColours = ColourPalettes.All[index].Colours;
@@ -461,11 +428,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         UseLighting(ColourPalettes.All[index].Glass);
 
         _spawner.UsePalette(newColours, _materials.Normal);
-
-        if (_hover is not null)
-        {
-            _hover.Materials = _materials;
-        }
+        _hover.Materials = _materials;
 
         foreach (var cube in _grid.Cubes.Values)
         {
@@ -522,10 +485,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         _levels.Current = LevelRules.ForNumber(_progress.Level);
 
         // The platform grows, so its middle rises - re-aim the orbit at the new board's centre
-        if (_cameraRotation is not null)
-        {
-            _cameraRotation.RotationCentre = _levels.Current.PlatformCentre;
-        }
+        _cameraRotation.RotationCentre = _levels.Current.PlatformCentre;
 
         // The key light follows the bigger board
         UseLighting(ColourPalettes.All[_paletteIndex].Glass);
@@ -546,8 +506,6 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// </remarks>
     private void RebuildBoard()
     {
-        if (_scene is null) return;
-
         foreach (var entity in _scene.Entities.ToList())
         {
             if (entity.Name is EntityNames.Cube or EntityNames.ScorePopup)
@@ -561,7 +519,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         }
 
         _grid.Clear();
-        _clickScript?.ResetForRestart();
+        _clickScript.ResetForRestart();
 
         _elapsedTime = 0;
 
@@ -578,23 +536,23 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     {
         // Anchored rather than a fixed pixel position, so both keep their margin from the corner when
         // the window is resized - which this example allows
-        var total = new EntityTextComponent()
+        var total = new EntityTextComponent
         {
             Text = "Total Score: 0",
             FontSize = 20,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = ScreenAnchor.TopLeft,
+            ScreenAnchor = Anchor.TopLeft,
             Offset = new Vector2(16, 16),
             TextColor = Color.White,
             EnableShadow = true,
         };
 
-        var combo = new EntityTextComponent()
+        var combo = new EntityTextComponent
         {
             Text = string.Empty,
             FontSize = 16,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = ScreenAnchor.TopLeft,
+            ScreenAnchor = Anchor.TopLeft,
             Offset = new Vector2(16, 44),
             TextColor = new Color(255, 210, 70),
             EnableShadow = true,
@@ -602,12 +560,12 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         };
 
         // The combo window as a draining bar of characters, directly under the combo line
-        var comboBar = new EntityTextComponent()
+        var comboBar = new EntityTextComponent
         {
             Text = string.Empty,
             FontSize = 14,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = ScreenAnchor.TopLeft,
+            ScreenAnchor = Anchor.TopLeft,
             Offset = new Vector2(16, 66),
             TextColor = new Color(255, 210, 70),
             EnableShadow = true,
@@ -615,12 +573,12 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         };
 
         // How much board is left: cubes standing, and the moves still hidden among them
-        var remaining = new EntityTextComponent()
+        var remaining = new EntityTextComponent
         {
             Text = string.Empty,
             FontSize = 14,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = ScreenAnchor.TopLeft,
+            ScreenAnchor = Anchor.TopLeft,
             Offset = new Vector2(16, 88),
             TextColor = new Color(200, 205, 215),
             EnableShadow = true,
@@ -637,8 +595,6 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
             RemainingText = remaining,
         };
 
-        var entity = new Entity(EntityNames.Scoreboard) { total, combo, comboBar, remaining, _scoreboard };
-
-        entity.Scene = _scene;
+        _scene.Entities.Add(new Entity(EntityNames.Scoreboard) { total, combo, comboBar, remaining, _scoreboard });
     }
 }

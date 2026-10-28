@@ -1,5 +1,4 @@
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -20,42 +19,19 @@ internal sealed class Shapes3DScene : IGoldScene
     private ShapeBatch? _scene;
     private ShapeBatch? _overlay;
 
-    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+    public SceneSetup Setup => GoldSetup.Perspective;
 
     public void Start(Game game, Scene scene)
     {
         game.SetCameraPosition(new Vector3(0f, 9f, 18f));
         game.SetCameraRotation(new Vector3(0f, -22f, 0f));
 
-        var groundMaterial = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f);
-        var pillarMaterial = game.CreateMaterial(new Color(96, 103, 116), metalness: 0.1f, glossiness: 0.35f);
-
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(40f, 0.5f, 40f)), new PrimitiveEntityOptions
-        {
-            EntityName = "Ground",
-            Material = groundMaterial,
-            Position = new Vector3(0f, -0.25f, 0f),
-        });
-
-        ground.Scene = scene;
-
-        Pillar("Pillar A", PillarA, 3f);
-        Pillar("Pillar B", PillarB, 4f);
+        GoldSetup.AddGround(game, scene, 40f);
+        GoldSetup.AddPillar(game, scene, "Pillar A", PillarA, 3f);
+        GoldSetup.AddPillar(game, scene, "Pillar B", PillarB, 4f);
 
         _scene = game.AddShapeBatch(depthTest: true);
         _overlay = game.AddShapeBatch(depthTest: false);
-
-        void Pillar(string name, Vector3 at, float height)
-        {
-            var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.6f, height, 1.6f)), new PrimitiveEntityOptions
-            {
-                EntityName = name,
-                Material = pillarMaterial,
-                Position = new Vector3(at.X, height * 0.5f, at.Z),
-            });
-
-            pillar.Scene = scene;
-        }
     }
 
     public void Update(Game game, Scene scene, GameTime time)

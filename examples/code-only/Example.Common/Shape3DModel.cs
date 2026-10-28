@@ -3,6 +3,7 @@ using Stride.Rendering;
 
 namespace Example.Common;
 
+/// <summary>A 3D shape to make: its primitive, colour and size, and the model once one has been built for it.</summary>
 public class Shape3DModel
 {
     public required Primitive3D Type { get; set; }

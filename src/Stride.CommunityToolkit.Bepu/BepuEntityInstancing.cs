@@ -40,13 +40,11 @@ public class BepuEntityInstancing : EntityInstancing
 {
     private readonly List<BodyComponent?> _bodies = [];
 
-    private int _instancesWithoutBody;
-
     /// <summary>
     /// Gets the number of registered instances that have no <see cref="BodyComponent"/>, and so
     /// prevent the sleep skip.
     /// </summary>
-    public int InstancesWithoutBody => _instancesWithoutBody;
+    public int InstancesWithoutBody { get; private set; }
 
     /// <summary>
     /// Determines whether every registered body is asleep, in which case no transform can have changed.
@@ -54,11 +52,11 @@ public class BepuEntityInstancing : EntityInstancing
     /// <returns><see langword="true"/> when the previous frame's gather is still valid.</returns>
     protected override bool CanSkipUpdate()
     {
-        if (_instancesWithoutBody > 0) return false;
+        if (InstancesWithoutBody > 0) return false;
 
         foreach (var body in CollectionsMarshal.AsSpan(_bodies))
         {
-            // Null-forgiving: _instancesWithoutBody being zero means every entry is non-null
+            // Null-forgiving: InstancesWithoutBody being zero means every entry is non-null
             if (body!.Awake) return false;
         }
 
@@ -72,7 +70,7 @@ public class BepuEntityInstancing : EntityInstancing
         // 2D bodies are covered too
         var body = entity.Get<BodyComponent>();
 
-        if (body is null) _instancesWithoutBody++;
+        if (body is null) InstancesWithoutBody++;
 
         _bodies.Add(body);
     }
@@ -80,13 +78,10 @@ public class BepuEntityInstancing : EntityInstancing
     /// <inheritdoc />
     protected override void OnInstanceRemoved(int index, int lastIndex)
     {
-        if (_bodies[index] is null) _instancesWithoutBody--;
+        if (_bodies[index] is null) InstancesWithoutBody--;
 
         // Mirror the base class's swap-remove exactly, or the bodies stop matching the transforms
-        if (index != lastIndex)
-        {
-            _bodies[index] = _bodies[lastIndex];
-        }
+        if (index != lastIndex) _bodies[index] = _bodies[lastIndex];
 
         _bodies.RemoveAt(lastIndex);
     }
@@ -95,6 +90,6 @@ public class BepuEntityInstancing : EntityInstancing
     protected override void OnInstancesCleared()
     {
         _bodies.Clear();
-        _instancesWithoutBody = 0;
+        InstancesWithoutBody = 0;
     }
 }

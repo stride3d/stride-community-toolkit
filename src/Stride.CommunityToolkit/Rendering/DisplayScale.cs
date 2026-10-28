@@ -56,13 +56,10 @@ public sealed class DisplayScale : GameSystemBase
     private static readonly Logger _log = GlobalLogger.GetLogger(nameof(DisplayScale));
 
     /// <summary>The smallest value ever reported, so a broken query cannot make everything vanish.</summary>
-    public static readonly float MinScale = 0.25f;
+    public const float MinScale = 0.25f;
 
     private const int PollFrames = 60;
 
-    private float _detected = 1f;
-    private float? _override;
-    private float _value = 1f;
     private int _framesSincePoll;
     private bool _subscribed;
 
@@ -99,13 +96,13 @@ public sealed class DisplayScale : GameSystemBase
     /// Gets the factor to multiply pixel sizes by: <see cref="Override"/> if set, otherwise
     /// <see cref="Detected"/>, never below <see cref="MinScale"/>.
     /// </summary>
-    public float Value => _value;
+    public float Value { get; private set; } = 1f;
 
     /// <summary>
     /// Gets the factor the display reports, ignoring any <see cref="Override"/>. 1 until the window
     /// exists and has been queried.
     /// </summary>
-    public float Detected => _detected;
+    public float Detected { get; private set; } = 1f;
 
     /// <summary>
     /// Gets or sets a value that replaces detection altogether: the user's own UI-scale setting, or a
@@ -113,10 +110,10 @@ public sealed class DisplayScale : GameSystemBase
     /// </summary>
     public float? Override
     {
-        get => _override;
+        get;
         set
         {
-            _override = value;
+            field = value;
             Recompute();
         }
     }
@@ -147,9 +144,9 @@ public sealed class DisplayScale : GameSystemBase
 
         _framesSincePoll = 0;
 
-        if (MathF.Abs(detected - _detected) < 0.001f) return;
+        if (MathF.Abs(detected - Detected) < 0.001f) return;
 
-        _detected = detected;
+        Detected = detected;
 
         Recompute();
     }
@@ -232,11 +229,11 @@ public sealed class DisplayScale : GameSystemBase
 
     private void Recompute()
     {
-        var value = MathF.Max(MinScale, _override ?? _detected);
+        var value = MathF.Max(MinScale, Override ?? Detected);
 
-        if (MathF.Abs(value - _value) < 0.001f) return;
+        if (MathF.Abs(value - Value) < 0.001f) return;
 
-        _value = value;
+        Value = value;
 
         Changed?.Invoke(this, EventArgs.Empty);
     }

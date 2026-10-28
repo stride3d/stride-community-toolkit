@@ -1,5 +1,5 @@
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -41,7 +41,7 @@ internal sealed class ChartCursor : IDisposable
 
         // Up and to the right of the ring, clear of the mouse pointer
         _label = new ChartText(o.Labels, "Cursor readout");
-        _label.Set(string.Empty, TextAnchor.BottomLeft, new Vector2(10f, -10f));
+        _label.Set(string.Empty, Anchor.BottomLeft, new Vector2(10f, -10f));
         _label.Visible = false;
         chart.Root.AddChild(_label.Entity);
     }
@@ -56,14 +56,13 @@ internal sealed class ChartCursor : IDisposable
     internal void Update(CameraComponent camera, Vector2 screenPosition, in ChartView view)
     {
         var world = view.World;
-        var normal = Vector3.TransformNormal(Vector3.UnitZ, world);
-        normal.Normalize();
+        var normal = Vector3.Normalize(Vector3.TransformNormal(Vector3.UnitZ, world));
 
-        var ray = camera.GetPickRay(screenPosition);
+        var ray = camera.ScreenToWorldRay(screenPosition);
         var facing = Vector3.Dot(normal, ray.Direction);
 
         // Parallel to the plane, or the plane is behind the camera
-        if (MathF.Abs(facing) < 1e-6f)
+        if (MathUtil.IsZero(facing))
         {
             Hide();
             return;

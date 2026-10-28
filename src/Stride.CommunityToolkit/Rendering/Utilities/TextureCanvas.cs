@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Collections;
 using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Images;
@@ -216,7 +217,7 @@ public class TextureCanvas : IDisposable
     public void Load(byte[] data)
     {
         using var stream = new MemoryStream(data);
-        stream.Seek(0, SeekOrigin.Begin);
+
         Load(stream);
     }
 
@@ -254,7 +255,7 @@ public class TextureCanvas : IDisposable
             ".bmp" => ImageFileType.Bmp,
             ".tiff" => ImageFileType.Tiff,
             ".tga" => ImageFileType.Tga,
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException($"'{Path.GetExtension(path)}' is not an image format the canvas can write. Use .png, .jpg, .bmp, .gif, .tiff, .tga, .dds or .stride, or pass the fileType.")
         };
         Store(stream, fileType.Value);
     }
@@ -264,11 +265,7 @@ public class TextureCanvas : IDisposable
     /// </summary>
     /// <param name="stream">The target stream</param>
     /// <param name="fileType">The file type to write</param>
-    public void Store(Stream stream, ImageFileType fileType)
-    {
-        var buffer = EnsurePrimary();
-        buffer.Save(CommandList, stream, fileType);
-    }
+    public void Store(Stream stream, ImageFileType fileType) => EnsurePrimary().Save(CommandList, stream, fileType);
 
     /// <summary>
     ///     Replaces the current <see cref="TextureCanvas" /> with a texture loaded from a <see cref="T:byte[]" /> containing
@@ -295,28 +292,18 @@ public class TextureCanvas : IDisposable
     ///     Copies the current texture data to a byte array
     /// </summary>
     /// <param name="data">The data array to store the data</param>
-    public void GetData(byte[] data)
-    {
-        var buffer = EnsurePrimary();
-        buffer.GetData(CommandList, data);
-    }
+    public void GetData(byte[] data) => EnsurePrimary().GetData(CommandList, data);
 
     /// <summary>
     ///     Copies the current texture data to a byte array
     /// </summary>
-    public byte[] GetData()
-    {
-        var buffer = EnsurePrimary();
-        return buffer.GetData<byte>(CommandList);
-    }
+    public byte[] GetData() => EnsurePrimary().GetData<byte>(CommandList);
 
     /// <summary>
     ///     Copies the current texture data to a new texture
     /// </summary>
     public Texture ToTexture(TextureFlags flags = TextureFlags.ShaderResource)
-    {
-        return Texture.New2D(GraphicsDevice, _size.Width, _size.Height, PixelFormat, GetData(), flags);
-    }
+        => Texture.New2D(GraphicsDevice, _size.Width, _size.Height, PixelFormat, GetData(), flags);
 
     /// <summary>
     ///     Applies a <see cref="Stride.Rendering.Images.BrightFilter" /> effect.
@@ -379,25 +366,12 @@ public class TextureCanvas : IDisposable
     )
     {
         if (transforms is null && preTransforms is null && postTransforms is null) return;
+
         using var effect = new ColorTransformGroup();
 
-        if (transforms is not null)
-        {
-            foreach (var transform in transforms)
-                effect.Transforms.Add(transform);
-        }
-
-        if (preTransforms is not null)
-        {
-            foreach (var transform in preTransforms)
-                effect.PreTransforms.Add(transform);
-        }
-
-        if (postTransforms is not null)
-        {
-            foreach (var transform in postTransforms)
-                effect.PostTransforms.Add(transform);
-        }
+        if (transforms is not null) effect.Transforms.AddRange(transforms);
+        if (preTransforms is not null) effect.PreTransforms.AddRange(preTransforms);
+        if (postTransforms is not null) effect.PostTransforms.AddRange(postTransforms);
 
         Apply(effect);
     }
@@ -553,79 +527,38 @@ public class TextureCanvas : IDisposable
         // How much the source rectangle is scaled on each axis. Contain fits the whole source inside
         // the destination and leaves letterboxing; Cover fills the destination and crops the overflow,
         // which the scissor below is what actually enforces.
-        float widthScale, heightScale;
-        switch (stretch)
+        var fitX = destinationRect.Width / (float)sourceRect.Width;
+        var fitY = destinationRect.Height / (float)sourceRect.Height;
+
+        var (widthScale, heightScale) = stretch switch
         {
-            case Stretch.None:
-                widthScale = 1;
-                heightScale = 1;
-                break;
-            case Stretch.Stretch:
-                widthScale = destinationRect.Width / (float)sourceRect.Width;
-                heightScale = destinationRect.Height / (float)sourceRect.Height;
-                break;
-            case Stretch.Contain:
-                widthScale = destinationRect.Width / (float)sourceRect.Width;
-                heightScale = destinationRect.Height / (float)sourceRect.Height;
-                widthScale = heightScale = Math.Min(widthScale, heightScale);
-                break;
-            case Stretch.Cover:
-                widthScale = destinationRect.Width / (float)sourceRect.Width;
-                heightScale = destinationRect.Height / (float)sourceRect.Height;
-                widthScale = heightScale = Math.Max(widthScale, heightScale);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(stretch), stretch, null);
-        }
+            Stretch.None => (1f, 1f),
+            Stretch.Stretch => (fitX, fitY),
+            Stretch.Contain => (Math.Min(fitX, fitY), Math.Min(fitX, fitY)),
+            Stretch.Cover => (Math.Max(fitX, fitY), Math.Max(fitX, fitY)),
+            _ => throw new ArgumentOutOfRangeException(nameof(stretch), stretch, null),
+        };
 
         var finalWidth = (int)(sourceRect.Width * widthScale);
         var finalHeight = (int)(sourceRect.Height * heightScale);
 
         // Where the scaled image sits inside the destination on each axis: flush at one edge, or
         // centred on the leftover space. The two switches are separate because Anchor combines both.
-        int alignmentX;
-        switch (anchor)
+        var alignmentX = anchor switch
         {
-            case Anchor.Left:
-            case Anchor.TopLeft:
-            case Anchor.BottomLeft:
-                alignmentX = 0;
-                break;
-            case Anchor.Top:
-            case Anchor.Center:
-            case Anchor.Bottom:
-                alignmentX = (destinationRect.Width - finalWidth) / 2;
-                break;
-            case Anchor.TopRight:
-            case Anchor.Right:
-            case Anchor.BottomRight:
-                alignmentX = destinationRect.Width - finalWidth;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(anchor), anchor, null);
-        }
+            Anchor.MiddleLeft or Anchor.TopLeft or Anchor.BottomLeft => 0,
+            Anchor.TopCenter or Anchor.MiddleCenter or Anchor.BottomCenter => (destinationRect.Width - finalWidth) / 2,
+            Anchor.TopRight or Anchor.MiddleRight or Anchor.BottomRight => destinationRect.Width - finalWidth,
+            _ => throw new ArgumentOutOfRangeException(nameof(anchor), anchor, null),
+        };
 
-        int alignmentY;
-        switch (anchor)
+        var alignmentY = anchor switch
         {
-            case Anchor.TopLeft:
-            case Anchor.Top:
-            case Anchor.TopRight:
-                alignmentY = 0;
-                break;
-            case Anchor.Left:
-            case Anchor.Center:
-            case Anchor.Right:
-                alignmentY = (destinationRect.Height - finalHeight) / 2;
-                break;
-            case Anchor.BottomLeft:
-            case Anchor.Bottom:
-            case Anchor.BottomRight:
-                alignmentY = destinationRect.Height - finalHeight;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(anchor), anchor, null);
-        }
+            Anchor.TopLeft or Anchor.TopCenter or Anchor.TopRight => 0,
+            Anchor.MiddleLeft or Anchor.MiddleCenter or Anchor.MiddleRight => (destinationRect.Height - finalHeight) / 2,
+            Anchor.BottomLeft or Anchor.BottomCenter or Anchor.BottomRight => destinationRect.Height - finalHeight,
+            _ => throw new ArgumentOutOfRangeException(nameof(anchor), anchor, null),
+        };
 
         var finalX = destinationRect.X + alignmentX;
         var finalY = destinationRect.Y + alignmentY;
@@ -648,23 +581,9 @@ public class TextureCanvas : IDisposable
         return (viewport, scissor);
     }
 
-    private static Rectangle ToAbsoluteSize(Size3 size, RectangleF sourceRect)
-    {
-        return new Rectangle(
-            (int)(size.Width * sourceRect.X),
-            (int)(size.Height * sourceRect.Y),
-            (int)(size.Width * sourceRect.Width),
-            (int)(size.Height * sourceRect.Height)
-        );
-    }
+    private static Rectangle ToAbsoluteSize(Size3 size, RectangleF relative) => ToAbsoluteSize(new Size2(size.Width, size.Height), relative);
 
-    private static Rectangle ToAbsoluteSize(Size2 size, RectangleF sourceRect)
-    {
-        return new Rectangle(
-            (int)(size.Width * sourceRect.X),
-            (int)(size.Height * sourceRect.Y),
-            (int)(size.Width * sourceRect.Width),
-            (int)(size.Height * sourceRect.Height)
-        );
-    }
+    /// <summary>A rectangle given as fractions of <paramref name="size"/>, in pixels.</summary>
+    private static Rectangle ToAbsoluteSize(Size2 size, RectangleF relative)
+        => new((int)(size.Width * relative.X), (int)(size.Height * relative.Y), (int)(size.Width * relative.Width), (int)(size.Height * relative.Height));
 }

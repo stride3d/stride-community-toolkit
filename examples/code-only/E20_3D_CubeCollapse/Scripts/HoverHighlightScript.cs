@@ -39,7 +39,7 @@ namespace CubeCollapse.Scripts;
 public class HoverHighlightScript : SyncScript
 {
     private readonly List<ModelComponent> _highlighted = [];
-    private CameraComponent? _camera;
+    private CameraComponent _camera = null!;
 
     /// <summary>
     /// Gets the logical grid the group lookup runs against - the same source of truth the click uses.
@@ -58,15 +58,14 @@ public class HoverHighlightScript : SyncScript
     public required CubeClickScript Click { get; init; }
 
     /// <inheritdoc />
+    public override void Start() => _camera = Game.GetCameraEntity().Get<CameraComponent>();
+
+    /// <inheritdoc />
     public override void Update()
     {
         RestoreAll();
 
-        if (Click.IsGameOver || !Input.HasMouse) return;
-
-        _camera ??= Entity.Scene.GetCamera();
-
-        if (_camera is null || !_camera.RaycastMouse(this, 100, out var hitInfo)) return;
+        if (Click.IsGameOver || !Input.HasMouse || !_camera.RaycastMouse(this, 100, out var hitInfo)) return;
 
         var cube = hitInfo.Collidable.Entity;
 

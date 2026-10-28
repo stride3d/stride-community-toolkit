@@ -33,28 +33,28 @@ namespace Stride.CommunityToolkit.Charts;
 public sealed class ChartOptions
 {
     /// <summary>What the chart shows: the bounds of each axis and the spacing of its ticks.</summary>
-    public ChartRangeOptions Range { get; set; } = new();
+    public ChartRangeOptions Range { get; init; } = new();
 
     /// <summary>How the axes and their tick marks are drawn, and what the axes are called.</summary>
-    public ChartAxesOptions Axes { get; set; } = new();
+    public ChartAxesOptions Axes { get; init; } = new();
 
     /// <summary>How the grid is drawn, and which coordinate planes carry one.</summary>
-    public ChartGridOptions Grid { get; set; } = new();
+    public ChartGridOptions Grid { get; init; } = new();
 
     /// <summary>How the tick labels are drawn.</summary>
-    public ChartLabelOptions Labels { get; set; } = new();
+    public ChartLabelOptions Labels { get; init; } = new();
 
     /// <summary>The legend that names each series.</summary>
-    public ChartLegendOptions Legend { get; set; } = new();
+    public ChartLegendOptions Legend { get; init; } = new();
 
     /// <summary>The chart's own title, just inside its top edge.</summary>
-    public ChartTitleOptions Title { get; set; } = new();
+    public ChartTitleOptions Title { get; init; } = new();
 
     /// <summary>The defaults a series takes when it is added without a style of its own.</summary>
-    public ChartSeriesOptions Series { get; set; } = new();
+    public ChartSeriesOptions Series { get; init; } = new();
 
     /// <summary>The mouse readout, on while <see cref="ChartCursorOptions.Visible"/> is.</summary>
-    public ChartCursorOptions Cursor { get; set; } = new();
+    public ChartCursorOptions Cursor { get; init; } = new();
 
     /// <summary>
     /// Glowing lines on a dark, lit 3D scene: the defaults of every group, named here so the two presets read

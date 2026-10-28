@@ -107,8 +107,7 @@ static string? FindUp(string start, string relative)
     {
         var candidate = Path.Combine(dir.FullName, relative);
 
-        if (Directory.Exists(candidate))
-            return candidate;
+        if (Directory.Exists(candidate)) return candidate;
     }
 
     return null;

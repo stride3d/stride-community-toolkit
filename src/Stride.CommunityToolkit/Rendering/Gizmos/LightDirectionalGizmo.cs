@@ -23,7 +23,6 @@ public class LightDirectionalGizmo
     private const float OriginRadius = 1.33f * 0.15f / 3f;
 
     private readonly GraphicsDevice _graphicsDevice;
-    private readonly RenderGroup _renderGroup = RenderGroup.Group0;
     private readonly Material _rayMaterial;
 
     /// <summary>
@@ -45,11 +44,12 @@ public class LightDirectionalGizmo
     /// <returns>The root entity with the light gizmo added.</returns>
     public Entity Create(Entity root)
     {
+        // The ray runs down -Z: the cone at its far end, the shaft behind it, a sphere at the origin
         var lightRay = new Entity($"Light ray for light gizmo {root.Id}");
 
-        lightRay.AddChild(CreateRayCone(root.Id));
-        lightRay.AddChild(CreateRayBody(root.Id));
-        lightRay.AddChild(CreateMiddleSphere());
+        lightRay.AddChild(Part($"Light ray cone for light gizmo {root.Id}", GeometricPrimitive.Cone.New(_graphicsDevice, ConeRadius, ConeHeight, GizmoTessellation), -BodyLength - ConeHeight * 0.5f));
+        lightRay.AddChild(Part($"Light ray body for light gizmo {root.Id}", GeometricPrimitive.Cylinder.New(_graphicsDevice, BodyLength, BodyRadius, GizmoTessellation), -BodyLength / 2));
+        lightRay.AddChild(Part("OriginSphere", GeometricPrimitive.Sphere.New(_graphicsDevice, OriginRadius, GizmoTessellation), 0f, alongRay: false));
 
         root.AddChild(lightRay);
 
@@ -57,65 +57,24 @@ public class LightDirectionalGizmo
     }
 
     /// <summary>
-    /// Creates the cone part of the light ray for the directional light gizmo.
+    /// One part of the ray: the primitive's mesh in the ray material, at <paramref name="z"/> along the ray,
+    /// turned from the primitive's own Y axis onto -Z when it is a part that has a direction.
     /// </summary>
-    /// <param name="id">The unique identifier for the entity to associate with the cone.</param>
-    /// <returns>An entity representing the cone part of the light ray.</returns>
-    private Entity CreateRayCone(Guid id)
+    private Entity Part(string name, GeometricPrimitive primitive, float z, bool alongRay = true)
     {
-        var coneMesh = GeometricPrimitive.Cone.New(_graphicsDevice, ConeRadius, ConeHeight, GizmoTessellation).ToMeshDraw();
-        var coneEntity = new Entity($"Light ray cone for light gizmo {id}")         {
-            CreateModelComponent(coneMesh)
-        };
-
-        coneEntity.Transform.Rotation = Quaternion.RotationX(-MathUtil.PiOverTwo);
-        coneEntity.Transform.Position.Z = -BodyLength - ConeHeight * 0.5f;
-
-        return coneEntity;
-    }
-
-    /// <summary>
-    /// Creates the cylindrical body part of the light ray for the directional light gizmo.
-    /// </summary>
-    /// <param name="id">The unique identifier for the entity to associate with the body.</param>
-    /// <returns>An entity representing the body part of the light ray.</returns>
-    private Entity CreateRayBody(Guid id)
-    {
-        var bodyMesh = GeometricPrimitive.Cylinder.New(_graphicsDevice, BodyLength, BodyRadius, GizmoTessellation).ToMeshDraw();
-        var bodyEntity = new Entity($"Light ray body for light gizmo {id}")
+        var part = new Entity(name)
         {
-            CreateModelComponent(bodyMesh)
+            new ModelComponent
+            {
+                Model = new Model { _rayMaterial, new Mesh { Draw = primitive.ToMeshDraw() } },
+                RenderGroup = RenderGroup.Group0
+            }
         };
 
-        bodyEntity.Transform.Position.Z = -BodyLength / 2;
-        bodyEntity.Transform.Rotation = Quaternion.RotationX(-MathUtil.PiOverTwo);
+        part.Transform.Position.Z = z;
 
-        return bodyEntity;
+        if (alongRay) part.Transform.Rotation = Quaternion.RotationX(-MathUtil.PiOverTwo);
+
+        return part;
     }
-
-    /// <summary>
-    /// Creates the spherical part of the light gizmo that appears at its origin.
-    /// </summary>
-    /// <returns>An entity representing the spherical part of the light gizmo at the origin.</returns>
-    private Entity CreateMiddleSphere()
-    {
-        var sphereMeshDraw = GeometricPrimitive.Sphere.New(_graphicsDevice, OriginRadius, GizmoTessellation).ToMeshDraw();
-
-        return new Entity("OriginSphere")
-        {
-             CreateModelComponent(sphereMeshDraw)
-        };
-    }
-
-    /// <summary>
-    /// Creates a model component with the given mesh to represent part of the gizmo.
-    /// </summary>
-    /// <param name="bodyMesh">The mesh to use for the model component.</param>
-    /// <returns>A <see cref="ModelComponent"/> with the provided mesh and the ray material applied.</returns>
-    private ModelComponent CreateModelComponent(MeshDraw bodyMesh)
-        => new()
-        {
-            Model = new Model { _rayMaterial, new Mesh { Draw = bodyMesh } },
-            RenderGroup = _renderGroup
-        };
 }

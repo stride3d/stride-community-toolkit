@@ -72,73 +72,47 @@ public class GameProfiler : AsyncScript
 
             if (Input.IsKeyDown(Keys.LeftShift) && Input.IsKeyDown(Keys.LeftCtrl) && Input.IsKeyReleased(Keys.P))
             {
+                Enabled = !Enabled;
+
                 if (Enabled)
                 {
-                    GameProfiler.DisableProfiling();
-                    Enabled = false;
+                    GameProfiler.EnableProfiling();
                 }
                 else
                 {
-                    GameProfiler.EnableProfiling();
-                    Enabled = true;
+                    GameProfiler.DisableProfiling();
                 }
             }
 
             if (Enabled)
             {
-                // Toggle the filtering mode
-                if (Input.IsKeyPressed(Keys.F1))
+                // F1 and F2 cycle the filter and the sort order
+                if (Input.IsKeyPressed(Keys.F1)) FilteringMode = Next(FilteringMode);
+                if (Input.IsKeyPressed(Keys.F2)) SortingMode = Next(SortingMode);
+
+                // F3 and F4 page back and forward; 1 to 5 jump to that page
+                if (Input.IsKeyPressed(Keys.F3)) ResultPage = Math.Max(1u, ResultPage - 1);
+                if (Input.IsKeyPressed(Keys.F4)) ResultPage++;
+
+                for (var page = 1; page <= 5; page++)
                 {
-                    FilteringMode = (GameProfilingResults)(((int)FilteringMode + 1) % Enum.GetValues<GameProfilingResults>().Length);
-                }
-                // Toggle the sorting mode
-                if (Input.IsKeyPressed(Keys.F2))
-                {
-                    SortingMode = (GameProfilingSorting)(((int)SortingMode + 1) % Enum.GetValues<GameProfilingSorting>().Length);
+                    if (Input.IsKeyPressed(Keys.D0 + page)) ResultPage = (uint)page;
                 }
 
-                // Update the result page
-                if (Input.IsKeyPressed(Keys.F3))
-                {
-                    ResultPage = Math.Max(1, --ResultPage);
-                }
-                else if (Input.IsKeyPressed(Keys.F4))
-                {
-                    ++ResultPage;
-                }
-                if (Input.IsKeyPressed(Keys.D1))
-                {
-                    ResultPage = 1;
-                }
-                else if (Input.IsKeyPressed(Keys.D2))
-                {
-                    ResultPage = 2;
-                }
-                else if (Input.IsKeyPressed(Keys.D3))
-                {
-                    ResultPage = 3;
-                }
-                else if (Input.IsKeyPressed(Keys.D4))
-                {
-                    ResultPage = 4;
-                }
-                else if (Input.IsKeyPressed(Keys.D5))
-                {
-                    ResultPage = 5;
-                }
-
-                // Update the refreshing speed
-                if (Input.IsKeyPressed(Keys.Subtract) || Input.IsKeyPressed(Keys.OemMinus))
-                {
-                    RefreshTime = Math.Min(RefreshTime * 2, 10000);
-                }
-                else if (Input.IsKeyPressed(Keys.Add) || Input.IsKeyPressed(Keys.OemPlus))
-                {
-                    RefreshTime = Math.Max(RefreshTime / 2, 100);
-                }
+                // Minus refreshes half as often, plus twice as often
+                if (Input.IsKeyPressed(Keys.Subtract) || Input.IsKeyPressed(Keys.OemMinus)) RefreshTime = Math.Min(RefreshTime * 2, 10000);
+                if (Input.IsKeyPressed(Keys.Add) || Input.IsKeyPressed(Keys.OemPlus)) RefreshTime = Math.Max(RefreshTime / 2, 100);
             }
 
             await Script.NextFrame();
         }
+    }
+
+    /// <summary>The value after <paramref name="value"/> in its enum, wrapping round to the first.</summary>
+    private static T Next<T>(T value) where T : struct, Enum
+    {
+        var values = Enum.GetValues<T>();
+
+        return values[(Array.IndexOf(values, value) + 1) % values.Length];
     }
 }

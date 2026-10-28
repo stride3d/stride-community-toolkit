@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Collections;
 using Stride.Graphics;
 using Stride.Rendering.ProceduralModels;
 
@@ -13,6 +14,7 @@ public class CircleProceduralModel : PrimitiveProceduralModelBase
     /// Circle radius.
     /// </summary>
     public float Radius { get; set; } = 0.5f;
+
     /// <summary>
     /// Number of perimeter segments (higher = smoother circle).
     /// </summary>
@@ -35,17 +37,7 @@ public class CircleProceduralModel : PrimitiveProceduralModelBase
     /// <param name="toLeftHanded">If true, converts to left-handed coordinate system.</param>
     /// <returns>Mesh data for a circle.</returns>
     public static GeometricMeshData<VertexPositionNormalTexture> New(float radius = 0.5f, int tessellation = 32, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
-    {
-        var cacheKey = (radius, tessellation, uScale, vScale, toLeftHanded);
-
-        if (_meshCache.TryGetValue(cacheKey, out var mesh))
-            return mesh;
-
-        mesh = CreateMesh(radius, tessellation, uScale, vScale, toLeftHanded);
-        _meshCache[cacheKey] = mesh;
-
-        return mesh;
-    }
+        => _meshCache.GetOrAdd((radius, tessellation, uScale, vScale, toLeftHanded), _ => CreateMesh(radius, tessellation, uScale, vScale, toLeftHanded));
 
     /// <summary>
     /// Builds a new circle mesh (without caching) using provided parameters.
@@ -63,30 +55,18 @@ public class CircleProceduralModel : PrimitiveProceduralModelBase
             : new int[tessellation * 3];
 
         var normal = Vector3.UnitZ;
+        var uvScale = new Vector2(uScale, vScale);
 
-        // Center vertex
-        vertices[0] = new VertexPositionNormalTexture(Vector3.Zero, normal, new Vector2(0.5f, 0.5f) * new Vector2(uScale, vScale));
+        // The centre, then the perimeter counter-clockwise from +X; the texture maps the unit circle to its middle
+        vertices[0] = new(Vector3.Zero, normal, new Vector2(0.5f, 0.5f) * uvScale);
 
-        // Create perimeter-vertices-FLIPPED X and Y coordinates
         for (var i = 0; i < tessellation; i++)
         {
-            var angle = (float)(i * 2.0 * Math.PI / tessellation);
+            var angle = i * MathUtil.TwoPi / tessellation;
+            var cos = MathF.Cos(angle);
+            var sin = MathF.Sin(angle);
 
-            // The key change: swap X and Y coordinates and negate one coordinate
-            // to match the orientation of your Rectangle model
-            var x = radius * (float)Math.Cos(angle);
-            var y = radius * (float)Math.Sin(angle);
-
-            var texCoord = new Vector2(
-                0.5f + ((float)Math.Cos(angle) * 0.5f),
-                0.5f + ((float)Math.Sin(angle) * 0.5f)
-            );
-
-            vertices[i + 1] = new VertexPositionNormalTexture(
-                new Vector3(x, y, 0),
-                normal,
-                texCoord * new Vector2(uScale, vScale)
-            );
+            vertices[i + 1] = new(new Vector3(radius * cos, radius * sin, 0), normal, new Vector2(0.5f + cos * 0.5f, 0.5f + sin * 0.5f) * uvScale);
         }
 
         // Create triangles

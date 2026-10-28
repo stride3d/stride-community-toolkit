@@ -42,8 +42,7 @@ var gray = new Color(0x80, 0x80, 0x80);
 var royalBlue = new Color(0x41, 0x69, 0xE1);
 var background = new Color(0.2f, 0.2f, 0.2f);
 
-Box2DSimulation? simulation = null;
-ShapeBatch? shapeBatch = null;
+ShapeBatch shapeBatch = null!;
 
 // Bodies are entity-less: physics is the single source of truth and the debug draw reads it
 // directly every frame, exactly like the testbed
@@ -55,17 +54,14 @@ B2BodyId pusherId = default;
 var pentagon = FibonacciPentagon(Radius);
 
 // Static square outlines, reused for every floor and wall submission
-var floorSquare = RectangleVertices(0.55f * GridSize, 0.5f * GridSize);
-var wallSquare = RectangleVertices(0.5f * GridSize, 0.55f * GridSize);
+var floorSquare = ShapeComponent.Box(new Vector2(1.1f * GridSize, GridSize));
+var wallSquare = ShapeComponent.Box(new Vector2(GridSize, 1.1f * GridSize));
 
 // The pusher plow: a 4 x 8 box whose shape sits 4 units above the body origin
 Vector2[] pusherBoxVertices = [new(-2, 0), new(2, 0), new(2, 8), new(-2, 8)];
 
-// Per-monitor DPI awareness, so a 150% display gets a sharp window rather than a stretched one;
-// it has to happen before the window exists
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
+using var simulation = new Box2DSimulation();
 
 var sceneSetup = new SceneSetup2D
 {
@@ -75,23 +71,19 @@ var sceneSetup = new SceneSetup2D
     // mouse wheel zooms; the shader keeps borders pixel-constant at any zoom on its own
     Camera = CameraSetup.Orthographic(position: new Vector3(8, 25, 50), orthographicSize: 60).WithController(),
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Junkyard Box2D Example - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 };
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-simulation?.Dispose();
-
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Junkyard Box2D Example - Stride Community Toolkit";
-
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;
     shapeBatch.Fill.Alpha = 0.4f;
-
-    simulation = new Box2DSimulation();
 
     // The testbed steps the world exactly once per rendered frame - no catch-up. This scene is the
     // heaviest benchmark in the sample suite, and letting the accumulator run three catch-up steps
@@ -99,7 +91,7 @@ void Start(Scene rootScene)
     simulation.MaxStepsPerFrame = 1;
 
     // Left mouse picks a rock up and throws it - the one interaction the replica adds to the testbed
-    game.GetCameraEntity().Add(new Grabber2DScript { Simulation = simulation });
+    game.AddGrabber2D(simulation);
 
     TextOverlay.GetOrCreate(game).AddSection("Junkyard", static () =>
     [
@@ -117,7 +109,7 @@ void Start(Scene rootScene)
 /// </summary>
 void CreateGround()
 {
-    var groundId = simulation!.CreateStaticBody(Vector3.Zero);
+    var groundId = simulation.CreateStaticBody(Vector3.Zero);
     var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
 
     var y = 0.0f;
@@ -169,7 +161,7 @@ void SpawnRocks()
             var position = new Vector3(x + side, y, 0);
             side = -side;
 
-            var bodyId = simulation!.CreateDynamicBody(position);
+            var bodyId = simulation.CreateDynamicBody(position);
 
             ShapeFixtureBuilder.AttachPolygon(pentagon, bodyId);
 
@@ -185,7 +177,7 @@ void SpawnRocks()
 /// </summary>
 void CreatePusher()
 {
-    pusherId = simulation!.CreateKinematicBody(Vector3.Zero);
+    pusherId = simulation.CreateKinematicBody(Vector3.Zero);
 
     var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
     var pusherBox = b2MakeOffsetBox(2.0f, 4.0f, new B2Vec2(0.0f, 4.0f), b2Rot_identity);
@@ -197,7 +189,7 @@ void CreatePusher()
 void Update(Scene rootScene, GameTime time)
 {
     // Box2D is stepped by hand: fixed-timestep accumulation and the pusher drive happen inside
-    simulation?.Update(time.Elapsed);
+    simulation.Update(time.Elapsed);
 
     SubmitShapes();
 }
@@ -208,8 +200,6 @@ void Update(Scene rootScene, GameTime time)
 /// </summary>
 void SubmitShapes()
 {
-    if (shapeBatch is null) return;
-
     var x = -80.0f * GridSize;
 
     for (var i = 0; i < 161; ++i)
@@ -229,23 +219,7 @@ void SubmitShapes()
 
     foreach (var bodyId in rockIds)
     {
-        var transform = b2Body_GetTransform(bodyId);
-
-        Color color;
-
-        if (!b2Body_IsAwake(bodyId))
-        {
-            color = gray;
-        }
-        else
-        {
-            var velocity = b2Body_GetLinearVelocity(bodyId);
-            var fast = velocity.X * velocity.X + velocity.Y * velocity.Y > FastSpeed * FastSpeed;
-
-            color = fast ? salmon : pink;
-        }
-
-        SubmitBodyPolygon(pentagon, transform, color);
+        SubmitBodyPolygon(pentagon, b2Body_GetTransform(bodyId), BodyColor(bodyId));
     }
 
     SubmitBodyPolygon(pusherBoxVertices, b2Body_GetTransform(pusherId), royalBlue);
@@ -254,16 +228,18 @@ void SubmitShapes()
 void SubmitBodyPolygon(Vector2[] vertices, B2Transform transform, Color color)
 {
     // The instance transform is the body's, in the same (x, y, cos, sin) form the testbed uses
-    shapeBatch!.DrawSolidPolygon(vertices, new Vector2(transform.p.X, transform.p.Y), MathF.Atan2(transform.q.s, transform.q.c), color);
+    shapeBatch.DrawSolidPolygon(vertices, new Vector2(transform.p.X, transform.p.Y), MathF.Atan2(transform.q.s, transform.q.c), color);
 }
 
-static Vector2[] RectangleVertices(float halfWidth, float halfHeight) =>
-[
-    new(-halfWidth, -halfHeight),
-    new(halfWidth, -halfHeight),
-    new(halfWidth, halfHeight),
-    new(-halfWidth, halfHeight),
-];
+// The testbed's body colouring: gray asleep, salmon fast, pink otherwise
+Color BodyColor(B2BodyId bodyId)
+{
+    if (!b2Body_IsAwake(bodyId)) return gray;
+
+    var velocity = b2Body_GetLinearVelocity(bodyId);
+
+    return velocity.X * velocity.X + velocity.Y * velocity.Y > FastSpeed * FastSpeed ? salmon : pink;
+}
 
 /// <summary>
 /// The sample's rock outline: five points on a circle of the given radius by the Fibonacci sphere
@@ -287,12 +263,9 @@ static Vector2[] FibonacciPentagon(float radius)
 /// Drives the kinematic pusher along the sample's sweep, x = 60*sin(0.2t), by setting its target
 /// transform once per fixed step - Box2D derives the kinematic velocity from target and time step.
 /// </summary>
-public sealed class PusherDriver : IBox2DSimulationUpdate
+public sealed class PusherDriver(B2BodyId pusherId) : IBox2DSimulationUpdate
 {
-    private readonly B2BodyId _pusherId;
     private int _stepCount;
-
-    public PusherDriver(B2BodyId pusherId) => _pusherId = pusherId;
 
     public void SimulationUpdate(Box2DSimulation simulation, float deltaTime)
     {
@@ -302,11 +275,7 @@ public sealed class PusherDriver : IBox2DSimulationUpdate
         var cosSin = b2ComputeCosSin(0.2f * time);
         var target = new B2Transform(new B2Vec2(60.0f * cosSin.sine, 0.0f), b2Rot_identity);
 
-        b2Body_SetTargetTransform(_pusherId, in target, deltaTime, true);
-    }
-
-    public void AfterSimulationUpdate(Box2DSimulation simulation, float deltaTime)
-    {
+        b2Body_SetTargetTransform(pusherId, in target, deltaTime, true);
     }
 }
 

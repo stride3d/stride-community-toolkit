@@ -7,22 +7,17 @@ using Stride.Engine;
 // The five colours of the first examples, one shape after another
 Color[] colours = [new(30, 70, 170), new(240, 150, 60), new(235, 100, 80), new(110, 200, 110), new(190, 130, 230)];
 
-var parallelogramVertices = new Vector2[]
-{
-    new(-0.5f, -0.25f),
-    new(0.5f, -0.25f),
-    new(0.75f, 0.25f),
-    new(-0.25f, 0.25f),
-};
+Vector2[] parallelogram = [new(-0.5f, -0.25f), new(0.5f, -0.25f), new(0.75f, 0.25f), new(-0.25f, 0.25f)];
 
-List<Primitive2D> shapes = [
+Primitive2D[] shapes =
+[
     Primitive2D.Circle(),
     Primitive2D.Capsule(),
     Primitive2D.Rectangle(),
     Primitive2D.Square(),
     Primitive2D.RegularPolygon(),
     Primitive2D.Triangle(),
-    Primitive2D.Polygon(parallelogramVertices),
+    Primitive2D.Polygon(parallelogram),
 ];
 
 using var game = new Game();

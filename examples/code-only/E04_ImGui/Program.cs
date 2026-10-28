@@ -19,7 +19,7 @@ void Start(Scene scene)
 
     // Each of these registers itself with the game on construction, so the instance is deliberately
     // not kept: the game owns them from here on.
-    _ = new ImGuiSystem(game.Services, game.GraphicsDeviceManager);
+    _ = new ImGuiSystem(game.Services);
     _ = new HierarchyView(game.Services);
     _ = new PerfMonitor(game.Services);
     Inspector.FindFreeInspector(game.Services).Target = game.SceneSystem.SceneInstance;

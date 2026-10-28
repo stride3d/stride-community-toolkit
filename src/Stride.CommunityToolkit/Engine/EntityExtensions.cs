@@ -31,7 +31,7 @@ public static partial class EntityExtensions
     /// <param name="showHelp"><see langword="false"/> keeps the controller but puts no key help on the overlay.</param>
     /// <returns>The controller, already on the entity.</returns>
     public static Basic3DCameraController Add3DCameraController(this Entity entity,
-        ScreenAnchor? helpPosition = null,
+        Anchor? helpPosition = null,
         Keys helpToggleKey = Keys.F2,
         bool helpCollapsed = true,
         bool showHelp = true)
@@ -128,84 +128,78 @@ public static partial class EntityExtensions
     }
 
     /// <summary>
-    /// Retrieves the first component of the specified type from the entity.
+    /// The first component of type <typeparamref name="T"/> on the entity, or <see langword="null"/>: Stride's own
+    /// <see cref="Entity.Get{T}()"/> under the name readers from other engines look for.
     /// </summary>
-    /// <typeparam name="T">The type of component to retrieve.</typeparam>
-    /// <returns>The first component of the specified type, or null if no such component exists.</returns>
-    public static T? GetComponent<T>(this Entity entity)
-    {
-        var result = entity.OfType<T>().FirstOrDefault();
-
-        return result;
-    }
+    /// <typeparam name="T">The component type.</typeparam>
+    /// <param name="entity">The entity to look on.</param>
+    /// <returns>The first component of that type, or <see langword="null"/>.</returns>
+    /// <remarks>Prefer <c>entity.Get&lt;T&gt;()</c> in new code; this forwarder may be removed in a later release.</remarks>
+    public static T? GetComponent<T>(this Entity entity) where T : EntityComponent
+        => entity.Get<T>();
 
     /// <summary>
-    /// Retrieves all components of the specified type from the entity.
+    /// Every component of type <typeparamref name="T"/> on the entity: Stride's own <see cref="Entity.GetAll{T}()"/>
+    /// under the name readers from other engines look for.
     /// </summary>
-    /// <typeparam name="T">The type of components to retrieve.</typeparam>
-    /// <returns>An <see cref="IEnumerable{T}"/> of components of the specified type.</returns>
-    public static IEnumerable<T> GetComponents<T>(this Entity entity)
-    {
-        var result = entity.OfType<T>();
-
-        return result;
-    }
+    /// <typeparam name="T">The component type.</typeparam>
+    /// <param name="entity">The entity to look on.</param>
+    /// <returns>The components of that type, in the order they were added.</returns>
+    /// <remarks>Prefer <c>entity.GetAll&lt;T&gt;()</c> in new code; this forwarder may be removed in a later release.</remarks>
+    public static IEnumerable<T> GetComponents<T>(this Entity entity) where T : EntityComponent
+        => entity.GetAll<T>();
 
     /// <summary>
     /// Removes the entity from its current scene by setting its <see cref="Scene"/> property to null.
     /// </summary>
     /// <param name="entity">The entity to be removed from its current scene.</param>
     public static void Remove(this Entity entity)
-    {
-        entity.Scene = null;
-    }
+        => entity.Scene = null;
 
     /// <summary>
-    /// Searches for an entity by name within the top-level entities of the current scene.
+    /// Finds an entity by name among the top-level entities of the scene this entity is in.
     /// </summary>
-    /// <param name="entity">The reference entity used to access the scene.</param>
+    /// <param name="entity">An entity in the scene to search; it is only the way to reach that scene.</param>
     /// <param name="name">The name of the entity to find.</param>
-    /// <returns>The first entity matching the specified name, or null if no match is found. This search does not include child entities.</returns>
+    /// <returns>The first top-level entity with that name, or <see langword="null"/> if none has it. Children are not searched; see <see cref="FindEntityRecursive"/>.</returns>
+    /// <exception cref="InvalidOperationException">The entity is not in a scene, so there is nothing to search.</exception>
+    /// <remarks>The same as <see cref="SceneExtensions.FindEntity(Scene, string, bool)"/> on <c>entity.Scene</c>; call that directly where the scene is at hand.</remarks>
     public static Entity? FindEntity(this Entity entity, string name)
-    {
-        return entity.Scene.Entities.FirstOrDefault(w => w.Name == name);
-    }
+        => SceneOf(entity, name).FindEntity(name);
 
     /// <summary>
-    /// Searches the scene's top-level entities and all their descendants for an entity by name.
+    /// Finds an entity by name among the top-level entities of the scene this entity is in and all their descendants.
     /// </summary>
-    /// <param name="parent">The reference entity used to access the scene.</param>
+    /// <param name="entity">An entity in the scene to search; it is only the way to reach that scene.</param>
     /// <param name="name">The name of the entity to find.</param>
-    /// <returns>The first entity with the specified name, or null if none is found.</returns>
-    public static Entity? FindEntityRecursive(this Entity parent, string name)
+    /// <returns>The first entity with that name, or <see langword="null"/> if none has it.</returns>
+    /// <exception cref="InvalidOperationException">The entity is not in a scene, so there is nothing to search.</exception>
+    /// <remarks>The same as <see cref="SceneExtensions.FindEntity(Scene, string, bool)"/> with <c>recursive: true</c> on <c>entity.Scene</c>; call that directly where the scene is at hand.</remarks>
+    public static Entity? FindEntityRecursive(this Entity entity, string name)
+        => SceneOf(entity, name).FindEntity(name, recursive: true);
+
+    // Names both parties, says why, and gives the fix as code: what a beginner needs from an exception
+    private static Scene SceneOf(Entity entity, string name)
     {
-        var entities = parent.Scene.Entities;
+        ArgumentNullException.ThrowIfNull(entity);
 
-        foreach (var entity in entities)
-        {
-            if (entity.Name == name) return entity;
-
-            var child = entity.FindChild(name);
-
-            if (child != null && child.Name == name) return child;
-        }
-
-        return null;
+        return entity.Scene ?? throw new InvalidOperationException(
+            $"Entity '{entity.Name}' is not in a scene, so it cannot look for '{name}'. " +
+            "Add the entity to a scene first (entity.Scene = scene), or search the scene you have: " +
+            $"scene.FindEntity(\"{name}\"). A script's Entity has a scene from Start onwards, not in its constructor.");
     }
 
     /// <summary>
-    /// Tries to retrieve a component of type <typeparamref name="T"/> from the given entity.
+    /// The first component of type <typeparamref name="T"/> on the entity, as a <c>Try</c> method: for when a missing
+    /// component is expected rather than a bug.
     /// </summary>
-    /// <typeparam name="T">The type of component to retrieve.</typeparam>
-    /// <param name="entity">The entity from which to retrieve the component.</param>
-    /// <param name="result">When this method returns, the first component of type <typeparamref name="T"/>, or the default value if none exists.</param>
-    /// <returns>
-    /// <c>true</c> if a component of type <typeparamref name="T"/> is found in the entity;
-    /// otherwise, <c>false</c>.
-    /// </returns>
-    public static bool TryGetComponent<T>(this Entity entity, [MaybeNullWhen(false)] out T result)
+    /// <typeparam name="T">The component type.</typeparam>
+    /// <param name="entity">The entity to look on.</param>
+    /// <param name="result">The first component of that type, or <see langword="null"/> when there is none.</param>
+    /// <returns><see langword="true"/> when the entity has such a component.</returns>
+    public static bool TryGetComponent<T>(this Entity entity, [MaybeNullWhen(false)] out T result) where T : EntityComponent
     {
-        result = entity.GetComponent<T>();
+        result = entity.Get<T>();
 
         return result is not null;
     }
@@ -219,8 +213,7 @@ public static partial class EntityExtensions
     /// <returns>The <see cref="Vector3"/> representing the world position of the <see cref="Entity"/>.</returns>
     public static Vector3 WorldPosition(this Entity entity, bool updateTransforms = true)
     {
-        if (updateTransforms)
-            entity.Transform.UpdateWorldMatrix();
+        if (updateTransforms) entity.Transform.UpdateWorldMatrix();
 
         return entity.Transform.WorldMatrix.TranslationVector;
     }

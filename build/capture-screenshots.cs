@@ -123,10 +123,7 @@ if (!reviewing)
             "One capture would overwrite the other.");
     }
 
-    if (collisions.Count > 0)
-    {
-        return 1;
-    }
+    if (collisions.Count > 0) return 1;
 }
 
 var captured = 0;
@@ -168,9 +165,16 @@ foreach (var example in examples)
     var mediaName = reviewing ? $"{slug}.webp" : Text(example, "media") ?? $"{slug}.webp";
     var webpPath = Path.Combine(reviewing ? reviewDirectory! : mediaDirectory, mediaName);
 
+    if (updateIndex)
+    {
+        Console.WriteLine($"  {counter} - {slug}: index only");
+        skipped++;
+        continue;
+    }
+
     // An existing screenshot was almost certainly taken and reviewed by a person. Replacing 25 of those
     // in one unattended run, silently, is not something a script should be able to do by accident.
-    if (File.Exists(webpPath) && !force && !reviewing || updateIndex)
+    if (File.Exists(webpPath) && !force && !reviewing)
     {
         Console.WriteLine($"  {counter} - {slug}: already has {mediaName}, pass --force to replace it");
         skipped++;
@@ -236,13 +240,12 @@ static bool RunExample(string root, string projectPath, string pngPath, int? fra
 {
     failure = string.Empty;
 
-    var exampleDirectory = Path.GetDirectoryName(Path.Combine(root, "examples", "code-only", projectPath.Replace('/', Path.DirectorySeparatorChar)))!;
+    var entryFile = Path.Combine(root, "examples", "code-only", projectPath.Replace('/', Path.DirectorySeparatorChar));
+    var exampleDirectory = Path.GetDirectoryName(entryFile)!;
     var project = Directory.EnumerateFiles(exampleDirectory, "*.*proj").FirstOrDefault();
 
     // A file-based app has no project file and is run by naming its source directly.
-    var arguments = project is not null
-        ? $"run --project \"{project}\""
-        : $"run \"{Path.Combine(root, "examples", "code-only", projectPath.Replace('/', Path.DirectorySeparatorChar))}\"";
+    var arguments = project is not null ? $"run --project \"{project}\"" : $"run \"{entryFile}\"";
 
     var startInfo = new ProcessStartInfo("dotnet", arguments)
     {
@@ -311,12 +314,7 @@ static void Opaque(Image<Rgba32> image)
     {
         for (var y = 0; y < accessor.Height; y++)
         {
-            var row = accessor.GetRowSpan(y);
-
-            for (var x = 0; x < row.Length; x++)
-            {
-                row[x].A = byte.MaxValue;
-            }
+            foreach (ref var pixel in accessor.GetRowSpan(y)) pixel.A = byte.MaxValue;
         }
     });
 

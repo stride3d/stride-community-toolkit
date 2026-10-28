@@ -24,7 +24,7 @@ public class MeshOutlineRenderFeature : RootRenderFeature
     /// vertex normals before the world matrix, so the entity's scale multiplies this).
     /// A unit-diameter sphere has a radius of 0.5, so 0.03 gives a rim about 6% of the radius.
     /// </summary>
-    public float Thickness = 0.001f;
+    public float Thickness { get; set; } = 0.001f;
 
     /// <summary>
     /// This feature draws meshes that belong to Stride's own <c>MeshRenderFeature</c>, so it never
@@ -88,15 +88,13 @@ public class MeshOutlineRenderFeature : RootRenderFeature
 
             if (renderMesh.Source is not ModelComponent model) continue;
 
-            var outline = model.Entity.Get<MeshOutlineComponent>();
-            if (outline is null || !outline.Enabled) continue;
+            if (model.Entity.Get<MeshOutlineComponent>() is not { Enabled: true } outline) continue;
 
             DrawOutline(context, renderMesh, outline, viewProjection, outlineScale);
         }
     }
 
-    private void DrawOutline(RenderDrawContext context, RenderMesh renderMesh, MeshOutlineComponent outline,
-        Matrix viewProjection, Vector3 outlineScale)
+    private void DrawOutline(RenderDrawContext context, RenderMesh renderMesh, MeshOutlineComponent outline, Matrix viewProjection, Vector3 outlineScale)
     {
         var drawData = renderMesh.ActiveMeshDraw;
         var commandList = context.CommandList;

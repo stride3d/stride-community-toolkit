@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Engine;
@@ -55,7 +56,7 @@ public class Basic2DCameraController : SyncScript
     /// default, restores the size the camera had when the controller started - so a scene that set
     /// its own framing gets that framing back, not a fixed number.
     /// </summary>
-    public float? OrthographicSizeDefault { get; set; }
+    public float? DefaultOrthographicSize { get; set; }
 
     /// <summary>
     /// Gets or sets the fraction by which the visible area scales per mouse-wheel notch. Defaults to 0.1 (10 %).
@@ -86,7 +87,6 @@ public class Basic2DCameraController : SyncScript
     /// approximate while the zoom eases and exact once it settles.
     /// </remarks>
     public bool ZoomToCursor { get; set; } = true;
-
 
     // Screen Edge Movement Properties
     /// <summary>
@@ -192,25 +192,30 @@ public class Basic2DCameraController : SyncScript
     public MouseButton MouseDragButton { get; set; } = MouseButton.Right;
 
     /// <summary>
-    /// Gets or sets whether on-screen camera instructions are displayed.
+    /// Gets or sets whether the camera's key help is shown on the shared <see cref="TextOverlay"/>. Defaults to
+    /// <see langword="true"/>, and can be set before the script starts or at any time after.
     /// </summary>
     /// <remarks>
     /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
     /// it, is toggled with <see cref="TextOverlay.ToggleKey"/>.
     /// </remarks>
-    public bool ShowInstructions
+    public bool ShowHelp
     {
-        get => _instructions?.Enabled ?? false;
-        set { if (_instructions is not null) _instructions.Enabled = value; }
-    }
+        get;
+        set
+        {
+            field = value;
+            _instructions?.Enabled = value;
+        }
+    } = true;
 
     private CameraComponent? _camera;
     private Vector3 _defaultCameraPosition;
-    private float _defaultOrthographicSize = 10f;
+    private float _startOrthographicSize = 10f;
     private Vector3 _targetPosition;
     private float _targetOrthographicSize;
     private Vector2? _lastMousePosition;
-    private float _defaultZ = 0;
+    private float _defaultZ;
 
     private TextOverlaySection? _instructions;
 
@@ -283,6 +288,8 @@ public class Basic2DCameraController : SyncScript
 
                 return lines;
             }, HelpCollapsed, order: -100);
+
+        _instructions.Enabled = ShowHelp;
     }
 
     /// <summary>
@@ -310,9 +317,8 @@ public class Basic2DCameraController : SyncScript
             // Captured here rather than in Start: a scene sets its framing in its own Start, which
             // runs before this script's first update, and this is what H restores
             _targetOrthographicSize = _camera.OrthographicSize;
-            _defaultOrthographicSize = _camera.OrthographicSize;
+            _startOrthographicSize = _camera.OrthographicSize;
         }
-
 
         // Process follow target first (the highest priority)
         if (FollowTarget is null)
@@ -342,7 +348,6 @@ public class Basic2DCameraController : SyncScript
         // Apply camera bounds if enabled
         if (EnableBounds)
             ApplyCameraBounds();
-
     }
 
     /// <summary>
@@ -357,7 +362,7 @@ public class Basic2DCameraController : SyncScript
             moveDirection.Normalize();
 
         // Apply a speed factor when shift is held
-        if (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift))
+        if (Input.IsShiftDown())
             moveDirection *= SpeedFactor;
 
         Pan(moveDirection * CameraMoveSpeed * DeltaTime);
@@ -451,7 +456,7 @@ public class Basic2DCameraController : SyncScript
         // A wheel notch is an impulse - it arrives on one frame and is gone the next - so it is scaled
         // per notch, not per second. Multiplying by delta time would only make each notch depend on
         // the frame rate, which is what made zooming feel jumpy.
-        if (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift))
+        if (Input.IsShiftDown())
             zoomDelta *= SpeedFactor;
 
         // Multiplicative, so every notch changes the visible area by the same fraction whether the
@@ -469,10 +474,7 @@ public class Basic2DCameraController : SyncScript
             // A cursor outside the window (alt-tabbed, multi-monitor) falls back to centre zoom
             if (mouse.X >= 0f && mouse.X <= 1f && mouse.Y >= 0f && mouse.Y <= 1f)
             {
-                var backBuffer = Game.GraphicsDevice.Presenter.BackBuffer;
-                var aspect = (float)backBuffer.Width / backBuffer.Height;
-
-                Pan(Camera2DMath.ZoomToCursorShift(mouse, aspect, oldSize, newSize));
+                Pan(Camera2DMath.ZoomToCursorShift(mouse, Game.GraphicsDevice.GetAspectRatio(), oldSize, newSize));
             }
         }
 
@@ -484,7 +486,7 @@ public class Basic2DCameraController : SyncScript
     /// Resets the camera to its default position and orthographic size when the 'H' key is pressed.
     /// </summary>
     /// <remarks>
-    /// <para>The camera returns to the position it started at and to <see cref="OrthographicSizeDefault"/>, or
+    /// <para>The camera returns to the position it started at and to <see cref="DefaultOrthographicSize"/>, or
     /// to the orthographic size it started with when that is not set. Both the target values (for
     /// smoothing) and the actual camera are updated immediately.</para>
     /// </remarks>
@@ -495,7 +497,7 @@ public class Basic2DCameraController : SyncScript
         _targetPosition = _defaultCameraPosition;
         Entity.Transform.Position = _defaultCameraPosition;
 
-        var size = OrthographicSizeDefault ?? _defaultOrthographicSize;
+        var size = DefaultOrthographicSize ?? _startOrthographicSize;
 
         _targetOrthographicSize = size;
         _camera!.OrthographicSize = size;
@@ -514,23 +516,15 @@ public class Basic2DCameraController : SyncScript
     {
         if (FollowTarget is null) return;
 
-        var targetPos = FollowTarget.Transform.Position + FollowOffset;
+        var target = FollowTarget.Transform.Position + FollowOffset;
 
-        if (FollowSmoothing > 0)
-        {
-            // Smooth follow using lerp
-            var smoothFactor = Math.Clamp(FollowSmoothing * DeltaTime, 0, 1);
-            _targetPosition = Vector3.Lerp(Entity.Transform.Position, targetPos, smoothFactor);
-            _targetPosition.Z = _defaultZ;
-            Entity.Transform.Position = _targetPosition;
-        }
-        else
-        {
-            // Instant follow
-            _targetPosition = targetPos;
-            _targetPosition.Z = _defaultZ;
-            Entity.Transform.Position = targetPos;
-        }
+        // Ease towards the target or jump to it; the camera keeps its own Z either way
+        _targetPosition = FollowSmoothing > 0
+            ? Vector3.Lerp(Entity.Transform.Position, target, Math.Clamp(FollowSmoothing * DeltaTime, 0, 1))
+            : target;
+        _targetPosition.Z = _defaultZ;
+
+        Entity.Transform.Position = _targetPosition;
     }
 
     /// <summary>
@@ -589,16 +583,7 @@ public class Basic2DCameraController : SyncScript
     {
         var currentMousePos = Input.MousePosition;
 
-        // Check if the drag button is down
-        bool isDragging = MouseDragButton switch
-        {
-            MouseButton.Left => Input.IsMouseButtonDown(MouseButton.Left),
-            MouseButton.Middle => Input.IsMouseButtonDown(MouseButton.Middle),
-            MouseButton.Right => Input.IsMouseButtonDown(MouseButton.Right),
-            _ => false
-        };
-
-        if (isDragging)
+        if (Input.IsMouseButtonDown(MouseDragButton))
         {
             if (_lastMousePosition.HasValue)
             {
@@ -609,11 +594,8 @@ public class Basic2DCameraController : SyncScript
                 // visible height, so a cursor move of mouseDelta covers mouseDelta * size world units
                 // vertically and mouseDelta * size * aspect horizontally. Invert X so the world follows
                 // the cursor; Y is already flipped between screen space (down) and world space (up).
-                var backBuffer = Game.GraphicsDevice.Presenter.BackBuffer;
-                var aspect = (float)backBuffer.Width / backBuffer.Height;
                 var height = _camera!.OrthographicSize;
-
-                var worldDelta = new Vector3(-mouseDelta.X * height * aspect, mouseDelta.Y * height, 0);
+                var worldDelta = new Vector3(-mouseDelta.X * height * Game.GraphicsDevice.GetAspectRatio(), mouseDelta.Y * height, 0);
 
                 Pan(worldDelta);
             }

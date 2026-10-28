@@ -7,81 +7,38 @@ using Stride.Engine;
 
 namespace E04_StrideUI_DragAndDrop;
 
-public class PrimitiveGenerator
+/// <summary>Drops primitives into the scene at random positions and keeps count of them.</summary>
+public class PrimitiveGenerator(Game game, Scene scene)
 {
-    /// <summary>
-    /// Total number of cubes generated.
-    /// </summary>
-    public int TotalShapes => _totalCubes;
-
-    private readonly Game _game;
-    private readonly Scene _scene;
     private readonly Random _random = new();
-    private int _totalCubes;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PrimitiveGenerator"/> class.
-    /// </summary>
-    /// <param name="game">The game instance to use for generating cubes.</param>
-    /// <param name="scene">The scene where cubes will be generated.</param>
-    /// <exception cref="ArgumentNullException">Thrown if game or scene is null.</exception>
-    public PrimitiveGenerator(Game game, Scene scene)
-    {
-        _game = game ?? throw new ArgumentNullException(nameof(game));
-        _scene = scene ?? throw new ArgumentNullException(nameof(scene));
-    }
+    /// <summary>How many primitives are in the scene: generated, less those removed.</summary>
+    public int TotalShapes { get; private set; }
 
-    /// <summary>
-    /// Generates the specified number of random primitives and returns the total count.
-    /// </summary>
-    /// <param name="count">The number of primitives to generate.</param>
-    /// <returns>The updated total number of primitives generated.</returns>
+    /// <summary>Generates <paramref name="count"/> primitives of one shape and returns the new total.</summary>
     public int Generate(int count, Primitive3D type)
     {
-        for (int i = 0; i < count; i++)
+        for (var i = 0; i < count; i++)
         {
             Generate(type);
-
-            _totalCubes++;
         }
 
-        return _totalCubes;
+        return TotalShapes;
     }
 
-    /// <summary>
-    /// Generates a 3D primitive (a cube 0.3 units across by default) in the scene, with optional shape and color.
-    /// </summary>
-    /// <param name="shape">The shape to generate, with its dimensions (default: a cube 0.3 units across).</param>
-    /// <param name="color">The color of the shape (default: random color).</param>
+    /// <summary>Generates one primitive, a cube 0.3 units across by default, in a random colour by default.</summary>
     public void Generate(Primitive3D? shape = null, Color? color = null)
     {
-        var selectedColor = color ?? _random.NextColor();
-
-        var entity = _game.CreatePrimitive(shape ?? Primitive3D.Cube(0.3f), new BulletPhysicsOptions
+        var entity = game.CreatePrimitive(shape ?? Primitive3D.Cube(0.3f), new BulletPhysicsOptions
         {
-            Material = _game.CreateMaterial(selectedColor),
+            Material = game.CreateMaterial(color ?? _random.NextColor()),
+            Position = _random.NextVector3(new Vector3(-4, 4, -4), new Vector3(4, 8, 4)),
         });
 
-        ConfigureTransform(entity);
-
-        entity.Scene = _scene;
+        entity.Scene = scene;
+        TotalShapes++;
     }
 
-    public void SubtractTotalCubes(int count)
-    {
-        _totalCubes -= count;
-    }
-
-    /// <summary>
-    /// Gives the entity a random position.
-    /// </summary>
-    /// <param name="entity">The entity to configure.</param>
-    private static void ConfigureTransform(Entity entity)
-    {
-        entity.Transform.Position = VectorHelper.RandomVector3(
-            xRange: [-4, 4],
-            yRange: [4, 8],
-            zRange: [-4, 4]
-        );
-    }
+    /// <summary>Takes removed primitives off the count.</summary>
+    public void Subtract(int count) => TotalShapes -= count;
 }

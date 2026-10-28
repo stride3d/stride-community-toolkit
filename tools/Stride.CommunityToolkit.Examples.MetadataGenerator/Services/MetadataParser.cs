@@ -74,11 +74,11 @@ public class MetadataParser(ILogger<MetadataParser> logger)
         }
         catch (YamlException ex)
         {
-            throw new InvalidOperationException(BuildYamlErrorMessage(exampleFilePath, yamlContent, ex), ex);
+            throw new InvalidOperationException(BuildErrorMessage($"Failed to parse YAML metadata in {Path.GetFileName(exampleFilePath)}, at line {ex.End.Line}, column {ex.End.Column}.", exampleFilePath, yamlContent, $"YamlDotNet reported: {ex.Message}"), ex);
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException(BuildGenericErrorMessage(exampleFilePath, yamlContent, ex), ex);
+            throw new InvalidOperationException(BuildErrorMessage($"Unexpected error while processing {Path.GetFileName(exampleFilePath)}.", exampleFilePath, yamlContent, $"Error: {ex.Message}"), ex);
         }
     }
 
@@ -106,10 +106,7 @@ public class MetadataParser(ILogger<MetadataParser> logger)
     /// </summary>
     private static void NormaliseTrailingNewlines(Dictionary<string, string>? values)
     {
-        if (values is null)
-        {
-            return;
-        }
+        if (values is null) return;
 
         foreach (var key in values.Keys.ToList())
         {
@@ -124,32 +121,8 @@ public class MetadataParser(ILogger<MetadataParser> logger)
     private static string ToRelativePosixPath(string filePath, string examplesRootPath)
         => Path.GetRelativePath(examplesRootPath, filePath).Replace('\\', '/');
 
-    private static string BuildYamlErrorMessage(string exampleFilePath, string yamlContent, YamlException ex)
-    {
-        var errorMessage = new StringBuilder();
-        errorMessage.AppendLine($"Failed to parse YAML metadata in {Path.GetFileName(exampleFilePath)}, at line {ex.End.Line}, column {ex.End.Column}.");
-
-        AppendDiagnosis(errorMessage, exampleFilePath, yamlContent);
-
-        errorMessage.Append($"YamlDotNet reported: {ex.Message}");
-
-        return errorMessage.ToString();
-    }
-
-    private static string BuildGenericErrorMessage(string exampleFilePath, string yamlContent, Exception ex)
-    {
-        var errorMessage = new StringBuilder();
-        errorMessage.AppendLine($"Unexpected error while processing {Path.GetFileName(exampleFilePath)}.");
-
-        AppendDiagnosis(errorMessage, exampleFilePath, yamlContent);
-
-        errorMessage.Append($"Error: {ex.Message}");
-
-        return errorMessage.ToString();
-    }
-
     /// <summary>
-    /// Adds the source-level diagnosis to a parse-failure message.
+    /// Composes a parse-failure message: the headline, the source-level diagnosis, then the deserializer's own words.
     /// </summary>
     /// <remarks>
     /// A YamlDotNet failure is usually a symptom rather than the cause - the classic one is
@@ -157,22 +130,25 @@ public class MetadataParser(ILogger<MetadataParser> logger)
     /// sequence item into a mapping. <see cref="YamlSourceInspector"/> can see that in the source text,
     /// so its findings go first and the deserializer's own message goes last.
     /// </remarks>
-    private static void AppendDiagnosis(StringBuilder errorMessage, string exampleFilePath, string yamlContent)
+    private static string BuildErrorMessage(string headline, string exampleFilePath, string yamlContent, string detail)
     {
         var projectName = Path.GetFileName(Path.GetDirectoryName(exampleFilePath)) ?? exampleFilePath;
         var findings = YamlSourceInspector.Inspect(projectName, yamlContent);
+        var message = new StringBuilder();
+
+        message.AppendLine(headline);
 
         if (findings.Count > 0)
         {
-            errorMessage.AppendLine();
-            errorMessage.AppendLine("Likely cause:");
+            message.AppendLine();
+            message.AppendLine("Likely cause:");
 
-            foreach (var finding in findings)
-            {
-                errorMessage.AppendLine($"  - {finding.Message}");
-            }
+            foreach (var finding in findings) message.AppendLine($"  - {finding.Message}");
         }
 
-        errorMessage.AppendLine();
+        message.AppendLine();
+        message.Append(detail);
+
+        return message.ToString();
     }
 }

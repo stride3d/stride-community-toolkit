@@ -21,9 +21,6 @@ public class MyraSceneRenderer : SceneRendererBase
     /// <summary>Called once with the desktop, after Myra is set up: build the widgets here.</summary>
     public Action<Desktop>? Build { get; set; }
 
-    /// <summary>The desktop, once the renderer has initialised.</summary>
-    public Desktop? Desktop => _desktop;
-
     protected override void InitializeCore()
     {
         base.InitializeCore();

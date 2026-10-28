@@ -8,12 +8,19 @@ using Stride.Input;
 
 namespace CubeCollapse.Scripts;
 
+/// <summary>
+/// Orbits the camera around the platform on Z and C, and shows the game's keys with a live readout
+/// of where the camera stands.
+/// </summary>
 public class CameraRotationScript : SyncScript
 {
     /// <summary>
     /// Closest the camera may be to the orbit centre and still be swung around it, in world units.
     /// </summary>
     private const float MinimumOrbitRadius = 0.01f;
+
+    /// <summary>How fast the camera orbits, in degrees per second.</summary>
+    private const float RotationSpeed = 45f;
 
     /// <summary>
     /// How much faster the camera orbits while shift is held.
@@ -24,9 +31,7 @@ public class CameraRotationScript : SyncScript
     /// </remarks>
     private const float SprintMultiplier = 5f;
 
-    private readonly float _rotationSpeed = 45f; // degrees per second
     private Vector3 _rotationCentre;
-    private TextOverlaySection? _instructions;
 
     /// <summary>
     /// Gets or sets the world point the camera orbits and aims at. Leave <see langword="null"/> to
@@ -43,11 +48,11 @@ public class CameraRotationScript : SyncScript
         // Falls back to the ground, then to the origin - previously a missing ground returned early
         // and silently took the instructions overlay down with it
         _rotationCentre = RotationCentre
-            ?? SceneSystem.SceneInstance.RootScene
-                   .Entities.FirstOrDefault(e => e.Name == EntityNames.Ground)?.Transform.Position
+            ?? SceneSystem.SceneInstance.RootScene.FindEntity(GameDefaults.DefaultGroundName)?.Transform.Position
             ?? Vector3.Zero;
 
-        InitializeTextOverlay();
+        // Runs every frame the overlay is drawn, so the camera position readout stays live
+        TextOverlay.GetOrCreate(Game).AddSection("Game", BuildOverlayLines);
     }
 
     /// <inheritdoc />
@@ -55,31 +60,16 @@ public class CameraRotationScript : SyncScript
     {
         // The property wins whenever it is set, so the centre can follow the platform as levels
         // change its height - Start's fallback only covers the case where it never is
-        if (RotationCentre is { } centre)
-        {
-            _rotationCentre = centre;
-        }
-
-        var deltaTime = this.DeltaTime();
+        if (RotationCentre is { } centre) _rotationCentre = centre;
 
         // Shift speeds the orbit up, matching what it already does for the free-look controller's
         // movement and for rapid clearing. One modifier, the same meaning everywhere.
-        var speed = _rotationSpeed * (IsSprinting() ? SprintMultiplier : 1f);
+        var speed = RotationSpeed * (IsSprinting() ? SprintMultiplier : 1f);
+        var direction = Input.IsKeyDown(Keys.Z) ? -1f : Input.IsKeyDown(Keys.C) ? 1f : 0f;
 
-        var deltaRotation = 0f;
-
-        if (Input.IsKeyDown(Keys.Z))
+        if (direction != 0f)
         {
-            deltaRotation = -speed * deltaTime;
-        }
-        else if (Input.IsKeyDown(Keys.C))
-        {
-            deltaRotation = +speed * deltaTime;
-        }
-
-        if (Math.Abs(deltaRotation) > 0.001f)
-        {
-            RotateAroundCentre(deltaRotation);
+            RotateAroundCentre(direction * speed * this.DeltaTime());
         }
     }
 
@@ -111,21 +101,17 @@ public class CameraRotationScript : SyncScript
         Entity.Transform.LookAt(_rotationCentre, Vector3.UnitY);
     }
 
-    void InitializeTextOverlay()
+    private IReadOnlyList<TextElement> BuildOverlayLines()
     {
-        var overlay = TextOverlay.GetOrCreate(Game);
+        var position = Entity.Transform.Position;
 
-        // Runs every frame the overlay is drawn, so the camera position readout stays live
-        _instructions = overlay.AddSection(
-            "Game", () => GenerateInstructions(Entity.Transform.Position));
-    }
-
-    static List<TextElement> GenerateInstructions(Vector3 cameraPosition)
-     => [
+        return
+        [
             new("Left mouse", "Click a cube", Color.Yellow),
             new("Shift", "Hold with left mouse to keep clearing", Color.Yellow),
             new(["Z", "C"], "Orbit around the platform, Shift for faster", Color.Yellow),
             new(""),
-            new($"Camera position {cameraPosition.X:0.00}, {cameraPosition.Y:0.00}, {cameraPosition.Z:0.00}", Color.Yellow),
+            new($"Camera position {position.X:0.00}, {position.Y:0.00}, {position.Z:0.00}", Color.Yellow),
         ];
+    }
 }

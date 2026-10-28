@@ -5,62 +5,32 @@ using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.DebugShapes;
 
+/// <summary>
+/// One shape handed to a render object: a tagged union of every payload. The payload shares one
+/// offset, so the struct is as wide as the widest shape and no wider.
+/// </summary>
 [StructLayout(LayoutKind.Explicit)]
 internal struct Renderable
 {
-    internal Renderable(ref Quad q) : this()
-    {
-        Type = DebugPrimitiveType.Quad;
-        QuadData = q;
-    }
+    private Renderable(DebugPrimitiveType type) => Type = type;
 
-    internal Renderable(ref Circle c) : this()
-    {
-        Type = DebugPrimitiveType.Circle;
-        CircleData = c;
-    }
+    internal Renderable(in Quad q) : this(DebugPrimitiveType.Quad) => QuadData = q;
 
-    internal Renderable(ref Sphere s) : this()
-    {
-        Type = DebugPrimitiveType.Sphere;
-        SphereData = s;
-    }
+    internal Renderable(in Circle c) : this(DebugPrimitiveType.Circle) => CircleData = c;
 
-    internal Renderable(ref HalfSphere h) : this()
-    {
-        Type = DebugPrimitiveType.HalfSphere;
-        HalfSphereData = h;
-    }
+    internal Renderable(in Sphere s) : this(DebugPrimitiveType.Sphere) => SphereData = s;
 
-    internal Renderable(ref Cube c) : this()
-    {
-        Type = DebugPrimitiveType.Cube;
-        CubeData = c;
-    }
+    internal Renderable(in HalfSphere h) : this(DebugPrimitiveType.HalfSphere) => HalfSphereData = h;
 
-    internal Renderable(ref Capsule c) : this()
-    {
-        Type = DebugPrimitiveType.Capsule;
-        CapsuleData = c;
-    }
+    internal Renderable(in Cube c) : this(DebugPrimitiveType.Cube) => CubeData = c;
 
-    internal Renderable(ref Cylinder c) : this()
-    {
-        Type = DebugPrimitiveType.Cylinder;
-        CylinderData = c;
-    }
+    internal Renderable(in Capsule c) : this(DebugPrimitiveType.Capsule) => CapsuleData = c;
 
-    internal Renderable(ref Cone c) : this()
-    {
-        Type = DebugPrimitiveType.Cone;
-        ConeData = c;
-    }
+    internal Renderable(in Cylinder c) : this(DebugPrimitiveType.Cylinder) => CylinderData = c;
 
-    internal Renderable(ref Line l) : this()
-    {
-        Type = DebugPrimitiveType.Line;
-        LineData = l;
-    }
+    internal Renderable(in Cone c) : this(DebugPrimitiveType.Cone) => ConeData = c;
+
+    internal Renderable(in Line l) : this(DebugPrimitiveType.Line) => LineData = l;
 
     [FieldOffset(0)]
     public DebugPrimitiveType Type;

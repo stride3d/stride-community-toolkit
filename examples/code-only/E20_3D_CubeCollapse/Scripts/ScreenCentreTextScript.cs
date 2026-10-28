@@ -26,9 +26,7 @@ public class ScreenCentreTextScript : SyncScript
     {
         if (Text is null || !Text.IsVisible) return;
 
-        var backBuffer = GraphicsDevice.Presenter?.BackBuffer;
-
-        if (backBuffer is null) return;
+        if (GraphicsDevice.Presenter?.BackBuffer is not { } backBuffer) return;
 
         Text.ScreenPosition = new Vector2(backBuffer.Width * 0.5f, backBuffer.Height * 0.5f);
     }

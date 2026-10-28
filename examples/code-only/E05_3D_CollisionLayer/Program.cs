@@ -7,9 +7,8 @@ using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-// Collision layers: two players that collide with each other and pass through the enemy, the red cube
-
-// Whether two layers collide, a layer with itself included, is what the CollisionMatrix below says
+// Collision layers: two players that collide with each other and pass through the enemy, the red cube.
+// Whether two layers collide, a layer with itself included, is what the CollisionMatrix below says.
 var playerLayer = CollisionLayer.Layer1;
 var enemyLayer = CollisionLayer.Layer2;
 var groundLayer = CollisionLayer.Layer3;
@@ -26,58 +25,27 @@ game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    SetupCollisionMatrix(scene);
-    SetupGroundCollisionLayer(scene);
+    game.GetCameraEntity().GetSimulation().CollisionMatrix = collisionMatrix;
 
-    CreateEntityWithLayer("Player1", Color.MediumSeaGreen, new Vector3(0, 0.5f, 0), scene, playerLayer);
-    CreateEntityWithLayer("Player2", Color.MediumPurple, new Vector3(0.5f, 4, 0.7f), scene, playerLayer);
+    // The setup's ground gets the ground layer, so the matrix applies to it too
+    scene.Entities.First(e => e.Name == "Ground").Get<StaticComponent>().CollisionLayer = groundLayer;
 
-    CreateEntityWithLayer("Enemy", Color.Red, new Vector3(-0.1f, 12, 0.5f), scene, enemyLayer);
+    CreateCube(scene, "Player1", Color.MediumSeaGreen, new Vector3(0, 0.5f, 0), playerLayer);
+    CreateCube(scene, "Player2", Color.MediumPurple, new Vector3(0.5f, 4, 0.7f), playerLayer);
+    CreateCube(scene, "Enemy", Color.Red, new Vector3(-0.1f, 12, 0.5f), enemyLayer);
 }
 
-void SetupCollisionMatrix(Scene scene)
-{
-    var camera = scene.GetCamera();
-
-    var simulation = camera?.Entity.GetSimulation();
-
-    if (simulation == null) return;
-
-    simulation.CollisionMatrix = collisionMatrix;
-}
-
-void SetupGroundCollisionLayer(Scene scene)
-{
-    var groundEntity = scene.Entities.FirstOrDefault(e => e.Name == "Ground");
-
-    if (groundEntity == null) return;
-
-    var groundBody = groundEntity.GetComponent<StaticComponent>();
-
-    groundBody!.CollisionLayer = groundLayer;
-}
-
-void CreateEntityWithLayer(string name, Color color, Vector3 position, Scene scene, CollisionLayer layer)
-{
-    var entity = CreateEntity(name, color, position);
-    var body = entity.GetComponent<BodyComponent>();
-
-    body!.CollisionLayer = layer;
-
-    entity.Scene = scene;
-}
-
-Entity CreateEntity(string name, Color color, Vector3 position)
+void CreateCube(Scene scene, string name, Color color, Vector3 position, CollisionLayer layer)
 {
     var entity = game.CreatePrimitive(Primitive3D.Cube(), new()
     {
         EntityName = name,
         Material = game.CreateMaterial(color),
+        Position = position,
     });
 
-    entity.Transform.Position = position;
-
-    return entity;
+    entity.Get<BodyComponent>().CollisionLayer = layer;
+    entity.Scene = scene;
 }
 /*
 ---example-metadata

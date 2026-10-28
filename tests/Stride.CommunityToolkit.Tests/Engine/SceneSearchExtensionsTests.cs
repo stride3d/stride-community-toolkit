@@ -93,7 +93,7 @@ public class SceneSearchGameTests
     }
 
     [Fact]
-    public async Task RunOnGameThread_RunsTheActionOnTheGameThread()
+    public void RunOnGameThread_RunsTheActionOnTheGameThread()
     {
         using var game = new Game();
 
@@ -129,6 +129,16 @@ public class SceneSearchGameTests
         Assert.NotEqual(-1, gameThread);
         Assert.Equal(gameThread, actionThread);
         Assert.Equal(gameThread, result);
-        await Task.CompletedTask;
+    }
+
+    [Fact]
+    public void NullScene_ThrowsAtTheCall_EvenWhenTheSequenceIsNeverEnumerated()
+    {
+        Scene scene = null!;
+        IGame game = null!;
+
+        Assert.Throws<ArgumentNullException>(() => scene.GetComponentsInScene<CameraComponent>());
+        Assert.Throws<ArgumentNullException>(() => game.GetComponentsInScene<CameraComponent>());
+        Assert.Throws<ArgumentNullException>(() => scene.GetCamera("Main"));
     }
 }

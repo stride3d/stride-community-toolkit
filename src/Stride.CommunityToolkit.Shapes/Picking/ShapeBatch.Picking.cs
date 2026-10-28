@@ -74,9 +74,7 @@ public sealed partial class ShapeBatch
 
         foreach (ref readonly var record in CollectionsMarshal.AsSpan(_lastPicks))
         {
-            if (!Test(record, view, screenPosition, slackPixels, out var candidate)) continue;
-
-            if (!found || candidate.Depth < hit.Depth || (candidate.Depth == hit.Depth && record.Index > bestIndex))
+            if (Test(record, view, screenPosition, slackPixels, out var candidate) && Topmost(candidate, record.Index, found, hit, bestIndex))
             {
                 hit = candidate;
                 bestIndex = record.Index;
@@ -133,9 +131,8 @@ public sealed partial class ShapeBatch
         foreach (ref readonly var record in CollectionsMarshal.AsSpan(_lastPicks))
         {
             if (record.Screen || record.Slice.Space) continue;
-            if (!TestPlane(record, view, ray, slackPixels, out var candidate)) continue;
 
-            if (!found || candidate.Depth < hit.Depth || (candidate.Depth == hit.Depth && record.Index > bestIndex))
+            if (TestPlane(record, view, ray, slackPixels, out var candidate) && Topmost(candidate, record.Index, found, hit, bestIndex))
             {
                 hit = candidate;
                 bestIndex = record.Index;
@@ -145,6 +142,10 @@ public sealed partial class ShapeBatch
 
         return found;
     }
+
+    /// <summary>Whether a candidate goes over the best hit so far: nearer the camera, or drawn later at the same depth. The first candidate always does.</summary>
+    private static bool Topmost(in ShapeHit candidate, int index, bool found, in ShapeHit best, int bestIndex)
+        => !found || candidate.Depth < best.Depth || (candidate.Depth == best.Depth && index > bestIndex);
 
     private void RecordPick(ReadOnlySpan<Vector2> vertices, in ShapePlane plane, in ShapeStyle style, in ShapeSlice slice, float radius, float scale)
     {
@@ -222,14 +223,14 @@ public sealed partial class ShapeBatch
             case PlaneMode.Axial:
                 var side = Vector3.Cross(view.EyePosition - origin, axisX);
                 var sideLength = side.Length();
-                axisY = sideLength > 0.000001f ? side / sideLength : view.CameraUp;
+                axisY = !MathUtil.IsZero(sideLength) ? side / sideLength : view.CameraUp;
                 break;
         }
 
         var normal = Vector3.Cross(axisX, axisY);
         var normalLength = normal.Length();
 
-        if (normalLength < 0.000001f) return false;
+        if (MathUtil.IsZero(normalLength)) return false;
 
         normal /= normalLength;
 
@@ -237,7 +238,7 @@ public sealed partial class ShapeBatch
         // Plane(point, normal) constructor builds the mirror plane)
         var facing = Vector3.Dot(normal, ray.Direction);
 
-        if (MathF.Abs(facing) < 0.000001f) return false;
+        if (MathUtil.IsZero(facing)) return false;
 
         var along = Vector3.Dot(normal, origin - ray.Position) / facing;
 

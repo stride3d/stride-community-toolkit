@@ -21,8 +21,8 @@ public class TextBevelTests
         {
             var data = TextMesh.Create(Font, character.ToString(), Bevelled);
 
-            TextMeshTests.AssertWatertight(data);
-            TextMeshTests.AssertOutwardWinding(data);
+            MeshAssertions.AssertWatertight(data);
+            MeshAssertions.AssertOutwardWinding(data);
         }
     }
 
@@ -41,11 +41,11 @@ public class TextBevelTests
         var plain = TextMesh.Create(Font, "H", new TextMeshOptions { Depth = 0.3f });
         var bevelled = TextMesh.Create(Font, "H", Bevelled);
 
-        static float CapWidth(GeometricMeshData<VertexPositionNormalTexture> data) => data.Vertices.Where(v => v.Normal.Z > 0.99f).Max(v => v.Position.X) - data.Vertices.Where(v => v.Normal.Z > 0.99f).Min(v => v.Position.X);
-        static float WallWidth(GeometricMeshData<VertexPositionNormalTexture> data) => data.Vertices.Where(v => MathF.Abs(v.Normal.Z) < 0.01f).Max(v => v.Position.X) - data.Vertices.Where(v => MathF.Abs(v.Normal.Z) < 0.01f).Min(v => v.Position.X);
+        static bool Cap(VertexPositionNormalTexture v) => v.Normal.Z > 0.99f;
+        static bool Wall(VertexPositionNormalTexture v) => MathF.Abs(v.Normal.Z) < 0.01f;
 
-        Assert.Equal(CapWidth(plain) - 2 * 0.02f, CapWidth(bevelled), 3);
-        Assert.Equal(WallWidth(plain), WallWidth(bevelled), 4);
+        Assert.Equal(TestGeometry.Width(plain, Cap) - 2 * 0.02f, TestGeometry.Width(bevelled, Cap), 3);
+        Assert.Equal(TestGeometry.Width(plain, Wall), TestGeometry.Width(bevelled, Wall), 4);
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class TextBevelTests
         // A chamfer adds one ring of quads per side on top of the walls; four segments add four
         Assert.True(plain.Vertices.Length < chamfer.Vertices.Length);
         Assert.True(chamfer.Vertices.Length < round.Vertices.Length);
-        TextMeshTests.AssertWatertight(chamfer);
+        MeshAssertions.AssertWatertight(chamfer);
     }
 
     [Fact]
@@ -80,8 +80,8 @@ public class TextBevelTests
         // A bevel of 0.2 against stems about 0.09 wide at this size: the cap would fold; the size halves until it fits
         var data = TextMesh.Create(Font, "I", new TextMeshOptions { Depth = 0.3f, Bevel = new TextBevel(size: 0.2f, thickness: 0.05f) });
 
-        TextMeshTests.AssertWatertight(data);
-        TextMeshTests.AssertOutwardWinding(data);
+        MeshAssertions.AssertWatertight(data);
+        MeshAssertions.AssertOutwardWinding(data);
     }
 
     [Theory]
@@ -93,8 +93,8 @@ public class TextBevelTests
         // No wall is built for a remainder of a hair, so the two bevels must end at the same depth, exactly
         var data = TextMesh.Create(MeshFont.Default, "H", new TextMeshOptions { Depth = 0.1f, Bevel = new TextBevel(0.01f, thickness) });
 
-        TextMeshTests.AssertWatertight(data);
-        TextMeshTests.AssertOutwardWinding(data);
+        MeshAssertions.AssertWatertight(data);
+        MeshAssertions.AssertOutwardWinding(data);
         Assert.Equal(0.05f, data.Vertices.Max(v => v.Position.Z));
     }
 
@@ -103,7 +103,7 @@ public class TextBevelTests
     {
         var data = TextMesh.Create(Font, "H", new TextMeshOptions { Depth = 0.1f, Bevel = new TextBevel(size: 0.01f, thickness: 1f) });
 
-        TextMeshTests.AssertWatertight(data);
+        MeshAssertions.AssertWatertight(data);
         Assert.Equal(0.05f, data.Vertices.Max(v => v.Position.Z), 5);
     }
 
@@ -131,6 +131,6 @@ public class TextBevelTests
         var glyphs = TextMesh.CreateGlyphs(Font, "AB", Bevelled);
 
         Assert.Equal(2, glyphs.Count);
-        Assert.All(glyphs, g => TextMeshTests.AssertWatertight(g.Mesh));
+        Assert.All(glyphs, g => MeshAssertions.AssertWatertight(g.Mesh));
     }
 }

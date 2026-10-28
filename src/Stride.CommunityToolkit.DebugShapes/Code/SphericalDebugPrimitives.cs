@@ -41,32 +41,7 @@ internal static class SphericalDebugPrimitives
     /// number of ring pairs to join with quads (sphere: all segments, capsule: one less), while
     /// <see cref="VerticalSegments"/> keeps feeding the split-line modulo.
     /// </summary>
-    private readonly struct WireframeGrid
-    {
-        internal readonly int VerticalLoopCount;
-        internal readonly int VerticalSegments;
-        internal readonly int HorizontalSegments;
-        internal readonly int UvSplits;
-        internal readonly int UvSplitOffsetVertical;
-
-        internal WireframeGrid(int verticalLoopCount, int verticalSegments, int horizontalSegments, int uvSplits, int uvSplitOffsetVertical)
-        {
-            VerticalLoopCount = verticalLoopCount;
-            VerticalSegments = verticalSegments;
-            HorizontalSegments = horizontalSegments;
-            UvSplits = uvSplits;
-            UvSplitOffsetVertical = uvSplitOffsetVertical;
-        }
-
-        internal void Deconstruct(out int verticalLoopCount, out int verticalSegments, out int horizontalSegments, out int uvSplits, out int uvSplitOffsetVertical)
-        {
-            verticalLoopCount = VerticalLoopCount;
-            verticalSegments = VerticalSegments;
-            horizontalSegments = HorizontalSegments;
-            uvSplits = UvSplits;
-            uvSplitOffsetVertical = UvSplitOffsetVertical;
-        }
-    }
+    private readonly record struct WireframeGrid(int VerticalLoopCount, int VerticalSegments, int HorizontalSegments, int UvSplits, int UvSplitOffsetVertical);
 
     internal static (VertexPositionTexture[] Vertices, int[] Indices) GenerateSphere(float radius = 0.5f, int tessellations = 16, int uvSplits = 4, int uvSplitOffsetVertical = 0)
     {
@@ -77,19 +52,19 @@ internal static class SphericalDebugPrimitives
             throw new ArgumentException(DebugPrimitiveUv.SplitDivisorErrorMessage);
         }
 
-        int verticalSegments = tessellations;
-        int horizontalSegments = tessellations * 2;
+        var verticalSegments = tessellations;
+        var horizontalSegments = tessellations * 2;
 
         var grid = new WireframeGrid(verticalSegments, verticalSegments, horizontalSegments, uvSplits, uvSplitOffsetVertical);
-        int extraVertexCount = CountExtraWireframeVertices(grid);
+        var extraVertexCount = CountExtraWireframeVertices(grid);
 
         var vertices = new VertexPositionTexture[(verticalSegments + 1) * (horizontalSegments + 1) + extraVertexCount];
         var indices = new int[verticalSegments * (horizontalSegments + 1) * 6];
 
-        int vertexCount = 0;
+        var vertexCount = 0;
 
         // generate the first extremity points
-        for (int j = 0; j <= horizontalSegments; j++)
+        for (var j = 0; j <= horizontalSegments; j++)
         {
             var normal = new Vector3(0, -1, 0);
             var textureCoordinate = new Vector2(0.5f);
@@ -97,7 +72,7 @@ internal static class SphericalDebugPrimitives
         }
 
         // Create rings of vertices at progressively higher latitudes.
-        for (int i = 1; i < verticalSegments; i++)
+        for (var i = 1; i < verticalSegments; i++)
         {
             var latitude = (float)(i * Math.PI / verticalSegments - Math.PI / 2.0);
             var dy = (float)Math.Sin(latitude);
@@ -109,7 +84,7 @@ internal static class SphericalDebugPrimitives
             vertices[vertexCount++] = firstHorizontalVertex;
 
             // Create a single ring of vertices at this latitude.
-            for (int j = 1; j < horizontalSegments; j++)
+            for (var j = 1; j < horizontalSegments; j++)
             {
                 var longitude = (float)(j * 2.0 * Math.PI / horizontalSegments);
                 var dx = (float)Math.Sin(longitude);
@@ -130,7 +105,7 @@ internal static class SphericalDebugPrimitives
         }
 
         // generate the end extremity points
-        for (int j = 0; j <= horizontalSegments; j++)
+        for (var j = 0; j <= horizontalSegments; j++)
         {
             var normal = new Vector3(0, 1, 0);
             var textureCoordinate = DebugPrimitiveUv.NoLine;
@@ -152,18 +127,18 @@ internal static class SphericalDebugPrimitives
             throw new ArgumentException(DebugPrimitiveUv.SplitDivisorErrorMessage);
         }
 
-        int verticalSegments = 2 * tessellations;
-        int horizontalSegments = 4 * tessellations;
+        var verticalSegments = 2 * tessellations;
+        var horizontalSegments = 4 * tessellations;
 
         var grid = new WireframeGrid(verticalSegments - 1, verticalSegments, horizontalSegments, uvSplits, 0);
-        int extraVertexCount = CountExtraWireframeVertices(grid);
+        var extraVertexCount = CountExtraWireframeVertices(grid);
 
         var vertices = new VertexPositionTexture[verticalSegments * (horizontalSegments + 1) + extraVertexCount];
         var indices = new int[(verticalSegments - 1) * (horizontalSegments + 1) * 6];
 
         var vertexCount = 0;
         // Create rings of vertices at progressively higher latitudes.
-        for (int i = 0; i < verticalSegments; i++)
+        for (var i = 0; i < verticalSegments; i++)
         {
             float deltaY;
             float latitude;
@@ -183,7 +158,7 @@ internal static class SphericalDebugPrimitives
             var dxz = (float)Math.Cos(latitude);
 
             // Create a single ring of vertices at this latitude.
-            for (int j = 0; j <= horizontalSegments; j++)
+            for (var j = 0; j <= horizontalSegments; j++)
             {
                 var longitude = (float)(j * 2.0 * Math.PI / horizontalSegments);
                 var dx = (float)Math.Sin(longitude);
@@ -222,13 +197,13 @@ internal static class SphericalDebugPrimitives
             return 0;
         }
 
-        int extraVertexCount = 0;
-        for (int i = 0; i < verticalLoopCount; i++)
+        var extraVertexCount = 0;
+        for (var i = 0; i < verticalLoopCount; i++)
         {
-            for (int j = 0; j <= horizontalSegments; j++)
+            for (var j = 0; j <= horizontalSegments; j++)
             {
-                int vertModulo = (i + uvSplitOffsetVertical) % (verticalSegments / uvSplits);
-                int horizModulo = j % (horizontalSegments / uvSplits);
+                var vertModulo = (i + uvSplitOffsetVertical) % (verticalSegments / uvSplits);
+                var horizModulo = j % (horizontalSegments / uvSplits);
                 if (vertModulo == 0 && horizModulo == 0)
                 {
                     extraVertexCount += 4;
@@ -253,17 +228,17 @@ internal static class SphericalDebugPrimitives
     {
         var (verticalLoopCount, verticalSegments, horizontalSegments, uvSplits, uvSplitOffsetVertical) = grid;
 
-        int stride = horizontalSegments + 1;
-        int hasUvSplit = uvSplits > 0 ? 1 : 0;
+        var stride = horizontalSegments + 1;
+        var hasUvSplit = uvSplits > 0 ? 1 : 0;
 
-        int indexCount = 0;
-        int newVertexCount = firstExtraVertex;
-        for (int i = 0; i < verticalLoopCount; i++)
+        var indexCount = 0;
+        var newVertexCount = firstExtraVertex;
+        for (var i = 0; i < verticalLoopCount; i++)
         {
-            for (int j = 0; j <= horizontalSegments; j++)
+            for (var j = 0; j <= horizontalSegments; j++)
             {
-                int nextI = i + 1;
-                int nextJ = (j + 1) % stride;
+                var nextI = i + 1;
+                var nextJ = (j + 1) % stride;
                 int? vertModulo = uvSplits > 0 ? (i + uvSplitOffsetVertical) % (verticalSegments / uvSplits) : null;
                 int? horizModulo = uvSplits > 0 ? j % (horizontalSegments / uvSplits) : null;
                 if (hasUvSplit > 0 && vertModulo == 0 && horizModulo == 0)

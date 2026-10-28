@@ -39,14 +39,13 @@ internal static class InspectorValueDrawers
         // natively (int), then cast back so the boxed value keeps its original type.
         switch (value)
         {
-            // c = closest type that ImGui implements natively, manually cast it to the right type afterward
-            case uint v: { int c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (uint)c; } return true; }
-            case long v: { int c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (long)c; } return true; }
-            case ulong v: { int c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (ulong)c; } return true; }
-            case short v: { int c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (short)c; } return true; }
-            case ushort v: { int c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (ushort)c; } return true; }
-            case byte v: { int c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (byte)c; } return true; }
-            case sbyte v: { int c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (sbyte)c; } return true; }
+            case uint v: { var c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (uint)c; } return true; }
+            case long v: { var c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (long)c; } return true; }
+            case ulong v: { var c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (ulong)c; } return true; }
+            case short v: { var c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (short)c; } return true; }
+            case ushort v: { var c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (ushort)c; } return true; }
+            case byte v: { var c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (byte)c; } return true; }
+            case sbyte v: { var c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (sbyte)c; } return true; }
             default: valueChanged = false; return false;
         }
     }
@@ -56,81 +55,72 @@ internal static class InspectorValueDrawers
     /// </summary>
     internal static bool DrawEnum((bool flags, Array values) enumInfo, ref object? value)
     {
-        bool valueChanged = false;
-        (bool flags, Array values) = enumInfo;
-        using (UCombo("", value?.ToString() ?? string.Empty, out bool open))
-        {
-            if (open)
-            {
-                foreach (object o in values)
-                {
-                    ulong fieldValue = GetEnumBits(value!);
-                    ulong compValue = GetEnumBits(o);
-                    bool selected;
-                    if (flags)
-                        selected = (fieldValue & compValue) == compValue;
-                    else
-                        selected = fieldValue == compValue;
+        var valueChanged = false;
+        var (flags, values) = enumInfo;
 
-                    if (Selectable(o.ToString(), selected))
-                    {
-                        if (flags)
-                        {
-                            if (selected) // unselect this value
-                                compValue = fieldValue & ~compValue;
-                            else // select new value
-                                compValue = fieldValue | compValue;
-                        }
-                        value = GetEnumValueFromBits(compValue, value!.GetType());
-                        valueChanged = true;
-                    }
-                }
+        using (UCombo("", value?.ToString() ?? string.Empty, out var open))
+        {
+            if (!open) return false;
+
+            foreach (var o in values)
+            {
+                var fieldValue = GetEnumBits(value!);
+                var compValue = GetEnumBits(o);
+                var selected = flags ? (fieldValue & compValue) == compValue : fieldValue == compValue;
+
+                if (!Selectable(o.ToString(), selected)) continue;
+
+                // A flag is toggled; a plain value replaces the whole thing
+                if (flags) compValue = selected ? fieldValue & ~compValue : fieldValue | compValue;
+
+                value = GetEnumValueFromBits(compValue, value!.GetType());
+                valueChanged = true;
             }
+
             return valueChanged;
         }
     }
 
+    // The value's bits as an unsigned long, whatever its underlying type; casts through the signed type keep the bit pattern
     private static ulong GetEnumBits(object enumValue)
     {
         var valueType = enumValue.GetType();
-        if (valueType.IsEnum)
-            valueType = Enum.GetUnderlyingType(valueType);
 
-        if (valueType == typeof(int)) return (ulong)(int)enumValue;
-        if (valueType == typeof(uint)) return (ulong)(uint)enumValue;
-        if (valueType == typeof(long)) return (ulong)(long)enumValue;
-        if (valueType == typeof(ulong)) return (ulong)enumValue;
-        if (valueType == typeof(short)) return (ulong)(short)enumValue;
-        if (valueType == typeof(ushort)) return (ulong)(ushort)enumValue;
-        if (valueType == typeof(byte)) return (ulong)(byte)enumValue;
-        if (valueType == typeof(sbyte)) return (ulong)(sbyte)enumValue;
+        if (valueType.IsEnum) valueType = Enum.GetUnderlyingType(valueType);
 
-        throw new ArgumentException(valueType.ToString());
+        return Type.GetTypeCode(valueType) switch
+        {
+            TypeCode.Int32 => (ulong)(int)enumValue,
+            TypeCode.UInt32 => (uint)enumValue,
+            TypeCode.Int64 => (ulong)(long)enumValue,
+            TypeCode.UInt64 => (ulong)enumValue,
+            TypeCode.Int16 => (ulong)(short)enumValue,
+            TypeCode.UInt16 => (ushort)enumValue,
+            TypeCode.Byte => (byte)enumValue,
+            TypeCode.SByte => (ulong)(sbyte)enumValue,
+            _ => throw new ArgumentException(valueType.ToString()),
+        };
     }
 
     [SuppressMessage("Performance", "CA1859:Use concrete types when possible for improved performance", Justification = "The method exists to box an arbitrary enum's underlying value; there is no single concrete return type.")]
     private static object GetEnumValueFromBits(ulong bits, Type enumType)
     {
-        if (enumType.IsEnum)
+        if (!enumType.IsEnum) throw new ArgumentException(enumType.ToString());
+
+        return Type.GetTypeCode(Enum.GetUnderlyingType(enumType)) switch
         {
-            var valueType = Enum.GetUnderlyingType(enumType);
-            if (valueType == typeof(int)) return (int)bits;
-            if (valueType == typeof(uint)) return (uint)bits;
-            if (valueType == typeof(long)) return (long)bits;
-            if (valueType == typeof(ulong)) return bits;
-            if (valueType == typeof(short)) return (short)bits;
-            if (valueType == typeof(ushort)) return (ushort)bits;
-            if (valueType == typeof(byte)) return (byte)bits;
-            if (valueType == typeof(sbyte)) return (sbyte)bits;
-        }
-
-        throw new ArgumentException(enumType.ToString());
+            TypeCode.Int32 => (int)bits,
+            TypeCode.UInt32 => (uint)bits,
+            TypeCode.Int64 => (long)bits,
+            TypeCode.UInt64 => bits,
+            TypeCode.Int16 => (short)bits,
+            TypeCode.UInt16 => (ushort)bits,
+            TypeCode.Byte => (byte)bits,
+            TypeCode.SByte => (sbyte)bits,
+            _ => throw new ArgumentException(enumType.ToString()),
+        };
     }
 
-    private static float RelativeDragSpeed(in float currentValue)
-    {
-        float finalSpeed = currentValue < 0f ? -currentValue : currentValue;
-        finalSpeed *= 0.1f;
-        return finalSpeed < 0.001f ? 0.001f : finalSpeed;
-    }
+    // A tenth of the value per pixel, so large values move fast and small ones move finely
+    private static float RelativeDragSpeed(float currentValue) => MathF.Max(MathF.Abs(currentValue) * 0.1f, 0.001f);
 }

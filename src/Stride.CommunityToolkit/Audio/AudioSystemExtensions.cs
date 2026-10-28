@@ -109,15 +109,7 @@ public static class AudioSystemExtensions
         RequireEngine(audio);
         ArgumentNullException.ThrowIfNull(entity);
 
-        var component = entity.Get<AudioListenerComponent>();
-
-        if (component is null)
-        {
-            component = new AudioListenerComponent();
-            entity.Add(component);
-        }
-
-        return AudioInternals.GetListener(component)
+        return AudioInternals.GetListener(entity.GetOrCreate<AudioListenerComponent>())
             ?? throw new InvalidOperationException($"'{entity.Name}' has no listener yet: the engine creates one when the entity is in a scene. Add the entity to the scene first.");
     }
 

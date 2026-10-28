@@ -5,6 +5,7 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Graphics;
 
 // A gallery of everything WorldTextComponent can do. Each station on the ground demonstrates one
 // setting, and the text itself names the setting that produced it.
@@ -14,16 +15,12 @@ using Stride.Engine;
 // it. For text that must always be readable at the same size, such as a HUD, see
 // E03_3D_EntityText.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
+game.Run(new SceneSetup3D { Resizable = true, DpiAware = true }.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-
     // One call, however much text the scene has. Without the renderer, world text simply never
     // appears - there is no error for a missing renderer.
     game.AddWorldTextRenderer();
@@ -173,7 +170,7 @@ Entity AddText(Scene scene, Vector3 position, Action<WorldTextComponent> configu
     {
         Text = string.Empty,
         Height = 0.35f,
-        Alignment = Stride.Graphics.TextAlignment.Center,
+        Alignment = TextAlignment.Center,
     };
 
     configure(component);

@@ -38,62 +38,48 @@ void Start(Scene rootScene)
 
     grid.Children.Add(CreateCard(texture));
 
+    // Every anchor down the columns; every stretch twice down the rows, into a wide area with the
+    // expanded sampling pattern and into a tall one with the default
     for (var a = 0; a < 9; a++)
     {
-        var anchor = (Anchor)a;
         for (var s = 0; s < 4; s++)
         {
-            var stretch = (Stretch)s;
-
-            using (var canvas = game.CreateTextureCanvas(new Size2(1024, 1024)))
-            {
-                canvas.DrawTexture(texture, new Rectangle(0, 128, 256, 256), new Rectangle(128, 256, 768, 512), null, stretch, anchor, SamplingPattern.Expanded);
-                var card = CreateCard(canvas.ToTexture());
-                card.SetGridColumn(a);
-                card.SetGridRow(s * 2 + 1);
-                grid.Children.Add(card);
-            }
-
-            using (var canvas = game.CreateTextureCanvas(new Size2(1024, 1024)))
-            {
-
-                canvas.DrawTexture(texture, new Rectangle(0, 128, 256, 256), new Rectangle(256, 128, 512, 768), null, stretch, anchor);
-                var card = CreateCard(canvas.ToTexture());
-                card.SetGridColumn(a);
-                card.SetGridRow(s * 2 + 2);
-                grid.Children.Add(card);
-            }
+            AddCard(a, s * 2 + 1, new Rectangle(128, 256, 768, 512), (Stretch)s, (Anchor)a, SamplingPattern.Expanded);
+            AddCard(a, s * 2 + 2, new Rectangle(256, 128, 512, 768), (Stretch)s, (Anchor)a, SamplingPattern.Linear);
         }
     }
 
-    var entity = new Entity { Scene = rootScene };
-    entity.Add(new UIComponent { Page = new UIPage { RootElement = grid } });
-}
+    var entity = new Entity { new UIComponent { Page = new UIPage { RootElement = grid } } };
 
-static Border CreateCard(Texture texture)
-{
-    var card = new Border
+    entity.Scene = rootScene;
+
+    void AddCard(int column, int row, Rectangle destination, Stretch stretch, Anchor anchor, SamplingPattern sampling)
     {
-        BorderColor = new Color(25, 25, 25),
-        BackgroundColor = new Color(120, 120, 120),
-        BorderThickness = new Thickness(2, 2, 2, 2),
-        Padding = new Thickness(8, 8, 8, 8),
-        Margin = new Thickness(4, 4, 4, 4),
-        Content = new StackPanel
-        {
-            Orientation = Orientation.Vertical,
-            Children =
-            {
-                new ImageElement
-                {
-                    Source = new SpriteFromTexture { Texture = texture }
-                }
-            }
-        }
-    };
+        using var canvas = game.CreateTextureCanvas(new Size2(1024, 1024));
 
-    return card;
+        canvas.DrawTexture(texture, new Rectangle(0, 128, 256, 256), destination, null, stretch, anchor, sampling);
+
+        var card = CreateCard(canvas.ToTexture());
+
+        card.SetGridColumn(column);
+        card.SetGridRow(row);
+        grid.Children.Add(card);
+    }
 }
+
+static Border CreateCard(Texture texture) => new()
+{
+    BorderColor = new Color(25, 25, 25),
+    BackgroundColor = new Color(120, 120, 120),
+    BorderThickness = new Thickness(2, 2, 2, 2),
+    Padding = new Thickness(8, 8, 8, 8),
+    Margin = new Thickness(4, 4, 4, 4),
+    Content = new StackPanel
+    {
+        Orientation = Orientation.Vertical,
+        Children = { new ImageElement { Source = new SpriteFromTexture { Texture = texture } } },
+    },
+};
 /*
 ---example-metadata
 slug: image-processing

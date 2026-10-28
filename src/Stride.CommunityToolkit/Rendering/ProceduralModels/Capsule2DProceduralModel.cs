@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Collections;
 using Stride.Graphics;
 using Stride.Rendering.ProceduralModels;
 
@@ -10,9 +11,9 @@ namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
 {
     /// <summary>
-    /// Gets or sets the total height of the capsule (including the two semicircles).
+    /// Gets or sets the height of the capsule: the whole shape end to end, the two semicircles included.
     /// </summary>
-    public float TotalHeight { get; set; } = 1.2f;
+    public float Height { get; set; } = 1.2f;
 
     /// <summary>
     /// Gets or sets the radius of the capsule.
@@ -29,7 +30,7 @@ public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
     /// <summary>
     /// Creates mesh data using current property values, honoring UV scale.
     /// </summary>
-    protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData() => New(TotalHeight, Radius, Tessellation, UvScale.X, UvScale.Y);
+    protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData() => New(Height, Radius, Tessellation, UvScale.X, UvScale.Y);
 
     /// <summary>
     /// Retrieves (or builds and caches) a capsule mesh with the specified dimensions and options.
@@ -42,17 +43,7 @@ public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
     /// <param name="toLeftHanded">If true, reverses winding for left‑handed coordinates.</param>
     /// <returns>Mesh data for the requested capsule.</returns>
     public static GeometricMeshData<VertexPositionNormalTexture> New(float height = 1.0f, float radius = 0.25f, int tessellation = 16, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
-    {
-        var cacheKey = (height, radius, tessellation, uScale, vScale, toLeftHanded);
-
-        if (_meshCache.TryGetValue(cacheKey, out var mesh))
-            return mesh;
-
-        mesh = CreateMesh(height, radius, tessellation, uScale, vScale, toLeftHanded);
-        _meshCache[cacheKey] = mesh;
-
-        return mesh;
-    }
+        => _meshCache.GetOrAdd((height, radius, tessellation, uScale, vScale, toLeftHanded), _ => CreateMesh(height, radius, tessellation, uScale, vScale, toLeftHanded));
 
     /// <summary>
     /// Builds a new capsule mesh (without caching) using provided parameters.
@@ -61,181 +52,84 @@ public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
     public static GeometricMeshData<VertexPositionNormalTexture> CreateMesh(float height = 1.0f, float radius = 0.25f, int tessellation = 16, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
         if (radius <= 0)
+        {
             throw new ArgumentOutOfRangeException(nameof(radius), "Radius must be greater than zero.");
+        }
 
-        // UV coordinate constants for consistent texture mapping
+        // Each semicircle maps to a quarter of the texture's height, the rectangle to the half between them
         const float uvCenterX = 0.5f;
         const float uvTopY = 0.75f;
         const float uvBottomY = 0.25f;
         const float uvSemicircleHeight = 0.25f;
 
-        // Cap the minimum tessellation to prevent issues
         tessellation = Math.Max(4, tessellation);
 
-        // Make sure the height is greater than twice the radius to ensure we have a rectangular section
-        var totalHeight = Math.Max(height, radius * 2.01f); // Add a small buffer to ensure the rectangle exists
-
-        // Calculate the rectangular part height
-        var rectHeight = Math.Max(0.01f, totalHeight - 2 * radius);
-
-        // Calculate the total number of vertices and indices
-        var vertexCount = (tessellation + 1) * 2 + 2; // Two semicircles plus two center points
-        var indexCount = tessellation * 6; // Two semicircles with triangles
-
-        if (rectHeight > 0)
-        {
-            vertexCount += 4; // Add four vertices for the rectangle
-            indexCount += 6; // Add two triangles for the rectangle
-        }
-
-        // Use stack allocation for reasonable sizes
-        var vertices = vertexCount <= 128
-            ? stackalloc VertexPositionNormalTexture[vertexCount]
-            : new VertexPositionNormalTexture[vertexCount];
-
-        var indices = indexCount <= 384
-            ? stackalloc int[indexCount]
-            : new int[indexCount];
-
+        // The straight part is never shorter than a sliver, so the shape always has its rectangle
+        var halfRectHeight = Math.Max(0.01f, Math.Max(height, radius * 2.01f) - 2 * radius) * 0.5f;
+        var uvScale = new Vector2(uScale, vScale);
         var normal = Vector3.UnitZ;
 
-        // Calculate center points of circles
-        var halfRectHeight = rectHeight / 2;
-        var topCircleCenter = new Vector3(0, halfRectHeight, 0); // Removed "+ radius"
-        var bottomCircleCenter = new Vector3(0, -halfRectHeight, 0); // Removed "- radius"
+        // Two fans of tessellation triangles each, and a rectangle of two
+        var vertices = new VertexPositionNormalTexture[(tessellation + 2) * 2 + 4];
+        var indices = new int[tessellation * 6 + 6];
+        var vertex = 0;
+        var index = 0;
 
-        // Set UV scale
-        var uvScale = new Vector2(uScale, vScale);
+        // Top semicircle: the arc from +X round to -X
+        var top = Semicircle(new Vector3(0, halfRectHeight, 0), 0f, uvTopY);
 
-        var currentVertex = 0;
+        // The rectangle between the two centres: top-left, bottom-left, bottom-right, top-right
+        var rectangle = vertex;
 
-        // ===== TOP SEMICIRCLE =====
-        // Top center point
-        var topCenterIndex = currentVertex;
-        vertices[currentVertex++] = new VertexPositionNormalTexture(
-            topCircleCenter,
-            normal,
-            new Vector2(uvCenterX, uvTopY) * uvScale
-        );
+        vertices[vertex++] = new(new Vector3(-radius, halfRectHeight, 0), normal, new Vector2(0, uvTopY) * uvScale);
+        vertices[vertex++] = new(new Vector3(-radius, -halfRectHeight, 0), normal, new Vector2(0, uvBottomY) * uvScale);
+        vertices[vertex++] = new(new Vector3(radius, -halfRectHeight, 0), normal, new Vector2(1, uvBottomY) * uvScale);
+        vertices[vertex++] = new(new Vector3(radius, halfRectHeight, 0), normal, new Vector2(1, uvTopY) * uvScale);
 
-        // Top semicircle perimeter
-        for (var i = 0; i <= tessellation; i++)
+        // Bottom semicircle: the arc from -X round to +X
+        var bottom = Semicircle(new Vector3(0, -halfRectHeight, 0), MathF.PI, uvBottomY);
+
+        Fan(top);
+
+        indices[index++] = rectangle;
+        indices[index++] = rectangle + 2;
+        indices[index++] = rectangle + 1;
+        indices[index++] = rectangle;
+        indices[index++] = rectangle + 3;
+        indices[index++] = rectangle + 2;
+
+        Fan(bottom);
+
+        return new GeometricMeshData<VertexPositionNormalTexture>(vertices, indices, toLeftHanded) { Name = "Capsule2D" };
+
+        // The centre, then tessellation + 1 points along the arc; returns the centre's index
+        int Semicircle(Vector3 center, float startAngle, float uvY)
         {
-            var angle = i * MathF.PI / tessellation;
-            var x = radius * MathF.Cos(angle);
-            var y = radius * MathF.Sin(angle);
+            var centerIndex = vertex;
 
-            var texCoord = new Vector2(
-                uvCenterX + (MathF.Cos(angle) * 0.5f),
-                uvTopY + (MathF.Sin(angle) * uvSemicircleHeight)
-            );
+            vertices[vertex++] = new(center, normal, new Vector2(uvCenterX, uvY) * uvScale);
 
-            vertices[currentVertex++] = new VertexPositionNormalTexture(
-                topCircleCenter + new Vector3(x, y, 0),
-                normal,
-                texCoord * uvScale
-            );
+            for (var i = 0; i <= tessellation; i++)
+            {
+                var angle = startAngle + i * MathF.PI / tessellation;
+                var cos = MathF.Cos(angle);
+                var sin = MathF.Sin(angle);
+
+                vertices[vertex++] = new(center + new Vector3(radius * cos, radius * sin, 0), normal, new Vector2(uvCenterX + cos * 0.5f, uvY + sin * uvSemicircleHeight) * uvScale);
+            }
+
+            return centerIndex;
         }
 
-        // ===== RECTANGLE MIDDLE PART =====
-        var rectStartIndex = currentVertex;
-        if (rectHeight > 0)
+        // One triangle per arc segment, wound to face +Z
+        void Fan(int centerIndex)
         {
-            // Define rect vertices - same winding as top semicircle
-            // Top-left
-            vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(-radius, halfRectHeight, 0),
-                normal,
-                new Vector2(0, uvTopY) * uvScale
-            );
-
-            // Bottom-left
-            vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(-radius, -halfRectHeight, 0),
-                normal,
-                new Vector2(0, uvBottomY) * uvScale
-            );
-
-            // Bottom-right
-            vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(radius, -halfRectHeight, 0),
-                normal,
-                new Vector2(1, uvBottomY) * uvScale
-            );
-
-            // Top-right
-            vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(radius, halfRectHeight, 0),
-                normal,
-                new Vector2(1, uvTopY) * uvScale
-            );
+            for (var i = 0; i < tessellation; i++)
+            {
+                indices[index++] = centerIndex;
+                indices[index++] = centerIndex + i + 2;
+                indices[index++] = centerIndex + i + 1;
+            }
         }
-
-        // ===== BOTTOM SEMICIRCLE =====
-        // Bottom center point
-        var bottomCenterIndex = currentVertex;
-        vertices[currentVertex++] = new VertexPositionNormalTexture(
-            bottomCircleCenter,
-            normal,
-            new Vector2(uvCenterX, uvBottomY) * uvScale
-        );
-
-        // Bottom semicircle perimeter
-        for (var i = 0; i <= tessellation; i++)
-        {
-            var angle = MathF.PI + i * MathF.PI / tessellation;
-            var x = radius * MathF.Cos(angle);
-            var y = radius * MathF.Sin(angle);
-
-            var texCoord = new Vector2(
-                uvCenterX + (MathF.Cos(angle) * 0.5f),
-                uvBottomY + (MathF.Sin(angle) * uvSemicircleHeight)
-            );
-
-            vertices[currentVertex++] = new VertexPositionNormalTexture(
-                bottomCircleCenter + new Vector3(x, y, 0),
-                normal,
-                texCoord * uvScale
-            );
-        }
-
-        // ===== INDEXING =====
-        var currentIndex = 0;
-
-        // Top semicircle triangles
-        for (var i = 0; i < tessellation; i++)
-        {
-            indices[currentIndex++] = topCenterIndex;
-            indices[currentIndex++] = topCenterIndex + i + 2;
-            indices[currentIndex++] = topCenterIndex + i + 1;
-        }
-
-        // Rectangle triangles
-        if (rectHeight > 0)
-        {
-            // First triangle
-            indices[currentIndex++] = rectStartIndex;
-            indices[currentIndex++] = rectStartIndex + 2;
-            indices[currentIndex++] = rectStartIndex + 1;
-
-            // Second triangle
-            indices[currentIndex++] = rectStartIndex;
-            indices[currentIndex++] = rectStartIndex + 3;
-            indices[currentIndex++] = rectStartIndex + 2;
-        }
-
-        // Bottom semicircle triangles
-        for (var i = 0; i < tessellation; i++)
-        {
-            indices[currentIndex++] = bottomCenterIndex;
-            indices[currentIndex++] = bottomCenterIndex + i + 2;
-            indices[currentIndex++] = bottomCenterIndex + i + 1;
-        }
-
-        // Convert spans to arrays for GeometricMeshData
-        var vertexArray = vertices.ToArray();
-        var indexArray = indices.ToArray();
-
-        return new GeometricMeshData<VertexPositionNormalTexture>(vertexArray, indexArray, toLeftHanded) { Name = "Capsule2D" };
     }
 }

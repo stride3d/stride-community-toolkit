@@ -46,21 +46,15 @@ public static partial class YamlSourceInspector
 
             if (blockScalarIndent is { } openIndent)
             {
-                if (line.Trim().Length == 0 || indent > openIndent)
-                {
-                    // Literal block content: '#' and ':' are ordinary characters here.
-                    continue;
-                }
+                // Literal block content: '#' and ':' are ordinary characters here.
+                if (string.IsNullOrWhiteSpace(line) || indent > openIndent) continue;
 
                 blockScalarIndent = null;
             }
 
             var trimmed = line.TrimStart();
 
-            if (trimmed.Length == 0 || trimmed.StartsWith('#'))
-            {
-                continue;
-            }
+            if (trimmed.Length == 0 || trimmed.StartsWith('#')) continue;
 
             var blockScalar = BlockScalarHeaderPattern().Match(line);
 
@@ -91,15 +85,7 @@ public static partial class YamlSourceInspector
     {
         var (index, key) = FindUnquoted(line, '#');
 
-        if (index <= 0 || !char.IsWhiteSpace(line[index - 1]))
-        {
-            return;
-        }
-
-        if (line[..index].Trim().Length == 0)
-        {
-            return;
-        }
+        if (index <= 0 || !char.IsWhiteSpace(line[index - 1]) || string.IsNullOrWhiteSpace(line[..index])) return;
 
         messages.Add(ValidationMessage.Error(projectName, key,
             $"An unquoted '#' starts a YAML comment, so this value is truncated to '{line[..index].Trim()}'. Quote the value. Line: {line.Trim()}"));
@@ -113,22 +99,11 @@ public static partial class YamlSourceInspector
     {
         var trimmed = line.TrimStart();
 
-        if (!trimmed.StartsWith("- ", StringComparison.Ordinal))
-        {
-            return;
-        }
+        if (!trimmed.StartsWith("- ", StringComparison.Ordinal)) return;
 
         var value = trimmed[2..].Trim();
 
-        if (value.StartsWith('"') || value.StartsWith('\''))
-        {
-            return;
-        }
-
-        if (!value.Contains(": ", StringComparison.Ordinal))
-        {
-            return;
-        }
+        if (value.StartsWith('"') || value.StartsWith('\'') || !value.Contains(": ", StringComparison.Ordinal)) return;
 
         messages.Add(ValidationMessage.Error(projectName, "(sequence item)",
             $"A sequence item containing ': ' is read as a mapping, not a string, and aborts parsing. Quote it. Line: {trimmed}"));

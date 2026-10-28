@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Collections;
+namespace Stride.CommunityToolkit.Mathematics;
 
 /// <summary>
 /// Provides extension methods for the <see cref="Random"/> class to facilitate random selection and shuffling of collections.

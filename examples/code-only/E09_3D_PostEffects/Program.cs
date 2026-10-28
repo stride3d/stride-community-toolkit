@@ -6,6 +6,7 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Input;
 using Stride.Rendering;
 using Stride.Rendering.Images;
@@ -27,11 +28,7 @@ using Stride.Rendering.Images.Dither;
 
 const float LampIntensity = 6f;   // emissive above 1 is what bloom and streaks feed on
 
-var effects = new Dictionary<Keys, (string Name, Func<bool> IsOn, Action Toggle)>();
-
-Vignetting? vignette = null;
-FilmGrain? filmGrain = null;
-Dither? dither = null;
+Dictionary<Keys, (string Name, Func<bool> IsOn, Action Toggle)> effects = [];
 
 using var game = new Game();
 
@@ -66,9 +63,13 @@ void Start(Scene scene)
         fx.LensFlare.Amount = 0.4f;
 
         // The colour transforms have to be added, not enabled; only the vignette starts on.
-        fx.ColorTransforms.Transforms.Add(vignette = new Vignetting { Amount = 0.35f, Radius = 0.8f });
-        fx.ColorTransforms.Transforms.Add(filmGrain = new FilmGrain { Enabled = false, Amount = 0.6f, GrainSize = 2f, Animate = true });
-        fx.ColorTransforms.Transforms.Add(dither = new Dither { Enabled = false });
+        var vignette = new Vignetting { Amount = 0.35f, Radius = 0.8f };
+        var filmGrain = new FilmGrain { Enabled = false, Amount = 0.6f, GrainSize = 2f, Animate = true };
+        var dither = new Dither { Enabled = false };
+
+        fx.ColorTransforms.Transforms.Add(vignette);
+        fx.ColorTransforms.Transforms.Add(filmGrain);
+        fx.ColorTransforms.Transforms.Add(dither);
 
         effects[Keys.D1] = ("Bloom", () => fx.Bloom.Enabled, () => fx.Bloom.Enabled ^= true);
         effects[Keys.D2] = ("Ambient occlusion", () => fx.AmbientOcclusion.Enabled, () => fx.AmbientOcclusion.Enabled ^= true);
@@ -88,32 +89,28 @@ void Start(Scene scene)
     BuildScene(scene);
 }
 
-void Update(Scene scene, Stride.Games.GameTime time)
+void Update(Scene scene, GameTime time)
 {
     foreach (var (key, effect) in effects)
     {
-        if (game.Input.IsKeyPressed(key))
-            effect.Toggle();
+        if (game.Input.IsKeyPressed(key)) effect.Toggle();
     }
 
     if (game.Input.IsKeyPressed(Keys.R))
     {
         foreach (var effect in effects.Values)
         {
-            if (effect.IsOn())
-                effect.Toggle();
+            if (effect.IsOn()) effect.Toggle();
         }
     }
 }
 
 void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
     // The lines are rebuilt whenever the overlay draws, so each shows the live state.
-    overlay.AddSection("Post effects", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Post effects", () =>
     {
-        var lines = new List<TextElement>();
+        List<TextElement> lines = [];
 
         foreach (var (key, effect) in effects)
         {
@@ -162,8 +159,12 @@ void BuildScene(Scene scene)
     // A tight cluster of cubes: creases and contact corners that ambient occlusion darkens.
     // Negative X is screen-right for a camera looking along +Z.
     var cluster = new Vector3(-2.2f, 0, -3);
-    foreach (var offset in new[] { new Vector3(-0.55f, 0.5f, 0), new Vector3(0.55f, 0.5f, 0), new Vector3(0, 0.5f, 0.9f), new Vector3(0, 1.5f, 0.35f), new Vector3(1.4f, 0.5f, 0.6f) })
+    ReadOnlySpan<Vector3> offsets = [new(-0.55f, 0.5f, 0), new(0.55f, 0.5f, 0), new(0, 0.5f, 0.9f), new(0, 1.5f, 0.35f), new(1.4f, 0.5f, 0.6f)];
+
+    foreach (var offset in offsets)
+    {
         Place(Primitive3D.Cube(), cluster + offset, game.CreateMaterial(new Color(200, 200, 205)));
+    }
 
     void Place(Primitive3D shape, Vector3 position, Material material)
     {
@@ -172,19 +173,16 @@ void BuildScene(Scene scene)
         {
             Material = material,
             Body = BodyMode.Static,
+            Position = position,
         });
 
-        entity.Transform.Position = position;
         entity.Scene = scene;
     }
 }
 
-Material Emissive(Color color)
-{
-    // Diffuse for the shaded look plus an emissive term far above 1: the HDR overshoot is what the
-    // bloom, streak and flare passes pick out of the frame. MaterialDescriptors.Emissive is the bag behind it.
-    return game.CreateEmissiveMaterial(color, LampIntensity);
-}
+// Diffuse for the shaded look plus an emissive term far above 1: the HDR overshoot is what the
+// bloom, streak and flare passes pick out of the frame. MaterialDescriptors.Emissive is the bag behind it.
+Material Emissive(Color color) => game.CreateEmissiveMaterial(color, LampIntensity);
 
 /*
 ---example-metadata

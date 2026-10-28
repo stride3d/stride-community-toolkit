@@ -57,17 +57,10 @@ public static partial class DocFrontmatter
 
         var frontmatter = FrontmatterBlockPattern().Match(content);
 
-        if (!frontmatter.Success)
-        {
-            return DocOwnership.HandOwned;
-        }
+        if (!frontmatter.Success) return DocOwnership.HandOwned;
 
+        // A missing key matches nothing, and an empty value is hand-owned like any other unknown value
         var generated = GeneratedKeyPattern().Match(frontmatter.Groups[1].Value);
-
-        if (!generated.Success)
-        {
-            return DocOwnership.HandOwned;
-        }
 
         return generated.Groups[1].Value.Trim().ToLowerInvariant() switch
         {
@@ -100,18 +93,9 @@ public static partial class DocFrontmatter
         var start = content.IndexOf(RegionStart, StringComparison.Ordinal);
         var end = content.IndexOf(RegionEnd, StringComparison.Ordinal);
 
-        if (start < 0 || end < 0 || end < start)
-        {
-            return false;
-        }
+        if (start < 0 || end < start) return false;
 
-        var afterStart = start + RegionStart.Length;
-
-        result = content[..afterStart]
-            + Environment.NewLine
-            + replacement.TrimEnd()
-            + Environment.NewLine
-            + content[end..];
+        result = $"{content[..(start + RegionStart.Length)]}{Environment.NewLine}{replacement.TrimEnd()}{Environment.NewLine}{content[end..]}";
 
         return true;
     }

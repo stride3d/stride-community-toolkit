@@ -25,7 +25,7 @@ public sealed partial class ShapeBatch
     /// stroke is translucent or has an additive glow. <see cref="Dash"/> runs along the whole run.
     /// </remarks>
     public void DrawPolyline(ReadOnlySpan<Vector2> points, Vector3 position, Vector3 axisX, Vector3 axisY, float width, Color color, bool closed = false)
-        => AddPolyline(points, new ShapePlane(position, Vector3.Normalize(axisX), Vector3.Normalize(axisY), PlaneMode.Fixed), SolidStyle(color), MathF.Max(width, 0.0001f) * 0.5f, closed);
+        => AddPolyline(points, ShapePlane.Fixed(position, axisX, axisY), SolidStyle(color), MathF.Max(width, 0.0001f) * 0.5f, closed);
 
     /// <summary>
     /// The 2D case of <see cref="DrawPolyline(ReadOnlySpan{Vector2}, Vector3, Vector3, Vector3, float, Color, bool)"/>: a stroke in the XY plane.
@@ -45,7 +45,7 @@ public sealed partial class ShapeBatch
     /// <param name="color">The stroke colour.</param>
     /// <param name="closed">Whether the last point joins back to the first.</param>
     public void DrawPixelPolyline(ReadOnlySpan<Vector2> points, Vector3 position, Vector3 axisX, Vector3 axisY, float pixelWidth, Color color, bool closed = false)
-        => AddPolyline(points, new ShapePlane(position, Vector3.Normalize(axisX), Vector3.Normalize(axisY), PlaneMode.Fixed), OutlineStyle(color, pixelWidth), 0f, closed);
+        => AddPolyline(points, ShapePlane.Fixed(position, axisX, axisY), OutlineStyle(color, pixelWidth), 0f, closed);
 
     /// <summary>
     /// The 2D case of <see cref="DrawPixelPolyline(ReadOnlySpan{Vector2}, Vector3, Vector3, Vector3, float, Color, bool)"/>: a stroke in the XY plane.
@@ -112,9 +112,7 @@ public sealed partial class ShapeBatch
         if (length <= lineRadius * 2f)
         {
             // Solid like the line it stands in for, whatever the current fill says
-            Add([Vector2.Zero],
-                new ShapePlane(center, Vector3.UnitX, Vector3.UnitY, PlaneMode.Screen),
-                SolidStyle(color), ShapeSlice.Whole, lineRadius, 1f);
+            Add([Vector2.Zero], ShapePlane.Billboard(center), SolidStyle(color), ShapeSlice.Whole, lineRadius, 1f);
 
             return;
         }
@@ -125,9 +123,7 @@ public sealed partial class ShapeBatch
         ReadOnlySpan<Vector2> segment = [new(-halfSegment, 0f), new(halfSegment, 0f)];
 
         // Solid: an outline-only line would be two thin rails rather than a line
-        Add(segment,
-            new ShapePlane(center, direction / length, Vector3.UnitY, PlaneMode.Axial),
-            SolidStyle(color), ShapeSlice.Whole, lineRadius, 1f);
+        Add(segment, ShapePlane.Axial(center, direction / length), SolidStyle(color), ShapeSlice.Whole, lineRadius, 1f);
     }
 
     /// <summary>
@@ -165,9 +161,7 @@ public sealed partial class ShapeBatch
 
         ReadOnlySpan<Vector2> segment = [new(-halfSegment, 0f), new(halfSegment, 0f)];
 
-        Add(segment,
-            new ShapePlane((start + end) * 0.5f, direction / length, Vector3.UnitY, PlaneMode.Axial),
-            OutlineStyle(color, pixelWidth), ShapeSlice.Whole, 0f, 1f);
+        Add(segment, ShapePlane.Axial((start + end) * 0.5f, direction / length), OutlineStyle(color, pixelWidth), ShapeSlice.Whole, 0f, 1f);
     }
 
     /// <summary>

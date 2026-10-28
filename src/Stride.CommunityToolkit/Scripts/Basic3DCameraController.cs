@@ -19,8 +19,7 @@ namespace Stride.CommunityToolkit.Scripts;
 public class Basic3DCameraController : SyncScript
 {
     private const float MaximumPitch = MathUtil.PiOverTwo * 0.99f;
-    private readonly ScreenAnchor? _helpPosition;
-    private Vector3 _upVector;
+    private readonly Anchor? _helpPosition;
     private Vector3 _translation;
     private Vector3 _defaultCameraPosition;
     private Quaternion _defaultCameraRotation;
@@ -48,10 +47,22 @@ public class Basic3DCameraController : SyncScript
     public bool HelpCollapsed { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets whether the camera's help is put on the shared <see cref="TextOverlay"/> at all. Defaults to
-    /// <see langword="true"/>, and must be set before the script starts.
+    /// Gets or sets whether the camera's key help is shown on the shared <see cref="TextOverlay"/>. Defaults to
+    /// <see langword="true"/>, and can be set before the script starts or at any time after.
     /// </summary>
-    public bool ShowHelp { get; set; } = true;
+    /// <remarks>
+    /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
+    /// it, is toggled with <see cref="TextOverlay.ToggleKey"/>.
+    /// </remarks>
+    public bool ShowHelp
+    {
+        get;
+        set
+        {
+            field = value;
+            _instructions?.Enabled = value;
+        }
+    } = true;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class, optionally moving the
@@ -61,7 +72,7 @@ public class Basic3DCameraController : SyncScript
     /// drawn. <see langword="null"/>, the default, leaves the overlay where it is, so a position set elsewhere
     /// (for example before the controller starts) is kept.
     /// </param>
-    public Basic3DCameraController(ScreenAnchor? helpPosition = null)
+    public Basic3DCameraController(Anchor? helpPosition = null)
     {
         _helpPosition = helpPosition;
     }
@@ -116,48 +127,44 @@ public class Basic3DCameraController : SyncScript
         // The overlay is shared, and this Start runs a frame after the game's own start callback, so
         // its position is only touched when an anchor was asked for explicitly - otherwise a position
         // set by the example before the controller started would be silently overwritten
-        if (ShowHelp)
+        var overlay = TextOverlay.GetOrCreate(Game);
+
+        if (_helpPosition is { } position)
         {
-            var overlay = TextOverlay.GetOrCreate(Game);
-
-            if (_helpPosition is { } position)
-            {
-                overlay.Position = position;
-            }
-
-            // Not static: the last two lines read the live transform. The factory runs every frame the
-            // section is drawn expanded, so the numbers track the camera as it is flown around.
-            _instructions = overlay.AddCollapsibleSection("Camera", "Camera controls", HelpToggleKey, () =>
-            {
-                var position = Entity.Transform.Position;
-
-                // Printed as yaw/pitch/roll in degrees, which is what Add3DCamera's initialRotation and
-                // SetCameraRotation both take - X is Yaw, Y is Pitch, Z is Roll. Printing plain XYZ Euler
-                // here would give numbers that look right, paste cleanly, and aim the camera somewhere
-                // else entirely.
-                var rotation = Entity.Transform.Rotation.YawPitchRoll;
-
-                return
-                [
-                    // Keys first, one per line, each in the brackets the title uses, then the live
-                    // values with two fixed decimals so they stop changing width as the camera flies
-                    new("F3", "Reposition help", Color.LightGoldenrodYellow),
-                    new("F4", "Hide help", Color.LightGoldenrodYellow),
-                    new("H", "Reset camera", Color.LightGreen),
-                    new("W A S D", "Move", Color.LightGreen),
-                    new("Arrow keys", "Move", Color.LightGreen),
-                    new(["Q", "E"], "Ascend / descend", Color.LightGreen),
-                    new("Numpad 2 4 6 8", "Rotate", Color.LightGreen),
-                    new("Shift", "Hold to move faster", Color.LightGreen),
-                    new("Right drag", "Rotate", Color.LightGreen),
-                    new($"Position: {position.X:0.00}, {position.Y:0.00}, {position.Z:0.00}", Color.Yellow),
-                    new($"Rotation (YPR): {MathUtil.RadiansToDegrees(rotation.X):0.00}, {MathUtil.RadiansToDegrees(rotation.Y):0.00}, {MathUtil.RadiansToDegrees(rotation.Z):0.00}", Color.Yellow),
-                ];
-            }, HelpCollapsed, order: -100);
+            overlay.Position = position;
         }
 
-        // Default up-direction
-        _upVector = Vector3.UnitY;
+        // Not static: the last two lines read the live transform. The factory runs every frame the
+        // section is drawn expanded, so the numbers track the camera as it is flown around.
+        _instructions = overlay.AddCollapsibleSection("Camera", "Camera controls", HelpToggleKey, () =>
+        {
+            var position = Entity.Transform.Position;
+
+            // Printed as yaw/pitch/roll in degrees, which is what Add3DCamera's initialRotation and
+            // SetCameraRotation both take - X is Yaw, Y is Pitch, Z is Roll. Printing plain XYZ Euler
+            // here would give numbers that look right, paste cleanly, and aim the camera somewhere
+            // else entirely.
+            var rotation = Entity.Transform.Rotation.YawPitchRoll;
+
+            return
+            [
+                // Keys first, one per line, each in the brackets the title uses, then the live
+                // values with two fixed decimals so they stop changing width as the camera flies
+                new("F3", "Reposition help", Color.LightGoldenrodYellow),
+                new("F4", "Hide help", Color.LightGoldenrodYellow),
+                new("H", "Reset camera", Color.LightGreen),
+                new("W A S D", "Move", Color.LightGreen),
+                new("Arrow keys", "Move", Color.LightGreen),
+                new(["Q", "E"], "Ascend / descend", Color.LightGreen),
+                new("Numpad 2 4 6 8", "Rotate", Color.LightGreen),
+                new("Shift", "Hold to move faster", Color.LightGreen),
+                new("Right drag", "Rotate", Color.LightGreen),
+                new($"Position: {position.X:0.00}, {position.Y:0.00}, {position.Z:0.00}", Color.Yellow),
+                new($"Rotation (YPR): {MathUtil.RadiansToDegrees(rotation.X):0.00}, {MathUtil.RadiansToDegrees(rotation.Y):0.00}, {MathUtil.RadiansToDegrees(rotation.Z):0.00}", Color.Yellow),
+            ];
+        }, HelpCollapsed, order: -100);
+
+        _instructions.Enabled = ShowHelp;
 
         _defaultCameraPosition = Entity.Transform.Position;
         _defaultCameraRotation = Entity.Transform.Rotation;
@@ -186,7 +193,6 @@ public class Basic3DCameraController : SyncScript
         _yaw = 0f;
         _pitch = 0f;
 
-
         KeyboardAndGamePadBasedMovement(deltaTime);
 
         KeyboardAndGamePadBasedRotation(deltaTime);
@@ -196,38 +202,16 @@ public class Basic3DCameraController : SyncScript
         ResetCameraToDefault();
     }
 
-    /// <summary>
-    /// Gets or sets whether the camera's help section is shown.
-    /// </summary>
-    /// <remarks>
-    /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
-    /// it, is toggled with <see cref="TextOverlay.ToggleKey"/>.
-    /// </remarks>
-    public bool ShowInstructions
-    {
-        get => _instructions?.Enabled ?? false;
-        set { if (_instructions is not null) _instructions.Enabled = value; }
-    }
-
     private void KeyboardAndGamePadBasedMovement(float deltaTime)
     {
-        // Our base speed is: one unit per second:
-        // deltaTime contains the duration of the previous frame, let's say that in this update
-        // or frame it is equal to 1/60, that means that the previous update ran 1/60 of a second ago
-        // and the next will, in most cases, run in around 1/60 of a second from now. Knowing that,
-        // we can move 1/60 of a unit on this frame so that in around 60 frames(1 second)
-        // we will have traveled one whole unit in a second.
-        // If you don't use deltaTime, your speed will be dependent on the number of frames rendered
-        // on screen, which often are inconsistent, meaning that if the player has performance issues,
-        // this entity will move around slower.
-
-        var speed = 1f * deltaTime;
+        // Scaled by the frame time, so the speed is in units per second whatever the frame rate
+        var speed = deltaTime;
 
         var movementDirection = Vector3.Zero;
 
         if (Gamepad && Input.HasGamePad)
         {
-            GamePadState padState = Input.DefaultGamePad.State;
+            var padState = Input.DefaultGamePad.State;
             // LeftThumb can be positive or negative on both axes (pushed to the right or to the left)
             movementDirection.Z += padState.LeftThumb.Y;
             movementDirection.X += padState.LeftThumb.X;
@@ -236,8 +220,7 @@ public class Basic3DCameraController : SyncScript
             movementDirection.Y -= padState.LeftTrigger;
             movementDirection.Y += padState.RightTrigger;
 
-            // Increase speed when pressing A, LeftShoulder or RightShoulder
-            // Here:does the enum flag 'Buttons' have one of the flag ('A','LeftShoulder' or 'RightShoulder') set
+            // Sprint while A or either shoulder is held
             if ((padState.Buttons & (GamePadButton.A | GamePadButton.LeftShoulder | GamePadButton.RightShoulder)) != 0)
                 speed *= SpeedFactor;
         }
@@ -264,15 +247,10 @@ public class Basic3DCameraController : SyncScript
                 movementDirection.Y += 1;
 
             // Increase speed when pressing shift
-            if (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift))
+            if (Input.IsShiftDown())
                 speed *= SpeedFactor;
 
-            // If the player pushes down two or more buttons, the direction and ultimately the base speed
-            // will be greater than one (vector(1, 1) is farther away from zero than vector(0, 1)),
-            // normalizing the vector ensures that whichever direction the player chooses, that direction
-            // will always be at most one unit in length.
-            // We're keeping dir as is if it isn't longer than one to retain subunit movement:
-            // a stick not entirely pushed forward should make the entity move slower.
+            // Normalise only when longer than one, so a half-pushed stick still moves slowly
             if (movementDirection.Length() > 1f)
                 movementDirection = Vector3.Normalize(movementDirection);
         }
@@ -283,15 +261,12 @@ public class Basic3DCameraController : SyncScript
 
     private void KeyboardAndGamePadBasedRotation(float deltaTime)
     {
-        // See Keyboard & Gamepad translation's deltaTime usage
-
-        float speed = 1f * deltaTime;
-
-        Vector2 rotation = Vector2.Zero;
+        var speed = deltaTime;
+        var rotation = Vector2.Zero;
 
         if (Gamepad && Input.HasGamePad)
         {
-            GamePadState padState = Input.DefaultGamePad.State;
+            var padState = Input.DefaultGamePad.State;
             rotation.X += padState.RightThumb.Y;
             rotation.Y += -padState.RightThumb.X;
         }
@@ -323,10 +298,7 @@ public class Basic3DCameraController : SyncScript
 
     private void MouseMovementAndGestures()
     {
-        // This type of input should not use delta time at all, they already are frame-rate independent.
-        // Let's say that you are going to move your finger/mouse for one second over 40 units, it doesn't matter
-        // the number of frames occurring within that time frame, each frame will receive the right amount of delta:
-        // a quarter of a second -> 10 units, half a second -> 20 units, one second -> your 40 units.
+        // Mouse and touch deltas are already distances per frame, so no frame time here
 
         if (Input.HasMouse)
         {
@@ -376,7 +348,7 @@ public class Basic3DCameraController : SyncScript
         var rotation = Matrix.RotationQuaternion(Entity.Transform.Rotation);
 
         // Enforce the global up-vector by adjusting the local x-axis
-        var right = Vector3.Cross(rotation.Forward, _upVector);
+        var right = Vector3.Cross(rotation.Forward, Vector3.UnitY);
         var up = Vector3.Cross(right, rotation.Forward);
 
         // Stabilize
@@ -384,7 +356,7 @@ public class Basic3DCameraController : SyncScript
         up.Normalize();
 
         // Adjust pitch. Prevent it from exceeding up and down facing. Stabilize edge cases.
-        var currentPitch = MathUtil.PiOverTwo - MathF.Acos(Vector3.Dot(rotation.Forward, _upVector));
+        var currentPitch = MathUtil.PiOverTwo - MathF.Acos(Vector3.Dot(rotation.Forward, Vector3.UnitY));
         _pitch = MathUtil.Clamp(currentPitch + _pitch, -MaximumPitch, MaximumPitch) - currentPitch;
 
         Vector3 finalTranslation = _translation;
@@ -395,7 +367,7 @@ public class Basic3DCameraController : SyncScript
         Entity.Transform.Position += finalTranslation;
 
         // Yaw around global up-vector, pitch and roll in local space
-        Entity.Transform.Rotation *= Quaternion.RotationAxis(right, _pitch) * Quaternion.RotationAxis(_upVector, _yaw);
+        Entity.Transform.Rotation *= Quaternion.RotationAxis(right, _pitch) * Quaternion.RotationAxis(Vector3.UnitY, _yaw);
     }
 
     /// <summary>

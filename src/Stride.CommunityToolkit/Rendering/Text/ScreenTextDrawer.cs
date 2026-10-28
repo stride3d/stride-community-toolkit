@@ -56,7 +56,7 @@ internal static class ScreenTextDrawer
         string text,
         Vector2 position,
         Vector2 textSize,
-        in ScreenTextStyle style)
+        ScreenTextStyle style)
     {
         var opacity = MathUtil.Clamp(style.Opacity, 0f, 1f);
         var scale = new Vector2(style.Scale);
@@ -74,18 +74,7 @@ internal static class ScreenTextDrawer
 
         if (style.EnableShadow)
         {
-            spriteBatch.DrawString(
-                style.Font,
-                text,
-                style.FontSize,
-                position + style.TextOffset + style.ShadowOffset,
-                WithOpacity(style.ShadowColor, opacity),
-                style.Rotation,
-                origin,
-                scale,
-                SpriteEffects.None,
-                style.LayerDepth,
-                style.Alignment);
+            DrawString(style.ShadowOffset, WithOpacity(style.ShadowColor, opacity));
         }
 
         if (style.EnableOutline && style.OutlineWidth > 0f)
@@ -96,36 +85,16 @@ internal static class ScreenTextDrawer
             // drawn over them leaves a ring of that width
             for (var direction = 0; direction < 8; direction++)
             {
-                var angle = direction * MathF.PI / 4f;
-                var offset = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * style.OutlineWidth;
+                var (sin, cos) = MathF.SinCos(direction * MathF.PI / 4f);
 
-                spriteBatch.DrawString(
-                    style.Font,
-                    text,
-                    style.FontSize,
-                    position + style.TextOffset + offset,
-                    outlineColor,
-                    style.Rotation,
-                    origin,
-                    scale,
-                    SpriteEffects.None,
-                    style.LayerDepth,
-                    style.Alignment);
+                DrawString(new Vector2(cos, sin) * style.OutlineWidth, outlineColor);
             }
         }
 
-        spriteBatch.DrawString(
-            style.Font,
-            text,
-            style.FontSize,
-            position + style.TextOffset,
-            WithOpacity(style.Color, opacity),
-            style.Rotation,
-            origin,
-            scale,
-            SpriteEffects.None,
-            style.LayerDepth,
-            style.Alignment);
+        DrawString(Vector2.Zero, WithOpacity(style.Color, opacity));
+
+        void DrawString(Vector2 offset, Color4 color)
+            => spriteBatch.DrawString(style.Font, text, style.FontSize, position + style.TextOffset + offset, color, style.Rotation, origin, scale, SpriteEffects.None, style.LayerDepth, style.Alignment);
     }
 
     /// <summary>
@@ -168,20 +137,31 @@ internal static class ScreenTextDrawer
 
     /// <summary>
     /// Maps an anchor to the fraction of the text's width and height sitting before the anchor point.
+    /// <see cref="Anchor"/> is laid out as a 3 by 3 grid row by row, so the ordinal gives the column and the row.
     /// </summary>
-    internal static Vector2 GetAnchorFactor(TextAnchor anchor) => anchor switch
+    internal static Vector2 GetAnchorFactor(Anchor anchor) => new Vector2((int)anchor % 3, (int)anchor / 3) * 0.5f;
+
+    /// <summary>
+    /// Applies a distance cutoff and fade to <paramref name="opacity"/>: nothing beyond <paramref name="maxDistance"/>,
+    /// a linear fade from <paramref name="fadeStartDistance"/> to it when both are set, and no change when neither is.
+    /// Zero means "not set" for either.
+    /// </summary>
+    /// <returns><see langword="false"/> when the text should not be drawn at all.</returns>
+    internal static bool TryApplyDistanceFade(float fadeStartDistance, float maxDistance, Vector3 cameraPosition, Vector3 position, ref float opacity)
     {
-        TextAnchor.TopLeft => new Vector2(0f, 0f),
-        TextAnchor.TopCenter => new Vector2(0.5f, 0f),
-        TextAnchor.TopRight => new Vector2(1f, 0f),
-        TextAnchor.MiddleLeft => new Vector2(0f, 0.5f),
-        TextAnchor.MiddleCenter => new Vector2(0.5f, 0.5f),
-        TextAnchor.MiddleRight => new Vector2(1f, 0.5f),
-        TextAnchor.BottomLeft => new Vector2(0f, 1f),
-        TextAnchor.BottomCenter => new Vector2(0.5f, 1f),
-        TextAnchor.BottomRight => new Vector2(1f, 1f),
-        _ => Vector2.Zero,
-    };
+        if (maxDistance <= 0f && fadeStartDistance <= 0f) return true;
+
+        var distance = Vector3.Distance(cameraPosition, position);
+
+        if (maxDistance > 0f && distance > maxDistance) return false;
+
+        if (fadeStartDistance > 0f && maxDistance > fadeStartDistance)
+        {
+            opacity *= 1f - MathUtil.Clamp((distance - fadeStartDistance) / (maxDistance - fadeStartDistance), 0f, 1f);
+        }
+
+        return opacity > 0f;
+    }
 
     /// <summary>
     /// Creates the 1x1 texture the background rectangle is stretched from.
@@ -193,9 +173,12 @@ internal static class ScreenTextDrawer
     internal static Texture CreateBackgroundTexture(GraphicsDevice graphicsDevice)
         => Texture.New2D(graphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [Color.White]);
 
+    /// <summary>The colour as the sprite batch takes it: its own alpha times the opacity, premultiplied.</summary>
+    private static Color4 WithOpacity(Color color, float opacity) => Premultiplied(color, color.A / 255f * opacity);
+
     /// <summary>
-    /// The colour as the sprite batch takes it: its own alpha times the opacity, and the channels
-    /// premultiplied by the result.
+    /// The colour as the sprite batch takes it: its alpha replaced by <paramref name="alpha"/> and its
+    /// channels premultiplied by it.
     /// </summary>
     /// <remarks>
     /// The premultiply is what makes alpha mean "fade". The batch is begun with
@@ -207,9 +190,9 @@ internal static class ScreenTextDrawer
     /// rectangle does not need it: its texture is opaque white, and the sprite batch premultiplies a
     /// texture's own alpha into the tint on the way through.
     /// </remarks>
-    private static Color4 WithOpacity(Color color, float opacity)
+    internal static Color4 Premultiplied(Color color, float alpha)
     {
-        var alpha = MathUtil.Clamp(color.A / 255f * opacity, 0f, 1f);
+        alpha = MathUtil.Clamp(alpha, 0f, 1f);
 
         return new Color4(color.R / 255f * alpha, color.G / 255f * alpha, color.B / 255f * alpha, alpha);
     }

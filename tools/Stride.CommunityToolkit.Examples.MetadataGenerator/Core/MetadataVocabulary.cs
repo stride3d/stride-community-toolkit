@@ -80,7 +80,11 @@ public static class MetadataVocabulary
     /// Derived from <see cref="ExampleMetadata"/> itself so the two cannot drift, excluding members
     /// marked <see cref="YamlIgnoreAttribute"/>, which the generator populates rather than the author.
     /// </remarks>
-    public static readonly IReadOnlySet<string> KnownKeys = BuildKnownKeys();
+    public static readonly IReadOnlySet<string> KnownKeys = typeof(ExampleMetadata)
+        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+        .Where(property => property.GetCustomAttribute<YamlIgnoreAttribute>() is null)
+        .Select(property => CamelCaseNamingConvention.Instance.Apply(property.Name))
+        .ToHashSet(StringComparer.Ordinal);
 
     /// <summary>
     /// Suggests the correctly spelled key for an unrecognised one, matching case-insensitively.
@@ -89,16 +93,4 @@ public static class MetadataVocabulary
     /// <returns>The known key it most likely meant, or <see langword="null"/> if there is no close match.</returns>
     public static string? SuggestKey(string unknownKey)
         => KnownKeys.FirstOrDefault(known => string.Equals(known, unknownKey, StringComparison.OrdinalIgnoreCase));
-
-    private static HashSet<string> BuildKnownKeys()
-    {
-        var namingConvention = CamelCaseNamingConvention.Instance;
-
-        var keys = typeof(ExampleMetadata)
-            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Where(property => property.GetCustomAttribute<YamlIgnoreAttribute>() is null)
-            .Select(property => namingConvention.Apply(property.Name));
-
-        return new HashSet<string>(keys, StringComparer.Ordinal);
-    }
 }

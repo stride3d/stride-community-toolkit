@@ -96,10 +96,10 @@ game.Run(sceneSetup, start: Start, update: Update);
 void Start(Scene scene)
 {
     // Pick up and throw any body with the left mouse button (GrabberScript, see E05_3D_Grabber).
-    game.GetCameraEntity().Add(new GrabberScript());
+    game.AddGrabber();
     game.AddStudioLighting();
 
-    InitializeTextOverlay();
+    AddInstructions();
 
     // Anchored at the segment ends, neighbours only: the straightforward build, and the unstable one.
     naiveRope = RopeBuilder.Build(game, scene,
@@ -137,12 +137,8 @@ void CreateTower(Scene scene, float x)
             {
                 EntityName = "Tower Box",
                 Material = game.CreateMaterial(row % 2 == 0 ? Color.Tan : Color.SandyBrown),
+                Position = new Vector3(x + (column - (TowerColumns - 1) / 2f) * TowerBoxSize, TowerBoxSize / 2 + row * TowerBoxSize, TowerZ),
             });
-
-            box.Transform.Position = new Vector3(
-                x + (column - (TowerColumns - 1) / 2f) * TowerBoxSize,
-                TowerBoxSize / 2 + row * TowerBoxSize,
-                TowerZ);
 
             box.Scene = scene;
         }
@@ -161,11 +157,7 @@ void Update(Scene scene, GameTime time)
         stableRope.SetStabilised(stabilised);
     }
 
-    if (game.Input.IsKeyPressed(Keys.P))
-    {
-        SwingWeights();
-    }
-
+    if (game.Input.IsKeyPressed(Keys.P)) SwingWeights();
 }
 
 /// <summary>
@@ -190,7 +182,7 @@ void SwingWeights()
     }
 }
 
-IReadOnlyList<TextElement> BuildInstructions()
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
     // Anchor-to-weight distance is the giveaway. Both ropes are built to the same nominal length, so
     // a number that climbs and wanders is a rope being pulled apart faster than the solver can fix.
@@ -211,13 +203,11 @@ IReadOnlyList<TextElement> BuildInstructions()
 
 static string Length(Rope? rope) => rope is null ? "-" : rope.Length.ToString("0.00", CultureInfo.InvariantCulture);
 
-void InitializeTextOverlay()
+void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
-    // BuildInstructions runs every frame the overlay is drawn, which is what keeps the measured rope
+    // BuildOverlayLines runs every frame the overlay is drawn, which is what keeps the measured rope
     // lengths live
-    overlay.AddSection("Game", BuildInstructions);
+    TextOverlay.GetOrCreate(game).AddSection("Game", BuildOverlayLines);
 }
 
 /*

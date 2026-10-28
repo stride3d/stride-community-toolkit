@@ -1,9 +1,10 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.Core.Diagnostics;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
+using Stride.Core.Diagnostics;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Graphics;
 using Stride.Physics;
 
 namespace Stride.CommunityToolkit.Bullet;
@@ -202,23 +203,10 @@ public static class EntityExtensions
     }
 
     // A convex hull from a generated mesh
-    private static ColliderShapeAssetDesc HullOf(Stride.Graphics.GeometricMeshData<Stride.Graphics.VertexPositionNormalTexture> meshData)
+    private static ColliderShapeAssetDesc HullOf(GeometricMeshData<VertexPositionNormalTexture> meshData)
         => HullOf(meshData.Vertices.Select(w => w.Position).ToList(), meshData.Indices.Select(w => (uint)w).ToList());
 
-    private static ColliderShapeAssetDesc HullOf(List<Vector3> points, List<uint> indices)
-    {
-        var collider = new ConvexHullColliderShapeDesc
-        {
-            Scaling = new(0.9f),
-            ConvexHulls = [],
-            ConvexHullsIndices = []
-        };
-
-        collider.ConvexHulls.Add([points]);
-        collider.ConvexHullsIndices.Add([indices]);
-
-        return Describe(collider);
-    }
+    private static ColliderShapeAssetDesc HullOf(List<Vector3> points, List<uint> indices) => Describe([points], [indices]);
 
     // A convex hull per glyph of solid lettering, in one shape
     private static ColliderShapeAssetDesc HullsOf(Primitive3D.TextShape text)
@@ -227,13 +215,6 @@ public static class EntityExtensions
 
         if (glyphs.Count == 0)
             throw new ArgumentException("The text has no glyph with a shape, so there is nothing to collide with.", nameof(text));
-
-        var collider = new ConvexHullColliderShapeDesc
-        {
-            Scaling = new(0.9f),
-            ConvexHulls = [],
-            ConvexHullsIndices = []
-        };
 
         var hulls = new List<List<Vector3>>(glyphs.Count);
         var hullIndices = new List<List<uint>>(glyphs.Count);
@@ -244,20 +225,19 @@ public static class EntityExtensions
             hullIndices.Add(glyph.Mesh.Indices.Select(i => (uint)i).ToList());
         }
 
-        collider.ConvexHulls.Add(hulls);
-        collider.ConvexHullsIndices.Add(hullIndices);
-
-        return Describe(collider);
+        return Describe(hulls, hullIndices);
     }
 
-    private static ColliderShapeAssetDesc Describe(ConvexHullColliderShapeDesc collider)
+    // The hulls as one convex hull shape, scaled down a little so neighbouring bodies do not start in contact
+    private static ColliderShapeAssetDesc Describe(List<List<Vector3>> hulls, List<List<uint>> indices)
     {
-
-        List<IAssetColliderShapeDesc> descriptions = [collider];
-
-        return new ColliderShapeAssetDesc
+        var collider = new ConvexHullColliderShapeDesc
         {
-            Shape = new PhysicsColliderShape(descriptions)
+            Scaling = new(0.9f),
+            ConvexHulls = [hulls],
+            ConvexHullsIndices = [indices]
         };
+
+        return new ColliderShapeAssetDesc { Shape = new PhysicsColliderShape([collider]) };
     }
 }

@@ -50,9 +50,9 @@ public class TextOverlayPositionTests
         var overlay = TextOverlay.GetOrCreate(game);
 
         overlay.SetPosition(40, 60);
-        overlay.SetPosition(ScreenAnchor.BottomLeft);
+        overlay.SetPosition(Anchor.BottomLeft);
 
-        Assert.Equal(ScreenAnchor.BottomLeft, overlay.Position);
+        Assert.Equal(Anchor.BottomLeft, overlay.Position);
         Assert.Equal(new Int2(40, 60), overlay.CustomPosition);
 
         overlay.SetPosition(null);
@@ -71,7 +71,7 @@ public class TextOverlayPositionTests
         overlay.CyclePosition();
 
         // The key handler refuses to cycle a custom position; the method itself is the deliberate way back to the corners
-        Assert.Equal(ScreenAnchor.TopLeft, overlay.Position);
+        Assert.Equal(Anchor.TopLeft, overlay.Position);
         Assert.Equal(new Int2(10, 10), overlay.CustomPosition);
     }
 }

@@ -23,13 +23,11 @@ internal sealed class EasingBasicsScene : IGoldScene
     private ShapeBatch? _shapes;
     private float _elapsed;
 
-    public SceneSetup Setup => new SceneSetup2D { ClearColor = new Color(24, 26, 32), Camera = CameraSetup.Orthographic(), Ground = null };
+    public SceneSetup Setup => GoldSetup.Orthographic;
 
     public void Start(Game game, Scene scene)
     {
-        var camera = scene.GetCamera() ?? throw new InvalidOperationException("The 2D scene has no camera.");
-
-        camera.OrthographicSize = 16f;
+        GoldSetup.SetOrthographicSize(scene, 16f);
 
         _shapes = game.AddShapeBatch();
     }

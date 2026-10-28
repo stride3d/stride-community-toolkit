@@ -26,8 +26,8 @@ internal sealed class DebugPrimitiveRenderer
     private PrimitiveInstanceStore? _store;
     private PrimitivePipeline? _pipeline;
 
-    private InputElementDescription[] _inputElements = [];
-    private InputElementDescription[] _lineInputElements = [];
+    // Made once: a lambda handed to the dispatcher every frame would allocate a closure each time
+    private Action<int>? _prepareInstance;
 
     /// <summary>
     /// Builds GPU buffers, effects, and input layouts required for debug rendering.
@@ -37,9 +37,6 @@ internal sealed class DebugPrimitiveRenderer
     /// <param name="services">Service registry used to initialize effect instances.</param>
     internal void Initialize(GraphicsDevice device, IServiceRegistry services)
     {
-        _inputElements = VertexPositionTexture.Layout.CreateInputElements();
-        _lineInputElements = LineVertex.Layout.CreateInputElements();
-
         _pipelineState = new MutablePipelineState(device);
         _pipelineState.State.SetDefaults();
 
@@ -52,22 +49,24 @@ internal sealed class DebugPrimitiveRenderer
         _lineEffect.UpdateEffect(device);
 
         _geometry = new PrimitiveGeometryCache();
+
         var vertexData = _geometry.BuildVertexData();
         var indexData = _geometry.BuildIndexData();
 
-        // create vertex and index buffers
-        _vertexBuffer = Buffer.Vertex.New(device, vertexData);
         if (indexData.Length >= 0xFFFF && device.Features.CurrentProfile <= GraphicsProfile.Level_9_3)
             throw new InvalidOperationException("Cannot generate more than 65535 indices on feature level HW <= 9.3");
+
+        _vertexBuffer = Buffer.Vertex.New(device, vertexData);
         _indexBuffer = Buffer.Index.New(device, indexData);
 
-        // allocate structured buffers
+        // The instance and line buffers start at one element and grow as frames need
         _transformBuffer = Buffer.Structured.New<Matrix>(device, 1);
         _colorBuffer = Buffer.Structured.New<Color>(device, 1);
         _lineVertexBuffer = Buffer.Vertex.New(device, new LineVertex[1], GraphicsResourceUsage.Dynamic);
 
-        _pipeline = new PrimitivePipeline(_pipelineState, _primitiveEffect, _lineEffect, _inputElements, _lineInputElements);
+        _pipeline = new PrimitivePipeline(_pipelineState, _primitiveEffect, _lineEffect, VertexPositionTexture.Layout.CreateInputElements(), LineVertex.Layout.CreateInputElements());
         _store = new PrimitiveInstanceStore();
+        _prepareInstance = PrepareInstance;
     }
 
     /// <summary>
@@ -84,86 +83,54 @@ internal sealed class DebugPrimitiveRenderer
         => _store!.ProcessRenderables(renderables, ref offsets);
 
     /// <summary>
-    /// Computes the sum of non-line primitive counts. Used to pre-size instance buffers.
-    /// </summary>
-    internal static int SumBasicPrimitives(ref Primitives primitives)
-    {
-        return primitives.Quads
-            + primitives.Circles
-            + primitives.Spheres
-            + primitives.HalfSpheres
-            + primitives.Cubes
-            + primitives.Capsules
-            + primitives.Cylinders
-            + primitives.Cones;
-    }
-
-    /// <summary>
-    /// Computes per-primitive offsets for a packed instances array.
-    /// </summary>
-    internal static Primitives SetupPrimitiveOffsets(ref Primitives counts, int offset = 0)
-    {
-        var offsets = new Primitives();
-        offsets.Quads = 0 + offset;
-        offsets.Circles = offsets.Quads + counts.Quads;
-        offsets.Spheres = offsets.Circles + counts.Circles;
-        offsets.HalfSpheres = offsets.Spheres + counts.Spheres;
-        offsets.Cubes = offsets.HalfSpheres + counts.HalfSpheres;
-        offsets.Capsules = offsets.Cubes + counts.Cubes;
-        offsets.Cylinders = offsets.Capsules + counts.Capsules;
-        offsets.Cones = offsets.Cylinders + counts.Cylinders;
-        return offsets;
-    }
-
-    /// <summary>
     /// Prepares per-instance transforms and uploads buffer data to the GPU.
     /// Call once per frame before Draw.
     /// </summary>
     internal void Prepare(RenderDrawContext context)
     {
         var store = _store!;
-        int count = store._instances.Count;
-        store._transforms.SetCount(count);
-        store._colors.SetCount(count);
+        var count = store.Instances.Count;
 
-        Core.Threading.Dispatcher.For(0, count, (i) =>
-        {
-            var instance = store._instances[i];
-            Matrix.Transformation(ref instance.Scale, ref instance.Rotation, ref instance.Position, out var m);
-            store._transforms[i] = m;
-            store._colors[i] = instance.Color;
-        });
+        store.Transforms.SetCount(count);
+        store.Colors.SetCount(count);
+
+        Core.Threading.Dispatcher.For(0, count, _prepareInstance!);
 
         CheckBuffers(context);
 
-        store._lineVertices.Clear();
-        store._instances.Clear();
+        store.LineVertices.Clear();
+        store.Instances.Clear();
+    }
+
+    // One instance's world matrix and colour, from the dispatcher's worker threads
+    private void PrepareInstance(int i)
+    {
+        var store = _store!;
+        var instance = store.Instances[i];
+
+        Matrix.Transformation(ref instance.Scale, ref instance.Rotation, ref instance.Position, out var m);
+        store.Transforms[i] = m;
+        store.Colors[i] = instance.Color;
     }
 
     private void CheckBuffers(RenderDrawContext context)
     {
         var store = _store!;
-        var transformsSpan = CollectionsMarshal.AsSpan(store._transforms);
-        UpdateBufferIfNecessary<Matrix>(context.GraphicsDevice, context.CommandList, ref _transformBuffer!, transformsSpan);
 
-        var colorsSpan = CollectionsMarshal.AsSpan(store._colors);
-        UpdateBufferIfNecessary<Color>(context.GraphicsDevice, context.CommandList, ref _colorBuffer!, colorsSpan);
-
-        var lineVertsSpan = CollectionsMarshal.AsSpan(store._lineVertices);
-        UpdateBufferIfNecessary<LineVertex>(context.GraphicsDevice, context.CommandList, ref _lineVertexBuffer!, lineVertsSpan);
+        UpdateBufferIfNecessary<Matrix>(context.GraphicsDevice, context.CommandList, ref _transformBuffer!, CollectionsMarshal.AsSpan(store.Transforms));
+        UpdateBufferIfNecessary<Color>(context.GraphicsDevice, context.CommandList, ref _colorBuffer!, CollectionsMarshal.AsSpan(store.Colors));
+        UpdateBufferIfNecessary<LineVertex>(context.GraphicsDevice, context.CommandList, ref _lineVertexBuffer!, CollectionsMarshal.AsSpan(store.LineVertices));
     }
 
+    // Grows the buffer to the data when it is too small, else uploads in place; nothing to upload keeps the previous content
     private static void UpdateBufferIfNecessary<T>(GraphicsDevice device, CommandList commandList, ref Buffer buffer, ReadOnlySpan<T> data) where T : unmanaged
     {
-        if (data.IsEmpty)
-            return; // nothing to upload, keep previous content
+        if (data.IsEmpty) return;
 
-        int neededBufferSize = data.Length;
-        if (neededBufferSize > buffer.ElementCount)
+        if (data.Length > buffer.ElementCount)
         {
             buffer.Dispose();
-            var newBuffer = Buffer.New(device, data, buffer.Flags, PixelFormat.None, buffer.Usage);
-            buffer = newBuffer;
+            buffer = Buffer.New(device, data, buffer.Flags, PixelFormat.None, buffer.Usage);
         }
         else
         {

@@ -45,7 +45,7 @@ public class ImmediateDebugRenderStageSelector : RenderStageSelector
             var debugObject = (ImmediateDebugRenderObject)renderObject;
             var renderStage = debugObject.Stage == DebugRenderStage.Opaque ? OpaqueRenderStage : TransparentRenderStage;
 
-            if (renderStage != null)
+            if (renderStage is not null)
                 renderObject.ActiveRenderStages[renderStage.Index] = new ActiveRenderStage(null);
         }
     }

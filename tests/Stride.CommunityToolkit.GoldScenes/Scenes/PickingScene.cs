@@ -6,7 +6,6 @@ using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
-using Stride.Rendering;
 
 namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 
@@ -34,7 +33,7 @@ internal sealed class PickingScene : IGoldScene
     private ShapeBatch? _shapes;
     private int _frame;
 
-    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+    public SceneSetup Setup => GoldSetup.Perspective;
 
     public void Start(Game game, Scene scene)
     {
@@ -42,23 +41,8 @@ internal sealed class PickingScene : IGoldScene
         game.SetCameraRotation(new Vector3(0f, -18f, 0f));
         game.AddInstancingSupport();
 
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new PrimitiveEntityOptions
-        {
-            EntityName = "Ground",
-            Material = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f),
-            Position = new Vector3(0f, -0.25f, 0f),
-        });
-
-        ground.Scene = scene;
-
-        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.6f, 4f, 1.6f)), new PrimitiveEntityOptions
-        {
-            EntityName = "Pillar",
-            Material = game.CreateMaterial(new Color(96, 103, 116), metalness: 0.1f, glossiness: 0.35f),
-            Position = new Vector3(0f, 2f, 0f),
-        });
-
-        pillar.Scene = scene;
+        GoldSetup.AddGround(game, scene);
+        GoldSetup.AddPillar(game, scene, "Pillar", Vector3.Zero, 4f);
 
         var sphere = game.CreatePrimitive(Primitive3D.Sphere(1.6f), new PrimitiveEntityOptions
         {
@@ -111,7 +95,6 @@ internal sealed class PickingScene : IGoldScene
         for (var i = 0; i < Points.Length; i++)
         {
             if (_results[i] is not { } answer) continue;
-
 
             if (answer is { Hit: true, WorldPosition: { } at, Entity: { } entity })
             {

@@ -1,6 +1,7 @@
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Rendering.Text.Meshes;
+using Stride.CommunityToolkit.Tests.Rendering;
 using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Bepu;
@@ -37,8 +38,8 @@ public class TextColliderTests
     {
         // Two copies of the embedded font are two fonts named Open Sans; a cache keyed by the name
         // handed the second the first's geometry (the second review's F10)
-        using var one = MeshFont.Load(ReadDefaultBytes(), "copy");
-        using var two = MeshFont.Load(ReadDefaultBytes(), "copy");
+        using var one = MeshFont.Load(TestGeometry.DefaultFontBytes(), "copy");
+        using var two = MeshFont.Load(TestGeometry.DefaultFontBytes(), "copy");
 
         Assert.Equal(one.Name, two.Name);
 
@@ -53,13 +54,5 @@ public class TextColliderTests
     public void TextWithNoShapeHasNoCollider()
     {
         Assert.Throws<ArgumentException>(() => TextCollider.CreateHulls(MeshFont.Default, "   "));
-    }
-
-    private static byte[] ReadDefaultBytes()
-    {
-        using var stream = typeof(MeshFont).Assembly.GetManifestResourceStream("Stride.CommunityToolkit.Rendering.Text.Fonts.OpenSans-Regular.ttf")!;
-        var bytes = new byte[stream.Length];
-        stream.ReadExactly(bytes);
-        return bytes;
     }
 }

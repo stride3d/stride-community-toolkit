@@ -18,7 +18,6 @@ public sealed class ShipState
     /// <summary>How many decoys the ship carries when full.</summary>
     private const int DecoyLoad = 48;
 
-
     public FlightState Flight { get; } = new();
 
     public SystemsState Systems { get; } = new();
@@ -101,7 +100,6 @@ public sealed class ShipState
     /// <param name="time">The ship's clock in seconds.</param>
     public void Advance(float time)
     {
-
         Flight.Advance(time);
         Systems.Advance(time, Flight.Speed);
 

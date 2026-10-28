@@ -1,8 +1,8 @@
 using Box2D.NET;
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -47,13 +47,12 @@ var spawn = new Vector2(2, 8);
 var ballStart = new Vector2(7, 7);
 
 // The scene the local functions share, filled in by Start and read every frame by Update and Draw.
-Box2DSimulation? simulation = null;
-ShapeBatch? shapeBatch = null;
-Basic2DCameraController? cameraController = null;
-Box2DDebugDraw? debugDraw = null;
-CharacterMover2D? mover = null;
-ShapeComponent? heroShape = null;
-KeyMenu? pogoMenu = null;
+ShapeBatch shapeBatch = null!;
+Basic2DCameraController cameraController = null!;
+Box2DDebugDraw debugDraw = null!;
+CharacterMover2D mover = null!;
+ShapeComponent heroShape = null!;
+KeyMenu pogoMenu = null!;
 List<Vector2[]> terrain = [];
 B2BodyId ballBody = default;
 var showContacts = false;
@@ -64,25 +63,23 @@ var kickFlash = 0f;
 var background = new Color(0.2f, 0.2f, 0.2f);
 
 using var game = new Game();
+using var simulation = new Box2DSimulation();
 
-// Start builds the course, Update drives it; the simulation is created in Start and outlives Run.
+// Start builds the course, Update drives it.
 var sceneSetup = new SceneSetup2D
 {
     ClearColor = background,
     Camera = CameraSetup.Orthographic(orthographicSize: 18).WithController(),
     Ground = null,
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Box2D Character Mover - Stride Community Toolkit",
+    Resizable = true,
 };
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-simulation?.Dispose();
-
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Box2D Character Mover - Stride Community Toolkit";
-
     var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
 
@@ -91,12 +88,10 @@ void Start(Scene scene)
     shapeBatch.BorderWidth = 1f;
     shapeBatch.Fill.Alpha = 0.4f;
 
-    simulation = new Box2DSimulation();
-
     // Box2D's own view of the contacts, for when the planes the mover collects are not enough.
     debugDraw = new Box2DDebugDraw(shapeBatch) { DrawShapes = false, DrawJoints = false, DrawContactPoints = true, DrawContactNormals = true, FillAlpha = shapeBatch.Fill.Alpha };
 
-    cameraEntity.Add(new Grabber2DScript { Simulation = simulation });
+    game.AddGrabber2D(simulation);
 
     // The two grounds sit side by side; the bridge spans the gap between them.
     var ground1 = BuildGround(GroundPath1, new Vector2(0, 0), new Vector2(-50, -200));
@@ -118,7 +113,7 @@ void Start(Scene scene)
 B2BodyId BuildGround(string path, Vector2 bodyPosition, Vector2 svgOffset)
 {
     var local = SvgPath2D.Parse(path, svgOffset, Scale);
-    var body = simulation!.CreateStaticBody(new Vector3(bodyPosition, 0));
+    var body = simulation.CreateStaticBody(new Vector3(bodyPosition, 0));
 
     ShapeFixtureBuilder.AttachChain(local, body, isLoop: true);
     terrain.Add([.. local.Select(p => p + bodyPosition)]);
@@ -140,7 +135,7 @@ void BuildBridge(Scene scene, B2BodyId ground1, B2BodyId ground2)
         var centre = new Vector2(BridgeStart + 0.5f + i, BridgeHeight);
         var entity = Spawn(scene, "Plank", new ShapeComponent { Vertices = [.. plank], Color = Color.RoyalBlue }, centre);
 
-        var body = simulation!.CreateDynamicBody(entity, new Vector3(centre, 0));
+        var body = simulation.CreateDynamicBody(entity, new Vector3(centre, 0));
         b2Body_SetAngularDamping(body, 0.2f);
         ShapeFixtureBuilder.AttachShape(Primitive2D.Rectangle(1f, 0.25f), body);
         entity.Add(new Box2DBodyComponent { BodyId = body });
@@ -149,7 +144,7 @@ void BuildBridge(Scene scene, B2BodyId ground1, B2BodyId ground2)
         previous = body;
     }
 
-    simulation!.Joints.CreateRevolute(previous, ground2, new Vector2(BridgeStart + PlankCount, BridgeHeight), options);
+    simulation.Joints.CreateRevolute(previous, ground2, new Vector2(BridgeStart + PlankCount, BridgeHeight), options);
 }
 
 // A static capsule in the mover category: the mover overlaps it but never sweeps against it, and
@@ -159,7 +154,7 @@ void BuildFriend(Scene scene)
     var position = new Vector2(32, 4.5f);
     var entity = Spawn(scene, "Friend", new ShapeComponent { Vertices = [new(0, -0.5f), new(0, 0.5f)], Radius = 0.3f, Color = Color.PaleGreen }, position);
 
-    var body = simulation!.CreateStaticBody(entity, new Vector3(position, 0));
+    var body = simulation.CreateStaticBody(entity, new Vector3(position, 0));
     var def = b2DefaultShapeDef();
     def.filter = new B2Filter(CharacterMover2D.MoverCategory, ulong.MaxValue, 0);
     var capsule = new B2Capsule(new B2Vec2(0, -0.5f), new B2Vec2(0, 0.5f), 0.3f);
@@ -174,7 +169,7 @@ void BuildBall(Scene scene)
 {
     var entity = Spawn(scene, "Ball", new ShapeComponent { Vertices = [Vector2.Zero], Radius = 0.3f, Color = Color.Goldenrod }, ballStart);
 
-    ballBody = simulation!.CreateDynamicBody(entity, new Vector3(ballStart, 0));
+    ballBody = simulation.CreateDynamicBody(entity, new Vector3(ballStart, 0));
     var def = b2DefaultShapeDef();
     def.filter = new B2Filter(CharacterMover2D.DebrisCategory, ulong.MaxValue, 0);
     // Bouncy, with a little rolling resistance so it settles.
@@ -192,7 +187,7 @@ void BuildElevator(Scene scene)
     Vector2[] slab = [new(-2, -0.1f), new(2, -0.1f), new(2, 0.1f), new(-2, 0.1f)];
     var entity = Spawn(scene, "Elevator", new ShapeComponent { Vertices = [.. slab], Color = Color.Plum }, start);
 
-    var body = simulation!.CreateKinematicBody(entity, new Vector3(start, 0));
+    var body = simulation.CreateKinematicBody(entity, new Vector3(start, 0));
     var def = b2DefaultShapeDef();
     def.filter = new B2Filter(CharacterMover2D.DynamicCategory, ulong.MaxValue, 0);
     var box = b2MakeBox(2f, 0.1f);
@@ -213,10 +208,10 @@ void BuildHero(Scene scene)
     var hero = Spawn(scene, "Hero", heroShape, spawn);
 
     mover = new CharacterMover2D(spawn) { Entity = hero };
-    simulation!.RegisterSimulationUpdate(mover);
+    simulation.RegisterSimulationUpdate(mover);
 
     // The camera follows the hero, looking a little above it.
-    cameraController!.FollowTarget = hero;
+    cameraController.FollowTarget = hero;
     cameraController.FollowOffset = new Vector3(0, 2, 0);
 }
 
@@ -240,47 +235,42 @@ void SetupMenu()
         SelectedIndex = 2,
         Items =
         [
-            new(Keys.D1, "point - cheapest, slips off ledges soonest", () => mover!.PogoShape = PogoShape.Point),
-            new(Keys.D2, "circle - smooths small steps", () => mover!.PogoShape = PogoShape.Circle),
-            new(Keys.D3, "segment - stands on ledges the point misses", () => mover!.PogoShape = PogoShape.Segment),
+            new(Keys.D1, "point - cheapest, slips off ledges soonest", () => mover.PogoShape = PogoShape.Point),
+            new(Keys.D2, "circle - smooths small steps", () => mover.PogoShape = PogoShape.Circle),
+            new(Keys.D3, "segment - stands on ledges the point misses", () => mover.PogoShape = PogoShape.Segment),
         ],
     };
 }
 
 void Update(Scene scene, GameTime time)
 {
-    simulation?.Update(time.Elapsed);
+    simulation.Update(time.Elapsed);
 
     var input = game.Input;
 
     // While the pogo menu is open the number keys are its, and nothing else runs.
-    if (pogoMenu is not null && pogoMenu.Update(input)) return;
-
-    if (mover is null) return;
+    if (pogoMenu.Update(input)) return;
 
     // The first press of A or D hands the character to the player for good.
     if (input.IsKeyDown(Keys.A) || input.IsKeyDown(Keys.D))
+    {
         autoWalk = false;
+    }
 
     mover.Throttle = autoWalk ? 1 : (input.IsKeyDown(Keys.D) ? 1 : 0) - (input.IsKeyDown(Keys.A) ? 1 : 0);
 
     // Walking by itself, the character jumps whenever a wall plane is in its way - the pillar, the
     // stairs up to the bridge, the far ground's steps - so the whole course plays through untouched.
     if (autoWalk && mover.IsOnGround && BlockedByWall())
+    {
         mover.Jump();
+    }
 
     // The keys: jump, kick, contacts on and off, reset.
-    if (input.IsKeyPressed(Keys.Space))
-        mover.Jump();
-
-    if (input.IsKeyPressed(Keys.K))
-        Kick();
-
-    if (input.IsKeyPressed(Keys.G))
-        showContacts = !showContacts;
-
-    if (input.IsKeyPressed(Keys.R))
-        Reset();
+    if (input.IsKeyPressed(Keys.Space)) mover.Jump();
+    if (input.IsKeyPressed(Keys.K)) Kick();
+    if (input.IsKeyPressed(Keys.G)) showContacts = !showContacts;
+    if (input.IsKeyPressed(Keys.R)) Reset();
 
     kickFlash = MathF.Max(0, kickFlash - (float)time.Elapsed.TotalSeconds);
 
@@ -294,13 +284,13 @@ void Kick()
     var centre = KickCentre();
     var filter = new B2QueryFilter(CharacterMover2D.MoverCategory, CharacterMover2D.DebrisCategory);
 
-    foreach (var body in simulation!.OverlapCircle(centre, 0.5f, filter))
+    foreach (var body in simulation.OverlapCircle(centre, 0.5f, filter))
     {
         if (b2Body_GetType(body) != B2BodyType.b2_dynamicBody) continue;
 
         // Away from the mover and up, so the ball lifts rather than skids.
         var target = b2Body_GetWorldCenterOfMass(body);
-        var direction = b2Normalize(target - new B2Vec2(mover!.Position.X, mover.Position.Y));
+        var direction = b2Normalize(target - new B2Vec2(mover.Position.X, mover.Position.Y));
 
         b2Body_ApplyLinearImpulseToCenter(body, new B2Vec2(2f * direction.X, 2f), true);
     }
@@ -308,15 +298,17 @@ void Kick()
     kickFlash = 0.2f;
 }
 
-Vector2 KickCentre() => mover!.Bottom - new Vector2(0, 3f * mover.Radius);
+Vector2 KickCentre() => mover.Bottom - new Vector2(0, 3f * mover.Radius);
 
 // A contact plane facing mostly sideways, against the direction of travel, is a wall.
 bool BlockedByWall()
 {
-    foreach (var plane in mover!.Planes)
+    foreach (var plane in mover.Planes)
     {
         if (MathF.Abs(plane.plane.normal.X) > 0.7f && MathF.Sign(plane.plane.normal.X) != MathF.Sign(mover.Throttle))
+        {
             return true;
+        }
     }
 
     return false;
@@ -325,7 +317,7 @@ bool BlockedByWall()
 void Reset()
 {
     // The character back at its spawn, the ball at rest where it started, and the auto-walk on again.
-    mover!.Teleport(spawn);
+    mover.Teleport(spawn);
     b2Body_SetTransform(ballBody, new B2Vec2(ballStart.X, ballStart.Y), b2Rot_identity);
     b2Body_SetLinearVelocity(ballBody, b2Vec2_zero);
     b2Body_SetAngularVelocity(ballBody, 0f);
@@ -334,17 +326,17 @@ void Reset()
 
 void Draw()
 {
-    if (shapeBatch is null || mover is null) return;
-
     // The level outlines, closed, in the samples' pale green.
     foreach (var outline in terrain)
     {
         for (var i = 0; i < outline.Length; i++)
+        {
             shapeBatch.DrawPixelLine(outline[i], outline[(i + 1) % outline.Length], 2f, Color.PaleGreen);
+        }
     }
 
     // Orange on the ground, aquamarine in the air: the pogo's verdict, painted on the capsule.
-    heroShape!.Color = mover.IsOnGround ? Color.Orange : Color.Aquamarine;
+    heroShape.Color = mover.IsOnGround ? Color.Orange : Color.Aquamarine;
 
     // The contact planes the mover collected: a dot on the capsule's surface and the normal.
     foreach (var plane in mover.Planes)
@@ -381,20 +373,19 @@ void Draw()
     shapeBatch.DrawPixelLine(mover.Position, mover.Position + mover.Velocity, 2f, Color.Purple);
 
     if (kickFlash > 0)
+    {
         shapeBatch.DrawRing(KickCentre(), 0.5f, Color.Goldenrod);
+    }
 
-    if (showContacts && simulation is not null)
-        debugDraw?.Draw(simulation);
+    if (showContacts) debugDraw.Draw(simulation);
 }
 
 void AddInstructions()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
-
     // The keys first, the live numbers under them.
-    overlay.AddSection("Mover", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Mover", () =>
     {
-        var m = mover!;
+        var m = mover;
 
         return
         [
@@ -428,8 +419,6 @@ public sealed class Elevator(B2BodyId body, Vector2 origin, float amplitude) : I
 
         b2Body_SetTargetTransform(body, in target, deltaTime, true);
     }
-
-    public void AfterSimulationUpdate(Box2DSimulation simulation, float deltaTime) { }
 }
 
 // The two grounds of the samples' Mover scene, as drawn in Inkscape.

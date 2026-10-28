@@ -3,11 +3,7 @@ using Stride.Rendering;
 
 namespace Example.Common;
 
-/// <summary>
-/// Represents a 2D shape model with a specified shape, color, and an optional associated model.
-/// </summary>
-/// <remarks>This class is used to define the properties of a 2D shape, including its shape and dimensions and its color. An
-/// optional model can also be associated with the shape for additional context or rendering purposes.</remarks>
+/// <summary>A 2D shape to make: its primitive and colour, and the model once one has been built for it.</summary>
 public class Shape2DModel
 {
     public required Primitive2D Type { get; set; }

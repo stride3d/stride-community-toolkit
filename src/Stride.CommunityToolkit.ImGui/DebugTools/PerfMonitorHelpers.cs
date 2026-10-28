@@ -1,6 +1,6 @@
 using Stride.Core.Diagnostics;
+using System.Globalization;
 using System.Numerics;
-using System.Threading.Channels;
 using static Hexa.NET.ImGui.ImGui;
 using static Stride.CommunityToolkit.ImGui.ImGuiExtension;
 using TimeSpan = System.TimeSpan;
@@ -15,36 +15,40 @@ namespace Stride.CommunityToolkit.ImGui.DebugTools;
 /// </summary>
 internal static class PerfMonitorHelpers
 {
-    static readonly ProfilingKey _dummyKey = new("dummy");
+    private static readonly ProfilingKey _dummyKey = new("dummy");
 
-    internal static async void StartProcessingMarkers(List<PerfMonitor.EventWrapper> _sortedList, CancellationToken token)
+    /// <summary>
+    /// Subscribes to Stride's profiler and keeps every event's begin and end marker in <paramref name="sortedList"/>,
+    /// in time order, until <paramref name="token"/> is cancelled.
+    /// </summary>
+    internal static async void StartProcessingMarkers(List<PerfMonitor.EventWrapper> sortedList, CancellationToken token)
     {
-        ChannelReader<ProfilingEvent> events = Profiler.Subscribe();
+        var events = Profiler.Subscribe();
+
         try
         {
-            while (token.IsCancellationRequested == false)
+            while (!token.IsCancellationRequested)
             {
-                ProfilingEvent perfEvent = await events.ReadAsync(token);
-                PerfMonitor.EventWrapper begin = new(perfEvent, true, perfEvent.TimeStamp);
-                PerfMonitor.EventWrapper end = new(perfEvent, false, perfEvent.TimeStamp + perfEvent.ElapsedTime);
-                lock (_sortedList)
+                var perfEvent = await events.ReadAsync(token);
+
+                lock (sortedList)
                 {
-                    var index = _sortedList.BinarySearch(begin);
-                    if (index < 0)
-                        _sortedList.Insert(~index, begin);
-                    else
-                        _sortedList.Insert(index, begin);
-                    var index2 = _sortedList.BinarySearch(end);
-                    if (index2 < 0)
-                        _sortedList.Insert(~index2, end);
-                    else
-                        _sortedList.Insert(index2, end);
+                    Insert(new PerfMonitor.EventWrapper(perfEvent, true, perfEvent.TimeStamp));
+                    Insert(new PerfMonitor.EventWrapper(perfEvent, false, perfEvent.TimeStamp + perfEvent.ElapsedTime));
                 }
             }
         }
         finally
         {
             Profiler.Unsubscribe(events);
+        }
+
+        // Binary search gives the slot of an equal stamp, or the bitwise complement of where one would go
+        void Insert(PerfMonitor.EventWrapper wrapper)
+        {
+            var index = sortedList.BinarySearch(wrapper);
+
+            sortedList.Insert(index < 0 ? ~index : index, wrapper);
         }
     }
 
@@ -60,8 +64,7 @@ internal static class PerfMonitorHelpers
     {
         if (pauseEval)
         {
-            lock (sorter)
-                sorter.Clear();
+            lock (sorter) sorter.Clear();
 
             return;
         }
@@ -84,84 +87,69 @@ internal static class PerfMonitorHelpers
                 }
 
                 var end = e.Event.TimeStamp + e.Event.ElapsedTime;
+
                 min = min <= e.Event.TimeStamp ? min : e.Event.TimeStamp;
                 max = max > end ? max : end;
-                var sample = new PerfMonitor.SampleInstance(e.Event.Key.Name, data.depth, e.Event.TimeStamp, e.Event.ElapsedTime.TotalMilliseconds, null);
-                data.samples.Add(sample);
+                data.samples.Add(new PerfMonitor.SampleInstance(e.Event.Key.Name, data.depth, e.Event.TimeStamp, e.Event.ElapsedTime.TotalMilliseconds, null));
                 data.depth--;
             }
+
             sorter.Clear();
         }
 
-        if (stride.samples.Count > 0)
-            stride = stride with { start = min, duration = (max - min).TotalMilliseconds };
-
-        if (gpu.samples.Count > 0)
-            gpu = gpu with { start = min, duration = (max - min).TotalMilliseconds };
+        if (stride.samples.Count > 0) stride = stride with { start = min, duration = (max - min).TotalMilliseconds };
+        if (gpu.samples.Count > 0) gpu = gpu with { start = min, duration = (max - min).TotalMilliseconds };
     }
 
+    /// <summary>One sample as a button on its row of the strip, sized and placed by its share of the frame.</summary>
     internal static void DrawSample(Vector2 corner, float maxWidth, PerfMonitor.SampleInstance sample, TimeSpan start, double duration)
     {
-        const float MIN_SIZE = 2f;
-        float height = GetTextLineHeightWithSpacing();
-        // Get ratio of this sample compared to total frame duration
-        float size = (float)(sample.Duration / duration);
-        size *= maxWidth; // Fit ratio to window
-        size = size < MIN_SIZE ? MIN_SIZE : size;
-        // Compute offset from the window's edge
-        float pos = (float)(sample.Start - start).TotalMilliseconds;
-        pos /= (float)duration;
-        pos *= maxWidth;
-        // outside of view:left
-        if (pos + size < MIN_SIZE)
-            size += pos + size + MIN_SIZE;
-        // outside of view:right
-        if (pos > maxWidth - MIN_SIZE)
-            pos = maxWidth - MIN_SIZE;
+        const float MinSize = 2f;
+
+        var height = GetTextLineHeightWithSpacing();
+
+        // The sample's share of the frame, fitted to the window, never thinner than a few pixels
+        var size = MathF.Max((float)(sample.Duration / duration) * maxWidth, MinSize);
+
+        // Its offset from the window's edge
+        var pos = (float)((sample.Start - start).TotalMilliseconds / duration) * maxWidth;
+
+        // Outside the view on the left
+        if (pos + size < MinSize) size += pos + size + MinSize;
+
+        // Outside the view on the right
+        if (pos > maxWidth - MinSize) pos = maxWidth - MinSize;
 
         SetCursorPos(corner + new Vector2(pos, sample.Depth * height));
         Button(sample.Id, new Vector2(size, height));
+
         if (IsItemHovered())
         {
             using (Tooltip())
             {
-                TextUnformatted(sample.DeltaMemAlloc.HasValue
-                    ? $"{sample.Id}:\n{S(sample.Duration)}ms - {Ts(sample.DeltaMemAlloc)} byte(s)"
+                TextUnformatted(sample.DeltaMemAlloc is { } bytes
+                    ? $"{sample.Id}:\n{S(sample.Duration)}ms - {bytes} byte(s)"
                     : $"{sample.Id}:\n{S(sample.Duration)}ms");
             }
         }
     }
 
-    internal static string S(float val, string? format = null)
-    {
-        return val.ToString(format ?? "F2", System.Globalization.CultureInfo.CurrentCulture);
-    }
+    internal static string S(float val, string? format = null) => val.ToString(format ?? "F2", CultureInfo.CurrentCulture);
 
-    private static string S(double val, string? format = null)
-    {
-        return val.ToString(format ?? "F2", System.Globalization.CultureInfo.CurrentCulture);
-    }
-
-    private static string Ts<T>(T val)
-    {
-        return val?.ToString() ?? string.Empty;
-    }
+    private static string S(double val, string? format = null) => val.ToString(format ?? "F2", CultureInfo.CurrentCulture);
 
     internal static bool IsStrideProfilingAll()
     {
-        Profiler.Disable(_dummyKey);
         // With the given disabled key this function will return true if EnableAll is set
+        Profiler.Disable(_dummyKey);
+
         return Profiler.IsEnabled(_dummyKey);
     }
 
     /// <summary> Guarantees that this key exist and returns at least a default new() value </summary>
     internal static TValue Guaranteed<TKey, TValue>(IDictionary<TKey, TValue> dictionary, TKey key) where TValue : new()
     {
-        if (dictionary.TryGetValue(key, out var value) == false)
-        {
-            value = new TValue();
-            dictionary.Add(key, value);
-        }
+        if (!dictionary.TryGetValue(key, out var value)) dictionary[key] = value = new TValue();
 
         return value;
     }

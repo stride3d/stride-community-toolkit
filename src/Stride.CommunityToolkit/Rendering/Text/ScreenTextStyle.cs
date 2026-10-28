@@ -25,7 +25,7 @@ internal readonly record struct ScreenTextStyle
     internal required Color Color { get; init; }
 
     /// <summary>Which point of the text sits on the drawn position.</summary>
-    internal TextAnchor Anchor { get; init; }
+    internal Anchor Anchor { get; init; }
 
     /// <summary>How lines of a multi-line string sit relative to one another.</summary>
     internal TextAlignment Alignment { get; init; }

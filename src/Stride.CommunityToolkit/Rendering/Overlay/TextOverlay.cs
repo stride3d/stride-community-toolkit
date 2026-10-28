@@ -136,7 +136,7 @@ public sealed class TextOverlay : GameSystemBase
     /// <summary>
     /// Gets or sets where the overlay is drawn: a corner, the middle of an edge or the centre, or <see langword="null"/> for the pixel position in <see cref="CustomPosition"/>. Hide the overlay with <see cref="GameSystemBase.Visible"/>, which the <see cref="ToggleKey"/> flips.
     /// </summary>
-    public ScreenAnchor? Position { get; set; } = ScreenAnchor.TopRight;
+    public Anchor? Position { get; set; } = Anchor.TopRight;
 
     /// <summary>
     /// Gets or sets the pixel position used when <see cref="Position"/> is <see langword="null"/>, in unscaled pixels from the top left. Setting this alone changes nothing while <see cref="Position"/> is an anchor; <see cref="SetPosition(Int2)"/> sets both.
@@ -176,12 +176,6 @@ public sealed class TextOverlay : GameSystemBase
     /// Gets or sets how far the text is shifted inside its background strip, in screen pixels, positive downwards. Defaults to <c>-1</c>: a font's line gap sits above its ascender, so glyphs land about a pixel low in a strip sized from the line height, and one pixel up centres them. Not multiplied by the scale: the imbalance stays close to one pixel at the sizes the overlay is drawn at.
     /// </summary>
     public float TextNudge { get; set; } = -1f;
-
-    /// <summary>
-    /// Gets or sets the assumed width of one character, in pixels, used to right-align the overlay.
-    /// </summary>
-    [Obsolete("Text is measured with the font since the overlay draws with a SpriteFont; this value is no longer used.")]
-    public int CharacterWidth { get; set; } = 8;
 
     /// <summary>Gets or sets the gap kept between the overlay and the edge of the screen, in pixels.</summary>
     public Int2 Margin { get; set; } = new(5, 10);
@@ -329,10 +323,10 @@ public sealed class TextOverlay : GameSystemBase
     /// </summary>
     public void CyclePosition() => Position = Position switch
     {
-        ScreenAnchor.TopLeft => ScreenAnchor.TopRight,
-        ScreenAnchor.TopRight => ScreenAnchor.BottomRight,
-        ScreenAnchor.BottomRight => ScreenAnchor.BottomLeft,
-        _ => ScreenAnchor.TopLeft,
+        Anchor.TopLeft => Anchor.TopRight,
+        Anchor.TopRight => Anchor.BottomRight,
+        Anchor.BottomRight => Anchor.BottomLeft,
+        _ => Anchor.TopLeft,
     };
 
     /// <summary>
@@ -359,7 +353,7 @@ public sealed class TextOverlay : GameSystemBase
     /// Places the overlay at an anchor. The same as setting <see cref="Position"/>; here so an anchor and a pixel position are chosen through one method.
     /// </summary>
     /// <param name="position">The corner, edge or centre, or <see langword="null"/> to draw at <see cref="CustomPosition"/> as last set.</param>
-    public void SetPosition(ScreenAnchor? position) => Position = position;
+    public void SetPosition(Anchor? position) => Position = position;
 
     /// <inheritdoc />
     public override void Update(GameTime gameTime)
@@ -420,7 +414,7 @@ public sealed class TextOverlay : GameSystemBase
             Font = font,
             FontSize = FontSize * scale,
             Color = DefaultTextColor,
-            Anchor = TextAnchor.TopLeft,
+            Anchor = Anchor.TopLeft,
             Scale = 1f,
             Opacity = 1f,
             EnableBackground = false,

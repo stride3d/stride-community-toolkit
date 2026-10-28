@@ -15,14 +15,7 @@ namespace Stride.CommunityToolkit.Tests.CubeCollapse;
 /// </remarks>
 public class CubeGridTests
 {
-    private static Entity MakeCube(Color colour)
-    {
-        var entity = new Entity("Cube");
-
-        entity.Add(new CubeComponent(colour));
-
-        return entity;
-    }
+    private static Entity MakeCube(Color colour) => new("Cube") { new CubeComponent(colour) };
 
     private static CubeGrid BuildColumn(params Color[] coloursFromBottom)
     {

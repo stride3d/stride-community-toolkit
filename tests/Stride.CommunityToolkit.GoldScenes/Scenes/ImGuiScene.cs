@@ -18,12 +18,12 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal sealed class ImGuiScene : IGoldScene
 {
-    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+    public SceneSetup Setup => GoldSetup.Perspective;
 
     public void Start(Game game, Scene scene)
     {
         // Registers itself with the game on construction; the game owns it from here
-        _ = new ImGuiSystem(game.Services, game.GraphicsDeviceManager);
+        _ = new ImGuiSystem(game.Services);
         _ = new GoldWindow(game.Services);
     }
 
@@ -34,14 +34,10 @@ internal sealed class ImGuiScene : IGoldScene
         GetIO().ConfigFlags |= ImGuiConfigFlags.NoMouse;
     }
 
-    private sealed class GoldWindow : BaseWindow
+    private sealed class GoldWindow(IServiceRegistry services) : BaseWindow(services)
     {
         private static readonly float[] Samples = [0.1f, 0.4f, 0.35f, 0.8f, 0.55f, 0.9f, 0.3f, 0.6f, 0.2f, 0.7f];
         private bool _checked = true;
-
-        internal GoldWindow(IServiceRegistry services) : base(services)
-        {
-        }
 
         protected override Vector2? WindowPos => new Vector2(40f, 40f);
 
@@ -65,8 +61,6 @@ internal sealed class ImGuiScene : IGoldScene
             ColorButton("Swatch", new Vector4(0.9f, 0.2f, 0.3f, 1f), ImGuiColorEditFlags.None, new Vector2(60f, 24f));
         }
 
-        protected override void OnDestroy()
-        {
-        }
+        protected override void OnDestroy() { }
     }
 }

@@ -23,9 +23,6 @@ public static class EntityNames
     /// <summary>One floating score, spawned per clear and removed when its animation ends.</summary>
     public const string ScorePopup = "ScorePopup";
 
-    /// <summary>The ground plane, used as a fallback point for the camera to orbit.</summary>
-    public const string Ground = "Ground";
-
     /// <summary>The axis gizmo that shows which way X, Y and Z run.</summary>
     public const string OrientationGizmo = "OrientationGizmo";
 

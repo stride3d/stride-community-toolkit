@@ -20,13 +20,11 @@ internal sealed class TexturedShapesScene : IGoldScene
     private ShapeBatch? _stripes;
     private ComputeTextureColor? _stripe;
 
-    public SceneSetup Setup => new SceneSetup2D { ClearColor = new Color(24, 26, 32), Camera = CameraSetup.Orthographic(), Ground = null };
+    public SceneSetup Setup => GoldSetup.Orthographic;
 
     public void Start(Game game, Scene scene)
     {
-        var camera = scene.GetCamera() ?? throw new InvalidOperationException("The 2D scene has no camera.");
-
-        camera.OrthographicSize = 14f;
+        GoldSetup.SetOrthographicSize(scene, 14f);
 
         var picture = CreatePicture(game.GraphicsDevice);
 
@@ -107,19 +105,10 @@ internal sealed class TexturedShapesScene : IGoldScene
 
                 var color = Color.Lerp(new Color(255, 120, 40), new Color(40, 110, 255), t);
 
-                if (x % 16 == 0 || y % 16 == 0)
-                {
-                    color = new Color(20, 20, 30);
-                }
+                if (x % 16 == 0 || y % 16 == 0) color = new Color(20, 20, 30);
 
-                if (x < 24 && y < 24)
-                {
-                    color = Color.White;
-                }
-                else if (x >= size - 24 && y >= size - 24)
-                {
-                    color = Color.Black;
-                }
+                if (x < 24 && y < 24) color = Color.White;
+                else if (x >= size - 24 && y >= size - 24) color = Color.Black;
 
                 pixels[y * size + x] = color;
             }

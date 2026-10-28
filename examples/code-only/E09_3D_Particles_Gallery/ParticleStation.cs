@@ -172,9 +172,9 @@ public sealed class ParticleStation : GalleryStation
         Entity = new Entity($"Station {Number} particles")
         {
             Transform = { Position = At(local), Rotation = FacingRotation() },
+            Components = { particles }
         };
 
-        Entity.Add(particles);
         Entity.Scene = Scene;
 
         return particles;

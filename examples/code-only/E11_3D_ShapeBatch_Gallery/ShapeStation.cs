@@ -1,5 +1,6 @@
 using Example.Common.Galleries;
 using Stride.CommunityToolkit.Shapes;
+using Stride.Rendering.Materials.ComputeColors;
 
 namespace E11_3D_ShapeBatch_Gallery;
 
@@ -16,9 +17,9 @@ public sealed record GalleryBatches(
     ShapeBatch Overlay,
     ShapeBatch Pictures,
     ShapeBatch Stripes,
-    Stride.Rendering.Materials.ComputeColors.ComputeTextureColor Stripe,
+    ComputeTextureColor Stripe,
     ShapeBatch Shaded,
-    Stride.Rendering.Materials.ComputeColors.ComputeFloat4 Clock);
+    ComputeFloat4 Clock);
 
 /// <summary>The three per-frame states the visitor changes with keys, applied to every station.</summary>
 public sealed class GalleryStyle

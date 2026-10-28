@@ -25,9 +25,6 @@ using Stride.Rendering.Images;
 // T removes or restores tan, Space throws the ball, A pauses the animated curve, V switches between
 // the chart look and the showcase look.
 
-// Without this a scaled-up 4K desktop hands the game a scaled, blurred window. A no-op off Windows.
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
 Chart? chart = null;
@@ -72,14 +69,14 @@ game.Run(new SceneSetup3D
     },
     Lighting = null,
     Skybox = null,
-    Ground = null
+    Ground = null,
+    WindowTitle = "Charts 3D",
+    Resizable = true,
+    DpiAware = true,
 }, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Charts 3D";
-
     keyLight = game.AddDirectionalLight(intensity: ChartLight).Get<LightComponent>();
 
     // Glow3D is the lit preset: bright palette, emissive intensity above 1, which the default
@@ -154,10 +151,10 @@ void Start(Scene rootScene)
 
     // Swap the fly controller for an orbit around the chart, then frame the camera so the whole figure
     // fits the window. The orbit reads its starting angles from the pose FrameCamera leaves behind.
-    var cameraEntity = rootScene.Entities.FirstOrDefault(e => e.Get<CameraComponent>() != null);
-
-    if (cameraEntity?.Get<CameraComponent>() is { } sceneCamera)
+    if (rootScene.GetCamera() is { } sceneCamera)
     {
+        var cameraEntity = sceneCamera.Entity;
+
         if (cameraEntity.Get<Basic3DCameraController>() is { } flyController)
         {
             cameraEntity.Remove(flyController);
@@ -177,7 +174,7 @@ void Start(Scene rootScene)
     var overlay = TextOverlay.GetOrCreate(game);
 
     // The chart fills the window, so the help goes in a corner rather than across the figure (F3 moves it)
-    overlay.Position = ScreenAnchor.BottomLeft;
+    overlay.Position = Anchor.BottomLeft;
 
     overlay.AddSection("Chart", () =>
     [
@@ -196,15 +193,8 @@ void Update(Scene scene, GameTime time)
 {
     if (chart is null) return;
 
-    if (game.Input.IsKeyPressed(Keys.G))
-    {
-        chart.Options.Grid.Visible = !chart.Options.Grid.Visible;
-    }
-
-    if (game.Input.IsKeyPressed(Keys.L))
-    {
-        chart.Options.Legend.Visible = !chart.Options.Legend.Visible;
-    }
+    if (game.Input.IsKeyPressed(Keys.G)) chart.Options.Grid.Visible = !chart.Options.Grid.Visible;
+    if (game.Input.IsKeyPressed(Keys.L)) chart.Options.Legend.Visible = !chart.Options.Legend.Visible;
 
     if (game.Input.IsKeyPressed(Keys.T))
     {
@@ -219,15 +209,8 @@ void Update(Scene scene, GameTime time)
         }
     }
 
-    if (game.Input.IsKeyPressed(Keys.Space))
-    {
-        ThrowBall();
-    }
-
-    if (game.Input.IsKeyPressed(Keys.A))
-    {
-        animate = !animate;
-    }
+    if (game.Input.IsKeyPressed(Keys.Space)) ThrowBall();
+    if (game.Input.IsKeyPressed(Keys.A)) animate = !animate;
 
     // The showcase look. What holds the figure back in the default view is the grid behind the curves and
     // a modest glow halo. Drop the grid and widen the halo and the same figure reads as the neon thing you
@@ -244,10 +227,7 @@ void Update(Scene scene, GameTime time)
         // white to every curve and washes the colour out - which is why the halo always looked better from
         // behind, where the ribbons face away from it. Dimming the light is what brings that side to the
         // front; it is not turned off, so the labels and axes keep some shading.
-        if (keyLight is not null)
-        {
-            keyLight.Intensity = showcase ? ShowcaseLight : ChartLight;
-        }
+        if (keyLight is not null) keyLight.Intensity = showcase ? ShowcaseLight : ChartLight;
 
         // The last piece, and the one that explains why orbiting behind the chart always looked better:
         // bloom spreads in SCREEN space, so the same halo covers far more of a figure that sits small in
@@ -270,7 +250,7 @@ void Update(Scene scene, GameTime time)
     // The chart's frame: applies whatever changed in its options (the toggles above, the showcase glow)
     // and moves the cursor readout. Nothing follows the camera here - that is the 2D chart's trick - but
     // the call is the same, and the camera is explicit because a scene can hold several.
-    camera ??= scene.Entities.Select(e => e.Get<CameraComponent>()).FirstOrDefault(c => c != null);
+    camera ??= scene.GetCamera();
 
     if (camera is not null && batch is not null)
     {

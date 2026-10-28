@@ -1,7 +1,6 @@
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
@@ -15,6 +14,7 @@ using Stride.Rendering.Colors;
 using Stride.Rendering.Compositing;
 using Stride.Rendering.Lights;
 using Stride.Rendering.Materials;
+using Stride.Rendering.ProceduralModels;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -282,12 +282,7 @@ public static partial class GameExtensions
         if (cameras.Count == 0)
             throw new InvalidOperationException(NoCameraSlotMessage);
 
-        var cameraSlot = cameras[0];
-
-        cameraSlot.Name = cameraName;
-
-        initialPosition ??= CameraDefaults.Initial3DPosition;
-        initialRotation ??= CameraDefaults.Initial3DRotation;
+        cameras[0].Name = cameraName;
 
         var entity = new Entity(cameraName)
         {
@@ -298,12 +293,8 @@ public static partial class GameExtensions
             }
         };
 
-        entity.Transform.Position = initialPosition.Value;
-        entity.Transform.Rotation = Quaternion.RotationYawPitchRoll(
-            MathUtil.DegreesToRadians(initialRotation.Value.X),
-            MathUtil.DegreesToRadians(initialRotation.Value.Y),
-            MathUtil.DegreesToRadians(initialRotation.Value.Z)
-        );
+        entity.Transform.Position = initialPosition ?? CameraDefaults.Initial3DPosition;
+        entity.Transform.Rotation = RotationFromDegrees(initialRotation ?? CameraDefaults.Initial3DRotation);
 
         entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
 
@@ -400,7 +391,7 @@ public static partial class GameExtensions
     /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
     /// <param name="showHelp"><see langword="false"/> keeps the controller but puts no key help on the overlay.</param>
     public static Entity Add3DCameraController(this IGame game,
-        ScreenAnchor? helpPosition = null,
+        Anchor? helpPosition = null,
         string? cameraName = CameraDefaults.MainCameraName,
         Keys helpToggleKey = Keys.F2,
         bool helpCollapsed = true,
@@ -465,10 +456,7 @@ public static partial class GameExtensions
     {
         var cameraEntity = game.GetCameraEntity(cameraName);
 
-        cameraEntity.Transform.Rotation = Quaternion.RotationYawPitchRoll(
-            MathUtil.DegreesToRadians(rotation.X),
-            MathUtil.DegreesToRadians(rotation.Y),
-            MathUtil.DegreesToRadians(rotation.Z));
+        cameraEntity.Transform.Rotation = RotationFromDegrees(rotation);
 
         return cameraEntity;
     }
@@ -501,25 +489,7 @@ public static partial class GameExtensions
     /// </remarks>
     public static Entity AddDirectionalLight(this IGame game, string? entityName = "Directional Light", bool enableShadows = true, float intensity = 20.0f)
     {
-        var entity = new Entity(entityName)
-        {
-            new LightComponent
-            {
-                Intensity = intensity,
-                Type = new LightDirectional
-                {
-                    Color = new ColorRgbProvider(Color.White),
-                    Shadow =
-                    {
-                        Enabled = enableShadows,
-                        Size = LightShadowMapSize.Large,
-                        Filter = new LightShadowMapFilterTypePcf { FilterSize = LightShadowMapFilterTypePcfSize.Filter5x5 },
-                        PartitionMode = new LightDirectionalShadowMap.PartitionLogarithmic(),
-                        ComputeTransmittance = false
-                    }
-                }
-            }
-        };
+        var entity = CreateDirectionalLight(entityName, intensity, enableShadows);
 
         entity.Transform.Position = new Vector3(0, 2.0f, 0);
         entity.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-30.0f)) *
@@ -548,28 +518,21 @@ public static partial class GameExtensions
 
         // A directional light shines along its entity's forward axis, so these six rotations aim one
         // light down each of the six world axes
-        var rotations = new[]
-        {
+        ReadOnlySpan<Quaternion> rotations =
+        [
             Quaternion.Identity,
             Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(180)),
             Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90)),
             Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(270)),
             Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(90)),
             Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(270))
-        };
+        ];
 
         var lights = new List<Entity>(rotations.Length);
 
         foreach (var rotation in rotations)
         {
-            var entity = new Entity
-            {
-                new LightComponent
-                {
-                    Intensity = intensity,
-                    Type = new LightDirectional { Color = new ColorRgbProvider(Color.White) }
-                }
-            };
+            var entity = CreateDirectionalLight(null, intensity, enableShadows: false);
 
             entity.Transform.Position = position;
             entity.Transform.Rotation = rotation;
@@ -637,29 +600,35 @@ public static partial class GameExtensions
     }
 
     /// <summary>
+    /// A white directional light, not yet in a scene, with the large PCF-filtered shadow map every toolkit light
+    /// uses when it casts shadows at all.
+    /// </summary>
+    private static Entity CreateDirectionalLight(string? name, float intensity, bool enableShadows) => new(name)
+    {
+        new LightComponent
+        {
+            Intensity = intensity,
+            Type = new LightDirectional
+            {
+                Color = new ColorRgbProvider(Color.White),
+                Shadow =
+                {
+                    Enabled = enableShadows,
+                    Size = LightShadowMapSize.Large,
+                    Filter = new LightShadowMapFilterTypePcf { FilterSize = LightShadowMapFilterTypePcfSize.Filter5x5 },
+                    PartitionMode = new LightDirectionalShadowMap.PartitionLogarithmic(),
+                    ComputeTransmittance = false
+                }
+            }
+        }
+    };
+
+    /// <summary>
     /// Creates one light of the studio rig, aimed at the scene centre from the given compass direction.
     /// </summary>
     private static Entity CreateStudioLight(string name, float intensity, float azimuthDegrees, float elevationDegrees, bool enableShadows)
     {
-        var entity = new Entity(name)
-        {
-            new LightComponent
-            {
-                Intensity = intensity,
-                Type = new LightDirectional
-                {
-                    Color = new ColorRgbProvider(Color.White),
-                    Shadow =
-                    {
-                        Enabled = enableShadows,
-                        Size = LightShadowMapSize.Large,
-                        Filter = new LightShadowMapFilterTypePcf { FilterSize = LightShadowMapFilterTypePcfSize.Filter5x5 },
-                        PartitionMode = new LightDirectionalShadowMap.PartitionLogarithmic(),
-                        ComputeTransmittance = false
-                    }
-                }
-            }
-        };
+        var entity = CreateDirectionalLight(name, intensity, enableShadows);
 
         var azimuth = MathUtil.DegreesToRadians(azimuthDegrees);
         var elevation = MathUtil.DegreesToRadians(elevationDegrees);
@@ -742,7 +711,6 @@ public static partial class GameExtensions
 
         return entity;
     }
-
 
     /// <summary>
     /// Creates a PBR (physically based rendering) material from a colour, a metalness and a glossiness,
@@ -863,11 +831,15 @@ public static partial class GameExtensions
     {
         ArgumentNullException.ThrowIfNull(renderer);
 
-        (game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet))
-            .AddSceneRenderer(renderer);
+        game.RequireGraphicsCompositor().AddSceneRenderer(renderer);
 
         return game;
     }
+
+    /// <summary>The game's compositor, which the scene setup or the caller must have put in place.</summary>
+    /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
+    internal static GraphicsCompositor RequireGraphicsCompositor(this IGame game)
+        => game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
 
     /// <summary>
     /// <see cref="AddSceneRenderer(IGame, SceneRendererBase)"/> with the signature that binaries built against
@@ -892,10 +864,7 @@ public static partial class GameExtensions
     /// </remarks>
     /// <returns>The renderer: the one already in the compositor when there was one.</returns>
     public static WorldTextRenderer AddWorldTextRenderer(this IGame game)
-    {
-        return (game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet))
-            .EnsureSceneRenderer(() => new WorldTextRenderer());
-    }
+        => game.RequireGraphicsCompositor().EnsureSceneRenderer(() => new WorldTextRenderer());
 
     /// <summary>
     /// Registers the renderer that draws <see cref="EntityTextComponent"/>, once, however many times
@@ -909,10 +878,7 @@ public static partial class GameExtensions
     /// </remarks>
     /// <returns>The renderer: the one already in the compositor when there was one.</returns>
     public static EntityTextRenderer AddEntityTextRenderer(this IGame game)
-    {
-        return (game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet))
-            .EnsureSceneRenderer(() => new EntityTextRenderer());
-    }
+        => game.RequireGraphicsCompositor().EnsureSceneRenderer(() => new EntityTextRenderer());
 
     /// <summary>
     /// Loads a font installed on the machine, ready to hand to any component that takes a
@@ -976,17 +942,9 @@ public static partial class GameExtensions
     /// do not cover - reading the transform, attaching a component, or replacing the camera outright.
     /// </remarks>
     public static Entity GetCameraEntity(this IGame game, string? cameraName = CameraDefaults.MainCameraName)
-    {
-        var cameraEntity = game.GetSceneSystem().SceneInstance.RootScene.Entities.FirstOrDefault(w => w.Name == cameraName);
+        => game.GetSceneSystem().SceneInstance.RootScene.Entities.FirstOrDefault(entity => entity.Name == cameraName)
+            ?? throw new InvalidOperationException($"No camera entity found with the name '{cameraName}' in the root scene.");
 
-        if (cameraEntity is null)
-        {
-            throw new InvalidOperationException(
-                $"No camera entity found with the name '{cameraName}' in the root scene.");
-        }
-
-        return cameraEntity;
-    }
     /// <summary>
     /// Creates an entity with the procedural model of a 3D <paramref name="shape"/>.
     /// </summary>
@@ -1001,26 +959,11 @@ public static partial class GameExtensions
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
     public static Entity CreatePrimitive(this IGame game, Primitive3D shape, PrimitiveEntityOptions? options = null)
     {
-        ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(shape);
 
         options ??= new();
 
-        var modelBase = ProceduralModelBuilder.Build(shape);
-
-        var model = modelBase.Generate(game.Services);
-
-        if (options.Material != null)
-        {
-            model.Materials.Add(options.Material);
-        }
-
-        var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
-
-        if (options.Position is { } position)
-        {
-            entity.Transform.Position = position;
-        }
+        var entity = CreatePrimitiveEntity(game, ProceduralModelBuilder.Build(shape), options);
 
         // The physics engine the setup chose, if any; the core alone attaches nothing
         if (options.Body != BodyMode.None)
@@ -1043,29 +986,39 @@ public static partial class GameExtensions
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> or <paramref name="shape"/> is <see langword="null"/>.</exception>
     public static Entity CreatePrimitive(this IGame game, Primitive2D shape, PrimitiveEntityOptions? options = null)
     {
-        ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(shape);
 
         options ??= new();
 
-        var modelBase = ProceduralModelBuilder.Build(shape);
+        var entity = CreatePrimitiveEntity(game, ProceduralModelBuilder.Build(shape), options);
+
+        if (options.Body != BodyMode.None)
+            PhysicsSetupBase.Of(game).AddBody(entity, shape, options);
+
+        return entity;
+    }
+
+    /// <summary>A rotation from degrees packed as <c>X = Yaw</c>, <c>Y = Pitch</c>, <c>Z = Roll</c>: the camera helpers' convention.</summary>
+    private static Quaternion RotationFromDegrees(Vector3 yawPitchRoll)
+        => Quaternion.RotationYawPitchRoll(
+            MathUtil.DegreesToRadians(yawPitchRoll.X),
+            MathUtil.DegreesToRadians(yawPitchRoll.Y),
+            MathUtil.DegreesToRadians(yawPitchRoll.Z));
+
+    /// <summary>The entity of a procedural model with the options' material, name, render group and position; no physics yet.</summary>
+    private static Entity CreatePrimitiveEntity(IGame game, PrimitiveProceduralModelBase modelBase, PrimitiveEntityOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(game);
 
         var model = modelBase.Generate(game.Services);
 
         if (options.Material != null)
-        {
             model.Materials.Add(options.Material);
-        }
 
         var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
 
         if (options.Position is { } position)
-        {
             entity.Transform.Position = position;
-        }
-
-        if (options.Body != BodyMode.None)
-            PhysicsSetupBase.Of(game).AddBody(entity, shape, options);
 
         return entity;
     }

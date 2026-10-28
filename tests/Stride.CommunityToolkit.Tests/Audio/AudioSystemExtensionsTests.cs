@@ -158,8 +158,7 @@ public class AudioSystemExtensionsTests
         {
             engineAvailable = game.Audio.AudioEngine is not null;
 
-            if (!engineAvailable)
-                return;
+            if (!engineAvailable) return;
 
             var entity = new Entity("ears") { Scene = scene };
 

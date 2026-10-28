@@ -1,7 +1,6 @@
-using Stride.CommunityToolkit.Rendering.Text;
-using System.Text;
 using Stride.Graphics;
 using Stride.Rendering;
+using System.Text;
 
 namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
@@ -234,21 +233,8 @@ public static class TextMesh
     private readonly record struct Block(Vector2 Min, Vector2 Max);
 
     /// <summary>Where every glyph goes: the pen positions, the block they make, and the shift the anchor asks for.</summary>
-    private sealed class Layout
+    private sealed record Layout(List<PlacedGlyph> Glyphs, Block Block, Vector2 Shift)
     {
-        private Layout(List<PlacedGlyph> glyphs, Block block, Vector2 shift)
-        {
-            Glyphs = glyphs;
-            Block = block;
-            Shift = shift;
-        }
-
-        internal List<PlacedGlyph> Glyphs { get; }
-
-        internal Block Block { get; }
-
-        internal Vector2 Shift { get; }
-
         /// <summary>
         /// Lays the text out line by line: the pen runs right along each line by the glyphs' advances,
         /// kerning and spacing, lines go down by the line height, then shorter lines are pushed right by
@@ -313,21 +299,21 @@ public static class TextMesh
             return new Layout(placed, block, ShiftFor(options.Anchor, block));
         }
 
-        private static Vector2 ShiftFor(TextAnchor? anchor, Block block)
+        private static Vector2 ShiftFor(Anchor? anchor, Block block)
         {
             if (anchor is null) return Vector2.Zero;
 
             var x = anchor switch
             {
-                TextAnchor.TopLeft or TextAnchor.MiddleLeft or TextAnchor.BottomLeft => block.Min.X,
-                TextAnchor.TopRight or TextAnchor.MiddleRight or TextAnchor.BottomRight => block.Max.X,
+                Anchor.TopLeft or Anchor.MiddleLeft or Anchor.BottomLeft => block.Min.X,
+                Anchor.TopRight or Anchor.MiddleRight or Anchor.BottomRight => block.Max.X,
                 _ => (block.Min.X + block.Max.X) * 0.5f,
             };
 
             var y = anchor switch
             {
-                TextAnchor.TopLeft or TextAnchor.TopCenter or TextAnchor.TopRight => block.Max.Y,
-                TextAnchor.BottomLeft or TextAnchor.BottomCenter or TextAnchor.BottomRight => block.Min.Y,
+                Anchor.TopLeft or Anchor.TopCenter or Anchor.TopRight => block.Max.Y,
+                Anchor.BottomLeft or Anchor.BottomCenter or Anchor.BottomRight => block.Min.Y,
                 _ => (block.Min.Y + block.Max.Y) * 0.5f,
             };
 
@@ -346,19 +332,10 @@ public static class TextMesh
     private sealed record PreparedPolygon(Vector2[][] Loops, Vector2[][][] Rings, List<int> CapTriangles);
 
     /// <summary>A glyph's polygons prepared, and the bevel width in EM units they accepted.</summary>
-    private sealed class PreparedGlyph
+    /// <param name="Polygons">The polygons, each with its loops, rings and cap triangles.</param>
+    /// <param name="BevelSizeEm">The bevel's reach across the cap in EM units, after any shrinking the glyph needed; 0 without a bevel.</param>
+    private sealed record PreparedGlyph(List<PreparedPolygon> Polygons, float BevelSizeEm)
     {
-        private PreparedGlyph(List<PreparedPolygon> polygons, float bevelSizeEm)
-        {
-            Polygons = polygons;
-            BevelSizeEm = bevelSizeEm;
-        }
-
-        internal List<PreparedPolygon> Polygons { get; }
-
-        /// <summary>The bevel's reach across the cap in EM units, after any shrinking the glyph needed; 0 without a bevel.</summary>
-        internal float BevelSizeEm { get; }
-
         internal bool IsEmpty => Polygons.Count == 0;
 
         internal static PreparedGlyph Build(GlyphOutline glyph, TextMeshOptions options)
@@ -433,20 +410,13 @@ public static class TextMesh
     }
 
     /// <summary>Accumulates the caps, bevels and walls of prepared polygons into one vertex and index list, scaled and placed on the way in.</summary>
-    private sealed class Emitter
+    private sealed class Emitter(TextMeshOptions options)
     {
         private readonly List<VertexPositionNormalTexture> _vertices = [];
         private readonly List<int> _indices = [];
-        private readonly float _scale;
-        private readonly float _halfDepth;
-        private readonly TextBevel? _bevel;
-
-        internal Emitter(TextMeshOptions options)
-        {
-            _scale = options.Size;
-            _halfDepth = options.Depth * 0.5f;
-            _bevel = options.Bevel;
-        }
+        private readonly float _scale = options.Size;
+        private readonly float _halfDepth = options.Depth * 0.5f;
+        private readonly TextBevel? _bevel = options.Bevel;
 
         /// <summary>
         /// Adds a prepared glyph placed at <paramref name="origin"/>, with cap texture coordinates spread over

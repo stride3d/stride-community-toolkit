@@ -18,18 +18,12 @@ namespace Stride.CommunityToolkit.Charts;
 /// and writes the new range into the chart's options, which the chart's own range diff then applies.
 /// Changes smaller than half a percent of the view are ignored, so an idle camera costs nothing.
 /// </remarks>
-internal sealed class ChartViewFollower
+/// <param name="game">The game whose window gives the view its aspect ratio.</param>
+/// <param name="chart">The chart whose range follows the camera.</param>
+internal sealed class ChartViewFollower(IGame game, Chart chart)
 {
-    private readonly IGame _game;
-    private readonly Chart _chart;
     private Vector4? _lastRange;
     private float _lastPixelHeight;
-
-    internal ChartViewFollower(IGame game, Chart chart)
-    {
-        _game = game;
-        _chart = chart;
-    }
 
     /// <summary>
     /// Writes the camera's visible rectangle into the chart's range if the view has meaningfully changed.
@@ -41,12 +35,12 @@ internal sealed class ChartViewFollower
         if (camera.Projection != CameraProjectionMode.Orthographic)
             return;
 
-        var backBuffer = _game.GraphicsDevice.Presenter.BackBuffer;
+        var backBuffer = game.GraphicsDevice.Presenter.BackBuffer;
         var aspect = (float)backBuffer.Width / backBuffer.Height;
         var pixelHeight = (float)backBuffer.Height;
 
         // The camera's position in chart space; the chart root may be moved
-        var world = _chart.Root.Transform.WorldMatrix;
+        var world = chart.Root.Transform.WorldMatrix;
         Matrix.Invert(ref world, out var toChart);
         var centre = Vector3.TransformCoordinate(camera.Entity.Transform.WorldMatrix.TranslationVector, toChart);
 
@@ -80,7 +74,7 @@ internal sealed class ChartViewFollower
         var magnitude = MathF.Pow(10f, MathF.Floor(MathF.Log10(step)));
         var mantissa = step / magnitude;
 
-        var r = _chart.Options.Range;
+        var r = chart.Options.Range;
         r.TickStep = step;
         r.MinorDivisions = mantissa is > 1.5f and < 3f ? 4 : 5;
         r.XMin = range.X;

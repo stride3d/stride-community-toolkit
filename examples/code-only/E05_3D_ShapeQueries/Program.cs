@@ -5,6 +5,7 @@ using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.DebugShapes;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -26,8 +27,6 @@ using Stride.Rendering;
 // ghost shows where it would first touch; T throws a real ball along the same line, without gravity,
 // and it stops where the ghost was. A sweep is a straight line: gravity is the caller's to add.
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 const float ProbeHeight = 1.5f;
 const float BallRadius = 0.35f;
 const float ThrowSpeed = 14f;
@@ -38,17 +37,17 @@ var probeSize = new Vector3(2.2f, ProbeHeight, 2.2f);
 var launcher = new Vector3(-8f, 1.2f, 0f);
 var aim = new Vector3(0.5f, 0f, 1.6f);  // Where the probe sits and the sweep points until the mouse moves
 
-var bodies = new List<FieldBody>();
-var inside = new List<BodyComponent>();
-var thrown = new List<Entity>();
+List<FieldBody> bodies = [];
+List<BodyComponent> inside = [];
+List<Entity> thrown = [];
 var probeLine = "Probe holds nothing";
 var sweepLine = "Sweep: nothing within 16 m";
 
-CameraComponent? camera = null;
+CameraComponent camera = null!;
 BepuSimulation? simulation = null;
-ImmediateDebugRenderSystem? debugDraw = null;
-Material? highlight = null;
-Material? ballMaterial = null;
+ImmediateDebugRenderSystem debugDraw = null!;
+Material highlight = null!;
+Material ballMaterial = null!;
 
 using var game = new Game();
 
@@ -56,36 +55,33 @@ var sceneSetup = new SceneSetup3D
 {
     // Above and in front of the field, shifted right so the launcher on the left clears the overlay
     Camera = CameraSetup.Perspective(position: new Vector3(0f, 11f, 15.5f), rotation: new Vector3(0f, -34f, 0f)).WithController(),
-    Profiler = true
+    Profiler = true,
+    WindowTitle = "Shape queries - Stride Community Toolkit",
+    Resizable = true,
+    DpiAware = true,
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Shape queries - Stride Community Toolkit";
-
-    game.AddDebugShapes();
-    game.AddPhysicsDebug();
-
-    debugDraw = game.Services.GetService<ImmediateDebugRenderSystem>() ?? throw new InvalidOperationException("AddDebugShapes registers the renderer first");
+    debugDraw = game.AddDebugShapes();
     debugDraw.Visible = true;
 
-    camera = scene.GetCamera();
+    game.AddPhysicsDebug();
+
+    camera = game.GetCameraEntity().Get<CameraComponent>();
     highlight = game.CreateMaterial(new Color(255, 170, 40), metalness: 0f, glossiness: 0.5f);
     ballMaterial = game.CreateMaterial(new Color(80, 190, 255), metalness: 0f, glossiness: 0.6f);
 
     BuildField(scene);
     BuildLauncher(scene);
 
-    TextOverlay.GetOrCreate(game).AddSection("Shape queries", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Shape queries", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
 {
-    if (camera is null || debugDraw is null) return;
-
     // The bodies hand over their simulation once they are attached, which takes a frame
     simulation ??= bodies[0].Body.Simulation;
 
@@ -94,7 +90,7 @@ void Update(Scene scene, GameTime time)
     if (game.Input.IsKeyPressed(Keys.R)) Reset();
 
     FollowMouse();
-    ProbeForOverlaps(scene);
+    ProbeForOverlaps();
     SweepTowardsAim(scene);
 }
 
@@ -103,7 +99,7 @@ void FollowMouse()
 {
     if (game.Input.MouseDelta == Vector2.Zero) return;
 
-    var ray = camera!.GetPickRay(game.Input.MousePosition);
+    var ray = camera.ScreenToWorldRay(game.Input.MousePosition);
     var ground = new Plane(Vector3.UnitY, 0f);
 
     if (ray.Intersects(ref ground, out Vector3 point)) aim = point;
@@ -114,7 +110,7 @@ void FollowMouse()
 /// into stack memory and allocates nothing, so it can run every frame; the collection overload appends
 /// <c>OverlapInfo</c> records with the penetration direction and depth of each.
 /// </summary>
-void ProbeForOverlaps(Scene scene)
+void ProbeForOverlaps()
 {
     // A hair above the ground, so the ground plane itself is not in the list
     var centre = new Vector3(aim.X, ProbeHeight * 0.5f + 0.02f, aim.Z);
@@ -125,7 +121,10 @@ void ProbeForOverlaps(Scene scene)
 
     foreach (var collidable in simulation!.Overlap(new Box(probeSize.X, probeSize.Y, probeSize.Z), new RigidPose(centre, Quaternion.Identity), buffer))
     {
-        if (collidable is BodyComponent body) inside.Add(body);
+        if (collidable is BodyComponent body)
+        {
+            inside.Add(body);
+        }
     }
 
     foreach (var field in bodies)
@@ -133,16 +132,25 @@ void ProbeForOverlaps(Scene scene)
         var model = field.Body.Entity.Get<ModelComponent>();
 
         // A material override while the body is inside; removing it shows the model's own again
-        if (inside.Contains(field.Body)) model.Materials[0] = highlight!;
-        else model.Materials.Remove(0);
+        if (inside.Contains(field.Body))
+        {
+            model.Materials[0] = highlight;
+        }
+        else
+        {
+            model.Materials.Remove(0);
+        }
     }
 
-    debugDraw!.DrawCube(centre, probeSize, color: inside.Count > 0 ? new Color(255, 170, 40) : Color.Gold);
+    debugDraw.DrawCube(centre, probeSize, color: inside.Count > 0 ? new Color(255, 170, 40) : Color.Gold);
 
-    var names = inside.Select(body => body.Entity.Name).Take(3).ToList();
-    var more = inside.Count - names.Count;
+    // The first three names, and how many more there are
+    var shown = Math.Min(inside.Count, 3);
+    var names = new string[shown];
 
-    probeLine = inside.Count == 0 ? "Probe holds nothing" : $"Probe holds: {string.Join(", ", names)}{(more > 0 ? $" +{more}" : "")}";
+    for (var i = 0; i < shown; i++) names[i] = inside[i].Entity.Name;
+
+    probeLine = shown == 0 ? "Probe holds nothing" : $"Probe holds: {string.Join(", ", names)}{(inside.Count > shown ? $" +{inside.Count - shown}" : "")}";
 
     if (game.Input.IsMouseButtonPressed(MouseButton.Left))
     {
@@ -171,7 +179,7 @@ void SweepTowardsAim(Scene scene)
     var touch = launcher + direction * (found ? hit.Distance : SweepReach);
     var colour = found ? Color.DeepSkyBlue : Color.Gray;
 
-    debugDraw!.DrawLine(launcher, touch, colour);
+    debugDraw.DrawLine(launcher, touch, colour);
     debugDraw.DrawSphere(touch, BallRadius, colour);
 
     if (found)
@@ -185,7 +193,10 @@ void SweepTowardsAim(Scene scene)
         sweepLine = $"Sweep: nothing within {SweepReach:0} m";
     }
 
-    if (game.Input.IsKeyPressed(Keys.T)) Throw(scene, direction);
+    if (game.Input.IsKeyPressed(Keys.T))
+    {
+        Throw(scene, direction);
+    }
 }
 
 /// <summary>A real ball along the sweep's line, with no gravity so it follows the straight path the sweep tested.</summary>
@@ -196,12 +207,12 @@ void Throw(Scene scene, Vector3 direction)
 
     var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
     {
+        EntityName = $"Ball {thrown.Count + 1}",
         Material = ballMaterial,
         Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated, Gravity = false },
+        Position = launcher,
     });
 
-    ball.Name = $"Ball {thrown.Count + 1}";
-    ball.Transform.Position = launcher;
     ball.Scene = scene;
     ball.Get<BodyComponent>().LinearVelocity = direction * ThrowSpeed;
 
@@ -218,14 +229,13 @@ void Throw(Scene scene, Vector3 direction)
 void BuildField(Scene scene)
 {
     var random = new Random(3);
-    var colours = new[] { new Color(200, 90, 80), new Color(90, 170, 110), new Color(120, 120, 220) };
+    Color[] colours = [new(200, 90, 80), new(90, 170, 110), new(120, 120, 220)];
 
     for (var i = 0; i < 14; i++)
     {
         var column = i % 7;
         var row = i / 7;
         var position = new Vector3(-5f + column * 1.8f + random.NextSingle() * 0.6f, 1.5f, (row - 0.5f) * 3.2f + random.NextSingle() * 0.8f);
-        var material = game.CreateMaterial(colours[i % colours.Length], metalness: 0f, glossiness: 0.4f);
 
         var (shape, name) = (i % 3) switch
         {
@@ -236,11 +246,11 @@ void BuildField(Scene scene)
 
         var entity = game.CreatePrimitive(shape, new BepuPhysicsOptions
         {
-            Material = material,
+            EntityName = $"{name} {i + 1}",
+            Material = game.CreateMaterial(colours[i % colours.Length], metalness: 0f, glossiness: 0.4f),
+            Position = position,
         });
 
-        entity.Name = $"{name} {i + 1}";
-        entity.Transform.Position = position;
         entity.Transform.Rotation = Quaternion.RotationY(random.NextSingle() * MathUtil.TwoPi);
         entity.Scene = scene;
 
@@ -251,12 +261,12 @@ void BuildField(Scene scene)
     {
         var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1f, 3f, 1f)), new BepuPhysicsOptions
         {
+            EntityName = $"Pillar {number}",
             Material = game.CreateMaterial(new Color(150, 150, 160), metalness: 0f, glossiness: 0.3f),
             Body = BodyMode.Static,
+            Position = new Vector3(x, 1.5f, z),
         });
 
-        pillar.Name = $"Pillar {number}";
-        pillar.Transform.Position = new Vector3(x, 1.5f, z);
         pillar.Scene = scene;
     }
 }
@@ -266,17 +276,17 @@ void BuildLauncher(Scene scene)
 {
     var marker = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
     {
+        EntityName = "Launcher",
         Material = ballMaterial,
         Body = BodyMode.None,
+        Position = launcher,
     });
 
-    marker.Name = "Launcher";
-    marker.Transform.Position = launcher;
     marker.Scene = scene;
 
     var label = new Entity("Label")
     {
-        new EntityTextComponent { Text = "Launcher", FontSize = 14, Anchor = TextAnchor.MiddleCenter, EnableShadow = true },
+        new EntityTextComponent { Text = "Launcher", FontSize = 14, Anchor = Anchor.MiddleCenter, EnableShadow = true },
     };
 
     label.Transform.Position = launcher - new Vector3(0f, 1.2f, 0f);
@@ -288,11 +298,7 @@ void Reset()
 {
     foreach (var field in bodies)
     {
-        // Teleport moves the body and nothing else: it keeps its velocity, its spin and its sleep
-        field.Body.Teleport(field.Start, field.Rotation);
-        field.Body.Awake = true;
-        field.Body.LinearVelocity = Vector3.Zero;
-        field.Body.AngularVelocity = Vector3.Zero;
+        field.Body.TeleportAtRest(field.Start, field.Rotation);
     }
 
     foreach (var ball in thrown) ball.Scene = null;
@@ -300,7 +306,7 @@ void Reset()
     thrown.Clear();
 }
 
-IReadOnlyList<TextElement> OverlayLines() =>
+IReadOnlyList<TextElement> BuildOverlayLines() =>
 [
     new("Mouse", "Move the probe and aim the sweep", Color.Gold),
     new("Left click", "Toss what the probe holds", Color.Gold),

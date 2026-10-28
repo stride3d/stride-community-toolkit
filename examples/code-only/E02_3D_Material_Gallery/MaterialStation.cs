@@ -51,18 +51,10 @@ public sealed class MaterialStation : GalleryStation
 
     /// <summary>
     /// A material from a descriptor, compiled for this game's device with its content manager, so the
-    /// engine's lookup-table environment term resolves. The descriptor stays on the material:
-    /// <c>Material.New</c> leaves it null, and a material used as a layer needs it, since the generator
-    /// composes the layer from its features.
+    /// engine's lookup-table environment term resolves. The descriptor stays on the material, which a
+    /// material used as a layer needs, since the generator composes the layer from its features.
     /// </summary>
-    public Material Material(MaterialDescriptor descriptor)
-    {
-        var material = Stride.Rendering.Material.New(Game.GraphicsDevice, descriptor, Game.Content);
-
-        material.Descriptor = descriptor;
-
-        return material;
-    }
+    public Material Material(MaterialDescriptor descriptor) => Game.CreateMaterial(descriptor);
 
     /// <summary>Removes everything the station placed, so a setup can run again for a variation.</summary>
     public void Clear()
