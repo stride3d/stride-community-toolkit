@@ -26,7 +26,7 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E04_StrideUI_DragAndDrop).
 
-[!code-csharp[](../../../../examples/code-only/E04_StrideUI_DragAndDrop/Program.cs?start=1&end=79)]
+[!code-csharp[](../../../../examples/code-only/E04_StrideUI_DragAndDrop/Program.cs?start=1&end=59)]
 <!-- #endregion generated -->
 
 ## Files

@@ -24,4 +24,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_2D_Material).
 
-[!code-csharp[](../../../../examples/code-only/E02_2D_Material/Program.cs?start=1&end=97)]
+[!code-csharp[](../../../../examples/code-only/E02_2D_Material/Program.cs?start=1&end=101)]

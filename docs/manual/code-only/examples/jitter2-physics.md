@@ -22,4 +22,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E06_Jitter2).
 
-[!code-csharp[](../../../../examples/code-only/E06_Jitter2/Program.cs?start=1&end=121)]
+[!code-csharp[](../../../../examples/code-only/E06_Jitter2/Program.cs?start=1&end=119)]

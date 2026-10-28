@@ -24,4 +24,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E10_3D_ComputeBoids).
 
-[!code-csharp[](../../../../examples/code-only/E10_3D_ComputeBoids/Program.cs?start=1&end=339)]
+[!code-csharp[](../../../../examples/code-only/E10_3D_ComputeBoids/Program.cs?start=1&end=330)]

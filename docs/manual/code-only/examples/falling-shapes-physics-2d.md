@@ -21,4 +21,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_2D_FallingShapes).
 
-[!code-csharp[](../../../../examples/code-only/E05_2D_FallingShapes/Program.cs?start=1&end=40)]
+[!code-csharp[](../../../../examples/code-only/E05_2D_FallingShapes/Program.cs?start=1&end=42)]
