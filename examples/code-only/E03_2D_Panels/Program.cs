@@ -32,7 +32,7 @@ const float RowPitch = 3.0f;
 const float PanelWidth = 4.0f;
 const float PanelHeight = 2.0f;
 
-// The whole grid framed at once; every cell is one wheel notch away from filling the window
+// The whole grid framed at once
 const float ViewHeight = 29f;
 
 // The grid sits low on purpose. The overlay is screen-space and lives in the top-right corner, so the
@@ -179,6 +179,7 @@ game.Run(new SceneSetup2D
 {
     ClearColor = new Color(6, 8, 14),
     Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight).WithController(),
+    // No ground and no physics: this is a gallery, and the default 2D ground would cut through it
     Ground = null,
     Resizable = true,
     DpiAware = true,
@@ -186,7 +187,6 @@ game.Run(new SceneSetup2D
 
 void Start(Scene scene)
 {
-    // No ground and no physics: this is a gallery, and the default 2D ground would cut through it
     game.AddWorldTextRenderer();
 
     shapes = game.AddShapeBatch();
@@ -400,7 +400,7 @@ void DrawBracket(Vector3 center, Color color)
     shapes.DrawRectangle(center.XY(), panelSize - new Vector2(2f * Notch + 0.12f, 0.12f), color);
     shapes.BorderWidth = borderWidth;
 
-    // Twelve points: each corner is cut into two, turning inward
+    // Twelve points: each corner is an inward notch of three
     ReadOnlySpan<Vector2> outline =
     [
         c + new Vector2(-half.X + Notch, -half.Y),
@@ -421,7 +421,7 @@ void DrawBracket(Vector3 center, Color color)
 }
 
 /// <summary>
-/// A plotted route across the panel: forty points as one pixel-wide stroke with round joins, and a
+/// A plotted route across the panel: forty points as one 2-pixel stroke with round joins, and a
 /// dash pattern that runs along the whole of it.
 /// </summary>
 void DrawRoute(Vector3 center, Theme theme)
@@ -447,7 +447,7 @@ void DrawRoute(Vector3 center, Theme theme)
 
 /// <summary>
 /// The corner ticks, divider and gauge arc that turn a rounded rectangle into something off a ship's
-/// console. Lines in pixel widths, so the ornament keeps its weight as you zoom.
+/// console. The ticks and divider are pixel lines, so they keep their weight as you zoom.
 /// </summary>
 void DrawOrnaments(Vector3 center, Theme theme)
 {
@@ -502,7 +502,7 @@ void DrawDashes(Vector3 center, Theme theme)
     Reset();
 }
 
-/// <summary>Every piece of captured state back to its default, so no panel inherits the last one's.</summary>
+/// <summary>Clears the captured state, border included, so no panel inherits the last one's.</summary>
 void Reset()
 {
     shapes.BorderWidth = 0f;

@@ -21,8 +21,7 @@ game.Run(new SceneSetup3D { Resizable = true, DpiAware = true }.UseBepu().UseSky
 
 void Start(Scene scene)
 {
-    // One call, however much text the scene has. Without the renderer, world text simply never
-    // appears - there is no error for a missing renderer.
+    // Optional: WorldTextProcessor adds the renderer itself once a text needs it
     game.AddWorldTextRenderer();
 
     // --- Row 1: orientation --------------------------------------------------------------------
@@ -64,8 +63,7 @@ void Start(Scene scene)
 
     AddText(scene, new Vector3(-4f, 0.6f, 4), text =>
     {
-        // Height is world units - this text is a quarter metre tall and always will be. FontSize is
-        // only sharpness: raise it if text viewed close up looks soft.
+        // Height is in world units. FontSize is only sharpness: raise it if close-up text looks soft.
         text.Text = "Height = 0.25";
         text.Height = 0.25f;
     });
@@ -163,7 +161,7 @@ void Start(Scene scene)
     });
 }
 
-// Creates one gallery station: an entity carrying a world text, handed over for its own settings.
+// An entity carrying a world text, which configure adjusts.
 Entity AddText(Scene scene, Vector3 position, Action<WorldTextComponent> configure)
 {
     var component = new WorldTextComponent

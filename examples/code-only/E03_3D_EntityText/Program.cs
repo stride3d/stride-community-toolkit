@@ -22,8 +22,7 @@ game.Run(new SceneSetup3D { Resizable = true, DpiAware = true }.UseBepu().UseSky
 
 void Start(Scene scene)
 {
-    // One call, however much text the scene has. Without the renderer, components collect quietly
-    // and nothing appears - there is no error for a missing renderer.
+    // Optional: EntityTextProcessor adds the renderer itself once a label needs it
     game.AddEntityTextRenderer();
 
     // --- Row 1: placement ----------------------------------------------------------------------
@@ -32,9 +31,8 @@ void Start(Scene scene)
 
     AddStation(scene, new Vector3(-1.5f, 0, -2), "Anchor = BottomCenter\nOffset = (0, -12)", label =>
     {
-        // The label floats centred above its pole. This pairing is what "put a name over a thing"
-        // means, and it is Anchor doing the centring - not Alignment, which only arranges the lines
-        // of a multi-line block relative to each other.
+        // Centres the label above its pole. Anchor does the centring, not Alignment, which only
+        // arranges the lines of a multi-line block relative to each other.
         label.Anchor = Anchor.BottomCenter;
         label.Offset = new Vector2(0, -12);
     });
@@ -43,8 +41,7 @@ void Start(Scene scene)
 
     AddStation(scene, new Vector3(4.5f, 0, -2), "Scale = 1.6\n(cheaper to animate\nthan FontSize)", label =>
     {
-        // Scale multiplies the drawn size without re-rasterising glyphs, which is why a score punch
-        // animates Scale and leaves FontSize alone
+        // Scale resizes without re-rasterising glyphs, so animate it rather than FontSize
         label.Scale = 1.6f;
     });
 
@@ -91,8 +88,7 @@ void Start(Scene scene)
 
     // --- HUD: not attached to anything in the scene --------------------------------------------
 
-    // Anchored mode snaps to a window corner and survives resizing; the entity's own position is
-    // ignored entirely, so a HUD entity can sit anywhere
+    // Anchored and Screen modes ignore the entity's position, so a HUD entity can sit anywhere
     var hud = new Entity("Hud")
     {
         new EntityTextComponent
@@ -124,8 +120,8 @@ void Start(Scene scene)
     hud.Scene = scene;
 }
 
-// Creates one gallery station: a pole with a label above it, then hands the label over for the
-// station's own settings. Returns the pole so a station can add more components to it.
+// A pole carrying a label, which configure adjusts. Returns the pole so a station can add more
+// components to it.
 Entity AddStation(Scene scene, Vector3 position, string text, Action<EntityTextComponent>? configure = null)
 {
     var pole = game.CreatePrimitive(Primitive3D.Cylinder(0.15f, 1f), new PrimitiveEntityOptions

@@ -13,7 +13,7 @@ namespace E03_3D_TextShaders;
 /// </summary>
 /// <remarks>
 /// The normals are left as they were, so the lighting still describes the still letters; for a wave this
-/// small the eye does not notice. The move is by x alone, not along the normal, so a cap and its walls,
+/// small the eye does not notice. The lift depends on x alone, not on the normal, so a cap and its walls,
 /// which do not share vertices, move together and the seams stay closed.
 /// </remarks>
 [DataContract]

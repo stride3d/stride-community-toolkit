@@ -4,15 +4,15 @@ using Myra.Graphics2D.UI;
 namespace E04_Myra_DraggableWindow;
 
 /// <summary>
-/// Utility class to create custom UI widgets.
+/// Creates custom UI widgets.
 /// </summary>
 public static class UIUtils
 {
     /// <summary>
-    /// Creates a new <see cref="HorizontalProgressBar"/> with the given top position and filler color.
+    /// Creates a <see cref="HorizontalProgressBar"/> with the given top position and filler colour.
     /// </summary>
     /// <param name="top">The top position of the progress bar.</param>
-    /// <param name="filler">The filler color of the progress bar.</param>
+    /// <param name="filler">The filler colour of the progress bar.</param>
     /// <returns>A new <see cref="HorizontalProgressBar"/> instance.</returns>
     public static HorizontalProgressBar CreateHealthBar(int top, string filler) => new()
     {

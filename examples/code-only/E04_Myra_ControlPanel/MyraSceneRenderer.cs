@@ -25,8 +25,8 @@ public class MyraSceneRenderer : SceneRendererBase
     {
         base.InitializeCore();
 
-        // Myra needs the concrete Game, and it has to exist by the time the renderer initializes:
-        // a null here would surface much later as a NullReferenceException inside Myra itself.
+        // Myra needs the concrete Game by now: a null here would surface much later as a
+        // NullReferenceException inside Myra.
         MyraEnvironment.Game = Services.GetService<IGame>() as Game
             ?? throw new InvalidOperationException("Myra needs the running Stride Game to be registered in Services.");
 

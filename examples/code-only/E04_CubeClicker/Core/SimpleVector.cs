@@ -3,13 +3,11 @@ using Stride.Core;
 namespace E04_CubeClicker.Core;
 
 /// <summary>
-/// Stride.Core.Vector isn't generated as the generator can't reach the core without being in it
-/// So a workaround has to be made with a local class
+/// Stands in for Stride's <c>Vector3</c>, which the YAML generator cannot reach from outside its assembly.
 /// </summary>
 /// <remarks>
-/// Equality is written out by hand rather than taken from a <c>record struct</c>: the positional
-/// properties a record generates are init-only in a way Stride's data serializer does not populate,
-/// and this type exists precisely to be serialized.
+/// Equality is written out by hand rather than taken from a positional <c>record struct</c>:
+/// NexVYaml does not support records with constructors, and this type exists to be serialized.
 /// </remarks>
 [DataContract]
 public readonly struct SimpleVector : IEquatable<SimpleVector>

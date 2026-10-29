@@ -88,8 +88,7 @@ void AddText(Scene scene, string word, float y, Material material)
     entity.Scene = scene;
 }
 
-// Every material here starts from the toolkit's PBR descriptor - a colour, a glossiness, a metalness,
-// Lambert and the microfacet model - and changes one slot. The slot is the lesson.
+// Each material is MaterialDescriptors.Pbr with a slot changed (two for the dissolve); the slot is the lesson.
 
 /// <summary>
 /// A gradient texture, one pixel wide and 64 tall, in the diffuse slot: the caps' texture coordinates
