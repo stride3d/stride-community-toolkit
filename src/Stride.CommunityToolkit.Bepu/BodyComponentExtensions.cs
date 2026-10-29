@@ -19,7 +19,11 @@ public static class BodyComponentExtensions
     /// <remarks>
     /// <see cref="BodyComponent.Teleport"/> alone moves the body and nothing else: it keeps its velocity, its
     /// spin and its sleep, so a body that was tumbling keeps tumbling at the new place, and one that was asleep
-    /// stays where it was put without checking what is under it. This zeroes both velocities and wakes the body.
+    /// stays where it was put without checking what is under it. This zeroes both velocities and wakes the body
+    /// from a fresh sleep, so that the sleep candidacy a resting body built up before the move does not come
+    /// with it: a body that was still awake but about to sleep would otherwise be put to sleep at the new place
+    /// within a step or two, before gravity had moved it, because waking an awake body changes nothing and the
+    /// sleeper judges candidacy on the velocity before integration.
     /// </remarks>
     public static void TeleportAtRest(this BodyComponent body, Vector3 position, Quaternion? rotation = null)
     {
@@ -28,6 +32,10 @@ public static class BodyComponentExtensions
         body.Teleport(position, rotation ?? Quaternion.Identity);
         body.LinearVelocity = Vector3.Zero;
         body.AngularVelocity = Vector3.Zero;
+
+        // Sleeping first makes the wake a real one, which resets the body's sleep counters; waking a body that is
+        // already awake does nothing, and its counters would carry over
+        body.Awake = false;
         body.Awake = true;
     }
 }
