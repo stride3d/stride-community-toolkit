@@ -7,16 +7,17 @@ local NuGet packages for testing.
 
 | File | Contents | Use it when |
 |---|---|---|
-| `Stride.CommunityToolkit.slnx` | Everything: libraries, tests, tools, benchmarks and all example projects | Verifying a change across every example, e.g. after a Stride upgrade |
-| `Stride.CommunityToolkit.Core.slnf` | The core libraries, tests and tools; the Box2D, Charts, Effects and Shapes packages are left out as well | Day-to-day library work |
+| `Stride.CommunityToolkit.slnx` | Everything: libraries, tests, gold scenes, tools, benchmarks, the docs project and all example projects | Verifying a change across every example, e.g. after a Stride upgrade or an API change |
+| `Stride.CommunityToolkit.Core.slnf` | The libraries except Box2D, Charts, Effects and Shapes, the unit tests and the tools | Day-to-day library work |
 
-The repository contains over a hundred example projects. Loading all of them slows the IDE noticeably, so the
-solution filter exists to skip them. Open the `.slnf` exactly like a solution; excluded projects
-still appear in Solution Explorer as unloaded nodes, and **Load Project** pulls in any single one
-when you need to debug it. **Load All Projects** restores the full set without switching files.
+The repository contains over a hundred example projects, and loading them all slows the IDE
+noticeably, so the solution filter skips them. Open the `.slnf` like a solution; excluded projects
+appear in Solution Explorer as unloaded nodes, and **Load Project** pulls in any single one.
+**Load All Projects** restores the full set without switching files.
 
-Because a filter is only a view over `Stride.CommunityToolkit.slnx`, adding a project to the
-solution automatically makes it available in the filter, and no filter update is needed.
+A filter is a view over `Stride.CommunityToolkit.slnx`, so a project added to the solution is
+available in the filter without a filter update. Only the full solution compiles the examples, so
+build it before you report an API change done.
 
 `dotnet build` accepts a filter too:
 
@@ -27,11 +28,9 @@ dotnet build Stride.CommunityToolkit.Core.slnf
 ## Why the examples build is fast
 
 Two shared files under `build/` keep the example, test and tool builds small. Without them, **each**
-Stride project copies roughly 476 MB into `bin`, most of which is unreachable from a desktop build:
-about 239 MB of Android native runtimes, a further ~38 MB of iOS/tvOS/macOS, and 54 MB of XML
-documentation from referenced packages. The Avalonia launcher was worse still, at 561 MB per
-configuration: Skia and HarfBuzz for 25 platforms, and 100 MB of native symbol files even for the
-one platform it runs on.
+Stride project copies roughly 476 MB into `bin`, most of it unreachable from a desktop build: native
+runtimes for Android, iOS, tvOS and macOS, and the XML documentation of referenced packages. The
+Avalonia launcher also copies Skia and HarfBuzz for 25 platforms, with their native symbol files.
 
 | File | What it does |
 |---|---|
@@ -41,9 +40,9 @@ one platform it runs on.
 The `Directory.Build.props` and `.targets` under `examples/`, `tests/` and `tools/` import them; the
 library projects under `src/` do not, because a package has to stay runtime-neutral. Together these
 take an example from ~476 MB to ~80 MB, the test project from 495 MB to 89 MB and the launcher from
-561 MB to 28 MB, and a clean build of the whole solution to well under a minute.
+561 MB to 28 MB.
 
-Two details worth knowing before editing them:
+Before you edit them:
 
 1. **Every nested `Directory.Build.props` and `.targets` explicitly imports the repository-root
    equivalent.** MSBuild imports only the *nearest* one, so without that import the settings defined
@@ -61,9 +60,10 @@ Two details worth knowing before editing them:
 
 ## Cleaning build output
 
-Even at the smaller sizes above, a full tree of `bin` and `obj` folders runs to several gigabytes,
-and a stale `obj/stride` can keep shaders compiled from a previous Stride package (see the
-release notes for the asset-bundle trap). Two scripts at the repository root remove them:
+A full tree of `bin` and `obj` folders runs to several gigabytes, and a stale `obj/stride` keeps
+shaders compiled from a previous Stride package (see
+[Building against a local Stride build](#building-against-a-local-stride-build)). Two scripts at the
+repository root remove them:
 
 | Script | Removes |
 |---|---|
@@ -72,8 +72,9 @@ release notes for the asset-bundle trap). Two scripts at the repository root rem
 
 Each folder removed is printed. One that a running process holds open, such as Visual Studio with
 the project loaded, is reported as locked and skipped. Nothing git tracks is named `bin` or `obj`,
-so the scripts never touch source. They are deliberately not `git clean -xdf`, which would also
-delete every other ignored file, local settings included.
+so the scripts never touch source. Unlike `git clean -xdf`, they keep every other ignored file,
+local settings included. `delete-bin.bat` with no arguments also removes the local package feed in
+`bin/packages`.
 
 ## Building local NuGet packages
 
@@ -90,24 +91,28 @@ Or, on any platform:
 dotnet run --file build/pack-local.cs
 ```
 
-Useful arguments: `--version <version>`, `--configuration <configuration>` and `--clean`.
+Pass arguments to the `.bat` directly, or after `--` to the `.cs` (`dotnet run --file build/pack-local.cs -- --clean`):
 
-This packs every publishable library into `bin/packages` as version `99.0.0-dev`. The version is
-fixed by design, so a reference such as `Stride.CommunityToolkit.Bepu@99.0.0-dev` keeps working
-across rebuilds and never has to be edited.
+| Argument | Effect |
+|---|---|
+| `--version <version>` | Packs as another version. The default is `99.0.0-dev` |
+| `--configuration <configuration>` | Builds that configuration. The default is `Release` |
+| `--clean` | Removes the version's packages from the feed and the NuGet cache, and packs nothing |
 
-The `99` is deliberate. A `PackageReference` means *at least* that version, and NuGet then picks the
-**lowest** version satisfying it. Because prerelease labels compare alphabetically, a `1.0.0-dev`
-constraint was satisfied by every published `1.0.0-preview.*` - so whenever the local feed was not
-consulted, NuGet quietly chose the *oldest* of them and the failure surfaced much later as a missing
-Stride 4.2 assembly. Nothing published can satisfy `99.0.0`, so that mistake now fails immediately
-with `NU1101`/`NU1102` instead.
+This packs every library in `PACK_PROJECTS` of `.github/workflows/dotnet-nuget.yml` into
+`bin/packages` as version `99.0.0-dev`. The version is fixed, so a reference such as
+`Stride.CommunityToolkit.Bepu@99.0.0-dev` keeps working across rebuilds.
+
+The `99` is deliberate. A `PackageReference` means *at least* that version, and NuGet picks the
+**lowest** version satisfying it. Prerelease labels compare alphabetically, so a `1.0.0-dev`
+constraint is satisfied by every published `1.0.0-preview.*`, and NuGet silently resolves the oldest
+of them when the local feed is not consulted. Nothing published satisfies `99.0.0`, so that mistake
+fails at once with `NU1101`/`NU1102`.
 
 > [!IMPORTANT]
-> NuGet keys its global cache by package id and version, and will not re-extract a rebuilt package
-> that carries a version it has already seen. The script therefore deletes the matching folders under
-> `~/.nuget/packages` before packing, so a freshly built package always wins. This mirrors what
-> Stride does in `build/install-gamestudio.targets`.
+> NuGet keys its global cache by package id and version, and does not re-extract a rebuilt package
+> with a version it has already seen. The script therefore deletes the matching folders under
+> `~/.nuget/packages` before packing, so a freshly built package always wins.
 
 ### Consuming the local packages
 
@@ -152,7 +157,7 @@ mapping them and a source that is not mapped is never consulted. Copy it next to
 WSL as `NuGet.config`, and reference the exact versions the feeds hold: the toolkit at `99.0.0-dev`,
 Stride at the version in the dev feed.
 
-Four things that cost a day each the first time:
+Four traps:
 
 1. **A same-version repack is invisible to NuGet under WSL too.** After every pack, delete the
    extractions and the resolver's cache in the distribution, then restore again:
@@ -205,10 +210,7 @@ an example against the local packages instead:
 > dotnet restore examples/code-only/<Example>/<Example>.csproj
 > ```
 >
-> Deleting the example's `obj` folder has the same effect. This is also why the base package matters:
-> the mapping in the generated config includes both `Stride.CommunityToolkit` and
-> `Stride.CommunityToolkit.*`, because the `.*` pattern alone does not match the base package name and
-> would leave it looking on nuget.org, where no `99.0.0` exists.
+> Deleting the example's `obj` folder has the same effect.
 
 ## Building against a local Stride build
 
@@ -216,7 +218,11 @@ The repository builds against the Stride version set by `StrideVersion` in `Dire
 build against a different version, such as an engine you built from source, override it in a local file.
 
 1. Build Stride from source. Its build writes `4.4.0-dev` packages to `%LOCALAPPDATA%\stride\nugetdev`
-   and registers that folder as the **Stride Dev** NuGet source.
+   and registers that folder as the **Stride Dev** NuGet source. The engine's native link needs to
+   find the MSVC toolset and the Windows SDK, through the user-level `VCINSTALLDIR` and
+   `VCToolsInstallDir` or the Visual Studio developer environment; the
+   [repository instructions](https://github.com/stride3d/stride-community-toolkit/blob/main/.github/copilot-instructions.md#building-the-engine-clone-native-link-fails-with-could-not-open-kernel32lib)
+   cover both and the developer prompt's ARM64 trap. The toolkit build needs neither.
 2. Create `Directory.Build.local.props` in the repository root:
 
     ```xml
@@ -259,8 +265,9 @@ dotnet run --project examples/code-only/E01_3D_BasicScene/E01_3D_BasicScene.cspr
 
 `E01_3D_BasicScene_FileBasedApp` is a [file-based app](https://learn.microsoft.com/en-us/dotnet/core/sdk/file-based-apps):
 a single `.cs` file with no project file, which declares its dependencies inline with `#:package`
-and `#:project` directives. It has no `.csproj`, so it is not part of the solution and Visual Studio
-will not build it alongside the other projects. Run it from the command line instead:
+and `#:project` directives. It is not a project in the solution, so Visual Studio does not build it.
+Run it from the command line; `--file` is required from the repository root, which holds
+`Stride.CommunityToolkit.ndproj`:
 
 ```bash
 dotnet run --file examples/code-only/E01_3D_BasicScene_FileBasedApp/Program.cs
@@ -283,7 +290,7 @@ Get-Content $out | Select-String "DIAG"
 
 ### Where diagnostics actually appear
 
-This catches people out, because the wrong choice produces no output at all rather than an error:
+The wrong choice produces no output at all rather than an error:
 
 | Location | Use |
 |---|---|
@@ -311,11 +318,10 @@ them easy to separate from Stride's own logging.
 
 ### Build warnings are a debugging tool
 
-Real defects hide in the warning list. A Stride 4.4 regression that silently broke the ImGui.NET
-integration was found only through a single `warning CS9193` among 66 warnings. Filter with
-`Select-String ": error|warning CS"`; filtering by project path also matches unrelated `NU1903`
-NuGet advisories.
+Real defects hide in the warning list: a single compiler warning can be the only sign of an engine
+regression. Filter with `Select-String ": error|warning"`, not `warning CS`, because Stride's
+analysers report as `STRDIAG`. Filtering by project path also matches unrelated `NU1903` NuGet
+advisories.
 
 > [!TIP]
-> Reach out to maintainers anytime, process improvements, clarifications, or code reviews, we're
-> happy to help!
+> Reach out to the maintainers any time for process improvements, clarifications or code reviews.

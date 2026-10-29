@@ -21,9 +21,9 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 |---|---|
 | `game.Run(setup, start: Start, update: Update)` | Applies `setup`, runs `start` once with the root scene, then `update` every frame. `start` may be `async`. |
 | `game.Run(start: Start)` | The same with `SceneSetup3D.Default`. |
-| `game.Run(SceneSetup.None, start: Start)` | Adds nothing to the scene: for a game that builds its compositor and scene by hand, and for headless tests. The physics engine, game settings, instancing, overlay and profiler still apply when set, so `SceneSetup.None.UseBepu()` is a hand-built scene whose primitives get Bepu bodies. |
+| `game.Run(SceneSetup.None, start: Start)` | Adds nothing to the scene: for a game that builds its compositor and scene by hand, and for headless tests. What is not scene still applies when set - the physics engine, game settings, DPI awareness, window title, resizing, instancing, overlay and profiler - so `SceneSetup.None.UseBepu()` is a hand-built scene whose primitives get Bepu bodies. |
 
-`GameSettings` and `Physics` are applied before the engine starts, because the engine reads them while it initialises; everything else once the root scene exists. See [`Run`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.CommunityToolkit.Engine.SceneSetup,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime},Stride.Games.GameContext)).
+`DpiAware`, `GameSettings` and `Physics` are applied before the engine starts, because they must be in place before the window and the engine's systems are created; everything else once the root scene exists. See [`Run`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.CommunityToolkit.Engine.SceneSetup,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime},Stride.Games.GameContext)).
 
 ## SceneSetup3D
 
@@ -69,7 +69,7 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 |---|---|
 | `CameraSetup.Perspective(position, rotation)` | A perspective camera. Both arguments optional; the defaults are `CameraDefaults.Initial3DPosition` and `Initial3DRotation`. |
 | `CameraSetup.Orthographic(position, rotation, orthographicSize)` | An orthographic camera; `orthographicSize` is the height of the view in world units, 10 by default. |
-| `.WithController(helpPosition, showHelp)` | Adds the camera controller after the camera is aimed, so H resets to the aimed pose. `helpPosition` is the `Anchor` the 3D controller's key help goes to; `showHelp: false` registers none. |
+| `.WithController(helpPosition, showHelp)` | Adds the camera controller after the camera is aimed, so H resets to the aimed pose. `helpPosition` is the `Anchor` the 3D controller's key help goes to; `showHelp: false` keeps the controller with no key help. |
 
 The rotation is in degrees, packed as `X = Yaw`, `Y = Pitch`, `Z = Roll`: the convention `Add3DCamera` uses and the order the controller's F2 panel prints, so a view found by flying can be copied into the setup.
 

@@ -42,9 +42,8 @@ copied next to the app, and the app fails at start-up with
 `Could not load file or assembly 'Stride.NuGetResolver'`. A `.csproj` says build-only with
 `IncludeAssets="build;buildTransitive"` on the reference; a `#:package` directive has no way to, so
 a `Directory.Build.targets` beside the file says it instead - a file-based app imports one like any
-project. The toolkit's file-based apps do not need this because `Stride.CommunityToolkit`
-already passes the asset compiler on build-only; this is the one thing the toolkit does on the
-packaging side, and the reason the engine-only version is not quite a single file.
+project. A toolkit file-based app needs no second file, because `Stride.CommunityToolkit` already
+references the asset compiler build-only.
 
 ## See it in the repository
 
@@ -62,8 +61,11 @@ Two things differ from the steps above, both because the file lives inside the r
 
 That `Directory.Build.targets` is read by all three apps in the folder, but it only changes the
 engine-only one: it updates a direct reference to `Stride.AssetCompiler`, and the two toolkit apps
-have none. Run the engine-only app with:
+have none. Run the engine-only app from the repository root with:
 
 ```
-dotnet run examples/code-only/E01_3D_BasicScene_FileBasedApp/ProgramEngineOnly.cs
+dotnet run --file examples/code-only/E01_3D_BasicScene_FileBasedApp/ProgramEngineOnly.cs
 ```
+
+`--file` is needed there because the root holds `Stride.CommunityToolkit.ndproj`, which `dotnet run`
+would otherwise take for the project to run.

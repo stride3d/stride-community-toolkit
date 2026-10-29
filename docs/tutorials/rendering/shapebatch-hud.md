@@ -93,15 +93,15 @@ function, `Update`, which runs every frame. You add it in step 1.
 
 ### Prepare the program
 
-Add this line at the very top of `Program.cs`, below the `using` lines:
+Change the `game.Run` line to set two properties on the scene setup:
 
 ```csharp
-WindowsDpiManager.EnablePerMonitorV2();
+game.Run(new SceneSetup2D { DpiAware = true, Resizable = true }.UseBepu(), start: Start);
 ```
 
-It tells Windows that the game draws for the display's real pixels. Without it, on a display scaled
-to 150%, Windows stretches the whole window and the HUD's edges turn blurry. `WindowsDpiManager` is in
-`Stride.CommunityToolkit.Engine`, which the program already imports.
+`DpiAware` tells Windows that the game draws for the display's real pixels. Without it, on a display
+scaled to 150%, Windows stretches the whole window and the HUD's edges turn blurry. `Resizable` lets
+you resize the window by dragging its edges.
 
 `ShapeBatch` draws shapes: rectangles, discs, rings, arcs and lines. Add a variable for it at the
 top of the file, above `using var game = new Game();`. The program already has an array called
@@ -117,7 +117,7 @@ It needs `using Stride.CommunityToolkit.Shapes;`. The `null!` says that the valu
 [!code-csharp[](../../../examples/code-only/E03_2D_HUD_Basics/Program.cs#Step1Create)]
 
 ```csharp
-// A grid with numbered lines. G switches it between world units and screen pixels
+// A grid with numbered lines. G steps it through screen pixels, off and world units
 game.AddGrid();
 ```
 
@@ -130,7 +130,7 @@ The panel needs a few values. Put them at the top of the file, next to `shapeBat
 A HUD is drawn every frame, so the drawing goes in an `Update` function. Tell `game.Run` about it:
 
 ```csharp
-game.Run(new SceneSetup2D().UseBepu(), start: Start, update: Update);
+game.Run(new SceneSetup2D { DpiAware = true, Resizable = true }.UseBepu(), start: Start, update: Update);
 ```
 
 Then add the function at the end of the file. It needs `using Stride.Games;`.
@@ -144,7 +144,8 @@ void Update(Scene scene, GameTime time)
 
 Run it. The whole window turns light blue. The rectangle is there, but in the world: 300 by 100
 world units, centred on the world's origin, while the camera sees about 10 units from top to
-bottom. You are looking at the inside of it. Zoom out with the mouse wheel to find its edges.
+bottom. You are looking at the inside of it. Even zoomed out as far as the mouse wheel goes, 100
+units, it fills the view.
 
 A HUD belongs on the screen, not in the world. Change `Update` to:
 
@@ -185,7 +186,8 @@ void Update(Scene scene, GameTime time)
 }
 ```
 
-On the screen, Y points down, so "up" is a minus.
+On the screen, Y points down, so "up" is a minus. `Anchor` needs
+`using Stride.CommunityToolkit.Rendering;`.
 
 ### Give it a fill and round corners
 
@@ -223,8 +225,9 @@ void Update(Scene scene, GameTime time)
 
 What to notice:
 
-- **Pixels.** With `Screen` set to `true`, positions and sizes are window pixels. The origin is the top
-  left corner and Y points down, which is why the panel's offset from the bottom corner has a minus.
+- **Pixels.** With `Screen` set to `true`, positions and sizes are pixels on a 100% display; the batch
+  scales them to the display. The origin is the top left corner and Y points down, which is why the
+  panel's offset from the bottom corner has a minus.
 - **`Screen` stays set.** It is a setting of the batch, not of one draw call. Everything drawn while it
   is `true` is in pixels, which is why `Update` sets it back to `false` at the end.
 - **A corner and an offset.** `AnchorPoint(Anchor.BottomLeft)` is asked for every frame, so the panel
@@ -233,8 +236,8 @@ What to notice:
   to the draw call. `BorderWidth` sets how wide it is, and `Fill` sets what is inside: here a colour of
   its own, at 80% so the scene shows through. Left at its default, the fill is the outline's colour at
   full strength, which draws a solid shape.
-- **After the post effects.** `afterPostEffects: true` draws the batch after the scene has been tone
-  mapped, so the colours you write are the colours you get.
+- **After the post effects.** `afterPostEffects: true` draws the batch after any tone mapping, so the
+  colours you write are the colours you get. A 2D scene has no tone mapping, but a 3D one does.
 
 More: [Create a batch and draw](../../manual/rendering/shape-batch.md#create-a-batch-and-draw),
 [Draw on the screen](../../manual/rendering/shape-batch.md#draw-on-the-screen),
@@ -408,8 +411,8 @@ What to notice:
 
 - **Glow.** `Glow.Set(18f)` adds a halo 18 pixels wide outside the shape, in the colour of its
   outline. `Glow.Strength` sets how strong it is.
-- **Opacity.** `Opacity` multiplies the transparency of everything a draw call draws: outline, fill
-  and glow. Driving it with a sine of the time makes the panel pulse. The label's own `Opacity`
+- **Opacity.** `Opacity` multiplies the alpha of everything a draw call draws: outline, fill and
+  glow. Driving it with a sine of the time makes the panel pulse. The label's own `Opacity`
   pulses with it.
 - **Put the state back.** Glow and opacity stay set like every other state. If the function did not
   clear them, next frame's panel would glow and pulse too. `Outline()` and `Solid()` do not touch
@@ -475,7 +478,7 @@ of one class, `HudStyle.cs`:
 
 [!code-csharp[](../../../examples/code-only/E03_2D_HUD_Basics/HudStyle.cs)]
 
-**The drawing goes into a class.** `SimpleHud.cs` takes the batch and a style, keeps the labels, and
+**The drawing goes into a class.** `SimpleHud.cs` takes the game, the scene, the batch and a style, keeps the labels, and
 offers three numbers to set and one method to call:
 
 [!code-csharp[](../../../examples/code-only/E03_2D_HUD_Basics/SimpleHud.cs#Step8Class)]

@@ -37,7 +37,7 @@ related:                           # Project names; the generator resolves them 
 
 # --- docs generation ------------------------------------------------------
 docs: true
-media: mesh-outline-annotated.webp   # Optional. Defaults to <slug>.webp; override only when the file cannot use the slug
+media: mesh-outline-annotated.webp # Optional. Defaults to <slug>.webp; override only when the file cannot use the slug
 tocName: Mesh Outline              # Optional. Falls back to title.en
 screenshot: true
 screenshotFrame: 240
@@ -51,9 +51,9 @@ created: 2025-08-07
 ---
 ```
 
-F# uses `(* ... *)`, and Visual Basic prefixes every line with `'`. Both are picked up automatically.
+In a C# file the block sits inside `/* ... */`; F# uses `(* ... *)`, and Visual Basic prefixes every line with `'`. Full-line `#` comments, such as the section headers above, are allowed. A `#` comment after a value is not: the validator reports it as a truncated value.
 
-Fields are written in that order - identity, classification, content, docs, launchers, lifecycle - so that any block can be read, or copied, without hunting.
+Write the fields in that order - identity, classification, content, docs, launchers, lifecycle - so any block can be read or copied without hunting.
 
 ## Fields
 
@@ -80,8 +80,8 @@ Fields are written in that order - identity, classification, content, docs, laun
 | Field | Required | Notes |
 |---|---|---|
 | `description.en` | | Rendered as the page intro and the gallery card. |
-| `concepts` | | The "The `Program.cs` file shows how to:" bullet list. |
-| `tags` | | Free-form topics. **Never repeat the `level` here** - it is a field, not a tag, and the validator rejects it. |
+| `concepts` | | The bullet list under "The `Program.cs` file shows how to:", which names the example's entry file. |
+| `tags` | | Free-form topics. **Never repeat the `level` here** - it is a field, not a tag, and the validator warns. |
 | `related` | | Project folder names, not slugs. A name matching no folder is an **error** - it is a typo. A folder that exists but carries no metadata block yet is a **warning**. A folder that is `enabled: false` is neither: the link is dropped deliberately and comes back when the example does. |
 
 ### Documentation
@@ -89,7 +89,7 @@ Fields are written in that order - identity, classification, content, docs, laun
 | Field | Default | Notes |
 |---|---|---|
 | `docs` | `true` | `false` keeps the example in the launchers with no page generated. |
-| `media` | `<slug>.webp` | Filename only, resolved against `docs/manual/code-only/examples/media/`. An explicit duplicate is an **error** - two pages sharing one file means the second capture silently destroyed the first. |
+| `media` | `<slug>.webp` | Filename only, resolved against `docs/manual/code-only/examples/media/`. An explicit duplicate is an **error**: the second capture would silently overwrite the first. |
 | `tocName` | `title.en` | For a title too long to sit in the sidebar. |
 | `screenshot` | `true` | `false` excludes the example from the capture run. |
 | `screenshotFrame` | `240` | A frame index, not a delay. |
@@ -120,7 +120,7 @@ Level means **conceptual prerequisites, not line count**. A 589-line example tha
 | **Advanced** | Custom engine extension points (render features, shaders, custom renderers), third-party engine integration, or multi-project architecture. |
 | **Other** | Playgrounds and demos that are not teaching a specific lesson. Sorts last. |
 
-**Getting Started admits exactly the "your first code-only app" examples** - the 3D one, the 2D one, the file-based one, and the F#/VB ports. Anything that builds *on top of* the base scene is Beginner, however short it is. That rule decides most borderline cases on its own.
+**Getting Started admits exactly the "your first code-only app" examples** - the 3D and 2D base scenes with their Bullet, engine-only, file-based, F# and Visual Basic variants, and the two `E01_*_FallingShapes` scenes. Anything that builds *on top of* the base scene is Beginner, however short it is. That rule decides most borderline cases on its own.
 
 `Other` means *unclassified but published*. It is not a substitute for `enabled: false` (does not build) or `docs: false` (deliberately undocumented).
 
@@ -134,9 +134,7 @@ Both vocabularies live in [`Core/MetadataVocabulary.cs`](https://github.com/stri
 
 ## Ordering
 
-`order` is scoped **per `(language, level)` group**, so numbers only ever compete with the handful of examples beside them. Use a small ascending sequence with gaps of 10, leaving room to insert without renumbering.
-
-Do not carry a global scheme forward. Three incompatible scales existed before the schema landed - `1`-`57`, `210`/`220`/`230`, and `32000` - and they were renumbered wholesale rather than reconciled.
+`order` is scoped **per `(language, level)` group**, so numbers only compete with the examples beside them. Use a small ascending sequence with gaps of 10, leaving room to insert without renumbering, and no global numbering scheme.
 
 ## Block scalars
 
@@ -146,12 +144,12 @@ YAML's plain `|` keeps one newline at the end of a block scalar, which reaches t
 
 ## Two YAML traps
 
-Both are silent, and both cost an afternoon the first time:
+YAML reports neither of these usefully:
 
-- **An unquoted `#` starts a comment and truncates its value.** `- Declaring NuGet packages inline with #:package` becomes `- Declaring NuGet packages inline with`. No error, no warning.
+- **An unquoted `#` starts a comment and truncates its value.** `- Declaring NuGet packages inline with #:package` becomes `- Declaring NuGet packages inline with`, with no YAML error.
 - **An unquoted `: ` inside a list item turns the item into a mapping**, and parsing aborts deep inside YamlDotNet with a message that names neither the line nor the cause.
 
-Quote any value containing either. The validator checks the raw source text for both, because neither is visible once the block has been parsed.
+Quote any value containing either. The validator checks the raw source text for both, because neither is visible once the block has been parsed, and reports each as an error.
 
 ## Page ownership
 
@@ -161,7 +159,7 @@ Generated pages carry a `generated:` marker in their own frontmatter, and the ge
 |---|---|
 | `true` | The whole file is tool-owned and overwritten on every run. Edit the metadata block, not the page. |
 | `partial` | **Only the delimited region** is overwritten. Everything outside it is preserved verbatim. |
-| `false` *or absent* | Hand-owned. Never touched; the generator only warns if the metadata has drifted. |
+| `false` *or absent* | Hand-owned. Never touched. |
 
 `partial` uses explicit markers rather than an inferred boundary:
 

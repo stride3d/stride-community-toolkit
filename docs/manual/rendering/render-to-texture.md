@@ -1,8 +1,9 @@
 # Render to texture
 
 `AddRenderTextureCamera` makes an entity's camera draw into a texture instead of the window: a rear-view
-mirror, a security monitor, a minimap. The texture is an ordinary texture: the emissive map of a
-monitor's material, the fill of a shape, a sprite.
+mirror, a security monitor, a minimap. Use the texture anywhere a texture fits: the emissive map of a
+monitor's material, the fill of a shape, a sprite. The method is in the
+`Stride.CommunityToolkit.Rendering.Compositing` namespace.
 
 ```csharp
 var feed = game.AddRenderTextureCamera(cameraEntity, width: 512, height: 512);
@@ -66,9 +67,18 @@ picture. To write a colour transform of your own, see
 
 ## Limitations
 
+- The compositor must exist and have render stages named `Opaque` and `Transparent`; otherwise the
+  call throws `InvalidOperationException`.
 - A colour transform cannot produce a wireframe or a depth view. Those need a rasterizer state or a
   post effect that reads the depth buffer.
 - Every feed is another pass over the scene. Five 512-pixel feeds are cheap; five full-resolution
   feeds are five extra frames per frame.
 - The texture shows the previous frame. A feed that must show the current frame has to be inserted
   before the main view rather than appended.
+- The GPU picker reads the main camera only. See [GPU picking](gpu-picking.md).
+
+## See also
+
+- [E09_3D_RenderToTexture](../code-only/examples/render-to-texture.md), the example.
+- [ShapeBatch](shape-batch.md) for filling a shape with a texture.
+- [Shaders in a toolkit package](../../contributing/toolkit/shaders.md) for writing a colour transform.

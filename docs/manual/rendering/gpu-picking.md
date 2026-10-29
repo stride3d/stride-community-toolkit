@@ -38,14 +38,15 @@ if (picker.Result is { Hit: true } hit)
 
 | Member | Description |
 |---|---|
-| `Request(position)` | Asks about one point once. The position is normalised over the viewport, origin top left, as `Input.MousePosition` |
-| `Continuous` | Asks at the mouse on every frame that has no explicit request |
-| `Result` | The last answer, a `PickResult`. `Sequence` increments with every new answer |
-| `Pickable` | A `RenderGroupMask` of the groups the picker draws. The default is `RenderGroupMask.All` |
+| `Request(position)` | Asks about one point once. The position is normalised over the viewport, origin top left, as `Input.MousePosition`. A second request in the same frame replaces the first |
+| `Continuous` | Asks at the mouse on every frame that has no explicit request. Off by default |
+| `Result` | The last answer, a `PickResult`, or `null` until the first one arrives. `Sequence` increments with every new answer |
+| `Pickable` | A `RenderGroupMask` of the groups the picker draws. The default is `RenderGroupMask.All`; `AddGpuPicker(pickable)` sets it at creation |
 
-`PickResult` has `Hit`, `Entity`, `ModelComponent`, `MeshIndex`, `MaterialIndex`, `InstanceIndex`,
-`Depth` and `WorldPosition`. `Depth` is 0 at the near plane and 1 at the far plane, 1 for the
-background. `WorldPosition` is rebuilt from the depth through the view that drew it.
+`PickResult` has `Hit`, `Sequence`, `ScreenPosition`, `Entity`, `ModelComponent`, `MeshIndex`,
+`MaterialIndex`, `InstanceIndex`, `Depth` and `WorldPosition`. `Depth` is 0 at the near plane and 1
+at the far plane, 1 for the background. `WorldPosition` is rebuilt from the depth through the view
+that drew it, and is `null` for the background.
 
 ## What the call builds
 
@@ -54,9 +55,8 @@ background. `WorldPosition` is rebuilt from the depth through the view that drew
 - A **"Picking" render stage** with a four-channel float target and a depth buffer, so the id
   pass has its own depth test and a mesh in front wins over a mesh behind, exactly as on screen.
 - A **stage selector** on the mesh feature that routes every mesh (or the render groups you
-  choose) into that stage under the picking effect. The effect is the engine's own forward shading
-  effect with the pixel stage swapped for a five-line id writer, so the vertex side - the part
-  that decides where things are - is untouched.
+  choose) into that stage under the picking effect: the engine's forward shading effect with the
+  pixel stage swapped for an id writer, so the vertex side is untouched.
 - A **sub render feature** on the mesh feature, `GpuPickingRenderFeature`, that hands each mesh its
   id through the per-draw constant buffer and remembers which component each id was.
 - A **camera renderer** of its own, `GpuPickingSceneRenderer`, over the main camera slot,
@@ -67,10 +67,9 @@ background. `WorldPosition` is rebuilt from the depth through the view that drew
 Idle, the picker adds no view, no stage and no work. Three staging textures are in flight, so a
 read never waits for the GPU and the answer arrives two frames after the request.
 
-- **Instanced models.** The engine's instancing feature binds the instance world matrices and
-  their inverses by position. The picking effect lists the two buffers in the other order, so
-  `GpuPickingRenderFeature` rebinds them by name for its own render nodes. Without that, every
-  instance is drawn through its inverse matrix and the pick misses.
+The engine's instancing feature binds the instance world matrices and their inverses by position,
+and the picking effect lists the two buffers in the other order. `GpuPickingRenderFeature` rebinds
+them by name for its own render nodes, so instances are picked where they are drawn.
 
 The shader behind the id pass is in the package's `Effects` folder. See
 [Shaders in a toolkit package](../../contributing/toolkit/shaders.md).
@@ -101,3 +100,10 @@ The shader behind the id pass is in the package's `Effects` folder. See
 `E09_3D_GpuPicking` has no physics package: a teapot, pillars, primitives and a field of instanced
 crates. Hover highlights, left click selects, <kbd>Escape</kbd> clears the selection. The gold scene
 `picking` asks about five screen points, one on the sky, and draws each answer where it landed.
+
+## See also
+
+- [E09_3D_GpuPicking](../code-only/examples/gpu-picking.md), the example.
+- [Camera Extensions](../camera-extensions/index.md) for the physics raycast.
+- [ShapeBatch](shape-batch.md#pick-shapes) for picking shapes.
+- [Render to texture](render-to-texture.md) for feeds, which need a picker of their own.

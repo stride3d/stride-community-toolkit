@@ -13,7 +13,7 @@ This tutorial shows how to apply a texture to a 3D object at runtime. Using the 
 
 ## Running the code
 
-When you run this code, you'll see a 3D cube with the specified texture applied. The cube is placed 8 units above the ground.
+When you run this code, you'll see a 3D cube with the specified texture applied. The cube starts 8 units above the ground and falls onto it.
 
 ## Summary
 

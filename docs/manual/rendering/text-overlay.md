@@ -91,9 +91,9 @@ re-read when the window moves to a differently scaled monitor. Three properties 
 
 The display factor is only right if the process is DPI aware - otherwise Windows is already
 stretching the whole window and the factor correctly reads 1. Declare awareness in an
-`app.manifest`, as the Stride templates do, or call `WindowsDpiManager.EnablePerMonitorV2()` (in the core
-package, namespace `Stride.CommunityToolkit.Engine`) before the game is created; see the
-[DPI-aware example](../code-only/examples/dpi-aware.md).
+`app.manifest`, as the Stride templates do, set `DpiAware = true` on the scene setup, or call
+`WindowsDpiManager.EnablePerMonitorV2()` (namespace `Stride.CommunityToolkit.Engine`) before the game
+is created; see the [DPI-aware example](../code-only/examples/dpi-aware.md).
 
 ## Fonts
 
@@ -164,7 +164,14 @@ unscaled pixels overrides the calculation entirely.
 | Piece | In `E11_2D_Charts` | Concept |
 |---|---|---|
 | `TextOverlay.GetOrCreate(game)` | `Program.cs`, `Start` | one shared instance, registered as a service |
-| `WindowsDpiManager.EnablePerMonitorV2()` | `Program.cs`, before `new Game()` | a sharp window; the overlay's size then follows `DisplayScale` on its own |
+| `DpiAware = true` | `Program.cs`, the `SceneSetup2D` | a sharp window; the overlay's size then follows `DisplayScale` on its own |
 | `overlay.BackgroundColor = new Color(0, 0, 0, 200)` | `Program.cs`, `Start` | readable on a white scene |
 | `overlay.AddSection("Chart", () => [...])` | `Program.cs`, `Start` | a live key line: `[G] Grid on` |
 | `SceneSetup2D` | `Program.cs`, `game.Run(...)` | adds the 2D camera controller, whose collapsible `[+] [F2] Camera controls` section is at order `-100` |
+
+## See also
+
+- [Entity Text](entity-text.md)
+- [Reference Grid](reference-grid.md)
+- [Charts 2D](../code-only/examples/charts-2d.md) example
+- [DPI-aware](../code-only/examples/dpi-aware.md) example

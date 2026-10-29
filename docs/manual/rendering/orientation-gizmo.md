@@ -1,16 +1,17 @@
 # Orientation Gizmo
 
 `OrientationGizmoRenderer` draws the world axes in a corner of the screen, turning with the camera, the
-way Game Studio's space marker shows which way is which in the scene editor. It is screen-space, drawn after the scene and over it,
-and ignores depth, so it is never buried in the scene's content. It is in the
-`Stride.CommunityToolkit.Rendering.Gizmos` namespace, with `AddOrientationGizmo`; `Anchor` in `Stride.CommunityToolkit.Rendering`.
+way Game Studio's space marker does in the scene editor. It is screen-space, drawn over the scene and
+ignoring depth, so the scene never hides it. It and `AddOrientationGizmo` are in the
+`Stride.CommunityToolkit.Rendering.Gizmos` namespace; `Anchor` is in `Stride.CommunityToolkit.Rendering`.
 
 ```csharp
 game.AddOrientationGizmo();
 ```
 
-Call it from the Start callback, after the graphics compositor exists. The gizmo follows the first
-camera of the compositor.
+Call it from the Start callback: it throws `InvalidOperationException` when the scene system has no
+graphics compositor yet. The gizmo follows the compositor's first camera slot, or its first camera
+renderer when the slots are empty.
 
 ![The orientation gizmo in the bottom left corner of the raycast example, with the ground gizmo at the origin for comparison](../code-only/examples/media/raycast.webp)
 
@@ -63,8 +64,9 @@ the text overlay, with the camera help in it, sits top right by default.
 ## Reading it
 
 The gizmo is the camera's rotation, nothing else: moving the camera does not change it, turning it
-does. With the default 3D camera, X points right and Z towards you, so a scene built along X and Z
-reads as a plan when the camera looks down and as an elevation when it looks along Z. If a letter is
+does. The default 3D camera looks at the origin from `(6, 6, 6)`, so Y points up, X down to the right
+and Z down to the left. A scene built along X and Z reads as a plan when the camera looks down and as
+an elevation when it looks along Z. If a letter is
 on a disc instead of an arrow, that axis points straight at or away from you.
 
 ## See also

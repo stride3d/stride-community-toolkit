@@ -7,7 +7,7 @@ Extension methods for `CameraComponent`. They fall into two halves: converting b
 In the `Stride.CommunityToolkit.Engine` namespace. Screen positions here are normalized: `(0,0)` is the top-left of the viewport and `(1,1)` the bottom-right.
 
 - [`ScreenToWorldRay()`](xref:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)) - A `Ray` from the camera through a screen point. The usual starting point for object picking.
-- [`ScreenToWorldPointOnXYPlane()`](xref:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPointOnXYPlane(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)) - Where that ray crosses the `Z=0` plane, as a `Vector2`, or `null` when the ray misses the plane. This is how you turn a mouse position into a 2D world position without any physics at all.
+- [`ScreenToWorldPointOnXYPlane()`](xref:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPointOnXYPlane(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)) - Where that ray crosses the `Z=0` plane, as a `Vector2`, or `null` when the ray is parallel to the plane or crosses it outside the near and far planes. This is how you turn a mouse position into a 2D world position without any physics at all.
 - [`ScreenPointToRay()`](xref:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenPointToRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)) - The near and far points of the ray as `Vector4` world positions, already divided by `w`.
 - [`ScreenToWorldRaySegment()`](xref:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)) - The ray as a `RaySegment` from the near plane to the far plane, which is the form the Bepu and Bullet `Simulation` raycast helpers take.
 - [`ScreenToWorldPoint()`](xref:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)) - Converts a screen position with a depth to a world position.
@@ -28,9 +28,16 @@ In the `Stride.CommunityToolkit.Bepu` namespace.
 - [`Raycast()`](xref:Stride.CommunityToolkit.Bepu.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,System.Single,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)) - Casts from the camera through a screen position and reports the first hit as a `HitInfo`.
 - [`RaycastMouse()`](xref:Stride.CommunityToolkit.Bepu.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,System.Single,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)) - The same, reading the mouse position for you.
 
+Both cast in the Bepu simulation of the camera's entity, so the camera must already be in the scene.
+
 ## Raycasting - Bullet
 
 In the `Stride.CommunityToolkit.Bullet` namespace. Both take either a `ScriptComponent` or a `Simulation` and return a `HitResult`.
 
 - [`Raycast()`](xref:Stride.CommunityToolkit.Bullet.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)) - Casts from the camera through a screen position, filtered by collision group.
 - [`RaycastMouse()`](xref:Stride.CommunityToolkit.Bullet.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)) - The same, reading the mouse position for you.
+
+## See also
+
+- [Camera Controllers](camera-controllers.md)
+- [Physics Extensions](../physics-extensions/index.md)

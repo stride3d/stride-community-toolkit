@@ -1,13 +1,13 @@
 # Documentation
 
-We use [DocFX](https://github.com/dotnet/docfx) to generate our documentation. Contributing is straightforward: explore the existing docs, duplicate relevant pages, and update the content as needed. For DocFX and Markdown syntax, see the [official guide](https://dotnet.github.io/docfx/docs/markdown.html). If you're new, we're happy to help you get started.
+The documentation is built with [DocFX](https://github.com/dotnet/docfx) from the `docs` folder. To add a page, copy a similar existing page and update its content. For DocFX and Markdown syntax, see the [official guide](https://dotnet.github.io/docfx/docs/markdown.html).
 
 ## Installing DocFX
 
-To install the latest DocFX as a global tool:
+Install or update DocFX as a global tool, the same command the GitHub Pages workflow runs:
 
 ```bash
-dotnet tool install -g docfx
+dotnet tool update -g docfx
 ```
 
 ## Building the documentation
@@ -27,10 +27,9 @@ dotnet tool install -g docfx
 
 ## Editing the documentation
 
-- All documentation files are under `docs`. Edit the Markdown files to update or add content.
-- After changes, re-run `run.bat` to rebuild and preview updates in your browser.
+- Edit the Markdown files under `docs`, then re-run `run.bat` to rebuild and preview the site.
+- Do not edit a page whose front matter has `generated: true`: the example generator overwrites it. See [Editing a generated page](../examples/index.md#editing-a-generated-page). The API pages are generated from the XML comments in `src`, so fix those instead.
 
 ## Submitting changes
 
-- Ensure you're satisfied with the result.
-- Submit a pull request to the `main` branch for review.
+Submit a pull request to the `main` branch for review.

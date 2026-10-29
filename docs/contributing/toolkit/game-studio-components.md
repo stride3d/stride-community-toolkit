@@ -1,9 +1,8 @@
 # Making components work in Game Studio
 
-A toolkit library that ships `EntityComponent` types has to satisfy four separate requirements
-before those components are usable from Game Studio. Each one is easy to miss, none of them produces
-an error naming the cause, and they fail at four different moments - so it is worth knowing them all
-before you start rather than discovering them one at a time.
+A toolkit library that ships `EntityComponent` types has to satisfy four requirements before those
+components are usable from Game Studio. None of them produces an error naming the cause, and each
+fails at a different moment.
 
 | Missing | What the user sees |
 |---|---|
@@ -12,10 +11,9 @@ before you start rather than discovering them one at a time.
 | A processor that provisions its own renderer | It adds and configures cleanly, and draws nothing until the game runs |
 | Editor-safe camera and font lookups | The viewport draws nothing, and the Output pane shows an exception from the renderer |
 
-Everything below works in code-only projects without any of it, which is exactly why these gaps
-survive: the library looks finished, its examples run, and the editor path is never exercised.
-`ShapeComponent`, `WorldTextComponent` and `EntityTextComponent` went through all four in one day
-(2026-09-07), and each section names where they ended up, so there is working code to copy.
+A component works in code-only projects without any of this, so the library looks finished while
+the editor path is never exercised. `ShapeComponent`, `WorldTextComponent` and
+`EntityTextComponent` meet all four, and each section names the code to copy.
 
 ## 1. Register the assembly for scanning
 
@@ -45,9 +43,9 @@ internal static class Module
 > `ModuleInitializer` here is **`Stride.Core.ModuleInitializerAttribute`**, not the C#
 > `System.Runtime.CompilerServices` attribute of the same name. The `using Stride.Core;` matters.
 
-`Stride.CommunityToolkit`, `DebugShapes`, `Effects`, `ImGui`, `Shapes`, `Bepu` and `Box2D` all carry an
-identical copy of this file. Scripts count too: `GrabberScript` had its attributes for months and never showed
-in the editor, because the Bepu package had no `Module.cs`.
+`Stride.CommunityToolkit`, `DebugShapes`, `Effects`, `ImGui`, `Shapes`, `Bepu` and `Box2D` each carry
+a copy of this file. Scripts need it too: a script with every editor attribute stays out of the
+editor when its assembly has no `Module.cs`.
 
 ## 2. Make the component serializable, and editable
 
@@ -73,6 +71,10 @@ becomes a new group in the list.
 `ExecutionMode.All` is the default and the right value: the scene editor is a running game, and the
 processor is what draws the component there (section 3). Say `Runtime` only for a processor that
 truly cannot work in the editor.
+
+The serializer and the editor also need a public parameterless constructor (analyser `STRDIAG010`).
+Declaring any other constructor removes the one the compiler supplies, so declare the parameterless
+one too.
 
 ### Audit every public property before you add it
 
@@ -147,7 +149,7 @@ models only; and the editor draws with a system font where a game draws with Str
 ## Checklist
 
 - [ ] `Module.cs` registers the assembly with `AssemblyRegistry`
-- [ ] Every `EntityComponent` has `[DataContract]`, `[Display]` and `[ComponentCategory]`
+- [ ] Every `EntityComponent` has `[DataContract]`, `[Display]`, `[ComponentCategory]` and a public parameterless constructor
 - [ ] Runtime-only handles on those components are `[DataMemberIgnore]`
 - [ ] Collections are `List<T>`; no nullable value types; no read-only hint properties
 - [ ] The processor runs in the editor and provisions its renderer on the owning compositor, re-checked per frame

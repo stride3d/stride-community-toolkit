@@ -23,7 +23,7 @@ Bullet is maintained, not extended: the package follows every toolkit change and
 
 - [`UseBepu()`](xref:Stride.CommunityToolkit.Bepu.SceneSetupExtensions.UseBepu``1(``0)) - Makes Bepu the physics engine of a [`SceneSetup3D`](xref:Stride.CommunityToolkit.Engine.SceneSetup3D) or [`SceneSetup2D`](xref:Stride.CommunityToolkit.Engine.SceneSetup2D): `game.Run(new SceneSetup3D().UseBepu(), start: Start)` is a scene you can fly around, with a ground that collides.
 - [`BepuPhysicsSetup`](xref:Stride.CommunityToolkit.Bepu.BepuPhysicsSetup) - What `UseBepu()` sets: the core's `CreatePrimitive` then attaches what the options' `Body` asks for, a `BodyComponent` (a `Body2DComponent` for a flat shape) or a `StaticComponent`, with the collider fitted to the shape; the grounds are static.
-- `Add3DGround()` and `Add2DGround()` are the core's; with Bepu chosen, the ground gets a static collider on its own, when you do not want the rest of the scene setup.
+- `Add3DGround()` and `Add2DGround()` are the core's and add a ground without the rest of a scene setup; with Bepu chosen, the ground gets a static collider.
 
 ### Primitives with colliders
 
@@ -50,7 +50,7 @@ var lift = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions
 Which pairs of bodies collide is Bepu's own, in two rules, one on top of the other. The two examples show them side by side and say when each fits.
 
 - **Layers and the matrix.** Every collidable sits on one `CollisionLayer`, of 32, and the simulation's `CollisionMatrix` says for each pair of layers whether they collide. A `CollisionMask` is a set of layers; the raycast and shape-query helpers below take one, so a query obeys the same table as the solver. [Collision Layer](../code-only/examples/collision-layer.md) drops a cube of every layer onto a shelf of every layer, with the matrix drawn beside the scene and a key that flips each pair.
-- **Groups and the index rule.** Inside a layer, a `CollisionGroup` is a number rule: bodies with the same group `Id` ignore each other when their `IndexA` values are the same or next to each other, and collide when two or more apart; `IndexB` and `IndexC` add two more such axes, and `Id` 0 is no group. [Collision Group](../code-only/examples/collision-group.md) runs two teams of spheres at each other in three lanes and hangs a chain whose neighbouring links are ignored and whose two ends still collide.
+- **Groups and the index rule.** On top of the layers, a `CollisionGroup` is a number rule: two collidables with the same non-zero `Id` ignore each other when their `IndexA`, `IndexB` and `IndexC` each differ by at most one, and collide when any of them differs by two or more. `Id` 0 is no group. [Collision Group](../code-only/examples/collision-group.md) runs two teams of spheres at each other in three lanes and hangs a chain whose neighbouring links are ignored and whose two ends still collide.
 
 | The rule you have | Reach for | As in |
 |---|---|---|
@@ -65,7 +65,7 @@ The rules are read as pairs meet, so both examples drop or wake their bodies aft
 - [`Raycast()`](xref:Stride.CommunityToolkit.Bepu.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,System.Single,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)) - Casts from the camera through a screen position and reports the first hit.
 - [`RaycastMouse()`](xref:Stride.CommunityToolkit.Bepu.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,System.Single,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)) - The same, reading the mouse position for you.
 - [`BepuSimulation.RayCast()`](xref:Stride.CommunityToolkit.Bepu.SimulationExtensions.RayCast(Stride.BepuPhysics.BepuSimulation,Stride.CommunityToolkit.Mathematics.RaySegment@,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)) - Casts a `RaySegment` directly, with no camera and no maximum distance to choose: the segment's own length is the limit. Pairs with `ScreenToWorldRaySegment()`.
-- [`RayCastPenetrating()`](xref:Stride.CommunityToolkit.Bepu.SimulationExtensions.RayCastPenetrating(Stride.BepuPhysics.BepuSimulation,Stride.CommunityToolkit.Mathematics.RaySegment@,System.Collections.Generic.ICollection{Stride.BepuPhysics.HitInfo},Stride.BepuPhysics.CollisionMask)) - Returns every hit along the segment rather than stopping at the first. An overload fills a collection you supply, to avoid allocating.
+- [`RayCastPenetrating()`](xref:Stride.CommunityToolkit.Bepu.SimulationExtensions.RayCastPenetrating(Stride.BepuPhysics.BepuSimulation,Stride.CommunityToolkit.Mathematics.RaySegment@,System.Collections.Generic.ICollection{Stride.BepuPhysics.HitInfo},Stride.BepuPhysics.CollisionMask)) - Returns every hit along the segment, in no particular order; sort them by `Distance` if order matters. An overload fills a collection you supply, to avoid allocating.
 
 A raycast sees colliders only. For what the eye sees under a screen point - a mesh with no body, an instanced model, a teapot - the Effects package has a [GPU picker](../rendering/gpu-picking.md) that reads the answer from the rendered frame.
 
@@ -119,7 +119,7 @@ The callbacks run on the main thread after the physics step, so they may change 
 
 - `TimeScale` runs it slower or faster than the game. It stacks with `GameTime.Factor`, so a game that slows its whole clock slows its physics with it.
 - `Enabled` pauses it; bodies hang where they are until it is set again.
-- `PoseGravity` takes effect on the next step, on every body.
+- `PoseGravity` takes effect on the next step for every awake body. Setting it does not wake sleeping bodies, so a body at rest ignores the change until something wakes it.
 
 A simulation running faster than the game needs more fixed steps per frame: at four times the speed and sixty frames a second it needs four, and the default `MaxStepPerFrame` of three lets it fall behind the clock. Raise the cap when a game runs fast. To read the simulation's clock exactly, give a component `ISimulationUpdate`: it is called once per fixed step with the step's length, before the step and after it. `E05_3D_TimeControl` puts a dropper on the game clock and a spinning bar on the physics clock, so the difference can be watched.
 
@@ -151,8 +151,8 @@ game.AddPhysicsDebug(gizmoColor: new Color4(0.4f, 0.843f, 0, 0.9f));
 
 In the `Stride.CommunityToolkit.Bepu` namespace, for giving an arbitrary mesh a collider.
 
-- [`ToConvexHullCollider()`](xref:Stride.CommunityToolkit.Bepu.ConvexHullColliderExtensions.ToConvexHullCollider(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture})) - Wraps mesh data in a single convex hull. Cheap, but it fills in any concave detail.
-- [`ToDecomposedHulls()`](xref:Stride.CommunityToolkit.Bepu.ConvexHullColliderExtensions.ToDecomposedHulls(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture})) - Splits the mesh into several hulls so concave shapes collide correctly. More accurate, more expensive to build.
+- [`ToConvexHullCollider()`](xref:Stride.CommunityToolkit.Bepu.ConvexHullColliderExtensions.ToConvexHullCollider(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture})) - Wraps mesh data in a single convex hull, which fills in any concave detail. Each call builds a new hull.
+- [`ToDecomposedHulls()`](xref:Stride.CommunityToolkit.Bepu.ConvexHullColliderExtensions.ToDecomposedHulls(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture})) - The same single hull as data, without the collider. It does not split the mesh; build it once and assign the instance to every `ConvexHullCollider.Hull` of that shape, so all of them share one Bepu hull.
 
 ### Mesh colliders
 
@@ -268,3 +268,10 @@ if (input.IsKeyPressed(Keys.Space)) mover.Jump();
 ```csharp
 game.AddGrabber2D(simulation);
 ```
+
+## See also
+
+- [Bepu: Who Owns the Transform?](bepu-transform-ownership.md)
+- [Bepu: Why Isn't My Constraint Doing Anything?](bepu-constraints.md)
+- [Bepu: Bounce and Friction](bepu-contact-materials.md)
+- [Camera Extensions](../camera-extensions/index.md)

@@ -1,9 +1,9 @@
 # Create a File-Based App
 
 A .NET 10 **file-based app** is a single `.cs` file with no `.csproj`: the packages it needs are declared
-at the top of the file with `#:` directives, and `dotnet run Program.cs` builds and runs it. For a Stride
-code-only project that is the shortest possible route from an empty folder to a window with a scene in
-it, and it is a natural fit for experiments, teaching snippets and bug reproductions.
+at the top of the file with `#:` directives, and `dotnet run Program.cs` builds and runs it. It is the
+shortest route from an empty folder to a Stride window with a scene, and suits experiments, teaching
+snippets and bug reproductions.
 
 The regular [Create Project](create-project.md) steps still apply when you want a `.csproj` - an IDE
 solution, several files, content that needs copying to the output. `dotnet project convert` turns a
@@ -42,7 +42,7 @@ by line.
 
 | Directive | Meaning |
 |---|---|
-| `#:package Name@Version` | A NuGet package reference. `Stride.CommunityToolkit` brings in Stride itself and the asset compiler; `Bepu` adds physics; `Skyboxes` adds the photographed sky, `UseSkybox()`. On Linux add `Stride.CommunityToolkit.Linux` as well; see the note on the [Create Project](create-project.md) page. |
+| `#:package Name@Version` | A NuGet package reference. `Stride.CommunityToolkit` brings in Stride itself and the asset compiler; `Bepu` adds physics; `Skyboxes` adds the photographed sky, `UseSkybox()`. With a Linux distribution's own `dotnet` package, add `Stride.CommunityToolkit.Linux` as well; see the Linux tab of [Create Project](create-project.md). |
 | `#:property Name=Value` | An MSBuild property, as if written in a `.csproj`. `PublishAot=false` is there because file-based apps publish as native AOT by default and Stride is not AOT-compatible; without it every build carries the trimming and AOT analyser warnings. |
 | `#:project ../path/To.csproj` | A project reference. The toolkit's own [file-based example](examples/file-based-app.md) uses this to build against the toolkit source instead of a package. |
 
@@ -55,8 +55,8 @@ for instance, it fails on two examples that ship shaders with the same name. Giv
 ## Where the build output goes
 
 There is no `obj/` or `bin/` next to the file: the SDK keeps them in its own temporary build cache,
-which is what keeps the folder to one file. If you ever need
-the output next to the file - to inspect the compiled `data/` folder, say - two directives put it there:
+which is what keeps the folder to one file. To get the output next to the file - to inspect the
+compiled `data/` folder, say - add two directives:
 
 ```csharp
 #:property BaseIntermediateOutputPath=obj\
@@ -76,7 +76,9 @@ From there it is a normal code-only project: open it in an IDE, add files, add i
 
 `examples/code-only/E01_3D_BasicScene_FileBasedApp/Program.cs` is this scene as a file-based app,
 built against the toolkit source with `#:project` references; the [example page](examples/file-based-app.md)
-describes it. Because it has no `.csproj` it is not part of the solution and is run from the command line.
+describes it. Because it has no `.csproj` it is not part of the solution and is run from the command line;
+from the repository root use `dotnet run --file <path>`, because the root holds
+`Stride.CommunityToolkit.ndproj`, which `dotnet run` would otherwise take for the project.
 
 `ProgramEngineOnly.cs` in the same folder is the scene with no toolkit package at all - see
 [Create a File-Based App - Engine Only](create-file-based-app-engine-only.md).

@@ -34,13 +34,13 @@ The scene renderer that draws the Myra desktop over the scene.
 
 ## MainView.cs
 
-The main window and its health bar, a `HorizontalProgressBar`.
+The main view: a health bar, a `HorizontalProgressBar`, and the draggable window.
 
 [!code-csharp[](../../../../examples/code-only/E04_Myra_DraggableWindow/MainView.cs)]
 
 ## UIUtils.cs
 
-Helpers that build the widgets used in more than one place.
+`CreateHealthBar`, which builds both health bars: the one in `MainView` and the one `Program.cs` adds at run time.
 
 [!code-csharp[](../../../../examples/code-only/E04_Myra_DraggableWindow/UIUtils.cs)]
 

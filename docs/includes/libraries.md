@@ -1,7 +1,7 @@
 - [Stride.CommunityToolkit](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit)
   - The core library: extensions for regular Stride projects and the code-only approach. It brings in the Stride packages a code-only project needs, including the asset compiler build step.
 - [Stride.CommunityToolkit.Bepu](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bepu)
-  - [Bepu Physics](https://github.com/bepu/bepuphysics2) helpers, the recommended physics package: scene setup with physics, primitives with colliders, the grabber, shape queries, triggers and the debug view.
+  - [Bepu Physics](https://github.com/bepu/bepuphysics2) helpers, the recommended physics package: scene setup with physics, primitives with colliders, the grabber, raycasts from the camera, 2D bodies and the debug view.
 - [Stride.CommunityToolkit.Bullet](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bullet)
   - [Bullet Physics](https://doc.stride3d.net/latest/en/manual/physics-bullet/index.html) helpers, for projects on Stride's Bullet-based physics. Kept building; no new features are planned, since the focus is Bepu.
 - [Stride.CommunityToolkit.Box2D](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Box2D)
@@ -13,7 +13,7 @@
 - [Stride.CommunityToolkit.Shapes](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Shapes)
   - Vector shapes whose outline stays a constant few pixels wide at any zoom or distance, measured per fragment by a signed distance function: discs, rings, rounded rectangles, wire boxes, camera-facing billboards and thick 3D lines, thousands per frame in one instanced draw call. Also the reference grid.
 - [Stride.CommunityToolkit.Charts](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Charts)
-  - Charts built from meshes at runtime, with no assets to author: function plots, parametric curves, scatter and area series, with axes, grid, legend and cursor drawn in pixels. Not on NuGet yet; it runs from a clone of the repository.
+  - Charts drawn every frame through a shape batch, with no assets to author: function plots, parametric curves, scatter and area series, with axes, grid, legend and cursor in pixel widths. Not on NuGet yet; it runs from a clone of the repository.
 - [Stride.CommunityToolkit.Effects](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Effects)
   - The pieces that ship a shader of their own: night-vision and thermal post-processing, and GPU picking.
 - [Stride.CommunityToolkit.ImGui](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.ImGui)

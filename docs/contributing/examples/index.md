@@ -61,9 +61,9 @@ matures and would break external links when they did.
 
 ## How an example is registered
 
-One metadata block, in the example's own entry file. There is nothing else to update: the console runner, the [Avalonia launcher](https://github.com/stride3d/stride-community-toolkit/tree/main/tools/Stride.CommunityToolkit.Examples.Launcher), the documentation page, the level landing pages and the table of contents are all generated from it.
+One metadata block, in the example's own entry file. The console runner, the [Avalonia launcher](https://github.com/stride3d/stride-community-toolkit/tree/main/tools/Stride.CommunityToolkit.Examples.Launcher), the documentation page, the level landing pages and the table of contents are all generated from it.
 
-1. Create a project under `examples/code-only/`, named to the convention above - pick the shelf it belongs on, then `E{NN}_[{Dimension}_]{Subject}`.
+1. Create a project under `examples/code-only/`, named to the convention above - pick the shelf it belongs on, then `E{NN}_[{Dimension}_]{Subject}`. Add it to `Stride.CommunityToolkit.slnx`, and reference the toolkit libraries by `ProjectReference`.
 
 2. Add an `---example-metadata` block to the bottom of the entry file, inside a comment. Keep it
    last: the generated page includes the code above the block by line range, and anything after the
@@ -72,13 +72,13 @@ One metadata block, in the example's own entry file. There is nothing else to up
     ```csharp
     /*
     ---example-metadata
-    slug: my-example                 # REQUIRED. Short, kebab-case. Becomes the doc filename and URL.
+    slug: my-example
     title:
       en: My Example
-    level: Beginner                  # Getting Started | Beginner | Intermediate | Advanced | Other
-    category: Physics                # See Core/MetadataVocabulary.cs for the full list
-    complexity: 2                    # 1-5
-    order: 40                        # Position within its (language, level) group
+    level: Beginner
+    category: Physics
+    complexity: 2
+    order: 40
     description:
       en: |-
         What the example shows, and why it is worth reading. A few sentences.
@@ -96,7 +96,7 @@ One metadata block, in the example's own entry file. There is nothing else to up
     */
     ```
 
-    F# uses `(* ... *)` and Visual Basic prefixes every line with `'`. Both are picked up automatically.
+    `slug`, `title.en`, `level` and `category` are required; [Example Metadata Schema](metadata-schema.md) lists every field and the allowed levels and categories. F# uses `(* ... *)` and Visual Basic prefixes every line with `'`. Both are picked up automatically.
 
 3. Check it:
 
@@ -104,7 +104,7 @@ One metadata block, in the example's own entry file. There is nothing else to up
     dotnet run --project tools/Stride.CommunityToolkit.Examples.MetadataGenerator -- scan examples/code-only
     ```
 
-    Validation reports every problem in one pass. Two mistakes are worth knowing about in advance, because YAML makes both of them silently: an **unquoted `#`** truncates its value, and an **unquoted `: `** inside a list item turns the item into a mapping. Quote any value containing either.
+    Validation reports every problem in one pass. YAML accepts two mistakes without complaint, so the validator reads the raw text for them: an **unquoted `#`** truncates its value, and an **unquoted `: `** inside a list item turns the item into a mapping. Quote any value containing either. An end-of-line `# comment` after a value counts as the first mistake.
 
 4. Run the console app or the launcher. Your example appears in its level group, with no further registration.
 
@@ -120,7 +120,7 @@ One metadata block, in the example's own entry file. There is nothing else to up
     dotnet run --project tools/Stride.CommunityToolkit.Examples.MetadataGenerator -- docs examples/code-only --docs-path docs/manual/code-only/examples --media-path docs/manual/code-only/examples/media
     ```
 
-    The `--docs-path` and `--media-path` defaults are relative to the current directory and assume the tool's own folder, so pass them explicitly from the repository root, as `docs/run.bat` does.
+    The defaults of the examples path, `--docs-path` and `--media-path` are relative to the current directory and assume the tool's own folder, so pass all three when you run from the repository root. `docs/run.bat` runs this step before it builds the site.
 
 ## Three flags worth knowing
 
@@ -140,11 +140,9 @@ dotnet run --file build/capture-screenshots.cs -- --review
 
 Each example runs once with capture enabled, saves its **GPU render target** at a fixed frame and exits. Nothing is scraped off the screen, so there is no window to keep in the foreground and the run can happen behind whatever you are doing.
 
-Screen capture - `gdigrab`, `PrintWindow`, Windows.Graphics.Capture - was tried and rejected: a fixed delay photographs a different moment every run, the window has to stay unobstructed for the whole run, and GDI capture of a Direct3D swapchain famously returns a black rectangle.
-
 `--review` writes every image to `screenshots-review/` at the repository root, together with an `index.html` contact sheet for looking at all of them in one pass. Run the command without `--review` to write them into the documentation media folder for real; an image already there is never replaced without `--force`.
 
-Add `--only <slug>` to redo a single example, and `--frame <n>` to try a different moment without editing the metadata first.
+Add `--only <slug>` to redo a single example (repeat it for several), `--frame <n>` to try a different moment without editing the metadata first, and `--keep-png` to keep the raw capture in `bin/screenshots`.
 
 ### Edited the metadata? Rebuild the manifest
 
@@ -154,7 +152,7 @@ The capture script does not read the metadata blocks. It reads `tools/Stride.Com
 dotnet build tools/Stride.CommunityToolkit.Examples.Launcher
 ```
 
-Building either launcher regenerates it, through `tools/ExamplesManifest.targets`. The script reports a manifest that is missing, but it cannot tell that one is stale - it will capture at the old frame and call it a success. This is what `--frame <n>` is for while you are still deciding: it overrides the manifest, so you can find the right moment first and write it into the metadata once.
+Each launcher regenerates its own copy of the manifest when it builds, through `tools/ExamplesManifest.targets`; the script reads the Avalonia launcher's copy, so build that one. The script reports a manifest that is missing, but it cannot tell that one is stale - it captures at the old frame and reports success. While you are still choosing the moment, use `--frame <n>`: it overrides the manifest, so you can find the right frame first and write it into the metadata once.
 
 Two metadata fields control capture:
 
@@ -169,10 +167,10 @@ Every image is looked at by a person before it is committed. A capture that rend
 
 The same capture path doubles as a regression test for the renderers, against **scenes built for
 the purpose** rather than the examples: `tests/Stride.CommunityToolkit.GoldScenes` holds one small
-scene per feature area - 2D shapes, 3D shapes, text, DebugShapes, ImGui - with a fixed layout and
-nothing random, changed only to pin something new. The examples stay free to evolve; a golden that
-photographed one would be re-captured with every change and prove nothing about the shader. The
-scenes are listed in `tests/gold/scenes.jsonc` and their goldens live beside it:
+scene per feature area - 2D and 3D shapes, text, DebugShapes, ImGui, picking, particles and more -
+with a fixed layout and nothing random, changed only to pin something new. The examples stay free
+to evolve; a golden of one would be re-captured with every change and prove nothing about the
+shader. The scenes are listed in `tests/gold/scenes.jsonc` and their goldens live beside it:
 
 ```bash
 dotnet run --file build/gold-images.cs                                  # compare every scene

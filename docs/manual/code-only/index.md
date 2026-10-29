@@ -25,7 +25,10 @@ The code-only extensions build a game programmatically with the Stride Game Engi
 
 Some features available in Stride Game Studio may not yet be supported in code-only workflows. If something you need is missing, please upvote or file a request in our [GitHub Issues](https://github.com/stride3d/stride-community-toolkit/issues).
 
-## References
+## See also
 
+- [Create Project](create-project.md)
+- [Scene Setup](scene-setup.md)
+- [Code-Only Extensions](extensions.md)
 - [Stride issue: Code-only approach](https://github.com/stride3d/stride/issues/1295)
 - [Stride discussion: Code-only / Minimal Stride API project](https://github.com/stride3d/stride/discussions/1253)

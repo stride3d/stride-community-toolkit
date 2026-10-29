@@ -56,9 +56,9 @@ rasterises at exactly `FontSize`. This only works when the process is DPI aware;
 
 ## Glow
 
-`GlowColor` with an alpha above zero draws the text again behind itself in that colour, in a ring
-reaching `GlowSize` font pixels out from the letters. Both default to off (a transparent colour and
-`0`). A tenth of `FontSize` is a crisp halo; a quarter is a bloom.
+A `GlowColor` with an alpha above zero and a `GlowSize` above zero draw the text again behind itself
+in that colour, in a ring reaching `GlowSize` font pixels out from the letters. Both default to off (a
+transparent colour and `0`). A tenth of `FontSize` is a crisp halo; a quarter is a bloom.
 
 ## Orientation
 
@@ -91,3 +91,9 @@ arrows are.
   For lettering as geometry see [3D Text](text-3d.md).
 - One font per component; `\n` works, and `Alignment` arranges the lines.
 - The renderer uses the first camera in the graphics compositor.
+
+## See also
+
+- [Entity Text](entity-text.md)
+- [3D Text](text-3d.md)
+- [World Text](../code-only/examples/world-text.md) example

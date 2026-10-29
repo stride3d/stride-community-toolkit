@@ -112,7 +112,7 @@ Both values are clamped to the range 0 to 1.
 > has no skybox or the skybox light is dim.
 
 The specular workflow is the alternative to metalness. `MaterialSpecularMapFeature` sets the reflection colour
-directly. Game Studio's Material Package uses this workflow.
+directly. Game Studio's Material Package uses both workflows.
 
 The microfacet model also has a normal distribution function (GGX, Beckmann or Blinn-Phong) and a Fresnel
 term. Glossiness 1, metalness 1 and `MaterialSpecularMicrofacetFresnelNone` give a mirror.
@@ -474,12 +474,19 @@ picker.Pickable = RenderGroupMask.All & ~RenderGroupMask.Group30;
 ...
 if (picker.Result is { Hit: true, ModelComponent: { } model } hovered)
 {
-    if (model.Entity == crates) hover?.Show(model, crateMatrices[Math.Clamp(hovered.InstanceIndex, 0, crateMatrices.Length - 1)]);
-    else hover?.Show(model);
+    // A crate has no entity of its own: the shell goes to the instance's matrix instead
+    if (model.Entity == crates)
+    {
+        hover.Show(model, CrateMatrix(hovered.InstanceIndex));
+    }
+    else
+    {
+        hover.Show(model);
+    }
 }
 else
 {
-    hover?.Hide();
+    hover.Hide();
 }
 ```
 
@@ -488,7 +495,7 @@ else
 | `Show(model)` | Attaches the shell to the model's entity, so it follows the entity |
 | `Show(model, world)` | Places the shell at a world matrix, for one instance of an instanced model |
 | `Hide()` | Removes the shell |
-| `RenderGroup` | The render group the shell draws in. The default is `Group30` |
+| `RenderGroup` | The render group the shell draws in, set by the constructor. The default is `Group30` |
 
 `MaterialDescriptors.Highlight(colour, strength, inflate)` combines a constant vertex displacement, an emissive
 colour, blend transparency and no culling.
@@ -545,7 +552,7 @@ on the same map.
 ### Thin glass
 
 `MaterialSpecularThinGlassModelFeature` is a multi-pass material. It draws a transmittance pass and a
-reflection pass for each face side.
+reflection pass, and with `CullMode.None` both again for the back faces.
 
 - Do not add a transparency feature.
 - Do not add a diffuse model. The diffuse colour is the transmission tint.

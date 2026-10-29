@@ -1,6 +1,6 @@
 # Major Release Workflow
 
-Preparing for a major release, such as upgrading from **.NET 8** to **.NET 9**, involves updating several key areas to ensure a seamless transition. This guide outlines the necessary steps to update the toolkit and associated documentation.
+A major release moves the toolkit to a new .NET version, such as **.NET 10** to **.NET 11**. It touches the documentation, the project settings and the CI workflows.
 
 ## Steps for a major release
 
@@ -8,8 +8,10 @@ Preparing for a major release, such as upgrading from **.NET 8** to **.NET 9**, 
    - Update `.NET` references on the Home page (`index.md`).
    - Update `.NET` references in `manual\getting-started.md`.
    - Update `.NET` references in `manual\code-only\create-project.md`, `create-project-engine-only.md`, `create-file-based-app.md` and `create-file-based-app-engine-only.md`.
+   - Update the `bin/Debug/net10.0` output paths in `contributing\toolkit\building.md` and `.github\copilot-instructions.md`.
 2. **Update Project Files**:
-   - Update `TargetFramework` in `Directory.Build.props` and `src\CommonSettings.props`; no `.csproj` sets it.
+   - Update `TargetFramework` in `Directory.Build.props` and `src\CommonSettings.props`.
+   - Update the projects that set their own `TargetFramework`: `E04_GumUI`, `E01_3D_BasicScene_FSharp`, `E01_3D_BasicScene_VisualBasic` and `E07_3D_PartialTorus_FSharp`.
    - Update the `TargetFramework` in `docs\docfx.json`.
    - Update the version in `docs\docfx.json`, under `build:globalMetadata:_appFooter`.
 3. **Update CI/CD Workflows**:
@@ -18,9 +20,5 @@ Preparing for a major release, such as upgrading from **.NET 8** to **.NET 9**, 
      - `.github\workflows\gold-images.yml`.
      - `.github\workflows\dotnet-nuget.yml`.
      - `.github\workflows\github-pages.yml`.
-     - `.github\workflows\bump-stride-nuget-packages.yml`.
 4. **Test Examples**:
-   - Test all examples to ensure they function as expected with the new framework version.
-    
-
-By following these steps, you ensure the toolkit is fully updated, well-documented, and thoroughly tested for each major release, providing users with a reliable and smooth experience.
+   - Build the full solution, `Stride.CommunityToolkit.slnx`, which compiles the examples, and run them on the new framework version.

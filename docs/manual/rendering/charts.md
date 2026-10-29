@@ -22,7 +22,6 @@ A 2D compositor, a 2D camera with the pan-and-zoom controller, one chart added t
 ```csharp
 using Stride.CommunityToolkit.Charts;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -104,15 +103,16 @@ chart.Plot(MathF.Tan, name: "tan", samples: 600);           // cut into branches
 chart.Plot(MathF.Cos, color: new Color(180, 180, 180), name: "cos");
 ```
 
-Values that are not finite break the curve, values outside the `y` range are clipped to the edge,
-and a jump between two samples larger than a quarter of the chart's height is treated as an
-asymptote rather than joined. More `samples` follow a wiggly function more closely.
+Values that are not finite break the curve, and values outside the `y` range are clipped to the edge.
+A jump between two samples that crosses zero and is larger than a quarter of the chart's height is
+treated as an asymptote: the curve breaks there and each branch runs to the chart edge. More
+`samples` follow a wiggly function more closely.
 
 Width and glow are per series through a style; whatever the style leaves unset comes from
 `Options.Series`, live:
 
 ```csharp
-chart.Plot(MathF.Sin, style: new ChartSeriesStyle { Width = 1.25f });        // half the default 2.5 px
+chart.Plot(MathF.Sin, style: new ChartSeriesStyle { Width = 1.25f });        // half Glow3D's 2.5 px; Light2D uses 3
 chart.Plot(MathF.Cos, style: new ChartSeriesStyle { Glow = 0f });            // no halo, whatever the chart's glow
 
 options.Series.CurveWidth = 3f;   // every series without a Width of its own
@@ -290,9 +290,14 @@ frees everything the chart owns, including its batch. Remove `chart.Root` from t
 | `Grid` | `Visible`, `Planes`, `Color`, `Width`, `MinorColor`, `MinorWidth` | Pixels; `Planes` matters in 3D only |
 | `Labels` | `Visible`, `Mode`, `FontSize`, `Height`, `Color`, `Format` | `Screen` uses `FontSize`, `World` uses `Height` |
 | `Legend` | `Visible` | Top left, one row per series |
-| `Title` | `Text`, `FontSize`, `Height` | Above the top edge |
-| `Series` | `CurveWidth`, `Glow`, `GlowStrength`, `AdditiveGlow`, `MarkerSize`, `MarkerWidth`, `AreaOpacity`, `Palette` | Defaults for series without a style; live for those |
+| `Title` | `Text`, `FontSize`, `Height` | Just inside the top edge |
+| `Series` | `CurveWidth`, `Glow`, `GlowStrength`, `AdditiveGlow`, `MarkerSize`, `MarkerWidth`, `AreaOpacity`, `Palette` | Defaults for series without a style; live, except `MarkerSize`, `MarkerWidth` and `Palette`, which are read when a series is added |
 | `Cursor` | `Visible`, `Format`, `Radius`, `Glow` | Mouse readout; `Chart.CursorPosition` |
 
 Every width, length, size and glow is in pixels on a 100% display and scales with the display
 scale. Ranges are in chart units; scale `chart.Root` to change the chart's size in the world.
+
+## See also
+
+- [ShapeBatch](shape-batch.md)
+- [Charts 2D](../code-only/examples/charts-2d.md) and [Charts 3D](../code-only/examples/charts-3d.md) examples

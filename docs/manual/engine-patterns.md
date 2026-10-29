@@ -182,8 +182,8 @@ patterns for code-only scenes.
 
 This is the bitmap-font renderer behind `DebugTextSystem.Print`: a fixed 8×16 pixel font on a static
 texture, cheap, with no assets. Its quirks follow from its internals: the glyph texture has a dark
-strip baked into it (so text
-carries its own contrast on any background), `DrawString` centres the first glyph on the given
+strip baked into it (so text carries its own contrast on any background), `DrawString` centres the
+first glyph on the given
 position rather than starting there, and the fixed pixel size means a 4K display renders it half the
 intended physical size. The toolkit's `TextOverlay` uses a `SpriteFont` for those reasons; the
 fast renderer remains the right tool for one cheap line of text with no setup.
@@ -217,3 +217,9 @@ fast renderer remains the right tool for one cheap line of text with no setup.
 - **Reading order matters.** The fastest way into any of these files is to run Game Studio, find the
   behaviour you want on screen, then search the sources for the string or key you can see - a colour,
   a parameter name, a menu label.
+
+## See also
+
+- [Text Overlay](rendering/text-overlay.md)
+- [Camera Extensions](camera-extensions/index.md)
+- [Stride repository](https://github.com/stride3d/stride)

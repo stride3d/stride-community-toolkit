@@ -20,7 +20,7 @@ instance.Play();
 
 ## Positioning sound
 
-- [`AttachListener()`](xref:Stride.CommunityToolkit.Audio.AudioSystemExtensions.AttachListener(Stride.Audio.AudioSystem,Stride.Engine.Entity)) - Puts an `AudioListenerComponent` on an entity - the camera, almost always - and returns its listener, which the engine then moves every frame. Pass it as the `listener` of every spatialised instance.
+- [`AttachListener()`](xref:Stride.CommunityToolkit.Audio.AudioSystemExtensions.AttachListener(Stride.Audio.AudioSystem,Stride.Engine.Entity)) - Puts an `AudioListenerComponent` on an entity - the camera, almost always - and returns its listener, which the engine then moves every frame. Pass it as the `listener` of every spatialised instance. The entity must already be in a scene, because the engine creates the listener when the component enters one.
 - [`SoundEmitterScript`](xref:Stride.CommunityToolkit.Audio.SoundEmitterScript) - A `SyncScript` that positions a spatialised instance at its entity every frame: position, orientation and velocity from the world transform, through `Apply3D`.
 
 ```csharp

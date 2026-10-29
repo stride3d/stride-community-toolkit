@@ -7,12 +7,11 @@ shadow, and can carry a physics body. For labels and HUDs, [Entity Text](entity-
 [World Text](world-text.md) are far cheaper; this is for lettering that is a thing in the world: a
 title, a sign, a logo, a word that falls.
 
-`MeshFont`, `TextMesh`, `TextMeshOptions` and `GlyphOutline` live in the
-`Stride.CommunityToolkit.Rendering.Text.Meshes` namespace; `SystemFonts`, which they share with the
-text components, in `Stride.CommunityToolkit.Rendering.Text`; `Anchor` in `Stride.CommunityToolkit.Rendering`;
-`Primitive3D.Text` in
-`Stride.CommunityToolkit.Rendering.ProceduralModels`. The stages between the font file and
-the mesh, and the files behind each, are on [How 3D text is built](text-3d-pipeline.md).
+`MeshFont`, `TextMesh`, `TextMeshOptions`, `TextBevel` and `GlyphOutline` are in the
+`Stride.CommunityToolkit.Rendering.Text.Meshes` namespace; `SystemFonts` in
+`Stride.CommunityToolkit.Rendering.Text`; `Anchor` in `Stride.CommunityToolkit.Rendering`; and
+`Primitive3D.Text` in `Stride.CommunityToolkit.Rendering.ProceduralModels`. The stages between the
+font file and the mesh are on [How 3D text is built](text-3d-pipeline.md).
 
 ```csharp
 var entity = new Entity("Title")
@@ -141,16 +140,18 @@ Lettering that must be walked into or shot through its holes wants a `MeshCollid
   they look right from outside, and each piece is closed on its own. A contour that crosses itself
   is reported by font and code point, not mangled. A contour of a single point, which some fonts
   carry, is skipped.
-- `Size`, `Depth`, `CurveQuality` and a bevel's size and thickness must be positive finite numbers,
-  and `LetterSpacing` finite; anything else is refused with `ArgumentOutOfRangeException`.
+- `Size`, `Depth`, `LineSpacing`, `CurveQuality` and a bevel's size, thickness and segments must be
+  positive finite numbers, and `LetterSpacing` finite; anything else is refused with
+  `ArgumentOutOfRangeException`.
 - Letters landing on letters are hull-against-hull pairs, and the Bepu build Stride 4.4 ships
   mishandles thin extruded hulls that overlap (reported upstream as bepuphysics2 issue 417; it can
   crash the narrow phase). A hull collider suits a word on its own; give a pile of letters a box per
   glyph instead, from the glyph meshes' bounds, as Cube Collapse does.
 - No right-to-left, no wrapping, no text on a path.
 
-## Examples
+## See also
 
+- [How 3D text is built](text-3d-pipeline.md) and [MeshBuilder](mesh-builder.md).
 - [`E03_3D_MeshText`](../code-only/examples/letters-3d.md): the embedded font, an installed font, lines
   that align, a frame counter, and words with physics.
 - [`E03_3D_TextShaders`](../code-only/examples/text-shaders.md): four materials on the same lettering:
