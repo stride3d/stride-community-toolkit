@@ -23,4 +23,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_PartialTorus).
 
-[!code-csharp[](../../../../examples/code-only/E07_3D_PartialTorus/Program.cs?start=1&end=100)]
+[!code-csharp[](../../../../examples/code-only/E07_3D_PartialTorus/Program.cs?start=1&end=99)]

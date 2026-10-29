@@ -28,4 +28,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_CubeFountain).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_CubeFountain/Program.cs?start=1&end=261)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_CubeFountain/Program.cs?start=1&end=258)]

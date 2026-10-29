@@ -23,4 +23,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_CylinderMesh).
 
-[!code-csharp[](../../../../examples/code-only/E07_3D_CylinderMesh/Program.cs?start=1&end=106)]
+[!code-csharp[](../../../../examples/code-only/E07_3D_CylinderMesh/Program.cs?start=1&end=105)]
