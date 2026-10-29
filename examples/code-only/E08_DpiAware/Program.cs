@@ -12,13 +12,11 @@ using Stride.Engine;
 // high-DPI display and the image is blurred. The declaration has to happen before the window
 // exists, and a manifest is read before any code runs, so it always does.
 //
-// The other examples make the same declaration from code instead, one line before new Game():
-//
-//     WindowsDpiManager.EnablePerMonitorV2();
-//
-// from the core package (namespace Stride.CommunityToolkit.Engine) - see E02_2D_EasingBasics or E09_3D_Particles_Gallery.
-// The call also works in a file-based app, which has no project file to hold a manifest. Use one
-// route, not both: when a manifest exists Windows refuses the call, and the manifest's setting wins.
+// Other examples declare it from code instead, with DpiAware = true on the scene setup, which calls
+// WindowsDpiManager.EnablePerMonitorV2() (namespace Stride.CommunityToolkit.Engine) before the
+// window is created - see E02_2D_EasingBasics or E09_3D_Particles_Gallery. That also works in a
+// file-based app, which has no project file to hold a manifest. Use one route, not both: when a
+// manifest exists Windows refuses the call, and the manifest's setting wins.
 
 using var game = new Game();
 
@@ -35,9 +33,8 @@ game.Run(new SceneSetup3D
     // The manifest makes the window sharp; this is the other half. With the process DPI-aware,
     // Windows no longer enlarges anything, so 16-pixel text on a 150% display is two thirds the
     // height it should be. DisplayScale reads the display's factor - from SDL here, from Stride's
-    // ScaleFactor on a Retina screen - and the overlay follows it by default, which is why the
-    // help text you are reading is the same size to the eye on any monitor. Drag the window to a
-    // differently scaled monitor and the figure below follows.
+    // ScaleFactor on a Retina screen - and the overlay follows it by default, so its text is the
+    // same size to the eye on any monitor, and the figure below updates on another monitor.
     var displayScale = DisplayScale.GetOrCreate(game);
 
     TextOverlay.GetOrCreate(game).AddSection("DPI", () =>

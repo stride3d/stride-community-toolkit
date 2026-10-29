@@ -72,7 +72,7 @@ void AddVertexLabels(Entity parent, ReadOnlySpan<Vector3> localPositions, string
                 FontSize = 14,
                 Offset = new Vector2(0, -18),
                 TextColor = Color.White,
-                // Anchor centres the label over its vertex; TextAlignment only arranges the lines of a block
+                // Anchor centres the label over its vertex; Alignment only arranges the lines of a block
                 Anchor = Anchor.BottomCenter,
                 EnableBackground = true,
                 BackgroundColor = new Color4(0, 0, 0, 0.5f),
@@ -80,7 +80,7 @@ void AddVertexLabels(Entity parent, ReadOnlySpan<Vector3> localPositions, string
             }
         };
 
-        // In the parent's local space, like the mesh vertices, so the label follows its transform
+        // In the parent's local space, like the mesh vertices
         label.Transform.Position = position;
         parent.AddChild(label);
     }

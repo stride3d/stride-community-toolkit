@@ -142,7 +142,7 @@ void Start(Scene rootScene)
     // with the curves whenever the view changes
     chart.AddArea(x => 2f * MathF.Sin(x), from: 0f, to: MathF.PI, color: options.Series.Palette[0], name: "integral");
 
-    // The animated curve. An explicit colour keeps the palette rotation of the other series unchanged.
+    // The animated curve. An explicit colour: the palette's pick here would repeat the samples' purple.
     wave = chart.Plot(x => WaveAmplitude * MathF.Sin(waveFrequency * x), color: new Color(0, 158, 150), name: "wave");
 
     // The ball is drawn each frame as a disc in a shape batch the chart shares: one batch draws the
@@ -184,7 +184,6 @@ void Update(Scene scene, GameTime time)
     if (game.Input.IsKeyPressed(Keys.G)) chart.Options.Grid.Visible = !chart.Options.Grid.Visible;
     if (game.Input.IsKeyPressed(Keys.L)) chart.Options.Legend.Visible = !chart.Options.Legend.Visible;
 
-    // Remove frees the ribbon's GPU buffers; plotting again builds new ones
     if (game.Input.IsKeyPressed(Keys.T))
     {
         if (tangent is null)
@@ -201,8 +200,8 @@ void Update(Scene scene, GameTime time)
     if (game.Input.IsKeyPressed(Keys.Space)) ThrowBall();
     if (game.Input.IsKeyPressed(Keys.A)) animate = !animate;
 
-    // Swapping the function rebuilds one mesh in place - same entity, same colour, same legend row - so
-    // it is cheap enough to do every frame
+    // Swapping the function re-samples just this curve, in place - same colour, same legend row - so it
+    // is cheap enough to do every frame
     if (animate && wave is not null)
     {
         waveTime += (float)time.Elapsed.TotalSeconds;

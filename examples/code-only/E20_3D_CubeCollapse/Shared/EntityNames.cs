@@ -4,10 +4,8 @@ namespace CubeCollapse.Shared;
 /// Names the game looks entities up by.
 /// </summary>
 /// <remarks>
-/// Stride has no built-in tag system, so finding an entity at runtime means matching its name. That
-/// works, but a name typed out at both the creation site and the lookup site is a rename away from
-/// silently finding nothing - there is no compiler error and no exception, the search simply returns
-/// empty. Naming them once here is the cheapest fix.
+/// Stride has no tag system, so entities are found by name. A name typed at both the creation and
+/// the lookup site is a rename away from silently finding nothing, so each is named once here.
 /// </remarks>
 public static class EntityNames
 {

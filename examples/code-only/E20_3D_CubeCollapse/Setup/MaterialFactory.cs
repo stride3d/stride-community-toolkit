@@ -15,15 +15,13 @@ namespace CubeCollapse.Setup;
 /// <remarks>
 /// <para>
 /// A material is a GPU resource, so one is built per colour up front and shared by every cube using
-/// it. Building one per cube would work and look identical, and would also mean a thousand copies of
-/// the same thing - a habit worth avoiding early, because it is invisible until it is not.
+/// it, rather than a thousand copies of the same thing.
 /// </para>
 /// <para>
 /// The colour palettes use the material the Bepu playground's shapes use,
-/// <see cref="GameExtensions.CreateMaterial"/>: a lit surface under the default light and the sky,
-/// so a theme's colours look the same here as in the other examples. The board used to be emissive,
-/// to read the same from every angle, but emissive colour added to lit colour washes mid tones out
-/// toward white. The glass palettes use the material gallery's thin glass.
+/// <see cref="GameExtensions.CreateMaterial"/>, so a theme's colours look the same here as in the
+/// other examples. Not emissive: emissive colour added to lit colour washes mid tones out toward
+/// white. The glass palettes use the material gallery's thin glass.
 /// </para>
 /// </remarks>
 public static class MaterialFactory
@@ -35,8 +33,7 @@ public static class MaterialFactory
     /// <remarks>
     /// Never scale a colour with <c>Color * float</c> here: it scales the <em>alpha</em> along with
     /// the RGB, which then multiplies the lit colour a second time through the material's alpha
-    /// blend. An earlier version of this board compounded the two to about two percent of the
-    /// intended colour. Balance belongs on the light intensities, not on the colour.
+    /// blend. Balance belongs on the light intensities, not on the colour.
     /// </remarks>
     private static Dictionary<Color, Material> CreateCubeMaterials(Game game, ColourPalette palette)
         => palette.Colours.ToDictionary(colour => colour, colour => Create(game, colour, palette));

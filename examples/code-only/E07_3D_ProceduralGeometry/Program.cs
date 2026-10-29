@@ -29,18 +29,15 @@ void Start(Scene rootScene)
 
 void CreateLetterEntity(Scene rootScene)
 {
-    // Solid extruded lettering: glyph outlines authored in code, triangulated by ear clipping and
-    // extruded through MeshBuilder. Real geometry, so it is lit and shadowed like any other mesh -
-    // unlike EntityTextComponent and WorldTextComponent, which draw font glyphs.
+    // Solid lettering: the toolkit's embedded font's glyph outlines, triangulated by ear clipping and
+    // extruded. Real geometry, so it is lit and shadowed like any other mesh - unlike
+    // EntityTextComponent and WorldTextComponent, which draw font glyphs.
     //
-    // Standing on the ground behind the gallery row, on purpose: the glyph baseline is at Y = 0,
-    // and letters floating in mid-air read strangely when the camera orbits - with nothing
-    // anchoring them, the parallax between the front faces and the side walls looks like the
-    // letters themselves are turning
+    // Standing on the ground (the baseline is at Y = 0) behind the gallery row, on purpose: letters
+    // floating in mid-air seem to turn as the camera orbits, with nothing to anchor the parallax
     var entity = new Entity { Scene = rootScene, Transform = { Position = new Vector3(-1.5f, 0, -2.5f) } };
 
-    // Not the gallery's shared material: that one reads colour from a vertex stream, and the text
-    // mesh has no colour stream, so it needs a material with a colour of its own
+    // Not the shared material: that one reads colour from a vertex stream, which the text mesh lacks
     var model = TextMesh.CreateModel(game.GraphicsDevice, game.CreateMaterial(Color.Gold, metalness: 0.1f, glossiness: 0.4f), MeshFont.Default, "XYZ");
 
     entity.Add(new ModelComponent { Model = model });
@@ -48,8 +45,8 @@ void CreateLetterEntity(Scene rootScene)
 
 void CreateNonIndexedTriangleMesh(MeshBuilder meshBuilder)
 {
-    // No index buffer at all: with IndexingType.None the vertices are drawn in the order they were
-    // added, three per triangle. Simplest possible mesh, at the cost of repeating shared vertices.
+    // No index buffer: with IndexingType.None the vertices are drawn in the order added, three per
+    // triangle, at the cost of repeating shared vertices.
     meshBuilder.WithIndexType(IndexingType.None);
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
 
@@ -65,9 +62,8 @@ void Update(Scene rootScene, GameTime gameTime)
 {
     var segments = (int)((Math.Cos(gameTime.Total.TotalMilliseconds / 500) + 1) / 2 * 47) + 3;
 
-    // Rebuilding a mesh means releasing the old one first. ToMeshDraw hands the caller two GPU
-    // buffers that no content manager tracks, so removing the entity alone leaks them - and this
-    // runs every frame, which is exactly how such a leak becomes megabytes per second.
+    // Release the old mesh first: ToMeshDraw hands the caller two GPU buffers that no content manager
+    // tracks, so removing the entity alone leaks them - every frame, here.
     if (circleEntity is not null)
     {
         ReleaseMeshBuffers(circleEntity);
@@ -135,7 +131,6 @@ void CreatePlaneMesh(MeshBuilder meshBuilder)
     meshBuilder.AddIndex(3);
 }
 
-// One vertex: added, then its position and colour elements filled in
 static void AddVertex(MeshBuilder meshBuilder, int position, int color, Vector3 at, Color colour)
 {
     meshBuilder.AddVertex();
@@ -182,8 +177,7 @@ Entity CreateMeshEntity(Scene scene, Vector3 position, Action<MeshBuilder> build
 
     var entity = new Entity { Scene = scene, Transform = { Position = position } };
 
-    // One material shared by every mesh this example builds. A material is a GPU resource like the
-    // buffers are, so building one per frame for the animated circle would be the same leak again.
+    // One material for every mesh, so the animated circle does not generate a new one each frame.
     sharedMaterial ??= CreateMaterial(game.GraphicsDevice);
 
     var model = new Model { new Mesh { Draw = meshBuilder.ToMeshDraw(game.GraphicsDevice) }, sharedMaterial };

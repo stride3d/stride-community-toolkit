@@ -45,8 +45,7 @@ public class CameraRotationScript : SyncScript
 
     public override void Start()
     {
-        // Falls back to the ground, then to the origin - previously a missing ground returned early
-        // and silently took the instructions overlay down with it
+        // Falls back to the ground, then to the origin, so a missing ground does not cost the overlay
         _rotationCentre = RotationCentre
             ?? SceneSystem.SceneInstance.RootScene.FindEntity(GameDefaults.DefaultGroundName)?.Transform.Position
             ?? Vector3.Zero;
@@ -62,8 +61,7 @@ public class CameraRotationScript : SyncScript
         // change its height - Start's fallback only covers the case where it never is
         if (RotationCentre is { } centre) _rotationCentre = centre;
 
-        // Shift speeds the orbit up, matching what it already does for the free-look controller's
-        // movement and for rapid clearing. One modifier, the same meaning everywhere.
+        // Shift speeds the orbit up, as it does the controller's movement and the clearing
         var speed = RotationSpeed * (IsSprinting() ? SprintMultiplier : 1f);
         var direction = Input.IsKeyDown(Keys.Z) ? -1f : Input.IsKeyDown(Keys.C) ? 1f : 0f;
 
@@ -89,8 +87,7 @@ public class CameraRotationScript : SyncScript
     {
         var offset = Entity.Transform.Position - _rotationCentre;
 
-        // Sitting on the centre leaves no radius to swing through and no direction to look in. Both
-        // are degenerate, so there is nothing meaningful to do until the camera is moved off it.
+        // On the centre there is no radius to swing through and no direction to look in
         if (offset.Length() < MinimumOrbitRadius) return;
 
         Entity.Transform.RotateAround(_rotationCentre, Vector3.UnitY, MathUtil.DegreesToRadians(angleDegrees));

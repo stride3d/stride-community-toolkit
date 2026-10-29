@@ -41,11 +41,9 @@ public class RibbonBackgroundRenderFeature : RootRenderFeature
 
     protected override void InitializeCore()
     {
-        // SpriteBatch needs a texture to size the quad and to derive texture coordinates from, but
-        // RibbonBackgroundShader overrides Shading() and never samples it - the ribbons are generated
-        // procedurally from the UVs. Only the texture's aspect ratio matters, because Draw2D uses it
-        // to crop the source rectangle so the pattern is not stretched. A tiny 16:9 placeholder
-        // produces identical UVs to a full 1920x1080 surface, without the memory or the mip chain.
+        // SpriteBatch needs a texture to derive texture coordinates from, but RibbonBackgroundShader
+        // overrides Shading() and never samples it. Only its aspect ratio matters: Draw2D crops the
+        // source rectangle by it, and a 16:9 placeholder gives the same UVs as a 1920x1080 texture.
         _texture = Texture.New(Context.GraphicsDevice, TextureDescription.New2D(PlaceholderWidth, PlaceholderHeight, PixelFormat.R8G8B8A8_UNorm_SRgb, TextureFlags.ShaderResource));
 
         _background2DEffect = new DynamicEffectInstance("RibbonBackgroundShader");
@@ -77,9 +75,8 @@ public class RibbonBackgroundRenderFeature : RootRenderFeature
         // The quad always covers the whole screen (VirtualResolution is 1x1)
         var destination = new RectangleF(0, 0, 1, 1);
 
-        // Crop the source rectangle to the render target's aspect ratio, so the generated pattern
-        // keeps its proportions instead of being stretched to the window. This is the only reason
-        // the placeholder texture's dimensions matter - its pixels are never sampled.
+        // Crop the source rectangle to the render target's aspect ratio, so the pattern is not
+        // stretched to the window
         var textureSize = new Size3(texture.ViewWidth, texture.ViewHeight, texture.ViewDepth);
         var imageBufferMinRatio = Math.Min(textureSize.Width / (float)target.ViewWidth, textureSize.Height / (float)target.ViewHeight);
         var sourceSize = new Vector2(target.ViewWidth * imageBufferMinRatio, target.ViewHeight * imageBufferMinRatio);

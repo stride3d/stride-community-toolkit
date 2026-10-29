@@ -14,9 +14,9 @@ void Start(Scene rootScene)
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
 
-    // One DebugRenderComponent turns the wireframe on for every Bepu entity in the scene, so the script
-    // lives on an entity that has nothing else to do. game.AddPhysicsDebug() makes this entity, with
-    // the collider gizmos too
+    // One DebugRenderComponent draws the collider wireframes of every Bepu body in the scene, so the
+    // script lives on an entity of its own. game.AddPhysicsDebug() makes this entity, with the
+    // collider gizmos too
     var debug = new Entity("Physics Debug") { new DebugRenderComponentScript { Visible = true } };
     debug.Scene = rootScene;
 

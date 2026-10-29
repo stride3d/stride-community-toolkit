@@ -1,7 +1,7 @@
 namespace CubeCollapse.Gameplay;
 
 /// <summary>
-/// How big a clear was, used to pick the wording, colour and sound of the feedback.
+/// How big a clear was, used to pick the wording, size and colour of the score popup.
 /// </summary>
 public enum ScoreTier
 {

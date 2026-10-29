@@ -16,24 +16,19 @@ namespace CubeCollapse.Scripts;
 /// </summary>
 /// <remarks>
 /// <para>
-/// This is the game's one wordless tutorial. The minimum-group rule is otherwise only discoverable
-/// by clicking and being rejected; with the hover, a group brightens to say "this will clear", and
-/// a stranded single stays as it is, so the player reads the board instead of testing it.
+/// The game's one wordless tutorial: the minimum-group rule is otherwise only discoverable by
+/// clicking and being rejected.
 /// </para>
 /// <para>
-/// The highlight is a material swap, not an outline. The shell-inflation outline technique
-/// (E09_3D_MeshOutline) offsets vertices along their normals, and a flat-shaded cube has split
-/// normals at every corner - the shell tears apart at the edges. Swapping to a pre-built
-/// brightened variant of the cube's own material needs no rendering code at all, and the
-/// per-<see cref="ModelComponent"/> material override means no other cube sharing that colour is
-/// touched.
+/// The highlight is a material swap, not an outline. The shell-inflation outline
+/// (E09_3D_MeshOutline) offsets vertices along their normals, and a cube's split normals tear the
+/// shell apart at the edges. The per-<see cref="ModelComponent"/> material override touches no other
+/// cube sharing that colour.
 /// </para>
 /// <para>
-/// Everything is re-evaluated every frame from the raycast and the logical grid: restore all, then
-/// re-apply to whatever is under the mouse now. That makes the bookkeeping immune to cubes being
-/// cleared, collapsing into new columns, the game ending or restarting - there is no cached state
-/// to go stale, and the work (one raycast, one flood fill, a few dictionary writes) is trivial next
-/// to what a click already does.
+/// Everything is re-evaluated every frame from the raycast and the grid: restore all, then re-apply
+/// to whatever is under the mouse. There is no cached state to go stale when cubes are cleared or the
+/// game restarts, and the work (one raycast, one flood fill) is small.
 /// </para>
 /// </remarks>
 public class HoverHighlightScript : SyncScript
@@ -47,8 +42,8 @@ public class HoverHighlightScript : SyncScript
     public required CubeGrid Grid { get; init; }
 
     /// <summary>
-    /// Gets or sets the cube materials in all three hover states. Settable, because a palette
-    /// switch swaps in the new palette's set.
+    /// Gets or sets the cube materials in both hover states. Settable, because a palette switch swaps
+    /// in the new palette's set.
     /// </summary>
     public required CubeMaterialSet Materials { get; set; }
 

@@ -193,7 +193,7 @@ public static class ShowStations
 
     /// <summary>
     /// Fireflies: a few hundred soft dots pulled towards a point by <see cref="SwarmUpdater"/>, an
-    /// updater written for this example in forty lines. The point wanders; the swarm follows,
+    /// updater written for this example. The point wanders; the swarm follows,
     /// lags, overshoots and settles, because that is what the updater's spring does.
     /// </summary>
     public static void Fireflies(ParticleStation s)

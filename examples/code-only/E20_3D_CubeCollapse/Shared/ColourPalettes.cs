@@ -9,9 +9,8 @@ namespace CubeCollapse.Shared;
 /// <remarks>
 /// Every palette must hold the same number of colours, in a stable order: a live palette switch
 /// repaints each cube by <em>index</em> - the third colour of the old palette becomes the third
-/// colour of the new one - so groups survive the switch untouched. The colours should stay
-/// distinguishable as emissive faces, which is a harder test than on paper: strong hue differences
-/// work, brightness differences alone do not.
+/// colour of the new one - so groups survive the switch untouched. The colours must stay
+/// distinguishable on lit faces: strong hue differences work, brightness differences alone do not.
 /// </remarks>
 public static class ColourPalettes
 {

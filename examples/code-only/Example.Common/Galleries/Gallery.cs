@@ -38,7 +38,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     private const float HomeDistance = 1.85f;
     private const float HomePitchDegrees = -17f;
 
-    /// <summary>The flight home: longer than a hop between stations, facing the first station on the way - from there it is the flight out, reversed; from anywhere else the camera turns to it as it rises.</summary>
+    /// <summary>The flight home: longer than a hop between stations, turning to face the first station as it rises.</summary>
     private const float HomeFlightSeconds = 3.5f;
 
     /// <summary>The radius of the ring on the ground under every station.</summary>
@@ -88,9 +88,8 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         _labelFont = SystemFonts.LoadFirst(game.Services, SystemFonts.SansSerifCandidates, 20f);
         _pillarMaterial = game.CreateMaterial(Options.PillarColor ?? new Color(96, 103, 116), metalness: 0.1f, glossiness: 0.35f);
 
-        // Depth-tested for the pads and the board, over everything for the dotted lines and pins -
-        // and after the post effects, or the tone mapper would turn their white into the same grey
-        // it makes of any unit colour in the scene, next to labels that are truly white
+        // Depth-tested for the pads and the board; the dotted lines and pins go over everything and
+        // after the post effects, or tone mapping greys their white beside the truly white labels
         _furniture = game.AddShapeBatch(depthTest: true);
         _overlay = game.AddShapeBatch(afterPostEffects: true);
 
@@ -119,14 +118,10 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     /// <summary>When set, only the station nearest the camera runs and shows its label - one exhibit at a time.</summary>
     public bool Solo { get; set; }
 
-    /// <summary>The station nearest the camera, updated every frame; next and previous count from it. 0 when the registry is empty, when there is no station to index.</summary>
+    /// <summary>The station nearest the camera, updated every frame; next and previous count from it. 0 when the registry is empty.</summary>
     public int Current { get; private set; }
 
-    /// <summary>
-    /// The station the visitor is at: the nearest one, or <c>null</c> at home, where the nearest station is
-    /// not where the visitor is, and <c>null</c> when the registry is empty - the frame stands with its
-    /// board and its ground either way.
-    /// </summary>
+    /// <summary>The station the visitor is at: the nearest one, or <c>null</c> at home and when the registry is empty.</summary>
     public TStation? CurrentStation => _stations.Count > 0 && !AtHome ? _stations[Current] : null;
 
     /// <summary>Whether the visitor is at the home spot, above and outside the ring: no station is current there.</summary>
@@ -256,7 +251,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
 
     private TStation BuildStation(int index, int count, Exhibit<TStation> exhibit, Action<TStation>? configure)
     {
-        // Station 1 straight ahead of the starting camera, the rest clockwise as seen from above
+        // Station 1 straight ahead of the home view, the rest clockwise as seen from above
         var angle = -MathF.PI * 0.5f + index * MathF.Tau / count;
         var (sin, cos) = MathF.SinCos(angle);
         var outward = new Vector3(cos, 0f, sin);

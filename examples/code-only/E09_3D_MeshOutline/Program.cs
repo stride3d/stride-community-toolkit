@@ -9,10 +9,10 @@ using Stride.Engine;
 // Shows how a custom RootRenderFeature can draw outlines around 3D primitives.
 // The original code is from https://github.com/herocrab/StrideMeshOutlineRenderFeature
 
-// How far the outline sticks out, as a fraction of the model's size
+// How far the outline sticks out, in model units
 const float OutlineThickness = 0.03f;
 
-// Outlines are drawn into the HDR buffer, so values well above 1 make them glow through bloom
+// Outlines are drawn into the HDR buffer, so values well above 1 would glow if bloom were enabled
 const float OutlineIntensity = 100f;
 
 using var game = new Game();
@@ -29,10 +29,7 @@ void Start(Scene rootScene)
     CreateOutlinedPrimitive(rootScene, Primitive3D.Sphere(), Color.Red, new Vector3(-1f, 0.5f, 4f));
     CreateOutlinedPrimitive(rootScene, Primitive3D.Capsule(), Color.Green, new Vector3(2f, 0.5f, 1f));
     CreateOutlinedPrimitive(rootScene, Primitive3D.Sphere(), Color.Magenta, new Vector3(-1f, 0.5f, 1f));
-    // Cube has hard per-face normals (duplicated vertices at each edge), so inflating along the
-    // normal pushes adjacent faces apart instead of outward as one shell - expect visible gaps/
-    // seams at the cube's edges and corners, unlike the smooth outline on curved primitives like
-    // Sphere/Capsule.
+    // The cube's per-face normals push its faces apart, so its outline has gaps at the edges and corners
     CreateOutlinedPrimitive(rootScene, Primitive3D.Cube(), Color.Orange, new Vector3(2f, 0.5f, 4f));
 }
 
@@ -40,7 +37,6 @@ void CreateOutlinedPrimitive(Scene rootScene, Primitive3D modelType, Color4 colo
 {
     var entity = game.CreatePrimitive(modelType, new PrimitiveEntityOptions { Position = position });
 
-    // The presence of this component is what makes the render feature draw an outline
     entity.Add(new MeshOutlineComponent { Color = color, Intensity = OutlineIntensity });
 
     entity.Scene = rootScene;

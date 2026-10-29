@@ -21,8 +21,8 @@ using Stride.Rendering;
 // instance and the point on the surface - per pixel, through the same vertex pipeline that drew
 // the frame, so an instanced crate is as pickable as a hand-placed pillar.
 //
-// The answer arrives two frames after the request, because the GPU is asked and the readback
-// waits for it without stalling. For hovering and clicking that is invisible.
+// The answer arrives two frames after the request, since the readback waits for the GPU rather
+// than stalling it; for hovering and clicking that is invisible.
 //
 // The hover highlight is a HighlightShell: the hovered model drawn again a little larger with a faint
 // glow, no render feature and no post effect - the TopDownRPG template's loot highlight. It draws in

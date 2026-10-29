@@ -134,7 +134,7 @@ public static class SetPieceStations
     }
 
     /// <summary>
-    /// A landing burn, a rocket engine firing down at the pad: a white-blue core of stretched quads at the throat,
+    /// A landing burn, a rocket engine firing down at the pad: a white-blue core of stretched quads at the exit,
     /// an orange plume of flame frames around it, sparks thrown clear, and exhaust smoke that hits
     /// the ground through a collider and rolls out across the pad. The variations are how much the
     /// engine smokes - a clean burn, a sooty one - and a landing burn with a hotter core, mach diamonds and dust.

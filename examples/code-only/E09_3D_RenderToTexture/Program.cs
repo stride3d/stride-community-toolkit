@@ -14,18 +14,16 @@ using Stride.Games;
 using Stride.Input;
 using Stride.Rendering;
 
-// Five cameras watching one small scene, each drawing into a texture, each texture on a monitor:
-// an overhead map, a chase camera following the orbiting ball, a fixed CCTV corner, and two
-// cameras with a look of their own - night vision and a thermal camera - which are colour
-// transforms in the toolkit's Effects package, added to a feed the way the engine's own
-// vignette or film grain would be. A big screen shows whichever feed is selected.
+// Five cameras watching one small scene, each drawing into a texture shown on a monitor: an
+// overhead map, a chase camera following the orbiting ball, a fixed CCTV corner, and night-vision
+// and thermal cameras, whose looks are colour transforms from the toolkit's Effects package added
+// to a feed like the engine's vignette or film grain. A big screen shows the selected feed.
 //
-// A feed is one call: game.AddRenderTextureCamera(entity, width, height, postEffects). It gives
-// back the texture, and the texture is just a texture - here the emissive map of a monitor's
-// material. Behind the call: a camera slot of its own, a camera renderer wrapping a
-// render-texture renderer wrapping a second forward renderer over the compositor's existing
-// stages. The texture is HDR because the scene is lit in HDR and a feed has no tone map; the
-// main view tone-maps the monitors along with everything else it draws.
+// A feed is one call: game.AddRenderTextureCamera(entity, width, height, postEffects). Its Texture
+// is just a texture - here the emissive map of a monitor's material. Behind the call: a camera slot
+// of its own, a camera renderer wrapping a render-texture renderer wrapping a second forward
+// renderer over the compositor's existing stages. The texture is HDR because the scene is lit in
+// HDR and a feed has no tone map; the main view tone-maps the monitors with everything else.
 //
 // Keys: 1 to 5 put a feed on the big screen, Space steps through them.
 
@@ -157,7 +155,7 @@ RenderTextureCamera Map(Scene scene)
     return game.AddRenderTextureCamera(camera, FeedSize, FeedSize);
 }
 
-/// <summary>Behind and above the ball, re-aimed every frame in <see cref="FollowBall"/>.</summary>
+/// <summary>Ahead of the ball and above it, re-aimed every frame in <see cref="FollowBall"/>.</summary>
 RenderTextureCamera Chase(Scene scene)
 {
     chaseCamera = new Entity("Chase camera") { Scene = scene };
@@ -192,7 +190,7 @@ Entity FixedCamera(Scene scene, string name, Vector3 position, Vector3 target)
 
 void FollowBall()
 {
-    // Behind the ball along its orbit, a little above, looking at it
+    // Ahead of the ball along its orbit, a little above, looking back at it
     var ballPosition = ball.Transform.Position;
     var outward = Vector3.Normalize(new Vector3(ballPosition.X, 0f, ballPosition.Z));
     var tangent = new Vector3(-outward.Z, 0f, outward.X);
@@ -215,7 +213,7 @@ void BuildMonitors(Scene scene)
 
     for (var i = 0; i < feeds.Length; i++)
     {
-        // A screen: the feed as an unlit, clamped emissive texture - the toolkit's CreateScreenMaterial is that bag
+        // The feed as an unlit, clamped emissive texture
         monitorMaterials[i] = game.CreateScreenMaterial(feeds[i].Camera.Texture);
 
         var x = (i - (feeds.Length - 1) * 0.5f) * 4.2f;

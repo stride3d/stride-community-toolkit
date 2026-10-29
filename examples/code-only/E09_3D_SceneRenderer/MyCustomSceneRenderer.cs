@@ -9,7 +9,7 @@ namespace E09_3D_SceneRenderer;
 
 /// <summary>
 /// A scene renderer that draws a label over every entity with a <see cref="SpriteBatch"/>: the name and
-/// the position on a dark background, plus one static line. <see cref="SceneRendererBase"/> is the hook
+/// the position on a light background, plus one static line. <see cref="SceneRendererBase"/> is the hook
 /// into the rendering pipeline.
 /// </summary>
 public class MyCustomSceneRenderer : SceneRendererBase

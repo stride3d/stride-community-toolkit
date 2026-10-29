@@ -40,8 +40,8 @@ public sealed record ParticleTextures(Texture Smoke, Texture Fire, Texture Flame
 
             // The sample's textures are bright on black with no alpha, made for additive blending. Alpha
             // from brightness makes the same picture work alpha-blended too, and leaves a real alpha alone.
-            // A pixel whose alpha is its brightest channel is already premultiplied - a colour at that
-            // coverage - so only a real alpha is premultiplied by the loader
+            // A pixel whose alpha is its brightest channel is already premultiplied, so the loader
+            // premultiplies only a real alpha and a coverage texture's white
             var derived = pixels.All(pixel => pixel.A == byte.MaxValue);
 
             if (derived)
@@ -218,8 +218,8 @@ public static class ParticleMaterials
     /// <param name="tint">A colour multiplied in, white by default.</param>
     /// <param name="additive">0 blends, 1 adds light, anything between mixes.</param>
     /// <param name="uv">A flipbook or scroll animation of the texture coordinates, or none.</param>
-    /// <returns>The material.</returns>
     /// <param name="softEdge">The distance over which the particle fades where it meets geometry; 0 is a hard cut.</param>
+    /// <returns>The material.</returns>
     public static ParticleMaterialComputeColor Textured(Texture texture, Color4? tint = null, float additive = 0f, UVBuilder? uv = null, float softEdge = 0f)
     {
         IComputeColor color = new ComputeBinaryColor(new ComputeTextureColor(texture), ParticleColour(), BinaryOperator.Multiply);
@@ -257,19 +257,18 @@ public static class ParticleMaterials
     private static ComputeVertexStreamColor ParticleColour() => new() { Stream = new ColorVertexStreamDefinition() };
 }
 
-/// <summary>Initializers every world-space emitter needs and nobody remembers.</summary>
+/// <summary>Initializers that spell out an engine default.</summary>
 public static class Initializers
 {
     /// <summary>
-    /// A position initializer with no range: the particle is born exactly at the emitter. The
-    /// engine does that by default too; this makes it explicit on an emitter that has no other
-    /// position initializer, so the reader does not have to know the default.
+    /// A position initializer with no range: the particle is born exactly at the emitter, as the
+    /// engine does by default; this makes it explicit, so the reader need not know the default.
     /// </summary>
     /// <returns>The initializer.</returns>
     public static InitialPositionSeed AtEmitter() => new() { PositionMin = Vector3.Zero, PositionMax = Vector3.Zero };
 }
 
-/// <summary>Curves in one call: the over-time updaters sample these, and building them by hand is four nested objects per key.</summary>
+/// <summary>Curves in one call, for the over-time updaters to sample.</summary>
 public static class Curves
 {
     /// <summary>A float curve through the given points, linear between them.</summary>

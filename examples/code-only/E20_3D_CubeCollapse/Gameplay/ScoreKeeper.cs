@@ -71,8 +71,7 @@ public class ScoreKeeper
     /// <param name="deltaTime">Seconds since the last update.</param>
     /// <remarks>
     /// The streak lapses on time rather than on a miss, so hesitating costs the multiplier but a
-    /// misjudged click does not. That rewards reading the board ahead, which is the interesting
-    /// decision, rather than punishing the occasional bad one.
+    /// misjudged click does not.
     /// </remarks>
     public void Update(float deltaTime)
     {

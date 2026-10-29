@@ -78,11 +78,9 @@ public class CubeSpawner(Game game, Scene scene, CubeGrid grid, LevelState level
     /// <param name="z">Column index along Z.</param>
     /// <returns>The world position of the cube centre for that coordinate.</returns>
     /// <remarks>
-    /// Two offsets, for two different reasons. <see cref="LevelDefinition.GridOrigin"/> pulls the
-    /// footprint back by half its own width so the platform centres on the ground rather than growing
-    /// out of one corner, whatever the level's size. The half cube on Y is because a coordinate names
-    /// a cube's centre while layer zero sits <em>on</em> the ground, so without it the bottom layer
-    /// would be buried half way into the floor.
+    /// <see cref="LevelDefinition.GridOrigin"/> centres the footprint on the ground whatever the
+    /// level's size. The half cube on Y is because a coordinate names a cube's centre while layer
+    /// zero sits <em>on</em> the ground.
     /// </remarks>
     public static Vector3 GridToWorld(LevelDefinition level, int x, int layer, int z) => new(
         x * GameSettings.CubeSize.X + level.GridOrigin,
@@ -118,16 +116,14 @@ public class CubeSpawner(Game game, Scene scene, CubeGrid grid, LevelState level
         compoundCollider.Colliders.Add(new BoxCollider
         {
             Size = GameSettings.CubeSize,
-            // Was 1e9. All cubes shared it so the mass ratios were fine, but it also scales the
-            // inertia tensor and puts contact impulses nine orders of magnitude away from where
-            // Bepu's absolute epsilons and sleep thresholds are tuned.
+            // An ordinary mass: a huge one (this was 1e9) scales the inertia tensor and puts contact
+            // impulses far from where Bepu's absolute epsilons and sleep thresholds are tuned
             Mass = 1,
         });
 
         // Kinematic until the whole tower is built, so layers hang in the air while they spawn.
-        // Nothing here may touch BodyInertia or the velocities: their setters no-op until the
-        // component is added to an entity below, at which point SlidingCubeComponent.AttachInner
-        // takes over and locks rotation.
+        // Nothing here may touch BodyInertia or the velocities: their setters no-op until the entity
+        // joins the scene, at which point SlidingCubeComponent.AttachInner locks rotation.
         entity.Add(new SlidingCubeComponent
         {
             Collider = compoundCollider,

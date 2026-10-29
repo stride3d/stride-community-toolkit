@@ -9,22 +9,13 @@ namespace CubeCollapse.Gameplay;
 /// </summary>
 /// <remarks>
 /// <para>
-/// This is the game's source of truth, and the physics is presentation. That split is the important
-/// idea in this file, so it is worth saying why.
+/// This is the game's source of truth; the physics is presentation.
 /// </para>
 /// <para>
-/// The obvious alternative - ask each cube where it is and compare positions - is what this example
-/// used to do, and it was quietly wrong. Comparing floats needs a tolerance, and cubes are *moving*:
-/// while a stack is collapsing they sit between slots, so a click during the fall found some
-/// neighbours and missed others. The player saw a group of eight and was paid for five. Snapping to
-/// integers does not fix that on its own either, because a cube halfway between two slots rounds to
-/// whichever it is nearer, which changes from frame to frame.
-/// </para>
-/// <para>
-/// Holding the layout separately removes the question. A clear updates the grid immediately, so the
-/// very next click matches against the finished layout even while the cubes are still visibly falling
-/// into it. The raycast still returns whatever the player actually hit, so what they click and what
-/// they score never disagree.
+/// Comparing cube positions instead needs a float tolerance, and a collapsing stack sits between
+/// slots, so a click during the fall finds some neighbours and misses others; rounding to the nearer
+/// slot changes from frame to frame. The grid updates the moment a clear happens, so the next click
+/// matches the finished layout while the cubes are still falling into it.
 /// </para>
 /// </remarks>
 public class CubeGrid
@@ -76,9 +67,8 @@ public class CubeGrid
     /// physics bodies to match.
     /// </returns>
     /// <remarks>
-    /// Columns are independent, so this walks each affected column upwards once and counts the holes
-    /// below each survivor. Doing it column by column rather than cube by cube is what keeps a clear
-    /// that removes a hundred cubes from being quadratic.
+    /// Columns are independent, so this walks each affected column upwards once, which keeps a large
+    /// clear from being quadratic.
     /// </remarks>
     public List<(Entity Cube, int Dropped)> RemoveAndCollapse(IEnumerable<Entity> cleared)
     {

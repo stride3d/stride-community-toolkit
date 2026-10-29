@@ -44,7 +44,7 @@ var showInstanced = true;
 
 using var game = new Game();
 
-// The setup has no ground and no physics, because this example is purely about rendering.
+// No ground and no physics: this example is purely about rendering.
 var sceneSetup = new SceneSetup3D
 {
     Ground = null,
@@ -58,10 +58,8 @@ void Start(Scene rootScene)
 {
     TextOverlay.GetOrCreate(game).AddSection("Instancing", BuildOverlayLines);
 
-    // The render feature that performs instanced drawing. This step is easy to miss and nothing
-    // warns you about it: the code-built compositor the toolkit uses wires up Transform, Skinning,
-    // Material, ShadowCaster and lighting - but not instancing. Without this call the instanced
-    // wall renders as a single cube.
+    // The code-built compositor has no instancing render feature. Without this call the instanced
+    // wall renders as a single cube, and the toolkit only logs a warning.
     game.AddInstancingSupport();
 
     CreateIndividualCubes(rootScene, CreateSharedModel(rootScene, Color.Orange));

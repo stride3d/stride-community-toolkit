@@ -23,7 +23,6 @@ var groundSize = new Vector3(15f, 1f, 2f);
 // Four substeps per step, for accuracy
 var world = new World { SubstepCount = 4 };
 
-// Each cube's visual entity and physics body, kept together so they can never drift out of sync
 List<CubeInstance> cubes = [];
 
 // Accumulates real elapsed time between fixed physics steps (see Update)
@@ -61,8 +60,8 @@ void Update(Scene scene, GameTime time)
         steps++;
     }
 
-    // Below the physics rate for long, the backlog would grow without bound: clamping it to one
-    // frame's worth trades a permanently late simulation for a float that stays precise
+    // Clamped to one frame's step budget, so a long stretch below the physics rate slows the
+    // simulation down instead of growing the backlog without bound
     accumulatedTime = MathF.Min(accumulatedTime, FixedTimeStep * MaxStepsPerFrame);
 
     SyncPhysicsToEntities();
@@ -84,8 +83,7 @@ void CreateCubes(Scene rootScene, int count)
 {
     for (int i = 0; i < count; i++)
     {
-        // Spread cubes across a grid of columns instead of a single vertical stack, so they
-        // cascade and pile up sideways - a much better way to see the planar motion at work.
+        // A grid of columns rather than one stack, so the cubes cascade sideways and the planar motion shows.
         var column = i % Columns;
         var row = i / Columns;
         var cubePosition = new Vector3((column - Columns / 2f) * HorizontalSpacing, 10 + row * VerticalSpacing, 0);

@@ -142,7 +142,7 @@ void Start(Scene scene)
         console.Note($"Hail: {text}", LogKind.Hail);
     };
 
-    // The overlay keeps only what is genuinely keyboard help; everything else is on the boards.
+    // The overlay keeps only keyboard help; everything else is on the boards
     var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
     overlay.AddSection("Station", BuildOverlayLines);

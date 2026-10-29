@@ -41,8 +41,8 @@ public readonly record struct SmokeLook(float Width, float Flare, Color4 Young, 
 /// how many of its particles overlap and gives each one its share.
 /// </para>
 /// <para>
-/// Colours may be brighter than 1, for HDR. A particle's own colour is stored in bytes and stops at
-/// 1, so the brightness goes into the material's tint and the particles carry the hue.
+/// Colours may be brighter than 1, for HDR. A particle's own colour reaches the shader as bytes and
+/// wraps above 1, so the brightness goes into the material's tint and the particles carry the hue.
 /// </para>
 /// </remarks>
 public static class Exhaust

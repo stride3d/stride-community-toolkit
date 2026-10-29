@@ -7,10 +7,8 @@ namespace CubeCollapse.Components;
 /// Marks an entity as a playable cube and remembers the colour it was given.
 /// </summary>
 /// <remarks>
-/// The colour is stored here rather than read back from the material, because the material is shared
-/// between every cube of that colour and comparing materials would say nothing about what the player
-/// sees. This component is what makes a cube a cube: the raycast finds an entity, and its presence is
-/// what says the entity is in play.
+/// The colour is stored here rather than read back from the material, which changes with the palette
+/// and the hover. Its presence is what says an entity the raycast found is in play.
 /// </remarks>
 public class CubeComponent : EntityComponent
 {
@@ -33,9 +31,8 @@ public class CubeComponent : EntityComponent
     /// Initializes a new instance of the <see cref="CubeComponent"/> class.
     /// </summary>
     /// <remarks>
-    /// Stride requires a public parameterless constructor on every component so it can create one
-    /// while deserializing a scene. Without it the STRDIAG010 analyser warns, even in a code-only
-    /// project that never loads a scene from disk.
+    /// Every component needs a public parameterless constructor for the serializer; the STRDIAG010
+    /// analyser warns without one, even in a code-only project.
     /// </remarks>
     public CubeComponent() { }
 

@@ -242,7 +242,7 @@ public static class ShapeStations
     }
 
     /// <summary>
-    /// A rectangle standing in the world, styled as a ship's HUD: a near-opaque dark fill, a thin
+    /// A rectangle standing in the world, styled as a ship's HUD: a half-opaque dark fill, a thin
     /// light edge and a glow outside it, corner brackets in pixel lines, and the world text on it
     /// counting up. Fill and outline are independent colours - a faint dark panel with a light edge
     /// is something deriving the fill from the outline could never produce.

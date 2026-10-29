@@ -59,7 +59,7 @@ public class SlidingCubeComponent : BodyComponent, ISimulationUpdate
     {
         // Bepu hands the body its shape inertia during the base call, and BodyReference only exists
         // afterwards, so this is the first point at which there is anything to lock. Assigning
-        // BodyInertia before the component is added to an entity silently does nothing.
+        // BodyInertia before the entity joins a scene silently does nothing.
         base.AttachInner(pose, shapeInertia, shapeIndex);
 
         _laneX = pose.Position.X;

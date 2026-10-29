@@ -63,8 +63,7 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    // Scenery only, so the plain options: no physics body. A cylinder's size is its radius in X
-    // and its height in Z
+    // Scenery only, so no physics body
     var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.3f, 2.5f), new PrimitiveEntityOptions
     {
         Body = BodyMode.None,

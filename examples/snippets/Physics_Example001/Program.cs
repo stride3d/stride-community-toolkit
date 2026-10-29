@@ -23,7 +23,6 @@ void Start(Scene scene)
         Material = game.CreateMaterial(Color.Violet),
     });
 
-    // Set the position of the cube
     cube.Transform.Position = new Vector3(0, 8, -3);
 
     // Add cube to the scene
@@ -35,13 +34,11 @@ void Start(Scene scene)
         Material = game.CreateMaterial(Color.Wheat),
     });
 
-    // Set the position of the sphere
     entity.Transform.Position = new Vector3(-4, 8, 0);
 
     // Add sphere to the scene
     entity.Scene = scene;
 
-    // Retrieve the camera from the scene
     camera = scene.GetCamera();
 }
 
@@ -50,10 +47,8 @@ void Update(Scene scene, GameTime gameTime)
 {
     game.DebugTextSystem.Print("Click on a sphere, cube or ground to move camera", new Int2(5, 10));
 
-    // Ensure that the camera is initialized
     if (camera is null) return;
 
-    // Check if the left mouse button is pressed
     if (game.Input.IsMouseButtonPressed(Stride.Input.MouseButton.Left))
     {
         var hit = camera.Raycast(game.Input.MousePosition, 100, out var hitInfo);

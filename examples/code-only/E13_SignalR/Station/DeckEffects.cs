@@ -183,7 +183,7 @@ public sealed class DeckEffects
             return;
         }
 
-        // In fast, out slow: a hail should land like a message and leave like one
+        // In fast, out slow
         var fade = MathF.Min(1f, MathF.Min(console.HailAge / 0.35f, console.HailRemaining / 1.5f));
 
         _labels.Set("hail-caption", "HAIL FROM WEB", new Vector3(0, 7.4f, 0), Quaternion.Identity, opacity: fade);

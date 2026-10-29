@@ -118,7 +118,7 @@ public sealed class GalleryCamera(Game game)
         return Quaternion.RotationYawPitchRoll(yaw, pitch, 0f);
     }
 
-    /// <summary>Whether the visitor is steering: any key or button the camera controller reads.</summary>
+    /// <summary>Whether the visitor is steering: the right mouse button or one of the camera controller's move keys.</summary>
     private bool BeingSteered
         => game.Input.IsMouseButtonDown(MouseButton.Right)
         || game.Input.IsKeyDown(Keys.W) || game.Input.IsKeyDown(Keys.A)

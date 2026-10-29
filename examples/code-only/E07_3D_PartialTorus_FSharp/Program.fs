@@ -47,7 +47,7 @@ let CreateMeshEntity (graphicsDevice:GraphicsDevice) (scene:Scene) (position:Vec
     entity
 
 let BuildPartialTorusMesh (meshBuilder:MeshBuilder) cylinderRadius torusAngle bendRadius circumferenceStepsCount bendSegmentSteps =
-    //for partial torus up to 360 degrees (torusAngle in degrees)
+    // torusAngle is in degrees, up to 360
     meshBuilder.WithIndexType(IndexingType.Int16) |> ignore
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList)  |> ignore
 
@@ -56,7 +56,7 @@ let BuildPartialTorusMesh (meshBuilder:MeshBuilder) cylinderRadius torusAngle be
 
     //vertices
     for j in 0..bendSegmentSteps do
-      //Torus angle position Phi starts at 0 in line with Z-axis and increases to Pi/2 at X-axis
+      // The bend angle tPhi starts at 0 on the Z axis and reaches the X axis at Pi/2
       let tPhi = (float j) * torusAngle / (float bendSegmentSteps) * Math.PI / 180.0
       let xc = bendRadius * Math.Sin(tPhi)
       let zc = bendRadius * Math.Cos(tPhi)
@@ -69,7 +69,7 @@ let BuildPartialTorusMesh (meshBuilder:MeshBuilder) cylinderRadius torusAngle be
         let xr = cylinderRadius * Math.Cos(tTheta) * Math.Sin(tPhi)
         let zr = cylinderRadius * Math.Cos(tTheta) * Math.Cos(tPhi)
 
-        // A normal has length 1: the direction out from the tube's centre line
+        // Unit length: the direction out from the tube's centre line
         let tNorm = Vector3.Normalize(Vector3(float32 xr, float32 yr, float32 zr))
         let tPos = Vector3(float32 (xc + xr), float32 yr, float32 (zc + zr))
 
@@ -82,7 +82,6 @@ let BuildPartialTorusMesh (meshBuilder:MeshBuilder) cylinderRadius torusAngle be
       for i in 0..(circumferenceStepsCount - 1) do
 
         let i_tot = i + j * circumferenceStepsCount
-        //build triangles
         let i_next = (i + 1) % circumferenceStepsCount + j * circumferenceStepsCount
 
         //triangle 1
@@ -106,7 +105,6 @@ let Start rootScene =
     let circumferenceStepsCount = 20
     let bendSegmentSteps = 40
 
-    // Create torus mesh entity
     CreateMeshEntity
         game.GraphicsDevice
         rootScene

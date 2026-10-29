@@ -48,8 +48,8 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     private const float GroundGap = 0.01f;
 
     /// <summary>
-    /// The glass key light's distance across and up from the board, the gallery's ring radius. Large
-    /// against the board, as the ring is against an exhibit, so every cube gets the same light.
+    /// The glass key light's distance across and up from the board: the r of the gallery's key-light
+    /// recipe. Large against the board, so every cube gets about the same light.
     /// </summary>
     private const float KeyDistance = 20f;
 
@@ -57,10 +57,8 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     private readonly ScoreKeeper _keeper = new();
     private readonly LevelState _levels = new();
 
-    // The seam persistence slots into: pass a JsonProgressStore (see its docs) at construction and a
-    // new launch resumes at the level the last game over reached. The rest of the game only sees the
-    // interface. Taking it as a parameter rather than newing it up here is what makes that a real
-    // choice at the call site instead of an edit to this file.
+    // Pass a JsonProgressStore at construction and a new launch resumes at the last level reached;
+    // the rest of the game only sees the interface
     private readonly IProgressStore _progressStore = progressStore ?? new FreshProgressStore();
     private GameProgress _progress = new();
 
@@ -80,11 +78,9 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     private CameraRotationScript _cameraRotation = null!;
     private Scene _scene = null!;
 
-    // Two lighting rigs under one sky, one rig in the scene at a time. For the colour palettes the
-    // Bepu playground's: the default directional light, so the cubes look as the playground's shapes
-    // do, plus a weak fill from the opposite side so no face of a cube goes dark. For the glass
-    // palettes the material gallery's: its steeper sun and its key light, so the glass looks exactly
-    // as it does in the gallery
+    // Two lighting rigs, one in the scene at a time. Colour palettes: the Bepu playground's default
+    // directional light plus a weak fill so no cube face goes dark. Glass palettes: the material
+    // gallery's steeper sun and key light, so the glass looks as it does there
     private Entity _light = null!;
     private Entity _fillLight = null!;
     private Entity _sun = null!;
@@ -120,9 +116,9 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         _sun.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-65f)) * Quaternion.RotationY(MathUtil.DegreesToRadians(-180f));
         ((LightDirectional)_sun.Get<LightComponent>().Type).Shadow.ComputeTransmittance = true;
 
-        // The gallery's key light stands at the ring's centre, the ring's radius r up, and reaches each
-        // exhibit at forty-five degrees from r times root two away, with an intensity of 30 r squared
-        // and a range of 2.5 r. The same here with r = KeyDistance, from the camera's side of the board
+        // The gallery's key light: r up from the ring's centre, reaching each exhibit at forty-five
+        // degrees from r times root two away, intensity 30 r squared, range 2.5 r. Here r = KeyDistance,
+        // on the camera's side of the board
         _keyLight = new Entity("Key light")
         {
             new LightComponent
@@ -141,8 +137,6 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
             _paletteIndex = palette - 1;
         }
 
-        // Every palette's materials, built once up front - a palette switch is then a repaint,
-        // never an allocation
         _materialSets = [.. ColourPalettes.All.Select(palette => MaterialFactory.CreateCubeMaterialSet(game, palette))];
         _materials = _materialSets[_paletteIndex];
 
@@ -217,9 +211,8 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
 
             body.Kinematic = false;
 
-            // Going dynamic re-applies the shape inertia, which undoes the rotation lock.
-            // SimulationUpdate would catch it on the next step anyway; doing it here closes the
-            // one step of freedom in between.
+            // Going dynamic re-applies the shape inertia and undoes the rotation lock. SimulationUpdate
+            // would catch it next step; locking here closes that one step of freedom.
             body.ApplyRotationLock();
         }
     }
@@ -260,9 +253,9 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// straight up at a target directly above it - a degenerate rotation, and a blank screen.
     /// </para>
     /// <para>
-    /// The aiming also has to happen before the controller is attached, because
-    /// <c>Basic3DCameraController.Start</c> caches the transform it finds as the pose that H
-    /// restores. Doing it in this order means H resets to a view of the platform too.
+    /// The aim must be set before <c>Basic3DCameraController.Start</c> runs, because it caches the
+    /// transform it finds as the pose that H restores. Aiming here means H resets to a view of the
+    /// platform too.
     /// </para>
     /// </remarks>
     /// <returns>The camera entity.</returns>
@@ -282,9 +275,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// Adds the axis gizmo that shows which way X, Y and Z run.
     /// </summary>
     /// <remarks>
-    /// Building a game from code alone means there is no editor viewport to orient in - no grid, no
-    /// axis widget, nothing that answers "which way is X" except what the scene draws for itself.
-    /// This is that.
+    /// A code-only game has no editor viewport to orient in, so the scene draws its own axes.
     /// </remarks>
     private void AddOrientationGizmo()
     {
@@ -470,8 +461,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     }
 
     /// <summary>
-    /// Advances to the next level's larger board. The score carries over - climbing is the reward,
-    /// and starting every board from zero would price the climb at nothing.
+    /// Advances to the next level's larger board. The score carries over, so the climb is rewarded.
     /// </summary>
     /// <remarks>
     /// Progress is saved through <see cref="IProgressStore"/> at the moment of advancing. With the
@@ -523,8 +513,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
 
         _elapsedTime = 0;
 
-        // Zero, not one: Start spawns layer 0 itself before handing over to Update, but here the
-        // loop must build the whole board - starting at 1 left every rebuilt board one layer short
+        // Zero, not one: Start spawns layer 0 itself, but a rebuild leaves the whole board to Update
         _layer = 0;
         _platformComplete = false;
     }

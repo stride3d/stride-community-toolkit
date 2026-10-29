@@ -115,7 +115,7 @@ public sealed class Deck(ContainerFactory factory)
         {
             var direction = Vector3.Normalize(new Vector3(Jitter(1f), 0.6f + _random.NextSingle() * 0.6f, Jitter(1f)));
 
-            // A body that has settled is asleep, and an impulse on a sleeping body is ignored
+            // A settled body is asleep, and an impulse does not wake it
             container.Body.Awake = true;
             container.Body.ApplyLinearImpulse(direction * container.Mass * 6f);
         }

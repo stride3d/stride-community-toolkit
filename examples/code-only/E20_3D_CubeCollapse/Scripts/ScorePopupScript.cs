@@ -9,19 +9,9 @@ namespace CubeCollapse.Scripts;
 /// Animates one floating score above the cube that was cleared, then removes it.
 /// </summary>
 /// <remarks>
-/// <para>
-/// The shape of this is the whole point: a fast burst that settles, not a slow drift. It rises with
-/// an ease-<em>out</em>, so most of the travel happens immediately and the number is where the eye
-/// expects it before it has finished moving; it overshoots its size and springs back, which is what
-/// reads as impact; and it fades over the last stretch so it leaves without needing to be noticed
-/// leaving.
-/// </para>
-/// <para>
-/// The previous version did the opposite of all three: an ease-<em>in</em>, so it crept away slowly
-/// and then accelerated, over four seconds and twenty-five world units, with no fade. It also used
-/// its travel distance as an absolute height at which to delete itself, so popups spawned high up
-/// vanished part-way through their animation while ones near the ground played almost to the end.
-/// </para>
+/// A fast burst that settles, not a slow drift: it rises with an ease-<em>out</em>, so most of the
+/// travel happens at once; it overshoots its size and springs back, which reads as impact; and it
+/// fades over the last stretch.
 /// </remarks>
 public class ScorePopupScript : SyncScript
 {
@@ -71,8 +61,7 @@ public class ScorePopupScript : SyncScript
     /// </summary>
     /// <remarks>
     /// <see cref="EasingFunction.BackEaseOut"/> travels past its target and settles back onto it, so
-    /// interpolating straight to full size gives the overshoot for free. That momentary too-big is
-    /// what reads as impact; easing smoothly up to size just looks like it is growing.
+    /// interpolating straight to full size gives the overshoot for free.
     /// </remarks>
     private float GetScale()
         => _elapsed >= PopDuration

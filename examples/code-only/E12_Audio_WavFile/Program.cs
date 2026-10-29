@@ -22,8 +22,8 @@ using System.Reflection;
 // cutting each other off. The pad is one instance set to loop, the usual shape for music.
 //
 // Two engine rules worth knowing: an instance reports Stopped once it has played out and should be
-// disposed then (each holds a native source), and Pan only applies to mono sources - which both
-// files are, deliberately.
+// disposed then (each holds a native source), and OpenAL pans only mono sources - which both files
+// are, deliberately.
 
 var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
 
@@ -50,7 +50,7 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    // Scenery only, so the plain options: no physics body
+    // Scenery only, so no physics body
     speaker = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions
     {
         Body = BodyMode.None,

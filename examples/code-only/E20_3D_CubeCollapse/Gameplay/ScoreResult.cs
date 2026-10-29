@@ -23,10 +23,7 @@ public readonly record struct ScoreResult(
     /// Gets a human-readable breakdown of the total.
     /// </summary>
     /// <remarks>
-    /// Built from the same fields the total is built from, so the two cannot disagree. The previous
-    /// version assembled this string separately and had drifted: it printed the cube count twice and
-    /// omitted the multiplier entirely, so the arithmetic it showed did not produce the number beside
-    /// it.
+    /// Built from the same fields as the total, so the two cannot disagree.
     /// </remarks>
     public string Breakdown => Multiplier > 1f
         ? $"({Base} + {Bonus}) x {Multiplier:0.#} = {Total}"

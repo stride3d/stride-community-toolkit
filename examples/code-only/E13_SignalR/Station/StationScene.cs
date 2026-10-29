@@ -56,10 +56,6 @@ public sealed class StationScene(Game game)
     {
         _labels = labels;
 
-        // The compositor, the camera and its controller come from the setup in Program.cs: a near-black
-        // clear colour instead of a skybox, the exposure pinned. A faint cool ambient below keeps the
-        // sides the sun does not reach dim rather than missing.
-
         // Left mouse grabs a container, the wheel changes the carry distance, R + mouse turns it.
         // R and not the grabber's default T: T opens the scheme list here
         game.GetCameraEntity().Add(new GrabberScript { RotateKey = Keys.R });
@@ -71,6 +67,7 @@ public sealed class StationScene(Game game)
 
         sun.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-58f)) * Quaternion.RotationY(MathUtil.DegreesToRadians(22f));
 
+        // A faint cool ambient keeps the sides the sun does not reach dim rather than black
         AddAmbient(scene);
 
         // Looking down at the pad from the open side, so lost cargo slides towards the viewer; a
@@ -141,8 +138,8 @@ public sealed class StationScene(Game game)
             _shapes.DrawPixelLine(new Vector3(-inset, Lift, line), new Vector3(inset, Lift, line), 1f, grid);
         }
 
-        // Landing pad: a ring, and a dashed ring outside it that turns. The pad is lit, so its glow
-        // adds light to the deck rather than painting over it
+        // Landing pad: a ring, and a dashed ring outside it that turns. The glow is additive, so it
+        // brightens the deck rather than painting over it
         _shapes.Glow.Set(6f, Hex.WithAlpha(glow, 140));
         _shapes.Glow.Additive = true;
         _shapes.DrawRing(new Vector3(0, Lift, 0), Vector3.UnitY, PadRadius, accent);

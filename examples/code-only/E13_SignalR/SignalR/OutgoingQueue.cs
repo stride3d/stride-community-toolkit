@@ -26,9 +26,8 @@ public sealed class OutgoingQueue : IStoppable, IDisposable
     public void Enqueue(string method, object payload) => _queue.Enqueue((method, payload));
 
     /// <summary>
-    /// Same work as <see cref="Stop"/>, which already cancels the loop and releases the token source.
-    /// Present so the type owns the disposal of the <see cref="CancellationTokenSource"/> it creates,
-    /// rather than leaving it to whoever remembers to call Stop. Safe to call twice.
+    /// Same as <see cref="Stop"/>: cancels the loop and disposes the <see cref="CancellationTokenSource"/>
+    /// this type creates. Safe to call twice.
     /// </summary>
     public void Dispose() => Stop();
 
@@ -47,7 +46,7 @@ public sealed class OutgoingQueue : IStoppable, IDisposable
         }
         catch (AggregateException)
         {
-            // Cancellation surfacing through Wait - the loop's normal way out
+            // Not expected: the loop catches its own cancellation and failures
         }
         finally
         {

@@ -21,7 +21,6 @@ var groundSize = new Vector3(15f, 1, 15f);
 // Four substeps per step, for accuracy
 var world = new World { SubstepCount = 4 };
 
-// Each cube's visual entity and physics body, kept together so they can never drift out of sync
 List<CubeInstance> cubes = [];
 
 // Accumulates real elapsed time between fixed physics steps (see Update)
@@ -59,8 +58,8 @@ void Update(Scene scene, GameTime time)
         steps++;
     }
 
-    // Below the physics rate for long, the backlog would grow without bound: clamping it to one
-    // frame's worth trades a permanently late simulation for a float that stays precise
+    // Clamped to one frame's step budget, so a long stretch below the physics rate slows the
+    // simulation down instead of growing the backlog without bound
     accumulatedTime = MathF.Min(accumulatedTime, FixedTimeStep * MaxStepsPerFrame);
 
     SyncPhysicsToEntities();

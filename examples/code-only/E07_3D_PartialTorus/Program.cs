@@ -11,8 +11,7 @@ using Stride.Rendering;
   A partial torus built vertex by vertex: a parametric surface over two angles, around the tube and
   along the bend, cut short of a full ring by limiting the bend angle. Shows positions, normals,
   triangle winding and vertex reuse through indices. The open ends show back-face culling at work:
-  from some angles the inside is visible and from others the far wall is see-through, since faces
-  turned away from the camera are not drawn.
+  look into one and the tube is see-through, since faces turned away from the camera are not drawn.
 */
 
 // Torus parameters
@@ -50,7 +49,7 @@ Entity CreateMeshEntity(Scene scene, Vector3 position, Action<MeshBuilder> build
 
 void BuildPartialTorusMesh(MeshBuilder meshBuilder, float cylinderRadius, float torusAngle, float bendRadius, int circumferenceStepsCount, int bendSegmentSteps)
 {
-    // for partial torus up to 360 degrees (torusAngle in degrees)
+    // torusAngle is in degrees, up to 360
     meshBuilder.WithIndexType(IndexingType.Int16);
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
 
@@ -75,7 +74,7 @@ void BuildPartialTorusMesh(MeshBuilder meshBuilder, float cylinderRadius, float 
 
             meshBuilder.AddVertex();
             meshBuilder.SetElement(position, new Vector3((float)(xc + xr), (float)yr, (float)(zc + zr)));
-            // A normal has length 1: the direction out from the tube's centre line
+            // Unit length: the direction out from the tube's centre line
             meshBuilder.SetElement(normal, Vector3.Normalize(new Vector3((float)xr, (float)yr, (float)zr)));
         }
     }

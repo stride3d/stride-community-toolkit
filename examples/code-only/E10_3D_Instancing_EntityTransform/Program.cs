@@ -79,6 +79,7 @@ using var bufferedInstancing = new BufferedEntityInstancing(new BepuEntityInstan
 
 var sceneSetup = new SceneSetup3D
 {
+    // A large ground so big drops cannot spill over the edge; the static collider comes with it
     Ground = GroundSetup.Plane(new Vector2(300)),
     Profiler = true
 }.UseBepu().UseSkybox();
@@ -89,7 +90,6 @@ void Start(Scene rootScene)
 {
     scene = rootScene;
 
-    // A large ground so big drops cannot spill over the edge; the static collider comes with it
     TextOverlay.GetOrCreate(game).AddSection("Instancing", BuildOverlayLines);
 
     sharedModel = CreateSharedModel(rootScene);
@@ -222,12 +222,10 @@ void DropItems(int count, ItemKind kind)
 /// Removes every body from the scene.
 /// </summary>
 /// <remarks>
-/// Taking an entity out of the scene removes its components too, so each <see cref="InstanceComponent"/>
-/// disconnects from the stock master on its own. It does not unsubscribe from the master's
-/// InstancingChanged event, though: the engine only does that when Master changes, so a master keeps
-/// every instance it ever had alive, bodies and all, unless Master is cleared before the entity leaves.
-/// The toolkit types have no hook at all - an entity leaving the scene stays registered until it is
-/// removed explicitly.
+/// An <see cref="InstanceComponent"/> disconnects from the stock master when its entity leaves the
+/// scene, but it unsubscribes from the master's InstancingChanged event only when Master changes, so
+/// the master keeps every instance it ever had alive, bodies and all, unless Master is cleared first.
+/// The toolkit types unregister an entity that leaves the scene by themselves.
 /// </remarks>
 void ClearItems()
 {
@@ -288,9 +286,8 @@ Entity CreateInstancedItem(string name)
 /// <remarks>
 /// <para>
 /// The model is attached here rather than by <c>CreatePrimitive</c>, which would build a fresh
-/// mesh for each of the 20,000 bodies. <c>AddBepuPhysics</c> only requires that a
-/// <see cref="ModelComponent"/> is present - it derives the collider from the primitive type and
-/// size, and reads nothing out of the mesh.
+/// mesh for each of the 20,000 bodies. <c>AddBepuPhysics</c> derives the collider from the primitive
+/// type and size, not from the mesh.
 /// </para>
 /// <para>
 /// Hull shapes get a hull collider each, but the hull data behind them is shared across every body

@@ -45,7 +45,7 @@ public class ShapeUpdater : SyncScript
         _debugDraw.Visible = true;
         ResizeDebugDrawCapacity(_count);
 
-        // The keys, then the live state; the callback runs every frame the overlay is drawn
+        // The callback runs every frame the overlay is drawn
         TextOverlay.GetOrCreate(Game).AddSection("Debug shapes", () =>
         [
             new("Mouse wheel", "Primitive count", Color.Gold),
@@ -246,7 +246,7 @@ public class ShapeUpdater : SyncScript
         _debugDraw.DrawBounds(new Vector3(-5, 0, -5), new Vector3(5, 5, 5), color: Color.White);
         _debugDraw.DrawBounds(new Vector3(-AreaSize), new Vector3(AreaSize), color: Color.HotPink);
 
-        // A line of cubes, solid inside wireframe, to see depth testing at work
+        // A line of solid cubes outlined in wireframe, to see depth testing at work
         for (var i = -8; i < 8; i++)
         {
             var position = new Vector3(i, 5, 0);
@@ -255,7 +255,7 @@ public class ShapeUpdater : SyncScript
             _debugDraw.DrawCube(position, Vector3.One, color: Color.White, depthTest: _depthTest, solid: false);
         }
 
-        // Every primitive type in a row
+        // One of each shape with a fill in a row
         var row = new Vector3(0, 0, -5);
 
         _debugDraw.PrimitiveColor = Color.Red;
