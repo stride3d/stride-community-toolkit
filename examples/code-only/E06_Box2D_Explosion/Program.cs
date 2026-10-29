@@ -9,12 +9,11 @@ using Stride.Games;
 using Stride.Input;
 
 // A grenade in one call: Box2D's explosion gives every shape within a radius an impulse away from
-// the centre, and the impulse is per metre of the shape's perimeter facing the blast - so a broad
-// flat body catches more of it than a small round one of the same mass, the way a pressure wave
-// would. Space detonates at the cursor; the rings show the full-strength radius and the falloff
-// band beyond it. Two bodies of the same mass stand side by side on the right, one a wide slab and
-// one a ball, to make the perimeter rule visible. The grabber on the camera rebuilds the pyramid
-// by hand between blasts, or R does it for you.
+// the centre, per metre of the shape's perimeter facing the blast - so a broad flat body catches
+// more of it than a round one of the same mass, as with a pressure wave. Space detonates at the
+// cursor; the rings show the full-strength radius and the falloff band beyond it. A wide slab and
+// a ball of the same mass stand on the right to show the perimeter rule. Rebuild the pyramid by
+// hand with the grabber, or with R.
 
 const float Radius = 5f;
 const float Falloff = 3f;
@@ -96,9 +95,9 @@ void BuildScene(Scene scene)
         DynamicCircle(scene, new Vector2(2 + i * 1.6f, 0.5f), 0.45f, royalBlue);
     }
 
-    // The perimeter rule: a wide slab and a ball with the same mass, at the same distance from a
-    // blast centred between them. The slab is 4 by 0.5 at density 1, a mass of 2, and the ball's
-    // density is chosen to give it the same. The slab shows the wave more of its edge, so it flies harder.
+    // The perimeter rule: a 4 by 0.5 slab at density 1 (mass 2) and a ball whose density gives it
+    // the same mass, equally far from a blast centred between them. The slab shows the wave more
+    // edge, so it flies harder.
     DynamicBox(scene, new Vector2(13, 2), new Vector2(4, 0.5f), gold, density: 1f);
     DynamicCircle(scene, new Vector2(19, 0.8f), 0.8f, gold, density: 2f / (MathF.PI * 0.8f * 0.8f));
 }
@@ -109,7 +108,7 @@ void Update(Scene rootScene, GameTime time)
 
     var dt = (float)time.Elapsed.TotalSeconds;
 
-    // One blast on its own a second in, at the pyramid, so the scene shows what it is about before a key is pressed.
+    // One blast at the pyramid a second in, before any key is pressed.
     sinceStart += dt;
 
     if (blasts == 0 && sinceStart > 1f)
@@ -146,8 +145,8 @@ void Detonate(Vector2 point)
     blasts++;
 }
 
-// The blast is a moment; the rings are how it is seen: the full-strength radius inside, the
-// falloff band outside, fading over a fraction of a second.
+// The rings show the blast: the full-strength radius inside, the falloff band outside, fading
+// over RingSeconds.
 void DrawBlast()
 {
     if (lastBlast is not { } centre || ringAge > RingSeconds) return;

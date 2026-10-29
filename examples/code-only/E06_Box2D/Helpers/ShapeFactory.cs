@@ -38,9 +38,8 @@ public class ShapeFactory(Scene scene)
 
     public Entity CreateEntity(Shape2DModel shape, Color? overrideColor = null, Vector2? position = null)
     {
-        // The Box2D debug-draw component renders the shape testbed-style - fill plus a
-        // pixel-constant border from the same numbers the collider uses. No mesh, no material,
-        // no outline shader.
+        // A ShapeComponent draws the shape testbed-style - fill plus a pixel-constant border from
+        // the same numbers the collider uses. No mesh, no material.
         var entity = new Entity($"{shape.Type.Name}-{GameConfig.ShapeName}") { CreateShapeComponent(shape, overrideColor ?? shape.Color) };
 
         entity.Transform.Position = position is { } at ? new Vector3(at, 0) : GetRandomPosition();
@@ -50,7 +49,7 @@ public class ShapeFactory(Scene scene)
     }
 
     /// <summary>
-    /// Builds the debug-draw outline for a shape model: a circle is one vertex plus a radius, a
+    /// Builds the drawn outline for a shape model: a circle is one vertex plus a radius, a
     /// capsule two vertices plus a radius, the rest are their corner polygons - mirroring exactly
     /// how ShapeFixtureBuilder builds the matching collider.
     /// </summary>

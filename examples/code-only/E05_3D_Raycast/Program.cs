@@ -17,7 +17,7 @@ using Buffer = Stride.Graphics.Buffer;
 
 // Two raycasts with two jobs. The camera's ray answers "what did I click, and where": the first thing
 // under the mouse. The sphere's ray answers "what lies in that direction, all of it": cast from the
-// sphere through the clicked point and on, with every hit listed near to far, which is what the sphere
+// sphere through the clicked point and on, with every hit listed, which is what the sphere
 // would meet if it flew on. The line is the sphere's ray. Click the sphere itself and it stops.
 
 const float ImpulseStrength = 0.5f;
@@ -92,8 +92,8 @@ void ProcessMouseClick()
 }
 
 // The sphere's ray: from its centre through the clicked point and on for RayLength. A raycast stops at
-// the first hit; RayCastPenetrating goes on through everything along the ray, and the toolkit's
-// overload takes a segment and sorts the hits by distance. The line is drawn along it
+// the first hit; RayCastPenetrating goes on through everything along the ray, in no particular order,
+// and the toolkit's overload takes a segment. The line is drawn along it
 void ListEverythingInThatDirection(Vector3 clickedPoint)
 {
     if (sphereBody.Simulation is not { } simulation) return;
@@ -176,7 +176,7 @@ void ApplyImpulseToSphere(Vector3 hitPointWorld)
 
     direction.Normalize();
 
-    // Applied at the surface rather than the centre, so the sphere spins as well as moves
+    // Applied at the surface but along the line through the centre, so it adds no spin
     sphereBody.ApplyImpulse(direction * ImpulseStrength, direction * SphereRadius);
 
     // A sleeping body ignores an impulse until it is woken

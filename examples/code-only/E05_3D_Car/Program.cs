@@ -119,10 +119,9 @@ void Update(Scene scene, GameTime time)
     Drive(car, throttle, zoom, brake: input.IsKeyDown(Keys.Space));
 }
 
-// Back to the start line, wheels included. Teleporting the chassis alone leaves the wheels wherever
-// they were, and the four constraints then drag chassis and wheels together across the gap - the
-// car lands on its side or tumbles in. Every body goes to its resting pose, still, and the
-// steering and the motor targets start over.
+// Back to the start line, wheels included: teleporting the chassis alone leaves the wheels behind,
+// and the constraints drag the parts back together across the gap, tipping the car over. Every body
+// comes to rest, and the steering and motor targets start over.
 void ResetCar(Car car)
 {
     car.Chassis.TeleportAtRest(start);
@@ -330,7 +329,7 @@ void BuildCourse(Scene scene)
     var ramp = game.CreatePrimitive(Primitive3D.Box(new Vector3(6, 0.4f, 10)), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(150, 150, 160)),
-        // An empty compound: the helper adds the box that fits the ramp's size
+        // No collider given: the helper fits a box to the ramp's size
         Body = BodyMode.Static,
         Position = new Vector3(0, 0.9f, 30),
     });
@@ -341,7 +340,6 @@ void BuildCourse(Scene scene)
     {
         var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.5f, 3), new BepuPhysicsOptions
         {
-            // A cylinder's size is its radius in X and its height in Z
             Material = game.CreateMaterial(new Color(120, 170, 220)),
             Body = BodyMode.Static,
             Position = new Vector3(i % 2 == 0 ? -4 : 4, 1.5f, -20 - i * 8),

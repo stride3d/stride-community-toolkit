@@ -18,19 +18,17 @@ using static Box2D.NET.B2Types;
 // A platformer character that is not a rigid body. Ported from the Box2D.NET samples' Mover
 // scene (MIT, (c) 2022 Erin Catto, (c) 2025 Choi Ikpil).
 //
-// A rigid-body character fights you: it tips, it bounces, it sticks to walls, it needs its
-// rotation locked and its friction faked. Box2D v3 offers another way - the mover API - where the
-// character is just a capsule the game moves itself, Quake style, and the world is asked only what
-// it touches: collect the contact planes, solve a translation that respects them, sweep it. A
-// "pogo" shape cast down from the feet drives a spring that floats the capsule above the ground
-// and tells it whether it is standing. CharacterMover2D is that recipe; this scene is the samples'
-// course for it.
+// A rigid-body character tips, bounces, sticks to walls and needs its rotation locked and its
+// friction faked. Box2D v3's mover API is the alternative: the character is a capsule the game
+// moves itself, Quake style, asking the world only what it touches - collect the contact planes,
+// solve a translation that respects them, sweep it. A "pogo" shape cast down from the feet drives
+// a spring that floats the capsule above the ground and tells it whether it is standing.
+// CharacterMover2D is that recipe; this scene is the samples' course for it.
 //
-// The level is two outlines drawn in Inkscape and read with SvgPath2D into chain shapes; a
-// fifty-plank bridge on sprung revolute joints sags under the character; a bouncy ball can be
-// kicked; a "friendly" capsule is soft - the mover walks through it slowly - and an elevator is
-// rigid and carries the mover. That softness is per shape: a push limit and a clip flag in the
-// shape's user data.
+// The level is two Inkscape outlines read with SvgPath2D into chain shapes; a fifty-plank bridge
+// on sprung revolute joints sags under the character; a bouncy ball can be kicked; a "friendly"
+// capsule is soft - the mover walks through it slowly - and an elevator is rigid and carries the
+// mover. That softness is per shape: a push limit and a clip flag in the shape's user data.
 //
 // A and D walk, Space jumps, K kicks the ball, Z picks the pogo shape, G shows Box2D's own
 // contact points, R resets. The character walks by itself, jumping walls, until A or D is pressed.
@@ -46,7 +44,7 @@ var elevatorBase = new Vector2(112, 10);
 var spawn = new Vector2(2, 8);
 var ballStart = new Vector2(7, 7);
 
-// The scene the local functions share, filled in by Start and read every frame by Update and Draw.
+// Shared by the local functions: set in Start, read every frame by Update and Draw.
 ShapeBatch shapeBatch = null!;
 Basic2DCameraController cameraController = null!;
 Box2DDebugDraw debugDraw = null!;
@@ -65,7 +63,6 @@ var background = new Color(0.2f, 0.2f, 0.2f);
 using var game = new Game();
 using var simulation = new Box2DSimulation();
 
-// Start builds the course, Update drives it.
 var sceneSetup = new SceneSetup2D
 {
     ClearColor = background,
@@ -83,7 +80,6 @@ void Start(Scene scene)
     var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
 
-    // Zoomed out enough to see the bridge whole; the camera follows the hero from BuildHero on.
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;
     shapeBatch.Fill.Alpha = 0.4f;
@@ -121,8 +117,8 @@ B2BodyId BuildGround(string path, Vector2 bodyPosition, Vector2 svgOffset)
     return body;
 }
 
-// Fifty planks on revolute joints with a soft spring and a small motor torque - the spring keeps
-// the bridge from folding, the motor gives it a little stiffness - hung between the two grounds.
+// Fifty planks on revolute joints between the two grounds: the soft spring keeps the bridge from
+// folding, the small motor torque stiffens it.
 void BuildBridge(Scene scene, B2BodyId ground1, B2BodyId ground2)
 {
     var options = new RevoluteJointOptions { EnableSpring = true, Hertz = 3, DampingRatio = 0.8f, EnableMotor = true, MaxMotorTorque = 10 };
@@ -160,7 +156,6 @@ void BuildFriend(Scene scene)
     var capsule = new B2Capsule(new B2Vec2(0, -0.5f), new B2Vec2(0, 0.5f), 0.3f);
     var shape = b2CreateCapsuleShape(body, in def, in capsule);
 
-    // Twenty-five millimetres of push a step and no velocity clip: soft.
     CharacterMover2D.SetResponse(shape, maxPush: 0.025f, clipVelocity: false);
 }
 
@@ -193,7 +188,6 @@ void BuildElevator(Scene scene)
     var box = b2MakeBox(2f, 0.1f);
     var shape = b2CreatePolygonShape(body, in def, in box);
 
-    // Ten centimetres a step and a clipped velocity: rigid, so it carries rather than yields.
     CharacterMover2D.SetResponse(shape, maxPush: 0.1f, clipVelocity: true);
     entity.Add(new Box2DBodyComponent { BodyId = body });
 
@@ -248,10 +242,10 @@ void Update(Scene scene, GameTime time)
 
     var input = game.Input;
 
-    // While the pogo menu is open the number keys are its, and nothing else runs.
+    // A frame whose key press the pogo menu claims ends here.
     if (pogoMenu.Update(input)) return;
 
-    // The first press of A or D hands the character to the player for good.
+    // The first press of A or D hands the character to the player until R.
     if (input.IsKeyDown(Keys.A) || input.IsKeyDown(Keys.D))
     {
         autoWalk = false;
@@ -259,14 +253,12 @@ void Update(Scene scene, GameTime time)
 
     mover.Throttle = autoWalk ? 1 : (input.IsKeyDown(Keys.D) ? 1 : 0) - (input.IsKeyDown(Keys.A) ? 1 : 0);
 
-    // Walking by itself, the character jumps whenever a wall plane is in its way - the pillar, the
-    // stairs up to the bridge, the far ground's steps - so the whole course plays through untouched.
+    // On auto-walk the character jumps at any wall plane in its way, so the course plays through untouched.
     if (autoWalk && mover.IsOnGround && BlockedByWall())
     {
         mover.Jump();
     }
 
-    // The keys: jump, kick, contacts on and off, reset.
     if (input.IsKeyPressed(Keys.Space)) mover.Jump();
     if (input.IsKeyPressed(Keys.K)) Kick();
     if (input.IsKeyPressed(Keys.G)) showContacts = !showContacts;
@@ -316,7 +308,6 @@ bool BlockedByWall()
 
 void Reset()
 {
-    // The character back at its spawn, the ball at rest where it started, and the auto-walk on again.
     mover.Teleport(spawn);
     b2Body_SetTransform(ballBody, new B2Vec2(ballStart.X, ballStart.Y), b2Rot_identity);
     b2Body_SetLinearVelocity(ballBody, b2Vec2_zero);
@@ -382,7 +373,6 @@ void Draw()
 
 void AddInstructions()
 {
-    // The keys first, the live numbers under them.
     TextOverlay.GetOrCreate(game).AddSection("Mover", () =>
     {
         var m = mover;
@@ -404,8 +394,8 @@ void AddInstructions()
     });
 }
 
-// The kinematic elevator: a cosine ride set as a target transform each fixed step, so it carries
-// a velocity the mover's planes and the contact solver both feel.
+// The kinematic elevator: a cosine ride set as a target transform before each fixed step, so it
+// moves by velocity rather than teleporting.
 public sealed class Elevator(B2BodyId body, Vector2 origin, float amplitude) : IBox2DSimulationUpdate
 {
     private float _time;

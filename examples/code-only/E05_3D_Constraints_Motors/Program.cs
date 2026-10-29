@@ -22,10 +22,8 @@ using System.Globalization;
 //
 // E05_3D_Constraints already covers servos and limits, so the star here is the motor.
 //
-// One rule shapes every measurement below: A CONSTRAINT DOES NOT STOP TWO BODIES COLLIDING. Joining
-// two boxes with a ball socket does not let them share space - they still push each other apart, and
-// a joint built so the parts overlap simply jams and never moves. Every pivot here is placed in
-// clear air.
+// One rule shapes every measurement below: A CONSTRAINT DOES NOT STOP TWO BODIES COLLIDING, so a joint
+// built with its parts overlapping jams and never moves. Every pivot here is in clear air.
 
 // --- Mixer (hinge + angular motor) -------------------------------------------------------------
 const float MixerX = -6f;
@@ -39,24 +37,21 @@ const float PostTopY = 3f;
 const float MotorSpeed = 4f;
 const int LooseCubeCount = 8;
 
-// Target angular speed for the cone-swept pendulum, in radians per second.
-//
-// Well clear of the arm's own pendulum frequency, sqrt(3g/2L) which is about 2.4 rad/s here. Driving
-// a pendulum at its natural frequency makes the two beat against each other and the orbit wanders
-// into shifting polygons instead of settling into a circle.
+// Target angular speed of the cone-swept pendulum, in rad/s. Well clear of the arm's natural
+// frequency, sqrt(3g/2L), about 2.4 rad/s here: driven at that frequency the two beat against each
+// other and the orbit wanders into shifting polygons instead of a circle.
 const float ConeSpeed = 5f;
 
 // The arm is a spherical pendulum: the motor fixes how fast it goes round, but its swing in and out
-// is free motion that nothing damps. Expect the cone to breathe by roughly a fifth of its radius
-// rather than tracing a perfect circle, and expect no value here to remove that - it is the pendulum
-// nutating, not the motor faltering. This one keeps the breathing reasonably tight.
+// is free, barely damped motion. Expect the cone to breathe by roughly a fifth of its radius, and no
+// value here to remove that - it is the pendulum nutating, not the motor faltering. This tilt keeps
+// the breathing reasonably tight.
 const float MotorArmTilt = 1.3f;
 
-// Motor strength. Beware that MotorDamping does NOT read back the number the component was built
-// with: the constructors pass a damping value to Bepu's MotorSettings, which stores its reciprocal,
-// so a component created with 0.02 reports a MotorDamping of 50. Read the property to learn the real
-// default before overriding it - guessing from the constructor gives a value 2500x too small, and a
-// motor set that soft produces no visible force at all.
+// Motor strength. MotorDamping does NOT read back the number the constructor passes: that number is
+// Bepu's MotorSettings softness, stored as its reciprocal, so a constructor's 0.02 reads back as 50.
+// Read the property for the real default - copying the constructor's value is 2500x too soft, and
+// the motor produces no visible force at all.
 const float MotorDampingValue = 50f;
 const float MotorForceValue = 10_000_000f;
 
@@ -120,8 +115,7 @@ void Update(Scene scene, GameTime time)
 {
     if (game.Input.IsKeyPressed(Keys.M) && mixerMotor is not null)
     {
-        // The blade does not stop dead: the hinge still holds it, so it coasts down under friction.
-        // That is the difference between removing a motor and freezing a body.
+        // The blade coasts down instead of stopping dead: removing a motor is not freezing a body.
         mixerMotor.Enabled = !mixerMotor.Enabled;
     }
 
@@ -182,9 +176,8 @@ void CreateMixer(Scene scene)
         SpringDampingRatio = 5,
     };
 
-    // A motor targets a VELOCITY, so there is no "finished" state - it keeps pushing for as long as
-    // it is enabled. MotorMaximumForce is the budget it may spend to reach that
-    // velocity; lower it and the cubes would stall the blade instead of being swept aside.
+    // A motor targets a VELOCITY, so it never finishes - it pushes for as long as it is enabled.
+    // MotorMaximumForce is its budget; lower it and the cubes stall the blade instead of being swept aside.
     mixerMotor = new OneBodyAngularMotorConstraintComponent
     {
         A = bladeBody,
@@ -228,25 +221,20 @@ void CreateMotorisedPendulum(Scene scene)
 {
     var (anchor, arm) = CreatePendulum(scene, MotorPendulumX, "Motorised", Color.MediumPurple, MotorArmTilt);
 
-    // Sweep the tilted arm around a cone by driving rotation about ONE axis only. The arm has to
-    // start tilted for this to be visible at all - a perfectly vertical arm driven about Y just
-    // spins about its own axis and looks completely still.
+    // Sweep the tilted arm around a cone by driving rotation about ONE axis only. A vertical arm
+    // driven about Y just spins about its own axis and looks still, hence the starting tilt.
     //
-    // Constraining a single axis is what keeps the cone alive. The whole-vector motors take a target
-    // like (0, speed, 0), which also demands ZERO rotation about X and Z - exactly the rotation the
-    // arm needs to swing back out against gravity. They hold the spin but flatten the cone into a
-    // vertical spin within seconds. AngularAxisMotor leaves the other two axes to gravity, so the
-    // arm keeps its angle.
+    // The whole-vector motors take a target like (0, speed, 0), which also demands ZERO rotation
+    // about X and Z - the rotation the arm needs to swing back out against gravity - so they flatten
+    // the cone into a vertical spin within seconds. AngularAxisMotor leaves those axes to gravity.
     //
-    // Two other constraints were tried here first and are worth knowing about:
+    // Two other constraints were tried here first:
     //
-    //   BallSocketMotor drives LINEAR velocity at the socket point, despite the name suggesting it
-    //   pairs with a ball socket. Pointing it at the very point a stiff BallSocketConstraint is
-    //   already pinning gives a tug of war the rigid joint always wins, and the arm never moves.
+    //   BallSocketMotor drives LINEAR velocity at the socket point, despite its name. Aimed at the
+    //   point a BallSocketConstraint already pins, it loses the tug of war and the arm never moves.
     //
-    //   AngularMotor is the two-body whole-vector motor. It turns the arm, but ships with a force
-    //   budget of 1000 and a damping of 0.1, which is far too soft to swing an arm against gravity -
-    //   it creeps at a fraction of the requested speed until both are raised.
+    //   AngularMotor, the two-body whole-vector motor, defaults to a force budget of 1000 and a
+    //   damping of 0.1, far too soft to swing an arm against gravity; it creeps until both are raised.
     armMotor = new AngularAxisMotorConstraintComponent
     {
         A = anchor.Get<BodyComponent>(),
@@ -375,13 +363,8 @@ Entity CreateBox(string name, Color color, Vector3 position, Vector3 size, bool 
 
 IReadOnlyList<TextElement> BuildOverlayLines()
 {
-    // Rebuilt every frame rather than patched line by line. Indexing into the existing list means
-    // the labels written here and the placeholders written at startup have to be kept in step by
-    // hand, and they drift apart the moment a line is renamed.
-    //
-    // The live spin readouts matter: switching a motor off does not brake anything, it just stops
-    // pushing. A hinged blade carrying momentum coasts for a very long time, so without a number on
-    // screen turning the motor off looks exactly like nothing happening.
+    // The live spin readouts matter: switching a motor off does not brake anything, so a hinged
+    // blade coasts for a long time, and without a number on screen it looks as if nothing happened.
     return [
         new("M", $"Mixer motor {OnOff(mixerMotor?.Enabled)}, blade spin {Spin(mixerMotor?.A)} rad/s", Color.Yellow),
         new("N", $"Arm motor {OnOff(armMotor?.Enabled)}, arm spin {Spin(armMotor?.B)} rad/s", Color.Yellow),
@@ -405,8 +388,7 @@ static string Spin(BodyComponent? body) => body is null ? "-" : MathF.Abs(body.A
 
 void AddInstructions()
 {
-    // BuildOverlayLines runs every frame the overlay is drawn, which is what puts the live spin
-    // readouts on screen without anything having to push them
+    // BuildOverlayLines runs every frame the overlay is drawn, which keeps the spin readouts live
     TextOverlay.GetOrCreate(game).AddSection("Game", BuildOverlayLines);
 }
 

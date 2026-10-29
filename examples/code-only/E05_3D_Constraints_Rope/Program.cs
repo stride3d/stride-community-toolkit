@@ -15,10 +15,9 @@ using System.Globalization;
 // part is not stringing them together - it is stopping the result from thrashing itself apart.
 //
 // The enemy is the MASS RATIO. Both ropes here carry the same heavy weight on the same light links.
-// The force holding that weight up has to travel link by link all the way to the fixed anchor, and a
-// solver only gets so many passes per frame to work that out. Ask it to hold a hundred times its
-// own mass through a long thin chain and it will not finish in time: the rope stretches, snaps back,
-// and oscillates.
+// The force holding that weight up has to travel link by link to the fixed anchor, and the solver
+// only gets so many passes per step. Hang a weight many times heavier than the links on a long thin
+// chain and it will not finish in time: the rope stretches, snaps back, and oscillates.
 //
 // Left rope is the naive build. Right rope is identical apart from two changes taken from Bepu's own
 // RopeStabilityDemo, and holds its shape:
@@ -28,18 +27,16 @@ using System.Globalization;
 //   Skip constraints  - each segment also tied to several further down, giving impulses shortcuts
 //                       instead of forcing them to crawl one link at a time.
 //
-// Watch when the left rope misbehaves, because it is the clearest evidence of the cause: while the
-// chain hangs slack it looks perfectly well behaved, and it only goes wobbly once it is pulled taut.
-// A distance limit does nothing until it reaches its limit, so a slack rope asks nothing of the
-// solver. The instant the weight draws the chain tight, every link has to relay the supporting force
-// to the anchor - and that is the job the naive build cannot finish in the time available.
+// Watch when the left rope misbehaves: slack, it behaves; pulled taut, it wobbles. A distance limit
+// does nothing until it reaches its limit, so a slack rope asks nothing of the solver. Once the chain
+// is tight, every link has to relay the supporting force to the anchor - the job the naive build
+// cannot finish in time.
 //
 // Press Z to switch the right-hand rope to the naive build and watch it join in.
 
-// High enough that even the naive rope at full stretch keeps its weight off the floor. This matters
-// more than it looks: a weight resting on the ground is being held up by the ground, so both ropes go
-// slack, the stretch that the whole example is about disappears, and the length readout stops
-// measuring anything.
+// High enough that even the naive rope at full stretch keeps its weight off the floor. A weight
+// resting on the ground is held up by the ground, so both ropes go slack and the length readout
+// stops measuring anything.
 const float AnchorHeight = 9f;
 const float NaiveRopeX = -3.5f;
 const float StableRopeX = 3.5f;
@@ -52,14 +49,13 @@ const float LinkRadius = 0.125f;
 const float LinkSpacing = 0.075f;
 const float LinkMass = 1f;
 
-// Ten times the mass of a single link. Bepu's own demo uses 100:1, but it also runs its solver at
-// eight velocity iterations; at Stride's default solver settings the naive rope stops merely sagging
-// and simply comes apart, stretching past twice its length and landing on the floor, which
-// demonstrates nothing except that the configuration was hopeless.
+// Ten times the mass of a single link. Bepu's own demo uses 100:1, but at that ratio the naive rope
+// here does not merely sag: it comes apart, stretching past twice its length onto the floor, which
+// demonstrates nothing.
 //
-// The workable ratio also depends on how many links the force has to travel through: 20 links tolerate
-// about half the load that 10 do, because every extra link is another step the solver has to push the
-// supporting force along. Raise either and the left-hand rope will eventually reach the floor.
+// The workable ratio also depends on the link count: 20 links tolerate about half the load that 10
+// do, since every extra link is another step the force has to travel. Raise either and the left-hand
+// rope will eventually reach the floor.
 const float WeightRadius = 0.8f;
 const float WeightMass = 10f;
 
@@ -72,9 +68,8 @@ const float TowerBoxSize = 0.6f;
 const int TowerRows = 15;
 const int TowerColumns = 2;
 
-// Sideways speed given to a weight by the swing key, in metres per second. An impulse is mass times
-// velocity, so it is derived from the weight rather than written as a raw number - otherwise every
-// change to WeightMass silently changes how hard the swing is.
+// Sideways speed given to a weight by the swing key, in m/s. The impulse is derived from it and the
+// weight's mass, so changing WeightMass does not change how hard the swing is.
 const float SwingSpeed = 4f;
 
 var swingImpulse = new Vector3(0, 0, WeightMass * SwingSpeed);
@@ -205,8 +200,7 @@ static string Length(Rope? rope) => rope is null ? "-" : rope.Length.ToString("0
 
 void AddInstructions()
 {
-    // BuildOverlayLines runs every frame the overlay is drawn, which is what keeps the measured rope
-    // lengths live
+    // BuildOverlayLines runs every frame the overlay is drawn, which keeps the rope lengths live
     TextOverlay.GetOrCreate(game).AddSection("Game", BuildOverlayLines);
 }
 

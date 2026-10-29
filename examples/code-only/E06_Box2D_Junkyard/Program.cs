@@ -12,16 +12,15 @@ using static Box2D.NET.B2MathFunction;
 using static Box2D.NET.B2Shapes;
 
 // A faithful replica of the Box2D.NET sample Benchmarks/BenchmarkJunkyard (MIT, (c) 2022 Erin Catto,
-// (c) 2025 Choi Ikpil): a walled yard whose
-// floor and walls are rows of overlapping static squares, 8,000 small five-sided "rocks" raining
-// into it, and a kinematic pusher plowing back and forth through the pile at x = 60*sin(0.2t).
+// (c) 2025 Choi Ikpil): a walled yard whose floor and walls are rows of overlapping static squares,
+// 8,000 small five-sided "rocks" raining into it, and a kinematic pusher plowing back and forth
+// through the pile at x = 60*sin(0.2t).
 //
-// Rendering works exactly like the Box2D testbed: no meshes, no materials, no entities - every
-// shape is submitted each frame to the toolkit's ShapeBatch, whose shader (a port of the
-// testbed's solid_polygon shader) draws all of them in one instanced call, computing the 40%-alpha
-// fill and the pixel-constant border per fragment. Zoom and resize cost nothing; overlapping
-// shapes blend through each other; body states show as the testbed's colours - pale green statics,
-// pink awake, salmon fast-movers, gray sleepers, royal blue pusher - on its dark gray background.
+// Rendering works like the Box2D testbed: no meshes, materials or entities - every shape goes to
+// the toolkit's ShapeBatch each frame, whose shader (a port of the testbed's solid_polygon shader)
+// draws them all in one instanced call, computing the 40%-alpha fill and the pixel-constant border
+// per fragment. Body states show in the testbed's colours - pale green statics, pink awake, salmon
+// fast-movers, gray sleepers, royal blue pusher - on its dark gray background.
 
 // --- the sample's numbers, verbatim
 const float GridSize = 1.0f;
@@ -44,13 +43,10 @@ var background = new Color(0.2f, 0.2f, 0.2f);
 
 ShapeBatch shapeBatch = null!;
 
-// Bodies are entity-less: physics is the single source of truth and the debug draw reads it
-// directly every frame, exactly like the testbed
+// Entity-less bodies: SubmitShapes reads the physics world directly every frame, like the testbed
 List<B2BodyId> rockIds = [];
 B2BodyId pusherId = default;
 
-// The five-sided rock outline: the sample places five points on a circle by the Fibonacci sphere
-// algorithm and takes their convex hull. The hull sorts them; the shader wants them sorted too.
 var pentagon = FibonacciPentagon(Radius);
 
 // Static square outlines, reused for every floor and wall submission
@@ -66,9 +62,8 @@ using var simulation = new Box2DSimulation();
 var sceneSetup = new SceneSetup2D
 {
     ClearColor = background,
-    // The sample's viewport: camera centered on (8, 25), zoom 60 - which in the testbed means the
-    // visible world is 60 units tall. The camera controller adopts this size and scales it when the
-    // mouse wheel zooms; the shader keeps borders pixel-constant at any zoom on its own
+    // Centred on the sample's (8, 25). The testbed's zoom 60 is a half-height (120 units tall);
+    // OrthographicSize is the full height, so this view is 60 units tall, twice as close
     Camera = CameraSetup.Orthographic(position: new Vector3(8, 25, 50), orthographicSize: 60).WithController(),
     Ground = null,
     Profiler = true,
@@ -85,9 +80,8 @@ void Start(Scene rootScene)
     shapeBatch.BorderWidth = 1f;
     shapeBatch.Fill.Alpha = 0.4f;
 
-    // The testbed steps the world exactly once per rendered frame - no catch-up. This scene is the
-    // heaviest benchmark in the sample suite, and letting the accumulator run three catch-up steps
-    // per frame would only deepen the slow motion it plays in on a loaded machine.
+    // The testbed steps once per rendered frame, with no catch-up; the default three catch-up steps
+    // would only deepen the slow motion on a loaded machine.
     simulation.MaxStepsPerFrame = 1;
 
     // Left mouse picks a rock up and throws it - the one interaction the replica adds to the testbed
@@ -188,15 +182,15 @@ void CreatePusher()
 
 void Update(Scene rootScene, GameTime time)
 {
-    // Box2D is stepped by hand: fixed-timestep accumulation and the pusher drive happen inside
+    // Fixed-step accumulation and the pusher drive happen inside
     simulation.Update(time.Elapsed);
 
     SubmitShapes();
 }
 
 /// <summary>
-/// Submits every shape for this frame straight from the physics world, in the testbed's draw order:
-/// the static yard first, then the rocks coloured by their state, the pusher last on top.
+/// Submits every shape for this frame straight from the physics world: the static yard, then the
+/// rocks coloured by their state, the pusher on top.
 /// </summary>
 void SubmitShapes()
 {
@@ -227,7 +221,6 @@ void SubmitShapes()
 
 void SubmitBodyPolygon(Vector2[] vertices, B2Transform transform, Color color)
 {
-    // The instance transform is the body's, in the same (x, y, cos, sin) form the testbed uses
     shapeBatch.DrawSolidPolygon(vertices, new Vector2(transform.p.X, transform.p.Y), MathF.Atan2(transform.q.s, transform.q.c), color);
 }
 

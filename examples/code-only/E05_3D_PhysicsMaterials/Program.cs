@@ -187,7 +187,6 @@ void BuildBounceLane(Scene scene, BounceLane lane, float x)
 
     var start = new Vector3(x, surface + DropHeight + BallRadius, BounceRowZ);
 
-    // A sphere's size is its radius in X
     var entity = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(lane.Pad is null ? lane.Colour : new Color(225, 225, 230), metalness: 0f, glossiness: 0.6f),

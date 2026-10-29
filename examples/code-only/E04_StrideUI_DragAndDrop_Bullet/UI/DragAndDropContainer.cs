@@ -19,7 +19,7 @@ public class DragAndDropContainer : Canvas
     }
 
     /// <summary>
-    /// Generates a new Z-index for the dragged element to ensure it stays on top.
+    /// Returns a Z-index above every earlier one, so the element goes on top.
     /// </summary>
     public int GetNewZIndex() => _lastZIndex++;
 

@@ -144,8 +144,8 @@ void Update(Scene scene, GameTime time)
         // The one line that slows, stops or speeds up the fountain. Nothing is sent to the fountain
         simulation.TimeScale = timeScales[timeScaleIndex];
 
-        // Five times the speed is five physics steps a frame at 60 frames a second, and this caps
-        // the steps a frame, three by default (Stride 4.4.0 ignored the cap; 4.4.1 applies it)
+        // Five times the speed is five physics steps a frame at 60 frames a second, over the default
+        // cap of three (Stride 4.4.0 ignored the cap; 4.4.1 applies it)
         simulation.MaxStepPerFrame = 8;
     }
 
@@ -197,8 +197,7 @@ InterpolationMode Interpolation() => interpolated ? InterpolationMode.Interpolat
 /// </summary>
 Entity CreateBody(Scene scene, int kind, Vector3 position)
 {
-    // AddBepuPhysics derives the collider from the shape; it needs a model
-    // component to be present, which is then taken off again
+    // AddBepuPhysics derives the collider from the shape alone
     var body = new Entity(shapes[kind].Name) { new ModelComponent(models[kind]) };
 
     body.AddBepuPhysics(shapes[kind].Type, new BepuPhysicsOptions
@@ -247,8 +246,6 @@ void BuildBasin(Scene scene)
 
     void Static(Primitive3D shape, Vector3 position)
     {
-        // An empty compound collider: CreatePrimitive adds the collider that fits the shape. A
-        // collider given here as well would be a second one, at its default size
         var entity = game.CreatePrimitive(shape, new BepuPhysicsOptions
         {
             Material = stone,

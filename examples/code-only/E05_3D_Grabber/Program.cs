@@ -113,8 +113,6 @@ void BuildScene(Scene scene)
     {
         EntityName = "wall",
         Material = game.CreateMaterial(new Color(140, 140, 150)),
-        // An empty compound: the helper adds the box that fits the wall's size. A box given here
-        // would be kept as the wall's collider, at its own default size
         Body = BodyMode.Static,
         Position = new Vector3(0, 1.5f, 7),
     });

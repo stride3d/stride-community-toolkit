@@ -5,8 +5,8 @@ using Stride.Core.Mathematics;
 namespace E05_3D_Constraints_Rope;
 
 /// <summary>
-/// A built rope: its segments, the weight on the end, and the skip constraints so they can be
-/// switched off at runtime.
+/// A built rope: its segments, the weight on the end, and its constraints, so
+/// <see cref="SetStabilised"/> can rewire them at runtime.
 /// </summary>
 public sealed record Rope(
     IReadOnlyList<BodyComponent> Links,
@@ -39,10 +39,8 @@ public sealed record Rope(
             constraint.MinimumDistance = constraint.MaximumDistance * 0.1f;
         }
 
-        // The weight hangs from the last segment on a constraint of its own, and it has to move with
-        // the rest. Leaving it anchored at the segment end while every other joint is anchored at a
-        // centre leaves one asymmetric joint at the bottom, which shows up as the last link sitting
-        // visibly out of line while the rope swings.
+        // The weight's own constraint has to move with the rest, or one asymmetric joint at the
+        // bottom leaves the last link visibly out of line while the rope swings.
         WeightConstraint.LocalOffsetA = new Vector3(0, -leverArm, 0);
         WeightConstraint.MaximumDistance = Settings.LinkSpacing + Settings.LinkRadius - leverArm;
         WeightConstraint.MinimumDistance = WeightConstraint.MaximumDistance * 0.1f;

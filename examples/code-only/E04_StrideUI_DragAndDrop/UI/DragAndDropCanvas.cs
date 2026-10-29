@@ -64,9 +64,6 @@ public class DragAndDropCanvas : Canvas
         Height = 27
     });
 
-    /// <summary>
-    /// Adds a close button to the canvas.
-    /// </summary>
     private void AddCloseButton()
     {
         var button = new Button
@@ -98,9 +95,6 @@ public class DragAndDropCanvas : Canvas
         VerticalAlignment = VerticalAlignment.Center
     };
 
-    /// <summary>
-    /// Handles the touch event when the close button is pressed.
-    /// </summary>
     private void OnCloseButtonTouchUp(object? sender, TouchEventArgs e)
     {
         if (Parent is not Canvas parent) return;

@@ -84,7 +84,7 @@ public class SceneManager
     private void AddGroundAndWalls()
     {
         // Junkyard-style yard: one static body carrying rows of slightly overlapping squares,
-        // each square also an entity drawn by the Box2D debug-draw component
+        // each square also an entity drawn by a ShapeComponent
         var groundId = _simulation.CreateStaticBody(Vector3.Zero);
         var shapeDef = ShapeSpawner.DefaultShapeDef();
 

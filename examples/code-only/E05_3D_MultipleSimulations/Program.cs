@@ -67,8 +67,7 @@ void Start(Scene scene)
 
 void AddInstructions()
 {
-    // One shared on-screen block with the camera help: the overlay draws itself, so nothing here
-    // runs per frame
+    // One shared on-screen block with the camera help
     TextOverlay.GetOrCreate(game).AddSection("Simulations", () =>
     [
         new("Space", "Drop everything again", Color.Yellow),

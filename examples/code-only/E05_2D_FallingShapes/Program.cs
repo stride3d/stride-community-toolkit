@@ -13,7 +13,7 @@ game.Run(new SceneSetup2D { Profiler = true }.UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
-    // Left mouse grabs any body, drags it and throws it on release
+    // Left mouse grabs any dynamic body, drags it and throws it on release
     game.AddGrabber();
 
     var otherShape = game.CreatePrimitive(Primitive2D.Rectangle(0.5f, 0.8f), new()

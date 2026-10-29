@@ -19,7 +19,8 @@ using Stride.Rendering;
 // collide. Four layers here - Players, Enemies, Shots, Debris - and the matrix shown twice: as a grid on
 // screen, and as the scene itself. Each lane is a shelf on one layer, and a cube of every layer is dropped
 // onto every shelf: a cube whose layer collides with the shelf's stays on it, any other falls through to
-// the ground. Keys 1 to 0, or a click on a cell of the grid, flip one pair of the matrix, and the cubes drop again.
+// the ground. Keys 1 to 0, or a click on a cell of the grid, flip one pair of the matrix, and the cubes drop again;
+// Space or R drops them without a flip.
 //
 // A right click fires a small body on the Shots layer from the camera at the cursor, so the matrix is seen a
 // third way: the shot flies through whatever its layer ignores and is stopped by whatever it collides with,
@@ -185,7 +186,7 @@ BodyComponent BuildCube(Scene scene, int row, int lane)
 /// <summary>One pair of the matrix flipped, and the cubes dropped again so the scene shows the new rule.</summary>
 void FlipPair(int a, int b)
 {
-    // The matrix is read as the solver meets each pair, so a change applies to the next drop
+    // The narrow phase reads the matrix for each pair every step, so a change applies to the next drop
     simulation.CollisionMatrix.Set(layers[a], layers[b], !simulation.CollisionMatrix.Get(layers[a], layers[b]));
     DropCubes();
 }
@@ -250,7 +251,7 @@ void AgeShots(float elapsed)
     }
 }
 
-/// <summary>The mouse ray under the current mask: what it hits is named in the overlay and ringed on the ground.</summary>
+/// <summary>The mouse ray under the current mask: what it hits is named in the overlay and ringed at the hit point.</summary>
 void CastMouseRay()
 {
     var camera = game.GetCameraEntity().Get<CameraComponent>();
@@ -341,7 +342,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     var lines = new List<TextElement>
     {
         new("1 to 0, or a click on a cell", "Flip a pair of the matrix, and drop the cubes again", Color.Gold),
-        new("Space", "Drop the cubes again", Color.Gold),
+        new(["Space", "R"], "Drop the cubes again", Color.Gold),
         new("M", $"Mouse ray hits {rayMasks[rayMask].Name}: now {rayHit}", Color.Gold),
         new("Right mouse", $"Shoot at the cursor from the Shots layer: last hit {hits.Last}", Color.Gold),
         new("Left mouse", "Grab a cube and drop it on another shelf", Color.Gold),

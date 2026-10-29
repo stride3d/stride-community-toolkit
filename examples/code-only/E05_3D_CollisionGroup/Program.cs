@@ -17,12 +17,12 @@ using Stride.Input;
 
 // Collision groups. A group is a number rule inside a layer: bodies with the same group Id ignore each other
 // when their indexes are the same or next to each other, and collide when the indexes are two or more apart.
-// Bodies with different Ids, or Id 0, are not filtered at all. Two stations show the two uses Bepu's own
-// documentation gives:
+// Bodies with different Ids, or Id 0, are not filtered at all. Two stations show the two uses the
+// CollisionGroup documentation gives:
 //
 //   1. Teams: three lanes, two spheres a lane running at each other, each wearing its name and its group Id.
 //      Team A has Id 1 and team B has Id 2, so A meets A and B meets B pass through each other, and A meets B
-//      bounces. T sets every Id to 0, and all three lanes bounce.
+//      bounces. G sets every Id to 0, and all three lanes bounce.
 //   2. Chain: four links hanging end to end from a swinging hook, all with Id 1 and indexes 0 to 3.
 //      Neighbours are one apart and ignored, so the chain bends freely at its sockets; links two or more
 //      apart still collide when it folds right over. C switches the filtering off, and the touching ends
@@ -141,7 +141,8 @@ void Update(Scene scene, GameTime time)
         hook.Awake = true;
     }
 
-    if (game.Input.IsKeyPressed(Keys.T))
+    // Not T: that is the grabber's rotate key
+    if (game.Input.IsKeyPressed(Keys.G))
     {
         teamGroups = !teamGroups;
         ApplyGroups();
@@ -306,7 +307,7 @@ WorldTextComponent MakeText(string text, Color colour, Anchor anchor, float heig
 IReadOnlyList<TextElement> BuildOverlayLines() =>
 [
     new("Space", $"Run the lanes again; they run by themselves every {RunEvery:0} seconds", Color.Gold),
-    new("T", $"Team groups {(teamGroups ? "on: A is Id 1, B is Id 2" : "off: every sphere Id 0")}", Color.Gold),
+    new("G", $"Team groups {(teamGroups ? "on: A is Id 1, B is Id 2" : "off: every sphere Id 0")}", Color.Gold),
     new("C", $"Chain filtering {(chainFiltered ? "on: Id 1, indexes 0 to 3" : "off: Id 0")}", Color.Gold),
     new("Left mouse", "Grab a sphere or a link", Color.Gold),
     new(""),

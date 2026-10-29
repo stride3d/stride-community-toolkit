@@ -20,7 +20,7 @@ using Stride.Rendering;
 // constraints work well. Each node is a small sphere body. Neighbours, including diagonals, are
 // tied by a distance *limit* whose minimum is 15% of the rest length, so the sheet can bunch but
 // never stretch. Area constraints on each triangle stop the shear that a distance-only lattice
-// shows. Nodes within one row or column of each other are told not to collide, through the
+// shows. Nodes within one row and one column of each other are told not to collide, through the
 // collision group's index rule.
 //
 // Three sheets hang side by side, differing only in stiffness and whether they have area
@@ -130,8 +130,8 @@ void SetupInstancing(Scene scene)
     game.AddInstancingBufferUpload(instancing);
 }
 
-// One sphere model per node size, built on first use. PrimitiveEntityOptions, explicitly typed,
-// is the overload that builds a model and no body; the entity is discarded.
+// One sphere model per node size, built on first use. BodyMode.None builds a model and no body;
+// the entity is discarded.
 Model ModelFor(float radius)
 {
     if (models.TryGetValue(radius, out var cached)) return cached;
