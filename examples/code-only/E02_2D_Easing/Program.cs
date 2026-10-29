@@ -11,11 +11,9 @@ using Stride.Graphics;
 using Stride.Input;
 
 // An easing cheat sheet that runs. Every curve in EasingFunction gets a tile: its graph over a unit
-// box, a dot travelling along the graph on a shared clock, and a slider under the box that moves
-// with the eased value - so the shape and the motion it produces sit side by side. Click a tile, or
-// press N and P, to see one curve large on the right with its formula, and a race between the eased
-// slider and a linear one, which is where "ease-out feels snappy" and "elastic overshoots" become
-// something you can watch rather than read.
+// box, a dot riding the graph on a shared clock, and a slider under the box moving with the eased
+// value. Click a tile, or press N and P, to see one curve large on the right with its formula and a
+// race against a linear slider, where "ease-out feels snappy" and "elastic overshoots" can be watched.
 //
 // Keys: N / P select the next and previous curve, 1 / 2 / 3 dim everything but the ease-in, ease-out
 // or in-out family, 0 shows all, Space pauses the clock, Left / Right change how long one run
@@ -30,7 +28,7 @@ const float Hold = 0.5f;
 
 // Six columns on the left; the big panel on the right, under the overlay block. The overlay is
 // pixels and the sheet is world units, so the panel asks the overlay how tall its block is each
-// frame and takes whatever height is left, which is why the window opens a step larger than usual
+// frame and takes whatever height is left
 var tiles = Enum.GetValues<EasingFunction>()
     .Select((function, index) => new Tile(function, new Vector2(-21f + TileSize / 2f + index % Columns * PitchX, 6.2f - index / Columns * PitchY)))
     .ToArray();

@@ -84,7 +84,7 @@ void Start(Scene scene)
     game.Window.Title = "Material Preview - Stride Community Toolkit";
 
     // The editor's thumbnail compositor: the forward renderer, no post effects, the editor's grey. The
-    // game's has post effects - tone mapping, bloom - and is swapped in on G
+    // game's adds tone mapping and is swapped in on G
     thumbnail = GraphicsCompositorHelper.CreateDefault(enablePostEffects: false, clearColor: Color.FromBgra(0xFF434343));
     inGame = GraphicsCompositorHelper.CreateDefault(enablePostEffects: true, clearColor: Color.FromBgra(0xFF434343));
     game.SceneSystem.GraphicsCompositor = thumbnail;
@@ -145,7 +145,7 @@ void Update(Scene scene, GameTime time)
     if (game.Input.IsKeyPressed(Keys.G)) SetGameLook(scene, !gameLook);
 }
 
-// The editor's thumbnail camera: back along Z far enough that the front of a unit sphere fills the view,
+// The editor's thumbnail camera: back along Z far enough that the front of a unit sphere fits the view,
 // then pitched down thirty degrees and turned forty-five about the subject
 CameraComponent AddThumbnailCamera(Scene scene)
 {
@@ -171,7 +171,7 @@ CameraComponent AddThumbnailCamera(Scene scene)
     entity.Transform.Rotation = rotation;
     entity.Scene = scene;
 
-    // The editor's pose is the start; the controller orbits from there and H brings it back
+    // The editor's pose is the start; the controller flies from there and H brings it back
     entity.Add3DCameraController();
 
     return component;

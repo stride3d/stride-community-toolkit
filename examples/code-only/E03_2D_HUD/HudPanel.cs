@@ -5,7 +5,7 @@ namespace E03_2D_HUD;
 /// <summary>The pattern of a panel's glass. The values are what the shader reads.</summary>
 public enum GlassPattern
 {
-    /// <summary>A dark scanline every four pixels.</summary>
+    /// <summary>Two dark pixel rows in every four.</summary>
     Lines,
 
     /// <summary>Five-pixel squares, each at one of five opacities.</summary>

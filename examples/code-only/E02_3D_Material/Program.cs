@@ -13,7 +13,7 @@ using Stride.Rendering;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
 
-// The four numbers of a material, one per row of cubes. A material in Stride is a colour, a
+// What a material's numbers do, in three rows of cubes. A material in Stride is a colour, a
 // glossiness (0 rough to 1 mirror) and a metalness (0 dielectric to 1 metal) under two shading
 // models, and everything else - textures, glass, hair, layers - is a feature added to that bag.
 // The back row sweeps glossiness, the middle row sweeps metalness, and the front row builds the
@@ -119,8 +119,7 @@ void Update(Scene scene, GameTime time)
 
 void AddInstructions()
 {
-    // The callback runs every frame the overlay is drawn, so the live light intensity appears without
-    // anything having to push it
+    // The callback runs every frame the overlay draws, so the intensity shown stays live
     TextOverlay.GetOrCreate(game).AddSection("Materials", () =>
     [
         new("Z", "Dim the skybox light", Color.Gold),

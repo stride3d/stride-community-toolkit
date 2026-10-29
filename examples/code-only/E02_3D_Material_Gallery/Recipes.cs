@@ -13,10 +13,9 @@ namespace E02_3D_Material_Gallery;
 public static class Recipes
 {
     /// <summary>
-    /// The microfacet model with a distribution of the station's choosing. The environment term - what
-    /// a metal is made of, the sky in its reflection - stays the engine's lookup texture, which resolves
-    /// because <see cref="MaterialStation.Material"/> compiles with the game's content manager; without
-    /// it the table is empty and metals come out black, which is how this gallery first met it.
+    /// The microfacet model with a distribution of the station's choosing. The environment term stays
+    /// the engine's lookup texture, which resolves because <see cref="MaterialStation.Material"/>
+    /// compiles with the game's content manager; without it the table is empty and metals come out black.
     /// </summary>
     public static MaterialSpecularMicrofacetModelFeature Microfacet(IMaterialSpecularMicrofacetNormalDistributionFunction? distribution = null) => new()
     {
@@ -57,7 +56,7 @@ public static class Recipes
     /// means no tangent-space work at all.
     /// </summary>
     /// <param name="diffuse">The colour, or the albedo texture.</param>
-    /// <param name="glossiness">The glossiness, a number or a map; null for the engine's default.</param>
+    /// <param name="glossiness">The glossiness, a number or a map; null for the toolkit's default, 0.65.</param>
     /// <param name="metalness">The metalness, a number or a map; leave null when <paramref name="specular"/> is given.</param>
     /// <param name="specular">A specular colour or map instead of a metalness.</param>
     /// <param name="normal">A normal map, in the pack's XY convention.</param>

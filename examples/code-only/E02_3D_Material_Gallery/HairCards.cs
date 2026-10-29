@@ -128,7 +128,7 @@ public static class HairCards
         for (var i = 0; i < style.Strips; i++)
         {
             // A root anywhere on the head that hair grows: above the ears, and on the front only
-            // above the hairline, which rises towards the temples
+            // above the hairline, which drops towards the temples
             Vector3 radial;
             do
             {

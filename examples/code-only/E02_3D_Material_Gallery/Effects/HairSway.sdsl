@@ -3,8 +3,8 @@ namespace E02_3D_Material_Gallery
     // Sways hair cards in the vertex stage. The material's displacement slot is the vertex-stage hook a
     // material has: this class runs as the stage's final modifier and moves streams.Position, in object
     // space, before the world transform. The offset grows with the texture's V - 0 at the root, 1 at the
-    // tip - so roots stay put and tips swing, and every card gets its own phase from where it is, so the
-    // head does not move as one block.
+    // tip - so roots stay put and tips swing, and the phase follows the vertex's position, so the head
+    // does not move as one block.
     shader HairSway : IMaterialSurface, PositionStream, Texturing
     {
         cbuffer PerMaterial
@@ -20,7 +20,7 @@ namespace E02_3D_Material_Gallery
             float weight = along * along;
             float phase = dot(streams.Position.xyz, float3(3.1, 2.3, 2.7));
 
-            // A slow gust with a faster flutter on top, per card
+            // A slow gust with a faster flutter on top
             float gust = 0.6 + 0.4 * sin(SwayTime * 1.7 + phase);
             float flutter = 0.15 * sin(SwayTime * 3.9 + phase * 1.7);
             float3 offset = SwayWind * gust + float3(sin(SwayTime * 2.9 + phase), 0.0, cos(SwayTime * 2.3 + phase)) * flutter;

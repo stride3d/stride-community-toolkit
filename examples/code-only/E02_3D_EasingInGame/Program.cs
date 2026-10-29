@@ -198,11 +198,9 @@ void Update(Scene scene, GameTime time)
         crystals[i].Transform.Position = crystalSpots[i] + new Vector3(0f, bob.Lerp(0f, 0.5f), 0f);
     }
 
-    // 4. The camera: position and rotation between two viewpoints, on one clock. The tween drives the
-    // camera only while it flies: a completed tween stays complete, so writing its pose every frame
-    // from then on would pin the camera where it landed and the free-flight controller could never
-    // move it again. The frame it completes writes the exact landing pose, then the tween is reset
-    // and the controller has the camera back.
+    // 4. The camera: position and rotation between two viewpoints, on one clock. A completed tween
+    // stays complete, and writing its pose every frame would pin the camera against the controller,
+    // so the completing frame writes the landing pose and resets the tween.
     flight.Update(time);
 
     if (flight.IsRunning || flight.IsComplete)
