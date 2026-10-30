@@ -423,7 +423,7 @@ title:
 level: Intermediate
 category: Physics
 complexity: 4
-order: 90
+order: 82
 description:
   en: |-
     Four layers, Players, Enemies, Shots and Debris, and the collision matrix that says which pairs
