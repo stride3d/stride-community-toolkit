@@ -21,12 +21,10 @@ namespace CubeCollapse.Setup;
 /// its own entity with a <see cref="BodyComponent"/>, so the word breaks apart naturally as it lands.
 /// </para>
 /// <para>
-/// The collider is a plain box around the glyph. A box is deliberate: a letter-shaped collider means
-/// convex hulls, and extruded-polygon hulls colliding with each other are exactly the shape class
-/// behind two Bepu failures seen in this repository (a NaN contact between extruded hulls, and a
-/// hull pair that never separates). A pile of
-/// letters jostling one another is the risky configuration, so they collide as boxes and nobody can
-/// tell once they are lying in a heap.
+/// The collider is a plain box around the glyph. A letter-shaped collider means convex hulls, and
+/// extruded-polygon hulls colliding with each other are the shape class behind two Bepu failures seen
+/// in this repository (a NaN contact between extruded hulls, and a hull pair that never separates).
+/// Once the letters lie in a heap, nobody can tell they are boxes.
 /// </para>
 /// </remarks>
 public static class FallingLetters
@@ -64,10 +62,9 @@ public static class FallingLetters
 
         var random = new Random(seed);
 
-        // One mesh per glyph, each centred on itself and told where it sits in the word, so the box
-        // collider below and the visible letter share a centre, which is also what makes the
-        // tumbling look right. The word is laid out along its own X axis and then turned as one
-        // piece, so the line of letters stays perpendicular to the viewer whichever way it faces
+        // One mesh per glyph, centred on itself and told where it sits in the word, so the box
+        // collider and the visible letter share a centre. The word is laid out along its own X axis
+        // and turned as one piece, so it faces the viewer whichever way that is
         var glyphs = TextMesh.CreateGlyphs(MeshFont.Default, word, new TextMeshOptions { Size = Size, Depth = Depth, LetterSpacing = 0.1f, Anchor = Anchor.MiddleCenter });
         var wordRotation = Quaternion.RotationY(yaw);
         var right = Vector3.Transform(Vector3.UnitX, wordRotation);
@@ -87,8 +84,7 @@ public static class FallingLetters
             };
 
             // SlowFallComponent rather than a plain BodyComponent: at full gravity the words drop
-            // past the camera before anyone reads them. It falls under a fraction of gravity while
-            // still accelerating, bouncing and tumbling like any rigid body.
+            // past the camera before anyone reads them
             entity.Add(new SlowFallComponent
             {
                 Collider = new CompoundCollider
@@ -123,7 +119,7 @@ public static class FallingLetters
     /// <param name="text">The line to show, in the toolkit's embedded font.</param>
     /// <param name="position">Where the line's centre hovers, in world units.</param>
     /// <param name="material">The line's material.</param>
-    /// <param name="scale">Letter height in world units. Defaults to 0.45.</param>
+    /// <param name="scale">Scale applied to the line's letters, which are built at the same size as the falling ones. Defaults to 0.45.</param>
     /// <returns>The created entity, named <see cref="EntityNames.GameOverMenu"/> so it can be removed on restart.</returns>
     public static Entity SpawnMenuLine(Game game, Scene scene, string text, Vector3 position, Material material, float scale = 0.45f)
     {

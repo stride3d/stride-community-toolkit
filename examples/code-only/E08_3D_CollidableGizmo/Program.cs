@@ -14,8 +14,8 @@ void Start(Scene rootScene)
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
 
-    // The script draws every collider in the scene, not its own entity's, so it lives on an entity
-    // that has nothing else to do. game.AddPhysicsDebug() makes this entity, with the debug meshes too
+    // The script draws every collider in the scene, not its own entity's, so it lives on an entity of
+    // its own. game.AddPhysicsDebug() makes this entity, with the debug meshes too
     var debug = new Entity("Physics Debug")
     {
         new CollidableGizmoScript

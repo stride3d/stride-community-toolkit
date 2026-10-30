@@ -1,10 +1,10 @@
 # Release Notes
 
-Welcome to the Release Notes for the **Stride Community Toolkit**. This section aims to provide you with an organized, high-level summary of changes, enhancements, and fixes made in each version release. If you're looking to understand what has changed from one version to the next, you're in the right place.
+The changes, new features and fixes in each release of the **Stride Community Toolkit**.
 
 ## What to Expect
 
-The Stride Community Toolkit is developed with rapid iteration in mind. It moves at a faster development pace compared to the Stride Game Engine. As a result, you should expect frequent updates that may introduce breaking changes. This fast-paced approach allows us to incorporate community feedback quickly and continue improving the toolkit.
+The toolkit moves faster than the Stride Game Engine, so expect frequent releases, and breaking changes between them while it is in preview.
 
 ## 1.0.0.0-preview.69
 
@@ -89,7 +89,7 @@ One family of helpers on the caller's own `Random`, so a world built from `new R
 
 | Before | After | Note |
 |---|---|---|
-| `Primitive3D.TriangularPrism` lit its two slanted faces from the inside | the normals point outwards | The face normal was the cross product of the edges in the wrong order. Found by a new geometry test; the bottom and the two triangles were right all along. |
+| `Primitive3D.TriangularPrism` lit its two slanted faces from the inside | the normals point outwards | The face normal was the cross product of the edges in the wrong order. The bottom and the two triangles are unchanged. |
 
 #### Gizmos
 
@@ -112,7 +112,7 @@ One family of helpers on the caller's own `Random`, so a world built from `new R
 
 #### Core helpers: names and contracts
 
-The review of the core package renamed the helpers whose names said how they worked or abbreviated what they read, and fixed the contracts that misled.
+Helpers whose names said how they worked, or abbreviated what they read, are renamed, and contracts that misled are fixed.
 
 | Before | After | Note |
 |---|---|---|
@@ -174,5 +174,5 @@ The review of the core package renamed the helpers whose names said how they wor
 - `ShapeComponent.Box(size)`: the four corners of a rectangle centred on the origin, for a shape component's `Vertices` or a shape batch; the Box2D examples wrote them by hand in nine places.
 - Box2D collision groups: `simulation.CollisionMatrix` is now consulted by the simulation, for the shapes put in a group with `shapeDef.InCollisionGroup(group)`. The matrix existed before, and nothing read it.
 - `game.AddGrabber2D(simulation)` puts the `Grabber2DScript` on the camera entity and returns it, the way `game.AddGrabber()` does for Bepu; the Box2D examples use it.
-- `body.TeleportAtRest(position, rotation = null)` in `Stride.CommunityToolkit.Bepu`: teleports a Bepu body and leaves it still and awake, which is what a reset key or a respawn wants; `Teleport` alone keeps the velocity, the spin and the sleep. The seven examples that wrote the four lines by hand use it.
+- `body.TeleportAtRest(position, rotation = null)` in `Stride.CommunityToolkit.Bepu`: teleports a Bepu body and leaves it still and awake, which is what a reset key or a respawn wants; `Teleport` alone keeps the velocity, the spin and the sleep. The examples that reset a body by hand use it.
 - `scene.FindEntity(name, recursive: false)`: the first entity with a name among a scene's top-level entities, or with `recursive: true` among their descendants too. `entity.FindEntity` and `entity.FindEntityRecursive` now call it on the entity's scene, and an entity that is not in a scene gets an `InvalidOperationException` that names the entity and says what to do, instead of a `NullReferenceException`.

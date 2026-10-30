@@ -80,8 +80,8 @@ public static class MotionStations
     }
 
     /// <summary>
-    /// An initial angle from a range, then a spin from a curve over the particle's life: the two
-    /// halves of a rotating particle. Sprites with a clear top, like the flame frames, show it best.
+    /// An initial angle from a range, or a spin from a curve over the particle's life, which
+    /// replaces that angle rather than adding to it. Sprites with a clear top, like the flame frames, show it best.
     /// </summary>
     public static void Spin(ParticleStation s)
     {
@@ -113,9 +113,9 @@ public static class MotionStations
     }
 
     /// <summary>
-    /// A force field: a shape in the world and three forces within it - around its axis, away from
-    /// its centre, along a fixed direction - falling off towards the shape's edge. A vortex, a
-    /// repulsor and a wind are the same updater with different numbers.
+    /// A force field: a shape in the world and forces within it - along its axis, around it, away
+    /// from it, and a fixed one - falling off towards the shape's edge. A vortex, a repulsor and a
+    /// wind are the same updater with different numbers.
     /// </summary>
     public static void ForceField(ParticleStation s)
     {
@@ -168,7 +168,7 @@ public static class MotionStations
 
     /// <summary>
     /// A collider: a shape particles bounce off, or stay inside when it is hollow. Restitution is
-    /// how much bounce survives, friction how much sideways speed. No physics engine is involved;
+    /// how much bounce survives, friction how much sideways speed is lost. No physics engine is involved;
     /// the updater tests each particle against the shape itself.
     /// </summary>
     public static void Collider(ParticleStation s)

@@ -3,7 +3,7 @@ namespace E03_2D_HUD
     // The glass of a panel, computed per pixel, in one of two patterns. Both are fixed to the screen,
     // both are brighter at the top of the panel and both have a band of light that travels down it.
     //
-    //   0  Lines    one dark scanline every four pixels
+    //   0  Lines    two dark pixel rows in every four
     //   1  Squares  five-pixel squares, each at one of five opacities picked by a hash of its cell
     //
     // The result multiplies the fill colour, alpha included. The texture coordinate runs 0 to 1

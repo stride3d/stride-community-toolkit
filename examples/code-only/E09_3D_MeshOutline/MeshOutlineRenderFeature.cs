@@ -74,7 +74,7 @@ public class MeshOutlineRenderFeature : RootRenderFeature
 
         _shader.UpdateEffect(context.GraphicsDevice);
 
-        // Everything except the primitive type is the same for every mesh, so set it up once
+        // The pipeline state differs per mesh only in primitive type, so set the rest up once
         _pipelineState.State.RootSignature = _shader.RootSignature;
         _pipelineState.State.EffectBytecode = _shader.Effect.Bytecode;
         _pipelineState.State.Output.CaptureState(context.CommandList);

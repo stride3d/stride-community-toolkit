@@ -6,7 +6,7 @@ using Stride.Engine;
 namespace E02_3D_GiveMeACube;
 
 /// <summary>
-/// Drives its entity around a horizontal circle centred on wherever the entity started.
+/// Drives its entity around a horizontal circle about <see cref="Centre"/>.
 /// </summary>
 /// <remarks>
 /// This is the point of the example: behaviour lives in a <see cref="SyncScript"/> attached to the
@@ -17,11 +17,10 @@ namespace E02_3D_GiveMeACube;
 /// rather than the transform, which is what lets the orbiting cube shove the loose cubes out of its way.
 /// </para>
 /// <para>
-/// It sets <see cref="BodyComponent.LinearVelocity"/> directly rather than calling
-/// <c>SetTargetPose</c>. SetTargetPose derives a velocity from <c>(target - position) / FixedTimeStep</c>,
-/// which assumes exactly one physics tick per call; when the frame rate drops below the physics rate,
-/// two ticks run on that velocity, overshoot past the target, and the correction overshoots further
-/// until the body diverges. Integrating a known velocity has no such feedback loop.
+/// It sets <see cref="BodyComponent.LinearVelocity"/> rather than calling <c>SetTargetPose</c>, whose
+/// velocity, <c>(target - position) / FixedTimeStep</c>, assumes one physics tick per call. Below the
+/// physics rate two ticks run on it, the body overshoots, and each correction overshoots further
+/// until it diverges. A known velocity has no such feedback loop.
 /// </para>
 /// </remarks>
 public class OrbitScript : SyncScript
@@ -74,9 +73,8 @@ public class OrbitScript : SyncScript
 
         if (_body is null) return;
 
-        // Move the body by giving it a velocity, never by assigning Entity.Transform.Position. The
-        // transform sync runs physics to transform and never the other way round, so writing the
-        // transform would move the mesh while leaving the collider behind, and nothing would be pushed.
+        // Move the body with a velocity, never Entity.Transform.Position: the sync runs physics to
+        // transform only, so a transform write moves the mesh, leaves the collider and pushes nothing.
 
         // Velocity of a point travelling around a circle is the derivative of its position
         var tangent = new Vector3(MathF.Cos(_angle), 0, -MathF.Sin(_angle)) * (AngularSpeed * Radius);

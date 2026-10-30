@@ -75,9 +75,7 @@ public static class MatchFinder
     /// <param name="groupSize">How many cubes are connected.</param>
     /// <returns><see langword="true"/> when the group may be cleared.</returns>
     /// <remarks>
-    /// A lone cube is not a match. Beyond following the genre, this removes a discontinuity from the
-    /// scoring curve - the group bonus is zero at one cube, so a single click used to be worth a flat
-    /// ten points while two were worth sixty.
+    /// A lone cube is not a match, as is usual in the genre.
     /// </remarks>
     public static bool IsClearable(int groupSize) => groupSize >= GameSettings.MinimumGroupSize;
 
@@ -88,17 +86,13 @@ public static class MatchFinder
     /// <returns><see langword="true"/> while the board can still be played.</returns>
     /// <remarks>
     /// <para>
-    /// Requiring groups of two or more means single cubes with no matching neighbour can never be
-    /// removed, so a board always ends with some left over and eventually reaches a state where
-    /// nothing at all can be cleared. That is normal for the genre, but it needs saying out loud -
-    /// without this check the game simply stops responding to clicks and never explains why.
+    /// A cube with no matching neighbour can never be removed, so every board eventually runs out of
+    /// moves. Without this check the game would stop responding to clicks without saying why.
     /// </para>
     /// <para>
-    /// Every cube is visited at most once across all the fills, because each one is marked as it is
-    /// reached and whole groups are skipped once seen - so this costs one pass over the board however
-    /// many groups it is divided into. It deliberately measures real group sizes rather than looking
-    /// for a matching neighbour, which would only be a valid shortcut while the minimum is exactly
-    /// two.
+    /// Every cube is visited at most once across all the fills, so this is one pass over the board.
+    /// It measures real group sizes rather than looking for a matching neighbour, a shortcut that only
+    /// holds while the minimum is exactly two.
     /// </para>
     /// </remarks>
     public static bool HasClearableGroup(CubeGrid grid)
@@ -127,9 +121,8 @@ public static class MatchFinder
     /// <param name="grid">The grid to count.</param>
     /// <returns>The number of distinct groups large enough to clear.</returns>
     /// <remarks>
-    /// The same single pass as <see cref="HasClearableGroup"/>, minus the early exit: every cube is
-    /// visited once whatever the answer is. Shown on the HUD so the endgame becomes a hunt for the
-    /// last few moves rather than a guess about whether any remain.
+    /// The same single pass as <see cref="HasClearableGroup"/>, without the early exit. Shown on the
+    /// HUD, so the endgame is a hunt for the last few moves rather than a guess.
     /// </remarks>
     public static int CountClearableGroups(CubeGrid grid)
     {

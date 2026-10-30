@@ -6,7 +6,7 @@ their width at any distance or zoom. It works in 2D and 3D scenes and is in the
 `Stride.CommunityToolkit.Shapes` package.
 
 For a tour of every shape, see the [ShapeBatch example](../code-only/examples/shape-batch.md). For method
-signatures, see the API reference.
+signatures, see <xref:Stride.CommunityToolkit.Shapes.ShapeBatch>.
 
 > [!TIP]
 > New to `ShapeBatch`? The tutorial [Build a simple HUD with ShapeBatch](../../tutorials/rendering/shapebatch-hud.md)
@@ -79,7 +79,7 @@ shapes.DrawDisc(new Vector3(0f, 0.02f, 1.5f), Vector3.UnitY, 3f, Color.OrangeRed
 | `afterPostEffects` | Draws the batch after the post-processing chain. See [Draw after post effects](#draw-after-post-effects) |
 
 `ShapeBatch` is immediate mode, like `SpriteBatch`. Shapes are submitted every frame, drawn once in submission
-order, and discarded.
+order, and discarded. `game.RemoveShapeBatch(batch)` takes a batch out of rendering.
 
 ## Draw state
 
@@ -90,7 +90,7 @@ Style properties are the batch's current state. Each draw call captures the stat
 | `BorderWidth` | 3 | Outline width in pixels |
 | `Fill` | The draw call's colour, alpha 1 | Fill colour and alpha |
 | `Glow` | Off | Halo outside the outline: width in pixels, colour, `Strength`, `Additive` |
-| `Dash` | Solid | Dash pattern in pixels |
+| `Dash` | Solid | Dash pattern in pixels, for circles, arcs and lines. Polygons stay solid |
 | `Gradient` | None | A second fill colour and a direction |
 | `Opacity` | 1 | Multiplies the alpha of border, fill and glow |
 | `DepthFade` | 0 | Distance in world units over which a shape fades as it approaches scene geometry |
@@ -130,13 +130,14 @@ shapes.Glow.Additive = true;
 
 ## Plane modes
 
-A shape is flat and lies in a plane. The draw method sets how the plane is oriented: a method that takes a normal, two axes or a rotation draws `Fixed`; `DrawBillboard`, `DrawBillboardCircle`, `DrawPixelDisc` and `DrawPixelRing` draw `Screen`; `DrawLine`, `DrawPixelLine` and `DrawWireBox` with `Vector3` points draw `Axial`.
+A shape is flat and lies in a plane. The draw method sets how the plane is oriented; there is no
+property for it.
 
-| `PlaneMode` | Plane | Use |
-|---|---|---|
-| `Fixed` | The two axes you pass | Discs on the ground, decals, panels on a wall |
-| `Screen` | Faces the camera | Billboards that keep their shape from any angle |
-| `Axial` | Keeps your X axis and turns about it to face the camera | A capsule between two points: a thick 3D line with round ends |
+| Plane | Drawn by | Orientation | Use |
+|---|---|---|---|
+| Fixed | Methods that take a normal, two axes or a rotation; other `Vector2` overloads use the XY plane | The axes you pass | Discs on the ground, decals, panels on a wall |
+| Billboard | `DrawBillboard`, `DrawBillboardCircle`, `DrawPixelDisc`, `DrawPixelRing` | Faces the camera | Shapes that keep their form from any angle |
+| Axial | `DrawLine` and `DrawPixelLine` (both overloads), `DrawWireBox` | Keeps the line's axis and turns about it to face the camera | A capsule between two points: a thick 3D line with round ends |
 
 Pixel-measured widths are correct under perspective and orthographic cameras.
 
@@ -148,6 +149,7 @@ screen and faces the camera from every angle.
 - `DrawPolyline` uses a width in world units, which narrows with distance.
 - `DrawPixelPolyline` uses a constant width in pixels.
 - Each fragment is depth-tested at its own point, so in a depth-tested batch a stroke passes behind and in front of geometry.
+- A run that crosses the camera's near plane is not supported.
 
 ### Depth fade
 
@@ -249,7 +251,7 @@ Remarks:
 - With `AutoScale` on, which is the default, units are the display's scaled pixels.
 - A positive angle turns clockwise on screen.
 - Screen shapes are drawn at the near plane, in front of scene geometry.
-- The `Screen` property is different from `PlaneMode.Screen`, which is a billboard in the world.
+- The `Screen` property is not the billboard plane, which faces the camera in the world.
 
 ## Draw after post effects
 
@@ -334,16 +336,17 @@ Limitations:
 
 - **Convex fills only.** The fill of a concave polygon is not supported. Strokes can follow any path, open or
   closed.
-- **Long translucent strokes.** A run of more than 64 points is drawn in pieces. With `Opacity` below 1, the
-  joint between two pieces is slightly brighter. A space stroke restarts its dash pattern at each piece.
+- **Long translucent strokes.** A run of more than 64 points is drawn in pieces. Where the stroke is not
+  opaque (`Opacity` or colour alpha below 1, or an additive glow), the joint between two pieces is slightly
+  brighter. A space stroke restarts its dash pattern at each piece.
 - **Flat shapes.** Only space strokes pass through 3D points. A sphere outline is a billboard disc. Mesh
   wireframes are not supported.
 - **No clipping.** `Viewport` positions and sizes screen shapes and does not clip them.
 - **No text.** Use World Text, or render text to a texture and use it as a fill.
 - **One fill source per batch.** Use a second batch for a second texture.
 - **No layout or events.** Hover and click handling is your code, based on `TryPick`.
-- **Sorting.** A batch sorts against transparent meshes as one object. Two batches in the same stage draw
-  in the order they were added, the later one on top. Draw shapes that must layer in a fixed order
+- **Sorting.** Batches draw after every other transparent object in their stage. Two batches in the same
+  stage draw in the order they were added, the later one on top. Draw shapes that must layer in a fixed order
   through one batch, and use an overlay batch for shapes that must never be covered.
 
 ## Example: an in-scene console
@@ -352,13 +355,13 @@ The SignalR example (`E13_SignalR/Station/`) builds a console in the scene from 
 
 | Part | Implementation | Feature |
 |---|---|---|
-| `Board` | A plane in the world with (u, v) coordinates | `PlaneMode.Fixed` |
+| `Board` | A plane in the world with (u, v) coordinates | Fixed plane |
 | `StationBoard.Draw` | Panel, rail, dividers, buttons and bars, drawn every frame | Immediate mode, draw state |
 | Scheme buttons | A solid `Fill` for the selected one, a `Glow` for the hovered one | Fill and glow |
 | `DrawCornerTicks` | A quarter `DrawArc` and two `DrawPixelLine` calls per corner | Arcs, pixel strokes |
 | `Labels` | World text entities with the board's rotation | World Text |
 | `DeckEffects` rings | `DrawRing` with a fading `Opacity` and a growing radius | Opacity |
-| Starfield | 420 `DrawBillboardCircle` calls in the same batch | `PlaneMode.Screen` |
+| Starfield | 420 `DrawBillboardCircle` calls in the same batch | Billboard plane |
 
 ## See also
 

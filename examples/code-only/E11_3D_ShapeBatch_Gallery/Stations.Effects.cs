@@ -336,7 +336,7 @@ public static class EffectStations
     /// Screen shapes: pixels from the top left of the window, Y down like a sprite, from the same
     /// batch as everything in the world and drawn over it whatever the depth test says. Shown only
     /// while the visitor stands at this station, because a HUD is on the screen, not on the ring.
-    /// A crosshair in the middle, a gauge and a panel placed with Corner() so they follow the window,
+    /// A crosshair in the middle, a gauge and a panel placed with AnchorPoint() so they follow the window,
     /// and a bar drawn into a viewport rectangle in that rectangle's own coordinates.
     /// </summary>
     public static void ScreenHud(ShapeStation s)

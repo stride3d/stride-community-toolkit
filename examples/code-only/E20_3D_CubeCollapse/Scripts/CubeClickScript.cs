@@ -21,8 +21,7 @@ namespace CubeCollapse.Scripts;
 /// This script does input and nothing else: raycast, ask <see cref="MatchFinder"/> what is connected,
 /// hand the count to <see cref="ScoreKeeper"/>, tell <see cref="CubeGrid"/> to collapse, and spawn the
 /// feedback. The rules themselves live in <c>Gameplay/</c> where they can be read and tested on their
-/// own - this used to be one class doing input, matching, scoring, sound, popups and the running
-/// total at once.
+/// own.
 /// </remarks>
 public class CubeClickScript : AsyncScript
 {
@@ -35,10 +34,8 @@ public class CubeClickScript : AsyncScript
     /// Gets the logical grid, which is the source of truth for what is where.
     /// </summary>
     /// <remarks>
-    /// Set through an object initialiser rather than a constructor. Stride's STRDIAG010 analyser wants
-    /// every component to have a public parameterless constructor for deserialisation, which rules out
-    /// constructor injection - but <c>required</c> keeps the compiler enforcing that this is supplied,
-    /// so nothing is lost by moving it.
+    /// Set through an object initialiser rather than a constructor: a component needs a public
+    /// parameterless constructor (STRDIAG010), and <c>required</c> still makes the compiler enforce it.
     /// </remarks>
     public required CubeGrid Grid { get; init; }
 
@@ -176,10 +173,9 @@ public class CubeClickScript : AsyncScript
 
         AddScorePopup(cube.Transform.Position, result, colour);
 
-        // The grid collapses immediately, so the next click already matches the finished layout while
-        // the cubes are still visibly falling into it. Nothing here moves a body: gravity does that,
-        // and the two cannot disagree once they settle because SlidingCubeComponent pins each cube to
-        // its own column, so the only place a cube can fall to is the slot the grid just gave it.
+        // The grid collapses immediately; gravity moves the bodies. The two cannot disagree once they
+        // settle, because SlidingCubeComponent pins each cube to its column, so a cube can only fall
+        // into the slot the grid just gave it.
         Grid.RemoveAndCollapse(group);
 
         foreach (var cleared in group) cleared.Remove();
@@ -193,10 +189,8 @@ public class CubeClickScript : AsyncScript
     /// Ends the game once no group of the minimum size is left anywhere on the board.
     /// </summary>
     /// <remarks>
-    /// Checked after a clear rather than every frame, because the board can only become unplayable as
-    /// a result of one. Cubes with no matching neighbour can never be removed once groups of two are
-    /// required, so every game ends with some left standing - the point of this is to say so, instead
-    /// of leaving the player clicking at a board that has quietly stopped responding.
+    /// Checked after a clear rather than every frame, because only a clear can make the board
+    /// unplayable.
     /// </remarks>
     private void CheckForGameOver()
     {
@@ -222,8 +216,7 @@ public class CubeClickScript : AsyncScript
     /// </summary>
     /// <remarks>
     /// The words spawn at increasing heights, so they land in sequence - GAME, then OVER, then the
-    /// score in 3D digits raining down last. Everything tumbles off whatever is left of the platform,
-    /// which is the whole fun of ending a physics game with physics.
+    /// score in 3D digits - and tumble off whatever is left of the platform.
     /// </remarks>
     private void SpawnGameOverLetters()
     {
@@ -231,7 +224,7 @@ public class CubeClickScript : AsyncScript
         var game = (Game)Game;
 
         // Cached across restarts: materials are GPU resources, and a fresh set per game over would
-        // leak three of them every time the player presses R
+        // leak three of them every game
         var letterMaterial = _letterMaterial ??= game.CreateMaterial(Color.Gold, metalness: 0.1f, glossiness: 0.4f);
         var digitMaterial = _digitMaterial ??= game.CreateMaterial(Color.White, metalness: 0.1f, glossiness: 0.4f);
         var menuMaterial = _menuMaterial ??= game.CreateMaterial(new Color(170, 220, 255), metalness: 0.1f, glossiness: 0.4f);

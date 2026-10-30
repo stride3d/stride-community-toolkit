@@ -47,7 +47,8 @@ A script runs only while its entity is in a running scene. Add the script with
 The cheapest way is a public `Entity` or component property on your script, set when you create
 the entity. To search by name, use [`scene.FindEntity`](entity-extensions/index.md) on the scene (or on
 an entity already in it), or [`GetCamera`](xref:Stride.CommunityToolkit.Engine.SceneExtensions) for a
-camera. Search once and keep the result; don't search every frame.
+camera. `FindEntity` searches only top-level entities unless you pass `recursive: true`. Search once
+and keep the result; don't search every frame.
 
 ### Does `entity.Get<T>()` find derived component types?
 
@@ -55,13 +56,13 @@ Yes. It returns the first component that is a `T` or derives from `T`, or `null`
 
 ### Is there an equivalent of Unity's FindObjectOfType?
 
-For one entity and its children, use
-[`GetComponentsInChildren<T>`](xref:Stride.CommunityToolkit.Engine.EntitySearchExtensions); for a
-whole scene, [`scene.GetComponentsInScene<T>()`](xref:Stride.CommunityToolkit.Engine.SceneSearchExtensions)
-or `game.GetComponentsInScene<T>()`. Both walk every entity, so call them on an event, not every
-frame. For a manager that other scripts need, register it as a service instead: call
-`Services.AddService(this)` in its `Start` method and `Services.RemoveService<MyManager>()` in
-`Cancel`. Other scripts then call `Services.GetService<MyManager>()`.
+Use [`game.GetComponentInScene<T>()`](xref:Stride.CommunityToolkit.Engine.SceneSearchExtensions)
+for the first match, or `GetComponentsInScene<T>()` on the game or a scene for all of them. For one
+entity and everything under it, use
+[`GetComponentsInDescendantsAndSelf<T>`](xref:Stride.CommunityToolkit.Engine.EntitySearchExtensions).
+They walk every entity, so call them on an event, not every frame. For a manager that other scripts
+need, register it as a service instead: call `Services.AddService(this)` in its `Start` method and
+`Services.RemoveService<MyManager>()` in `Cancel`. Other scripts then call `Services.GetService<MyManager>()`.
 
 ### Should I subclass `Entity` to add data such as hit points?
 
@@ -105,8 +106,9 @@ game started. See [Delta time](glossary.md).
 ### How do I make the game run in slow motion?
 
 Set `Game.UpdateTime.Factor`. A value between 0 and 1 slows time down, and a value above 1 speeds
-it up. The factor applies to physics, animations and particles. Bepu's `BepuSimulation.TimeScale`
-adds its own factor on top of this one.
+it up. The factor applies to physics, animations and particles, which read
+`Game.UpdateTime.WarpElapsed`; `Elapsed` stays unscaled, so your own scripts slow down only if they
+read `WarpElapsed`. Bepu's `BepuSimulation.TimeScale` adds its own factor on top of this one.
 
 ### How do I save the player's progress?
 
@@ -162,8 +164,9 @@ toward a point, use [`LookAt`](xref:Stride.CommunityToolkit.Engine.TransformExte
 ### Why is `WorldMatrix` out of date after I set `Position`?
 
 The transform processor recomputes the matrices once per frame. Call `UpdateWorldMatrix()` if you
-need the new value at once. If you write `LocalMatrix` or `WorldMatrix` yourself, the next update
-overwrites it unless you set `UseTRS` to `false`.
+need the new value at once. To set `LocalMatrix` yourself, set `UseTRS` to `false`, or the next
+update rebuilds it from `Position`, `Rotation` and `Scale`. `WorldMatrix` is always recomputed from
+`LocalMatrix` and the parent, so write `LocalMatrix`, not `WorldMatrix`.
 
 ### How big is one unit?
 
@@ -186,9 +189,10 @@ ground; `.UseBepu()` on the setup gives the ground a collider. See
 
 ### My procedurally built model doesn't show. Why?
 
-The usual cause is a model with no material, which draws nothing. Add a material and check that
-the mesh's `MaterialIndex` points to it. If the texture looks flat, check the UV calculation:
-integer division turns every UV into 0. See [Mesh builder](rendering/mesh-builder.md).
+Check the winding first: front faces wind clockwise as seen by the camera, and Stride culls back
+faces, so a mesh wound the other way looks inside out or disappears. A mesh with no material still
+draws, with a fallback material. If the texture looks flat, check the UV calculation: integer
+division turns every UV into 0. See [Mesh builder](rendering/mesh-builder.md).
 
 ### My procedural mesh disappears at some camera angles. Why?
 
@@ -213,11 +217,12 @@ is built. See [Materials](rendering/materials.md).
 
 ### My HUD looks dark or washed out. Why?
 
-It is not the HUD. Stride's UI draws in a stage after the forward renderer, and the toolkit's
-[overlay](rendering/text-overlay.md), [entity text](rendering/entity-text.md) and
-[shape batches](rendering/shape-batch.md) are scene renderers appended after it, so none of them go
-through the tone map or the bloom. Something that changes with the lighting is in the scene: a
-sprite or a quad with a lit material. Give it an emissive or unlit material, or draw it as UI.
+It is drawn before the post effects, so tone mapping and bloom change its colours. Stride's UI, the
+toolkit's [overlay](rendering/text-overlay.md) and [entity text](rendering/entity-text.md), and a
+[shape batch](rendering/shape-batch.md) added with `afterPostEffects: true` are drawn after them and
+keep their colours. A default shape batch, a sprite or a quad with a lit material is part of the
+scene: add the batch with `afterPostEffects: true`, give the quad an emissive or unlit material, or
+draw it as UI.
 
 ### How do I draw text or shapes on top of the scene every frame?
 
@@ -254,9 +259,9 @@ version.
 ### My laptop shows a black screen or a graphics profile error. Why?
 
 The game may be running on the integrated GPU, or it may be asking for a graphics profile the
-device doesn't support. On Stride 4.4.1 a game picks the discrete GPU of a hybrid laptop itself.
-On an older Stride, make it use the discrete GPU in the graphics driver's settings or in Windows
-graphics settings.
+device doesn't support. Since Stride 4.4, a Direct3D game prefers the discrete GPU of a hybrid
+laptop itself. On an older Stride, make it use the discrete GPU in the graphics driver's settings or
+in Windows graphics settings.
 
 ## Physics
 
@@ -286,8 +291,9 @@ shapes.
 
 ### Can I put dynamic bodies under other dynamic bodies in the hierarchy?
 
-No. Each body writes its own world transform, so a child body moves twice and drifts away from its
-collider. Keep dynamic bodies at the root and connect them with
+Yes, with Bepu, but the hierarchy does not join them. Each body moves on its own in the simulation,
+and Stride converts its pose into a transform relative to its parent, so a child body does not
+follow its parent. To hold bodies together, connect them with
 [constraints](physics-extensions/bepu-constraints.md).
 
 ### My raycast doesn't hit my model. Why?
@@ -295,6 +301,18 @@ collider. Keep dynamic bodies at the root and connect them with
 A physics raycast hits colliders only. Give the model a collider, or use
 [GPU picking](rendering/gpu-picking.md), which picks what is drawn. See the
 [raycast example](code-only/examples/raycast.md).
+
+### How do I make one object pass through another?
+
+Bepu decides it per pair. For rules between kinds of body, put the bodies on `CollisionLayer`s and
+set which pairs of layers collide in the simulation's `CollisionMatrix`. For a team or a chain whose
+members ignore each other, give them the same `CollisionGroup.Id`. A raycast's `CollisionMask`
+filters a query the same way. The
+[Collision Layer](code-only/examples/collision-layer.md) and
+[Collision Group](code-only/examples/collision-group.md) examples show both, and
+[collision filtering](physics-extensions/index.md#collision-filtering) says when to use which. For a
+body that reports contacts without stopping anything, a trigger, see
+[Trigger Zones](code-only/examples/trigger-zones.md).
 
 ### How do I make physics 2D?
 

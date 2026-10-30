@@ -4,9 +4,9 @@ using System.Text;
 namespace Example.Common;
 
 /// <summary>
-/// Overlay lines from a sentence that may be too long for one: the toolkit's help block keeps every
-/// line to about fifty characters, and a long line widens the whole block and pushes it across the
-/// screen. Text is split at spaces, never inside a word.
+/// Overlay lines from a sentence that may be too long for one: the examples keep every help line to
+/// about fifty characters, since a long line widens the whole block. Text is split at spaces, never
+/// inside a word.
 /// </summary>
 public static class OverlayText
 {

@@ -14,10 +14,8 @@ namespace Example.Common.Galleries;
 internal sealed class GalleryBoard
 {
     /// <summary>
-    /// One line of the board, in world units; the frame is the lines plus a margin. The list's
-    /// size on screen is set by <see cref="Share"/>, not by this or by the text's font size,
-    /// which is only how finely it is rasterised: the board hangs at whatever distance makes it that
-    /// share of the home view, so a taller line just means a bigger board at a greater distance.
+    /// One line of the board, in world units; the frame is the lines plus a margin. The size on
+    /// screen is set by <see cref="Share"/>: a taller line means a bigger board hung further away.
     /// </summary>
     private const float LineHeight = 0.45f;
 
@@ -93,7 +91,7 @@ internal sealed class GalleryBoard
         entity.Scene = scene;
     }
 
-    /// <summary>Draws the frame and its corner brackets. The batch's fill, border and glow are set and not restored.</summary>
+    /// <summary>Draws the frame and its corner brackets, leaving the batch's fill and border width changed and its glow cleared.</summary>
     internal void DrawFrame(ShapeBatch shapes)
     {
         var hudBlue = new Color(110, 200, 255);

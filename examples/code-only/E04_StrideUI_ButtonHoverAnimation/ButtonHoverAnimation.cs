@@ -11,12 +11,9 @@ namespace E04_StrideUI_ButtonHoverAnimation;
 /// </summary>
 /// <remarks>
 /// <para>
-/// A Stride <see cref="Button"/> reports nothing in <see cref="Stride.UI.UIElement.MouseOverState"/>
-/// unless <see cref="Stride.UI.UIElement.RequiresMouseOverUpdate"/> is set on it. It is off by default
-/// because keeping it up to date costs a hit test per element per frame, so a control that never
-/// reacts to the pointer does not pay for one. Forgetting it is the usual reason a hover effect
-/// written from code does nothing at all: <see cref="Track"/> sets it, which is most of why the
-/// registration step exists.
+/// Stride hit-tests <see cref="Stride.UI.UIElement.MouseOverState"/> whenever the mouse moves.
+/// <see cref="Track"/> also sets <see cref="Stride.UI.UIElement.RequiresMouseOverUpdate"/>, which
+/// re-tests it while the cursor is still; the engine clears that flag when the pointer leaves.
 /// </para>
 /// <para>
 /// One script drives every button rather than one script per button. A <see cref="SyncScript"/> is an
@@ -44,7 +41,7 @@ public class ButtonHoverAnimation : SyncScript
         ArgumentNullException.ThrowIfNull(button);
         ArgumentNullException.ThrowIfNull(underline);
 
-        // Without this the button's MouseOverState stays MouseOverNone forever and nothing animates.
+        // Re-tests the hover state even while the cursor is still
         button.RequiresMouseOverUpdate = true;
 
         _tracked.Add((button, underline));
@@ -61,8 +58,7 @@ public class ButtonHoverAnimation : SyncScript
 
         foreach (var (button, underline) in _tracked)
         {
-            // Not == MouseOverElement: the pointer sitting on the button's own text reads as
-            // MouseOverChild, and from the player's point of view that is still hovering the button.
+            // Not == MouseOverElement: a hittable child under the pointer leaves the button at MouseOverChild
             var hovering = button.MouseOverState != MouseOverState.MouseOverNone;
 
             // RenderSize is the size the last layout pass gave the button, so the underline tracks a

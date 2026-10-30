@@ -12,7 +12,7 @@ this page and prints what it measures.
 | Property | Default | Meaning |
 |---|---|---|
 | `SpringFrequency` | 30 | Stiffness of the contact, in hertz. Lower is softer. |
-| `SpringDampingRatio` | 3 | Share of a hit the contact absorbs. 0 returns all of it, 1 or more returns none. |
+| `SpringDampingRatio` | 3 | Damping of the contact spring. 0 is undamped; 1 or more absorbs the whole hit, so nothing bounces. |
 | `FrictionCoefficient` | 1 | Resistance to sliding. 0 is frictionless. |
 | `MaximumRecoveryVelocity` | 1000 | Highest speed at which two overlapping collidables are pushed apart. Also selects whose spring is used, see below. |
 
@@ -42,9 +42,9 @@ The springs are not blended. One collidable's spring is used and the other's is 
 A contact bounces when its damping ratio is below 1. The default ratio of 3 absorbs the whole hit,
 so the default spring does not bounce.
 
-How much comes back then depends on the frequency. The simulation takes 60 steps a second, and a
-stiff contact is over in a step or two, which loses most of the bounce. The lower the frequency, the
-more of it survives.
+How much comes back then depends on the frequency. The simulation takes 60 steps a second by
+default, and a stiff contact is over in a step or two, which loses most of the bounce. The lower the
+frequency, the more of it survives.
 
 Rebound of a ball dropped 3 m onto the default ground, as a share of the drop, at 60 steps a second:
 
@@ -98,13 +98,13 @@ whatever the other side has. A body of 4 on a surface of 0.5 slides like a body 
 of 2.
 
 > [!NOTE]
-> Stride 4.4 uses BepuPhysics 2.5.0-beta.28, which divides the friction of a contact between two
-> convex shapes by its number of contact points. A box resting on a face has four, so it slides as
-> if the friction were a quarter of the product: a box with the default coefficient of 1 slides down
-> a 30 degree slope. Later Bepu versions apply the full product. Until Stride moves to one,
-> multiply the coefficient to compensate. A sphere has one contact point and is not affected.
+> Bepu (2.5.0-beta.28 in Stride 4.4) divides the friction of a contact between two convex shapes by
+> its number of contact points. A box resting on a face has four, so it slides as if the friction
+> were a quarter of the product: a box with the default coefficient of 1 slides down a 30 degree
+> slope. Multiply the coefficient to compensate. A sphere has one contact point and is not affected.
 
 ## See also
 
 - [Bepu: Who Owns the Transform?](bepu-transform-ownership.md)
+- [Physics Extensions](index.md)
 - [Physics Materials example](../code-only/examples/physics-materials.md)

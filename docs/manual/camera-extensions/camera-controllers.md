@@ -34,11 +34,11 @@ void Start(Scene scene)
 }
 ```
 
-Both helpers accept the help overlay's toggle key and whether it starts collapsed; the 3D one also
-takes an optional `Anchor` for the overlay's corner, edge or centre - leave it out and the
-overlay keeps whatever position it already has - and `showHelp: false` registers no help at all.
-These must be decided up front - the overlay section is created in `Start()` - which is why they are
-parameters rather than properties you set later.
+Both helpers accept the help's toggle key and whether it starts collapsed. The 3D one also takes an
+optional `Anchor` for the overlay's corner, edge or centre - leave it out and the overlay keeps its
+current position - and `showHelp: false`, which keeps the controller but shows no help. The toggle
+key, the collapsed state and the anchor are read once, when the script starts and registers its help,
+so set them through the helper or before the script starts.
 
 ## The 2D controller
 
@@ -78,8 +78,9 @@ All off unless stated, and all plain properties on the script:
 
 ### Changing settings after setup
 
-The helpers return the camera entity, and the script reads its properties every frame, so anything
-except the overlay parameters can be changed at any time:
+The game helpers return the camera entity (the entity helpers return the controller itself), and the
+script reads its properties every frame, so anything but those three help settings can be changed at
+any time:
 
 ```csharp
 var camera = game.Add2DCameraController();
@@ -104,7 +105,7 @@ own axes, look around with the right mouse button, and never roll.
 | Numpad <kbd>8</kbd> <kbd>2</kbd> / <kbd>4</kbd> <kbd>6</kbd> | Pitch / yaw from the keyboard | `KeyboardRotationSpeed` (3 rad/s) |
 | <kbd>H</kbd> | Reset to the position *and* rotation the camera started with | - |
 | Gamepad | Left stick moves, triggers descend/ascend, right stick looks, <kbd>A</kbd> or a shoulder button sprints | `Gamepad` (off) |
-| Touch (non-desktop) | One-finger drag looks, two-finger drag pans and pinch moves along the view axis | `TouchRotationSpeed`, `TouchMovementSpeed` |
+| Touch (all platforms but Windows desktop) | One-finger drag looks, two-finger drag pans and pinch moves along the view axis | `TouchRotationSpeed`, `TouchMovementSpeed` |
 
 Two details:
 
@@ -142,7 +143,7 @@ chart takes its place.
 
 ## When the defaults are wrong
 
-Both controllers are ordinary `SyncScript`s with nothing else attached to the camera, so replacing
+The controllers are ordinary `SyncScript`s with nothing else attached to the camera, so replacing
 one is a matter of not adding it:
 
 ```csharp
@@ -152,7 +153,8 @@ void Start(Scene scene) => game.GetCameraEntity().Add(new MyOrbitCameraControlle
 ```
 
 If you keep a controller but want the on-screen help gone, pass `showHelp: false` to the 3D helper,
-or set `ShowHelp = false` on either script, before it starts or at any time after. Hiding the
+or set `ShowHelp = false` on the 2D or 3D controller, before it starts or at any time after. The
+orbit controller has no `ShowHelp`. Hiding the
 whole overlay with <kbd>F4</kbd> is the runtime equivalent.
 
 ## See them in use

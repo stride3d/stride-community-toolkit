@@ -20,8 +20,7 @@ using Stride.Input;
 // time, read a value.
 //
 // Keys: C pops the next coin in, Space collects every coin on screen, X shakes the camera,
-// L pauses and resumes the lift, R drops the boxes back onto it. Not S: the camera controller
-// owns W A S D.
+// L pauses and resumes the lift, R drops the boxes back onto it.
 //
 // New to Tween? E02_2D_EasingBasics builds the same motion by hand first, then with a tween.
 

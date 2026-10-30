@@ -13,7 +13,7 @@ using Stride.Input;
 
 // Four Bepu constraints side by side: DistanceLimit keeps two spheres between a minimum and a maximum
 // distance, DistanceServo pulls two spheres to a target distance with spring settings, BallSocket
-// joins two bodies at a point, PointOnLineServo holds a cube to a line. Left mouse grabs any body
+// joins two bodies at a point, PointOnLineServo holds a cube to a line. Left mouse grabs any dynamic body
 // (GrabberScript, see E05_3D_Grabber), a middle click removes a stacked cube so the stack above
 // falls, R resets the scene.
 
@@ -22,7 +22,7 @@ const string ConnectedEntityName = "Connected Sphere";
 const string StackAName = "CubeStackA";
 const string StackBName = "CubeStackB";
 
-// Soft servos and little friction, so the stacked cubes slide along their lines rather than jam
+// Soft, heavily damped contacts and little friction, so the stacked cubes slide along their lines rather than jam
 const float CubeSpringDampingRatio = 50;
 const float SpringFrequency = 20;
 const float FrictionCoefficient = 0.1f;
@@ -66,7 +66,7 @@ void Start(Scene scene)
 
     mainCamera = game.GetCameraEntity().Get<CameraComponent>();
 
-    // Pick up, carry and throw any body with the left mouse button - two servo constraints, so the
+    // Pick up, carry and throw any dynamic body with the left mouse button - two servo constraints, so the
     // held body still collides and the connected constraints still pull on it.
     game.AddGrabber();
 }
@@ -135,7 +135,7 @@ void CreateDistanceLimitConstraintExamples(Scene scene)
     var connectedBody = connectedSphere.Get<BodyComponent>();
     connectedBody.CollisionLayer = CollisionLayer.Layer5;
 
-    // The spheres may drift together but never further than three units apart
+    // The spheres stay between one and three units apart
     goldenSphere.Add(new DistanceLimitConstraintComponent
     {
         A = goldenBody,

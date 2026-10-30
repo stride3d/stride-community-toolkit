@@ -82,8 +82,8 @@ The background is axis-aligned and does not turn with `Rotation`.
 
 - **`Scale`** rather than `FontSize`. Changing the font size re-rasterises glyphs and re-measures the
   string; scaling does neither, and it scales about `Anchor` so centred text grows evenly.
-- **`Opacity`** multiplies into the text, shadow and background alpha, leaving the configured colours
-  untouched.
+- **`Opacity`** multiplies into the text, shadow, outline and background alpha, leaving the configured
+  colours untouched.
 - **`LayerDepth`** orders the texts against each other. Higher is drawn on top.
 
 `IsVisible` hides the text without removing the component, which keeps the cached measurement alive.
@@ -111,9 +111,9 @@ measurements are released when a component is removed.
 
 ## The debug renderer
 
-`EntityInfoRenderer` is the other side of the same coin. Where `EntityTextComponent` draws text
-an entity **opts into**, the debug renderer labels **every** entity automatically with its name and/or
-position, in one shared style:
+`EntityInfoRenderer` (namespace `Stride.CommunityToolkit.Rendering.Overlay`) is the other side of the
+same coin. Where `EntityTextComponent` draws text an entity **opts into**, the debug renderer labels
+**every** entity with its name, its position or both, in one shared style:
 
 ```csharp
 game.AddEntityInfoRenderer(new()
@@ -131,7 +131,8 @@ Options worth knowing:
 
 - **`IncludeChildEntities`** is off by default; labelling every child of a composed scene is usually
   unreadable.
-- **`EntityFilter`** narrows the labels to the entities that match, by name or component type.
+- **`EntityFilter`** is a `Func<Entity, bool>` that picks the entities to label - by name, component
+  type or anything else.
 - **`PositionColor`** gives the coordinates their own colour, and moves them onto a line beneath the
   name.
 - **`MaxDistance`** drops labels past a given range.
@@ -147,3 +148,9 @@ Options worth knowing:
 - No word wrapping. `\n` in the string works and `Alignment` then applies.
 - The background does not rotate with the text.
 - The renderer uses the first camera in the graphics compositor.
+
+## See also
+
+- [World Text](world-text.md)
+- [Text Overlay](text-overlay.md)
+- [Entity Text](../code-only/examples/entity-text.md) example

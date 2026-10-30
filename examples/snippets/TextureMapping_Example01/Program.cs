@@ -27,16 +27,13 @@ void Start(Scene scene)
        {
            Diffuse = new MaterialDiffuseMapFeature(new ComputeTextureColor(texture)),
 
-           // Configures using the Lambert lighting model,
-           // which simulates how light interacts with the surface
+           // Lambert shading, so lights shade the surface
            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
 
-           // Specifies the back-face culling mode
            CullMode = CullMode.Back
        }
     };
 
-    // Create a material instance from the descriptor
     var material = Material.New(game.GraphicsDevice, materialDescriptor);
 
     // Create a 3D cube primitive and assign the material to it

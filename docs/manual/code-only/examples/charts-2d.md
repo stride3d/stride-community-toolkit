@@ -32,4 +32,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E11_2D_Charts).
 
-[!code-csharp[](../../../../examples/code-only/E11_2D_Charts/Program.cs?start=1&end=248)]
+[!code-csharp[](../../../../examples/code-only/E11_2D_Charts/Program.cs?start=1&end=247)]

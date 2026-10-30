@@ -14,10 +14,8 @@ namespace E05_3D_FirstPersonCharacter;
 // The component goes on the CAMERA entity and drives the linked CharacterComponent (walk mode)
 // or the camera transform directly (fly mode).
 //
-// Everything is a property rather than a public field: the processor is a separate type, so the
-// state it mutates has to be accessible from outside this class, and properties keep that access
-// behind something you can breakpoint. Stride's serializer treats public properties with a setter
-// exactly as it would public fields.
+// Properties rather than public fields, so the processor's writes can be breakpointed. Stride's
+// serializer treats public properties with a setter exactly as it would public fields.
 [DataContract]
 [DefaultEntityComponentProcessor(typeof(FirstPersonControllerProcessor), ExecutionMode = ExecutionMode.Runtime)]
 public class FirstPersonControllerComponent : EntityComponent
@@ -28,7 +26,7 @@ public class FirstPersonControllerComponent : EntityComponent
     // Tunables.
     public float MouseSensitivity { get; set; } = 1.5f;
     public float EyeHeight { get; set; } = 0.7f;        // camera height above the capsule entity's origin
-    public float SprintMultiplier { get; set; } = 1.7f; // Shift speed factor (MoveVector treats vector length as a speed factor)
+    public float SprintMultiplier { get; set; } = 1.7f; // Shift speed factor
     public float FlySpeed { get; set; } = 15f;          // metres/sec in fly mode
     public float FlyBoost { get; set; } = 5f;           // Shift multiplier in fly mode
 

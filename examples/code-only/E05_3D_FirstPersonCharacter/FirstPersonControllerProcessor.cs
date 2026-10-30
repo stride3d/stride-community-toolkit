@@ -72,8 +72,8 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
 
         if (character is null) return;
 
-        // Set world gravity once the body has joined the simulation (Simulation is null before
-        // the entity's first physics tick).
+        // Set world gravity once the body has joined a simulation (Simulation is null until the
+        // body is attached, when its entity enters the scene).
         if (!c.GravityApplied && character.Simulation is not null)
         {
             character.Simulation.PoseGravity = new Vector3(0f, Gravity, 0f);
@@ -131,9 +131,8 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         }
         else
         {
-            // Exit fly: keep the player where the camera is - teleport the body under the camera,
-            // then resume gravity. Character.Teleport is the proper API; setting Transform.Position
-            // directly is overwritten by the physics sync and flings you elsewhere.
+            // Exit fly: teleport the body under the camera, then resume gravity. Writing
+            // Transform.Position instead would move only the mesh; the physics sync overwrites it.
             c.Character.Teleport(c.FlyPosition - new Vector3(0, c.EyeHeight, 0), c.Character.Orientation);
             c.Character.LinearVelocity = Vector3.Zero;
             c.Character.Gravity = true;

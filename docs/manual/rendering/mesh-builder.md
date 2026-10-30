@@ -102,7 +102,7 @@ var meshDraw = meshBuilder.ToMeshDraw(GraphicsDevice);
 Put the `MeshDraw` in a `Model` with a material that reads the vertex colour. Without
 `ComputeVertexStreamColor` the triangle is white.
 
-```
+```csharp
 var model = new Model
 {
     new MaterialInstance {
@@ -122,7 +122,6 @@ var model = new Model
 }
 ```
 
-
 ## Who owns the buffers
 
 `ToMeshDraw` creates two GPU buffers - vertex and, when indexing is configured, index - and hands
@@ -141,11 +140,15 @@ The Procedural Geometry example shows this pattern on its animated circle.
 
 ## Extruded shapes and 3D letters
 
-`AddExtrudedPolygon` turns any simple 2D outline - convex or concave - into a solid: front cap,
-back cap and crisp flat-shaded side walls, triangulated internally by ear clipping
-(`EarClipping.Triangulate`, which is public and usable on its own):
+`AddExtrudedPolygon` turns a simple 2D outline - convex or concave, not self-intersecting - into a
+solid: front cap, back cap and flat-shaded side walls. The caps are triangulated by ear clipping
+(`EarClipping.Triangulate`, which is public and usable on its own). It adds indexed triangles, so the
+builder needs an index type and `PrimitiveType.TriangleList`:
 
 ```csharp
+meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
+meshBuilder.WithIndexType(IndexingType.Int32);
+
 var position = meshBuilder.WithPosition<Vector3>();
 var normal = meshBuilder.WithNormal<Vector3>();
 
@@ -160,10 +163,12 @@ same way.
 
 Every `With*` method infers the GPU format from `T` - `Vector3` becomes `R32G32B32_Float`, `Color`
 becomes `R8G8B8A8_UNorm`, and so on. For a type the inference does not know, or to store data in a
-different format than the CLR type suggests, pass the format explicitly:
+different format than the CLR type suggests, pass the format explicitly. The format must be the same
+size as `T`, because the builder lays out each vertex by the size of `T`:
 
 ```csharp
-var position = meshBuilder.WithPosition<Vector3>(pixelFormat: PixelFormat.R32G32B32A32_Float);
+// An RGBA colour packed in a uint, which would otherwise be read as R32_UInt
+var color = meshBuilder.WithColor<uint>(pixelFormat: PixelFormat.R8G8B8A8_UNorm);
 ```
 
 ## See also

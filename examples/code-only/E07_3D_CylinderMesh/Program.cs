@@ -48,7 +48,6 @@ void BuildCylinderMesh(MeshBuilder meshBuilder, int segments, float radius, floa
     var position = meshBuilder.WithPosition<Vector3>();
     var normal = meshBuilder.WithNormal<Vector3>();
 
-    // A ring of vertices at each end, the wall between them, and a cap over each ring
     CreateRingVertices(meshBuilder, segments, radius, position, normal, 0);
     CreateRingVertices(meshBuilder, segments, radius, position, normal, length);
     CreateSideWalls(meshBuilder, segments);
@@ -65,7 +64,7 @@ static void CreateRingVertices(MeshBuilder meshBuilder, int segments, float radi
 
         meshBuilder.AddVertex();
         meshBuilder.SetElement(position, new Vector3(x, y, z));
-        // A normal has length 1: the direction out from the axis, without the radius
+        // Unit length: the direction out from the axis, without the radius
         meshBuilder.SetElement(normal, new Vector3(x, y, 0) / radius);
     }
 }
@@ -87,8 +86,8 @@ static void CreateSideWalls(MeshBuilder meshBuilder, int segments)
     }
 }
 
-// A fan of triangles from a centre vertex to the ring at one end. The first ring's vertices are
-// 0 to segments - 1 and the second ring's follow; the two caps wind opposite ways, so that each faces out
+// A fan from a centre vertex to one end's ring (the first ring is vertices 0 to segments - 1, the
+// second follows). The two caps wind opposite ways so each faces out
 static void CreateEndCap(MeshBuilder meshBuilder, int segments, int position, int normal, float z, bool facesPositiveZ)
 {
     var centre = meshBuilder.AddVertex();

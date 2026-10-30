@@ -2,7 +2,7 @@ namespace E09_3D_Particles_Gallery
 {
     // Concentric rings that fade to the quad's edge: a ripple, a sonar ping, a shockwave, from a formula.
     // TRings is a generic, baked into the shader when the material is built, so one class gives a single
-    // ring or a target of five.
+    // ring or a target of four.
     shader GalleryParticleRings<float TRings> : ComputeColor, Texturing
     {
         override float4 Compute()

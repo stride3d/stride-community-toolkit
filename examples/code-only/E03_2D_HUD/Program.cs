@@ -28,9 +28,8 @@ using System.Globalization;
 // and SPACE freezes the ship.
 //
 // "--scheme 0" starts in a scheme by its key and "--glass squares" in a glass pattern.
-// "--pointer 0.5,0.5" holds the pointer at a position,
-// from 0,0 top left to 1,1 bottom right, and clicks there once: what a screenshot needs to show a
-// hover.
+// "--pointer 0.5,0.5" holds the pointer there, from 0,0 top left to 1,1 bottom right, and clicks
+// once: what a screenshot needs to show a hover.
 
 const float ViewHeight = 19f;
 
@@ -105,7 +104,7 @@ void Update(Scene scene, GameTime gameTime)
         ship.Advance(time);
     }
 
-    // The power setting follows the pointer, so it moves while the ship is frozen too
+    // Power eases to the clicked focus on real time, so it moves while the ship is frozen too
     ship.Power.Advance(elapsed);
 
     // What the glass shader reads: x is the clock, y the pattern

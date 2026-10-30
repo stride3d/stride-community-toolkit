@@ -15,7 +15,7 @@ The [Stride Community Toolkit](https://github.com/stride3d/stride-community-tool
 > [!TIP]
 > Experienced developers can go straight to the source: these helpers are thin wrappers over Stride APIs, meant to accelerate iteration, not to hide the engine.
 
-## 📦 Libraries  
+## 📦 Libraries
 
 Each library focuses on a specific concern (core helpers, physics integration, UI/debug aids, etc.):
 
@@ -30,8 +30,6 @@ This toolkit favours momentum and rapid 🏃 feature delivery. Expect:
 - Occasional rough edges in less-travelled code paths.
 
 Stability will improve as patterns settle. Pin a version if you need consistency.
-
-This approach allows us to quickly iterate and integrate new features and improvements. We believe this pace serves the needs of developers who are looking for cutting-edge tools and are comfortable with a more dynamic environment.
 
 ## 🔧 Installation
 
@@ -49,15 +47,11 @@ Access the source code or contribute 🤝 to the Stride Game Engine on its [GitH
 
 ## 📃 Documentation & Resources
 
-Explore a range of resources to help you get the most out of the toolkit:
-
 - [Manual](manual/index.md): Detailed guidance and best practices
 - [Tutorials](tutorials/index.md): Step-by-step tutorials to help you learn various features
 - [Release Notes](release-notes/index.md): Stay updated with the latest changes and improvements
 - [API Reference](api/index.md): In-depth API documentation for a deep dive into the toolkit's capabilities
 - [Contributing](contributing/index.md): Guidelines for contributing to the toolkit
-
-These resources provide comprehensive information and support for developers at all levels, from beginners to advanced users.
 
 ## 👥 Contributors
 

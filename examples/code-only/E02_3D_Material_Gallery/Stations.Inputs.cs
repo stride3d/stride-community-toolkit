@@ -102,9 +102,10 @@ public static class InputStations
     /// <summary>
     /// The same files loaded wrong on the left and right on the right: what the toolkit's
     /// <c>TextureLoader</c> does at runtime that Game Studio's pipeline does at import, and what each
-    /// step is for. V cycles the five ways a runtime load goes wrong without anything failing - a colour
-    /// read as data comes out pale, a normal map read as a colour loses its tilt, a green channel the wrong way
-    /// turns bumps into dents - Game Studio's default import does this to the pack's own maps - straight alpha fills the clear part with the colour the file kept under it,
+    /// step is for. V cycles the five ways a runtime load goes wrong without anything failing: a colour
+    /// read as data comes out pale, a normal map read as a colour leans every normal one way, a green
+    /// channel the wrong way turns bumps into dents (Game Studio's default import does this to the
+    /// pack's own maps), straight alpha fills the clear part with the colour the file kept under it,
     /// and no mipmaps make a receding floor crawl. Press M for the normal views on the normal-map pairs.
     /// </summary>
     public static void TextureLoading(MaterialStation s)
@@ -125,7 +126,7 @@ public static class InputStations
                 break;
 
             case 1:
-                // One call for every file: the normal map gamma-decoded, so every tilt is squashed towards flat
+                // One call for every file: the normal map gamma-decoded, so flat 0.5 reads as 0.2 and every normal leans
                 Pair(s,
                     s.Material(Recipes.Mapped(Recipes.Colour(albedo), glossiness: gloss, normal: Recipes.Colour(loader.Color("brick/brick_nml.png")))),
                     s.Material(Recipes.Mapped(Recipes.Colour(albedo), glossiness: gloss, normal: Recipes.Colour(loader.NormalMap("brick/brick_nml.png")))));

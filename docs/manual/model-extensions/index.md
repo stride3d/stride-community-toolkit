@@ -12,4 +12,4 @@ Useful when you are placing procedurally created entities and do not know their 
 
 ## Material parameters
 
-- [`SetMaterialParameter()`](xref:Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.ValueParameterKey{``0},``0,System.Int32,System.Int32)) - Sets a shader parameter on one of the component's materials, without going through `RenderGroup` plumbing yourself. Overloads cover value, object and permutation parameters, keys and accessors, single values and arrays, with optional `materialIndex` and `passIndex`.
+- [`SetMaterialParameter()`](xref:Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.ValueParameterKey{``0},``0,System.Int32,System.Int32)) - Sets a shader parameter on one pass of one of the component's materials. The first call gives the component its own copy of the material, so other models that share it are not changed. Overloads cover value, object and permutation parameters, keys and accessors, single values and arrays, with optional `materialIndex` and `passIndex`.

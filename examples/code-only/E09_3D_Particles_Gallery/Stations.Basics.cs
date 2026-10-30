@@ -38,8 +38,8 @@ public static class BasicStations
     }
 
     /// <summary>
-    /// A burst: every particle of the batch at once. Once and never again, or on a loop - a delay
-    /// then a burst, over and over - which is a spawner's loop condition, not a script.
+    /// A burst: the whole batch at once. Once, or on a loop - a delay then a burst - which is the
+    /// spawner's loop condition, not a script.
     /// </summary>
     public static void Burst(ParticleStation s)
     {
@@ -73,9 +73,9 @@ public static class BasicStations
     }
 
     /// <summary>
-    /// A count per frame rather than per second: the same on a fast machine and a slow one in
-    /// particles per frame, and therefore not in particles per second. Use it when the look must
-    /// hold per frame - a trail behind something drawn once per frame - and per-second otherwise.
+    /// A count per frame rather than per second, so particles per second follow the frame rate.
+    /// Use it when the look must hold per frame - a trail behind something drawn once per frame -
+    /// and per-second otherwise.
     /// </summary>
     public static void PerFrame(ParticleStation s)
     {

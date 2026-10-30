@@ -3,8 +3,7 @@ using Stride.Core.Mathematics;
 namespace CubeCollapse.Shared;
 
 /// <summary>
-/// Every number that shapes the board or the pace of play, in one place so they can be tried out
-/// without hunting through the game code for the one that matters.
+/// Every number that shapes the board or the pace of play, in one place so they are easy to tune.
 /// </summary>
 public static class GameSettings
 {
@@ -33,12 +32,9 @@ public static class GameSettings
     /// Seconds after a clear during which the next one still counts as part of the same combo.
     /// </summary>
     /// <remarks>
-    /// This was 2.5, which quietly inverted the game's incentive: a thinking pause is longer than
-    /// that, so deliberate play ran at x1 while blind spam-clicking held a permanent x5 and beat it
-    /// roughly 1.7M to 0.7M (measured by simulating both styles over five boards with the real
-    /// rules). At 7 seconds both keep the streak, the quadratic group bonus decides the winner, and
-    /// the same simulation puts deliberate play ahead 3.6M to 1.7M. The combo now punishes
-    /// stalling, not thinking.
+    /// At 2.5 a thinking pause broke the streak, so blind spam-clicking held x5 and beat deliberate
+    /// play about 1.7M to 0.7M (both styles simulated over five boards with the real rules). At 7 both
+    /// keep the streak, the quadratic group bonus decides, and deliberate play leads 3.6M to 1.7M.
     /// </remarks>
     public const float ComboWindowSeconds = 7f;
 

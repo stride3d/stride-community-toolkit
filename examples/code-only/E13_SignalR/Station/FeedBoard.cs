@@ -79,7 +79,7 @@ public sealed class FeedBoard
                 continue;
             }
 
-            // Newest on top, and the older the line the dimmer it is
+            // The older the line, the dimmer
             var entry = log[log.Count - 1 - i];
             var v = FirstRow - i * RowStep;
             var age = (float)i / (Lines - 1);

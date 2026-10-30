@@ -16,8 +16,7 @@ public class RibbonBackgroundComponent : ActivableEntityComponent
     /// <summary>
     /// Gets or sets the intensity.
     /// </summary>
-    /// <value>The intensity.</value>
-    /// <userdoc>The intensity of the background color</userdoc>
+    /// <userdoc>The intensity of the background colour</userdoc>
     [DataMemberRange(0.0, 100.0, 0.01f, 1.0f, 2)]
     public float Intensity { get; set; } = 1f;
 
@@ -30,24 +29,12 @@ public class RibbonBackgroundComponent : ActivableEntityComponent
     [DataMemberRange(0.0, 5.0, 0.01f, 1.0f, 2)]
     public float Speed { get; set; } = 1f;
 
-    /// <summary>
-    /// Gets or sets the top.
-    /// </summary>
     public Color3 Top { get; set; } = Color.Blue.ToColor3();
 
-    /// <summary>
-    /// Gets or sets the bottom.
-    /// </summary>
     public Color3 Bottom { get; set; } = Color.BlueViolet.ToColor3();
 
-    /// <summary>
-    /// Gets or sets the width factor.
-    /// </summary>
     public float WidthFactor { get; set; } = 0.5f;
 
-    /// <summary>
-    /// The render group for this component.
-    /// </summary>
     [Display("Render group")]
     public RenderGroup RenderGroup { get; set; } = RenderGroup.Group0;
 }

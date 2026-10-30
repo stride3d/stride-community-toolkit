@@ -38,7 +38,7 @@ public sealed class ShockCellInitializer : ParticleInitializer
     /// <summary>The brightness of a cell as a fraction of the one before it.</summary>
     public float Dimming { get; set; } = 0.75f;
 
-    /// <summary>The colour of a particle in the first cell, each channel 1 at most: a particle's colour is stored in bytes. Intensity belongs in the material.</summary>
+    /// <summary>The colour of a particle in the first cell, each channel 1 at most: a particle's colour reaches the shader as bytes. Intensity belongs in the material.</summary>
     public Color4 Color { get; set; } = Color4.White;
 
     /// <summary>Declares the fields the initializer writes.</summary>

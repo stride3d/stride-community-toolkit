@@ -21,7 +21,8 @@ writes suddenly appear to start working. The visual moves, the collider does not
 
 **Instead**, move the body deliberately:
 
-- `Teleport(...)` jumps a body to a new pose without checking collisions along the way.
+- `Teleport(...)` jumps a body to a new pose without checking collisions along the way. It keeps the
+  body's velocity and does not wake it; the toolkit's `TeleportAtRest(...)` also stops and wakes it.
 - For scripted motion that *should* collide, use a body with `Kinematic = true` and drive it with
   velocity.
 
@@ -67,9 +68,8 @@ public void SimulationUpdate(BepuSimulation simulation, float simTimeStep)
 ## "I want the model without a body"
 
 `Body = BodyMode.None` on the options leaves the physics out altogether. A `BodyComponent` whose
-`CompoundCollider` holds no shapes never attaches to the simulation, so a body added by hand with an
-empty compound is an inert component rather than no physics.
-
+`CompoundCollider` holds no shapes does not attach to the simulation until a shape is added, so a
+body added by hand with an empty compound is an inert component rather than no physics.
 
 ## "Bepu crashes with an AccessViolationException"
 
@@ -83,16 +83,14 @@ The stack lands somewhere in the solver - `Contact4.ApplyDescription`, `AddToSim
 - Every case observed so far used a hull-backed shape - `TriangularPrism`, `Cone`, `Teapot` or
   `Torus` - at a few thousand bodies. It has not been reproduced with cubes or spheres, which is
   suggestive but not proof, since more bodies and more contacts also make it likelier.
-- Sharing hull data across bodies does **not** stop it, so the finalizer hazard described in the next
-  section, real as it is, is not a sufficient explanation.
+- Sharing hull data across bodies, as described in the next section, does **not** prevent it.
 
-Until the cause is found, the practical options are to keep hull-shaped body counts down, or to
-substitute an analytic collider - a box, a cylinder or a capsule - where the shape allows it.
+Until the cause is found, keep hull-shaped body counts down, or substitute an analytic collider - a
+box, a cylinder or a capsule - where the shape allows it.
 
 ## "One hull per body is slow, and freed from a finalizer"
 
-This is not the crash above; it is a cost and a genuine thread-safety hazard, worth avoiding on its
-own account.
+This is a cost and a thread-safety hazard, separate from the crash above.
 
 Stride caches the built Bepu hull against the `DecomposedHulls` **instance** it came from, so a fresh
 instance per body means a fresh hull per body: ten thousand identical prisms build, store and
@@ -129,18 +127,17 @@ Repeated 7990 times:
    at BepuPhysics.CollisionDetection.BroadPhase.Update2(IThreadDispatcher, Boolean)
 ```
 
-That function recurses once per level of the broad-phase tree, so its depth *is* the tree's height.
-Over a few thousand bodies a healthy tree is a dozen or so levels deep, not eight thousand: the tree
-has degenerated into something close to a linked list, and the recursion has no depth guard. Bepu
-does refine the tree incrementally every frame, but on a fixed budget, and some scenes degrade it
-faster than that budget repairs it.
+The function recurses once per level of the broad-phase tree. A healthy tree over a few thousand
+bodies is a dozen or so levels deep; this one has degenerated into something close to a linked list,
+and the recursion has no depth guard. Bepu refines the tree a little every frame, but some scenes
+degrade it faster than that repairs it.
 
 The trigger is a **perfectly regular lattice of exactly-touching bodies** - 5,000 spheres one
-diameter apart on a grid, all on the same plane, reproducibly dead within about ten seconds. Unlike
-the `AccessViolationException` above it is deterministic, and it is not a race: it reproduces just as
-readily single-threaded, and with sleeping disabled.
+diameter apart on a grid, all on the same plane, die within about ten seconds. Unlike the
+`AccessViolationException` above it is deterministic and not a race: it reproduces single-threaded
+and with sleeping disabled.
 
-Break the symmetry and it goes away. Any of these survived indefinitely:
+Break the symmetry and it goes away. Any of these survive indefinitely:
 
 - a millimetre or so of random jitter on each spawn position - the bodies are just as close, and some
   overlap, which is fine;
@@ -158,14 +155,12 @@ entity.Transform.Position = new Vector3(
 
 ## "A 2D pile of prisms eats all my memory"
 
-Thousands of `TriangularPrism` bodies on a `Body2DComponent`, and within seconds the process is
-holding tens of gigabytes and dies. The stack, if you catch one, is in
+Thousands of `TriangularPrism` bodies with a hand-written rotation lock, and within seconds the
+process is holding tens of gigabytes and dies. The stack, if you catch one, is in
 `NarrowPhase.ExecutePreflushJob`. The same scene with an ordinary `BodyComponent` is untroubled.
 
-The cause was **not** the hull, the mesh, or contact volume, all of which were measured and cleared.
-It was `Body2DComponent` zeroing the X and Y terms of the inverse inertia tensor to lock rotation.
-
-What matters is that only *some* terms were zeroed. Three runs each at 20,000 prisms:
+The cause is a lock that zeroes the X and Y terms of the inverse inertia tensor, leaving Z. What
+matters is that only *some* terms are zeroed. Three runs each at 20,000 prisms:
 
 | Inverse inertia tensor | Result |
 |---|---|
@@ -177,9 +172,9 @@ A fully zeroed tensor is the idiom Bepu's own character demo uses - it means "no
 this" - and it is perfectly stable. So the problem is not that the tensor is degenerate; it is that
 it is degenerate in *some* directions and not others.
 
-The toolkit scales those terms by `1e-4` instead of zeroing them, leaving the body four orders of
-magnitude harder to rotate out of plane than within it while keeping every term non-zero. Anything
-that leaks through is removed by the angular velocity clamp on the same step. Measured across 20 runs
+`Body2DComponent` scales the X and Y terms by `1e-4` instead of zeroing them, so the body is four
+orders of magnitude harder to rotate out of plane than within it while every diagonal term stays
+non-zero, and it clears any X or Y spin that leaks through before every step. Measured across 20 runs
 at 8,000 and 20,000 bodies: no runaway, no increase in bodies squeezed out of the pile, and a pile
 that settles where the zeroed version kept churning.
 
@@ -194,8 +189,9 @@ Why a partly-zeroed tensor misbehaves is not established; the evidence above is 
 A convex hull is exact for a convex shape, so `TriangularPrism`, `Cone` and `Teapot` collide as they
 look. A torus is not convex, and its hull spans the hole.
 
-There is no single-shape fix: an accurate torus needs a compound built from several shapes, or a
-mesh collider if it can be static.
+There is no single-shape fix: an accurate torus needs a compound built from several convex shapes,
+or a `MeshCollider`, which is best kept static: a moving mesh works but costs more than a hull and
+has no inside.
 
 ## Summary
 
@@ -210,8 +206,14 @@ mesh collider if it can be static.
 | `AccessViolationException` in the solver | Unknown; intermittent, seen only with hull shapes at scale | None known - keep hull body counts down, or use an analytic collider |
 | Slow spawns and finalizer churn with hull shapes | A hull per body, freed from a finalizer into a static pool | Share one `DecomposedHulls` per shape; the toolkit does this already |
 | `Stack overflow` in `Refit2WithCacheOptimization` | A degenerate broad-phase tree from a perfectly regular lattice | Jitter the spawn positions, or space the bodies apart |
-| Runaway memory in a 2D prism pile | Zeroing *some* inverse inertia terms and not others | Scale the terms instead of zeroing them; fixed in `Body2DComponent` |
+| Runaway memory in a 2D prism pile | Zeroing *some* inverse inertia terms and not others | Scale the terms instead of zeroing them, as `Body2DComponent` does |
 | Torus collides with its hole filled | A convex hull cannot represent a concave shape | Build a compound, or use a mesh collider for statics |
 
 > [!NOTE]
 > Do not combine Bepu and Bullet physics components on the same entity.
+
+## See also
+
+- [Bepu: Why Isn't My Constraint Doing Anything?](bepu-constraints.md)
+- [Bepu: Bounce and Friction](bepu-contact-materials.md)
+- [Physics Extensions](index.md)

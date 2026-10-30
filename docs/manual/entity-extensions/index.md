@@ -1,6 +1,6 @@
 # Entity Extensions
 
-Extension methods for `Entity`, in the `Stride.CommunityToolkit.Engine` namespace. They cover the four things you end up doing to an entity constantly: getting components off it, finding it again, attaching a controller, and drawing a gizmo on it.
+Extension methods for `Entity`, in the `Stride.CommunityToolkit.Engine` namespace. They cover getting components off an entity, finding and adding entities, moving them, attaching a camera controller and drawing a gizmo.
 
 ## Components
 
@@ -20,6 +20,7 @@ var (model, light) = entity.Get<ModelComponent, LightComponent>();
 - [`FindEntity()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity(Stride.Engine.Entity,System.String)) - The same search, started from an entity that is already in the scene: its top-level entities, not this entity's children.
 - [`FindEntityRecursive()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.FindEntityRecursive(Stride.Engine.Entity,System.String)) - The same from an entity, descendants included. Both throw an `InvalidOperationException` that says what to do when the entity is not in a scene yet.
 - [`WorldPosition()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity,System.Boolean)) - The entity's position in world space rather than relative to its parent, updating the transform hierarchy first unless you ask it not to.
+- [`AddTo(scene)`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.AddTo(Stride.Engine.Entity,Stride.Engine.Scene)) / [`AddTo(parent)`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.AddTo(Stride.Engine.Entity,Stride.Engine.Entity)) - Adds the entity to a scene, or as a child of another entity, and returns it, so creating, adding and placing read as one line: `game.CreatePrimitive(Primitive3D.Cube()).AddTo(scene).Transform.Position = new Vector3(0, 8, 0);`.
 - [`Remove()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Remove(Stride.Engine.Entity)) - Takes the entity out of its scene by setting `Scene` to `null`.
 
 To search a whole scene rather than one entity's subtree:

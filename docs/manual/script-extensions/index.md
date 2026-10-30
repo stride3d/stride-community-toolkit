@@ -3,8 +3,7 @@
 Extension methods for `ScriptComponent`, in the `Stride.CommunityToolkit.Engine` namespace. Mostly shortcuts for things a script reaches for on almost every frame.
 
 - [`DeltaTime()`](xref:Stride.CommunityToolkit.Engine.ScriptComponentExtensions.DeltaTime(Stride.Engine.ScriptComponent)) - Seconds since the last update, instead of writing `Game.UpdateTime.Elapsed.TotalSeconds` out in full.
-- [`GetCamera()`](xref:Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent,System.String)) - Gets the camera bound to the graphics compositor slot named `Main`. Returns `null` when no slot matches.
-- [`GetCamera(cameraName)`](xref:Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent,System.String)) - The same, for a camera slot you named yourself.
+- [`GetCamera()`](xref:Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent,System.String)) - Gets the camera bound to the graphics compositor slot named `Main`, or to the slot named by `cameraName`. Returns `null` when no slot matches.
 - [`GetFirstCamera()`](xref:Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstCamera(Stride.Engine.ScriptComponent)) - Gets the first camera in the graphics compositor whatever its slot is called, which is usually what you want when there is only one. Returns `null` when the compositor has no camera slot.
 
 > [!NOTE]

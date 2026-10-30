@@ -52,7 +52,7 @@ public static class NumberStations
 
     /// <summary>
     /// Five spheres, metalness 0 to 1 at one glossiness: a dielectric keeps its colour as diffuse
-    /// and reflects a colourless 4 percent; a metal has no diffuse at all, and its colour is the
+    /// and reflects a colourless 2 percent; a metal has no diffuse at all, and its colour is the
     /// colour of its reflection. Halfway values are what a metalness map paints where paint meets
     /// bare metal. V cycles the colour.
     /// </summary>
@@ -72,9 +72,9 @@ public static class NumberStations
 
     /// <summary>
     /// The other way to say the same thing: a specular colour (F0, what the surface reflects head
-    /// on) given directly instead of derived from a metalness. Plastic reflects a grey 4 percent
+    /// on) given directly instead of derived from a metalness. Plastic reflects a faint grey
     /// and keeps its diffuse; gold and silver reflect their own colour and have a black diffuse,
-    /// which is what a metal is. This is the workflow the Material Package's textures use.
+    /// which is what a metal is. Several of the Material Package's materials use this workflow.
     /// </summary>
     public static void SpecularColour(MaterialStation s)
     {
@@ -114,11 +114,9 @@ public static class NumberStations
     /// at full strength from every angle. It is the community's recipe for checking a cubemap
     /// (Stride discussion 3031), with the implicit visibility and Blinn-Phong distribution it
     /// uses. A metal's diffuse colour is the colour of its reflection, so a gold tint makes a gold
-    /// mirror; V switches. There is no Fresnel variation because there would be nothing to see:
-    /// the Fresnel function shapes the highlights of lights, pinpoints at this glossiness, while the
-    /// reflection of the sky - all of what a mirror shows - is the environment term's business, and
-    /// that is the same lookup table whichever Fresnel is chosen. On a white metal even the highlights
-    /// agree, since a reflectance of one has nowhere to rise to.
+    /// mirror; V switches. There is no Fresnel variation: the Fresnel function shapes only the
+    /// lights' highlights, pinpoints at this glossiness, while the sky's reflection - all a mirror
+    /// shows - comes from the environment term's lookup table whichever Fresnel is chosen.
     /// </summary>
     public static void Mirror(MaterialStation s)
     {

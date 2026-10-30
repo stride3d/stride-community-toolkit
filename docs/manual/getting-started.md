@@ -49,7 +49,7 @@ dotnet add package Stride.CommunityToolkit --prerelease
 ```
 
 > [!NOTE]
-> `Stride.CommunityToolkit` brings in the Stride packages a code-only project needs, including the asset compiler build step. On Linux, add `Stride.CommunityToolkit.Linux` as well; see [Create Project](code-only/create-project.md).
+> `Stride.CommunityToolkit` brings in the Stride packages a code-only project needs, including the asset compiler build step. On Linux with a distribution's own `dotnet` package, add `Stride.CommunityToolkit.Linux` as well; see the Linux tab of [Create Project](code-only/create-project.md).
 
 ### Additional toolkit packages
 

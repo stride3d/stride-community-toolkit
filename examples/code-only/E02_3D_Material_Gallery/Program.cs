@@ -28,8 +28,7 @@ using Stride.Rendering.Lights;
 // Keys: N and P fly to the next and previous station, Home flies home to the index board, Tab
 // shows one station at a time, L widens the labels, V cycles the current station's variation, M opens
 // the list of material stream views - diffuse, glossiness, normals - and a digit draws every mesh with
-// that stream as its colour, the way the editor's view modes do: the fastest way to see what a map is
-// really feeding the material.
+// that stream as its colour, like the editor's view modes.
 // "--station 5" starts at a station; "--station 5 --variation 2" at its third variation; "--stream Glossiness"
 // starts with that view on - handy for screenshots. "--clean" hides the overlay.
 
@@ -50,7 +49,7 @@ game.Run(new SceneSetup3D
     // Tessellation runs on hull and domain shaders, which need feature level 11; a code-only game runs
     // at level 10 unless it asks. GameSettings is how it asks.
     GameSettings = settings => settings.GetOrCreateConfiguration<RenderingSettings>().DefaultGraphicsProfile = GraphicsProfile.Level_11_0,
-    // The sun is aimed by the stations, so it is added by hand below
+    // The sun is added by hand below, so LightTheRing can aim it
     Lighting = null,
     Ground = null,
     Profiler = true,
@@ -148,13 +147,11 @@ void HandleInput(Gallery<MaterialStation> gallery)
     }
 }
 
-// One sun lights a ring badly. The exhibits face the centre, so the station the sun points at is
-// front-lit and the one opposite gets nothing but sky. The ring is symmetric about its centre, so a
-// point light there is the same key light for every station, from the side the camera stands on,
-// and high enough to come in at forty-five degrees rather than as a flat headlight - the higher it
-// sits, the less the floor under it outshines the exhibits, since a point light falls off with the
-// square of the distance. The sun stays for its shadows, steepened so its share is nearly the same
-// all the way round.
+// One sun lights a ring badly: the exhibits face the centre, so the station the sun points at is
+// front-lit and the one opposite gets only sky. A point light at the centre is the same key light for
+// every station, from the camera's side, high enough to come in at forty-five degrees - the higher it
+// sits, the less the floor under it outshines the exhibits. The sun stays for its shadows, steepened
+// so its share is nearly the same all the way round.
 void LightTheRing(Scene scene, float radius, Entity sun)
 {
     sun.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-65f)) * Quaternion.RotationY(MathUtil.DegreesToRadians(-180f));

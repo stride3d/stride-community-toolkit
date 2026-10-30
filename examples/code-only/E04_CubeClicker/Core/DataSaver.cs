@@ -6,8 +6,7 @@ namespace E04_CubeClicker.Core;
 public class DataSaver<TData>
 {
     /// <summary>
-    /// The Data which should be covered for saving and deleting and loading
-    /// Only Objects with direct [DataContract] Attribute work.
+    /// The object saved and loaded; only types tagged [DataContract] directly work.
     /// </summary>
     public required TData Data { get; set; }
     public required string FileName { get; set; }

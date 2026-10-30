@@ -20,7 +20,7 @@
 
 ## Running the Code
 
-When you run the code, you'll see a 3D sphere smoothly moving from the starting position (8 units above the ground) to the bottom (2 units above the ground) over a duration of 2 seconds. At the same time, the sphere’s material color will gradually change from white to a randomly generated color. You can press the **spacebar** to reset the animation and see the sphere rise back to the top while its color returns to white.
+When you run the code, you'll see a 3D sphere smoothly moving from the starting position (8 units above the ground) to the bottom (2 units above the ground) over a duration of 2 seconds. At the same time, the sphere’s material color will gradually change from white to a randomly generated color. Press the **spacebar** to restart the animation: the sphere jumps back to the top and turns white again.
 
 ## Summary
 

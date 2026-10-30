@@ -35,7 +35,7 @@ CameraComponent? camera = null;
 ShapeBatch? batch = null;
 
 // The thrown ball, integrated by hand each frame. Unlike the 2D example it is given a Z velocity too, so
-// the recorded trail arcs through the depth of the chart instead of staying on the front plane.
+// the recorded trail arcs through the depth of the chart instead of staying on the z = 0 plane.
 var launchPosition = new Vector3(-4.5f, -3.5f, -2.5f);
 var launchVelocity = new Vector3(4f, 7f, 1.6f);
 const float Gravity = 9.81f;
@@ -79,8 +79,8 @@ void Start(Scene rootScene)
 {
     keyLight = game.AddDirectionalLight(intensity: ChartLight).Get<LightComponent>();
 
-    // Glow3D is the lit preset: bright palette, emissive intensity above 1, which the default
-    // compositor's bloom turns into a glow
+    // Glow3D is the lit preset: a bright palette and a glow halo on every stroke; ribbons go emissive
+    // above 1, which the bloom enabled above turns into a glow
     var options = ChartOptions.Glow3D();
 
     options.Range.XMin = -5f;
@@ -105,7 +105,7 @@ void Start(Scene rootScene)
 
     chart = new Chart(game, options);
 
-    // Lifted so most of the chart stands above the ground plane of the scene
+    // Lifted so most of the chart stands above y = 0
     chart.Root.Transform.Position = new Vector3(0, 3f, 0);
     chart.Root.Scene = rootScene;
 
@@ -124,7 +124,7 @@ void Start(Scene rootScene)
     // The live trail of the thrown ball; in 3D it is clipped to the box, not the rectangle
     trail = chart.AddTrajectory(capacity: 900, name: "throw");
 
-    // Scatter markers, here lifted off the front plane so they sit inside the box
+    // Scatter markers, here lifted off the z = 0 plane so they sit inside the box
     var samples = new List<Vector3>();
 
     for (var x = -4.5f; x <= 4.5f; x += 0.45f)
@@ -223,10 +223,10 @@ void Update(Scene scene, GameTime time)
         chart.Options.Grid.Visible = !showcase;
         chart.Options.Series.Glow = showcase ? ShowcaseGlow : ChartGlow;
 
-        // The light matters more than it looks. A ribbon is emissive AND lit, so a bright key light adds
-        // white to every curve and washes the colour out - which is why the halo always looked better from
-        // behind, where the ribbons face away from it. Dimming the light is what brings that side to the
-        // front; it is not turned off, so the labels and axes keep some shading.
+        // The light matters more than it looks. A ribbon (the helix, the trail) is emissive AND lit, so a
+        // bright key light adds white and washes the colour out - which is why the halo always looked
+        // better from behind, where the ribbons face away from it. Dimming the light brings that side to
+        // the front; it is not turned off, so the labels and axes keep some shading.
         if (keyLight is not null) keyLight.Intensity = showcase ? ShowcaseLight : ChartLight;
 
         // The last piece, and the one that explains why orbiting behind the chart always looked better:

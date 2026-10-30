@@ -27,8 +27,8 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    // Shapes render through the toolkit's Box2D debug draw - testbed-style fill and pixel-constant
-    // borders from an SDF shader, replacing the old per-mesh outline render features
+    // Every shape is a ShapeComponent drawn through this batch - testbed-style fill and
+    // pixel-constant borders from an SDF shader
     var shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1.5f;
     shapeBatch.Fill.Alpha = 0.4f;

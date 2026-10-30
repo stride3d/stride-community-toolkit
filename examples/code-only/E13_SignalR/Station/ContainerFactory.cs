@@ -18,7 +18,7 @@ public sealed class ContainerFactory(Game game)
 {
     private readonly Dictionary<ContainerPaint, Material> _materials = [];
 
-    /// <summary>What each size measures and weighs. Mass scales with volume roughly, so a large one lands with authority.</summary>
+    /// <summary>What each size measures and weighs. Mass roughly follows volume.</summary>
     public static (Vector3 Box, float Mass) Spec(ContainerSize size) => size switch
     {
         ContainerSize.Small => (new Vector3(1f, 1f, 1f), 1f),

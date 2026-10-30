@@ -19,8 +19,7 @@ using Stride.Input;
 // Each entry names its own key and carries its own callback, so what a choice does is entirely up to
 // the caller - here, dropping a shape into the scene.
 //
-// CloseOnSelect = false keeps the list up after a choice, which is what you want for something used
-// repeatedly. Leave it at the default to have the list collapse as soon as a choice is made.
+// CloseOnSelect = false keeps the list up after a choice; the default collapses it.
 
 var random = new Random(1);
 
@@ -67,8 +66,7 @@ void Start(Scene rootScene)
         // Stay open so shapes can be dropped one after another
         CloseOnSelect = false,
 
-        // Entries are generated from the list above, so adding a shape there adds it to the menu.
-        // Keys are yours to pick, which is why a menu is not limited to the ten digits
+        // One entry per shape, so adding a shape adds it to the menu. Any key works, not just digits
         Items = [.. shapes.Index().Select(pair => new KeyMenuItem(
             Key: (Keys)(Keys.D1 + pair.Index),
             Text: pair.Item.Name ?? pair.Item.Type.Name,

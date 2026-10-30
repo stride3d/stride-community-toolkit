@@ -15,16 +15,15 @@ using static Box2D.NET.B2Geometries;
 using static Box2D.NET.B2MathFunction;
 using static Box2D.NET.B2Shapes;
 
-// The playground sibling of E06_Box2D_Junkyard: the same walled yard and sweeping plow, but
-// built the Stride way - every shape is an entity carrying ShapeComponent (the testbed
-// look, no meshes or materials) and a Box2D body, so the component system, scripts and camera all
-// join in. Shapes of different kinds fall and mix freely - pentagons, circles, capsules and boxes,
-// switchable at runtime - something the instanced stress piles cannot do, because here rendering is
-// one shader batch instead of one master model per shape.
+// The playground sibling of E06_Box2D_Junkyard: the same walled yard and sweeping plow, built the
+// Stride way - every shape is an entity carrying ShapeComponent (the testbed look, no meshes or
+// materials) and a Box2D body, so the component system, scripts and camera all join in. Pentagons,
+// circles, capsules and boxes, switchable at runtime, fall and mix freely - which the instanced
+// stress piles cannot do, as here rendering is one shader batch instead of one master model per shape.
 //
-// A wheat-coloured sensor gate hangs over the yard: anything passing through turns gold, driven by
-// the library's sensor events. Pick a shape up with the mouse and throw it, press N to drop a new one,
-// middle-click a shape and the camera follows it through the pile.
+// A wheat-coloured sensor gate hangs over the yard: anything passing through turns gold, through
+// the library's sensor events. Pick a shape up with the mouse and throw it, press N to drop a new
+// one, middle-click a shape and the camera follows it through the pile.
 
 // --- the junkyard's yard, verbatim
 const float GridSize = 1.0f;
@@ -317,8 +316,7 @@ void HandleInput(Scene rootScene)
 
     if (!game.Input.HasMouse) return;
 
-    // The left button belongs to the grabber on the camera: pick a shape up, carry it, throw it.
-    // N drops a new one of the selected kind at the cursor.
+    // The left button belongs to the grabber; N drops one of the selected kind at the cursor.
     if (game.Input.IsKeyPressed(Keys.N) && camera.ScreenToWorldPointOnXYPlane(game.Input.MousePosition) is { } dropPoint)
     {
         Spawn(rootScene, catalogue[currentShape], dropPoint);
@@ -330,7 +328,7 @@ void HandleInput(Scene rootScene)
 
         if (world is { } point && simulation.OverlapPoint(point) is { } bodyId)
         {
-            // The camera controller does the rest: it tracks the entity until Escape releases it
+            // The camera controller tracks the entity until Escape clears FollowTarget
             cameraController.FollowTarget = simulation.GetEntity(bodyId);
         }
     }

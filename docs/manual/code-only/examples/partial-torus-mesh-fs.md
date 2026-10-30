@@ -22,4 +22,4 @@ The `Program.fs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_PartialTorus_FSharp).
 
-[!code-fsharp[](../../../../examples/code-only/E07_3D_PartialTorus_FSharp/Program.fs?start=1&end=120)]
+[!code-fsharp[](../../../../examples/code-only/E07_3D_PartialTorus_FSharp/Program.fs?start=1&end=118)]

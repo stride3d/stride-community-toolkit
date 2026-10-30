@@ -8,10 +8,8 @@ namespace CubeCollapse.Scripts;
 /// Draws the running total and the combo streak, and animates the total as it changes.
 /// </summary>
 /// <remarks>
-/// The counter eases up to the real total rather than snapping to it. It is a small thing and it is
-/// the single cheapest way to make scoring feel like an event: a number that visibly climbs is worth
-/// watching, and the same number appearing instantly is just text. The keeper always holds the true
-/// total - only the display lags - so nothing downstream has to know this is happening.
+/// The counter eases up to the real total rather than snapping to it, so scoring reads as an event.
+/// Only the display lags; the keeper always holds the true total.
 /// </remarks>
 public class ScoreboardScript : SyncScript
 {
@@ -31,9 +29,8 @@ public class ScoreboardScript : SyncScript
     /// Gets the score keeper this reads from.
     /// </summary>
     /// <remarks>
-    /// Set through an object initialiser rather than a constructor, so the class keeps the public
-    /// parameterless constructor Stride's STRDIAG010 analyser expects of a component, while
-    /// <c>required</c> keeps the compiler enforcing that it is supplied.
+    /// Set through an object initialiser rather than a constructor: a component needs a public
+    /// parameterless constructor (STRDIAG010), and <c>required</c> still makes the compiler enforce it.
     /// </remarks>
     public required ScoreKeeper Keeper { get; init; }
 
@@ -46,9 +43,8 @@ public class ScoreboardScript : SyncScript
     /// Gets or sets the text showing the combo multiplier.
     /// </summary>
     /// <remarks>
-    /// Assigned explicitly rather than looked up off the entity. Two components of the same type on
-    /// one entity can only be told apart by the order they were added, which is a rename or a
-    /// reorder away from silently swapping the two labels.
+    /// Assigned explicitly rather than looked up off the entity: components of the same type on one
+    /// entity differ only by the order they were added, so a reorder would silently swap the labels.
     /// </remarks>
     public EntityTextComponent? ComboText { get; set; }
 
@@ -57,8 +53,7 @@ public class ScoreboardScript : SyncScript
     /// groups - moves - remain among them.
     /// </summary>
     /// <remarks>
-    /// The moves number is what turns the endgame around: with a handful left, the player knows to
-    /// orbit and hunt for them rather than wonder whether the board has quietly run out.
+    /// With a handful of moves left, the player knows to orbit and hunt for them.
     /// </remarks>
     public EntityTextComponent? RemainingText { get; set; }
 
@@ -76,10 +71,8 @@ public class ScoreboardScript : SyncScript
     /// Gets or sets the draining bar under the combo, showing how much of the window is left.
     /// </summary>
     /// <remarks>
-    /// The bar is a run of characters whose length follows <see cref="ScoreKeeper.ComboFraction"/> -
-    /// no UI framework, no textures, just the same text renderer the rest of the HUD already uses.
-    /// Chunky, but it makes the window something the player can race instead of something they
-    /// discover when the multiplier vanishes.
+    /// A run of characters whose length follows <see cref="ScoreKeeper.ComboFraction"/>, drawn by the
+    /// same text renderer as the rest of the HUD, so the player can race the window.
     /// </remarks>
     public EntityTextComponent? ComboBarText { get; set; }
 
@@ -122,8 +115,8 @@ public class ScoreboardScript : SyncScript
 
         if (_displayedScore < target)
         {
-            // Rate is set from whatever gap remains when the clear lands, so a huge clear counts up
-            // faster rather than taking proportionally longer. Every clear feels the same length.
+            // The rate is the remaining gap over CountUpSeconds, recomputed each frame, so a huge
+            // clear eases in about as quickly as a small one
             _displayedScore += Math.Max((target - _displayedScore) / CountUpSeconds, 1f) * deltaTime;
 
             if (_displayedScore >= target) _displayedScore = target;

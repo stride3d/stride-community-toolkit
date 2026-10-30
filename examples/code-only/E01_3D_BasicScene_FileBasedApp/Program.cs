@@ -15,14 +15,12 @@
 #:project ../../../src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
 #:property PublishAot=false
 
-// Stride's asset compiler builds its cache path by concatenating $(ProjectDir) with
-// $(IntermediateOutputPath). That assumes the latter is relative, which holds for a normal project
-// but not for a file-based app, whose obj/bin live under the SDK's temp cache and are therefore
-// absolute - producing a malformed path and an IOException during build.
+// Stride before 4.4.0 built its asset cache path by concatenating $(ProjectDir) with
+// $(IntermediateOutputPath). A file-based app's obj/ and bin/ live under the SDK's temp cache, so
+// that path is absolute, and the build failed with an IOException on a malformed path.
 //
-// Uncomment the two directives below to work around it on a Stride build that lacks the fix. They
-// force obj/ and bin/ next to this file, which costs the SDK's shared temp build cache, so prefer
-// leaving them commented once the fix is in.
+// On such a Stride build, uncomment the two directives below. They force obj/ and bin/ next to
+// this file, which costs the SDK's shared temp build cache.
 //
 // #:property BaseIntermediateOutputPath=obj\
 // #:property OutputPath=bin\

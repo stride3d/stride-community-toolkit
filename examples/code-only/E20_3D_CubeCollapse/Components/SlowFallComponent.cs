@@ -17,10 +17,10 @@ namespace CubeCollapse.Components;
 /// <see cref="ISimulationUpdate.SimulationUpdate"/>, before the solver runs.
 /// </para>
 /// <para>
-/// Each tick the integrator adds one tick of full gravity; this component immediately removes
-/// (1 - <see cref="GravityScale"/>) of it again, so the net acceleration is gravity scaled. Cancelling
-/// acceleration rather than clamping speed keeps the motion natural - the letters still accelerate,
-/// bounce and tumble, just as if they were falling on a smaller planet.
+/// Each tick the integrator adds one tick of full gravity; this component removes
+/// (1 - <see cref="GravityScale"/>) of it just before, so the net acceleration is gravity scaled.
+/// Cancelling acceleration rather than clamping speed keeps the motion natural: the letters still
+/// accelerate, bounce and tumble.
 /// </para>
 /// </remarks>
 [ComponentCategory("Cube Collapse")]

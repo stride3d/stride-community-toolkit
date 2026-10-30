@@ -11,20 +11,20 @@ using Stride.Input;
 using static Box2D.NET.B2RevoluteJoints;
 using static Box2D.NET.B2WheelJoints;
 
-// Every Box2D joint, one rig each, in a row you can pull on.
+// Every Box2D joint that constrains motion (all but the filter joint), one rig each, in a row you
+// can pull on.
 //
 // A joint definition wants its anchors as local frames - a point and a rotation in each body's
 // own space - which is why raw Box2D code is full of GetLocalPoint calls. Joints2D takes the pivot
-// and the axis in world space and does that once; the pose at creation is the joint's zero. The
-// options records carry the per-type knobs under Box2D's own names, and anything left unset keeps
-// Box2D's default.
+// and the axis in world space instead; the pose at creation is the joint's zero. The options
+// records carry the per-type knobs under Box2D's own names; anything left unset keeps Box2D's
+// default.
 //
-// Joints are only interesting when something pulls on them, so the grabber is on the camera: pick
-// any body up and drag it, then watch what its joint allows. Left to right: a hinge pendulum with a
-// motor and a limit, a slider on a spring, a wheel on a suspension, a rope of distance joints, a
-// soft weld, and a motor joint that spins a box and springs it back home. The joints themselves are
-// drawn by Box2D's own debug draw through the shape batch - Box2DDebugDraw - which can also show
-// contact points, bounding boxes and centres of mass on request.
+// The grabber is on the camera: drag any body and watch what its joint allows. Left to right: a
+// hinge pendulum with a motor and a limit, a slider on a spring, a wheel on a suspension, a rope of
+// distance joints, a soft weld, and a motor joint that spins a box and springs it back home.
+// Box2DDebugDraw draws the joints through the shape batch, and on request contact points, bounding
+// boxes and centres of mass.
 
 ShapeBatch shapeBatch = null!;
 Box2DDebugDraw debugDraw = null!;
@@ -69,7 +69,7 @@ void Start(Scene rootScene)
     // Shapes stay off - the entities' ShapeComponents already draw the bodies.
     debugDraw = new Box2DDebugDraw(shapeBatch) { DrawShapes = false, DrawJointExtras = true, FillAlpha = shapeBatch.Fill.Alpha };
 
-    // The 2D grabber: left mouse picks any dynamic body up. Every rig below is built to be pulled.
+    // Left mouse picks any dynamic body up.
     game.AddGrabber2D(simulation);
 
     BuildScene(rootScene);
@@ -209,7 +209,7 @@ void Update(Scene rootScene, GameTime time)
         Reset(rootScene);
     }
 
-    // One call draws every joint - and whatever else is switched on - from Box2D's own view of the world.
+    // Draws every joint, and whatever else is switched on, from Box2D's own view of the world.
     debugDraw.Draw(simulation);
 }
 

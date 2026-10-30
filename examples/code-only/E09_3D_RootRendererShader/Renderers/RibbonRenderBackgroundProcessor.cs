@@ -10,7 +10,6 @@ public class RibbonBackgroundRenderProcessor : EntityProcessor<RibbonBackgroundC
     /// <summary>
     /// Gets the active background.
     /// </summary>
-    /// <value>The active background.</value>
     public RibbonRenderBackground? ActiveBackground { get; private set; }
 
     /// <inheritdoc />
@@ -39,12 +38,11 @@ public class RibbonBackgroundRenderProcessor : EntityProcessor<RibbonBackgroundC
         var previousBackground = ActiveBackground;
         ActiveBackground = null;
 
-        // Start by making it not visible
+        // Select the first enabled background
         foreach (var (backgroundComponent, renderBackground) in ComponentDatas)
         {
             if (backgroundComponent.Enabled)
             {
-                // Select the first active background
                 renderBackground.Intensity = backgroundComponent.Intensity;
                 renderBackground.RenderGroup = backgroundComponent.RenderGroup;
                 renderBackground.Speed = backgroundComponent.Speed;

@@ -50,7 +50,8 @@ public static class LookStations
 
     /// <summary>
     /// Colour from a curve over the particle's life, alpha included: a fade, a fire ramp from white
-    /// through yellow and red to black, a rainbow. In HDR the values can go above one for glare.
+    /// through yellow and red to black, a rainbow. The colour reaches the shader as 8 bits a channel,
+    /// so a value above one wraps round instead of glaring.
     /// </summary>
     public static void ColorOverLife(ParticleStation s)
     {
@@ -113,7 +114,7 @@ public static class LookStations
     /// <summary>
     /// A flipbook: the texture is an 8 by 8 grid of frames and each particle plays through them
     /// over its life. The speed is frames per life; 64 shows each frame once, 128 plays the sheet
-    /// twice, 16 holds each frame four times as long.
+    /// twice, 16 plays the first quarter, each frame four times as long.
     /// </summary>
     public static void Flipbook(ParticleStation s)
     {
@@ -191,7 +192,7 @@ public static class LookStations
         emitter.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(-0.4f, 0.5f, -0.4f), VelocityMax = new Vector3(0.4f, 1f, 0.4f) });
         emitter.Updaters.Add(new UpdaterColorOverTime { SamplerMain = Curves.Color((0f, new Color4(1f, 1f, 1f, 0f)), (0.2f, new Color4(1f, 1f, 1f, 0.8f)), (1f, new Color4(1f, 1f, 1f, 0f))) });
 
-        // On the pillar's side, so the puffs drift through it
+        // At the pillar's position, so the puffs drift through it
         s.Place(new Vector3(-3.5f, 0.5f, -1.5f), 2f, emitter);
     }
 

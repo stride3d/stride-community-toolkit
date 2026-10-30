@@ -8,11 +8,8 @@ namespace CubeCollapse.Scripts;
 /// Keeps a screen-positioned text in the middle of the window as it is resized.
 /// </summary>
 /// <remarks>
-/// <see cref="TextPositionMode.Anchored"/> snaps to the four corners, and
-/// <see cref="TextPositionMode.Screen"/> takes a fixed pixel position, so neither of them centres
-/// anything on its own. Recomputing the position each frame covers the gap in four lines. It is worth
-/// knowing this is the workaround rather than the intended route - a centre option belongs in the
-/// component.
+/// <see cref="TextPositionMode.Anchored"/> with <see cref="EntityTextComponent.ScreenAnchor"/> set to
+/// <c>Anchor.MiddleCenter</c> does the same without a script.
 /// </remarks>
 public class ScreenCentreTextScript : SyncScript
 {

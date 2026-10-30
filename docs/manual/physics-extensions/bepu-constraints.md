@@ -60,9 +60,9 @@ For rotation, use an angular motor:
 
 ## "My motor stopped the moment I set MotorDamping"
 
-`MotorDamping` does **not** read back the number the component was constructed with. The constructors
-pass a damping value to Bepu's `MotorSettings`, which stores its reciprocal, so a component built with
-`0.02` reports a `MotorDamping` of `50`.
+`MotorDamping` does **not** read back the number in the component's constructor. The constructors
+pass Bepu's `MotorSettings` a *softness*, and `MotorSettings` stores its reciprocal as the damping, so
+a component built with `0.02` reports a `MotorDamping` of `50`.
 
 Copying the value out of the constructor and "setting it to the default" therefore makes the motor
 2500x softer, and a motor that soft produces no visible force at all:
@@ -112,12 +112,11 @@ cancelling it. Nothing is broken - the motor is doing exactly what it was told.
 `LocalAxisA` and a scalar `TargetVelocity`, leaving the other two axes to gravity, so the cone
 survives.
 
-Two things to expect once it does. Drive the arm near its own pendulum frequency, `sqrt(3g/2L)` for a
-rod pivoting at its end, and the two beat against each other - the orbit wanders into shifting
-polygons instead of a circle, so pick a speed well clear of it. And because only the spin is
-controlled, the swing in and out is free motion that nothing damps: the cone breathes about its
-equilibrium angle indefinitely. That is the pendulum nutating, not the motor faltering, and no
-constant will tune it away.
+Two effects remain. Near the arm's own pendulum frequency, `sqrt(3g/2L)` for a rod pivoting at its
+end, the drive and the swing beat against each other and the orbit wanders into shifting polygons;
+pick a speed well clear of it. And the swing in and out is free motion that nothing damps, so the
+cone breathes about its equilibrium angle indefinitely - the pendulum nutating, not the motor
+faltering.
 
 ```csharp
 new AngularAxisMotorConstraintComponent
@@ -134,11 +133,10 @@ new AngularAxisMotorConstraintComponent
 ## "Turning the motor off does nothing"
 
 Disabling a motor does not brake anything; it only stops pushing. A hinged flywheel carrying
-momentum coasts for a very long time, which is visually indistinguishable from "the toggle is
-broken".
+momentum coasts for a long time, which looks exactly like a broken toggle.
 
-`Enabled` does work - it reattaches the constraint - but confirm it by displaying the body's velocity
-rather than by watching the object:
+Setting `Enabled` to `false` does take the constraint out of the solver. Confirm it by displaying the
+body's velocity rather than by watching the object:
 
 ```csharp
 DebugText.Print($"spin {MathF.Abs(body.AngularVelocity.Y):0.0} rad/s", position);
@@ -160,3 +158,9 @@ Constraints join **bodies**. Both ends need a `BodyComponent`, so an immovable a
 | Driven axis fine, other axes fought | A whole-vector motor target constrains all three axes | Use `AngularAxisMotorConstraintComponent` |
 | Disabling the motor changes nothing | Disabling stops pushing but does not brake | Display the velocity to confirm |
 | Anchor rejects `StaticComponent` | Constraints join bodies only | Kinematic `BodyComponent` |
+
+## See also
+
+- [Bepu: Who Owns the Transform?](bepu-transform-ownership.md)
+- [Constraint Motors example](../code-only/examples/constraint-motors.md)
+- [Physics Extensions](index.md)

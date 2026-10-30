@@ -9,7 +9,7 @@ using Stride.Games;
 
 ImmediateDebugRenderSystem? debugDraw = null;
 
-// The spheres are kept in a list, so the update does not search the scene by name every frame
+// Kept in a list, so Update does not search the scene every frame
 List<Entity> spheres = [];
 
 using var game = new Game();

@@ -156,3 +156,8 @@ Two helpers in `TextMeshTests` carry most of the weight: every mesh must be wate
 directed edge matched by its reverse, by exact position) and wound outward (no triangle against its
 normals). The `text-3d` gold scene renders the whole alphabet, a bevelled sample and a
 `Primitive3D.Text` and is compared pixel for pixel.
+
+## See also
+
+- [3D Text](text-3d.md)
+- [MeshBuilder](mesh-builder.md)

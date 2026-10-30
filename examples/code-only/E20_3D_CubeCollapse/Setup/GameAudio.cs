@@ -10,18 +10,14 @@ namespace CubeCollapse.Setup;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Two habits worth copying are in here. The first is <em>round-robin</em>: a clear picks from three
-/// recordings of the same sound in turn, because one clip repeated quickly stops sounding like an
-/// event and starts sounding like a machine gun. The second is <em>pitch variation</em>, which does
-/// the same job along a different axis and doubles here as information - a bigger clear is a lower,
-/// heavier sound, so the size of what just happened is audible before the number is readable.
+/// Two habits worth copying. <em>Round-robin</em>: a clear picks from three recordings in turn,
+/// because one clip repeated quickly sounds like a machine gun. <em>Pitch variation</em> does the
+/// same job and doubles as information: a bigger clear is a lower, heavier sound.
 /// </para>
 /// <para>
-/// Round-robin is doing more work than it looks like here. A <see cref="SoundInstance"/> plays one
-/// sound at a time, so replaying one that is still sounding necessarily cuts it off - which is what
-/// the previous version did with its single instance, meaning the faster the player went the less
-/// they heard. Three instances means three clears can overlap; only the fourth in quick succession
-/// interrupts anything.
+/// Round-robin also lets clears overlap. A <see cref="SoundInstance"/> plays one sound at a time, so
+/// replaying one that is still sounding cuts it off; with three instances only the fourth clear in
+/// quick succession interrupts anything.
 /// </para>
 /// </remarks>
 public class GameAudio
@@ -77,8 +73,7 @@ public class GameAudio
             Play(instance);
         }
 
-        // Layered over the clear rather than replacing it, so a big clear still sounds like the
-        // normal one happening - only more so
+        // Layered over the clear rather than replacing it
         if (cubeCount >= 10)
         {
             Play(_bigClear);
@@ -110,11 +105,10 @@ public class GameAudio
     /// <remarks>
     /// Stride pauses the whole audio engine when the window loses focus - <c>AudioSystem</c> hooks
     /// <c>Game.Deactivated</c> and calls <c>AudioEngine.PauseAudio()</c> - and
-    /// <c>SoundInstance.Play</c> returns silently while it is paused, with no error and no queued
-    /// playback. Clicking back onto the window delivers that click before the matching
-    /// <c>ResumeAudio</c> has run, so the first sound after coming back was being dropped. Reaching
-    /// this method at all means a click was just handled, so the window has focus and resuming is the
-    /// correct thing to do rather than a workaround for a race.
+    /// <c>SoundInstance.Play</c> returns silently while it is paused. Clicking back onto the window
+    /// delivers that click before the matching <c>ResumeAudio</c> has run, so the first sound would
+    /// be dropped. Reaching this method means a click was just handled, so the window has focus and
+    /// resuming is correct.
     /// </remarks>
     private void Play(SoundInstance? instance)
     {
@@ -122,8 +116,7 @@ public class GameAudio
 
         if (_engine.State == AudioEngineState.Paused) _engine.ResumeAudio();
 
-        // An instance cannot overlap itself, so restarting is the only option once it is busy. The
-        // round-robin above is what keeps that from being the common case.
+        // An instance cannot overlap itself, so a busy one restarts; the round-robin keeps that rare
         if (instance.PlayState == PlayState.Playing) instance.Stop();
 
         instance.Play();

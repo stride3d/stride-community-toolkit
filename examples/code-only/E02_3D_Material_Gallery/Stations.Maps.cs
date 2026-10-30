@@ -51,7 +51,7 @@ public static class MapStations
     /// <summary>
     /// The same albedo twice: the left cube has only the colour map, the right one the normal map
     /// as well, and the light now falls into the mortar lines that were only painted before. A
-    /// normal map costs a tangent frame per vertex and nothing else. V cycles the texture set.
+    /// normal map needs a tangent frame per vertex. V cycles the texture set.
     /// </summary>
     public static void NormalMap(MaterialStation s)
     {
@@ -304,8 +304,8 @@ public static class MapStations
 
         foreach (var n in normals)
         {
-            // The face's own axes; its four corners go round clockwise seen from outside, which is the
-            // front face in Stride as in Direct3D - the other way round and culling shows the insides
+            // The face's own axes; both triangles wind clockwise seen from outside, which is the front
+            // face in Stride as in Direct3D - the other way round and culling shows the insides
             var up = MathF.Abs(n.Y) > 0.5f ? Vector3.UnitZ : Vector3.UnitY;
             var right = Vector3.Cross(up, n);
             var first = builder.VertexCount;

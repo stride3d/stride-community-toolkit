@@ -4,7 +4,7 @@ namespace E03_2D_HUD;
 
 /// <summary>
 /// The annunciator under the sight: amber when the shield needs attention, red when it needs it
-/// now, and quietly nominal the rest of the time. The one widget whose colour no scheme decides.
+/// now, and quietly nominal the rest of the time. Its amber and red are the same in every scheme.
 /// </summary>
 public sealed class WarningWidget(ShipState ship) : HudWidget
 {

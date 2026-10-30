@@ -1,21 +1,19 @@
 # Shaders in a toolkit package
 
 What to know before writing an `.sdsl` or `.sdfx` file for the toolkit: where it goes, what the
-build does with it, what the engine already gives you, and the three habits that keep a shader
-honest on every display and in every golden image. The compiler facts - the SPIR-V toolchain,
-reserved words, where the generated HLSL lands - are in the
-[repository instructions](https://github.com/stride3d/stride-community-toolkit/blob/main/.github/copilot-instructions.md#shaders-sdsl); this page is
-the recipe.
+build does with it, what the engine already gives you, and three habits that keep a shader correct
+on every display and in every golden image. The compiler facts - the SPIR-V toolchain, reserved
+words, where the generated HLSL lands - are in the
+[repository instructions](https://github.com/stride3d/stride-community-toolkit/blob/main/.github/copilot-instructions.md#shaders-sdsl).
 
 ## Where a shader lives
 
-The core package has no shaders, by decision, and stays that way. A shader makes a package carry
-an `Effects` pack item, an `.sdpkg` manifest and a build-time dependency on the asset compiler,
-and none of that belongs in the package everything else depends on. So a shader goes into the
-package that owns the feature - `Shapes` for the shape batch, `DebugShapes`, the two ImGui
-packages - or into `Stride.CommunityToolkit.Effects`, the home for shader-backed pieces that have
-no package of their own: the post-processing colour transforms and GPU picking today, more
-later, until the maintainers settle a longer-term layout.
+The core package has no shaders, by decision. A shader makes a package carry an `Effects` pack
+item, an `.sdpkg` manifest and a build-time dependency on the asset compiler, and none of that
+belongs in the package everything else depends on. A shader goes into the package that owns the
+feature - `Shapes` for the shape batch, `DebugShapes`, the two ImGui packages - or into
+`Stride.CommunityToolkit.Effects`, the home for shader-backed pieces with no package of their own:
+the post-processing colour transforms and GPU picking.
 
 Inside the package the layout is fixed:
 
@@ -67,7 +65,7 @@ in Effects are the two patterns. Inherit for streams and overrides; qualify for 
 as bytes must be decoded to linear before blending and the hardware encodes it on the way out.
 Skip the decode and the picture is washed out; decode with `pow(c, 2.2)` instead of
 `ColorUtility.ToLinear` and the darks crush. Every toolkit shader that takes vertex colours does
-this the same way; the ShapeBatch page has the story of getting it wrong twice.
+this the same way; see [ShapeBatch colour and blending](../../manual/rendering/shape-batch.md#colour-and-blending).
 
 **Dither any wide, soft gradient.** Eight bits band. Half a code of ordered noise, fixed to the
 pixel grid so it never crawls, breaks the bands into something the eye does not see. The
@@ -159,6 +157,4 @@ and the release notes say which goldens moved and why. A new shader gets a gold 
 in `tests/Stride.CommunityToolkit.GoldScenes`, small and named for what it pins.
 
 When a picture is wrong and the reason is not obvious, do not reason from the C#: read a pixel
-back with `GetData`, or dump the whole target to an image, and look. The picking pass's instancing
-bug, where every instance was drawn through its inverse matrix, was found in one dump after an
-hour of theories; the story is on the [GPU picking](../../manual/rendering/gpu-picking.md) page.
+back with `GetData`, or dump the whole target to an image, and look.

@@ -35,7 +35,7 @@ public class UiHelper
     /// <see cref="RenderStatusMessage"/> lasts until the next call.
     /// </summary>
     /// <param name="shapeCount">Current number of physics objects</param>
-    /// <param name="totalCreated">How many shapes have been spawned since the start</param>
+    /// <param name="totalCreated">How many shapes have been spawned since the last clear</param>
     /// <param name="simulation">The physics simulation for additional stats</param>
     public void RenderNavigation(int shapeCount, int totalCreated, Box2DSimulation simulation)
     {

@@ -20,8 +20,8 @@ public sealed class SignalRHubClient : IAsyncDisposable
     private readonly CancellationTokenSource _shutdownCts = new();
 
     /// <summary>
-    /// Set before the connection is stopped, so the connect loop can tell an intentional stop from a
-    /// dropped connection. Without it, closing the game reconnects instead of shutting down.
+    /// Set before the connection is stopped, so an intentional stop is not logged as a lost
+    /// connection and nothing starts the connection again.
     /// </summary>
     private volatile bool _stopRequested;
 
@@ -77,7 +77,6 @@ public sealed class SignalRHubClient : IAsyncDisposable
         configureBuilder?.Invoke(builder);
         Connection = builder.Build();
 
-        // Apply optional timeouts, if supplied
         if (options.ServerTimeout is { } serverTimeout) Connection.ServerTimeout = serverTimeout;
         if (options.KeepAliveInterval is { } keepAlive) Connection.KeepAliveInterval = keepAlive;
         if (options.HandshakeTimeout is { } handshake) Connection.HandshakeTimeout = handshake;
@@ -87,10 +86,8 @@ public sealed class SignalRHubClient : IAsyncDisposable
 
         if (_maxBackoff < _minBackoff) (_minBackoff, _maxBackoff) = (_maxBackoff, _minBackoff);
 
-        // Closed only reports. Reconnecting from here was the old design, and it had two faults: it
-        // could not tell an intentional StopAsync from a dropped connection, and it never fired at
-        // all when the very first connect failed - so a game started before the hub stayed offline
-        // for its whole run. The connect loop below handles both cases with one piece of code.
+        // Closed only logs. Reconnecting is the connect loop's job: Closed does not fire when the
+        // first connect fails, so a game started before the hub would stay offline.
         Connection.Closed += error =>
         {
             if (!_stopRequested)
@@ -182,9 +179,8 @@ public sealed class SignalRHubClient : IAsyncDisposable
     /// </summary>
     public async Task EnsureStartedAsync(CancellationToken ct = default)
     {
-        // Stopping is terminal for this client - StopAsync is followed by DisposeAsync - so a start
-        // arriving afterwards is a race, not a request. Returning is right; throwing would only move
-        // the exception from StartAsync to here.
+        // Stopping is terminal (DisposeAsync follows StopAsync), so a later start is a race, not a
+        // request
         if (_stopRequested) return;
 
         if (Connection.State == HubConnectionState.Connected) return;
@@ -230,7 +226,7 @@ public sealed class SignalRHubClient : IAsyncDisposable
             }
             catch
             {
-                // The loop swallows its own failures; this only unwraps cancellation.
+                // Not expected: the loop catches its own failures and cancellation
             }
 
             _connectLoop = null;

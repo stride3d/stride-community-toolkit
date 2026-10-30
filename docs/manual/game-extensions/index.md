@@ -2,7 +2,7 @@
 
 Extension methods for `Game` and `IGame`. They cover starting the game loop, assembling a scene from nothing, and the small conveniences - frame rate, materials, screenshots - that you would otherwise write once per project.
 
-They all live in `Stride.CommunityToolkit.Engine`, so one `using` covers everything on `game.`. Some take `Game` and some take `IGame`; at a call site the difference does not show, because a `Game` is an `IGame`.
+Unless an entry names another namespace, they live in `Stride.CommunityToolkit.Engine`. Some take `Game` and some take `IGame`; at a call site the difference does not show, because a `Game` is an `IGame`.
 
 > [!TIP]
 > If you are working code-only, [Code-Only Extensions](../code-only/extensions.md) is the shorter,
@@ -17,7 +17,7 @@ They all live in `Stride.CommunityToolkit.Engine`, so one `using` covers everyth
 - [`UseGameSettings()`](xref:Stride.CommunityToolkit.Engine.GameSettingsExtensions.UseGameSettings(Stride.Engine.Game,System.Action{Stride.Engine.Design.GameSettings})) - What a Game Studio project gets from its `GameSettings` asset, built in code and applied the same way: the configurations the audio, physics and navigation systems read (HRTF, physics defaults, navigation build settings, Bepu simulations), rendering settings (graphics profile, back buffer, colour space) and the shader compilation mode. Call it before `Run()`. Safe in a project that has the asset too: the asset wins, and the call only adds the configurations it lacks.
 
 > [!NOTE]
-> On the compilation mode, measured rather than assumed: on Direct3D 11 `Debug` (the engine's default for a game without settings) and `Release` produce identical shader bytecode, because the compiler only applies the optimisation level when debug information is off. `AppStore` is the one that differs - optimisation level 2 with the symbols stripped, so RenderDoc no longer shows shader source. Vulkan and Direct3D 12 ignore the mode. Bytecode is cached per mode, so a change means one full recompile on the next run.
+> On Direct3D 11 the compilation modes `Debug` (the engine's default for a game without settings) and `Release` produce identical shader bytecode, because the compiler only applies the optimisation level when debug information is off. `AppStore` is the one that differs - optimisation level 2 with the symbols stripped, so RenderDoc no longer shows shader source. Vulkan and Direct3D 12 ignore the mode. Bytecode is cached per mode, so a change means one full recompile on the next run.
 
 ## Scene setup
 
@@ -37,7 +37,7 @@ Nothing renders without a compositor. These add one, or hang extra renderers off
 - [`AddSceneRenderer()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddSceneRenderer(Stride.Games.IGame,Stride.Rendering.Compositing.SceneRendererBase)) - Appends your own `SceneRendererBase` to the compositor's render chain.
 - [`AddRootRenderFeature()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddRootRenderFeature(Stride.Games.IGame,Stride.Rendering.RootRenderFeature)) - Registers a `RootRenderFeature`, for drawing a component type the engine does not know about.
 - [`AddParticleRenderer()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddParticleRenderer(Stride.Games.IGame)) - Adds the particle stages and features, which the default code-only compositor leaves out.
-- [`ConfigurePostEffects()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.ConfigurePostEffects(Stride.Games.IGame,System.Action{Stride.Rendering.Images.PostProcessingEffects})) - Switches post effects on and tunes them. The default compositor has bloom, ambient occlusion, depth of field, screen-space reflections, fog, outline and FXAA all present but *disabled*, and only tone mapping in its colour transforms; vignette, film grain and dither are not there at all until added to `ColorTransforms.Transforms`. See the [Post Effects](../code-only/examples/post-effects.md) example.
+- [`ConfigurePostEffects()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.ConfigurePostEffects(Stride.Games.IGame,System.Action{Stride.Rendering.Images.PostProcessingEffects})) - Switches post effects on and tunes them. The default compositor has bloom, light streaks, lens flare, ambient occlusion, depth of field, screen-space reflections, fog, outline and FXAA all present but *disabled*, and only tone mapping in its colour transforms; vignette, film grain and dither are not there at all until added to `ColorTransforms.Transforms`. See the [Post Effects](../code-only/examples/post-effects.md) example.
 - [`GetPostEffects()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.GetPostEffects(Stride.Games.IGame)) - The live `PostProcessingEffects`, or `null` for a compositor without any (the 2D one), for toggling an effect at runtime.
 
 ## Cameras
@@ -46,7 +46,6 @@ Nothing renders without a compositor. These add one, or hang extra renderers off
 - [`Add3DCamera()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Add3DCamera(Stride.Games.IGame,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3},Stride.Engine.Processors.CameraProjectionMode)) - Adds a 3D camera, perspective by default.
 - [`Add2DCameraController()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Add2DCameraController(Stride.Games.IGame,System.String,Stride.Input.Keys,System.Boolean)) - Makes the 2D camera pannable and zoomable, with an on-screen key reminder toggled by <kbd>F2</kbd>.
 - [`Add3DCameraController()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Add3DCameraController(Stride.Games.IGame,System.Nullable{Stride.CommunityToolkit.Rendering.Anchor},System.String,Stride.Input.Keys,System.Boolean,System.Boolean)) - Adds free-look movement. The <kbd>F2</kbd> panel also prints the camera's live position and rotation, which is the quickest way to find numbers worth hard-coding.
-
 - [`SetCameraPosition()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetCameraPosition(Stride.Games.IGame,Stride.Core.Mathematics.Vector3,System.String)) - Moves the existing camera. Use this after `Run(setup, ...)` rather than adding a second camera that competes for the same slot.
 - [`SetCameraRotation()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetCameraRotation(Stride.Games.IGame,Stride.Core.Mathematics.Vector3,System.String)) - Aims the existing camera, taking yaw, pitch and roll in degrees.
 - [`GetCameraEntity()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.GetCameraEntity(Stride.Games.IGame,System.String)) - The camera entity itself, for everything the two setters do not cover - reading the transform, attaching a script, replacing the camera outright.
@@ -59,7 +58,7 @@ See [Camera Controllers](../camera-extensions/camera-controllers.md) for the key
 - [`AddAllDirectionLighting()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddAllDirectionLighting(Stride.Games.IGame,System.Single,System.Boolean)) - Lights the scene from every direction at once, so nothing is left in shadow. Blunt, but it makes a debug scene readable.
 - [`AddStudioLighting()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddStudioLighting(Stride.Games.IGame,System.Single,System.Single,System.Boolean,System.Boolean)) - A three-point key, fill and rim rig aimed at the scene centre, returned as a tuple so you can adjust each light afterwards.
 
-The setup's gradient sky lights the scene from above; for a photographed sky, `UseSkybox()` and `AddSkybox()` ship in the `Stride.CommunityToolkit.Skyboxes` package - see [Code-Only Extensions](../code-only/extensions.md).
+The setup's gradient sky lights the scene as well; for a photographed sky, `UseSkybox()` and `AddSkybox()` ship in the `Stride.CommunityToolkit.Skyboxes` package - see [Code-Only Extensions](../code-only/extensions.md).
 
 ## Materials and primitives
 
@@ -68,6 +67,7 @@ The setup's gradient sky lights the scene from above; for a photographed sky, `U
 - [`CreateEmissiveMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateEmissiveMaterial(Stride.Games.IGame,Stride.Core.Mathematics.Color,System.Single)) - A surface that gives off its own light: a lamp, a sign, a glowing edge. Above an intensity of 1 it blooms under post effects.
 - [`CreateTexturedMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateTexturedMaterial(Stride.Games.IGame,Stride.Graphics.Texture,System.Single,System.Single,System.Single)) - A texture where the colour would be, tiled, with the same metalness and glossiness numbers.
 - [`CreateScreenMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateScreenMaterial(Stride.Games.IGame,Stride.Graphics.Texture,System.Single)) - A screen showing a texture, unlit and clamped: a monitor for a render-texture camera's feed.
+- [`CreateOverlayMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateOverlayMaterial(Stride.Games.IGame,Stride.Core.Mathematics.Color,System.Single)) - Unlit and translucent, with the colour's alpha as the opacity: a zone, a placement preview, a selection volume.
 - [`CreateMaterial(descriptor)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,Stride.Rendering.Materials.MaterialDescriptor)) - Compiles a descriptor and keeps it on the material, so it can be a layer later. The descriptors behind every helper are in [`MaterialDescriptors`](xref:Stride.CommunityToolkit.Rendering.MaterialDescriptors): take one, add a feature, compile it.
 - [`CreatePrimitive(Primitive3D)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Engine.PrimitiveEntityOptions)) - A cube, sphere, capsule and so on as an entity. The shape comes from a [`Primitive3D`](xref:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D) factory with its dimensions: `Primitive3D.Sphere(0.5f)`, `Primitive3D.Box(new Vector3(2, 1, 1))`.
 - [`CreatePrimitive(Primitive2D)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Engine.PrimitiveEntityOptions)) - The 2D equivalent - square, circle, triangle, polygon - from a [`Primitive2D`](xref:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D) factory.
@@ -78,18 +78,19 @@ The setup's gradient sky lights the scene from above; for a photographed sky, `U
 
 ## Text renderers
 
-Both register their renderer once, however many times you call them.
+The two renderer calls register their renderer once, however many times you call them.
 
 - [`AddEntityTextRenderer()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddEntityTextRenderer(Stride.Games.IGame)) - Puts the renderer for `EntityTextComponent`, screen-space text drawn over the scene, on the compositor before the first frame; the component registers it itself when missing. See [Entity Text](../rendering/entity-text.md).
 - [`AddWorldTextRenderer()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddWorldTextRenderer(Stride.Games.IGame)) - Puts the renderer for `WorldTextComponent`, text that lives in the 3D scene, on the compositor before the first frame; the component registers it itself when missing. See [World Text](../rendering/world-text.md).
+- [`LoadSystemFont()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.LoadSystemFont(Stride.Games.IGame,System.String,System.Single,Stride.Graphics.Font.FontStyle,System.String)) - Loads a font installed on the machine as a `SpriteFont`, or `null` when the family is not installed. A code-only game has no compiled fonts other than Stride's default; load each font once and keep it.
 
 ## Debugging and diagnostics
 
 - [`AddProfiler()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Games.IGame,System.String)) - Adds Stride's profiler, toggled with <kbd>Left Shift</kbd> + <kbd>Left Ctrl</kbd> + <kbd>P</kbd>.
 - [`SetDeterministic()`](xref:Stride.CommunityToolkit.Engine.GameLoopExtensions.SetDeterministic(Stride.Games.IGame,System.Nullable{System.TimeSpan})) - Pins the loop so frame N is the same simulated instant on every run: fixed timestep, draws in step, one update per draw. For replays, lockstep, tests and screenshots.
-- [`AddGroundGizmo()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Vector3},System.Boolean,System.Boolean)) - Draws the world axes at the origin, optionally labelled. Marks the origin and a unit in the scene.
-- [`AddOrientationGizmo()`](xref:Stride.CommunityToolkit.Rendering.Gizmos.OrientationGizmoExtensions.AddOrientationGizmo(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.Anchor)) - Draws the world axes in a corner of the screen, turning with the camera. The quickest way to work out which way you are facing; see [Orientation Gizmo](../rendering/orientation-gizmo.md).
-- [`AddEntityInfoRenderer()`](xref:Stride.CommunityToolkit.Rendering.Overlay.EntityInfoRendererExtensions.AddEntityInfoRenderer(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.Overlay.EntityInfoRendererOptions)) - Draws entity names and positions over the scene. In `Stride.CommunityToolkit.Rendering.Text`.
+- [`AddGroundGizmo()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Vector3},System.Boolean,System.Boolean)) - Draws the world axes, optionally labelled, as a child of the ground entity, at the origin unless you give a position. Returns `null` and adds nothing when there is no ground.
+- [`AddOrientationGizmo()`](xref:Stride.CommunityToolkit.Rendering.Gizmos.OrientationGizmoExtensions.AddOrientationGizmo(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.Anchor)) - Draws the world axes in a corner of the screen, turning with the camera, so you can tell which way you are facing; see [Orientation Gizmo](../rendering/orientation-gizmo.md). In `Stride.CommunityToolkit.Rendering.Gizmos`.
+- [`AddEntityInfoRenderer()`](xref:Stride.CommunityToolkit.Rendering.Overlay.EntityInfoRendererExtensions.AddEntityInfoRenderer(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.Overlay.EntityInfoRendererOptions)) - Draws entity names and positions over the scene. In `Stride.CommunityToolkit.Rendering.Overlay`.
 - [`TakeScreenShot()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot(Stride.Games.IGame,System.String,Stride.Graphics.ImageFileType)) - Saves the current frame to a file. This is what the toolkit's own screenshot capture is built on.
 
 To see colliders, use `AddPhysicsDebug()` for Bepu or `ShowColliders()` for Bullet, both in [Physics Extensions](../physics-extensions/index.md).
@@ -103,4 +104,4 @@ These take `IGame`, since they need nothing from the scene.
 - [`FPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Games.IGame)) - The current frames per second.
 - [`SetMaxFPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)) - Caps the frame rate; `0` removes the cap.
 - [`SetFocusLostFPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)) - Caps it separately for when the window is in the background, so a minimised game stops burning a core.
-- [`EnableVSync()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.EnableVSync(Stride.Games.IGame)) / [`DisableVSync()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DisableVSync(Stride.Games.IGame)) - Turns vertical sync on or off at runtime.
+- [`EnableVSync()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.EnableVSync(Stride.Games.IGame)) / [`DisableVSync()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DisableVSync(Stride.Games.IGame)) - Sets the presentation interval at runtime. `EnableVSync()` waits for every *second* vertical blank (`PresentInterval.Two`), which caps the frame rate at half the display's refresh rate; `DisableVSync()` presents immediately.

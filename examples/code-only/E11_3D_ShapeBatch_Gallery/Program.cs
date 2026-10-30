@@ -16,7 +16,7 @@ using Stride.Rendering.Materials.ComputeColors;
 // A gallery of ShapeBatch. Every exhibit is one static method in Stations.*.cs that draws in its
 // station's own coordinates and knows nothing about where it stands, so any of them can be copied
 // into a game as it is. The ring, the ground, the pillars, the numbered labels with their dotted
-// lines and the index board at the centre all come from the registry in Stations.cs: add a demo
+// lines and the index board all come from the registry in Stations.cs: add a demo
 // there and the gallery grows to fit, every number after it shifting along.
 //
 // Every shape is flat - a polygon evaluated per fragment as a signed distance function - but flat
@@ -193,7 +193,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
         new($"{submitted} shapes this frame, {gallery.Stations.Count} stations", Color.LightGreen),
     ];
 
-    // The index board at the centre is the full list; here, only where the visitor stands
+    // The index board is the full list; here, only where the visitor stands
     if (gallery.CurrentStation is not { } station)
     {
         if (gallery.Stations.Count > 0) lines.Add(new($"Home - {gallery.Stations.Count} stations; N, P or a pad to visit", Color.White));

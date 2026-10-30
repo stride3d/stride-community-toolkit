@@ -34,4 +34,4 @@ View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/
 - `UIManager` - creates and manages the windows and updates their text
 - `DragAndDropContainer` - the root canvas that tracks the draggable elements and their stacking order
 - `DragAndDropCanvas` - one window: title bar, divider, close button and dragging
-- `PrimitiveGenerator` - creates and counts the spheres spawned from the UI, and removes those that fall out of the world
+- `PrimitiveGenerator` - creates the spheres spawned from the UI and keeps their count, which the update loop in `Program.cs` lowers as it removes those that fall out of the world

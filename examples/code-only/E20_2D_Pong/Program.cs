@@ -32,7 +32,7 @@ var foldedKeys = false;
 
 using var game = new Game();
 
-// No camera controller: the court does not move, and W and S belong to the left paddle
+// No camera controller: the court does not move, and the arrow keys belong to the right paddle
 game.Run(new SceneSetup2D
 {
     ClearColor = court,

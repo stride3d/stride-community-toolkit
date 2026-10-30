@@ -47,9 +47,9 @@ The screen grid counts pixels from the top left corner and is drawn over everyth
 150 pixels of the monitor. The overlay line then reads `[G] Grid: screen, 1 = 1.5 px`.
 
 > [!NOTE]
-> The grid can only know the display scale in a DPI-aware process. Call `WindowsDpiManager.EnablePerMonitorV2()`
-> before creating the game, as the examples do. Without it Windows stretches the whole window and the
-> program is told the scale is 100%.
+> The grid can only know the display scale in a DPI-aware process. Set `DpiAware = true` on the scene
+> setup, as the examples do, or call `WindowsDpiManager.EnablePerMonitorV2()` before creating the game.
+> Without it Windows stretches the whole window and the program is told the scale is 100%.
 
 ## Switch the grid
 

@@ -12,8 +12,8 @@ public static class ShapeStations
 {
     /// <summary>
     /// The same emitter under the three flat shapes. A billboard always faces the camera; a quad
-    /// lies in the emitter's plane and is seen edge-on from the side; an oriented quad points along
-    /// its velocity, which is what a spark or a raindrop wants.
+    /// lies flat, facing up, and is seen edge-on from the side; an oriented quad stretches along the
+    /// particle's direction, which is what a spark or a raindrop wants.
     /// </summary>
     public static void FlatShapes(ParticleStation s)
     {
@@ -109,10 +109,9 @@ public static class ShapeStations
 
         var (sin, cos) = MathF.SinCos(s.Seconds * 1.6f);
 
-        // A ribbon turns its width to face the camera. Where its path runs towards the camera or away
-        // from it there is no width to turn, and the strip twists into a fan of thin lines. So the path
-        // stays in the plane that faces the visitor. And it turns gently: on a bend tighter than the strip is
-        // wide, the inside edges of neighbouring segments cross and the overlap shows as bright specks.
+        // A ribbon turns its width to face the camera, so a path running towards the camera twists into
+        // thin lines: the path stays in the plane facing the visitor. It bends gently, because on a bend
+        // tighter than the strip is wide, neighbouring segments overlap and show as bright specks.
         s.Entity.Transform.Position = s.At(cos * 2.6f, 3f + sin * 2f, 0f);
     }
 
@@ -160,8 +159,8 @@ public static class ShapeStations
     }
 
     /// <summary>
-    /// Quads with a rotation in three dimensions, so a falling leaf tumbles rather than spinning
-    /// flat on the screen. A random quaternion per particle, or one of two fixed ones.
+    /// Quads with a rotation in three dimensions, not just on the screen: a random orientation per
+    /// particle, held for its life, or one of two fixed ones.
     /// </summary>
     public static void Orientation(ParticleStation s)
     {

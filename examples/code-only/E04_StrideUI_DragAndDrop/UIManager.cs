@@ -27,7 +27,7 @@ public class UIManager
     /// Initializes a new instance of the <see cref="UIManager"/> class.
     /// </summary>
     /// <param name="font">The font used in the UI.</param>
-    /// <param name="onGenerateCubes">The action to be triggered when generating cubes.</param>
+    /// <param name="onGenerateCubes">The action the Generate Items button calls.</param>
     /// <exception cref="ArgumentNullException">Thrown if font or onGenerateCubes is null.</exception>
     public UIManager(SpriteFont? font, Action? onGenerateCubes)
     {
@@ -108,11 +108,6 @@ public class UIManager
         return button;
     }
 
-    /// <summary>
-    /// Creates a text block with specified text.
-    /// </summary>
-    /// <param name="text">The text to display in the block.</param>
-    /// <returns>A new text block.</returns>
     private TextBlock CreateTextBlock(string text) => new()
     {
         Text = text,

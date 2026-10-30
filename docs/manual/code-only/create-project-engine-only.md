@@ -31,9 +31,9 @@ can see what `SceneSetup3D` and `CreatePrimitive()` stand for. It is not the rec
    <PackageReference Include="Stride.AssetCompiler" Version="4.4.1" IncludeAssets="build;buildTransitive" />
    ```
    Without it the package's own assemblies are copied next to your app and it fails at start-up with
-   `Could not load file or assembly 'Stride.NuGetResolver'`. This is the one thing the toolkit's
-   `Stride.CommunityToolkit` package does for you on the packaging side: it passes the asset
-   compiler on build-only, which is why the [Create Project](create-project.md) steps never mention it.
+   `Could not load file or assembly 'Stride.NuGetResolver'`. The `Stride.CommunityToolkit` package
+   references the asset compiler build-only, which is why the [Create Project](create-project.md)
+   steps never mention it.
 5. Replace `Program.cs` with the code below.
 6. Run it:
    ```
@@ -60,14 +60,15 @@ This is the toolkit's `E01_3D_BasicScene_EngineOnly` example, verbatim.
 What the engine-only version leaves out, because each is a page of its own without the toolkit:
 
 - **Physics.** With `UseBepu()` on the setup, the ground gets a static collider and `CreatePrimitive()`
-  gives the cube a rigid body, so it can fall and land. Here the
-  cube is placed on the ground by hand and nothing moves.
+  gives the cube a rigid body, so it can fall and land. Here the cube is placed on the ground by hand
+  and nothing moves.
 - **A camera controller.** The toolkit's `Add3DCameraController()` flies the camera with the keyboard
   and mouse; here the camera is fixed where `Start` put it.
 - **A sky.** The setup's gradient sky lights and surrounds the scene, and `UseSkybox()` swaps in a
   photograph; here a cornflower clear colour and an ambient light do the minimum.
-- **DPI awareness.** `WindowsDpiManager.EnablePerMonitorV2()` is a toolkit call; without it the
-  window is stretched on a scaled display.
+- **DPI awareness.** `DpiAware = true` on the setup calls the toolkit's
+  `WindowsDpiManager.EnablePerMonitorV2()`; without it the window is stretched on a scaled display.
+  It is off by default, in the toolkit version too.
 
 The [file-based app](create-file-based-app-engine-only.md) version of this page runs the same code
 from a single file.

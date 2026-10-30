@@ -14,16 +14,13 @@ using Stride.Rendering;
 using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2Worlds;
 
-// The Box2D twin of E10_2D_StressPile: thousands of bodies in two draw calls -
-// awake through one master, sleeping tinted green through another - with
-// the shape, the batch size and the spawn layout all switchable while it runs - but the physics is
-// Box2D.NET instead of Bepu. The rendered shapes are the same nine 3D primitives; each one gets the
-// 2D fixture that matches its head-on silhouette (a sphere becomes a circle, a cylinder a box), so
-// the pile looks the same while a genuinely 2D engine simulates it.
+// The Box2D twin of E10_2D_StressPile: the same pile, two draw calls and runtime switches, but the
+// physics is Box2D.NET instead of Bepu. The rendered shapes are the same nine 3D primitives; each
+// gets the 2D fixture matching its head-on silhouette (a sphere becomes a circle, a cylinder a box).
 //
-// Each sleep state is drawn by one master entity, so every body on screen necessarily shares one
-// of two Models - shapes cannot be mixed. Changing shape therefore clears and respawns the pile, while
-// changing the layout or the batch size only affects what is spawned next.
+// Each sleep state is drawn by one master entity, so every body shares one of two Models - shapes
+// cannot be mixed. Changing shape clears and respawns the pile; changing the layout or the batch
+// size only affects what is spawned next.
 
 Vector3 wallSize = new(1, 65, 1);
 const float WallWidth = 100;
@@ -79,7 +76,7 @@ List<KeyMenu> menus = [];
 using var game = new Game();
 
 // Box2D is not a Stride system: the simulation owns the native world and is stepped from Update
-// below. Default gravity is (0, -10), matching what the Bepu version falls under.
+// below. Default gravity is (0, -10), close to the Bepu version's (0, -9.8).
 using var simulation = new Box2DSimulation();
 
 // The buffered instancings own their GPU buffers, and the engine never releases user-owned buffers
@@ -110,8 +107,8 @@ void Start(Scene rootScene)
     // popcorn and over the walls, and the endlessly falling escapees then keep the scene awake.
     b2World_SetMaximumLinearSpeed(simulation.WorldId, 40f);
 
-    // Left mouse picks a body out of the pile and throws it back in. The camera is a perspective
-    // one here; the grabber picks on the XY plane the bodies live in.
+    // Left mouse picks and throws a body. The camera is perspective; the grabber picks on the XY
+    // plane the bodies live in.
     game.AddGrabber2D(simulation);
 
     CreateWall(new Vector3(-WallWidth / 2, 0, 0), wallSize);
@@ -147,8 +144,7 @@ void CreateWall(Vector3 position, Vector3 size, float rotation = 0f)
 
 void SetupInstancing()
 {
-    // Without this nothing instanced is drawn, and nothing warns you: the code-built compositor
-    // wires up transform, skinning, material and lighting, but not instancing
+    // The code-built compositor has no instancing; AddInstancingBufferUpload below adds it too
     game.AddInstancingSupport();
 
     // One master per sleep state for the whole run. Their Models are swapped when the shape changes;
@@ -281,8 +277,8 @@ void ChangeShape(Primitive3D type)
 /// <summary>Removes every body from the scene, the simulation and the instancing.</summary>
 void Clear()
 {
-    // Before the entities leave the scene: an entity removed from the scene stays registered with
-    // the instancing, which would keep reading transforms off it and drawing ghosts
+    // First: Clear also unhooks the instancings from the scene's removal events, so the loop below
+    // does not unregister the bodies one at a time
     awakeInstancing.Clear();
     sleepingInstancing.Clear();
 
@@ -332,9 +328,7 @@ void SpawnBatch(int count)
 
 void Spawn(Vector3 position)
 {
-    // No ModelComponent dance here: the Bepu version needs a model on the entity for its physics
-    // helper and removes it again, but the Box2D fixture is built from the primitive type directly,
-    // so the entity never carries a model - the master draws it
+    // No ModelComponent: the master draws the entity
     var entity = new Entity("InstancedItem");
 
     var bodyId = simulation.CreateDynamicBody(entity, position);
@@ -462,7 +456,7 @@ void HandleInput()
 /// <remarks>
 /// The overlay calls this every frame it draws, so the body count and the menus stay live without
 /// anything having to push them. Camera keys are not listed: the camera controller contributes its
-/// own section, including the F2 and F3 keys that toggle and move the whole overlay.
+/// own section, including the F3 and F4 keys that move and hide the whole overlay.
 /// </remarks>
 IReadOnlyList<TextElement> BuildOverlayLines()
 {

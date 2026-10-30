@@ -11,20 +11,17 @@ using Stride.UI.Panels;
 
 using var game = new Game();
 
-// A tall window for the 9 by 9 grid, 1000 pixels square. This runs before the device exists;
-// game.Window.SetSize(...) inside Start would resize an already-created window, which also works
-// but shows a flash at the default size first. The rendering settings a Game Studio project
-// carries (DefaultBackBufferWidth and Height through game.UseGameSettings) are not enough on their
-// own: the engine clamps them to the window it has already created, so they can shrink a window
-// but never grow it past 1280 by 720. SetWindowSize sizes the window and the back buffer together.
+// A tall window for the 9 by 9 grid, which is 1000 pixels square. Set before the device exists:
+// game.Window.SetSize in Start would show the default size first, and back-buffer sizes from
+// game.UseGameSettings alone can shrink the 1280 by 720 window but never grow it.
 game.SetWindowSize(1000, 1080);
 
 game.Run(new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null }, start: Start);
 
 void Start(Scene rootScene)
 {
-    // A colour picture: sRGB and premultiplied, as the content pipeline would have imported it. Texture.Load
-    // with its defaults reads it as linear, and every mid-tone comes out pale
+    // sRGB and premultiplied, as the content pipeline would import it. Texture.Load with its defaults
+    // reads it as linear, and every mid-tone comes out pale
     var texture = new TextureLoader(game.GraphicsDevice).Color("input.png");
 
     var grid = new UniformGrid
@@ -38,7 +35,7 @@ void Start(Scene rootScene)
 
     grid.Children.Add(CreateCard(texture));
 
-    // Every anchor down the columns; every stretch twice down the rows, into a wide area with the
+    // Every anchor across the columns; every stretch twice down the rows, into a wide area with the
     // expanded sampling pattern and into a tall one with the default
     for (var a = 0; a < 9; a++)
     {

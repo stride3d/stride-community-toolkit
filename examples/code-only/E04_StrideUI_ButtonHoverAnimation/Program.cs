@@ -28,8 +28,7 @@ game.Run(new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null }.
 
 void Start(Scene scene)
 {
-    // Text draws nothing without a font, and this one ships with the engine, so the example needs no
-    // assets of its own.
+    // Text draws nothing without a font; this one ships with the engine, so the example needs no assets
     var font = game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
 
     var animation = new ButtonHoverAnimation();

@@ -23,16 +23,13 @@ var startPosition = new Vector3(0, 8, 0);
 // 3D entity to be animated
 var entity = new Entity();
 
-// Color to interpolate to, initilized to white
+// Colour to interpolate to
 Color color = Color.White;
 
-// Initialize a new game instance
 using var game = new Game();
 
-// Run the game, specifying both the Start and Update methods
 game.Run(new SceneSetup3D().UseBepu(), start: Start, update: Update);
 
-// Setup and initialize the scene
 void Start(Scene scene)
 {
     // Create a 3D sphere primitive and assign the material to it

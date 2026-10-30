@@ -95,7 +95,7 @@ void Update(Scene scene, GameTime time)
 
     if (game.Input.IsKeyPressed(Keys.G))
     {
-        // Takes effect on the next step, on every body in the simulation
+        // Takes effect on the next step, on every awake body; a sleeping one is not woken
         gravityIndex = (gravityIndex + 1) % gravities.Length;
         simulation.PoseGravity = gravities[gravityIndex].Value;
     }

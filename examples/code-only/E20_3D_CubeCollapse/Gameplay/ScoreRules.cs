@@ -7,7 +7,7 @@ namespace CubeCollapse.Gameplay;
 /// </summary>
 /// <remarks>
 /// Kept apart from everything that draws or removes anything, so the rules can be read on their own
-/// and tested without a running game - which is where a scoring bug is cheapest to find.
+/// and tested without a running game.
 /// </remarks>
 public static class ScoreRules
 {
@@ -24,10 +24,8 @@ public static class ScoreRules
     /// <param name="comboStep">Which step of the combo this is, starting at zero for the first clear.</param>
     /// <returns>The points awarded and the parts they were made of.</returns>
     /// <remarks>
-    /// The bonus is <c>n * (n - 1)</c> rather than <c>n * n</c>, which makes it zero for a single cube
-    /// by construction. The old formula needed an explicit <c>n == 1 ? 0 : n</c> to avoid paying out
-    /// for a lone click; expressing it this way means the rule falls out of the arithmetic instead of
-    /// being patched on top of it.
+    /// The bonus is <c>n * (n - 1)</c> rather than <c>n * n</c>, so it is zero for a single cube by
+    /// construction.
     /// </remarks>
     public static ScoreResult Score(int cubeCount, int comboStep)
     {

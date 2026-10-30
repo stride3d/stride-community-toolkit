@@ -32,7 +32,7 @@ public readonly record struct HudStyle(float Border, float FillAlpha, Color? Fil
     /// <summary>The colour the fill runs to, or <c>null</c> for a fill in one colour.</summary>
     public Color? GradientTo { get; init; }
 
-    /// <summary>The direction the gradient runs in, or <c>null</c> for top to bottom.</summary>
+    /// <summary>The direction the gradient runs in, or <c>null</c> for bottom to top.</summary>
     public Vector2? GradientAlong { get; init; }
 
     /// <summary>The opacity of the whole shape, on top of the canvas's own.</summary>

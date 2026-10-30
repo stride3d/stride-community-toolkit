@@ -1,9 +1,9 @@
 # Using toolkit components in Game Studio
 
 **World Text**, **Entity Text** and **Shape** added to an entity in Game Studio draw in the
-editor's viewport before you press Play. This page lists the components the toolkit adds to the
-**Add component** menu, explains what makes the drawing ones work, what the `Add*` calls are for,
-and what to check when a component does not draw.
+editor's viewport before you press Play. This page lists the toolkit's components in the
+**Add component** menu, how the drawing ones work, what the `Add*` calls are for, and what to check
+when a component does not draw.
 
 ## What you can add
 
@@ -27,8 +27,9 @@ like any engine component's.
 | | Debug Render (Bepu) | Physics | Adds Bepu's debug render component once the scene is ready, with its toggle key |
 | | Grabber (pick up bodies with the mouse) | Physics | Pick up, drag and throw bodies with the mouse |
 
-`Stride.CommunityToolkit.Box2D` adds **Box2D Body** and **Grabber 2D** the same way, but it is not on
-NuGet yet, so it is only available to a game that references the toolkit's source.
+`Stride.CommunityToolkit.Box2D` adds **Box2D Body** and **Grabber 2D (pick up Box2D bodies with the
+mouse)** under Physics the same way, but it is not on NuGet yet, so it is only available to a game
+that references the toolkit's source.
 
 ## A component is data; a processor sees to the rest
 
@@ -87,7 +88,7 @@ Each cause looks the same from the outside.
 4. **Look at the Output pane.** The shape processor logs one line when it registers its own batch,
    and an effect that failed to compile is reported there, with the shader's name.
 
-## Related
+## See also
 
 - [Entity Text](rendering/entity-text.md) - screen-space text anchored to an entity
 - [World Text](rendering/world-text.md) - text living in the 3D scene

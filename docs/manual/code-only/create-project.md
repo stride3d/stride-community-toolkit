@@ -115,9 +115,9 @@ void Start(Scene rootScene)
 - `void Start(Scene rootScene)` is invoked on start with the active root scene.
 - `game.CreatePrimitive(Primitive3D.Capsule())` creates a capsule primitive. `Primitive3D.Capsule(radius, length)` sizes it.
 - `entity.Transform.Position = new Vector3(0, 8, 0);` places the capsule 8 units above the ground.
-- `entity.Scene = rootScene;` adds the entity to the scene so it is rendered and simulated. Without it the entity is not in the scene graph and does not appear. 
+- `entity.Scene = rootScene;` adds the entity to the scene so it is rendered and simulated. Without it the entity does not appear.
 
-`CreatePrimitive()` creates a capsule with [rigid body physics](https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html). Because it starts above the ground, it will fall due to gravity.
+With `UseBepu()` on the setup, `CreatePrimitive()` gives the capsule a [rigid body](https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html), so it falls to the ground.
 
 [Create Project - Engine Only](create-project-engine-only.md) builds a ground, a cube and a camera against the engine alone, with no toolkit package, and maps each part to the helper it replaces.
 

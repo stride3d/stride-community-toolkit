@@ -14,17 +14,15 @@ using Stride.Rendering.Images.Dither;
 
 // Every post effect Stride ships, one key each, on a scene built to show them.
 //
-// The default compositor has all of them switched off and only tone mapping in its colour
-// transforms. Bloom, ambient occlusion, depth of field and the rest are objects that already exist
-// on the compositor and just need Enabled = true - which is what ConfigurePostEffects below does for
-// a first set, and each key does for one effect at a time. The three colour transforms - vignette,
-// film grain, dither - are different: they are not there at all until added to the colour-transform
-// group, which fuses them into the tone-mapping pass, so they cost nothing extra once added.
+// The default compositor has every effect switched off and only tone mapping in its colour
+// transforms. Bloom, ambient occlusion, depth of field and the rest already exist on the compositor
+// and only need Enabled = true: ConfigurePostEffects below does that for a first set, each key for
+// one effect. Vignette, film grain and dither are different: they must be added to the colour-transform
+// group, which compiles them into the tone-mapping shader, so they cost no extra pass.
 //
-// The scene is built for the effects, not the other way round: three over-bright lamps for bloom,
-// light streaks and lens flare; a glossy floor for screen-space reflections; a corridor of pillars
-// receding into the distance for depth of field and fog; a tight cluster of cubes for ambient
-// occlusion to darken the creases of.
+// The scene is built for the effects: over-bright lamps for bloom, light streaks and lens flare; a
+// glossy floor for screen-space reflections; a receding corridor of pillars for depth of field and
+// fog; a tight cluster of cubes for ambient occlusion.
 
 const float LampIntensity = 6f;   // emissive above 1 is what bloom and streaks feed on
 
@@ -47,7 +45,7 @@ void Start(Scene scene)
 {
     game.ConfigurePostEffects(fx =>
     {
-        // A first set, switched on the way any game would do it. Every key below flips one flag.
+        // A first set switched on; each key below flips one flag.
         fx.Bloom.Enabled = true;
         fx.Bloom.Amount = 0.6f;
 
@@ -180,8 +178,8 @@ void BuildScene(Scene scene)
     }
 }
 
-// Diffuse for the shaded look plus an emissive term far above 1: the HDR overshoot is what the
-// bloom, streak and flare passes pick out of the frame. MaterialDescriptors.Emissive is the bag behind it.
+// Diffuse plus an emissive term far above 1 (MaterialDescriptors.Emissive): the HDR overshoot is
+// what bloom, streaks and flare pick out of the frame.
 Material Emissive(Color color) => game.CreateEmissiveMaterial(color, LampIntensity);
 
 /*

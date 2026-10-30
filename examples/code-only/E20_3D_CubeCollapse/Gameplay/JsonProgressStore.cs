@@ -3,17 +3,16 @@ using System.Text.Json;
 namespace CubeCollapse.Gameplay;
 
 /// <summary>
-/// A store that keeps progress in a JSON file, so a new launch resumes at the level the last game
-/// over reached. Ready to use, not wired up: swap it for the <see cref="FreshProgressStore"/> where
-/// the game constructs its store.
+/// A store that keeps progress in a JSON file, so a new launch resumes at the last level reached.
+/// Ready to use, not wired up: pass one where the game is constructed instead of the default
+/// <see cref="FreshProgressStore"/>.
 /// </summary>
 /// <param name="path">The file to read and write, created (directories included) on first save.</param>
 public sealed class JsonProgressStore(string path) : IProgressStore
 {
     /// <inheritdoc />
     /// <remarks>
-    /// A missing or unreadable file is a fresh start, not an error - progress is a convenience, and
-    /// refusing to launch over a corrupt save file would price it wrong.
+    /// A missing or unreadable file is a fresh start, not an error: progress is a convenience.
     /// </remarks>
     public GameProgress Load()
     {

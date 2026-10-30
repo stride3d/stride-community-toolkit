@@ -8,7 +8,7 @@ using Stride.Engine;
 
 // A cube orbits the scene and knocks a ring of smaller cubes out of its way.
 // The orbit is driven by OrbitScript, a SyncScript attached to the entity, rather than by the update
-// callback of game.Run(...) - that is what this example is really demonstrating.
+// callback of game.Run(...) - the point of the example.
 
 // Half of a 1x1x1 cube, so it sits exactly on the ground
 const float CubeRestingHeight = 0.5f;
@@ -74,8 +74,7 @@ void CreateOrbitingCube(Scene rootScene)
 {
     var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions { Body = BodyMode.Kinematic });
 
-    // Spawn on the circle, not at its centre: the script steers the body towards the next point on
-    // the orbit, so starting three units away would demand a huge velocity on the very first tick.
+    // Spawn where the orbit starts: on the circle, along +Z from its centre
     cube.Transform.Position = new Vector3(0, CubeRestingHeight, OrbitRadius);
 
     // Adding the script is what gives the entity its behaviour

@@ -4,12 +4,10 @@ Immediate-mode wireframe and solid shapes for debugging: colliders, ray hits, sp
 
 ## Getting the system
 
-Register the renderer once with [`AddDebugShapes()`](xref:Stride.CommunityToolkit.DebugShapes.DebugShapeExtensions.AddDebugShapes(Stride.Games.IGame,Stride.Rendering.RenderGroup)), then resolve `ImmediateDebugRenderSystem` from the game's services. It is registered as a service and as a game system, so you get it the same way from a script or from a code-only `Start` callback.
+Register the renderer once with [`AddDebugShapes()`](xref:Stride.CommunityToolkit.DebugShapes.DebugShapeExtensions.AddDebugShapes(Stride.Games.IGame,Stride.Rendering.RenderGroup)). It returns the `ImmediateDebugRenderSystem` and registers it as a service and a game system, so a script gets the same instance with `Services.GetService<ImmediateDebugRenderSystem>()`.
 
 ```csharp
-game.AddDebugShapes();
-
-var debugDraw = game.Services.GetService<ImmediateDebugRenderSystem>();
+var debugDraw = game.AddDebugShapes();
 ```
 
 > [!IMPORTANT]
@@ -17,8 +15,12 @@ var debugDraw = game.Services.GetService<ImmediateDebugRenderSystem>();
 > the `Draw*` methods from your update loop, not once at startup. `duration` is how many extra seconds
 > the shape survives without being re-issued; leave it at `0` for the once-per-frame case.
 >
-> `AddDebugShapes()` turns `Visible` on only when the toolkit itself is a Debug build. With the
-> published package, set `Visible = true` on the system, or nothing appears.
+> The system's `Visible` starts on only when your game's entry assembly, or the toolkit itself, is a
+> Debug build. In a Release build, set `Visible = true` on the system, or nothing appears.
+
+> [!NOTE]
+> At most `MaxPrimitives` one-frame shapes and `MaxPrimitivesWithLifetime` timed shapes are kept (both
+> default to `100`); past that, each new shape drops the oldest. Raise them when drawing many shapes.
 
 ## Shared parameters
 
@@ -26,7 +28,7 @@ Every method below ends with the same optional parameters, so they are listed on
 
 | Parameter | Default | Meaning |
 |---|---|---|
-| `color` | `default` (`null` on `DrawLines`) | The shape's colour. |
+| `color` | `default` (`null` on `DrawLines`) | The shape's colour; the default draws in `PrimitiveColor` (light green). Alpha below 255 draws it transparent. |
 | `duration` | `0.0f` | Seconds the shape stays visible without being re-issued. `0` means this frame only. |
 | `depthTest` | `true` | When `false`, the shape draws through geometry in front of it. |
 | `solid` | `false` | Filled instead of wireframe. Not available on the line methods. |
@@ -36,12 +38,12 @@ Every method below ends with the same optional parameters, so they are listed on
 | Method | Shape-specific parameters |
 |---|---|
 | [`DrawLine`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawLine*) | `start`, `end` - no `solid` |
-| [`DrawLines`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawLines*) | `vertices` - an array drawn as a connected run. No `solid` |
+| [`DrawLines`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawLines*) | `vertices` - each consecutive pair is one separate segment. No `solid` |
 | [`DrawRay`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawRay*) | `start`, `dir` - a direction rather than an end point. No `solid` |
 | [`DrawArrow`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawArrow*) | `from`, `to`, `coneHeight`, `coneRadius` |
 | [`DrawSphere`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawSphere*) | `position`, `radius` - no `rotation` |
 | [`DrawHalfSphere`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere*) | `position`, `radius`, `rotation` |
-| [`DrawCube`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCube*) | `start`, `size`, `rotation` |
+| [`DrawCube`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCube*) | `start` - the centre, not a corner - `size`, `rotation` |
 | [`DrawBounds`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawBounds*) | `start`, `end`, `rotation` - a box given by two opposite corners |
 | [`DrawCapsule`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCapsule*) | `position`, `height`, `radius`, `rotation` |
 | [`DrawCylinder`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCylinder*) | `position`, `height`, `radius`, `rotation` |
@@ -54,8 +56,7 @@ Every method below ends with the same optional parameters, so they are listed on
 > way round from how most people write it. `DrawHalfSphere` takes `color` **before** `rotation`, unlike
 > every other rotatable shape. Use named arguments.
 
-## Where to see it working
+## See also
 
-[Debug Shapes](../code-only/examples/debug-shapes.md) draws every shape at once, and
-[Debug Shapes Usage](../code-only/examples/debug-shapes-usage.md) is the smaller version showing just
-the setup.
+- [Debug Shapes](../code-only/examples/debug-shapes.md) example - every shape at once
+- [Debug Shapes Usage](../code-only/examples/debug-shapes-usage.md) example - just the setup

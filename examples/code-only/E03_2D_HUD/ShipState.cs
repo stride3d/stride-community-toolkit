@@ -236,7 +236,7 @@ public sealed class Contact(string callsign, string type, bool hostile)
         Angle = time * (0.08f + 0.04f * index) + index * 1.3f;
         Distance = 0.3f + 0.6f * (0.5f + 0.5f * MathF.Sin(time * 0.15f + index * 2f));
 
-        // The derivative of the distance, in metres per second
+        // Minus the derivative of the distance, in metres per second
         Closing = -0.6f * 0.5f * 0.15f * MathF.Cos(time * 0.15f + index * 2f) * ShipState.RadarRange * 1000f;
 
         Hull = 0.55f + 0.4f * MathF.Sin(time * 0.05f + index * 1.7f);

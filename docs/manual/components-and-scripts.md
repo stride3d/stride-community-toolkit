@@ -2,7 +2,8 @@
 
 Everything you attach to an entity is a component, and a script is the easiest kind to write. This
 page explains when a plain data component, a script or a physics-derived component is the right
-choice. Every rule is illustrated by code in `examples/code-only/E20_3D_CubeCollapse`.
+choice. Every rule is illustrated by code in [Cube Collapse](code-only/examples/cube-collapse.md)
+(`examples/code-only/E20_3D_CubeCollapse`).
 
 ## One entity, many components
 
@@ -51,12 +52,12 @@ public class CubeScript : SyncScript
 }
 ```
 
-Both compile, and both support `entity.Get<CubeComponent>()`. The script version schedules a
+Both compile, and both are found with `entity.Get<T>()`. The script version schedules a
 thousand empty `Update()` calls per frame on a 10×10×10 board. A plain `EntityComponent` costs
 nothing until something asks for it.
 
-A component's data **lives and dies with its entity**. The usual
-alternative - a `Dictionary<Entity, Color>` somewhere - has to be cleaned up by hand every time an
+A component's data **lives and dies with its entity**. The usual alternative - a
+`Dictionary<Entity, Color>` somewhere - has to be cleaned up by hand every time an
 entity is removed, and when someone forgets, it leaks silently. Attach the data to the entity and
 that class of bug cannot exist.
 
@@ -122,7 +123,7 @@ public class SlowFallComponent : BodyComponent, ISimulationUpdate
     {
         if (!Awake) return; // a resting body should be allowed to sleep
 
-        // The integrator added one tick of full gravity; remove the share we don't want
+        // The step about to run adds one tick of full gravity; remove the share we don't want
         LinearVelocity -= simulation.PoseGravity * ((1f - GravityScale) * simTimeStep);
     }
 
@@ -140,8 +141,7 @@ in `Start`.
 
 The data/behaviour split is the component half of **ECS** (Entity–Component–System). The system
 half is the `EntityProcessor`: it registers interest in one component type, and the engine tells it
-whenever such a component enters or leaves
-the scene - anywhere in the entity hierarchy. One object then owns the whole population:
+whenever such a component enters or leaves the scene - anywhere in the entity hierarchy. One object then owns the whole population:
 
 ```mermaid
 graph TD
@@ -188,3 +188,9 @@ tracks them; a renderer draws them.
 | `CubeClickScript` | `AsyncScript` | An input loop: click, clear, await the next frame |
 | `SlidingCubeComponent`, `SlowFallComponent` | `BodyComponent` + `ISimulationUpdate` | Behaviour inseparable from the rigid body |
 | `EntityTextComponent` + `EntityTextProcessor` (toolkit) | data + processor | Hundreds of texts, collected centrally, drawn by one renderer |
+
+## See also
+
+- [Cube Collapse example](code-only/examples/cube-collapse.md)
+- [Bepu: Who Owns the Transform?](physics-extensions/bepu-transform-ownership.md)
+- [Game Studio](game-studio.md)

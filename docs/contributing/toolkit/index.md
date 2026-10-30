@@ -16,19 +16,18 @@ Before you start working on an issue:
 
 ## Building the toolkit
 
-See [Building the Toolkit](building.md) for how the solutions and solution filters are laid out, why
-the examples build is configured the way it is, how to debug a running example, and how to produce
-local NuGet packages for testing.
+See [Building the Toolkit](building.md) for the solution and solution filter, the examples build
+configuration, local NuGet packages for testing, and debugging a running example.
 
 ## Coding style
 
-Use Stride's `.editorconfig` when making changes.
+Follow the repository's `.editorconfig`.
 
-The full list of repository conventions - naming, nullability, XML documentation, terminology,
-performance and threading rules, and the pattern to follow when adding an example - lives in
+The repository conventions - naming, nullability, XML documentation, terminology, performance and
+threading rules, and the pattern for adding an example - live in
 [`.github/copilot-instructions.md`](https://github.com/stride3d/stride-community-toolkit/blob/main/.github/copilot-instructions.md).
-It is written for AI assistants but applies equally to people, and it is deliberately the single
-source of truth so the two do not drift apart. Keep it up to date when conventions change.
+It is written for AI assistants but is the single source of truth for people too. Update it when a
+convention changes.
 
 ## Engine behaviour worth knowing
 
