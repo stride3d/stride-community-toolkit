@@ -129,7 +129,9 @@ public sealed class HudCanvas
     /// <summary>Sets the whole of the batch's captured state at once, so no draw inherits a stale value.</summary>
     public void Style(HudStyle style)
     {
+        // The rings and the arcs are strokes of the same width as the border, so one figure styles a widget
         Shapes.BorderWidth = style.Border;
+        Shapes.StrokeWidth = style.Border;
         Shapes.Fill.Set(style.Fill, style.FillAlpha);
         Shapes.Glow.Set(style.Glow, style.GlowColour);
         Shapes.Glow.Additive = style.Additive;

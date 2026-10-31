@@ -240,8 +240,7 @@ void DrawRing(PickResult result, Color colour, float ringPixels)
 {
     if (result is not { Hit: true, WorldPosition: { } at }) return;
 
-    shapes.BorderWidth = 2f;
-    shapes.Fill.Alpha = 0f;
+    shapes.StrokeWidth = 2f;
     shapes.DrawPixelRing(at, ringPixels, colour);
 }
 

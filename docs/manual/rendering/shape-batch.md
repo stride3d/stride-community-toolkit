@@ -87,7 +87,8 @@ Style properties are the batch's current state. Each draw call captures the stat
 
 | Property | Default | Description |
 |---|---|---|
-| `BorderWidth` | 3 | Outline width in pixels |
+| `BorderWidth` | 0 | Outline width in pixels around a filled shape |
+| `StrokeWidth` | 1 | Width in pixels of the rings and arcs drawn without a width |
 | `Fill` | The draw call's colour, alpha 1 | Fill colour and alpha |
 | `Glow` | Off | Halo outside the outline: width in pixels, colour, `Strength`, `Additive` |
 | `Dash` | Solid | Dash pattern in pixels, for circles, arcs and lines. Polygons stay solid |
@@ -103,12 +104,28 @@ Style properties are the batch's current state. Each draw call captures the stat
 Every shape has an outline and a fill. The colour passed to a draw call is the outline's colour.
 
 - By default the fill is the same colour at full strength, so a draw call with one colour draws a solid shape.
-- The border is centred on the shape's edge: half its width lies outside. With the default width of 3, a
-  shape is 3 pixels wider and taller than its size. Set `BorderWidth = 0` for a shape of exactly its size.
 - `Fill.Set(colour)` gives the fill a colour of its own, such as a dark panel inside a bright border.
 - `Fill.Alpha = 0` leaves only the outline.
 - `Fill.Alpha = ShapeFill.TestbedAlpha` with no fill colour gives the look of the Box2D testbed: a bright
   outline around a dimmed, see-through inside. `Box2DDebugDraw` draws this way.
+
+A shape has at most two colours, the outline's and the fill's. `BorderWidth` and `StrokeWidth` are two widths
+for two kinds of shape, not two outlines on one: a shape with an inside has a border around its fill, and a
+shape that is only a line has a stroke.
+
+| Shape | Colours | Width |
+|---|---|---|
+| Disc, rectangle, polygon, sector, annulus, billboard circle, arc with a width | The fill from `Fill`, the outline from the draw call | `BorderWidth`, 0 by default: exactly the shape's size, no outline |
+| Ring, pixel ring, arc without a width | The draw call's colour alone | `StrokeWidth`, 1 pixel by default |
+| Line, pixel line, polyline | The draw call's colour alone | The call's width argument |
+
+- The border is centred on the shape's edge: half its width lies outside, so a shape with `BorderWidth = 3`
+  is 3 pixels wider and taller than its size.
+- A stroke has no inside, so `BorderWidth` and the fill alpha do not apply to it, and a glow sits on both of
+  its sides.
+- So a circle is one of two shapes. `DrawDisc` is a fill with a border round it, in up to two colours, and
+  `DrawRing` is a stroke in one. For a ring with a fill of its own and a border of another colour around both
+  edges, use `DrawAnnulus`.
 
 > [!NOTE]
 > State persists until you change it. A method that sets `Textured`, `Screen` or `Tag` for its own shapes must

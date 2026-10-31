@@ -31,6 +31,7 @@ internal sealed class Shapes2DScene : IGoldScene
         var seconds = (float)time.Total.TotalSeconds;
 
         shapes.BorderWidth = 3f;
+        shapes.StrokeWidth = 3f;
         shapes.Fill.Alpha = 0.45f;
 
         // Row 1: a HUD panel, a ring, an annulus and a donut segment

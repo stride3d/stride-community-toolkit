@@ -123,8 +123,7 @@ public sealed class StationScene(Game game)
         var glow = console.Glow;
         var dim = Hex.WithAlpha(accent, 90);
 
-        _shapes.BorderWidth = 1.5f;
-        _shapes.Fill.Set(null, 0f);
+        _shapes.StrokeWidth = 1.5f;
 
         // A faint grid, so the deck reads as a surface against the black
         var inset = DeckHalf - LipThickness - 0.3f;

@@ -203,6 +203,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/reset-out-of-bounds.webp" class="card-img-top" alt="Screenshot of the Reset Out of Bounds example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="reset-out-of-bounds.md">Reset Out of Bounds</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">A row of balls drops onto a tilted plank with no ground under it, rolls off its low end and falls.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/grabber.webp" class="card-img-top" alt="Screenshot of the Grabber example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="grabber.md">Grabber</a></h3>
@@ -257,7 +267,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="easing-basics.md">Easing Basics</a></h3>
                 <p><span class="badge text-bg-secondary">Mathematics</span></p>
-                <p class="card-text">Easing from the ground up, in four lanes that move a disc over the same two seconds: by hand with no easing, by hand with one formula, with the...</p>
+                <p class="card-text">Easing from the ground up, in five lanes that move a disc over the same two seconds: by hand with no easing, by hand with one formula, with the...</p>
             </div>
         </div>
     </div>

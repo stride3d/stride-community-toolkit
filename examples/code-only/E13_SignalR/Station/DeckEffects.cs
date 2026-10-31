@@ -134,8 +134,7 @@ public sealed class DeckEffects
 
     public void Draw(ShapeBatch shapes, StationConsole console)
     {
-        shapes.BorderWidth = 2f;
-        shapes.Fill.Set(null, 0f);
+        shapes.StrokeWidth = 2f;
 
         foreach (var ring in _rings)
         {

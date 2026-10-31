@@ -5,11 +5,11 @@ slug: easing-basics
 
 # Easing Basics
 
-Easing from the ground up, in four lanes that move a disc over the same two seconds: by hand
-with no easing, by hand with one formula, with the toolkit's easing functions, and with a
-Tween. The last three use the same curve and move in lockstep, while each needs less code than
-the one above it, printed beside its lane. Dots along every lane show the spacing that makes
-easing visible.
+Easing from the ground up, in five lanes that move a disc over the same two seconds: by hand
+with no easing, by hand with one formula, with the toolkit's easing functions, with a Tween,
+and with MoveTowards, which keeps no clock. Lanes 2 to 4 use the same curve and move in
+lockstep, while each needs less code than the one above it, printed beside its lane. Dots along
+every lane show the spacing that makes easing visible.
 
 The `Program.cs` file shows how to:
 
@@ -17,10 +17,11 @@ The `Program.cs` file shows how to:
 - Easing as one formula that bends the progress before a lerp
 - EasingFunction.Interpolate, which also clamps the time
 - Tween, which also keeps the clock
+- MoveTowards, a step of speed times frame time with no clock, which lands on the target exactly
 - Evenly spaced positions for no easing, bunched positions for an ease-out
 
 ![Easing Basics](media/easing-basics.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_2D_EasingBasics).
 
-[!code-csharp[](../../../../examples/code-only/E02_2D_EasingBasics/Program.cs?start=1&end=203)]
+[!code-csharp[](../../../../examples/code-only/E02_2D_EasingBasics/Program.cs?start=1&end=219)]

@@ -227,6 +227,7 @@ Vector2 PanelCentre()
 void Outline(float width = 2f)
 {
     shapeBatch.BorderWidth = width;
+    shapeBatch.StrokeWidth = width;
     shapeBatch.Fill.Set(null, 0f);
 }
 #endregion

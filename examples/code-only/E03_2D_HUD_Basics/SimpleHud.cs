@@ -88,6 +88,7 @@ public sealed class SimpleHud
     private void Outline(float width = 2f)
     {
         _shapeBatch.BorderWidth = width;
+        _shapeBatch.StrokeWidth = width;
         _shapeBatch.Fill.Set(null, 0f);
     }
 

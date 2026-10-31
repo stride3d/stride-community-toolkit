@@ -168,6 +168,8 @@ Helpers whose names said how they worked, or abbreviated what they read, are ren
 | `AddImmediateDebugRenderFeature()` threw `NullReferenceException` for a missing stage | `InvalidOperationException` naming the stage and what creates it | |
 | `ImGuiSystem.ImGuiContext` public field | read-only property | The same value. |
 | ImGui text fields did not copy or paste | they use dear imgui's own clipboard hooks, the Win32 clipboard on Windows | The toolkit's empty hooks had replaced them. |
+| `ShapeBatch.BorderWidth` defaulted to 3 | 0 | A shape is exactly its size; the 3-pixel border was the Box2D testbed look, which a solid fill in the same colour hid. Set `BorderWidth = 3` for the old look. The gold images moved with it. |
+| `DrawRing`, `DrawPixelRing` and `DrawArc` without a width were `BorderWidth` wide | `StrokeWidth` wide, 1 pixel by default | The two are independent, so a borderless fill and a visible ring coexist. Where `BorderWidth` was set for a ring, set `StrokeWidth`. |
 
 ### 🎉 New Features
 
@@ -179,4 +181,11 @@ Helpers whose names said how they worked, or abbreviated what they read, are ren
 - Box2D collision groups: `simulation.CollisionMatrix` is now consulted by the simulation, for the shapes put in a group with `shapeDef.InCollisionGroup(group)`. The matrix existed before, and nothing read it.
 - `game.AddGrabber2D(simulation)` puts the `Grabber2DScript` on the camera entity and returns it, the way `game.AddGrabber()` does for Bepu; the Box2D examples use it.
 - `body.TeleportAtRest(position, rotation = null)` in `Stride.CommunityToolkit.Bepu`: teleports a Bepu body and leaves it still and awake, which is what a reset key or a respawn wants; `Teleport` alone keeps the velocity, the spin and the sleep. The examples that reset a body by hand use it.
+- `game.SetFullScreen(bool)` and `game.ToggleFullScreen()`: the window's fullscreen flag from one call, applied by the device manager on the next frame; bind the toggle to a key such as F11.
+- `MathUtilEx.MoveTowards(current, target, maxDelta)` for `float`, `Vector2` and `Vector3`: a step of at most that length towards a target, landing on it exactly. With `speed * deltaTime` as the step a value arrives at a constant speed and stops, where a lerp slows down and never quite arrives. `E02_2D_EasingBasics` shows it as a fifth lane that keeps pace with the linear one and keeps no clock.
+- `InputManagerExtensions` in `Stride.CommunityToolkit.Engine`: `GetLeftThumb()`, `GetRightThumb()`, `GetLeftTrigger()`, `GetRightTrigger()`, `IsGamePadButtonDown()` and `IsGamePadButtonPressed()` on `InputManager`, for the default pad, a pad by index or every connected pad at once (`...Any`), each past a dead zone and stretched back to the full range. `Basic3DCameraController` reads its pad through them, so a stick that has sprung back no longer creeps the camera.
+- `BaseWindow.WindowPos` and `WindowSize` are where an ImGui window starts, applied once per run, so the window can be dragged and resized; they were applied every frame, which pinned it.
+- `ShapeBatch.StrokeWidth`: the width of the rings and arcs drawn without a width, 1 pixel by default and independent of the border; see the breaking change above.
+- `E05_3D_ResetOutOfBounds`: a row of balls rolls off a tilted plank with no ground under it, and a ball below the red line goes back to the top with `TeleportAtRest`; the smallest physics pattern every prototype needs.
+- The three galleries label their stations with world text that faces the visitor and leans back by the view's pitch, in place of screen text, so a label shrinks with distance like the station under it.
 - `scene.FindEntity(name, recursive: false)`: the first entity with a name among a scene's top-level entities, or with `recursive: true` among their descendants too. `entity.FindEntity` and `entity.FindEntityRecursive` now call it on the entity's scene, and an entity that is not in a scene gets an `InvalidOperationException` that names the entity and says what to do, instead of a `NullReferenceException`.

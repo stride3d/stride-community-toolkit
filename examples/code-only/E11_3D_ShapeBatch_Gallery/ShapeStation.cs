@@ -21,10 +21,11 @@ public sealed record GalleryBatches(
     ShapeBatch Shaded,
     ComputeFloat4 Clock);
 
-/// <summary>The three per-frame states the visitor changes with keys, applied to every station.</summary>
+/// <summary>The three per-frame states the visitor changes with keys, applied to every station, and the width of the rings, which the keys leave alone.</summary>
 public sealed class GalleryStyle
 {
     public float BorderWidth { get; set; } = 1f;
+    public float StrokeWidth { get; set; } = 1f;
     public float FillAlpha { get; set; } = 0.45f;
     public float GlowWidth { get; set; }
 }
@@ -52,6 +53,7 @@ public sealed class ShapeStation : GalleryStation
     public void ResetStyle(ShapeBatch batch)
     {
         batch.BorderWidth = Style.BorderWidth;
+        batch.StrokeWidth = Style.StrokeWidth;
         batch.Fill.Set(null, Style.FillAlpha);
         batch.Glow.Clear();
         // The visitor's glow is in each shape's own colour, so at a third of its strength: light around the stroke, not a fatter one

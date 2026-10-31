@@ -492,7 +492,7 @@ void DrawDashes(Vector3 center, Theme theme)
 {
     Reset();
 
-    shapes.BorderWidth = 1.5f;
+    shapes.StrokeWidth = 1.5f;
     shapes.Dash.Set(6f, 4f, time * 20f);
     shapes.DrawArc(new Vector2(center.X - PanelWidth / 2f + 0.75f, center.Y), 0.5f, 0f, MathF.Tau, theme.Accent);
 
@@ -506,6 +506,7 @@ void DrawDashes(Vector3 center, Theme theme)
 void Reset()
 {
     shapes.BorderWidth = 0f;
+    shapes.StrokeWidth = 1f;
     shapes.Fill.Set(null, 1f);
     shapes.Glow.Clear();
     shapes.Dash.Clear();

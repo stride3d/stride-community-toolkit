@@ -60,6 +60,7 @@
     <Project Path="examples/code-only/E05_3D_MeshColliders/E05_3D_MeshColliders.csproj" />
     <Project Path="examples/code-only/E05_3D_PhysicsMaterials/E05_3D_PhysicsMaterials.csproj" />
     <Project Path="examples/code-only/E05_3D_Raycast/E05_3D_Raycast.csproj" />
+    <Project Path="examples/code-only/E05_3D_ResetOutOfBounds/E05_3D_ResetOutOfBounds.csproj" />
     <Project Path="examples/code-only/E05_3D_ShapeQueries/E05_3D_ShapeQueries.csproj" />
     <Project Path="examples/code-only/E05_3D_TimeControl/E05_3D_TimeControl.csproj" />
     <Project Path="examples/code-only/E05_3D_TriggerZones/E05_3D_TriggerZones.csproj" />

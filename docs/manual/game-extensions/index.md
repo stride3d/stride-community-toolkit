@@ -106,6 +106,10 @@ These take `IGame`, since they need nothing from the scene.
 - [`SetFocusLostFPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)) - Caps it separately for when the window is in the background, so a minimised game stops burning a core.
 - [`EnableVSync()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.EnableVSync(Stride.Games.IGame)) / [`DisableVSync()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DisableVSync(Stride.Games.IGame)) - Sets the presentation interval at runtime. `EnableVSync()` waits for every *second* vertical blank (`PresentInterval.Two`), which caps the frame rate at half the display's refresh rate; `DisableVSync()` presents immediately.
 
+## Window
+
+- [`SetFullScreen()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetFullScreen(Stride.Games.IGame,System.Boolean)) / [`ToggleFullScreen()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.ToggleFullScreen(Stride.Games.IGame)) - Switches between fullscreen and a window at runtime through `GameWindow.IsFullscreen`; the change is applied on the next frame. `game.Window.FullscreenIsBorderlessWindow` decides whether fullscreen is a borderless window over the desktop or an exclusive mode switch.
+
 ## See also
 
 - [Scene Setup](../code-only/scene-setup.md)

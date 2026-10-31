@@ -15,6 +15,7 @@ public sealed class ExampleWindow(IServiceRegistry services, Game game, Entity c
     private const float DefaultSpin = 0.25f;
 
     private bool _showStats = true;
+    private string _note = "";
 
     /// <summary>Turns per second the cube makes, set from the slider.</summary>
     public float SpinSpeed { get; private set; } = DefaultSpin;
@@ -53,6 +54,10 @@ public sealed class ExampleWindow(IServiceRegistry services, Game game, Entity c
         if (ImGui.SliderFloat("Spin, turns per second", ref spin, 0f, 2f)) SpinSpeed = spin;
 
         ImGui.Checkbox("Show stats", ref _showStats);
+
+        // A text field: Ctrl+C, Ctrl+V and Ctrl+X go through dear imgui's own clipboard hooks, on Windows the
+        // Win32 clipboard, so text moves between this field and the rest of the desktop
+        ImGui.InputText("Note", ref _note, 64);
 
         if (!_showStats) return;
 

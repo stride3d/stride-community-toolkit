@@ -87,18 +87,18 @@ public static class EffectStations
             switch (i)
             {
                 case 0:
-                    shapes.BorderWidth = 2f;
+                    shapes.StrokeWidth = 2f;
                     shapes.DrawRing(centre, s.Up, 1.4f, Color.Cyan);
                     break;
                 case 1:
-                    shapes.BorderWidth = 3f;
+                    shapes.StrokeWidth = 3f;
                     shapes.Glow.Set(8f, new Color(255, 140, 0, 150));
                     shapes.Glow.Additive = true;
                     shapes.DrawRing(centre, s.Up, 1.4f, Color.Orange);
                     shapes.Glow.Clear();
                     break;
                 default:
-                    shapes.BorderWidth = 5f;
+                    shapes.StrokeWidth = 5f;
                     shapes.Opacity = 0.55f + 0.45f * MathF.Sin(s.Seconds * 2f);
                     shapes.DrawRing(centre, s.Up, 1.4f, Color.GreenYellow);
                     shapes.Opacity = 1f;
@@ -106,7 +106,7 @@ public static class EffectStations
             }
         }
 
-        shapes.BorderWidth = s.Style.BorderWidth;
+        shapes.StrokeWidth = s.Style.StrokeWidth;
 
         shapes.Dash.Set(8f, 6f);
         shapes.DrawRing(s.At(0f, Lift, -2f), s.Up, 3.2f, Color.Orange);
@@ -352,7 +352,7 @@ public static class EffectStations
 
         var centre = shapes.ScreenSize * 0.5f;
 
-        shapes.BorderWidth = 2f;
+        shapes.StrokeWidth = 2f;
         shapes.DrawRing(centre, 22f, Color.White);
         shapes.DrawPixelLine(new Vector2(centre.X - 40f, centre.Y), new Vector2(centre.X - 10f, centre.Y), 2f, Color.White);
         shapes.DrawPixelLine(new Vector2(centre.X + 10f, centre.Y), new Vector2(centre.X + 40f, centre.Y), 2f, Color.White);
@@ -376,7 +376,7 @@ public static class EffectStations
         shapes.Glow.Set(8f, HudGlow);
         shapes.DrawRectangle(panel, new Vector2(260f, 140f), HudBlue, cornerRadius: 12f);
         shapes.Glow.Clear();
-        shapes.Fill.Set(null, 0.45f);
+        shapes.StrokeWidth = 1.5f;
         shapes.Dash.Set(8f, 6f, s.Seconds * 30f);
         shapes.DrawRing(panel, 44f, Color.Orange);
         shapes.Dash.Clear();
