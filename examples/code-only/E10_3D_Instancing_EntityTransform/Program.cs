@@ -92,7 +92,8 @@ void Start(Scene rootScene)
 
     TextOverlay.GetOrCreate(game).AddSection("Instancing", BuildOverlayLines);
 
-    sharedModel = CreateSharedModel(rootScene);
+    // The mesh is built once: this is the model every body is drawn with, instanced or not
+    sharedModel = game.GetOrCreateModel(modelShape);
 
     // Three masters sharing one model: Stride's own, the toolkit's, and the toolkit's buffered
     stockMaster = CreateMaster(rootScene, sharedModel, new TimedInstancingEntityTransform(), "StockMaster");
@@ -134,19 +135,6 @@ static Primitive3D Scaled(Primitive3D shape) => shape switch
     // Cube and box: full extents on all three axes
     _ => Primitive3D.Cube(ItemScale)
 };
-
-/// <summary>
-/// Builds the mesh once. This is the model every body is drawn with, instanced or not.
-/// </summary>
-Model CreateSharedModel(Scene rootScene)
-{
-    // Parked out of sight; it exists only to own the Model
-    var prototype = game.CreatePrimitive(modelShape, new PrimitiveEntityOptions { Body = BodyMode.None, Position = new Vector3(0, -100, 0) });
-
-    prototype.Scene = rootScene;
-
-    return prototype.Get<ModelComponent>().Model;
-}
 
 /// <summary>
 /// Creates a master entity: the one that actually gets drawn, once, for every instance.

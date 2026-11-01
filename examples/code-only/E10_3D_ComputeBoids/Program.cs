@@ -2,8 +2,8 @@ using E10_3D_ComputeBoids;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Instancing;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -28,7 +28,7 @@ using Buffer = Stride.Graphics.Buffer;
 //
 // SPACE freezes the flock, R scatters it again, 1-3 change how many boids there are.
 
-int[] boidCounts = [2048, 4096, 8192];
+int[] boidCounts = [2048, 4096, 8192, 16384];
 
 using var game = new Game();
 
@@ -60,8 +60,9 @@ void Start(Scene scene)
     // InstancingComponent draws its model once, at the entity, and the flock is one cone
     game.AddInstancingSupport();
 
-    // The boid: a small cone, tip along +Y, which the shader points along the heading. The entity
-    // is only a way to get the model; it never enters the scene.
+    // The boid: a small cone, tip along +Y, which the shader points along the heading
+    //boidModel = game.GetOrCreateModel(Primitive3D.Cone(0.14f, 0.4f), game.CreateMaterial(new Color(255, 150, 40)));
+
     boidModel = game.CreatePrimitive(Primitive3D.Cone(0.14f, 0.4f), new PrimitiveEntityOptions
     {
         Body = BodyMode.None,
@@ -134,7 +135,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     [
         new("Space", simulation.Paused ? "Resume" : "Freeze", Color.Yellow),
         new("R", "Scatter", Color.Yellow),
-        new(["1", "2", "3"], "Flock size", Color.Yellow),
+        new([.. boidCounts.Select((_, i) => $"{i + 1}")], "Flock size", Color.Yellow),
         new(""),
         new($"{simulation.Count} boids, {pairs / 1_000_000f:0.0} million pairs a frame", Color.LightGreen),
         new("All on the GPU: one dispatch, one instanced draw call,", Color.LightGray),

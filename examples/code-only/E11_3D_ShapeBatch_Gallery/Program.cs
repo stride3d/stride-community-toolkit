@@ -191,7 +191,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     // The index board is the full list; here, only where the visitor stands
     if (gallery.CurrentStation is not { } station)
     {
-        if (gallery.Stations.Count > 0) lines.Add(new($"Home - {gallery.Stations.Count} stations; N, P or a pad to visit", Color.White));
+        if (gallery.Stations.Count > 0) lines.Add(new($"Home - {gallery.Stations.Count} stations; N, P, a pad or a line of the board to visit", Color.White));
 
         return lines;
     }

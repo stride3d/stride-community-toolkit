@@ -16,7 +16,7 @@
     href: basic-2d-scene-bullet.md
   - name: Basic 3D Scene (Capsule) - Bullet Physics
     href: capsule-with-rigid-body-bullet.md
-- name: C# Beginner (32)
+- name: C# Beginner (35)
   href: beginner-examples.md
   items:
   - name: 3D Primitives
@@ -43,6 +43,8 @@
     href: falling-shapes-2d.md
   - name: SyncScript - moving a body every frame
     href: sync-script.md
+  - name: Collider Shapes
+    href: collider-shapes.md
   - name: Reset Out of Bounds
     href: reset-out-of-bounds.md
   - name: Grabber
@@ -51,6 +53,8 @@
     href: physics-materials.md
   - name: Mesh Colliders
     href: mesh-colliders.md
+  - name: Compound Colliders
+    href: compound-colliders.md
   - name: Give me a cube
     href: give-me-cube-body.md
   - name: Entity Text (Screen-Space)
@@ -73,6 +77,8 @@
     href: trigger-zones.md
   - name: Falling Shapes with Physics Options (2D)
     href: falling-shapes-physics-2d.md
+  - name: Box2D Events
+    href: box2d-events.md
   - name: Box2D Explosion
     href: box2d-explosion.md
   - name: Time Control
@@ -83,7 +89,7 @@
     href: dpi-aware.md
   - name: Game - Pong
     href: pong.md
-- name: C# Intermediate (38)
+- name: C# Intermediate (43)
   href: intermediate-examples.md
   items:
   - name: Procedural Geometry
@@ -110,12 +116,20 @@
     href: hud.md
   - name: Spatial Sound
     href: spatial-sound.md
+  - name: Impact Sounds
+    href: audio-impacts.md
   - name: Collision Group
     href: collision-group.md
   - name: Collision Layer
     href: collision-layer.md
+  - name: Debris Filtering
+    href: debris-filtering.md
   - name: Cube Fountain
     href: cube-fountain.md
+  - name: Planet Gravity
+    href: planet-gravity.md
+  - name: Solver Substeps
+    href: solver-substeps.md
   - name: Box2D Joints
     href: box2d-joints.md
   - name: Box2D Car
@@ -134,6 +148,8 @@
     href: constraint-motors.md
   - name: First-Person Character (Bepu)
     href: first-person-character.md
+  - name: Third-Person Camera
+    href: third-person-camera.md
   - name: GPU Instancing
     href: instancing.md
   - name: Particle Gallery

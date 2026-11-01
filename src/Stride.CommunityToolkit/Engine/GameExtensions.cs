@@ -954,7 +954,7 @@ public static partial class GameExtensions
 
         options ??= new();
 
-        var entity = CreatePrimitiveEntity(game, ProceduralModelBuilder.Build(shape), options);
+        var entity = CreatePrimitiveEntity(game, ModelFor(game, shape, options), options);
 
         // The physics engine the setup chose, if any; the core alone attaches nothing
         if (options.Body != BodyMode.None)
@@ -981,7 +981,7 @@ public static partial class GameExtensions
 
         options ??= new();
 
-        var entity = CreatePrimitiveEntity(game, ProceduralModelBuilder.Build(shape), options);
+        var entity = CreatePrimitiveEntity(game, ModelFor(game, shape, options), options);
 
         if (options.Body != BodyMode.None)
             PhysicsSetupBase.Of(game).AddBody(entity, shape, options);
@@ -996,15 +996,10 @@ public static partial class GameExtensions
             MathUtil.DegreesToRadians(yawPitchRoll.Y),
             MathUtil.DegreesToRadians(yawPitchRoll.Z));
 
-    /// <summary>The entity of a procedural model with the options' material, name, render group and position; no physics yet.</summary>
-    private static Entity CreatePrimitiveEntity(IGame game, PrimitiveProceduralModelBase modelBase, PrimitiveEntityOptions options)
+    /// <summary>The entity of a model with the options' name, render group and position; no physics yet.</summary>
+    private static Entity CreatePrimitiveEntity(IGame game, Model model, PrimitiveEntityOptions options)
     {
         ArgumentNullException.ThrowIfNull(game);
-
-        var model = modelBase.Generate(game.Services);
-
-        if (options.Material != null)
-            model.Materials.Add(options.Material);
 
         var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
 

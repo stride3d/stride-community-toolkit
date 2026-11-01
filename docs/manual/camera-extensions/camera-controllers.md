@@ -141,6 +141,48 @@ orbit.
 `E11_3D_Charts` uses it: the fly controller from the setup is removed and an orbit centred on the
 chart takes its place.
 
+## The follow controller
+
+`Basic3DFollowCameraController` is the third-person camera: it hangs behind and above a `Target`
+entity, keeps it in view as it moves, and lets the player swing round it. The camera looks at the
+target's position plus `TargetOffset`, a character's chest rather than its feet, and that pivot
+trails the target with a short lag, `FollowSmoothing`, so the view does not jolt with every step.
+Attach it to a camera entity without `WithController()` and set the target; the entity's starting
+position relative to the pivot gives the first distance and angles, and an entity sitting on the
+pivot starts at `Distance` and `Pitch`, behind the target and a little above.
+
+| Input | Action | Configure with |
+| --- | --- | --- |
+| Right mouse drag | Swing the camera round the target; pitch clamped between about −80° and 20° | `OrbitButton`, `OrbitSensitivity`, `MinPitch`/`MaxPitch` |
+| Mouse wheel | Closer or further, 10 % of the distance per notch | `ZoomStep` (0.1), `MinDistance` (1), `MaxDistance` (30) |
+| Hold <kbd>Shift</kbd> | Faster zoom | `SpeedFactor` (5) |
+| <kbd>H</kbd> | Reset to the starting view | - |
+| <kbd>F2</kbd> | Collapse or expand the help, with the live distance and angles | `HelpToggleKey`, `HelpCollapsed` |
+
+The controller knows nothing of physics, so walls are the game's to report: give it an
+`ObstacleTest`, a delegate that takes the pivot and the wanted camera position and returns the
+distance to the first thing in the way or `null` for a clear line, and the camera stops
+`ObstacleMargin` short of the hit. A Bepu raycast is the usual answer, with the character on a layer
+the ray's mask leaves out, so the camera does not stop at its own target:
+
+```csharp
+camera.Add(new Basic3DFollowCameraController
+{
+    Target = character,
+    TargetOffset = new Vector3(0f, 1.2f, 0f),
+    ObstacleTest = (from, to) =>
+    {
+        var line = to - from;
+        var length = line.Length();
+
+        return simulation.RayCast(from, line / length, length, out var hit, SceneryMask) ? hit.Distance : null;
+    },
+});
+```
+
+`Yaw` is the direction the camera looks along the ground, which is what a character that walks
+"forward" wants to read. `E05_3D_ThirdPersonCamera` uses it that way.
+
 ## When the defaults are wrong
 
 The controllers are ordinary `SyncScript`s with nothing else attached to the camera, so replacing

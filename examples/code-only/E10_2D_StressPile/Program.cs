@@ -31,8 +31,7 @@ const float ColumnWidth = WallWidth - 30;
 
 // One Model per shape and sleep state, built on first use and kept. Eighteen of them cost under a
 // megabyte, and it makes switching back to a shape you have already used free.
-Dictionary<Primitive3D, Model> models = [];
-Dictionary<Primitive3D, Model> sleepingModels = [];
+Material? sleepingMaterial = null;
 
 Primitive3D[] shapes =
 [
@@ -147,34 +146,11 @@ void SetupInstancing()
     game.AddInstancingBufferUpload(sleepingInstancing);
 }
 
-/// <summary>Returns the shared model for a shape, building it once on first use.</summary>
-Model ModelFor(Primitive3D type)
-{
-    if (models.TryGetValue(type, out var cached)) return cached;
+/// <summary>Returns the shared model for a shape, built once on first use and kept by the game.</summary>
+Model ModelFor(Primitive3D type) => game.GetOrCreateModel(type);
 
-    // Only the model is kept; the entity never joins a scene, and asks for no body
-    var model = game.CreatePrimitive(type, new PrimitiveEntityOptions { Body = BodyMode.None }).Get<ModelComponent>().Model;
-
-    models[type] = model;
-
-    return model;
-}
-
-/// <summary>Returns the shared sleeping-tint model for a shape, building it once on first use.</summary>
-Model SleepingModelFor(Primitive3D type)
-{
-    if (sleepingModels.TryGetValue(type, out var cached)) return cached;
-
-    var model = game.CreatePrimitive(type, new PrimitiveEntityOptions
-    {
-        Material = game.CreateMaterial(Color.MediumSeaGreen),
-        Body = BodyMode.None,
-    }).Get<ModelComponent>().Model;
-
-    sleepingModels[type] = model;
-
-    return model;
-}
+/// <summary>Returns the shared sleeping-tint model for a shape, built once on first use and kept by the game.</summary>
+Model SleepingModelFor(Primitive3D type) => game.GetOrCreateModel(type, sleepingMaterial ??= game.CreateMaterial(Color.MediumSeaGreen));
 
 void SetupMenus()
 {

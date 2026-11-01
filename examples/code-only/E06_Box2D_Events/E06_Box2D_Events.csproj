@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Box2D\Stride.CommunityToolkit.Box2D.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Shapes\Stride.CommunityToolkit.Shapes.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -20,9 +20,13 @@ A Stride subsystem used directly, or several concepts combined. These assume you
 - [Shape Queries](shape-queries.md): Two questions a raycast cannot answer: what is inside this volume right now, and what would this shape touch first if it moved that way.
 - [Ship HUD](hud.md): A cockpit HUD composed from the toolkit's shapes and world text, with one widget per file.
 - [Spatial Sound](spatial-sound.md): 3D positional audio for a runtime sound: a looping pad on an orb that circles a pillar, heard from the camera.
+- [Impact Sounds](audio-impacts.md): Balls of three sizes drop onto a plate and every landing is heard.
 - [Collision Group](collision-group.md): Collision groups are a number rule inside a layer: bodies with the same group Id ignore each other when their indexes are the same or adjacent, and collide when two or more apart.
 - [Collision Layer](collision-layer.md): Four layers, Players, Enemies, Shots and Debris, and the collision matrix that says which pairs collide, shown twice: as a grid on screen and as the scene itself.
+- [Debris Filtering](debris-filtering.md): A burst of a few hundred fragments lands in a walled pit.
 - [Cube Fountain](cube-fountain.md): A fountain of cubes, spheres and cylinders that runs on the physics clock.
+- [Planet Gravity](planet-gravity.md): A ring of bodies orbiting a planet.
+- [Solver Substeps](solver-substeps.md): Why a tall stack wobbles and what firms it up.
 - [Box2D Joints](box2d-joints.md): Every Box2D joint, one rig each, in a row you can pull on: a hinge pendulum with a motor and a limit, a slider on a spring, a wheel on a suspension, a rope of distance joints, a soft weld and a motor joint that springs its box back home.
 - [Box2D Car](box2d-car.md): A car on two wheel joints over hilly terrain: the wheel joint pins the wheel, lets it turn, springs it along the suspension axis with a travel limit, and drives it with a motor whose speed is the throttle and whose zero is the brake.
 - [Box2D Character Mover](box2d-character-mover.md): A platformer character with no rigid body, on Box2D v3's mover API: a capsule the game moves itself, Quake style, asking the world only what it touches - collect the contact planes, solve a translation that respects them, sweep it - with a pogo shape cast from the feet that floats it above the ground.
@@ -32,6 +36,7 @@ A Stride subsystem used directly, or several concepts combined. These assume you
 - [Simple Constraint](simple-constraint.md): One constraint, doing one thing: a distance servo holding two spheres three units apart, pulling them together or pushing them apart until they settle there.
 - [Constraints - Servo vs Motor vs Limit](constraint-motors.md): The three kinds of Bepu constraint, side by side.
 - [First-Person Character (Bepu)](first-person-character.md): A first-person character built entirely from code - no Game Studio scene - on a Bepu CharacterComponent, with boxes to walk into and jump onto.
+- [Third-Person Camera](third-person-camera.md): A character on a stepped pyramid with the toolkit's follow camera behind it: the camera trails the character's steps with a short lag, swings round it on a right-drag, zooms on the wheel, and comes forward rather than look through a pillar or a step, through a raycast the game lends it.
 - [GPU Instancing](instancing.md): Render two walls of the same cube built two different ways, side by side.
 - [Particle Gallery](particles.md): Thirty-eight particle systems on a ring of stations, all built from code: the building blocks one at a time - spawners, shapes, initializers, updaters, materials, flipbooks, soft particles - then the showpieces that put them together: a campfire, fireworks with child emitters, a tornado, a swarm driven by an updater of our own, lasers, rain that splashes, a portal, a landing burn.
 - [Debug Shapes](debug-shapes.md): The full tour of the DebugShapes package: every immediate-mode primitive it can draw, exercised from a ShapeUpdater component so the shapes animate and the batching can be seen under load.

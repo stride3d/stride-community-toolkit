@@ -133,7 +133,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     /// <summary>Whether the visitor is at the home spot, above and outside the ring: no station is current there.</summary>
     public bool AtHome { get; private set; }
 
-    /// <summary>The station whose pad is under the mouse, or -1: the pad fills, and a click flies there.</summary>
+    /// <summary>The station whose pad, or whose line of the index board, is under the mouse, or -1: it lights up, and a click flies there.</summary>
     public int Hovered { get; private set; } = -1;
 
     /// <summary>Whether the camera is flying itself somewhere rather than being steered.</summary>
@@ -207,7 +207,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
             AtHome = false;
         }
 
-        // A pad under the mouse lights up, and a click on it is a flight there
+        // A pad or a board line under the mouse lights up, and a click on it is a flight there
         Hovered = Flying ? -1 : PadUnderMouse();
 
         if (Hovered >= 0 && _game.Input.IsMouseButtonPressed(MouseButton.Left))
@@ -234,7 +234,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         }
 
         DrawLabels();
-        _board.DrawFrame(_furniture);
+        _board.DrawFrame(_furniture, _stations, Hovered, AtHome ? -1 : Current);
         _furniture.Fill.Set(null, 0.45f);
         _furniture.BorderWidth = 3f;
     }
@@ -397,7 +397,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         shapes.BorderWidth = 3f;
     }
 
-    /// <summary>The station whose pad the mouse is over, as the batch drew it last frame, or -1.</summary>
+    /// <summary>The station whose pad or board line the mouse is over, as the batch drew them last frame, or -1.</summary>
     private int PadUnderMouse()
         => _furniture.TryPick(_game.Input.MousePosition, out var hit) && hit.Tag is TStation station ? _stations.IndexOf(station) : -1;
 

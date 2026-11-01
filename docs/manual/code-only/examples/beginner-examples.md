@@ -20,10 +20,12 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 - [Procedural Sound](procedural-sound.md): A tone with no sound file: a callback computes the samples as they play.
 - [Basic 2D Scene (Falling Shapes)](falling-shapes-2d.md): The next step after the basic 2D scene: thirty shapes of five kinds and five colours, dropped in a column that topples into a pile.
 - [SyncScript - moving a body every frame](sync-script.md): A cube driven in a circle by a SyncScript, which is the ordinary way to run code every frame.
+- [Collider Shapes](collider-shapes.md): One of every primitive shape dropped side by side, each with the collider the toolkit fits to it: a box, a sphere, a capsule and a cylinder get their own kinds, and the cone, prism, torus and teapot get one convex hull each, which fills the torus.
 - [Reset Out of Bounds](reset-out-of-bounds.md): A row of balls drops onto a tilted plank with no ground under it, rolls off its low end and falls.
 - [Grabber](grabber.md): A gravity gun: click any body to pick it up, carry it on the end of the camera ray, and let go - with its velocity, so a flick throws it.
 - [Physics Materials](physics-materials.md): How to make something bouncy and how to make something slippery.
 - [Mesh Colliders](mesh-colliders.md): A collider made from real geometry, two ways: a convex hull wraps the model in the smallest convex shape that holds it, so a ring becomes a disc, and a mesh collider is the model's own triangles, so the hole stays a hole.
+- [Compound Colliders](compound-colliders.md): A hammer, a dumbbell and an L-piece, each one body whose compound collider holds a collider per piece at its own local pose and mass, beside the same pieces dropped as separate bodies.
 - [Give Me a Cube](give-me-cube-body.md): Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.
 - [Entity Text (Screen-Space)](entity-text.md): A gallery of everything EntityTextComponent can do, one feature per pole: anchoring, shadows, backgrounds, scaling, rotation, opacity, distance fading, several texts on one entity, and HUD text pinned to window corners that survives resizing.
 - [Easing Basics](easing-basics.md): Easing from the ground up, in five lanes that move a disc over the same two seconds: by hand with no easing, by hand with one formula, with the toolkit's easing functions, with a Tween, and with MoveTowards, which keeps no clock.
@@ -35,6 +37,7 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 - [2D Panels and Text](2d-scene-panels.md): Twenty-four HUD panel recipes side by side, each one property away from the last: fills, borders, rounded corners, glows of three strengths, glass, a ship-console panel with corner ticks and a gauge, dashed rings and lines that march, gradients, opacity, a translucent border, an additive glow, a hairline, a twelve-sided badge, a dashed route, overlapping see-through panels and a concave bracket.
 - [Trigger Zones](trigger-zones.md): Reacting to contact, three ways.
 - [Falling Shapes with Physics Options (2D)](falling-shapes-physics-2d.md): Thirty capsules and a rectangle dropped in a column, as in E01_2D_FallingShapes, with one thing added: each capsule is given its own Body2DComponent with a lower FrictionCoefficient, so the pile spreads wider than with the default.
+- [Box2D Events](box2d-events.md): Shapes drop through a sensor zone onto a floor and one handler listens to everything Box2D reports: begin and end touch, hits with their approach speed, and a sensor's visitors.
 - [Box2D Explosion](box2d-explosion.md): A grenade in one call: Explode gives every shape within a radius an impulse away from the centre, per metre of perimeter facing the blast, so a wide slab flies harder than a ball of the same mass.
 - [Time Control](time-control.md): The simulation has a clock of its own, with three knobs: TimeScale runs it slower or faster than the game, Enabled pauses it, and PoseGravity changes while it runs.
 - [Basic 2D Scene (Debug Rendering)](debug-render-2d.md): A pile of falling 2D shapes with the physics text overlays turned on, so what the simulation is actually solving can be seen rather than inferred.
@@ -49,5 +52,5 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 
 > [!NOTE]
 > Most examples run from a copy of their project with the toolkit packages from NuGet. `Stride.CommunityToolkit.Box2D` is not on NuGet yet,
-> so the examples built on it run from a clone of the repository: [Box2D Explosion](box2d-explosion.md).
+> so the examples built on it run from a clone of the repository: [Box2D Events](box2d-events.md), [Box2D Explosion](box2d-explosion.md).
 [!INCLUDE [basic-examples-outro](../../../includes/manual/examples/basic-examples-outro.md)]

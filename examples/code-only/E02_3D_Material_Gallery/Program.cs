@@ -191,7 +191,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     {
         lines.Add(gallery.Stations.Count == 0
             ? new("No stations in the registry", Color.OrangeRed)
-            : new($"Home - {gallery.Stations.Count} stations; N, P or a pad to visit", Color.White));
+            : new($"Home - {gallery.Stations.Count} stations; N, P, a pad or a line of the board to visit", Color.White));
 
         return lines;
     }

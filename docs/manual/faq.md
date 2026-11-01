@@ -75,9 +75,33 @@ No. They are the same object. The entity keeps a direct reference to it for spee
 
 ### How do I hide an entity, including its children?
 
-Call `entity.EnableAll(false, applyOnChildren: true)`. It disables every component that can be
-disabled, on the entity and on its children. To hide only the model, set the model component's
-`Enabled` to `false`.
+Call [`entity.EnableAll(false, applyOnChildren: true)`](https://doc.stride3d.net/latest/en/api/Stride.Engine.EntityExtensions.html),
+Stride's own extension. It disables every component that can be disabled, on the entity and on its
+children. To hide only the model, set the model component's `Enabled` to `false`.
+
+### How do I show a sprite from code?
+
+In a 2D scene, with a `SpriteComponent` whose provider is a texture: the compositor `SceneSetup2D`
+builds has the sprite render feature, so the component draws. The texture comes from a file through
+the toolkit's loader, in the colour role, which premultiplies the alpha for you.
+
+```csharp
+using var stream = File.OpenRead("ball.png");
+var texture = TextureLoader.Load(game.GraphicsDevice, stream, new TextureLoadOptions(TextureRole.Color));
+
+var ball = new Entity("Ball")
+{
+    new SpriteComponent { SpriteProvider = new SpriteFromTexture { Texture = texture, PixelsPerUnit = 100f } },
+};
+
+ball.Transform.Position = new Vector3(0f, 2f, 0f);
+ball.Scene = scene;
+```
+
+`PixelsPerUnit` sets the size: a 200-pixel image at 100 pixels per unit is two units wide. The 3D
+setup's compositor has no sprite feature. There, put the texture on a quad with
+[`CreateTexturedMaterial`](game-extensions/index.md) and `Primitive3D.Plane`, or draw it through a
+[`ShapeBatch`](rendering/shape-batch.md#fill-a-shape-with-a-texture-or-a-shader) with `FillWith(texture)`.
 
 ### How do I remove an entity?
 

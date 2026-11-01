@@ -11,7 +11,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
 
 > [!NOTE]
 > Most examples run from a copy of their project with the toolkit packages from NuGet. `Stride.CommunityToolkit.Box2D`, `Stride.CommunityToolkit.Charts` and `Stride.CommunityToolkit.ImGuiNet` are not on NuGet yet,
-> so the examples built on them run from a clone of the repository: [Box2D Explosion](box2d-explosion.md), [Box2D Joints](box2d-joints.md), [Box2D Car](box2d-car.md), [Box2D Character Mover](box2d-character-mover.md), [Charts 2D](charts-2d.md), [Charts 3D](charts-3d.md), [Basic 2D Scene (Stress Pile, Box2D)](stress-pile-2d-box2d.md), [Junkyard (Box2D)](junkyard-box2d.md), [Junkyard Playground (Box2D)](junkyard-playground-box2d.md), [Box2D.NET Physics](box2d-physics.md), [ImGui.NET Text Rendering](imgui-net.md).
+> so the examples built on them run from a clone of the repository: [Box2D Events](box2d-events.md), [Box2D Explosion](box2d-explosion.md), [Box2D Joints](box2d-joints.md), [Box2D Car](box2d-car.md), [Box2D Character Mover](box2d-character-mover.md), [Charts 2D](charts-2d.md), [Charts 3D](charts-3d.md), [Basic 2D Scene (Stress Pile, Box2D)](stress-pile-2d-box2d.md), [Junkyard (Box2D)](junkyard-box2d.md), [Junkyard Playground (Box2D)](junkyard-playground-box2d.md), [Box2D.NET Physics](box2d-physics.md), [ImGui.NET Text Rendering](imgui-net.md).
 
 ## C# Getting Started
 
@@ -203,6 +203,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/collider-shapes.webp" class="card-img-top" alt="Screenshot of the Collider Shapes example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="collider-shapes.md">Collider Shapes</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">One of every primitive shape dropped side by side, each with the collider the toolkit fits to it: a box, a sphere, a capsule and a cylinder get their...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/reset-out-of-bounds.webp" class="card-img-top" alt="Screenshot of the Reset Out of Bounds example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="reset-out-of-bounds.md">Reset Out of Bounds</a></h3>
@@ -238,6 +248,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="mesh-colliders.md">Mesh Colliders</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
                 <p class="card-text">A collider made from real geometry, two ways: a convex hull wraps the model in the smallest convex shape that holds it, so a ring becomes a disc, and...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/compound-colliders.webp" class="card-img-top" alt="Screenshot of the Compound Colliders example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="compound-colliders.md">Compound Colliders</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">A hammer, a dumbbell and an L-piece, each one body whose compound collider holds a collider per piece at its own local pose and mass, beside the same...</p>
             </div>
         </div>
     </div>
@@ -348,6 +368,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-physics-2d.md">Falling Shapes with Physics Options (2D)</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
                 <p class="card-text">Thirty capsules and a rectangle dropped in a column, as in E01_2D_FallingShapes, with one thing added: each capsule is given its own Body2DComponent...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/box2d-events.webp" class="card-img-top" alt="Screenshot of the Box2D Events example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="box2d-events.md">Box2D Events</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">Shapes drop through a sensor zone onto a floor and one handler listens to everything Box2D reports: begin and end touch, hits with their approach...</p>
             </div>
         </div>
     </div>
@@ -528,6 +558,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/audio-impacts.webp" class="card-img-top" alt="Screenshot of the Impact Sounds example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="audio-impacts.md">Impact Sounds</a></h3>
+                <p><span class="badge text-bg-secondary">Audio</span></p>
+                <p class="card-text">Balls of three sizes drop onto a plate and every landing is heard.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/collision-group.webp" class="card-img-top" alt="Screenshot of the Collision Group example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="collision-group.md">Collision Group</a></h3>
@@ -548,11 +588,41 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/debris-filtering.webp" class="card-img-top" alt="Screenshot of the Debris Filtering example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="debris-filtering.md">Debris Filtering</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">A burst of a few hundred fragments lands in a walled pit.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/cube-fountain.webp" class="card-img-top" alt="Screenshot of the Cube Fountain example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="cube-fountain.md">Cube Fountain</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
                 <p class="card-text">A fountain of cubes, spheres and cylinders that runs on the physics clock.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/planet-gravity.webp" class="card-img-top" alt="Screenshot of the Planet Gravity example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="planet-gravity.md">Planet Gravity</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">A ring of bodies orbiting a planet.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/solver-substeps.webp" class="card-img-top" alt="Screenshot of the Solver Substeps example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="solver-substeps.md">Solver Substeps</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">Why a tall stack wobbles and what firms it up.</p>
             </div>
         </div>
     </div>
@@ -643,6 +713,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="first-person-character.md">First-Person Character (Bepu)</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
                 <p class="card-text">A first-person character built entirely from code - no Game Studio scene - on a Bepu CharacterComponent, with boxes to walk into and jump onto.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/third-person-camera.webp" class="card-img-top" alt="Screenshot of the Third-Person Camera example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="third-person-camera.md">Third-Person Camera</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">A character on a stepped pyramid with the toolkit's follow camera behind it: the camera trails the character's steps with a short lag, swings round it...</p>
             </div>
         </div>
     </div>
