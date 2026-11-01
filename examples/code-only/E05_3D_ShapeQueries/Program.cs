@@ -209,6 +209,7 @@ void Throw(Scene scene, Vector3 direction)
     {
         EntityName = $"Ball {thrown.Count + 1}",
         Material = ballMaterial,
+        ShareModel = true,
         Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated, Gravity = false },
         Position = launcher,
     });
@@ -278,6 +279,7 @@ void BuildLauncher(Scene scene)
     {
         EntityName = "Launcher",
         Material = ballMaterial,
+        ShareModel = true,
         Body = BodyMode.None,
         Position = launcher,
     });

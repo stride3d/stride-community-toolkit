@@ -76,6 +76,7 @@ void Start(Scene scene)
         {
             EntityName = $"Ball {i + 1}",
             Material = ballMaterial,
+            ShareModel = true,
             Position = StartPosition(i),
         });
 

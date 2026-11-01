@@ -84,8 +84,8 @@ void Update(Scene scene, GameTime time)
     if (input.IsKeyPressed(Keys.Space)) Spawn(scene);
     if (input.IsKeyPressed(Keys.C)) Clear();
     if (input.IsKeyPressed(Keys.E)) simulation.EnableContactEvents = !simulation.EnableContactEvents;
-    if (input.IsKeyPressed(Keys.H)) simulation.EnableHitEvents = !simulation.EnableHitEvents;
-    if (input.IsKeyPressed(Keys.S)) simulation.EnableSensorEvents = !simulation.EnableSensorEvents;
+    if (input.IsKeyPressed(Keys.I)) simulation.EnableHitEvents = !simulation.EnableHitEvents;
+    if (input.IsKeyPressed(Keys.N)) simulation.EnableSensorEvents = !simulation.EnableSensorEvents;
 
     log.Age((float)time.Elapsed.TotalSeconds);
 
@@ -211,8 +211,8 @@ IReadOnlyList<TextElement> BuildOverlayLines()
         new("C", "Clear the shapes", Color.Gold),
         new("Left mouse", "Grab and throw a shape", Color.Gold),
         new("E", simulation.EnableContactEvents ? "Begin and end touch events: on" : "Begin and end touch events: off", simulation.EnableContactEvents ? Color.LightGreen : Color.OrangeRed),
-        new("H", simulation.EnableHitEvents ? "Hit events: on" : "Hit events: off", simulation.EnableHitEvents ? Color.LightGreen : Color.OrangeRed),
-        new("S", simulation.EnableSensorEvents ? "Sensor events: on" : "Sensor events: off", simulation.EnableSensorEvents ? Color.LightGreen : Color.OrangeRed),
+        new("I", simulation.EnableHitEvents ? "Hit events: on" : "Hit events: off", simulation.EnableHitEvents ? Color.LightGreen : Color.OrangeRed),
+        new("N", simulation.EnableSensorEvents ? "Sensor events: on" : "Sensor events: off", simulation.EnableSensorEvents ? Color.LightGreen : Color.OrangeRed),
         new(""),
         new($"Touches begun {log.Begins}, ended {log.Ends}, hits {log.Hits}, inside the sensor {log.InsideCount}", Color.White),
         new(""),

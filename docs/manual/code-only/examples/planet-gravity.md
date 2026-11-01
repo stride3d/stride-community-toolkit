@@ -13,7 +13,7 @@ force per step lives in SimulationUpdate, not in Update.
 
 The `Program.cs` file shows how to:
 
-- PoseGravity set to zero for a simulation through the setup's GameSettings
+- PoseGravity set to zero and PoseLinearDamping to zero for a simulation through the setup's GameSettings
 - A per-step pull applied in ISimulationUpdate as a velocity change on each body
 - The circular orbit speed from the gravitational parameter and the radius
 - One shared model for every orbiter, through ShareModel
@@ -23,4 +23,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_PlanetGravity).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_PlanetGravity/Program.cs?start=1&end=200)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_PlanetGravity/Program.cs?start=1&end=205)]

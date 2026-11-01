@@ -56,10 +56,11 @@ var sceneSetup = new SceneSetup3D
 {
     GameSettings = settings =>
     {
-        // One simulation, with no gravity of its own: the planet's script is the only pull
+        // One simulation with no gravity of its own, so the planet's script is the only pull, and no damping: Bepu's
+        // default takes a few percent of every body's speed per second, which brings an orbit down in half a minute
         var bepu = settings.GetOrCreateConfiguration<BepuConfiguration>();
 
-        bepu.BepuSimulations.Add(new BepuSimulation { PoseGravity = Vector3.Zero });
+        bepu.BepuSimulations.Add(new BepuSimulation { PoseGravity = Vector3.Zero, PoseLinearDamping = 0f, PoseAngularDamping = 0f });
     },
     Ground = null,
     Camera = CameraSetup.Perspective(position: new Vector3(0f, 22f, 26f), rotation: new Vector3(0f, -40f, 0f)).WithController(),
@@ -189,10 +190,14 @@ void DrawTrails(ShapeBatch shapes)
     }
 }
 
+string SpeedLine(int choice) => $"Launch {speedNames[choice]}{(choice == speedChoice ? " (chosen)" : "")}";
+
 IReadOnlyList<TextElement> BuildOverlayLines() =>
 [
     new("Space", "Launch a new ring", Color.Gold),
-    new(["1", "2", "3"], $"Launch speed: {speedNames[speedChoice]}", Color.Gold),
+    new("1", SpeedLine(0), speedChoice == 0 ? Color.LightGreen : Color.Gold),
+    new("2", SpeedLine(1), speedChoice == 1 ? Color.LightGreen : Color.Gold),
+    new("3", SpeedLine(2), speedChoice == 2 ? Color.LightGreen : Color.Gold),
     new("T", trails ? "Trails on" : "Trails off", Color.Gold),
     new(""),
     new($"Surface gravity {SurfaceGravity:0} m/s², no gravity in the simulation itself", Color.White),
@@ -216,7 +221,7 @@ description:
     in and an ellipse, and trails show the paths; a frame runs zero or several physics steps, so a
     force per step lives in SimulationUpdate, not in Update.
 concepts:
-  - PoseGravity set to zero for a simulation through the setup's GameSettings
+  - PoseGravity set to zero and PoseLinearDamping to zero for a simulation through the setup's GameSettings
   - A per-step pull applied in ISimulationUpdate as a velocity change on each body
   - The circular orbit speed from the gravitational parameter and the radius
   - One shared model for every orbiter, through ShareModel

@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.Engine;
 using Stride.Games;
 using Stride.Rendering;
 using Stride.Rendering.ProceduralModels;

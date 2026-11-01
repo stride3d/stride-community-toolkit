@@ -198,6 +198,7 @@ void DropBalls(Scene scene)
         {
             EntityName = $"Ball {balls.Count + 1}",
             Material = ballMaterial,
+            ShareModel = true,
             Position = new Vector3(x + random.NextSingle() * 0.6f - 0.3f, 6f, random.NextSingle() * 0.6f - 0.3f),
         });
 

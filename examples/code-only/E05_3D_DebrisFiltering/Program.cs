@@ -30,9 +30,10 @@ const float PitHalfWidth = 6f;
 const float WallHeight = 2.5f;
 const float FragmentSize = 0.35f;
 const float BurstHeight = 5f;
-const float BurstSpeed = 5f;
+const float BurstSpeed = 4f;
 
 int[] countChoices = [150, 400, 800, 1600];
+string[] countKeys = [.. countChoices.Select((_, i) => $"{i + 1}")];
 var countChoice = 1;
 var selfCollision = false;
 
@@ -127,7 +128,7 @@ void Burst(Scene scene)
 
     for (var i = 0; i < countChoices[countChoice]; i++)
     {
-        var direction = Vector3.Normalize(new Vector3(random.NextSingle() - 0.5f, random.NextSingle() * 0.5f, random.NextSingle() - 0.5f));
+        var direction = Vector3.Normalize(new Vector3(random.NextSingle() - 0.5f, 0.4f + random.NextSingle() * 0.6f, random.NextSingle() - 0.5f));
 
         // Every fragment draws the one shared model
         var fragment = game.CreatePrimitive(Primitive3D.Cube(FragmentSize), new BepuPhysicsOptions
@@ -135,7 +136,9 @@ void Burst(Scene scene)
             EntityName = "Fragment",
             Material = fragmentMaterial,
             ShareModel = true,
-            Position = new Vector3(0f, BurstHeight, 0f) + direction * (random.NextSingle() * 0.8f),
+            // A shell above the pit rather than a ball of overlapping cubes: fragments that start inside each other
+            // cost the first step dearly, and with the pair on it shows as a stall before the burst
+            Position = new Vector3(0f, BurstHeight, 0f) + direction * (1f + random.NextSingle() * 2f),
         });
 
         var body = fragment.Get<BodyComponent>();
@@ -162,7 +165,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     [
         new("Space", "Fire the burst again", Color.Gold),
         new("F", selfCollision ? "Debris collides with debris: on" : "Debris collides with debris: off", selfCollision ? Color.OrangeRed : Color.LightGreen),
-        new(["1", "2", "3"], $"Fragments: {countChoices[countChoice]}", Color.Gold),
+        new(countKeys, $"Fragments: {countChoices[countChoice]}", Color.Gold),
         new(""),
         new($"Contact constraints in the solver: {contacts}", Color.White),
         new($"Awake bodies: {active}", Color.White),

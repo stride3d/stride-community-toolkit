@@ -209,6 +209,7 @@ void Shoot(Scene scene)
     {
         EntityName = "Shot",
         Material = shotMaterial,
+        ShareModel = true,
         // No gravity, so the shot flies straight; continuous detection has Bepu sweep its path to the next step instead of checking only where it lands
         Component = new BodyComponent
         {

@@ -91,8 +91,8 @@ void Update(Scene scene, GameTime time)
     if (input.IsKeyPressed(Keys.Space)) Drop(scene, sizeChoice, new Vector3((random.NextSingle() - 0.5f) * 4f, dropHeight, (random.NextSingle() - 0.5f) * 4f));
     if (input.IsKeyPressed(Keys.R)) Rain(scene);
     if (input.IsKeyPressed(Keys.C)) Clear();
-    if (input.IsKeyPressed(Keys.Up)) dropHeight = MathF.Min(dropHeight + 2f, 16f);
-    if (input.IsKeyPressed(Keys.Down)) dropHeight = MathF.Max(dropHeight - 2f, 2f);
+    if (input.IsKeyPressed(Keys.PageUp)) dropHeight = MathF.Min(dropHeight + 2f, 16f);
+    if (input.IsKeyPressed(Keys.PageDown)) dropHeight = MathF.Max(dropHeight - 2f, 2f);
 
     for (var i = 0; i < radii.Length; i++)
     {
@@ -146,7 +146,7 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
 [
     new("Space", $"Drop a {sizeNames[sizeChoice]} ball from {dropHeight:0} m", Color.Gold),
     new(["1", "2", "3"], "Small, medium or large", Color.Gold),
-    new(["Up", "Down"], "Drop height", Color.Gold),
+    new(["PageUp", "PageDown"], "Drop height", Color.Gold),
     new("R", "A rain of balls", Color.Gold),
     new("C", "Clear the balls", Color.Gold),
     new(""),
@@ -167,6 +167,10 @@ public sealed class Impacts : IContactHandler
     private const float QuietSpeed = 0.6f;
     private const float Decay = 0.35f;
     private const float MarkLife = 0.6f;
+
+    // Four buffers of 4096 samples at 44.1 kHz sit between a note and the speaker, about a third of a second;
+    // the ring waits as long, so the eye and the ear agree on when the ball landed
+    private const float SoundDelay = 0.37f;
 
     private readonly ConcurrentQueue<(float Frequency, float Amplitude)> _notes = new();
     private readonly Voice[] _voices = new Voice[MaxVoices];
@@ -209,7 +213,7 @@ public sealed class Impacts : IContactHandler
         Count++;
         LastSpeed = speed;
 
-        _marks[_nextMark] = (contact.Current.Point, 0f);
+        _marks[_nextMark] = (contact.Current.Point, -SoundDelay);
         _nextMark = (_nextMark + 1) % _marks.Length;
     }
 
@@ -253,7 +257,7 @@ public sealed class Impacts : IContactHandler
         }
     }
 
-    /// <summary>A ring growing out of each recent landing, so the eye finds what the ear heard.</summary>
+    /// <summary>A ring growing out of each recent landing once its note is heard, so the eye finds what the ear hears.</summary>
     public void DrawMarks(ShapeBatch shapes, float elapsed)
     {
         shapes.StrokeWidth = 2f;
@@ -265,6 +269,8 @@ public sealed class Impacts : IContactHandler
             if (mark.Age >= MarkLife) continue;
 
             mark.Age += elapsed;
+
+            if (mark.Age < 0f) continue;
 
             var t = mark.Age / MarkLife;
 
