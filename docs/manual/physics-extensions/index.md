@@ -127,6 +127,15 @@ A simulation running faster than the game needs more fixed steps per frame: at f
 
 - [`TeleportAtRest()`](xref:Stride.CommunityToolkit.Bepu.BodyComponentExtensions.TeleportAtRest(Stride.BepuPhysics.BodyComponent,Stride.Core.Mathematics.Vector3,System.Nullable{Stride.Core.Mathematics.Quaternion})) - Teleports a body to a pose and leaves it still and awake. `Teleport()` alone keeps the body's velocity, its spin and its sleep, so a reset key or a respawn wants this one.
 
+### Locking rotation
+
+- [`LockRotation()`](xref:Stride.CommunityToolkit.Bepu.BodyComponentExtensions.LockRotation(Stride.BepuPhysics.BodyComponent,System.Boolean,System.Boolean,System.Boolean)) - Stops the body turning about the chosen axes of its own frame: a crate that slides but does not tumble, a figure that stays upright, a 2D-in-3D body that turns about Z alone. The inverse inertia of a locked axis is scaled down ten-thousandfold rather than zeroed, the way `Body2DComponent` keeps its bodies in the plane, because a zero row leaves a tensor that corrupts contact generation for a convex hull. Call it once the body is in a simulation, from the frame after its entity joined the scene, and again after a change of `Kinematic`, which restores the full shape inertia. The lock is on torque, what collisions and impulses apply; an angular velocity written to the body is kept whatever the inertia.
+
+```csharp
+// Frame 2 or later: the body is attached and has an inertia to change
+crate.Get<BodyComponent>().LockRotation(lockX: true, lockY: false, lockZ: true);
+```
+
 ### Grabbing bodies
 
 - [`GrabberScript`](xref:Stride.CommunityToolkit.Bepu.GrabberScript) - `game.AddGrabber()` puts it on the camera entity, or add it there in Game Studio under Physics, and any dynamic body can be picked up with the mouse, carried on the end of the camera ray, and thrown. The wheel changes the carry distance; <kbd>T</kbd> plus mouse movement turns the held body. The pick looks through trigger volumes, so a body inside a zone can still be grabbed; a solid static in front still hides what is behind it. It works through a linear and an angular servo constraint rather than by moving the body, so the held body still collides and pushes, and its force caps scale with mass so heavy and light bodies drag alike. [`Grab()`](xref:Stride.CommunityToolkit.Bepu.GrabberScript.Grab(Stride.BepuPhysics.BodyComponent,Stride.Core.Mathematics.Vector3,System.Single)) and [`Release()`](xref:Stride.CommunityToolkit.Bepu.GrabberScript.Release) do the same from code.

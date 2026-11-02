@@ -14,6 +14,7 @@ A Stride subsystem used directly, or several concepts combined. These assume you
 - [Material Preview](material-preview.md): Game Studio's material thumbnail rebuilt in code, with the editor's own numbers: the forward renderer with no post effects on a grey background, a camera pitched and turned the same way, the three thumbnail lights, and the model scaled to its unit bounding sphere.
 - [Cylinder Mesh](cylinder-mesh.md): A cylinder generated with MeshBuilder, split into the three jobs any surface of revolution needs: place a ring of vertices, join consecutive rings into side walls, then close both ends with caps.
 - [Partial Torus Mesh](partial-torus-mesh.md): A torus defined parametrically from two angles - one around the tube, one around the ring - and cut short by limiting the second, which turns the same code into an arc, a horseshoe or a full ring without special cases.
+- [Scene Switching](scene-switching.md): Rooms as child scenes: three rooms built in code, each a scene attached to the root by adding it to Children and detached by removing it, one at a time.
 - [3D Text from a Font](letters-3d.md): Solid 3D text from a real font: TextMesh reads a font's glyph outlines through the FreeType the engine ships, triangulates them, holes and all, and extrudes them into meshes that are lit and shadowed like any other geometry.
 - [Give Me a Cube (SimulationUpdate)](simulation-update.md): Drive an entity from the physics clock instead of the render loop.
 - [Raycast](raycast.md): Two raycasts with two jobs.
@@ -24,9 +25,11 @@ A Stride subsystem used directly, or several concepts combined. These assume you
 - [Collision Group](collision-group.md): Collision groups are a number rule inside a layer: bodies with the same group Id ignore each other when their indexes are the same or adjacent, and collide when two or more apart.
 - [Collision Layer](collision-layer.md): Four layers, Players, Enemies, Shots and Debris, and the collision matrix that says which pairs collide, shown twice: as a grid on screen and as the scene itself.
 - [Debris Filtering](debris-filtering.md): A burst of a few hundred fragments lands in a walled pit.
+- [Dodgeball](dodgeball.md): Dodgeball on four collision layers: each team's players and each team's balls have a layer of their own, and the matrix says a team's balls pass through its own players and hit the other team's.
 - [Cube Fountain](cube-fountain.md): A fountain of cubes, spheres and cylinders that runs on the physics clock.
 - [Planet Gravity](planet-gravity.md): A ring of bodies orbiting a planet.
 - [Solver Substeps](solver-substeps.md): Why a tall stack wobbles and what firms it up.
+- [Layer Selection](layer-selection.md): Selecting things through collision layers.
 - [Box2D Joints](box2d-joints.md): Every Box2D joint, one rig each, in a row you can pull on: a hinge pendulum with a motor and a limit, a slider on a spring, a wheel on a suspension, a rope of distance joints, a soft weld and a motor joint that springs its box back home.
 - [Box2D Car](box2d-car.md): A car on two wheel joints over hilly terrain: the wheel joint pins the wheel, lets it turn, springs it along the suspension axis with a travel limit, and drives it with a motor whose speed is the throttle and whose zero is the brake.
 - [Box2D Character Mover](box2d-character-mover.md): A platformer character with no rigid body, on Box2D v3's mover API: a capsule the game moves itself, Quake style, asking the world only what it touches - collect the contact planes, solve a translation that respects them, sweep it - with a pogo shape cast from the feet that floats it above the ground.
@@ -37,12 +40,15 @@ A Stride subsystem used directly, or several concepts combined. These assume you
 - [Constraints - Servo vs Motor vs Limit](constraint-motors.md): The three kinds of Bepu constraint, side by side.
 - [First-Person Character (Bepu)](first-person-character.md): A first-person character built entirely from code - no Game Studio scene - on a Bepu CharacterComponent, with boxes to walk into and jump onto.
 - [Third-Person Camera](third-person-camera.md): A character on a stepped pyramid with the toolkit's follow camera behind it: the camera trails the character's steps with a short lag, swings round it on a right-drag, zooms on the wheel, and comes forward rather than look through a pillar or a step, through a raycast the game lends it.
+- [Planet Walker](planet-walker.md): A character walking round a planet with the follow camera behind it.
 - [GPU Instancing](instancing.md): Render two walls of the same cube built two different ways, side by side.
 - [Particle Gallery](particles.md): Thirty-eight particle systems on a ring of stations, all built from code: the building blocks one at a time - spawners, shapes, initializers, updaters, materials, flipbooks, soft particles - then the showpieces that put them together: a campfire, fireworks with child emitters, a tornado, a swarm driven by an updater of our own, lasers, rain that splashes, a portal, a landing burn.
 - [Debug Shapes](debug-shapes.md): The full tour of the DebugShapes package: every immediate-mode primitive it can draw, exercised from a ShapeUpdater component so the shapes animate and the batching can be seen under load.
 - [Render to Texture](render-to-texture.md): Five cameras watch one scene and each draws into a texture shown on a monitor: an overhead map, a chase camera following an orbiting ball, a fixed CCTV corner, and two cameras with a look of their own - night vision and a thermal camera, colour transforms from the toolkit's Effects package.
 - [GPU Picking](gpu-picking.md): What is under the mouse, answered by the renderer instead of by physics.
 - [Debug Shapes Usage](debug-shapes-usage.md): The short version of the debug shapes example: turn the system on, draw a sphere and a circle, done.
+- [Split Screen](split-screen.md): Two players in one window.
+- [View Model](view-model.md): The weapon that never clips: a tool held in front of a first-person camera is drawn by a camera of its own over the finished view.
 - [ShapeBatch Gallery](shape-batch.md): A ring of numbered stations, one ShapeBatch idea each, from a single disc to a scrolling textured panel: discs, rings, polygons and rectangles on any plane, sectors and arcs for pie and progress indicators, thick 3D lines, wire boxes, polyline strokes and space strokes, billboards, a corridor of rings that proves the constant-pixel outline, HUD panels with world text, fill colours, glow, dashes, gradients, opacity, the soft depth fade, overlay versus depth-tested batches, and textured fills.
 - [Stride UI - Capsule and Window](stride-ui-capsule-with-rigid-body.md): A capsule in a 3D scene with a "Hello, World" panel drawn over it using Stride's built-in UI.
 - [Stride UI - Button Hover Animation](stride-ui-button-hover-animation.md): A main menu built from code whose buttons grow a blue underline while the pointer is over them.

@@ -77,8 +77,8 @@ public class EntityInstancing : InstancingUserArray
     /// <inheritdoc />
     /// <remarks>
     /// Instance matrices are already in world space, so the default ignores the master's own transform. The
-    /// other values apply the master's transform as well: before each instance's, which moves the whole set
-    /// with the master, or after it, which moves every instance in its own frame.
+    /// other values apply the master's transform as well, in the shader's order: before each instance's, so it
+    /// acts in every instance's own frame, or after it, so the whole set moves with the master.
     /// </remarks>
     public override ModelTransformUsage ModelTransformUsage { get; set; } = ModelTransformUsage.Ignore;
 

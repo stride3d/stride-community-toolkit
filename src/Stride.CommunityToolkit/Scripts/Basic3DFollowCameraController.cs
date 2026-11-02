@@ -36,7 +36,11 @@ public delegate float? CameraObstacleTest(Vector3 from, Vector3 to);
 /// <para>
 /// Pitch is the camera's own: negative looks down from above the target, and the clamps
 /// <see cref="MinPitch"/> and <see cref="MaxPitch"/> keep it from flipping over the top or sinking
-/// through the floor. The 'F2' help section is shared with the other controllers through
+/// through the floor. Both angles are measured against <see cref="Up"/>, the world's up unless the
+/// game says otherwise: a character walking round a planet sets it to the direction away from the
+/// centre every frame, and the camera orbits and pitches over the surface. <see cref="Forward"/> and
+/// <see cref="Right"/> are the matching ground directions, what a character that walks "forward"
+/// wants to read. The 'F2' help section is shared with the other controllers through
 /// <see cref="TextOverlay"/>.
 /// </para>
 /// </remarks>
@@ -46,10 +50,12 @@ public class Basic3DFollowCameraController : SyncScript
 {
     private Vector2? _lastMousePosition;
     private Vector3 _pivot;
-    private float _yaw;
+    private Vector3 _back = Vector3.UnitZ;
+    private Vector3 _defaultBack = Vector3.UnitZ;
     private float _pitch;
     private float _distance;
-    private float _defaultYaw;
+    private float _shownDistance;
+    private float _elapsed;
     private float _defaultPitch;
     private float _defaultDistance;
     private TextOverlaySection? _instructions;
@@ -59,6 +65,12 @@ public class Basic3DFollowCameraController : SyncScript
 
     /// <summary>Gets or sets the point the camera looks at, relative to the target's position: a character's chest rather than its feet. Defaults to 1.5 up.</summary>
     public Vector3 TargetOffset { get; set; } = new(0f, 1.5f, 0f);
+
+    /// <summary>
+    /// Gets or sets the direction the camera treats as up, which the yaw turns round and the pitch leans away from.
+    /// Defaults to the world's up. On a planet, set it to the direction from the centre to the target every frame.
+    /// </summary>
+    public Vector3 Up { get; set; } = Vector3.UnitY;
 
     /// <summary>Gets or sets the distance the camera starts at when its entity begins on the pivot, in world units. Defaults to <c>6</c>.</summary>
     public float Distance { get; set; } = 6f;
@@ -102,6 +114,13 @@ public class Basic3DFollowCameraController : SyncScript
     /// <summary>Gets or sets how far short of an obstacle the camera stops, in world units. Defaults to <c>0.3</c>.</summary>
     public float ObstacleMargin { get; set; } = 0.3f;
 
+    /// <summary>
+    /// Gets or sets how long the camera takes to ease most of the way back out once an obstacle has cleared, in
+    /// seconds. Coming in is always immediate, so the camera never clips; going back out at once would be a jump.
+    /// <c>0</c> returns at once. Defaults to <c>0.3</c>.
+    /// </summary>
+    public float ObstacleReturnSmoothing { get; set; } = 0.3f;
+
     /// <summary>Gets or sets the key that collapses and expands the help section. Defaults to <see cref="Keys.F2"/>.</summary>
     public Keys HelpToggleKey { get; set; } = Keys.F2;
 
@@ -111,8 +130,26 @@ public class Basic3DFollowCameraController : SyncScript
     /// <summary>Gets the point the camera is looking at: the target plus its offset, after the follow lag.</summary>
     public Vector3 Pivot => _pivot;
 
-    /// <summary>Gets the camera's yaw in radians, the direction it looks along the ground; a character that walks "forward" walks this way.</summary>
-    public float Yaw => _yaw;
+    /// <summary>
+    /// Gets the camera's yaw in radians: the angle of its ground direction round <see cref="Up"/>, measured from the
+    /// world's +Z laid into the ground. The direction itself is kept from frame to frame and carried along as the
+    /// up changes, so a walk over a planet never flips the view; the angle is only its reading.
+    /// </summary>
+    public float Yaw
+    {
+        get
+        {
+            var (_, back, right) = Frame();
+
+            return MathF.Atan2(Vector3.Dot(_back, right), Vector3.Dot(_back, back));
+        }
+    }
+
+    /// <summary>Gets the direction the camera looks along the ground: the look direction with the pitch taken out. A character that walks "forward" walks this way.</summary>
+    public Vector3 Forward { get; private set; } = -Vector3.UnitZ;
+
+    /// <summary>Gets the direction to the camera's right along the ground.</summary>
+    public Vector3 Right { get; private set; } = Vector3.UnitX;
 
     /// <summary>
     /// Reads the starting pose from the entity's position relative to the pivot, or takes the defaults when
@@ -124,19 +161,25 @@ public class Basic3DFollowCameraController : SyncScript
         _distance = Math.Clamp(Distance, MinDistance, MaxDistance);
         _pitch = Math.Clamp(Pitch, MinPitch, MaxPitch);
 
+        var (up, back, _) = Frame();
         var offset = Entity.Transform.Position - _pivot;
+
+        _back = back;
 
         if (offset.LengthSquared() > MathUtil.ZeroTolerance)
         {
             _distance = Math.Clamp(offset.Length(), MinDistance, MaxDistance);
             var direction = offset / offset.Length();
-            _yaw = MathF.Atan2(direction.X, direction.Z);
-            _pitch = Math.Clamp(-MathF.Asin(Math.Clamp(direction.Y, -1f, 1f)), MinPitch, MaxPitch);
+
+            // The ground direction is the offset laid into the ground; pitch is the angle out of it
+            _back = Level(direction, up, back);
+            _pitch = Math.Clamp(-MathF.Asin(Math.Clamp(Vector3.Dot(direction, up), -1f, 1f)), MinPitch, MaxPitch);
         }
 
-        _defaultYaw = _yaw;
+        _defaultBack = _back;
         _defaultPitch = _pitch;
         _defaultDistance = _distance;
+        _shownDistance = _distance;
 
         Apply();
 
@@ -148,7 +191,7 @@ public class Basic3DFollowCameraController : SyncScript
                 new($"{OrbitButton} drag", "Orbit the target"),
                 new("Mouse wheel", "Zoom"),
                 new("Shift", "Hold for faster zoom"),
-                new($"Distance: {_distance:0.00}  Yaw: {MathUtil.RadiansToDegrees(_yaw):0.0}°  Pitch: {MathUtil.RadiansToDegrees(_pitch):0.0}°", Color.Yellow),
+                new($"Distance: {_distance:0.00}  Yaw: {MathUtil.RadiansToDegrees(Yaw):0.0}°  Pitch: {MathUtil.RadiansToDegrees(_pitch):0.0}°", Color.Yellow),
             ], HelpCollapsed, order: -100);
     }
 
@@ -161,7 +204,8 @@ public class Basic3DFollowCameraController : SyncScript
         if (Target is null)
             return;
 
-        Follow((float)Game.UpdateTime.Elapsed.TotalSeconds);
+        _elapsed = (float)Game.UpdateTime.Elapsed.TotalSeconds;
+        Follow(_elapsed);
 
         var mousePosition = Input.MousePosition;
         var orbiting = Input.IsMouseButtonDown(OrbitButton);
@@ -171,7 +215,7 @@ public class Basic3DFollowCameraController : SyncScript
             var delta = mousePosition - last;
 
             // Dragging right swings the camera to the right around the target; dragging up climbs
-            _yaw -= delta.X * OrbitSensitivity;
+            _back = Vector3.Transform(_back, Quaternion.RotationAxis(Frame().Up, -delta.X * OrbitSensitivity));
             _pitch = Math.Clamp(_pitch - delta.Y * OrbitSensitivity, MinPitch, MaxPitch);
         }
 
@@ -181,7 +225,7 @@ public class Basic3DFollowCameraController : SyncScript
 
         if (Input.IsKeyPressed(Keys.H))
         {
-            _yaw = _defaultYaw;
+            _back = _defaultBack;
             _pitch = _defaultPitch;
             _distance = _defaultDistance;
         }
@@ -229,17 +273,64 @@ public class Basic3DFollowCameraController : SyncScript
     /// </summary>
     private void Apply()
     {
-        var rotation = Quaternion.RotationYawPitchRoll(_yaw, _pitch, 0f);
-        var back = Vector3.Transform(Vector3.UnitZ, rotation);
+        var (up, back0, _) = Frame();
+
+        // The ground direction is carried from the last frame and laid into this frame's ground, which is what keeps
+        // the view continuous as the up turns under a walker; pitch then leans it out of the ground about the right axis
+        _back = Level(_back, up, back0);
+
+        var level = _back;
+        var right = Vector3.Cross(up, level);
+        var back = Vector3.Transform(level, Quaternion.RotationAxis(right, _pitch));
         var wanted = _pivot + back * _distance;
-        var distance = _distance;
+        var allowed = _distance;
 
         if (ObstacleTest?.Invoke(_pivot, wanted) is { } blocked)
         {
-            distance = Math.Clamp(blocked - ObstacleMargin, 0f, _distance);
+            allowed = Math.Clamp(blocked - ObstacleMargin, 0f, _distance);
         }
 
-        Entity.Transform.Rotation = rotation;
+        // In at once, out with a lag: the camera never clips, and never jumps when the way behind it clears
+        var distance = allowed < _shownDistance || ObstacleReturnSmoothing <= 0f
+            ? allowed
+            : _shownDistance + (allowed - _shownDistance) * (1f - MathF.Exp(-_elapsed / ObstacleReturnSmoothing));
+
+        _shownDistance = distance;
+
+        Forward = -level;
+        Right = right;
+
+        var basis = Matrix.Identity;
+
+        basis.Right = right;
+        basis.Up = Vector3.Cross(back, right);
+        basis.Backward = back;
+
+        Entity.Transform.Rotation = Quaternion.RotationMatrix(basis);
         Entity.Transform.Position = _pivot + back * distance;
+    }
+
+    /// <summary>A direction laid into the ground the up axis defines and normalised, or the fallback when it stands along the up.</summary>
+    private static Vector3 Level(Vector3 direction, Vector3 up, Vector3 fallback)
+    {
+        var level = direction - up * Vector3.Dot(direction, up);
+
+        return level.LengthSquared() < 1e-6f ? fallback : Vector3.Normalize(level);
+    }
+
+    /// <summary>
+    /// The frame the yaw is read in: <see cref="Up"/> normalised, the back direction of zero yaw, which is the
+    /// world's +Z laid into the ground, or +X when up runs along Z, and the right direction that goes with it.
+    /// </summary>
+    private (Vector3 Up, Vector3 Back, Vector3 Right) Frame()
+    {
+        var up = Up.LengthSquared() > MathUtil.ZeroTolerance ? Vector3.Normalize(Up) : Vector3.UnitY;
+        var back = Vector3.UnitZ - up * Vector3.Dot(Vector3.UnitZ, up);
+
+        if (back.LengthSquared() < 1e-6f) back = Vector3.UnitX - up * Vector3.Dot(Vector3.UnitX, up);
+
+        back.Normalize();
+
+        return (up, back, Vector3.Cross(up, back));
     }
 }

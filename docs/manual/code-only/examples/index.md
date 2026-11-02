@@ -498,6 +498,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/scene-switching.webp" class="card-img-top" alt="Screenshot of the Scene Switching example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="scene-switching.md">Scene Switching</a></h3>
+                <p><span class="badge text-bg-secondary">Scripts</span></p>
+                <p class="card-text">Rooms as child scenes: three rooms built in code, each a scene attached to the root by adding it to Children and detached by removing it, one at a...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/letters-3d.webp" class="card-img-top" alt="Screenshot of the 3D Text from a Font example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="letters-3d.md">3D Text from a Font</a></h3>
@@ -598,6 +608,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/dodgeball.webp" class="card-img-top" alt="Screenshot of the Dodgeball example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="dodgeball.md">Dodgeball</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">Dodgeball on four collision layers: each team's players and each team's balls have a layer of their own, and the matrix says a team's balls pass...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/cube-fountain.webp" class="card-img-top" alt="Screenshot of the Cube Fountain example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="cube-fountain.md">Cube Fountain</a></h3>
@@ -623,6 +643,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="solver-substeps.md">Solver Substeps</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
                 <p class="card-text">Why a tall stack wobbles and what firms it up.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/layer-selection.webp" class="card-img-top" alt="Screenshot of the Layer Selection example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="layer-selection.md">Layer Selection</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">Selecting things through collision layers.</p>
             </div>
         </div>
     </div>
@@ -728,6 +758,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/planet-walker.webp" class="card-img-top" alt="Screenshot of the Planet Walker example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="planet-walker.md">Planet Walker</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">A character walking round a planet with the follow camera behind it.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/instancing.webp" class="card-img-top" alt="Screenshot of the GPU Instancing example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="instancing.md">GPU Instancing</a></h3>
@@ -783,6 +823,26 @@ Prefer a list? Each level has its own page, linked from the table of contents.
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="debug-shapes-usage.md">Debug Shapes Usage</a></h3>
                 <p><span class="badge text-bg-secondary">Debug</span></p>
                 <p class="card-text">The short version of the debug shapes example: turn the system on, draw a sphere and a circle, done.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/split-screen.webp" class="card-img-top" alt="Screenshot of the Split Screen example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="split-screen.md">Split Screen</a></h3>
+                <p><span class="badge text-bg-secondary">Rendering</span></p>
+                <p class="card-text">Two players in one window.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/view-model.webp" class="card-img-top" alt="Screenshot of the View Model example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="view-model.md">View Model</a></h3>
+                <p><span class="badge text-bg-secondary">Rendering</span></p>
+                <p class="card-text">The weapon that never clips: a tool held in front of a first-person camera is drawn by a camera of its own over the finished view.</p>
             </div>
         </div>
     </div>

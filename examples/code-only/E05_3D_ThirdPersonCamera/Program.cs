@@ -111,9 +111,8 @@ void Update(Scene scene, GameTime time)
     var input = game.Input;
 
     // Forward is away from the camera along the ground, whatever the camera's pitch
-    var (sinYaw, cosYaw) = MathF.SinCos(follow.Yaw);
-    var forward = new Vector3(-sinYaw, 0f, -cosYaw);
-    var right = new Vector3(cosYaw, 0f, -sinYaw);
+    var forward = follow.Forward;
+    var right = follow.Right;
     var move = Vector3.Zero;
 
     if (input.IsKeyDown(Keys.W) || input.IsKeyDown(Keys.Up)) move += forward;

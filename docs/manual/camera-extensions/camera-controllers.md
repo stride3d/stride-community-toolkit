@@ -156,14 +156,17 @@ pivot starts at `Distance` and `Pitch`, behind the target and a little above.
 | Right mouse drag | Swing the camera round the target; pitch clamped between about −80° and 20° | `OrbitButton`, `OrbitSensitivity`, `MinPitch`/`MaxPitch` |
 | Mouse wheel | Closer or further, 10 % of the distance per notch | `ZoomStep` (0.1), `MinDistance` (1), `MaxDistance` (30) |
 | Hold <kbd>Shift</kbd> | Faster zoom | `SpeedFactor` (5) |
+| A wall behind the camera | The camera comes forward to stay in front of it, at once, and eases back when it clears | `ObstacleTest`, `ObstacleMargin` (0.3), `ObstacleReturnSmoothing` (0.3) |
 | <kbd>H</kbd> | Reset to the starting view | - |
 | <kbd>F2</kbd> | Collapse or expand the help, with the live distance and angles | `HelpToggleKey`, `HelpCollapsed` |
 
 The controller knows nothing of physics, so walls are the game's to report: give it an
 `ObstacleTest`, a delegate that takes the pivot and the wanted camera position and returns the
 distance to the first thing in the way or `null` for a clear line, and the camera stops
-`ObstacleMargin` short of the hit. A Bepu raycast is the usual answer, with the character on a layer
-the ray's mask leaves out, so the camera does not stop at its own target:
+`ObstacleMargin` short of the hit. It comes in at once, so it never clips, and eases back out over
+`ObstacleReturnSmoothing` once the way is clear, so it never jumps. A Bepu raycast is the usual
+answer, with the character on a layer the ray's mask leaves out, so the camera does not stop at its
+own target:
 
 ```csharp
 camera.Add(new Basic3DFollowCameraController
@@ -180,8 +183,12 @@ camera.Add(new Basic3DFollowCameraController
 });
 ```
 
-`Yaw` is the direction the camera looks along the ground, which is what a character that walks
-"forward" wants to read. `E05_3D_ThirdPersonCamera` uses it that way.
+`Forward` and `Right` are the camera's directions along the ground, which is what a character that
+walks "forward" wants to read; `E05_3D_ThirdPersonCamera` uses them that way. Both angles are
+measured against `Up`, the world's up by default. A game on a planet sets `Up` to the direction
+from the centre to the target every frame, and the camera orbits and pitches over the surface; the
+ground direction is carried along as the up turns, so the view never flips under a walker.
+`E05_3D_PlanetWalker` does that.
 
 ## When the defaults are wrong
 

@@ -136,6 +136,9 @@ read `WarpElapsed`. Bepu's `BepuSimulation.TimeScale` adds its own factor on top
 
 ### How do I save the player's progress?
 
+The [Save and Load Game Data](save-and-load.md) page has the whole of it: where the file goes on
+Stride's virtual file system, and a JSON route and a YAML route for what is in it.
+
 Stride has no save system. Write a plain data class to a file with a serializer such as
 `System.Text.Json`. The [Cube Clicker example](code-only/examples/stride-ui-cube-clicker.md) saves
 and loads its data under `VirtualFileSystem.ApplicationData`.
@@ -201,6 +204,43 @@ One unit is one metre. Physics and the default lighting assume that scale.
 Use the toolkit's camera extensions: `ScreenToWorldPoint`, `ScreenToWorldRaySegment` and
 `WorldToScreenPoint`. See [Camera extensions](camera-extensions/index.md) and
 [Picking](engine-patterns.md#picking-from-cursor-to-world-point).
+
+## Input
+
+### How do I show a custom cursor?
+
+Hide the system's and draw your own where the mouse is, every frame, in screen space. `MousePosition`
+is normalized, so multiply by the batch's `ScreenSize` for pixels; a batch drawn after the post effects
+keeps the cursor crisp and on top.
+
+```csharp
+game.IsMouseVisible = false;
+var cursor = game.AddShapeBatch(afterPostEffects: true);
+
+// Every frame
+var at = game.Input.MousePosition * cursor.ScreenSize;
+
+cursor.Screen = true;
+cursor.DrawPixelDisc(new Vector3(at, 0f), 6f, Color.White);
+cursor.DrawPixelRing(new Vector3(at, 0f), 10f, Color.Black);
+cursor.Screen = false;
+```
+
+### How do I detect a double click?
+
+`InputManager` reports presses, not double clicks, so keep the time and place of the last press and
+compare: a second press within a third of a second and a few pixels of the first is a double click.
+
+```csharp
+if (input.IsMouseButtonPressed(MouseButton.Left))
+{
+    var now = time.Total.TotalSeconds;
+    var doubleClick = now - lastPress < 0.3 && Vector2.Distance(input.MousePosition, lastPressAt) < 0.01f;
+
+    lastPress = doubleClick ? 0 : now;   // a triple press is not two double clicks
+    lastPressAt = input.MousePosition;
+}
+```
 
 ## Rendering
 

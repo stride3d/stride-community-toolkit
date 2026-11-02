@@ -270,6 +270,26 @@ Remarks:
 - Screen shapes are drawn at the near plane, in front of scene geometry.
 - The `Screen` property is not the billboard plane, which faces the camera in the world.
 
+A bar over a unit that keeps its size whatever the distance is a screen shape placed by
+`TryWorldToScreenPoint`: the camera says where the unit's head lands, and the bar is drawn there in
+pixels.
+
+```csharp
+if (camera.TryWorldToScreenPoint(unit.Transform.Position + Vector3.UnitY * 1.2f, out var head))
+{
+    var at = new Vector2(head.X, head.Y) * shapes.ScreenSize;   // 60 by 8 pixels, near or far
+
+    shapes.Screen = true;
+    shapes.BorderWidth = 1f;
+    shapes.Fill.Set(Color.Black, 0.6f);
+    shapes.DrawRectangle(new Vector3(at, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(60f, 8f), Color.White);
+    shapes.BorderWidth = 0f;
+    shapes.Fill.Set(Color.LimeGreen, 1f);
+    shapes.DrawRectangle(new Vector3(at.X - 30f + 30f * health, at.Y, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(60f * health, 6f), Color.LimeGreen);
+    shapes.Screen = false;
+}
+```
+
 ## Draw after post effects
 
 A batch in the scene is drawn into the HDR buffer before post processing. Auto exposure and tone mapping then
@@ -287,6 +307,24 @@ var hud = game.AddShapeBatch(afterPostEffects: true);
 
 `afterPostEffects` requires the toolkit's UI stage in the compositor. Without it, the batch draws in the
 transparent stage.
+
+## Fade and wipe
+
+`ScreenFade` covers the window with a colour and clears it again: a fade to black and back round a
+scene change, a cut, or a bar that wipes across. `game.AddScreenFade()` puts one in the scene, and it
+draws itself every frame through a batch after the post effects, so nothing else is touched.
+
+```csharp
+var fade = game.AddScreenFade();
+
+fade.Transition(0.35f, () => LoadLevel(2), 0.35f);   // out, the action while covered, in
+fade.Wipe(0.4f, Rebuild, 0.4f);                       // a bar sweeps in from the left and on out to the right
+fade.Cut(covered: true);                              // at once
+```
+
+`Transition` and `Wipe` run their action between the two halves, which is where a scene is switched or
+a player moved: the player sees the colour and then the result, never the swap half done. `Covered`
+and `IsRunning` say where it is. `E02_3D_SceneSwitching` changes rooms under it.
 
 ## Pick shapes
 
