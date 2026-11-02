@@ -2,8 +2,8 @@ using E10_3D_Instancing_EntityTransform;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Instancing;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -81,13 +81,16 @@ var sceneSetup = new SceneSetup3D
 {
     // A large ground so big drops cannot spill over the edge; the static collider comes with it
     Ground = GroundSetup.Plane(new Vector2(300)),
-    Profiler = true
+    Profiler = true,
+    Resizable = true
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
+    game.AddGrabber();
+
     scene = rootScene;
 
     TextOverlay.GetOrCreate(game).AddSection("Instancing", BuildOverlayLines);
