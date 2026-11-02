@@ -395,4 +395,23 @@ public static class CameraComponentExtensions
 
         return true;
     }
+
+    /// <summary>
+    /// Whether a world position lands inside a rectangle of the screen: the test a marquee selection makes for every
+    /// candidate once the mouse is released. The corners are normalized screen points, top-left (0,0) to bottom-right
+    /// (1,1), in either order; a position behind the camera or off the sides of the view is never inside.
+    /// </summary>
+    /// <param name="cameraComponent">The camera the screen belongs to.</param>
+    /// <param name="position">The world space position.</param>
+    /// <param name="cornerA">One corner of the rectangle, normalized.</param>
+    /// <param name="cornerB">The opposite corner, normalized.</param>
+    /// <returns><see langword="true"/> when the position is in view and inside the rectangle.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="cameraComponent"/> is <see langword="null"/>.</exception>
+    public static bool IsInScreenRectangle(this CameraComponent cameraComponent, Vector3 position, Vector2 cornerA, Vector2 cornerB)
+    {
+        if (!cameraComponent.TryWorldToScreenPoint(position, out var screen)) return false;
+
+        return screen.X >= MathF.Min(cornerA.X, cornerB.X) && screen.X <= MathF.Max(cornerA.X, cornerB.X)
+            && screen.Y >= MathF.Min(cornerA.Y, cornerB.Y) && screen.Y <= MathF.Max(cornerA.Y, cornerB.Y);
+    }
 }
