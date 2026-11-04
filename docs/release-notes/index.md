@@ -167,6 +167,7 @@ Helpers whose names said how they worked, or abbreviated what they read, are ren
 | `ImmediateDebugRenderSystem` dropped the newest shape when a queue was full | drops the oldest | What is drawn is always the latest asked for; `MaxPrimitives` and `MaxPrimitivesWithLifetime` say so. |
 | `AddImmediateDebugRenderFeature()` threw `NullReferenceException` for a missing stage | `InvalidOperationException` naming the stage and what creates it | |
 | `ImGuiSystem.ImGuiContext` public field | read-only property | The same value. |
+| `new ImGuiSystem(services, graphicsDeviceManager, inputManager)` | `new ImGuiSystem(services, inputManager)` | The device is read from the game. |
 | ImGui text fields did not copy or paste | they use dear imgui's own clipboard hooks, the Win32 clipboard on Windows | The toolkit's empty hooks had replaced them. |
 | `ShapeBatch.BorderWidth` defaulted to 3 | 0 | A shape is exactly its size; the 3-pixel border was the Box2D testbed look, which a solid fill in the same colour hid. Set `BorderWidth = 3` for the old look. The gold images moved with it. |
 | `DrawRing`, `DrawPixelRing` and `DrawArc` without a width were `BorderWidth` wide | `StrokeWidth` wide, 1 pixel by default | The two are independent, so a borderless fill and a visible ring coexist. Where `BorderWidth` was set for a ring, set `StrokeWidth`. |
@@ -198,7 +199,15 @@ Helpers whose names said how they worked, or abbreviated what they read, are ren
 - `MathUtilEx.MoveTowards(current, target, maxDelta)` for `float`, `Vector2` and `Vector3`: a step of at most that length towards a target, landing on it exactly. With `speed * deltaTime` as the step a value arrives at a constant speed and stops, where a lerp slows down and never quite arrives. `E02_2D_EasingBasics` shows it as a fifth lane that keeps pace with the linear one and keeps no clock.
 - `InputManagerExtensions` in `Stride.CommunityToolkit.Input`: `GetLeftThumb()`, `GetRightThumb()`, `GetLeftTrigger()`, `GetRightTrigger()`, `IsGamePadButtonDown()` and `IsGamePadButtonPressed()` on `InputManager`, for the default pad, a pad by index or every connected pad at once (`...Any`), each past a dead zone and stretched back to the full range. `Basic3DCameraController` reads its pad through them, so a stick that has sprung back no longer creeps the camera.
 - `BaseWindow.WindowPos` and `WindowSize` are where an ImGui window starts, applied once per run, so the window can be dragged and resized; they were applied every frame, which pinned it.
+- The ImGui `Inspector` shows a member's XML summary behind a `?` button when the assembly's documentation file is beside it. The loader looked for a `file:///` prefix that `Assembly.Location` never has, so it found nothing before.
 - `ShapeBatch.StrokeWidth`: the width of the rings and arcs drawn without a width, 1 pixel by default and independent of the border; see the breaking change above.
 - `E05_3D_ResetOutOfBounds`: a row of balls rolls off a tilted plank with no ground under it, and a ball below the red line goes back to the top with `TeleportAtRest`; the smallest physics pattern every prototype needs.
 - The three galleries label their stations with world text that faces the visitor and leans back by the view's pitch, in place of screen text, so a label shrinks with distance like the station under it.
 - `scene.FindEntity(name, recursive: false)`: the first entity with a name among a scene's top-level entities, or with `recursive: true` among their descendants too. `entity.FindEntity` and `entity.FindEntityRecursive` now call it on the entity's scene, and an entity that is not in a scene gets an `InvalidOperationException` that names the entity and says what to do, instead of a `NullReferenceException`.
+
+### 🐞 Bug Fixes
+
+- `E10_2D_StressPile` attaches a `Body2DComponent`, as its page says; the pile was made of 3D bodies.
+- A full `ImmediateDebugRenderSystem` queue made room with one head removal per push, a shift of the whole list every time; it drops the oldest sixteenth of its capacity at once.
+- A documentation file beside an assembly that does not parse is no documentation to the ImGui `Inspector`, not an exception out of the window being drawn.
+- `AddOnEventAction` and `AddOnEventTask` with an `EventKey` check their action before the receiver links itself to the key.

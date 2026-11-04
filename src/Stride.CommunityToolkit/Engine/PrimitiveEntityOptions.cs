@@ -59,7 +59,7 @@ public class PrimitiveEntityOptions
 
     /// <summary>
     /// Whether the entity draws the one model the game keeps for this shape and material, the one
-    /// <see cref="GameExtensions.GetOrCreateModel(Stride.Games.IGame, Rendering.ProceduralModels.Primitive3D, Material)"/>
+    /// <see cref="GameModelExtensions.GetOrCreateModel(Stride.Games.IGame, Rendering.ProceduralModels.Primitive3D, Material)"/>
     /// returns, instead of a model generated for this call alone. Defaults to <see langword="false"/>.
     /// Set it for the many entities that draw the same thing: one mesh and one pair of GPU buffers
     /// between them, at the price that a change to the model shows on all of them.

@@ -193,7 +193,7 @@ public static class TextMesh
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(options.CurveQuality, nameof(options.CurveQuality));
 
         if (!float.IsFinite(options.LetterSpacing))
-            throw new ArgumentOutOfRangeException(nameof(options.LetterSpacing), options.LetterSpacing, "The letter spacing must be a finite number.");
+            throw new ArgumentOutOfRangeException(nameof(options), options.LetterSpacing, "The letter spacing must be a finite number.");
 
         return options;
 

@@ -29,7 +29,7 @@ public static class HeightmapExtensions
     /// Divisor applied to each stored sample before it is mapped into <see cref="Heightmap.HeightRange"/>;
     /// 255 suits 8-bit greyscale heightmaps.
     /// </summary>
-    public const float HeightMultiplier = 255.0f;
+    public static readonly float HeightMultiplier = 255.0f;
 
     // The vertex colour of a terrain mesh, an earthy brown
     private static readonly Vector4 TerrainColor = new(149, 135, 118, 255);

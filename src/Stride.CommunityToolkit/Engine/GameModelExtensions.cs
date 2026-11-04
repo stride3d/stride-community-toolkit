@@ -6,7 +6,10 @@ using Stride.Rendering.ProceduralModels;
 
 namespace Stride.CommunityToolkit.Engine;
 
-public static partial class GameExtensions
+/// <summary>
+/// The models a game keeps: one per shape and material, shared by every entity that asks for it.
+/// </summary>
+public static class GameModelExtensions
 {
     /// <summary>
     /// Returns one model for a 3D <paramref name="shape"/> and <paramref name="material"/>, generated the first time the pair is asked for and the same object on every later call, so many entities draw the same mesh from the same vertex and index buffers.
@@ -17,7 +20,7 @@ public static partial class GameExtensions
     /// <returns>The shared model.</returns>
     /// <remarks>
     ///
-    /// <para><see cref="CreatePrimitive(IGame, Primitive3D, PrimitiveEntityOptions)"/> generates a mesh and a pair of GPU buffers per call, which is what a scene of a few hundred distinct things wants. A scene of ten thousand spheres wants one mesh: through one shared model they cost about 400 MB where ten thousand generated models cost about 1.5 GB. This is the model to hand an instancing master, or to put on each entity's <see cref="ModelComponent"/>;
+    /// <para><see cref="GameExtensions.CreatePrimitive(IGame, Primitive3D, PrimitiveEntityOptions)"/> generates a mesh and a pair of GPU buffers per call, which is what a scene of a few hundred distinct things wants. A scene of ten thousand spheres wants one mesh: through one shared model they cost about 400 MB where ten thousand generated models cost about 1.5 GB. This is the model to hand an instancing master, or to put on each entity's <see cref="ModelComponent"/>;
     /// <see cref="PrimitiveEntityOptions.ShareModel"/> makes <c>CreatePrimitive</c> do that. </para>
     ///
     /// <para>The model is one object: a material swapped on it, or a mesh changed in it, shows on every entity that shares it. </para>
@@ -48,11 +51,11 @@ public static partial class GameExtensions
     }
 
     /// <summary>The model a primitive entity draws: the shared one when the options ask for it, otherwise a fresh one.</summary>
-    private static Model ModelFor(IGame game, Primitive3D shape, PrimitiveEntityOptions options)
+    internal static Model ModelFor(IGame game, Primitive3D shape, PrimitiveEntityOptions options)
         => options.ShareModel ? game.GetOrCreateModel(shape, options.Material) : GenerateModel(game, ProceduralModelBuilder.Build(shape), options.Material);
 
     /// <inheritdoc cref="ModelFor(IGame, Primitive3D, PrimitiveEntityOptions)"/>
-    private static Model ModelFor(IGame game, Primitive2D shape, PrimitiveEntityOptions options)
+    internal static Model ModelFor(IGame game, Primitive2D shape, PrimitiveEntityOptions options)
         => options.ShareModel ? game.GetOrCreateModel(shape, options.Material) : GenerateModel(game, ProceduralModelBuilder.Build(shape), options.Material);
 
     /// <summary>A model generated from a procedural description, with the material added when there is one.</summary>

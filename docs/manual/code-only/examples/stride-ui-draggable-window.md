@@ -20,7 +20,7 @@ The `Program.cs` file shows how to:
 - Spawning scene objects from a UI button
 - Keeping a UI counter in step with the scene
 - Removing entities that fall out of the world
-- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, AddGrabber
 
 ![Stride UI - Draggable Window](media/stride-ui-draggable-window.webp)
 

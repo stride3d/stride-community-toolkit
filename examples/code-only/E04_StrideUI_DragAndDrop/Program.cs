@@ -80,7 +80,7 @@ concepts:
   - Spawning scene objects from a UI button
   - Keeping a UI counter in step with the scene
   - Removing entities that fall out of the world
-  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, AddGrabber"
 tags:
   - 3D
   - UI

@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Xml;
+using System.Xml.XPath;
 using WebUtility = System.Net.WebUtility;
 
 namespace Stride.CommunityToolkit.ImGui.DebugTools;
@@ -13,7 +14,7 @@ internal static class XMLDocumentation
 {
     // Two-level cache: one xml document per assembly, one parsed entry per member. An assembly without a
     // documentation file, and a member without an entry, are cached as null so the search is not repeated
-    private static readonly ConcurrentDictionary<Assembly, XmlDocument?> _documents = new();
+    private static readonly ConcurrentDictionary<Assembly, IXPathNavigable?> _documents = new();
     private static readonly ConcurrentDictionary<MemberInfo, CachedDocumentation?> _documentation = new();
 
     /// <summary> Returns false if the documentation file wasn't found </summary>
@@ -30,7 +31,7 @@ internal static class XMLDocumentation
         {
             var document = _documents.GetOrAdd(member.Module.Assembly, LoadDocument);
 
-            documentation = document?["doc"]?["members"]?.SelectSingleNode($"member[@name='{DocumentationId(member)}']") is XmlElement element
+            documentation = document?.CreateNavigator()?.SelectSingleNode($"/doc/members/member[@name='{DocumentationId(member)}']")?.UnderlyingObject is XmlElement element
                 ? new CachedDocumentation(element)
                 : null;
 
@@ -41,7 +42,7 @@ internal static class XMLDocumentation
     }
 
     // The xml file the compiler writes next to the assembly, when the build produced one
-    private static XmlDocument? LoadDocument(Assembly assembly)
+    private static IXPathNavigable? LoadDocument(Assembly assembly)
     {
         if (string.IsNullOrEmpty(assembly.Location)) return null;
 
@@ -51,7 +52,16 @@ internal static class XMLDocumentation
 
         var document = new XmlDocument();
 
-        document.Load(path);
+        try
+        {
+            document.Load(path);
+        }
+        catch (Exception e) when (e is XmlException or IOException or UnauthorizedAccessException)
+        {
+            // A file beside the assembly that is not the compiler's: cached as no documentation,
+            // rather than an exception thrown out of the window being drawn
+            return null;
+        }
 
         return document;
     }

@@ -130,8 +130,9 @@ public class ShapeUpdater : SyncScript
 
     private void ResizeDebugDrawCapacity(int primitives)
     {
-        _debugDraw.MaxPrimitivesWithLifetime = primitives * 2 + 8;
-        _debugDraw.MaxPrimitives = primitives * 2 + 8;
+        // Two shapes per arrow, plus the few dozen the hit markers, bounds and axes add on top
+        _debugDraw.MaxPrimitivesWithLifetime = primitives * 2 + 64;
+        _debugDraw.MaxPrimitives = primitives * 2 + 64;
     }
 
     private void Simulate(float dt)

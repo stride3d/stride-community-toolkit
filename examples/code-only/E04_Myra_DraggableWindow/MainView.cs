@@ -5,7 +5,7 @@ namespace E04_Myra_DraggableWindow;
 /// <summary>
 /// The main view: a health bar and a draggable test window.
 /// </summary>
-public class MainView : Panel
+public sealed class MainView : Panel
 {
     /// <summary>The draggable test window, with a sample label.</summary>
     public Window ExampleWindow { get; }

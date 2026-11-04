@@ -19,7 +19,7 @@ The `Program.cs` file shows how to:
 - Tagging entities with a name so the scene can be torn down and rebuilt
 - Inspecting the generated colliders and debug meshes with AddPhysicsDebug, on P and F11
 - Adding keyboard instructions as a TextOverlay section
-- Using helpers: SceneSetup3D, AddGrabber, AddPhysicsDebug, CreatePrimitive
+- Using helpers: SceneSetup3D, AddGrabber, AddPhysicsDebug, CreatePrimitive, AddGroundGizmo
 
 ![3D Primitives](media/primitives-3d.webp)
 

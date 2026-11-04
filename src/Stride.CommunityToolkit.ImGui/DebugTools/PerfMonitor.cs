@@ -94,9 +94,7 @@ public class PerfMonitor : BaseWindow
     /// <inheritdoc />
     protected override Vector2? WindowSize => _windowSizeApplied ? null : new Vector2(420f, 240f);
 
-    private Vector2 GetGraphSize() => new(MaxWidth(), GraphHeight * Scale);
-
-    private static float MaxWidth() => GetContentRegionAvail().X;
+    private Vector2 GetGraphSize() => new(GetContentRegionAvail().X, GraphHeight * Scale);
 
     /// <summary>
     /// Changes how many frames the history graphs keep, preserving the most recent samples.
@@ -321,7 +319,7 @@ public class PerfMonitor : BaseWindow
     {
         using (Child(cln, new Vector2(0f, FrameHeight)))
         {
-            for (var i = 0; i < samples.Count; i++) DrawSample(default, MaxWidth(), samples[i], start, duration);
+            for (var i = 0; i < samples.Count; i++) DrawSample(default, GetContentRegionAvail().X, samples[i], start, duration);
         }
     }
 

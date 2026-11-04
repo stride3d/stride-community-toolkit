@@ -8,7 +8,7 @@ using Stride.UI.Controls;
 
 namespace E04_StrideUI_DragAndDrop;
 
-public class UIManager
+public sealed class UIManager : IDisposable
 {
     /// <summary>
     /// The root UI entity containing all UI elements.
@@ -117,4 +117,7 @@ public class UIManager
         TextAlignment = TextAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center
     };
+
+    /// <summary>Disposes the UI entity and everything under it.</summary>
+    public void Dispose() => Entity.Dispose();
 }

@@ -56,7 +56,7 @@ public sealed class DisplayScale : GameSystemBase
     private static readonly Logger _log = GlobalLogger.GetLogger(nameof(DisplayScale));
 
     /// <summary>The smallest value ever reported, so a broken query cannot make everything vanish.</summary>
-    public const float MinScale = 0.25f;
+    public static readonly float MinScale = 0.25f;
 
     private const int PollFrames = 60;
 

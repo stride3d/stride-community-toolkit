@@ -21,7 +21,7 @@ The `Program.cs` file shows how to:
 - Deciding between a scene-wide and an entity-scoped renderer
 - Labelling entities with the toolkit's EntityTextComponent and EntityTextRenderer
 - Initialising and releasing renderer resources at the right time
-- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, AddGrabber
 
 ![Custom Scene Renderers](media/renderer.webp)
 

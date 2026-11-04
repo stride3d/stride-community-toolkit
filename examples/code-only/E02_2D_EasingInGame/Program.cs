@@ -270,10 +270,18 @@ static Entity Label(string text, Vector3 position, Scene scene)
 }
 
 /// <summary>A coin: its entity, where it lives, the tween that brings it in and the tween that takes it to the score.</summary>
-sealed record Coin(Entity Entity, Vector3 Spot, Tween Pop, Tween Fly)
+sealed class Coin(Entity entity, Vector3 spot, Tween pop, Tween fly)
 {
+    internal Entity Entity { get; } = entity;
+
+    internal Vector3 Spot { get; } = spot;
+
+    internal Tween Pop { get; } = pop;
+
+    internal Tween Fly { get; } = fly;
+
     /// <summary>Whether this coin's flight has been added to the score, so it counts once.</summary>
-    public bool Counted { get; set; }
+    internal bool Counted { get; set; }
 }
 
 /// <summary>A "+10" on its way up: the label, where it started and the tween that lifts and fades it.</summary>

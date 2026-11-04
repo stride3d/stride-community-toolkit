@@ -282,7 +282,8 @@ public sealed unsafe class MeshFont : IDisposable
             {
                 lock (LibraryLock)
                 {
-                    FreeType.DoneFace(_face);
+                    // A failure to release has nothing to act on at this point; the face is dropped either way
+                    _ = FreeType.DoneFace(_face);
                 }
 
                 _face = null;

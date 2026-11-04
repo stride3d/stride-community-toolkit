@@ -37,7 +37,7 @@ public sealed class ShapeComponent : ActivableEntityComponent
     /// Assigned to <see cref="BorderWidth"/>, <see cref="FillAlpha"/> or <see cref="GlowWidth"/> to take
     /// the batch's value instead of one set here.
     /// </summary>
-    public const float Inherit = -1f;
+    public static readonly float Inherit = -1f;
 
     /// <summary>
     /// The outline of a box of <paramref name="size"/> centred on the origin, counter-clockwise from the bottom-left

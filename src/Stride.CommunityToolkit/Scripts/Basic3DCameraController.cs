@@ -210,20 +210,7 @@ public class Basic3DCameraController : SyncScript
 
         var movementDirection = Vector3.Zero;
 
-        if (Gamepad && Input.HasGamePad)
-        {
-            // The left stick is signed on both axes; the triggers are positive, one lowering and the other raising.
-            // The reads apply a dead zone, so a stick that has sprung back does not creep the camera
-            var leftThumb = Input.GetLeftThumb();
-            movementDirection.Z += leftThumb.Y;
-            movementDirection.X += leftThumb.X;
-            movementDirection.Y -= Input.GetLeftTrigger();
-            movementDirection.Y += Input.GetRightTrigger();
-
-            // Sprint while A or either shoulder is held
-            if (Input.IsGamePadButtonDown(GamePadButton.A) || Input.IsGamePadButtonDown(GamePadButton.LeftShoulder) || Input.IsGamePadButtonDown(GamePadButton.RightShoulder))
-                speed *= SpeedFactor;
-        }
+        if (Gamepad && Input.HasGamePad) ApplyGamePadMovement(ref movementDirection, ref speed);
 
         if (Input.HasKeyboard)
         {
@@ -257,6 +244,22 @@ public class Basic3DCameraController : SyncScript
 
         // Finally, push all of that to the translation variable which will be used within UpdateTransform()
         _translation += movementDirection * KeyboardMovementSpeed * speed;
+    }
+
+    /// <summary>The left stick and the triggers into the direction, the sprint buttons into the speed.</summary>
+    private void ApplyGamePadMovement(ref Vector3 movementDirection, ref float speed)
+    {
+        // The left stick is signed on both axes; the triggers are positive, one lowering and the other raising.
+        // The reads apply a dead zone, so a stick that has sprung back does not creep the camera
+        var leftThumb = Input.GetLeftThumb();
+        movementDirection.Z += leftThumb.Y;
+        movementDirection.X += leftThumb.X;
+        movementDirection.Y -= Input.GetLeftTrigger();
+        movementDirection.Y += Input.GetRightTrigger();
+
+        // Sprint while A or either shoulder is held
+        if (Input.IsGamePadButtonDown(GamePadButton.A) || Input.IsGamePadButtonDown(GamePadButton.LeftShoulder) || Input.IsGamePadButtonDown(GamePadButton.RightShoulder))
+            speed *= SpeedFactor;
     }
 
     private void KeyboardAndGamePadBasedRotation(float deltaTime)
