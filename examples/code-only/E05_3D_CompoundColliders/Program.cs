@@ -217,10 +217,10 @@ IReadOnlyList<TextElement> BuildOverlayLines()
 }
 
 /// <summary>One piece of a rig: its shape, its pose in the rig's own space, its mass and its material.</summary>
-record Piece(Primitive3D Shape, Vector3 Position, Quaternion Rotation, float Mass, Material Material);
+sealed record Piece(Primitive3D Shape, Vector3 Position, Quaternion Rotation, float Mass, Material Material);
 
 /// <summary>A compound body and where it started.</summary>
-record Rig(string Name, Entity Entity, BodyComponent Body, Vector3 Start);
+sealed record Rig(string Name, Entity Entity, BodyComponent Body, Vector3 Start);
 
 /*
 ---example-metadata

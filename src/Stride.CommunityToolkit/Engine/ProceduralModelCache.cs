@@ -16,7 +16,7 @@ internal sealed class ProceduralModelCache
     private readonly Dictionary<(object Shape, Material? Material), Model> _models = [];
 
     /// <summary>The model for a shape and material, built by <paramref name="build"/> the first time it is asked for.</summary>
-    public Model GetOrAdd(object shape, Material? material, Func<Model> build)
+    internal Model GetOrAdd(object shape, Material? material, Func<Model> build)
     {
         if (_models.TryGetValue((shape, material), out var model)) return model;
 

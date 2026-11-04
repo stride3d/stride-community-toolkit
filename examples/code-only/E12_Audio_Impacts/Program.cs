@@ -284,10 +284,10 @@ public sealed class Impacts : IContactHandler
     /// <summary>One ringing note: where it is in its cycle, how far along the cycle a sample moves it, and how loud it still is.</summary>
     private struct Voice
     {
-        public float Phase;
-        public float Step;
-        public float Amplitude;
-        public float Fade;
+        internal float Phase { get; set; }
+        internal float Step { get; set; }
+        internal float Amplitude { get; set; }
+        internal float Fade { get; set; }
     }
 }
 

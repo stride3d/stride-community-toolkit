@@ -838,7 +838,7 @@ public static partial class GameExtensions
 
     /// <summary>The game's compositor, which the scene setup or the caller must have put in place.</summary>
     /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
-    internal static GraphicsCompositor RequireGraphicsCompositor(this IGame game)
+    private static GraphicsCompositor RequireGraphicsCompositor(this IGame game)
         => game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
 
     /// <summary>

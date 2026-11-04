@@ -160,7 +160,8 @@ void Update(Scene scene, GameTime time)
     basis.Up = up;
     basis.Backward = -forward;
 
-    character.Orientation = Quaternion.Normalize(Quaternion.RotationMatrix(basis));
+    // Teleport is what the obsolete Orientation setter did
+    character.Teleport(character.Position, Quaternion.Normalize(Quaternion.RotationMatrix(basis)));
     character.MoveVector = new Vector2(Vector3.Dot(move, right), -Vector3.Dot(move, forward));
 
     // The nose turns within that frame to the last walk direction

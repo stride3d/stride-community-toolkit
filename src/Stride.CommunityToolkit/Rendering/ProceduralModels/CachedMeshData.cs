@@ -17,7 +17,7 @@ internal static class CachedMeshData
     /// <param name="localOffset">The model's <c>LocalOffset</c>.</param>
     /// <param name="scale">The model's <c>Scale</c>.</param>
     /// <returns>The mesh data the model may hand on to be mutated.</returns>
-    public static GeometricMeshData<VertexPositionNormalTexture> ForModel(GeometricMeshData<VertexPositionNormalTexture> cached, Vector3 localOffset, Vector3 scale)
+    internal static GeometricMeshData<VertexPositionNormalTexture> ForModel(GeometricMeshData<VertexPositionNormalTexture> cached, Vector3 localOffset, Vector3 scale)
     {
         if (localOffset == Vector3.Zero && scale == Vector3.One) return cached;
 
