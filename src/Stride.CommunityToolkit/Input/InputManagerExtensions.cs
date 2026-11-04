@@ -1,6 +1,6 @@
 using Stride.Input;
 
-namespace Stride.CommunityToolkit.Engine;
+namespace Stride.CommunityToolkit.Input;
 
 /// <summary>
 /// Gamepad reads on <see cref="InputManager"/>: the thumbsticks, the triggers and the buttons of the default pad,

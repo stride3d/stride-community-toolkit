@@ -1,4 +1,3 @@
-using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -592,10 +591,12 @@ public class Basic2DCameraController : SyncScript
                 var mouseDelta = currentMousePos - _lastMousePosition.Value;
 
                 // Mouse position is normalised (0..1 across the window), so a cursor move of mouseDelta
-                // covers that fraction of the visible width and height. Invert X so the world follows
-                // the cursor; Y is already flipped between screen space (down) and world space (up).
-                var visible = _camera!.GetOrthographicVisibleSize();
-                var worldDelta = new Vector3(-mouseDelta.X * visible.X, mouseDelta.Y * visible.Y, 0);
+                // covers that fraction of the visible width and height, which an orthographic projection
+                // keeps as 2 over its first two diagonal terms (what GetOrthographicVisibleSize reads, with
+                // a custom aspect ratio counted). Invert X so the world follows the cursor; Y is already
+                // flipped between screen space (down) and world space (up).
+                var projection = _camera!.ProjectionMatrix;
+                var worldDelta = new Vector3(-mouseDelta.X * 2f / projection.M11, mouseDelta.Y * 2f / projection.M22, 0);
 
                 Pan(worldDelta);
             }

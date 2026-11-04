@@ -81,6 +81,8 @@ game.Run(new SceneSetup2D
 void Start(Scene rootScene)
 {
     shapes = game.AddShapeBatch();
+    // The markers are coloured discs with a white rim
+    shapes.BorderWidth = 3f;
 
     for (var lane = 0; lane < laneY.Length; lane++)
     {
