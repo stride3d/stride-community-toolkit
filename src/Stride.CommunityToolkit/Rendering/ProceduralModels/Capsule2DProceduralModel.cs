@@ -1,6 +1,6 @@
-using Stride.CommunityToolkit.Collections;
 using Stride.Graphics;
 using Stride.Rendering.ProceduralModels;
+using System.Collections.Concurrent;
 
 namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 
@@ -25,12 +25,12 @@ public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
     /// </summary>
     public int Tessellation { get; set; } = 16;
 
-    private static readonly Dictionary<(float Height, float Radius, int Tessellation, float UScale, float VScale, bool IsLeftHanded), GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
+    private static readonly ConcurrentDictionary<(float Height, float Radius, int Tessellation, float UScale, float VScale, bool IsLeftHanded), GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
 
     /// <summary>
     /// Creates mesh data using current property values, honoring UV scale.
     /// </summary>
-    protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData() => New(Height, Radius, Tessellation, UvScale.X, UvScale.Y);
+    protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData() => CachedMeshData.ForModel(New(Height, Radius, Tessellation, UvScale.X, UvScale.Y), LocalOffset, Scale);
 
     /// <summary>
     /// Retrieves (or builds and caches) a capsule mesh with the specified dimensions and options.

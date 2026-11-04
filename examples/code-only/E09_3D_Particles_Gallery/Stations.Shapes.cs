@@ -38,6 +38,9 @@ public static class ShapeStations
         emitter.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(-2f, 3f, -2f), VelocityMax = new Vector3(2f, 5f, 2f) });
         emitter.Updaters.Add(new UpdaterGravity { GravitationalAcceleration = new Vector3(0f, -4f, 0f) });
 
+        // The oriented quad is stretched along the particle's direction, which this updater keeps equal to its velocity
+        if (v == 2) emitter.Updaters.Add(new UpdaterSpeedToDirection());
+
         s.Place(new Vector3(0f, 0.3f, 0f), emitter);
     }
 

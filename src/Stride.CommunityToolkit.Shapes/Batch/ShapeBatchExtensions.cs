@@ -82,7 +82,7 @@ public static class ShapeBatchExtensions
 
         var displayScale = DisplayScale.GetOrCreate(game);
 
-        // Screen shapes and Corner() work in the display's scaled pixels, so the window is asked each
+        // Screen shapes and AnchorPoint() work in the display's scaled pixels, so the window is asked each
         // time rather than remembered: it resizes, and the scale follows the monitor it is on
         batch.ScreenSizeSource = () =>
         {

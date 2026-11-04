@@ -87,7 +87,8 @@ Style properties are the batch's current state. Each draw call captures the stat
 
 | Property | Default | Description |
 |---|---|---|
-| `BorderWidth` | 3 | Outline width in pixels |
+| `BorderWidth` | 0 | Outline width in pixels around a filled shape |
+| `StrokeWidth` | 1 | Width in pixels of the rings and arcs drawn without a width |
 | `Fill` | The draw call's colour, alpha 1 | Fill colour and alpha |
 | `Glow` | Off | Halo outside the outline: width in pixels, colour, `Strength`, `Additive` |
 | `Dash` | Solid | Dash pattern in pixels, for circles, arcs and lines. Polygons stay solid |
@@ -103,12 +104,28 @@ Style properties are the batch's current state. Each draw call captures the stat
 Every shape has an outline and a fill. The colour passed to a draw call is the outline's colour.
 
 - By default the fill is the same colour at full strength, so a draw call with one colour draws a solid shape.
-- The border is centred on the shape's edge: half its width lies outside. With the default width of 3, a
-  shape is 3 pixels wider and taller than its size. Set `BorderWidth = 0` for a shape of exactly its size.
 - `Fill.Set(colour)` gives the fill a colour of its own, such as a dark panel inside a bright border.
 - `Fill.Alpha = 0` leaves only the outline.
 - `Fill.Alpha = ShapeFill.TestbedAlpha` with no fill colour gives the look of the Box2D testbed: a bright
   outline around a dimmed, see-through inside. `Box2DDebugDraw` draws this way.
+
+A shape has at most two colours, the outline's and the fill's. `BorderWidth` and `StrokeWidth` are two widths
+for two kinds of shape, not two outlines on one: a shape with an inside has a border around its fill, and a
+shape that is only a line has a stroke.
+
+| Shape | Colours | Width |
+|---|---|---|
+| Disc, rectangle, polygon, sector, annulus, billboard circle, arc with a width | The fill from `Fill`, the outline from the draw call | `BorderWidth`, 0 by default: exactly the shape's size, no outline |
+| Ring, pixel ring, arc without a width | The draw call's colour alone | `StrokeWidth`, 1 pixel by default |
+| Line, pixel line, polyline | The draw call's colour alone | The call's width argument |
+
+- The border is centred on the shape's edge: half its width lies outside, so a shape with `BorderWidth = 3`
+  is 3 pixels wider and taller than its size.
+- A stroke has no inside, so `BorderWidth` and the fill alpha do not apply to it, and a glow sits on both of
+  its sides.
+- So a circle is one of two shapes. `DrawDisc` is a fill with a border round it, in up to two colours, and
+  `DrawRing` is a stroke in one. For a ring with a fill of its own and a border of another colour around both
+  edges, use `DrawAnnulus`.
 
 > [!NOTE]
 > State persists until you change it. A method that sets `Textured`, `Screen` or `Tag` for its own shapes must
@@ -253,6 +270,26 @@ Remarks:
 - Screen shapes are drawn at the near plane, in front of scene geometry.
 - The `Screen` property is not the billboard plane, which faces the camera in the world.
 
+A bar over a unit that keeps its size whatever the distance is a screen shape placed by
+`TryWorldToScreenPoint`: the camera says where the unit's head lands, and the bar is drawn there in
+pixels.
+
+```csharp
+if (camera.TryWorldToScreenPoint(unit.Transform.Position + Vector3.UnitY * 1.2f, out var head))
+{
+    var at = new Vector2(head.X, head.Y) * shapes.ScreenSize;   // 60 by 8 pixels, near or far
+
+    shapes.Screen = true;
+    shapes.BorderWidth = 1f;
+    shapes.Fill.Set(Color.Black, 0.6f);
+    shapes.DrawRectangle(new Vector3(at, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(60f, 8f), Color.White);
+    shapes.BorderWidth = 0f;
+    shapes.Fill.Set(Color.LimeGreen, 1f);
+    shapes.DrawRectangle(new Vector3(at.X - 30f + 30f * health, at.Y, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(60f * health, 6f), Color.LimeGreen);
+    shapes.Screen = false;
+}
+```
+
 ## Draw after post effects
 
 A batch in the scene is drawn into the HDR buffer before post processing. Auto exposure and tone mapping then
@@ -270,6 +307,24 @@ var hud = game.AddShapeBatch(afterPostEffects: true);
 
 `afterPostEffects` requires the toolkit's UI stage in the compositor. Without it, the batch draws in the
 transparent stage.
+
+## Fade and wipe
+
+`ScreenFade` covers the window with a colour and clears it again: a fade to black and back round a
+scene change, a cut, or a bar that wipes across. `game.AddScreenFade()` puts one in the scene, and it
+draws itself every frame through a batch after the post effects, so nothing else is touched.
+
+```csharp
+var fade = game.AddScreenFade();
+
+fade.Transition(0.35f, () => LoadLevel(2), 0.35f);   // out, the action while covered, in
+fade.Wipe(0.4f, Rebuild, 0.4f);                       // a bar sweeps in from the left and on out to the right
+fade.Cut(covered: true);                              // at once
+```
+
+`Transition` and `Wipe` run their action between the two halves, which is where a scene is switched or
+a player moved: the player sees the colour and then the result, never the swap half done. `Covered`
+and `IsRunning` say where it is. `E02_3D_SceneSwitching` changes rooms under it.
 
 ## Pick shapes
 

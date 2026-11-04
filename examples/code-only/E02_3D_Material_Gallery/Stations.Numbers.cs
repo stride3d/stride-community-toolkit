@@ -13,18 +13,18 @@ public static class NumberStations
     /// feature at all, so the surface has no highlight and no reflection, only light spread evenly.
     /// Every other station adds to this. V cycles the colour.
     /// </summary>
-    public static void DiffuseColour(MaterialStation s)
+    public static void DiffuseColour(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var colour = s.Pick("terracotta", "teal", "ochre") switch
+        var colour = station.Pick("terracotta", "teal", "ochre") switch
         {
             0 => new Color(190, 80, 55),
             1 => new Color(40, 140, 140),
             _ => new Color(200, 150, 50),
         };
 
-        s.PlaceTrio(s.Material(new MaterialDescriptor
+        station.PlaceTrio(station.Compile(new MaterialDescriptor
         {
             Attributes =
             {
@@ -40,14 +40,14 @@ public static class NumberStations
     /// V switches the row between a dielectric and a metal, where the same sweep runs from brushed
     /// to mirror.
     /// </summary>
-    public static void GlossinessSweep(MaterialStation s)
+    public static void GlossinessSweep(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var metalness = s.Pick("dielectric", "metal") == 0 ? 0f : 1f;
+        var metalness = station.Pick("dielectric", "metal") == 0 ? 0f : 1f;
         var colour = metalness > 0f ? new Color(255, 200, 120) : new Color(80, 130, 200);
 
-        s.PlaceRow([.. Enumerable.Range(0, 5).Select(i => s.Material(Recipes.Pbr(colour, glossiness: i / 4f, metalness)))]);
+        station.PlaceRow([.. Enumerable.Range(0, 5).Select(i => station.Compile(Recipes.Pbr(colour, glossiness: i / 4f, metalness)))]);
     }
 
     /// <summary>
@@ -56,18 +56,18 @@ public static class NumberStations
     /// colour of its reflection. Halfway values are what a metalness map paints where paint meets
     /// bare metal. V cycles the colour.
     /// </summary>
-    public static void MetalnessSweep(MaterialStation s)
+    public static void MetalnessSweep(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var colour = s.Pick("gold", "copper", "steel blue") switch
+        var colour = station.Pick("gold", "copper", "steel blue") switch
         {
             0 => new Color(255, 200, 100),
             1 => new Color(220, 120, 80),
             _ => new Color(120, 150, 200),
         };
 
-        s.PlaceRow([.. Enumerable.Range(0, 5).Select(i => s.Material(Recipes.Pbr(colour, glossiness: 0.85f, metalness: i / 4f)))]);
+        station.PlaceRow([.. Enumerable.Range(0, 5).Select(i => station.Compile(Recipes.Pbr(colour, glossiness: 0.85f, metalness: i / 4f)))]);
     }
 
     /// <summary>
@@ -76,15 +76,15 @@ public static class NumberStations
     /// and keeps its diffuse; gold and silver reflect their own colour and have a black diffuse,
     /// which is what a metal is. Several of the Material Package's materials use this workflow.
     /// </summary>
-    public static void SpecularColour(MaterialStation s)
+    public static void SpecularColour(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        s.PlaceRow(
+        station.PlaceRow(
         [
-            s.Material(Recipes.SpecularWorkflow(diffuse: new Color(200, 40, 40), specular: new Color(10, 10, 10), glossiness: 0.8f)),
-            s.Material(Recipes.SpecularWorkflow(diffuse: Color.Black, specular: new Color(255, 180, 75), glossiness: 0.9f)),
-            s.Material(Recipes.SpecularWorkflow(diffuse: Color.Black, specular: new Color(242, 237, 224), glossiness: 0.9f)),
+            station.Compile(Recipes.SpecularWorkflow(diffuse: new Color(200, 40, 40), specular: new Color(40, 40, 40), glossiness: 0.8f)),
+            station.Compile(Recipes.SpecularWorkflow(diffuse: Color.Black, specular: new Color(255, 180, 75), glossiness: 0.9f)),
+            station.Compile(Recipes.SpecularWorkflow(diffuse: Color.Black, specular: new Color(242, 237, 224), glossiness: 0.9f)),
         ], spacing: 2.4f);
     }
 
@@ -94,18 +94,18 @@ public static class NumberStations
     /// tail every modern renderer uses, Beckmann falls off sharply, Blinn-Phong is the classic. V
     /// cycles the glossiness, where the three differ most in the middle.
     /// </summary>
-    public static void Distributions(MaterialStation s)
+    public static void Distributions(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var glossiness = s.Pick("glossiness 0.5", "glossiness 0.7", "glossiness 0.9") switch { 0 => 0.5f, 1 => 0.7f, _ => 0.9f };
+        var glossiness = station.Pick("glossiness 0.5", "glossiness 0.7", "glossiness 0.9") switch { 0 => 0.5f, 1 => 0.7f, _ => 0.9f };
         var colour = new Color(60, 60, 70);
 
-        s.PlaceRow(
+        station.PlaceRow(
         [
-            s.Material(Recipes.Pbr(colour, glossiness, metalness: 0f, new MaterialSpecularMicrofacetNormalDistributionGGX())),
-            s.Material(Recipes.Pbr(colour, glossiness, metalness: 0f, new MaterialSpecularMicrofacetNormalDistributionBeckmann())),
-            s.Material(Recipes.Pbr(colour, glossiness, metalness: 0f, new MaterialSpecularMicrofacetNormalDistributionBlinnPhong())),
+            station.Compile(Recipes.Pbr(colour, glossiness, metalness: 0f, new MaterialSpecularMicrofacetNormalDistributionGGX())),
+            station.Compile(Recipes.Pbr(colour, glossiness, metalness: 0f, new MaterialSpecularMicrofacetNormalDistributionBeckmann())),
+            station.Compile(Recipes.Pbr(colour, glossiness, metalness: 0f, new MaterialSpecularMicrofacetNormalDistributionBlinnPhong())),
         ], spacing: 2.4f);
     }
 
@@ -118,13 +118,13 @@ public static class NumberStations
     /// lights' highlights, pinpoints at this glossiness, while the sky's reflection - all a mirror
     /// shows - comes from the environment term's lookup table whichever Fresnel is chosen.
     /// </summary>
-    public static void Mirror(MaterialStation s)
+    public static void Mirror(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var colour = s.Pick("mirror", "gold mirror") == 0 ? Color.White : new Color(255, 200, 90);
+        var colour = station.Pick("mirror", "gold mirror") == 0 ? Color.White : new Color(255, 200, 90);
 
-        var mirror = s.Material(new MaterialDescriptor
+        var mirror = station.Compile(new MaterialDescriptor
         {
             Attributes =
             {
@@ -141,6 +141,6 @@ public static class NumberStations
             },
         });
 
-        s.PlaceTrio(mirror);
+        station.PlaceTrio(mirror);
     }
 }

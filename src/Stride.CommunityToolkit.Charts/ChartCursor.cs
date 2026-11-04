@@ -104,15 +104,15 @@ internal sealed class ChartCursor : IDisposable
         var o = _chart.Options;
 
         // The batch may be the caller's, so its state is put back the way it was found
-        var border = batch.BorderWidth;
+        var stroke = batch.StrokeWidth;
         var glowWidth = batch.Glow.Width;
         var glowColor = batch.Glow.Color;
 
-        batch.BorderWidth = RingWidth;
+        batch.StrokeWidth = RingWidth;
         batch.Glow.Set(o.Cursor.Glow);
         batch.DrawPixelRing(view.ToWorld(new Vector3(local.X, local.Y, 3f * Chart.LayerStep)), o.Cursor.Radius, o.Labels.Color);
 
-        batch.BorderWidth = border;
+        batch.StrokeWidth = stroke;
         batch.Glow.Set(glowWidth, glowColor);
     }
 

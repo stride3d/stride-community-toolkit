@@ -6,8 +6,8 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Instancing;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -42,13 +42,13 @@ const float DrapeExtent = 12f;
 // as a surface rather than a string of beads.
 const float SpacingPerRadius = 0.5f / 0.32f;
 
-float[] nodeRadii = [0.16f, 0.24f, 0.32f, 0.48f];
+float[] nodeRadii = [0.04f, 0.08f, 0.16f, 0.24f, 0.32f, 0.48f];
 var nodeRadius = 0.32f;
 
 Scene? rootScene = null;
 BufferedEntityInstancing? instancing = null;
 Entity? master = null;
-Dictionary<float, Model> models = [];
+Material? nodeMaterial = null;
 KeyMenu? sizeMenu = null;
 List<Entity> nodes = [];
 List<Entity> extras = [];
@@ -130,22 +130,9 @@ void SetupInstancing(Scene scene)
     game.AddInstancingBufferUpload(instancing);
 }
 
-// One sphere model per node size, built on first use. BodyMode.None builds a model and no body;
-// the entity is discarded.
+// One sphere model per node size, built on first use and kept by the game
 Model ModelFor(float radius)
-{
-    if (models.TryGetValue(radius, out var cached)) return cached;
-
-    var model = game.CreatePrimitive(Primitive3D.Sphere(radius), new PrimitiveEntityOptions
-    {
-        Body = BodyMode.None,
-        Material = game.CreateMaterial(new Color(230, 120, 90), metalness: 0.3f, glossiness: 0.7f),
-    }).Get<ModelComponent>().Model;
-
-    models[radius] = model;
-
-    return model;
-}
+    => game.GetOrCreateModel(Primitive3D.Sphere(radius), nodeMaterial ??= game.CreateMaterial(new Color(230, 120, 90), metalness: 0.3f, glossiness: 0.7f));
 
 // Z opens the node-size menu. Choosing a size swaps the master's model and rebuilds every sheet at
 // the matching spacing, since each node's collider is sized at creation. The item text carries the

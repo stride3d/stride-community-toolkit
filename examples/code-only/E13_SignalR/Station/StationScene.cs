@@ -77,10 +77,8 @@ public sealed class StationScene(Game game)
         game.GetCameraEntity().Get<CameraComponent>().VerticalFieldOfView = 60f;
 
         // Depth-tested, so a container sitting on the pad ring covers it like anything else would.
-        // Added before the text renderers: the panels are drawn first, and the text sits on them.
+        // Added before any text, whose renderers register themselves with the first label: the panels are drawn first, and the text sits on them.
         _shapes = game.AddShapeBatch(depthTest: true);
-        game.AddWorldTextRenderer();
-        game.AddEntityTextRenderer();
 
         var deckMaterial = game.CreateMaterial(new Color(34, 37, 44), metalness: 0.05f, glossiness: 0.25f);
         var lipMaterial = game.CreateMaterial(new Color(58, 62, 72), metalness: 0.08f, glossiness: 0.3f);
@@ -125,8 +123,7 @@ public sealed class StationScene(Game game)
         var glow = console.Glow;
         var dim = Hex.WithAlpha(accent, 90);
 
-        _shapes.BorderWidth = 1.5f;
-        _shapes.Fill.Set(null, 0f);
+        _shapes.StrokeWidth = 1.5f;
 
         // A faint grid, so the deck reads as a surface against the black
         var inset = DeckHalf - LipThickness - 0.3f;

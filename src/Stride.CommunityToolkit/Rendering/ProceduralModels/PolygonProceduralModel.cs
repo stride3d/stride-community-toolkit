@@ -1,6 +1,6 @@
-using Stride.CommunityToolkit.Collections;
 using Stride.Graphics;
 using Stride.Rendering.ProceduralModels;
+using System.Collections.Concurrent;
 
 namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 
@@ -52,11 +52,30 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
     /// </remarks>
     public int Sides { get; set; } = 6;
 
-    private static readonly Dictionary<string, GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
+    private static readonly ConcurrentDictionary<MeshCacheKey, GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
+
+    private readonly record struct MeshCacheKey(Vector2[] Vertices, float UScale, float VScale, bool IsLeftHanded)
+    {
+        public bool Equals(MeshCacheKey other)
+            => UScale == other.UScale && VScale == other.VScale && IsLeftHanded == other.IsLeftHanded && Vertices.AsSpan().SequenceEqual(other.Vertices);
+
+        public override int GetHashCode()
+        {
+            var hash = new HashCode();
+
+            foreach (var vertex in Vertices) hash.Add(vertex);
+
+            hash.Add(UScale);
+            hash.Add(VScale);
+            hash.Add(IsLeftHanded);
+
+            return hash.ToHashCode();
+        }
+    }
 
     /// <inheritdoc />
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
-        => New(Vertices.Length > 0 ? Vertices : GenerateRegularPolygonVertices(Radius, Sides), UvScale.X, UvScale.Y);
+        => CachedMeshData.ForModel(New(Vertices.Length > 0 ? Vertices : GenerateRegularPolygonVertices(Radius, Sides), UvScale.X, UvScale.Y), LocalOffset, Scale);
 
     /// <summary>
     /// Generates vertices for a regular polygon centered at the origin.
@@ -115,10 +134,8 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
     {
         ValidatePoints(vertices);
 
-        var hash = string.Join(",", vertices.Select(vertex => $"{vertex.X},{vertex.Y}"));
-        var cacheKey = $"{hash}_{uScale}_{vScale}_{toLeftHanded}";
-
-        return _meshCache.GetOrAdd(cacheKey, _ => CreateMesh(vertices, uScale, vScale, toLeftHanded));
+        // The key keeps its own copy of the outline, so a caller that reuses its array cannot change a cached key
+        return _meshCache.GetOrAdd(new MeshCacheKey([.. vertices], uScale, vScale, toLeftHanded), key => CreateMesh(key.Vertices, uScale, vScale, toLeftHanded));
     }
 
     /// <summary>
@@ -138,8 +155,8 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
         var vertexCount = points.Length;
 
         // A convex polygon of n vertices is n-2 triangles, all fanned from vertex 0 below.
-        Span<VertexPositionNormalTexture> vertices = new VertexPositionNormalTexture[vertexCount];
-        Span<int> indices = new int[(vertexCount - 2) * 3];
+        var vertices = new VertexPositionNormalTexture[vertexCount];
+        var indices = new int[(vertexCount - 2) * 3];
 
         // UVs are measured from the polygon's own centre, not from the origin, so the same shape
         // maps the same texture wherever it sits in the XY plane.
@@ -190,7 +207,7 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
             indices[i * 3 + 2] = i + 1;
         }
 
-        return new GeometricMeshData<VertexPositionNormalTexture>(vertices.ToArray(), indices.ToArray(), toLeftHanded) { Name = "Polygon" };
+        return new GeometricMeshData<VertexPositionNormalTexture>(vertices, indices, toLeftHanded) { Name = "Polygon" };
     }
 
     private static void ValidatePoints(Vector2[] points)

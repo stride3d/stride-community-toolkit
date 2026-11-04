@@ -50,6 +50,13 @@ const float WheelBaseWidth = 1.8f;
 
 var suspensionDirection = new Vector3(0, -1, 0);
 var wheelAxleInChassis = new Vector3(-1, 0, 0);     // the wheel's Y after its quarter turn about Z
+
+// The chassis and wheel sizes, shared by the models and their colliders so the two cannot drift apart
+var hullSize = new Vector3(1.85f, 0.7f, 4.73f);
+var cabinSize = new Vector3(1.85f, 0.6f, 2.5f);
+var cabinOffset = new Vector3(0, 0.65f, -0.35f);
+const float WheelRadius = 0.4f;
+const float WheelWidth = 0.18f;
 var wheelTurn = Quaternion.RotationZ(MathUtil.PiOverTwo);   // the quarter turn that makes a cylinder's Y the axle
 
 Car? car = null;
@@ -214,8 +221,8 @@ Car BuildCar(Scene scene, Vector3 position)
             {
                 Colliders =
                 {
-                    new BoxCollider { Size = new Vector3(1.85f, 0.7f, 4.73f), Mass = 10 },
-                    new BoxCollider { Size = new Vector3(1.85f, 0.6f, 2.5f), PositionLocal = new Vector3(0, 0.65f, -0.35f), Mass = 0.5f },
+                    new BoxCollider { Size = hullSize, Mass = 10 },
+                    new BoxCollider { Size = cabinSize, PositionLocal = cabinOffset, Mass = 0.5f },
                 },
             },
             FrictionCoefficient = 0.35f,
@@ -226,8 +233,8 @@ Car BuildCar(Scene scene, Vector3 position)
     chassisEntity.Transform.Position = position;
 
     var body = game.CreateMaterial(new Color(200, 60, 50), metalness: 0.6f, glossiness: 0.8f);
-    chassisEntity.AddChild(Model(Primitive3D.Box(new Vector3(1.85f, 0.7f, 4.73f)), body, Vector3.Zero));
-    chassisEntity.AddChild(Model(Primitive3D.Box(new Vector3(1.85f, 0.6f, 2.5f)), body, new Vector3(0, 0.65f, -0.35f)));
+    chassisEntity.AddChild(Model(Primitive3D.Box(hullSize), body, Vector3.Zero));
+    chassisEntity.AddChild(Model(Primitive3D.Box(cabinSize), body, cabinOffset));
     chassisEntity.Scene = scene;
 
     var chassis = chassisEntity.Get<BodyComponent>();
@@ -247,7 +254,7 @@ Wheel BuildWheel(Scene scene, BodyComponent chassis, Vector3 mount)
     {
         new BodyComponent
         {
-            Collider = new CompoundCollider { Colliders = { new CylinderCollider { Radius = 0.4f, Length = 0.18f, Mass = 0.25f } } },
+            Collider = new CompoundCollider { Colliders = { new CylinderCollider { Radius = WheelRadius, Length = WheelWidth, Mass = 0.25f } } },
             FrictionCoefficient = 1f,
             CollisionLayer = CollisionLayer.Layer1,
             InterpolationMode = InterpolationMode.Interpolated,
@@ -255,7 +262,7 @@ Wheel BuildWheel(Scene scene, BodyComponent chassis, Vector3 mount)
     };
     entity.Transform.Position = chassis.Entity.Transform.Position + mount + suspensionDirection * SuspensionLength;
     entity.Transform.Rotation = wheelTurn;
-    entity.AddChild(Model(Primitive3D.Cylinder(0.4f, 0.18f), game.CreateMaterial(new Color(40, 40, 45), metalness: 0.2f, glossiness: 0.5f), Vector3.Zero));
+    entity.AddChild(Model(Primitive3D.Cylinder(WheelRadius, WheelWidth), game.CreateMaterial(new Color(40, 40, 45), metalness: 0.2f, glossiness: 0.5f), Vector3.Zero));
 
     var wheel = entity.Get<BodyComponent>();
 
@@ -443,7 +450,7 @@ concepts:
   - Re-applying constraint targets only when they change, so the car sleeps when idle
   - Filtering chassis-wheel collisions with a collision layer that does not collide with itself
   - A chase camera in place of the camera controller, to free the driving keys
-  - "Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive (both overloads), GrabberScript"
+  - "Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, GrabberScript"
 tags:
   - 3D
   - Bepu

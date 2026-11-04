@@ -4,12 +4,11 @@ using Gum.Forms.DefaultVisuals.V3;
 using SkiaGum.Helpers;
 using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
-using Stride.Games;
 using System.Drawing;
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D { Camera = CameraSetup.Orthographic(), Lighting = null, Skybox = null, Ground = null }, start: Start, update: Update);
+game.Run(new SceneSetup3D { Camera = CameraSetup.Orthographic(), Lighting = null, Skybox = null, Ground = null }, start: Start);
 
 void Start(Scene rootScene)
 {
@@ -17,8 +16,6 @@ void Start(Scene rootScene)
 
     CreateUi();
 }
-
-void Update(Scene scene, GameTime time) => GumService.Default.Update(game.UpdateTime.Elapsed.TotalSeconds);
 
 void CreateUi()
 {
@@ -86,12 +83,12 @@ order: 12
 description:
   en: |-
     Initialise Gum UI in Stride using the official Gum.Stride runtime and the Stride Community Toolkit.
-    Demonstrates setting up GumService with the Game instance, updating the UI layout in the game loop,
+    Demonstrates setting up GumService with the Game instance, whose renderer ticks the UI every frame,
     and building interactive UI layouts in C# with Gum Forms controls such as StackPanel, Label, Button,
     CheckBox, ComboBox, and ListBox, complete with styling and event handling.
 concepts:
   - Initialising Gum UI via GumService.Default.Initialize(game)
-  - Driving Gum layout updates using GumService.Default.Update(gameTime)
+  - "No per-frame Update call: the renderer Initialize registers ticks Gum itself"
   - Setting up scene graphics compositing and a 2D camera with Stride Community Toolkit
   - Constructing UI hierarchy using Gum.Forms controls (StackPanel, Label, Button, CheckBox, ComboBox, ListBox)
   - Handling UI events and modifying visual properties such as background colour

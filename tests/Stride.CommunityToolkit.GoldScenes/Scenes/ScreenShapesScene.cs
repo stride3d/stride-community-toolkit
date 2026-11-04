@@ -51,6 +51,7 @@ internal sealed class ScreenShapesScene : IGoldScene
 
         // A crosshair: a ring and two pixel lines with a gap at the middle
         shapes.BorderWidth = 2f;
+        shapes.StrokeWidth = 2f;
         shapes.DrawRing(new Vector3(centre, 0f), Vector3.UnitZ, 22f, Color.White);
         shapes.DrawPixelLine(new Vector3(centre.X - 40f, centre.Y, 0f), new Vector3(centre.X - 10f, centre.Y, 0f), 2f, Color.White);
         shapes.DrawPixelLine(new Vector3(centre.X + 10f, centre.Y, 0f), new Vector3(centre.X + 40f, centre.Y, 0f), 2f, Color.White);
@@ -95,6 +96,7 @@ internal sealed class ScreenShapesScene : IGoldScene
         shapes.Viewport = null;
 
         shapes.BorderWidth = 3f;
+        shapes.StrokeWidth = 1f;
         shapes.Screen = false;
     }
 }

@@ -17,7 +17,7 @@ public class UIManager
 
     private readonly DragAndDropContainer _rootElement = new();
     private readonly SpriteFont _font;
-    private readonly Action _onGenerateCubes;
+    private readonly Action _onGenerateItems;
     private readonly Vector3 _defaultWindowPosition = new(0.02f, 0.05f, 0);
 
     private int _windowId = 1;
@@ -27,12 +27,12 @@ public class UIManager
     /// Initializes a new instance of the <see cref="UIManager"/> class.
     /// </summary>
     /// <param name="font">The font used in the UI.</param>
-    /// <param name="onGenerateCubes">The action the Generate Items button calls.</param>
-    /// <exception cref="ArgumentNullException">Thrown if font or onGenerateCubes is null.</exception>
-    public UIManager(SpriteFont? font, Action? onGenerateCubes)
+    /// <param name="onGenerateItems">The action the Generate Items button calls.</param>
+    /// <exception cref="ArgumentNullException">Thrown if font or onGenerateItems is null.</exception>
+    public UIManager(SpriteFont? font, Action? onGenerateItems)
     {
         _font = font ?? throw new ArgumentNullException(nameof(font));
-        _onGenerateCubes = onGenerateCubes ?? throw new ArgumentNullException(nameof(onGenerateCubes));
+        _onGenerateItems = onGenerateItems ?? throw new ArgumentNullException(nameof(onGenerateItems));
 
         Entity = new Entity
         {
@@ -82,7 +82,7 @@ public class UIManager
         return canvas;
     }
 
-    private void GenerateItemsButton_PreviewTouchUp(object? sender, TouchEventArgs e) => _onGenerateCubes();
+    private void GenerateItemsButton_PreviewTouchUp(object? sender, TouchEventArgs e) => _onGenerateItems();
 
     private void NewWindowButton_PreviewTouchUp(object? sender, TouchEventArgs e)
         => _rootElement.Children.Add(CreateWindow($"Window {_windowId++}", _defaultWindowPosition));

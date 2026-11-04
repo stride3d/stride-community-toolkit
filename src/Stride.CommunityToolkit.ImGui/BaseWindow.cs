@@ -43,12 +43,12 @@ public abstract class BaseWindow : GameSystem
     protected virtual ImGuiWindowFlags WindowFlags => ImGuiWindowFlags.None;
 
     /// <summary>
-    /// The position applied before the window is begun each frame, or <see langword="null"/> to let ImGui place it.
+    /// Where the window starts, applied once per run, or <see langword="null"/> to let ImGui place it. The user can drag it from there.
     /// </summary>
     protected virtual Vector2? WindowPos => null;
 
     /// <summary>
-    /// The size applied before the window is begun each frame, or <see langword="null"/> to let ImGui size it.
+    /// The size the window starts at, applied once per run, or <see langword="null"/> to let ImGui size it. The user can resize it from there.
     /// </summary>
     protected virtual Vector2? WindowSize => null;
 
@@ -85,8 +85,9 @@ public abstract class BaseWindow : GameSystem
             return;
         }
 
-        if (WindowPos is { } position) SetNextWindowPos(position);
-        if (WindowSize is { } size) SetNextWindowSize(size);
+        // Once, not every frame: a position set every frame pins the window where the user cannot drag it
+        if (WindowPos is { } position) SetNextWindowPos(position, ImGuiCond.Once);
+        if (WindowSize is { } size) SetNextWindowSize(size, ImGuiCond.Once);
 
         using (Window(_uniqueName, ref Open, out var collapsed, WindowFlags))
         {

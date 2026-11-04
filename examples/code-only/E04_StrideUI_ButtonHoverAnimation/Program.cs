@@ -113,10 +113,10 @@ order: 175
 description:
   en: |-
     A main menu built from code whose buttons grow a blue underline while the pointer is over them.
-    Two things make a hover effect work in Stride's UI, and both are easy to miss. A Button reports
-    nothing in MouseOverState until RequiresMouseOverUpdate is set on it, which is off by default
-    because tracking it costs a hit test per element per frame - forgetting it is the usual reason a
-    hand-written hover effect does nothing at all. And the animation is a lerp toward a target width
+    Two things make a hover effect work in Stride's UI, and both are easy to miss. A Button's
+    MouseOverState is tested whenever the mouse moves; RequiresMouseOverUpdate, off by default because
+    it costs a hit test per element per frame, makes the engine re-test it while the cursor is still,
+    so a button that grows under a resting pointer keeps reacting. And the animation is a lerp toward a target width
     rather than a fixed step per frame, so it settles in the same time whatever the frame rate and
     reverses smoothly when the pointer leaves mid-animation.
 concepts:

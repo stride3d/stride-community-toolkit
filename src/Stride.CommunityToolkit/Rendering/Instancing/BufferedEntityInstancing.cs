@@ -59,7 +59,7 @@ public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisp
 
     /// <inheritdoc />
     /// <remarks>Instance matrices are already in world space, so the master's own transform is ignored.</remarks>
-    public override ModelTransformUsage ModelTransformUsage => ModelTransformUsage.Ignore;
+    public override ModelTransformUsage ModelTransformUsage { get; set; } = ModelTransformUsage.Ignore;
 
     /// <inheritdoc cref="EntityInstancing.AddInstance" />
     public bool AddInstance(Entity entity) => Gather.AddInstance(entity);

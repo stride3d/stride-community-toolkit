@@ -53,10 +53,6 @@ void Start(Scene rootScene)
 {
     game.AddParticleRenderer();
 
-    // The text renderers, appended after the camera renderer, so labels land on top of everything
-    game.AddWorldTextRenderer();
-    game.AddEntityTextRenderer();
-
     textures = ParticleTextures.Load(game.GraphicsDevice);
 
     // The frame comes from Example.Common; what a particle station needs on top of it is the textures
@@ -144,7 +140,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     {
         lines.Add(gallery.Stations.Count == 0
             ? new("No stations in the registry", Color.OrangeRed)
-            : new($"Home - {gallery.Stations.Count} stations; N, P or a pad to visit", Color.White));
+            : new($"Home - {gallery.Stations.Count} stations; N, P, a pad or a line of the board to visit", Color.White));
 
         return lines;
     }

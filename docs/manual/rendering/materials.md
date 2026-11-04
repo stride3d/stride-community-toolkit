@@ -72,6 +72,11 @@ var material = game.CreateMaterial(descriptor);
 > The microfacet specular model reads an environment lookup texture that ships with the engine as an asset.
 > Without the content manager the texture is not resolved and metals render black. No exception is thrown.
 
+> [!NOTE]
+> `Material.New`, and so `game.CreateMaterial`, assumes a linear colour space project, which is Stride's default.
+> A project set to Gamma needs a material generator context of its own to set `ColorSpace`; the toolkit does not
+> provide one.
+
 When no content manager is available, such as in a tool or a test, use the polynomial environment term, which
 needs no asset:
 

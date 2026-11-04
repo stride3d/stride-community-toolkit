@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Input;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.Engine;
@@ -211,17 +212,16 @@ public class Basic3DCameraController : SyncScript
 
         if (Gamepad && Input.HasGamePad)
         {
-            var padState = Input.DefaultGamePad.State;
-            // LeftThumb can be positive or negative on both axes (pushed to the right or to the left)
-            movementDirection.Z += padState.LeftThumb.Y;
-            movementDirection.X += padState.LeftThumb.X;
-
-            // Triggers are always positive, in this case using one to increase and the other to decrease
-            movementDirection.Y -= padState.LeftTrigger;
-            movementDirection.Y += padState.RightTrigger;
+            // The left stick is signed on both axes; the triggers are positive, one lowering and the other raising.
+            // The reads apply a dead zone, so a stick that has sprung back does not creep the camera
+            var leftThumb = Input.GetLeftThumb();
+            movementDirection.Z += leftThumb.Y;
+            movementDirection.X += leftThumb.X;
+            movementDirection.Y -= Input.GetLeftTrigger();
+            movementDirection.Y += Input.GetRightTrigger();
 
             // Sprint while A or either shoulder is held
-            if ((padState.Buttons & (GamePadButton.A | GamePadButton.LeftShoulder | GamePadButton.RightShoulder)) != 0)
+            if (Input.IsGamePadButtonDown(GamePadButton.A) || Input.IsGamePadButtonDown(GamePadButton.LeftShoulder) || Input.IsGamePadButtonDown(GamePadButton.RightShoulder))
                 speed *= SpeedFactor;
         }
 
@@ -266,9 +266,9 @@ public class Basic3DCameraController : SyncScript
 
         if (Gamepad && Input.HasGamePad)
         {
-            var padState = Input.DefaultGamePad.State;
-            rotation.X += padState.RightThumb.Y;
-            rotation.Y += -padState.RightThumb.X;
+            var rightThumb = Input.GetRightThumb();
+            rotation.X += rightThumb.Y;
+            rotation.Y += -rightThumb.X;
         }
 
         if (Input.HasKeyboard)
@@ -371,7 +371,7 @@ public class Basic3DCameraController : SyncScript
     }
 
     /// <summary>
-    /// Reset camera to default position and orthographic size when the 'H' key is pressed
+    /// Resets the camera to its default position and rotation when H is pressed
     /// </summary>
     private void ResetCameraToDefault()
     {

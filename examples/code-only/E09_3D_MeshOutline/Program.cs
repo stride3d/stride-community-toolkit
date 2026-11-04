@@ -57,12 +57,14 @@ description:
     Draw coloured outlines around 3D primitives with a custom RootRenderFeature. Each mesh is drawn a
     second time, inflated along its normals with front faces culled, so only a shell remains visible
     behind the original mesh. Adding a MeshOutlineComponent to an entity is all it takes to outline it,
-    and a high intensity pushes the outline into HDR range so bloom makes it glow.
+    and a high intensity pushes the outline into HDR range, ready to glow under a bloom effect, none
+    being enabled here.
   cs: |-
     Vykreslení barevných obrysů kolem 3D tvarů pomocí vlastní RootRenderFeature. Každý model se vykreslí
     podruhé, nafouknutý podél normál a s odstraněnými přivrácenými stěnami, takže za původním modelem
     zůstane viditelná jen skořepina. K vytvoření obrysu stačí entitě přidat MeshOutlineComponent
-    a vysoká intenzita posune obrys do HDR rozsahu, takže díky bloomu září.
+    a vysoká intenzita posune obrys do HDR rozsahu, připravený zářit pod efektem bloom, který zde
+    zapnutý není.
 concepts:
   - Writing a custom RootRenderFeature
   - Registering a render feature with AddRootRenderFeature
@@ -81,7 +83,7 @@ tags:
   - Pipeline State
   - Entity Component
   - HDR
-  - Bloom
+
 related:
   - E09_3D_RootRendererShader
   - E09_3D_SceneRenderer

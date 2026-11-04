@@ -17,8 +17,8 @@ using Stride.Media;
 // pipeline; there is no way to build one in code. The door that is open is the SoundInstance
 // constructor that takes a DynamicSoundSource: the engine asks the source for a block of samples
 // whenever it has a free buffer, and CreateProceduralSound puts a callback behind that. Four
-// buffers of 4096 samples at 44.1 kHz means a change made here is heard within about a tenth of a
-// second.
+// buffers of 4096 samples at 44.1 kHz means a change made here is heard once the queued buffers have
+// played, about a third of a second.
 //
 // The callback runs on the audio worker thread, not the game thread. Everything it reads from the
 // game - waveform, frequency, mute - is a single int, float or bool, which .NET writes atomically, so
@@ -49,6 +49,9 @@ var sceneSetup = new SceneSetup3D
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
+
+// The game has exited; the instance holds a native voice until it is disposed
+tone?.Dispose();
 
 void Start(Scene scene)
 {

@@ -30,14 +30,14 @@ complexity: 5
 order: 180
 description:
   en: |-
-    A colour-match collapse puzzle built entirely from code. A platform of cubes, 5x5x5 at level one and growing to 10x10x10, builds
+    A colour-match collapse puzzle built from code, its six compiled sound assets the one exception. A platform of cubes, 5x5x5 at level one and growing to 10x10x10, builds
     itself one layer at a time, clicking a cube clears every same-coloured cube connected to it, and
     what is left above drops into the gap.
     Shows how to structure a whole game without the editor: scene setup split from gameplay, a custom
     Bepu body that constrains cubes to their own column, screen-space text drawn without the UI
     system, and mouse picking through a physics raycast.
   cs: |-
-    Logická hra na skládání barev postavená výhradně v kódu. Platforma z kostek, 5x5x5 v první úrovni a postupně až 10x10x10, se staví
+    Logická hra na skládání barev postavená v kódu, s šesti zkompilovanými zvuky jako jedinou výjimkou. Platforma z kostek, 5x5x5 v první úrovni a postupně až 10x10x10, se staví
     po vrstvách, kliknutí na kostku odstraní všechny propojené kostky stejné barvy a to, co zůstane
     nad nimi, spadne do vzniklé mezery.
     Ukazuje, jak strukturovat celou hru bez editoru: oddělení stavby scény od herní logiky, vlastní

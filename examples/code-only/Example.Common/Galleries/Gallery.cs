@@ -48,6 +48,12 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     private const float LeaderEndRadius = 4f;
     private const float LeaderWidth = 1f;
 
+    /// <summary>The labels lean back by about the pitch a visitor at a station looks down with, so they meet the view square instead of keystoning.</summary>
+    private const float LabelPitchDegrees = -12f;
+
+    /// <summary>The height of a one-line label in the world; a two-line label gets twice this.</summary>
+    private const float LabelHeight = 0.5f;
+
     private readonly GalleryBoard _board;
     private readonly SpriteFont? _labelFont;
 
@@ -55,7 +61,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     private readonly Scene _scene;
     private readonly IReadOnlyList<Exhibit<TStation>> _exhibits;
     private readonly List<TStation> _stations = [];
-    private readonly List<EntityTextComponent> _labels = [];
+    private readonly List<WorldTextComponent> _labels = [];
     private readonly Material _pillarMaterial;
     private readonly ShapeBatch _furniture;
     private readonly ShapeBatch _overlay;
@@ -127,7 +133,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     /// <summary>Whether the visitor is at the home spot, above and outside the ring: no station is current there.</summary>
     public bool AtHome { get; private set; }
 
-    /// <summary>The station whose pad is under the mouse, or -1: the pad fills, and a click flies there.</summary>
+    /// <summary>The station whose pad, or whose line of the index board, is under the mouse, or -1: it lights up, and a click flies there.</summary>
     public int Hovered { get; private set; } = -1;
 
     /// <summary>Whether the camera is flying itself somewhere rather than being steered.</summary>
@@ -201,7 +207,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
             AtHome = false;
         }
 
-        // A pad under the mouse lights up, and a click on it is a flight there
+        // A pad or a board line under the mouse lights up, and a click on it is a flight there
         Hovered = Flying ? -1 : PadUnderMouse();
 
         if (Hovered >= 0 && _game.Input.IsMouseButtonPressed(MouseButton.Left))
@@ -228,7 +234,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         }
 
         DrawLabels();
-        _board.DrawFrame(_furniture);
+        _board.DrawFrame(_furniture, _stations, Hovered, AtHome ? -1 : Current);
         _furniture.Fill.Set(null, 0.45f);
         _furniture.BorderWidth = 3f;
     }
@@ -246,6 +252,9 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
                 1 => $"{i + 1}  {exhibit.Method}",
                 _ => $"{i + 1}  {exhibit.Method}\n{exhibit.Title}: {exhibit.Summary}",
             };
+
+            // Height is the whole block, so the two-line label gets twice the room and its lines stay the size of the others
+            _labels[i].Height = LabelDetail == 2 ? LabelHeight * 2f : LabelHeight;
         }
     }
 
@@ -291,33 +300,22 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         configure?.Invoke(station);
         Guarded(station, exhibit.Setup);
 
-        // The label: screen-space text pinned to a point above the pad, so it reads at any distance
-        // ToDo: Test this component as well
-        //var label = new WorldTextComponent
-        //{
-        //    Text = $"{station.Number}",
-        //    FontSize = 12,
-        //    Font = _labelFont,
-        //    TextColor = Color.White,
-        //    Anchor = Anchor.MiddleLeft,
-        //    AutoScale = true,
-        //    Offset = new Vector3(1, 0f, 0f),
-        //    Billboard = false
-        //};
-        var label = new EntityTextComponent
+        // The label: world text on its own entity above the pad, facing the visitor and leaning back by the
+        // view's pitch. It is a thing in the scene, so it shrinks with distance like the station under it
+        var label = new WorldTextComponent
         {
             Text = $"{station.Number}",
-            FontSize = 20,
             Font = _labelFont,
             TextColor = Color.White,
             Anchor = Anchor.MiddleLeft,
-            Offset = new Vector2(10f, 0f),
-            EnableBackground = true,
-            BackgroundColor = new Color4(0.03f, 0.05f, 0.09f, 0.85f),
-            EnableShadow = false,
+            Height = LabelHeight,
+            Offset = new Vector3(0.3f, 0f, 0f),
+            Billboard = false,
+            GlowColor = new Color(0, 0, 0, 200),
+            GlowSize = 2f,
         };
 
-        var entity = new Entity($"Station {station.Number} label") { Transform = { Position = PinOf(station) } };
+        var entity = new Entity($"Station {station.Number} label") { Transform = { Position = PinOf(station), Rotation = LabelRotation(station) } };
 
         entity.Add(label);
         entity.Scene = _scene;
@@ -399,7 +397,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         shapes.BorderWidth = 3f;
     }
 
-    /// <summary>The station whose pad the mouse is over, as the batch drew it last frame, or -1.</summary>
+    /// <summary>The station whose pad or board line the mouse is over, as the batch drew them last frame, or -1.</summary>
     private int PadUnderMouse()
         => _furniture.TryPick(_game.Input.MousePosition, out var hit) && hit.Tag is TStation station ? _stations.IndexOf(station) : -1;
 
@@ -411,7 +409,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     {
         var shapes = _overlay;
 
-        shapes.BorderWidth = LeaderWidth;
+        shapes.StrokeWidth = LeaderWidth;
         shapes.Dash.Set(2f, 5f);
 
         foreach (var station in _stations)
@@ -442,8 +440,6 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
             shapes.DrawPixelRing(AnchorOf(station), LeaderEndRadius, Color.White);
             shapes.DrawPixelDisc(PinOf(station), LeaderEndRadius, Color.White);
         }
-
-        shapes.BorderWidth = 3f;
     }
 
     private static Vector3 AnchorOf(GalleryStation station) => station.At(station.Exhibit.Anchor ?? new Vector3(0f, 0.3f, 0f));
@@ -453,6 +449,19 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         var anchor = station.Exhibit.Anchor ?? new Vector3(0f, 0.3f, 0f);
 
         return station.At(anchor.X + 1.2f, PinHeight, anchor.Z);
+    }
+
+    /// <summary>The station's facing rotation tilted back about its Right axis, so the text meets the visitor's view square on.</summary>
+    private static Quaternion LabelRotation(GalleryStation station)
+    {
+        var tilt = Quaternion.RotationAxis(station.Right, MathUtil.DegreesToRadians(LabelPitchDegrees));
+        var basis = Matrix.Identity;
+
+        basis.Right = station.Right;
+        basis.Up = Vector3.Transform(Vector3.UnitY, tilt);
+        basis.Backward = Vector3.Transform(station.Forward, tilt);
+
+        return Quaternion.RotationMatrix(basis);
     }
 
     private int NearestStation(Vector3 position)

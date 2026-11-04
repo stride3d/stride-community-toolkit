@@ -138,7 +138,7 @@ namespace E10_3D_ComputeBoids
 
             right = normalize(right);
 
-            float3 side = cross(heading, right);
+            float3 side = cross(right, heading);
 
             // The rows of the world matrix are the basis vectors and the translation, the way Stride
             // multiplies a row vector by a matrix; column k of that matrix is the k-th component of

@@ -27,7 +27,7 @@ public static class MaterialDescriptors
     /// from that - under the Lambert diffuse and microfacet specular models. What <c>game.CreateMaterial(colour, metalness, glossiness)</c> compiles.
     /// </summary>
     /// <param name="colour">The colour: the diffuse of a dielectric, the reflection tint of a metal.</param>
-    /// <param name="metalness">0 for a dielectric, which keeps its colour as diffuse and reflects a colourless 4 percent; 1 for a metal, which has no diffuse and reflects in its own colour.</param>
+    /// <param name="metalness">0 for a dielectric, which keeps its colour as diffuse and reflects a colourless 2 percent; 1 for a metal, which has no diffuse and reflects in its own colour.</param>
     /// <param name="glossiness">0 for rough, where the highlight is a haze; 1 for a mirror.</param>
     /// <remarks>
     /// The specular model is the engine's default, whose environment term is a lookup texture the engine

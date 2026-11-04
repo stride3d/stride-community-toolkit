@@ -65,7 +65,7 @@ var sceneSetup = new SceneSetup3D
     Profiler = true,
     WindowTitle = "Cube fountain - Stride Community Toolkit",
     Resizable = true,
-    DpiAware = true,
+    DpiAware = true
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
@@ -76,16 +76,8 @@ void Start(Scene scene)
 {
     for (var i = 0; i < shapes.Length; i++)
     {
-        // The model, owned by a prototype parked out of sight
-        var prototype = game.CreatePrimitive(shapes[i].Type, new PrimitiveEntityOptions
-        {
-            Body = BodyMode.None,
-            Material = game.CreateMaterial(shapes[i].Colour, metalness: 0f, glossiness: 0.5f),
-            Position = new Vector3(0f, -100f, 0f),
-        });
-
-        prototype.Scene = scene;
-        models[i] = prototype.Get<ModelComponent>().Model;
+        // The model every body of this shape is drawn with
+        models[i] = game.GetOrCreateModel(shapes[i].Type, game.CreateMaterial(shapes[i].Colour, metalness: 0f, glossiness: 0.5f));
 
         // The master: the one entity that is drawn, once for every body of this shape. An instance
         // shares its master's model and material, which is why each shape and colour has its own.
@@ -197,16 +189,14 @@ InterpolationMode Interpolation() => interpolated ? InterpolationMode.Interpolat
 /// </summary>
 Entity CreateBody(Scene scene, int kind, Vector3 position)
 {
-    // AddBepuPhysics derives the collider from the shape alone
-    var body = new Entity(shapes[kind].Name) { new ModelComponent(models[kind]) };
+    // AddBepuPhysics derives the collider from the shape alone, so no ModelComponent is needed for it
+    var body = new Entity(shapes[kind].Name);
 
     body.AddBepuPhysics(shapes[kind].Type, new BepuPhysicsOptions
     {
         // The toolkit interpolates a body by default; the I key turns it off to show the difference
         Interpolation = interpolated,
     });
-
-    body.Remove<ModelComponent>();
 
     body.Transform.Position = position;
     body.Scene = scene;

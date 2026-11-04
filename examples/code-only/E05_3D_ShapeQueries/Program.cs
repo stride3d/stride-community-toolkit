@@ -82,7 +82,7 @@ void Start(Scene scene)
 
 void Update(Scene scene, GameTime time)
 {
-    // The bodies hand over their simulation once they are attached, which takes a frame
+    // The bodies carry their simulation from the moment their entities join the scene; read once, here, and kept
     simulation ??= bodies[0].Body.Simulation;
 
     if (simulation is null) return;
@@ -209,6 +209,7 @@ void Throw(Scene scene, Vector3 direction)
     {
         EntityName = $"Ball {thrown.Count + 1}",
         Material = ballMaterial,
+        ShareModel = true,
         Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated, Gravity = false },
         Position = launcher,
     });
@@ -278,6 +279,7 @@ void BuildLauncher(Scene scene)
     {
         EntityName = "Launcher",
         Material = ballMaterial,
+        ShareModel = true,
         Body = BodyMode.None,
         Position = launcher,
     });

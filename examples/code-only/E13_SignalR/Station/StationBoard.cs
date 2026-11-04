@@ -285,8 +285,8 @@ public sealed class StationBoard
         const float Radius = 0.25f;
         var half = _board.Half - new Vector2(0.15f, 0.15f);
 
-        // The arc is a stroke at the border width, so it matches the lines' two pixels
-        shapes.BorderWidth = 2f;
+        // The arc is a stroke two pixels wide, so it matches the lines
+        shapes.StrokeWidth = 2f;
 
         ReadOnlySpan<(float X, float Y)> corners = [(-1f, -1f), (1f, -1f), (-1f, 1f), (1f, 1f)];
 
@@ -304,6 +304,7 @@ public sealed class StationBoard
             Line(shapes, corner.X, elbow.Y, corner.X, elbow.Y - signY * Tick, 2f, accent);
         }
 
+        shapes.StrokeWidth = 1f;
         shapes.BorderWidth = 1.5f;
     }
 

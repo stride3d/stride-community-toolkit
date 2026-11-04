@@ -18,63 +18,62 @@ public static class EntityExtensions
 {
     private static readonly Logger Log = GlobalLogger.GetLogger("Bepu");
 
-    extension(Entity entity)
+    /// <summary>
+    /// Adds Bepu 2D physics to the entity, with the collider that matches <paramref name="shape"/>, extruded
+    /// by the shape's depth.
+    /// </summary>
+    /// <param name="entity">The entity the body is added to.</param>
+    /// <param name="shape">The flat shape the entity's model was built from; the collider is derived from it.</param>
+    /// <param name="options">The body's mode, component, mass and interpolation; <see langword="null"/> is a dynamic, interpolated body.</param>
+    /// <returns>The entity, with the component added unless the mode is <see cref="BodyMode.None"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
+    /// <exception cref="InvalidOperationException">A component is supplied together with <see cref="BodyMode.None"/>.</exception>
+    public static Entity AddBepuPhysics(this Entity entity, Primitive2D shape, BepuPhysicsOptions? options = null)
     {
-        /// <summary>
-        /// Adds Bepu 2D physics to the entity, with the collider that matches <paramref name="shape"/>, extruded
-        /// by the shape's depth.
-        /// </summary>
-        /// <param name="shape">The flat shape the entity's model was built from; the collider is derived from it.</param>
-        /// <param name="options">The body's mode, component, mass and interpolation; <see langword="null"/> is a dynamic, interpolated body.</param>
-        /// <returns>The entity, with the component added unless the mode is <see cref="BodyMode.None"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">A component is supplied together with <see cref="BodyMode.None"/>.</exception>
-        public Entity AddBepuPhysics(Primitive2D shape, BepuPhysicsOptions? options = null)
-        {
-            ArgumentNullException.ThrowIfNull(entity);
-            ArgumentNullException.ThrowIfNull(shape);
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(shape);
 
-            options ??= new();
+        options ??= new();
 
-            // The toolkit's own Body2DComponent, not the engine's of the same name: a type in this
-            // file's own namespace wins over one brought in by a using directive. When the engine's
-            // version ships and this copy is deleted, this line resolves to it instead, unchanged
-            var component = ComponentFor(options, static () => new Body2DComponent { Collider = new CompoundCollider() });
+        // The toolkit's own Body2DComponent, not the engine's of the same name: a type in this
+        // file's own namespace wins over one brought in by a using directive. When the engine's
+        // version ships and this copy is deleted, this line resolves to it instead, unchanged
+        var component = ComponentFor(options, static () => new Body2DComponent { Collider = new CompoundCollider() });
 
-            if (component is null) return entity;
+        if (component is null) return entity;
 
-            Fit(component, options, () => ColliderFor(shape, shape.Depth));
+        Fit(component, options, () => ColliderFor(shape, shape.Depth));
 
-            entity.Add(component);
+        entity.Add(component);
 
-            return entity;
-        }
+        return entity;
+    }
 
-        /// <summary>
-        /// Adds Bepu 3D physics to the entity, with the collider that matches <paramref name="shape"/>.
-        /// </summary>
-        /// <param name="shape">The shape the entity's model was built from; the collider is derived from it.</param>
-        /// <param name="options">The body's mode, component, mass and interpolation; <see langword="null"/> is a dynamic, interpolated body.</param>
-        /// <returns>The entity, with the component added unless the mode is <see cref="BodyMode.None"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">A component is supplied together with <see cref="BodyMode.None"/>.</exception>
-        public Entity AddBepuPhysics(Primitive3D shape, BepuPhysicsOptions? options = null)
-        {
-            ArgumentNullException.ThrowIfNull(entity);
-            ArgumentNullException.ThrowIfNull(shape);
+    /// <summary>
+    /// Adds Bepu 3D physics to the entity, with the collider that matches <paramref name="shape"/>.
+    /// </summary>
+    /// <param name="entity">The entity the body is added to.</param>
+    /// <param name="shape">The shape the entity's model was built from; the collider is derived from it.</param>
+    /// <param name="options">The body's mode, component, mass and interpolation; <see langword="null"/> is a dynamic, interpolated body.</param>
+    /// <returns>The entity, with the component added unless the mode is <see cref="BodyMode.None"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
+    /// <exception cref="InvalidOperationException">A component is supplied together with <see cref="BodyMode.None"/>.</exception>
+    public static Entity AddBepuPhysics(this Entity entity, Primitive3D shape, BepuPhysicsOptions? options = null)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(shape);
 
-            options ??= new();
+        options ??= new();
 
-            var component = ComponentFor(options, static () => new BodyComponent { Collider = new CompoundCollider() });
+        var component = ComponentFor(options, static () => new BodyComponent { Collider = new CompoundCollider() });
 
-            if (component is null) return entity;
+        if (component is null) return entity;
 
-            Fit(component, options, () => ColliderFor(shape));
+        Fit(component, options, () => ColliderFor(shape));
 
-            entity.Add(component);
+        entity.Add(component);
 
-            return entity;
-        }
+        return entity;
     }
 
     /// <summary>
@@ -155,8 +154,9 @@ public static class EntityExtensions
                 Length = depth,
                 RotationLocal = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90))
             },
-            // A capsule's Length is the straight part between the two semicircles; the shape's Height is the whole thing
-            Primitive2D.CapsuleShape capsule => new CapsuleCollider { Radius = capsule.Radius, Length = capsule.Height - 2 * capsule.Radius },
+            // A capsule's Length is the straight part between the two semicircles; the shape's Height is the whole thing. A
+            // height under two radii would make it negative, which Bepu rejects, so it is clamped the way the mesh clamps it
+            Primitive2D.CapsuleShape capsule => new CapsuleCollider { Radius = capsule.Radius, Length = MathF.Max(capsule.Height, capsule.Radius * 2.01f) - 2 * capsule.Radius },
             Primitive2D.TriangleShape triangle => TriangularPrismCollider.Create(new Vector3(triangle.Size.X, triangle.Size.Y, depth)),
             Primitive2D.RegularPolygonShape polygon => PolygonCollider.Create(polygon, depth),
             Primitive2D.PolygonShape polygon => PolygonCollider.Create(polygon, depth),

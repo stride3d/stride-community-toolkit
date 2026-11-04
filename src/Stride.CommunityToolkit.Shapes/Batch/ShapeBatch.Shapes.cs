@@ -90,7 +90,7 @@ public sealed partial class ShapeBatch
 
     /// <summary>
     /// Submits a camera-facing ring whose radius is measured in pixels on screen, stroked
-    /// <see cref="BorderWidth"/> pixels wide - a cursor marker or a selection halo that keeps its size
+    /// <see cref="StrokeWidth"/> pixels wide - a cursor marker or a selection halo that keeps its size
     /// at any distance.
     /// </summary>
     /// <param name="center">World position of the centre.</param>
@@ -129,13 +129,14 @@ public sealed partial class ShapeBatch
     /// <param name="color">The ring colour.</param>
     /// <remarks>
     /// The ring is the shape, not the disc it encloses, so a <see cref="ShapeGlow.Width"/> glows on both
-    /// sides of it. <see cref="ShapeFill.Alpha"/> does not apply.
+    /// sides of it. The stroke is <see cref="StrokeWidth"/> pixels wide; <see cref="BorderWidth"/> and
+    /// <see cref="ShapeFill.Alpha"/> do not apply.
     /// </remarks>
     public void DrawRing(Vector3 center, Vector3 normal, float radius, Color color)
         => Add([Vector2.Zero], ShapePlane.FromNormal(center, normal), OutlineStyle(color), Stroke, radius, 1f);
 
     /// <summary>
-    /// Submits an unfilled circle in the XY plane, the 2D case, stroked <see cref="BorderWidth"/> pixels wide.
+    /// Submits an unfilled circle in the XY plane, the 2D case, stroked <see cref="StrokeWidth"/> pixels wide.
     /// </summary>
     /// <param name="center">Centre in the XY plane.</param>
     /// <param name="radius">Radius in world units, or pixels with <see cref="Screen"/> on.</param>
@@ -210,7 +211,7 @@ public sealed partial class ShapeBatch
     /// <param name="startAngle">Where the arc starts, in radians. Zero is along the plane's X axis; see <see cref="DrawSector(Vector3, Vector3, float, float, float, Color, float)"/>.</param>
     /// <param name="sweepAngle">How far it extends, in radians. Positive is counter-clockwise, negative clockwise; a full turn or more closes the ring.</param>
     /// <param name="color">The outline colour; with a width the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
-    /// <param name="width">Width of the band in world units, or 0 (the default) for a stroke.</param>
+    /// <param name="width">Width of the band in world units, or 0 (the default) for a stroke <see cref="StrokeWidth"/> pixels wide.</param>
     /// <remarks>
     /// The ends are semicircles, which is what a progress ring wants. For square, radial ends use
     /// <see cref="DrawSector(Vector3, Vector3, float, float, float, Color, float)"/> with an inner radius.
@@ -228,7 +229,7 @@ public sealed partial class ShapeBatch
     /// <param name="startAngle">Where the arc starts, in radians from the X axis.</param>
     /// <param name="sweepAngle">How far it extends, in radians. Positive is counter-clockwise, negative clockwise; a full turn or more closes the ring.</param>
     /// <param name="color">The outline colour; with a width the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
-    /// <param name="width">Width of the band in world units, or 0 (the default) for a stroke.</param>
+    /// <param name="width">Width of the band in world units, or 0 (the default) for a stroke <see cref="StrokeWidth"/> pixels wide.</param>
     public void DrawArc(Vector2 center, float radius, float startAngle, float sweepAngle, Color color, float width = 0f)
         => AddArc(ShapePlane.XY(center), radius, startAngle, sweepAngle, color, width);
 

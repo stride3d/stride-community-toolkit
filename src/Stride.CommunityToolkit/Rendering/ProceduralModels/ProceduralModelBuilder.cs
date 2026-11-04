@@ -16,7 +16,7 @@ public static class ProceduralModelBuilder
     {
         ArgumentNullException.ThrowIfNull(shape);
 
-        return shape switch
+        PrimitiveProceduralModelBase model = shape switch
         {
             Primitive3D.BoxShape box => new CubeProceduralModel { Size = box.Size },
             Primitive3D.SphereShape sphere => new SphereProceduralModel { Radius = sphere.Radius, Tessellation = sphere.Tessellation },
@@ -30,6 +30,11 @@ public static class ProceduralModelBuilder
             Primitive3D.TextShape text => new TextProceduralModel { Text = text.Content, Font = text.Font, Options = text.Options },
             _ => throw new ArgumentException($"Unknown shape {shape.GetType().Name}.", nameof(shape))
         };
+
+        // One UV channel: the default of ten repeats the same coordinates ten times over and makes every vertex 84 bytes instead of 48
+        model.NumberOfTextureCoordinates = 1;
+
+        return model;
     }
 
     /// <summary>
@@ -41,7 +46,7 @@ public static class ProceduralModelBuilder
     {
         ArgumentNullException.ThrowIfNull(shape);
 
-        return shape switch
+        PrimitiveProceduralModelBase model = shape switch
         {
             Primitive2D.RectangleShape rectangle => new RectangleProceduralModel { Size = rectangle.Size },
             Primitive2D.CircleShape circle => new CircleProceduralModel { Radius = circle.Radius, Tessellation = circle.Tessellation },
@@ -51,5 +56,10 @@ public static class ProceduralModelBuilder
             Primitive2D.PolygonShape polygon => new PolygonProceduralModel { Vertices = polygon.Vertices },
             _ => throw new ArgumentException($"Unknown shape {shape.GetType().Name}.", nameof(shape))
         };
+
+        // One UV channel: the default of ten repeats the same coordinates ten times over and makes every vertex 84 bytes instead of 48
+        model.NumberOfTextureCoordinates = 1;
+
+        return model;
     }
 }

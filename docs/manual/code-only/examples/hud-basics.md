@@ -26,4 +26,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E03_2D_HUD_Basics).
 
-[!code-csharp[](../../../../examples/code-only/E03_2D_HUD_Basics/Program.cs?start=1&end=412)]
+[!code-csharp[](../../../../examples/code-only/E03_2D_HUD_Basics/Program.cs?start=1&end=410)]

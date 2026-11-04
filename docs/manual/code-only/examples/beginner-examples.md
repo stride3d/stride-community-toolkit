@@ -11,19 +11,24 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 - [3D Primitives](primitives-3d.md): Nine of the toolkit's 3D primitives - cube, box, cone, capsule, sphere, cylinder, teapot, torus and triangular prism - dropped into one scene so the shapes, their default sizes and their generated colliders can be compared side by side.
 - [2D Primitives](primitives-2d.md): Create a minimal 2D scene using toolkit helpers and place multiple different primitive shapes.
 - [Basic Gum UI Setup](gum-stride-ui-basic.md): Initialise Gum UI in Stride using the official Gum.Stride runtime and the Stride Community Toolkit.
-- [3D Material](material.md): The four numbers of a material, one per row of cubes: a glossiness sweep from rough to mirror, a metalness sweep from dielectric to metal, and a front row that builds the same numbers as a MaterialDescriptor feature by feature - which is what CreateMaterial does.
+- [Basic 3D Scene (Falling Shapes)](falling-shapes-3d.md): The next step after the basic 3D scene: thirty shapes of five kinds and five colours, dropped in a column that topples into a pile.
+- [3D Material](material.md): The four numbers of a material over three rows of cubes: a glossiness sweep from rough to mirror, a metalness sweep from dielectric to metal, and a front row that builds the same numbers as a MaterialDescriptor feature by feature - which is what CreateMaterial does.
 - [2D Material](material-2d.md): What each material helper does on a flat shape, in four rows of squares: the flat material a 2D scene wants, the same colours as a lit material, black because nothing in a 2D scene lights them, a checkerboard built in code as a screen material and as a lit textured one, and a translucent overlay drawn over a square.
 - [Post Effects](post-effects.md): Every post effect Stride ships, one key each: bloom, ambient occlusion, screen-space reflections, depth of field, light streaks, lens flare, fog, outline, FXAA, and the vignette, film-grain and dither colour transforms.
 - [Mesh Line](mesh-line.md): A line attached to a sphere, built as a real mesh rather than a debug primitive.
 - [Wav File](wav-file.md): Play a .wav read from disk at runtime, with no compiled asset: LoadWav decodes the file into memory and each CreateInstance is an independent playback.
 - [Procedural Sound](procedural-sound.md): A tone with no sound file: a callback computes the samples as they play.
+- [Basic 2D Scene (Falling Shapes)](falling-shapes-2d.md): The next step after the basic 2D scene: thirty shapes of five kinds and five colours, dropped in a column that topples into a pile.
 - [SyncScript - moving a body every frame](sync-script.md): A cube driven in a circle by a SyncScript, which is the ordinary way to run code every frame.
+- [Collider Shapes](collider-shapes.md): One of every primitive shape dropped side by side, each with the collider the toolkit fits to it: a box, a sphere, a capsule and a cylinder get their own kinds, and the cone, prism, torus and teapot get one convex hull each, which fills the torus.
+- [Reset Out of Bounds](reset-out-of-bounds.md): A row of balls drops onto a tilted plank with no ground under it, rolls off its low end and falls.
 - [Grabber](grabber.md): A gravity gun: click any body to pick it up, carry it on the end of the camera ray, and let go - with its velocity, so a flick throws it.
 - [Physics Materials](physics-materials.md): How to make something bouncy and how to make something slippery.
 - [Mesh Colliders](mesh-colliders.md): A collider made from real geometry, two ways: a convex hull wraps the model in the smallest convex shape that holds it, so a ring becomes a disc, and a mesh collider is the model's own triangles, so the hole stays a hole.
+- [Compound Colliders](compound-colliders.md): A hammer, a dumbbell and an L-piece, each one body whose compound collider holds a collider per piece at its own local pose and mass, beside the same pieces dropped as separate bodies.
 - [Give Me a Cube](give-me-cube-body.md): Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.
 - [Entity Text (Screen-Space)](entity-text.md): A gallery of everything EntityTextComponent can do, one feature per pole: anchoring, shadows, backgrounds, scaling, rotation, opacity, distance fading, several texts on one entity, and HUD text pinned to window corners that survives resizing.
-- [Easing Basics](easing-basics.md): Easing from the ground up, in four lanes that move a disc over the same two seconds: by hand with no easing, by hand with one formula, with the toolkit's easing functions, and with a Tween.
+- [Easing Basics](easing-basics.md): Easing from the ground up, in five lanes that move a disc over the same two seconds: by hand with no easing, by hand with one formula, with the toolkit's easing functions, with a Tween, and with MoveTowards, which keeps no clock.
 - [Easing Cheat Sheet](easing.md): Every easing curve in the toolkit on one screen: a tile per curve with its graph, a dot riding the graph on a shared clock, and a slider that moves the way a thing eased by that curve would.
 - [Easing in a 3D Game](easing-3d-game.md): Easing doing real work in a 3D scene, four ways, each one a Tween: a kinematic platform lifts a stack of physics bodies on a sine curve and comes back down, a door swings on a cubic curve, crystals pop in with an overshoot and bob forever, and the camera flies between two viewpoints on a smoother-step.
 - [Easing in a 2D Game](easing-2d-game.md): Easing doing real work in a 2D physics scene, each piece a Tween: a kinematic lift carries a stack of boxes up and down on a sine curve, coins pop in with an overshoot and fly to the score when collected, a "+10" rises and fades, and X shakes the camera on an elastic curve.
@@ -32,6 +37,7 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 - [2D Panels and Text](2d-scene-panels.md): Twenty-four HUD panel recipes side by side, each one property away from the last: fills, borders, rounded corners, glows of three strengths, glass, a ship-console panel with corner ticks and a gauge, dashed rings and lines that march, gradients, opacity, a translucent border, an additive glow, a hairline, a twelve-sided badge, a dashed route, overlapping see-through panels and a concave bracket.
 - [Trigger Zones](trigger-zones.md): Reacting to contact, three ways.
 - [Falling Shapes with Physics Options (2D)](falling-shapes-physics-2d.md): Thirty capsules and a rectangle dropped in a column, as in E01_2D_FallingShapes, with one thing added: each capsule is given its own Body2DComponent with a lower FrictionCoefficient, so the pile spreads wider than with the default.
+- [Box2D Events](box2d-events.md): Shapes drop through a sensor zone onto a floor and one handler listens to everything Box2D reports: begin and end touch, hits with their approach speed, and a sensor's visitors.
 - [Box2D Explosion](box2d-explosion.md): A grenade in one call: Explode gives every shape within a radius an impulse away from the centre, per metre of perimeter facing the blast, so a wide slab flies harder than a ball of the same mass.
 - [Time Control](time-control.md): The simulation has a clock of its own, with three knobs: TimeScale runs it slower or faster than the game, Enabled pauses it, and PoseGravity changes while it runs.
 - [Basic 2D Scene (Debug Rendering)](debug-render-2d.md): A pile of falling 2D shapes with the physics text overlays turned on, so what the simulation is actually solving can be seen rather than inferred.
@@ -46,5 +52,5 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 
 > [!NOTE]
 > Most examples run from a copy of their project with the toolkit packages from NuGet. `Stride.CommunityToolkit.Box2D` is not on NuGet yet,
-> so the examples built on it run from a clone of the repository: [Box2D Explosion](box2d-explosion.md).
+> so the examples built on it run from a clone of the repository: [Box2D Events](box2d-events.md), [Box2D Explosion](box2d-explosion.md).
 [!INCLUDE [basic-examples-outro](../../../includes/manual/examples/basic-examples-outro.md)]

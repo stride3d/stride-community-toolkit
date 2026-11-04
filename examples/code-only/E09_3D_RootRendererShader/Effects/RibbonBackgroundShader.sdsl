@@ -5,7 +5,7 @@ shader RibbonBackgroundShader : SpriteBase
     stage float3 Top;
     stage float3 Bottom;
     stage float WidthFactor;
-    stage float DeltaTime;
+    stage float TotalTime;
     stage float Frequency;
     stage float Amplitude;
     stage float Speed;
@@ -31,7 +31,7 @@ shader RibbonBackgroundShader : SpriteBase
     stage float3 CalcSine(float2 uv, float speed, float frequency, float amplitude, float shift, float offset, float3 color, float width, float exponent, bool dir)
     {
         float pi = 3.14159265359f;
-        float angle = DeltaTime * speed * frequency * -1.0f + (shift + uv.x) * 2.0f;
+        float angle = TotalTime * speed * frequency * -1.0f + (shift + uv.x) * 2.0f;
 
         float y = sin(angle) * amplitude + offset;
         float diffY = y - uv.y;

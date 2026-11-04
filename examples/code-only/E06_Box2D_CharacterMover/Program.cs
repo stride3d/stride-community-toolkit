@@ -242,9 +242,16 @@ void Update(Scene scene, GameTime time)
 
     var input = game.Input;
 
-    // A frame whose key press the pogo menu claims ends here.
-    if (pogoMenu.Update(input)) return;
+    // A frame whose key press the pogo menu claims gets no play input, but is drawn like any other
+    if (!pogoMenu.Update(input)) HandlePlayInput(input);
 
+    kickFlash = MathF.Max(0, kickFlash - (float)time.Elapsed.TotalSeconds);
+
+    Draw();
+}
+
+void HandlePlayInput(InputManager input)
+{
     // The first press of A or D hands the character to the player until R.
     if (input.IsKeyDown(Keys.A) || input.IsKeyDown(Keys.D))
     {
@@ -263,10 +270,6 @@ void Update(Scene scene, GameTime time)
     if (input.IsKeyPressed(Keys.K)) Kick();
     if (input.IsKeyPressed(Keys.G)) showContacts = !showContacts;
     if (input.IsKeyPressed(Keys.R)) Reset();
-
-    kickFlash = MathF.Max(0, kickFlash - (float)time.Elapsed.TotalSeconds);
-
-    Draw();
 }
 
 // The sample's kick: an overlap just below the feet, restricted to debris, and an impulse away

@@ -7,7 +7,7 @@ slug: simple-geometry
 
 The smallest possible custom mesh - one triangle from three vertices - with each vertex labelled on
 screen so the relationship between the numbers in the code and the shape on screen is visible. The
-labels come from EntityTextComponent, which needs its renderer registered once, and the ground gizmo
+labels come from EntityTextComponent, whose renderer registers itself, and the ground gizmo
 shows which way the axes point. Useful as a scratchpad when a mesh comes out inside out or facing
 the wrong way.
 

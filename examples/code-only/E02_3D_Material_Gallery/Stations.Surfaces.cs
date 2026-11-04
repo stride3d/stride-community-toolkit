@@ -27,12 +27,12 @@ public static class SurfaceStations
     /// <c>DitheredShadows</c> to <see langword="false"/> on the transparency feature for a full shadow, or
     /// <c>IsShadowCaster</c> to <see langword="false"/> on the model component for none.
     /// </remarks>
-    public static void Transparency(MaterialStation s)
+    public static void Transparency(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
         var colour = new Color(70, 150, 255);
-        var v = s.Pick("blend", "additive", "cutoff", "dithered", "overlay: unlit, the alpha is the opacity");
+        var v = station.Pick("blend", "additive", "cutoff", "dithered", "overlay: unlit, the alpha is the opacity");
 
         var descriptor = v == 4
             ? MaterialDescriptors.Overlay(new Color(colour.R, colour.G, colour.B, 115))
@@ -42,14 +42,14 @@ public static class SurfaceStations
         {
             0 => new MaterialTransparencyBlendFeature { Alpha = new ComputeFloat(0.45f), Tint = new ComputeColor(Color.White) },
             1 => new MaterialTransparencyAdditiveFeature { Alpha = new ComputeFloat(0.7f), Tint = new ComputeColor(Color.White) },
-            2 => new MaterialTransparencyCutoffFeature { Alpha = Recipes.Scalar(s.Textures.Generated("holes", () => RuntimeTextures.Holes(s.Game.GraphicsDevice)), tiling: 2f) },
+            2 => new MaterialTransparencyCutoffFeature { Alpha = Recipes.Scalar(station.Textures.Generated("holes", () => RuntimeTextures.Holes(station.Game.GraphicsDevice)), tiling: 2f) },
             3 => new MaterialTransparencyCutoffFeature { Alpha = new ComputeShaderClassScalar { MixinReference = "GalleryDither" } },
             _ => descriptor.Attributes.Transparency,
         };
 
         // Something behind, so see-through has something to see
-        s.Place(Primitive3D.Sphere(0.8f), s.Material(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f)), new Vector3(0f, 0.8f, -2.4f));
-        s.PlaceTrio(s.Material(descriptor));
+        station.Place(Primitive3D.Sphere(0.8f), station.Compile(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f)), new Vector3(0f, 0.8f, -2.4f));
+        station.PlaceTrio(station.Compile(descriptor));
     }
 
     /// <summary>
@@ -61,18 +61,18 @@ public static class SurfaceStations
     /// colour and the glass would go opaque; that is how the engine's own sample glass is built. V
     /// cycles clear, tinted and frosted, where frosted is nothing but a lower glossiness.
     /// </summary>
-    public static void ThinGlass(MaterialStation s)
+    public static void ThinGlass(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var (tint, glossiness) = s.Pick("clear", "tinted", "frosted") switch
+        var (tint, glossiness) = station.Pick("clear", "tinted", "frosted") switch
         {
             0 => (new Color(245, 250, 255), 0.95f),
             1 => (new Color(90, 215, 70), 0.85f),
             _ => (new Color(225, 230, 235), 0.45f),
         };
 
-        var glass = s.Material(new MaterialDescriptor
+        var glass = station.Compile(new MaterialDescriptor
         {
             Attributes =
             {
@@ -90,9 +90,9 @@ public static class SurfaceStations
             },
         });
 
-        s.Place(Primitive3D.Sphere(0.8f), s.Material(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f)), new Vector3(-2.8f, 0.8f, -2.4f));
-        s.Place(Primitive3D.Cube(1.4f), s.Material(Recipes.Pbr(new Color(60, 160, 90), 0.5f, 0f)), new Vector3(2.8f, 0.8f, -2.4f));
-        s.PlaceTrio(glass);
+        station.Place(Primitive3D.Sphere(0.8f), station.Compile(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f)), new Vector3(-2.8f, 0.8f, -2.4f));
+        station.Place(Primitive3D.Cube(1.4f), station.Compile(Recipes.Pbr(new Color(60, 160, 90), 0.5f, 0f)), new Vector3(2.8f, 0.8f, -2.4f));
+        station.PlaceTrio(glass);
     }
 
     /// <summary>
@@ -112,12 +112,12 @@ public static class SurfaceStations
     /// Requires Stride 4.4.0-beta9 or later. The light attenuation is set to none on both
     /// models: the default directional attenuation renders these shapes black at its defaults.
     /// </remarks>
-    public static void Hair(MaterialStation s)
+    public static void Hair(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
         // Scheuermann first: on solid shapes its sheen reads at once, where Kajiya-Kay's is subtle
-        var model = s.Pick("Scheuermann approximation", "Scheuermann improved", "Kajiya-Kay shifted") switch
+        var model = station.Pick("Scheuermann approximation", "Scheuermann improved", "Kajiya-Kay shifted") switch
         {
             0 => HairShared.HairShadingModel.ScheuermannApproximation,
             1 => HairShared.HairShadingModel.ScheuermannImproved,
@@ -125,18 +125,18 @@ public static class SurfaceStations
         };
 
         var colour = new Color(120, 75, 35);
-        var device = s.Game.GraphicsDevice;
-        var strands = s.Textures.Generated("strands", () => HairCards.Strands(device, colour));
+        var device = station.Game.GraphicsDevice;
+        var strands = station.Textures.Generated("strands", () => HairCards.Strands(device, colour));
 
         // The strand texture is the diffuse; its alpha is what the passes cut by. Both faces of a card are hair
         // Clamped along the strand: wrapped, the tip row would blend with the root row and paint a line across every card end
         var strandInput = Recipes.Colour(strands);
         strandInput.AddressModeV = TextureAddressMode.Clamp;
-        var cards = s.Material(HairMaterial(model, strandInput, twoSided: true));
+        var cards = station.Compile(HairMaterial(model, strandInput, twoSided: true));
 
         // A skin-coloured head, so the clear forehead reads as a face; the face is towards the visitor
         const float headRadius = 0.55f;
-        var skin = s.Material(Recipes.Pbr(new Color(225, 180, 150), 0.35f, 0f));
+        var skin = station.Compile(Recipes.Pbr(new Color(225, 180, 150), 0.35f, 0f));
 
         var heads = new List<(Entity Entity, Quaternion Placed)>();
 
@@ -144,12 +144,12 @@ public static class SurfaceStations
         Head(new Vector3(0f, 1.1f, 0f), HairStyle.Bob);
         Head(new Vector3(2.8f, 2.6f, 0f), HairStyle.Long);
 
-        s.State = new HairState(cards, heads);
+        station.State = new HairState(cards, heads);
 
         void Head(Vector3 at, HairStyle style)
         {
-            var head = s.Place(Primitive3D.Sphere(headRadius), skin, at);
-            var hair = s.PlaceModel(HairCards.Haircut(device, headRadius, style), cards, at);
+            var head = station.Place(Primitive3D.Sphere(headRadius), skin, at);
+            var hair = station.PlaceModel(HairCards.Haircut(device, headRadius, style), cards, at);
 
             heads.Add((head, head.Transform.Rotation));
             heads.Add((hair, hair.Transform.Rotation));
@@ -162,11 +162,11 @@ public static class SurfaceStations
     /// one vector in the hair's object space, which turns with the heads - close enough for a
     /// breeze, and one parameter set rather than three.
     /// </summary>
-    public static void HairSway(MaterialStation s)
+    public static void HairSway(MaterialStation station)
     {
-        if (s.State is not HairState state) return;
+        if (station.State is not HairState state) return;
 
-        var turn = Quaternion.RotationY(MathF.Sin(s.Seconds * 0.35f) * 0.7f);
+        var turn = Quaternion.RotationY(MathF.Sin(station.Seconds * 0.35f) * 0.7f);
 
         foreach (var (entity, placed) in state.Heads)
         {
@@ -175,7 +175,7 @@ public static class SurfaceStations
 
         foreach (var pass in state.Cards.Passes)
         {
-            pass.Parameters.Set(HairSwayKeys.SwayTime, s.Seconds);
+            pass.Parameters.Set(HairSwayKeys.SwayTime, station.Seconds);
             pass.Parameters.Set(HairSwayKeys.SwayStrength, 0.18f);
             pass.Parameters.Set(HairSwayKeys.SwayWind, new Vector3(1f, 0.1f, 0.4f));
         }
@@ -192,31 +192,31 @@ public static class SurfaceStations
     /// function, which reads the bitangent, on cards laid out for it. V walks them; the first
     /// variation is the plain material for reference.
     /// </summary>
-    public static void HairParts(MaterialStation s)
+    public static void HairParts(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var device = s.Game.GraphicsDevice;
+        var device = station.Game.GraphicsDevice;
         var colour = new Color(120, 75, 35);
-        var strands = s.Textures.Generated("strands", () => HairCards.Strands(device, colour));
+        var strands = station.Textures.Generated("strands", () => HairCards.Strands(device, colour));
         var strandInput = Recipes.Colour(strands);
         strandInput.AddressModeV = TextureAddressMode.Clamp;
 
-        var part = s.Pick("plain", "the three passes in colour", "scattering shadowing", "per-strand noise", "direction from the bitangent");
+        var part = station.Pick("plain", "the three passes in colour", "scattering shadowing", "per-strand noise", "direction from the bitangent");
 
-        IComputeScalar? noise = part == 3 ? Recipes.Scalar(s.Textures.Generated("noise", () => RuntimeTextures.Noise(device)), 6f) : null;
+        IComputeScalar? noise = part == 3 ? Recipes.Scalar(station.Textures.Generated("noise", () => RuntimeTextures.Noise(device)), 6f) : null;
         IMaterialHairShadowingFunction? shadowing = part == 2 ? new MaterialHairShadowingFunctionScattering { ExtinctionStrength = 15f } : null;
         IMaterialHairDirectionFunction? direction = part == 4 ? new MaterialHairDirectionFunctionBitangent() : null;
 
-        var cards = s.Material(HairMaterial(HairShared.HairShadingModel.ScheuermannApproximation, strandInput, twoSided: true,
+        var cards = station.Compile(HairMaterial(HairShared.HairShadingModel.ScheuermannApproximation, strandInput, twoSided: true,
             sway: false, debugPasses: part == 1, shadowing: shadowing, noise: noise, direction: direction));
 
         const float headRadius = 0.55f;
-        var skin = s.Material(Recipes.Pbr(new Color(225, 180, 150), 0.35f, 0f));
+        var skin = station.Compile(Recipes.Pbr(new Color(225, 180, 150), 0.35f, 0f));
         var at = new Vector3(0f, 1.1f, 0f);
 
-        s.Place(Primitive3D.Sphere(headRadius), skin, at);
-        s.PlaceModel(HairCards.Haircut(device, headRadius, HairStyle.Bob, directionInBitangent: part == 4), cards, at);
+        station.Place(Primitive3D.Sphere(headRadius), skin, at);
+        station.PlaceModel(HairCards.Haircut(device, headRadius, HairStyle.Bob, directionInBitangent: part == 4), cards, at);
     }
 
     /// <summary>
@@ -276,11 +276,11 @@ public static class SurfaceStations
     /// frame wrong (reported upstream), so what shows is the translucency, from the sun's shadow map
     /// with transmittance on. V cycles it.
     /// </summary>
-    public static void Subsurface(MaterialStation s)
+    public static void Subsurface(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var translucency = s.Pick("translucency 0.83", "translucency 0.3", "translucency 1") switch { 0 => 0.83f, 1 => 0.3f, _ => 1f };
+        var translucency = station.Pick("translucency 0.83", "translucency 0.3", "translucency 1") switch { 0 => 0.83f, 1 => 0.3f, _ => 1f };
 
         var descriptor = Recipes.Pbr(new Color(230, 180, 160), 0.45f, 0f);
         descriptor.Attributes.SubsurfaceScattering = new MaterialSubsurfaceScatteringFeature
@@ -290,7 +290,7 @@ public static class SurfaceStations
             TranslucencyMap = new ComputeFloat(1f),
         };
 
-        s.PlaceTrio(s.Material(descriptor));
+        station.PlaceTrio(station.Compile(descriptor));
     }
 
     /// <summary>
@@ -298,18 +298,18 @@ public static class SurfaceStations
     /// normals, and a clear coat over both with its own glossiness. One feature holds the three
     /// layers; the flake normal map is a runtime texture of small random tilts. V cycles the paint.
     /// </summary>
-    public static void ClearCoat(MaterialStation s)
+    public static void ClearCoat(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var paint = s.Pick("candy red", "midnight blue", "British green") switch
+        var paint = station.Pick("candy red", "midnight blue", "British green") switch
         {
             0 => new Color(180, 20, 30),
             1 => new Color(20, 30, 90),
             _ => new Color(10, 70, 40),
         };
 
-        var flakes = s.Textures.Generated("flakes", () => RuntimeTextures.Flakes(s.Game.GraphicsDevice));
+        var flakes = station.Textures.Generated("flakes", () => RuntimeTextures.Flakes(station.Game.GraphicsDevice));
 
         var descriptor = Recipes.Pbr(paint, glossiness: 0.6f, metalness: 0f);
 
@@ -327,7 +327,7 @@ public static class SurfaceStations
             LODDistance = new ComputeFloat(20f),
         };
 
-        s.PlaceTrio(s.Material(descriptor));
+        station.PlaceTrio(station.Compile(descriptor));
     }
 
     /// <summary>
@@ -336,19 +336,19 @@ public static class SurfaceStations
     /// looks the band up in a texture, here a three-step ramp made at runtime, so the bands are
     /// yours to draw. V switches between them.
     /// </summary>
-    public static void CelShading(MaterialStation s)
+    public static void CelShading(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        IMaterialCelShadingLightFunction ramp = s.Pick("default bands", "three-step ramp") == 0
+        IMaterialCelShadingLightFunction ramp = station.Pick("default bands", "three-step ramp") == 0
             ? new MaterialCelShadingLightDefault()
-            : new MaterialCelShadingLightRamp { RampTexture = s.Textures.Generated("cel-ramp", () => RuntimeTextures.Ramp(s.Game.GraphicsDevice, 0.25f, 0.6f, 1f)) };
+            : new MaterialCelShadingLightRamp { RampTexture = station.Textures.Generated("cel-ramp", () => RuntimeTextures.Ramp(station.Game.GraphicsDevice, 0.25f, 0.6f, 1f)) };
 
         var descriptor = Recipes.Pbr(new Color(240, 120, 90), glossiness: 0.7f, metalness: 0f);
 
         descriptor.Attributes.DiffuseModel = new MaterialDiffuseCelShadingModelFeature { RampFunction = ramp };
         descriptor.Attributes.SpecularModel = new MaterialSpecularCelShadingModelFeature { RampFunction = ramp };
 
-        s.PlaceTrio(s.Material(descriptor));
+        station.PlaceTrio(station.Compile(descriptor));
     }
 }

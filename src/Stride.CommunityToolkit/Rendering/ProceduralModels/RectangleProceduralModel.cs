@@ -1,6 +1,6 @@
-using Stride.CommunityToolkit.Collections;
 using Stride.Graphics;
 using Stride.Rendering.ProceduralModels;
+using System.Collections.Concurrent;
 
 namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 
@@ -15,13 +15,13 @@ public class RectangleProceduralModel : PrimitiveProceduralModelBase
     public Vector2 Size { get; set; } = new(0.5f, 1);
 
     private static readonly Vector2[] _textureCoordinates = [new(1, 0), new(1, 1), new(0, 1), new(0, 0)];
-    private static readonly Dictionary<MeshCacheKey, GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
+    private static readonly ConcurrentDictionary<MeshCacheKey, GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
 
     private readonly record struct MeshCacheKey(Vector2 Size, float UScale, float VScale, bool ToLeftHanded);
 
     /// <inheritdoc />
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
-        => New(Size, UvScale.X, UvScale.Y);
+        => CachedMeshData.ForModel(New(Size, UvScale.X, UvScale.Y), LocalOffset, Scale);
 
     /// <summary>
     /// Creates (or retrieves from cache) a rectangle mesh of the given size and UV scale.

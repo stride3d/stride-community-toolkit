@@ -30,7 +30,7 @@ public static class Stations
         new("Trail", "a strip with an edge, behind a swinging emitter", nameof(ShapeBuilderTrail), Setup: ShapeStations.Trail, Update: ShapeStations.Swing),
         new("3D orientation", "quads with a rotation in space, not just on screen", nameof(Initial3DRotationSeed), Setup: ShapeStations.Orientation),
         new("Position arc", "born along an arc to a target", nameof(InitialPositionArc), Setup: MotionStations.Arc),
-        new("Direction and speed", "a cone of directions, stretched along the velocity", nameof(UpdaterSpeedToDirection), Setup: MotionStations.Direction),
+        new("Direction and speed", "a cone of velocities, each particle stretched along its own", nameof(UpdaterSpeedToDirection), Setup: MotionStations.Direction),
         new("Rotation and spin", "an initial angle and a spin over life", nameof(UpdaterRotationOverTime), Setup: MotionStations.Spin),
         new("Force field", "a vortex, a repulsor, a wind", nameof(UpdaterForceField), Setup: MotionStations.ForceField),
         new("Collider", "particles that bounce off a shape or stay inside one", nameof(UpdaterCollider), Setup: MotionStations.Collider),

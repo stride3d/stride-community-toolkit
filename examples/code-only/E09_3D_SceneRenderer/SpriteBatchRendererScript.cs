@@ -18,6 +18,8 @@ public class SpriteBatchRendererScript : StartupScript
 
     private SpriteFont? _font;
 
+    private DelegateSceneRenderer? _renderer;
+
     private const float FontSize = 12;
 
     private CameraComponent? _camera;
@@ -35,7 +37,23 @@ public class SpriteBatchRendererScript : StartupScript
 
         _camera = SceneSystem.SceneInstance.RootScene.GetCamera();
 
-        SceneSystem.GraphicsCompositor.AddSceneRenderer(new DelegateSceneRenderer(Draw));
+        _renderer = new DelegateSceneRenderer(Draw);
+        SceneSystem.GraphicsCompositor.AddSceneRenderer(_renderer);
+    }
+
+    /// <summary>
+    /// Takes the renderer out of the compositor and releases the sprite batch, so a removed entity leaves nothing drawing.
+    /// </summary>
+    public override void Cancel()
+    {
+        if (_renderer is not null && SceneSystem.GraphicsCompositor.Game is SceneRendererCollection renderers)
+        {
+            renderers.Children.Remove(_renderer);
+        }
+
+        _spriteBatch?.Dispose();
+        _spriteBatch = null;
+        _renderer = null;
     }
 
     /// <summary>

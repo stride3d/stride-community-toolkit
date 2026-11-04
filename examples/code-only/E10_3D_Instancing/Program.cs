@@ -62,30 +62,11 @@ void Start(Scene rootScene)
     // wall renders as a single cube, and the toolkit only logs a warning.
     game.AddInstancingSupport();
 
-    CreateIndividualCubes(rootScene, CreateSharedModel(rootScene, Color.Orange));
-    CreateInstancedCubes(rootScene, CreateSharedModel(rootScene, Color.LightGreen));
-}
-
-/// <summary>
-/// Creates one cube entity and returns its <see cref="Model"/>, so both walls can share it.
-/// </summary>
-/// <remarks>
-/// Sharing matters for a fair comparison. Calling CreatePrimitive per cube would also generate a
-/// separate vertex and index buffer per cube, so the slow side would be losing on memory as well as
-/// on draw calls, and the measurement would not be about instancing any more.
-/// </remarks>
-Model CreateSharedModel(Scene rootScene, Color color)
-{
-    // Parked out of sight; it exists only to own the Model
-    var prototype = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions
-    {
-        Material = game.CreateMaterial(color),
-        Position = new Vector3(0, -100, 0),
-    });
-
-    prototype.Scene = rootScene;
-
-    return prototype.Get<ModelComponent>().Model;
+    // One shared model per wall, for a fair comparison: a model per cube would also mean a vertex and
+    // an index buffer per cube, so the slow side would lose on memory as well as on draw calls, and the
+    // measurement would not be about instancing any more
+    CreateIndividualCubes(rootScene, game.GetOrCreateModel(Primitive3D.Cube(), game.CreateMaterial(Color.Orange)));
+    CreateInstancedCubes(rootScene, game.GetOrCreateModel(Primitive3D.Cube(), game.CreateMaterial(Color.LightGreen)));
 }
 
 /// <summary>

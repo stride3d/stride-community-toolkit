@@ -21,9 +21,6 @@ game.Run(new SceneSetup3D { Resizable = true, DpiAware = true }.UseBepu().UseSky
 
 void Start(Scene scene)
 {
-    // Optional: WorldTextProcessor adds the renderer itself once a text needs it
-    game.AddWorldTextRenderer();
-
     // --- Row 1: orientation --------------------------------------------------------------------
 
     AddText(scene, new Vector3(-4f, 1.2f, -2), text =>
@@ -206,7 +203,7 @@ description:
     písmeny v několika barevných kombinacích - HUD modrá, neon, čitelnostní halo a měkký bloom.
     Text ve světě žije uvnitř scény - zmenšuje se s vzdáleností a geometrie ho může zakrýt.
 concepts:
-  - "Registering the text renderer once: AddWorldTextRenderer"
+  - "The text renderer registers itself with the first text"
   - "Billboarding: KeepUpright versus facing the camera freely"
   - Text fixed to a surface or lying flat with Billboard = false
   - "Height in world units versus FontSize as sharpness"

@@ -26,7 +26,7 @@ namespace Stride.CommunityToolkit.Shapes;
 /// order, and the batch resets itself after rendering. Register with <c>game.AddShapeBatch()</c>.
 /// </para>
 /// <para>
-/// <see cref="BorderWidth"/>, <see cref="Fill"/>, <see cref="Glow"/>, <see cref="Dash"/>,
+/// <see cref="BorderWidth"/>, <see cref="StrokeWidth"/>, <see cref="Fill"/>, <see cref="Glow"/>, <see cref="Dash"/>,
 /// <see cref="Gradient"/>, <see cref="Opacity"/>, <see cref="DepthFade"/>, <see cref="Textured"/>,
 /// <see cref="Screen"/> and <see cref="Tag"/> are current state, captured by each draw call as it is
 /// made, so you can change them between calls the way you would with a sprite batch.
@@ -83,14 +83,24 @@ public sealed partial class ShapeBatch : RenderObject
     public int Count => Instances.Count;
 
     /// <summary>
-    /// Outline width in on-screen pixels, constant at any zoom or distance. The Box2D testbed uses
-    /// 3; set 0 for a borderless fill. Captured by each draw call as it is made.
+    /// Outline width in on-screen pixels around a filled shape, constant at any zoom or distance. The
+    /// default of 0 is a borderless fill the exact size of the shape; the Box2D testbed look uses 3.
+    /// Captured by each draw call as it is made.
     /// </summary>
     /// <remarks>
-    /// The border is centred on the shape's edge: half its width lies outside. With the default of
-    /// 3 a shape is 3 pixels wider and taller than its size; with 0 it is exactly its size.
+    /// The border is centred on the shape's edge: half its width lies outside, so with 3 a shape is 3
+    /// pixels wider and taller than its size. The shapes that are all stroke, the rings and the arcs
+    /// drawn without a width, take <see cref="StrokeWidth"/> instead.
     /// </remarks>
-    public float BorderWidth { get; set; } = 3f;
+    public float BorderWidth { get; set; }
+
+    /// <summary>
+    /// Width in on-screen pixels of the shapes that are all stroke: <see cref="DrawRing(Vector3, Vector3, float, Color)"/>,
+    /// <see cref="DrawPixelRing"/> and <see cref="DrawArc(Vector3, Vector3, float, float, float, Color, float)"/>
+    /// without a width. Defaults to 1, independent of <see cref="BorderWidth"/>, so a borderless fill and a
+    /// visible ring coexist. Captured by each draw call as it is made.
+    /// </summary>
+    public float StrokeWidth { get; set; } = 1f;
 
     /// <summary>
     /// How the interior is painted: the fill's own colour, or <c>null</c> for the outline colour,
@@ -351,8 +361,8 @@ public sealed partial class ShapeBatch : RenderObject
     private ShapePlane Placed(in ShapePlane plane, in ShapeStyle style)
         => style.Screen && Viewport is { } viewport ? plane with { Origin = plane.Origin + new Vector3(viewport.X, viewport.Y, 0f) } : plane;
 
-    /// <summary>The current style with the fill turned off, for shapes that are all outline.</summary>
-    private ShapeStyle OutlineStyle(Color color) => OutlineStyle(color, BorderWidth);
+    /// <summary>The current style with the fill turned off and the stroke width, for shapes that are all stroke.</summary>
+    private ShapeStyle OutlineStyle(Color color) => OutlineStyle(color, StrokeWidth);
 
     /// <summary>The current style with the fill turned off and its own outline width.</summary>
     private ShapeStyle OutlineStyle(Color color, float borderWidth) => Style(color, color, borderWidth, 0f, new GradientStyle(false, color, Gradient.Direction));

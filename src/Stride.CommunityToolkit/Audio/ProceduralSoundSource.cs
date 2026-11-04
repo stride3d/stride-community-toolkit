@@ -16,7 +16,7 @@ namespace Stride.CommunityToolkit.Audio;
 /// <para>
 /// Buffering: four buffers of <see cref="FramesPerBuffer"/> frames each, the same shape as the
 /// engine's own streaming source. At 44.1 kHz one buffer is about 93 ms, so a change the callback
-/// picks up on its next call is heard within roughly a tenth of a second.
+/// picks up on its next call is heard once the buffers already queued have played, about 0.28 to 0.37 s.
 /// </para>
 /// <para>
 /// The source and the instance reference each other and neither constructor can run first; the

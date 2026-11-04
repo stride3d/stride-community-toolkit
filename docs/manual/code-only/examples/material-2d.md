@@ -18,10 +18,10 @@ The `Program.cs` file shows how to:
 - CreateScreenMaterial, the unlit texture, against the lit CreateTexturedMaterial
 - CreateOverlayMaterial for a translucent shape drawn over another
 - Labelling entities with EntityTextComponent
-- Using helpers: SceneSetup2D, AddEntityTextRenderer, CreatePrimitive
+- Using helpers: SceneSetup2D, CreatePrimitive
 
 ![2D Material](media/material-2d.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_2D_Material).
 
-[!code-csharp[](../../../../examples/code-only/E02_2D_Material/Program.cs?start=1&end=101)]
+[!code-csharp[](../../../../examples/code-only/E02_2D_Material/Program.cs?start=1&end=99)]

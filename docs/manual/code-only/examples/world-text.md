@@ -14,7 +14,7 @@ can hide it.
 
 The `Program.cs` file shows how to:
 
-- Registering the text renderer once: AddWorldTextRenderer
+- The text renderer registers itself with the first text
 - Billboarding: KeepUpright versus facing the camera freely
 - Text fixed to a surface or lying flat with Billboard = false
 - Height in world units versus FontSize as sharpness
@@ -26,4 +26,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E03_3D_WorldText).
 
-[!code-csharp[](../../../../examples/code-only/E03_3D_WorldText/Program.cs?start=1&end=182)]
+[!code-csharp[](../../../../examples/code-only/E03_3D_WorldText/Program.cs?start=1&end=179)]

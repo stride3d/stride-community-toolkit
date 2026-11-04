@@ -48,6 +48,10 @@ var sceneSetup = new SceneSetup3D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
+// The game has exited; whatever was still playing holds a native voice until it is disposed
+padInstance?.Dispose();
+foreach (var instance in chimes) instance.Dispose();
+
 void Start(Scene scene)
 {
     // Scenery only, so no physics body
@@ -136,7 +140,7 @@ void AddInstructions()
             new("Space", $"Chime, {chimes.Count} playing (press fast: they overlap)", chimes.Count > 0 ? Color.LightGreen : Color.Yellow),
             new("L", $"Pad loop {(padOn ? "playing" : "stopped")}", padOn ? Color.LightGreen : Color.Yellow),
             new(["J", "K"], $"Volume {volume:0.00}", Color.Yellow),
-            new(["N", "M"], $"Pan {pan:+0.00;-0.00;0.00} (mono sources only)", Color.Yellow),
+            new(["N", "M"], $"Pan {pan:+0.00;-0.00;0.00}", Color.Yellow),
             new(""),
             new($"chime.wav: {Describe(chime)}", Color.LightGray),
             new($"pad-loop.wav: {Describe(pad)}", Color.LightGray),
@@ -167,8 +171,8 @@ concepts:
   - Loading a .wav at runtime with game.Audio.LoadWav instead of the asset pipeline
   - One WavSound, many overlapping instances
   - Looping, volume and pan on a SoundInstance
-  - Disposing instances once they have played out
-  - "Why the files are mono: Pan and spatialisation need a single channel"
+  - "The whole lifetime of a SoundInstance: created, played, stopped, disposed when played out or at exit"
+  - "Why the files are mono: spatialisation needs a single channel, and so does pan on OpenAL"
   - "Using helpers: SceneSetup3D, CreatePrimitive, TextOverlay"
 tags:
   - 3D

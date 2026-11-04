@@ -27,7 +27,7 @@ public static class ShowStations
             ParticleLifetime = new Vector2(0.6f, 0.9f),
             SimulationSpace = EmitterSimulationSpace.World,
             ShapeBuilder = new ShapeBuilderBillboard(),
-            Material = ParticleMaterials.Flipbook(s.Textures.Bonfire, 8, 8, 64, new Color4(2.2f, 1f, 0.3f, 1f), additive: 0.8f),
+            Material = ParticleMaterials.Flipbook(s.Textures.Bonfire, 8, 8, 64, new Color4(1f, 0.45f, 0.14f, 1f), additive: 0.8f),
         };
 
         flames.Spawners.Add(new SpawnerPerSecond { SpawnCount = 24 });
@@ -41,7 +41,7 @@ public static class ShowStations
             ParticleLifetime = new Vector2(1.5f, 3f),
             SimulationSpace = EmitterSimulationSpace.World,
             ShapeBuilder = new ShapeBuilderBillboard(),
-            Material = ParticleMaterials.Textured(s.Textures.Dot, new Color4(2f, 1f, 0.3f, 1f), additive: 1f),
+            Material = ParticleMaterials.Textured(s.Textures.Dot, new Color4(1f, 0.5f, 0.15f, 1f), additive: 1f),
         };
 
         embers.Spawners.Add(new SpawnerPerSecond { SpawnCount = 30 });
@@ -57,7 +57,7 @@ public static class ShowStations
             ForceDirected = 1f,
             EnergyConservation = 0.5f,
         });
-        embers.Updaters.Add(new UpdaterColorOverTime { SamplerMain = Curves.Color((0f, new Color4(2f, 1.2f, 0.4f, 1f)), (0.7f, new Color4(1.5f, 0.4f, 0.1f, 1f)), (1f, new Color4(0.5f, 0.1f, 0f, 0f))) });
+        embers.Updaters.Add(new UpdaterColorOverTime { SamplerMain = Curves.Color((0f, new Color4(1f, 0.6f, 0.2f, 1f)), (0.7f, new Color4(1f, 0.27f, 0.07f, 1f)), (1f, new Color4(0.5f, 0.1f, 0f, 0f))) });
 
         var smoke = new ParticleEmitter
         {
@@ -98,7 +98,7 @@ public static class ShowStations
             ParticleLifetime = big ? new Vector2(1.8f, 2.2f) : new Vector2(1.2f, 1.6f),
             SimulationSpace = EmitterSimulationSpace.World,
             ShapeBuilder = new ShapeBuilderBillboard(),
-            Material = ParticleMaterials.Textured(s.Textures.Radial, new Color4(2f, 1.8f, 1.2f, 1f), additive: 1f),
+            Material = ParticleMaterials.Textured(s.Textures.Radial, new Color4(1f, 0.9f, 0.6f, 1f), additive: 1f),
         };
 
         rockets.Spawners.Add(new SpawnerPerSecond { SpawnCount = big ? 0.6f : 1.5f });
@@ -107,8 +107,8 @@ public static class ShowStations
         rockets.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(-1.5f, big ? 10f : 9f, -1.5f), VelocityMax = new Vector3(1.5f, big ? 12f : 11f, 1.5f) });
         rockets.Initializers.Add(new InitialColorSeed
         {
-            ColorMin = v == 1 ? new Color4(0.2f, 0.4f, 1f, 1f) : new Color4(1.5f, 1.2f, 0.4f, 1f),
-            ColorMax = v == 1 ? new Color4(1.5f, 0.4f, 0.8f, 1f) : new Color4(1.8f, 1.5f, 0.6f, 1f),
+            ColorMin = v == 1 ? new Color4(0.2f, 0.4f, 1f, 1f) : new Color4(1f, 0.8f, 0.27f, 1f),
+            ColorMax = v == 1 ? new Color4(1f, 0.27f, 0.53f, 1f) : new Color4(1f, 0.83f, 0.33f, 1f),
         });
         rockets.Updaters.Add(new UpdaterGravity { GravitationalAcceleration = new Vector3(0f, -4f, 0f) });
 
@@ -118,7 +118,7 @@ public static class ShowStations
             ParticleLifetime = new Vector2(0.4f, 0.7f),
             SimulationSpace = EmitterSimulationSpace.World,
             ShapeBuilder = new ShapeBuilderBillboard(),
-            Material = ParticleMaterials.Textured(s.Textures.Dot, new Color4(1.2f, 1f, 0.7f, 1f), additive: 1f),
+            Material = ParticleMaterials.Textured(s.Textures.Dot, new Color4(1f, 0.83f, 0.58f, 1f), additive: 1f),
         };
 
         trail.Spawners.Add(new SpawnerFromParent { ParentName = "rockets", ParentControlFlag = ParentControlFlag.Group00, ParticleSpawnTrigger = new ParticleSpawnTriggerDistance(), SpawnCount = new Vector2(2f, 4f) });
@@ -143,7 +143,7 @@ public static class ShowStations
         sparks.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(big ? -7f : -5f), VelocityMax = new Vector3(big ? 7f : 5f) });
         sparks.Updaters.Add(new UpdaterGravity { GravitationalAcceleration = new Vector3(0f, -3f, 0f) });
         sparks.Updaters.Add(new UpdaterSpeedToDirection());
-        sparks.Updaters.Add(new UpdaterColorOverTime { SamplerMain = Curves.Color((0f, new Color4(1.5f, 1.5f, 1.5f, 1f)), (0.6f, Color4.White), (1f, new Color4(1f, 1f, 1f, 0f))) });
+        sparks.Updaters.Add(new UpdaterColorOverTime { SamplerMain = Curves.Color((0f, new Color4(1f, 1f, 1f, 1f)), (0.6f, Color4.White), (1f, new Color4(1f, 1f, 1f, 0f))) });
 
         s.Place(new Vector3(0f, 0.2f, 0f), rockets, trail, sparks);
     }
@@ -166,7 +166,7 @@ public static class ShowStations
             SimulationSpace = EmitterSimulationSpace.World,
             ShapeBuilder = v == 1 ? new ShapeBuilderOrientedQuad { ScaleLength = true, LengthFactor = 3f } : new ShapeBuilderBillboard(),
             Material = v == 1
-                ? ParticleMaterials.Textured(s.Textures.Dot, new Color4(1.5f, 1.1f, 0.5f, 1f), additive: 1f)
+                ? ParticleMaterials.Textured(s.Textures.Dot, new Color4(1f, 0.73f, 0.33f, 1f), additive: 1f)
                 : ParticleMaterials.Smoke(s.Textures, new Color4(0.75f, 0.7f, 0.6f, 1f), additive: 0.15f),
         };
 
@@ -205,7 +205,7 @@ public static class ShowStations
             ParticleLifetime = new Vector2(6f, 9f),
             SimulationSpace = EmitterSimulationSpace.World,
             ShapeBuilder = new ShapeBuilderBillboard(),
-            Material = ParticleMaterials.Textured(s.Textures.Dot, new Color4(1.2f, 1.6f, 0.4f, 1f), additive: 1f),
+            Material = ParticleMaterials.Textured(s.Textures.Dot, new Color4(0.75f, 1f, 0.25f, 1f), additive: 1f),
         };
 
         emitter.Spawners.Add(new SpawnerPerSecond { SpawnCount = v == 2 ? 120 : 40 });
@@ -240,13 +240,13 @@ public static class ShowStations
     {
         var v = s.Pick("red", "cyan", "three beams");
 
-        var colour = v == 1 ? new Color4(0.3f, 1.5f, 2f, 1f) : new Color4(2f, 0.3f, 0.2f, 1f);
+        var colour = v == 1 ? new Color4(0.15f, 0.75f, 1f, 1f) : new Color4(1f, 0.15f, 0.1f, 1f);
         List<ParticleEmitter> emitters = [];
         var beams = v == 2 ? 3 : 1;
 
         for (var b = 0; b < beams; b++)
         {
-            var tint = v == 2 ? b switch { 0 => new Color4(2f, 0.3f, 0.2f, 1f), 1 => new Color4(0.3f, 2f, 0.4f, 1f), _ => new Color4(0.3f, 0.6f, 2f, 1f) } : colour;
+            var tint = v == 2 ? b switch { 0 => new Color4(1f, 0.15f, 0.1f, 1f), 1 => new Color4(0.15f, 1f, 0.2f, 1f), _ => new Color4(0.15f, 0.3f, 1f, 1f) } : colour;
             var direction = Quaternion.RotationY(b * MathF.Tau / beams);
 
             foreach (var (width, alpha, name) in new[] { (0.9f, 0.5f, "halo"), (0.25f, 1f, "core") })

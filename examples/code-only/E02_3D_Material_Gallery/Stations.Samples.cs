@@ -18,27 +18,27 @@ public static class SampleStations
     /// <summary>
     /// Five recipes, one per variation. The sample each comes from is named in its method.
     /// </summary>
-    public static void SampleRecipes(MaterialStation s)
+    public static void SampleRecipes(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        switch (s.Pick("brushed metal: a gloss map mirrored and offset", "wood table: the specular map reused as roughness", "brick: a normal map weakened, full on the left", "neon sign: a layer masked by a texture's alpha, emissive at 50", "prototyping grid: a colour added to a checker"))
+        switch (station.Pick("brushed metal: a gloss map mirrored and offset", "wood table: the specular map reused as roughness", "brick: a normal map weakened, full on the left", "neon sign: a layer masked by a texture's alpha, emissive at 50", "prototyping grid: a colour added to a checker"))
         {
             case 0:
-                s.PlaceTrio(s.Material(BrushedMetal(s)));
+                station.PlaceTrio(station.Compile(BrushedMetal(station)));
                 break;
             case 1:
-                s.PlaceTrio(s.Material(WoodTable(s)));
+                station.PlaceTrio(station.Compile(WoodTable(station)));
                 break;
             case 2:
-                s.Place(Primitive3D.Cube(1.8f), s.Material(Brick(s, 1f)), new Vector3(-1.6f, 0.9f, 0f));
-                s.Place(Primitive3D.Cube(1.8f), s.Material(Brick(s, 0.2f)), new Vector3(1.6f, 0.9f, 0f));
+                station.Place(Primitive3D.Cube(1.8f), station.Compile(Brick(station, 1f)), new Vector3(-1.6f, 0.9f, 0f));
+                station.Place(Primitive3D.Cube(1.8f), station.Compile(Brick(station, 0.2f)), new Vector3(1.6f, 0.9f, 0f));
                 break;
             case 3:
-                s.PlaceTrio(s.Material(NeonSign(s)));
+                station.PlaceTrio(station.Compile(NeonSign(station)));
                 break;
             default:
-                s.PlaceTrio(s.Material(PrototypingGrid(s)));
+                station.PlaceTrio(station.Compile(PrototypingGrid(station)));
                 break;
         }
     }
@@ -47,9 +47,9 @@ public static class SampleStations
     /// The samples' DullSilver: a metal in one grey, whose gloss map is tiled twice, mirrored at the
     /// seams and offset, so the streaks never repeat visibly. The map here is made in code.
     /// </summary>
-    private static MaterialDescriptor BrushedMetal(MaterialStation s)
+    private static MaterialDescriptor BrushedMetal(MaterialStation station)
     {
-        var streaks = s.Textures.Generated("brushed", () => RuntimeTextures.Brushed(s.Game.GraphicsDevice));
+        var streaks = station.Textures.Generated("brushed", () => RuntimeTextures.Brushed(station.Game.GraphicsDevice));
 
         var gloss = new ComputeTextureScalar(streaks, TextureCoordinate.Texcoord0, new Vector2(2f), new Vector2(0.25f, 0.37f))
         {
@@ -65,15 +65,15 @@ public static class SampleStations
     /// the glossiness, scaled to a quarter and inverted, so where the wood is most reflective it is also
     /// roughest. <c>MaterialGlossinessMapFeature.Invert</c> reads a roughness map as glossiness.
     /// </summary>
-    private static MaterialDescriptor WoodTable(MaterialStation s)
+    private static MaterialDescriptor WoodTable(MaterialStation station)
     {
-        var t = s.Textures;
-        var specular = t.Data("wood_gloss/wood_gloss_spc.png");
+        var textures = station.Textures;
+        var specular = textures.Data("wood_gloss/wood_gloss_spc.png");
 
         var descriptor = Recipes.Mapped(
-            Recipes.Colour(t.Color("wood_gloss/wood_gloss_dif.png")),
+            Recipes.Colour(textures.Color("wood_gloss/wood_gloss_dif.png")),
             specular: Recipes.Colour(specular),
-            normal: Recipes.Colour(t.Normal("wood_gloss/wood_gloss_nml.png")));
+            normal: Recipes.Colour(textures.Normal("wood_gloss/wood_gloss_nml.png")));
 
         descriptor.Attributes.MicroSurface = new MaterialGlossinessMapFeature(new ComputeBinaryScalar(Recipes.Scalar(specular), new ComputeFloat(0.25f), BinaryOperator.Multiply)) { Invert = true };
         ((MaterialSpecularMapFeature)descriptor.Attributes.Specular).Intensity = new ComputeFloat(0.3f);
@@ -86,10 +86,10 @@ public static class SampleStations
     /// is signed. The pack's maps are unsigned, 0.5 for flat, so the same weakening scales the map
     /// about 0.5: the texture times the strength, plus half of what is left.
     /// </summary>
-    private static MaterialDescriptor Brick(MaterialStation s, float strength)
+    private static MaterialDescriptor Brick(MaterialStation station, float strength)
     {
-        var t = s.Textures;
-        var map = Recipes.Colour(t.Normal("brick/brick_nml.png"));
+        var textures = station.Textures;
+        var map = Recipes.Colour(textures.Normal("brick/brick_nml.png"));
 
         IComputeColor normal = strength >= 1f
             ? map
@@ -98,7 +98,7 @@ public static class SampleStations
                 new ComputeFloat4(new Vector4(0.5f * (1f - strength), 0.5f * (1f - strength), 0f, 0f)),
                 BinaryOperator.AddMath);
 
-        return Recipes.Mapped(Recipes.Colour(t.Color("brick/brick_dif.png")), glossiness: Recipes.Scalar(t.Data("brick/brick_gls.png")), normal: normal);
+        return Recipes.Mapped(Recipes.Colour(textures.Color("brick/brick_dif.png")), glossiness: Recipes.Scalar(textures.Data("brick/brick_gls.png")), normal: normal);
     }
 
     /// <summary>
@@ -106,9 +106,9 @@ public static class SampleStations
     /// channel of a texture and glowing where it shows. The glow is the mask times (5, 9, 50, 5), a
     /// <c>ComputeFloat4</c>, which is passed to the shader as it is: the blue at 50 is what blooms.
     /// </summary>
-    private static MaterialDescriptor NeonSign(MaterialStation s)
+    private static MaterialDescriptor NeonSign(MaterialStation station)
     {
-        var sign = s.Textures.Generated("sign", () => Sign(s.Game.GraphicsDevice));
+        var sign = station.Textures.Generated("sign", () => Sign(station.Game.GraphicsDevice));
 
         var glow = new MaterialDescriptor
         {
@@ -137,7 +137,7 @@ public static class SampleStations
 
         descriptor.Layers.Add(new MaterialBlendLayer
         {
-            Material = s.Material(glow),
+            Material = station.Compile(glow),
             BlendMap = new ComputeTextureScalar(sign, TextureCoordinate.Texcoord0, Vector2.One, Vector2.Zero) { Channel = ColorChannel.A },
         });
 
@@ -148,9 +148,9 @@ public static class SampleStations
     /// The Prototyping Blocks' GridMTArc: one grey checker texture serves every colour of block, tinted
     /// by adding a colour to it in the diffuse slot. Metalness and glossiness at a half.
     /// </summary>
-    private static MaterialDescriptor PrototypingGrid(MaterialStation s)
+    private static MaterialDescriptor PrototypingGrid(MaterialStation station)
     {
-        var checker = s.Textures.Generated("checker", () => Checker(s.Game.GraphicsDevice));
+        var checker = station.Textures.Generated("checker", () => Checker(station.Game.GraphicsDevice));
         var tinted = new ComputeBinaryColor(Recipes.Colour(checker, tiling: 2f), new ComputeColor(new Color4(0.031f, 0.435f, 0f, 1f)), BinaryOperator.Add);
 
         return Recipes.Mapped(tinted, glossiness: new ComputeFloat(0.5f), metalness: new ComputeFloat(0.5f));

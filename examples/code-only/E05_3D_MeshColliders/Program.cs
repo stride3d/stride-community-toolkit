@@ -63,8 +63,6 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.AddEntityTextRenderer();
-
     // P draws every collider, so the hull's lid and the mesh's triangles can be seen
     game.AddPhysicsDebug();
 

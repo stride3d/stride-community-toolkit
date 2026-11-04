@@ -23,13 +23,13 @@ public static class MapStations
     /// <item><c>FallbackValue</c> is what the node gives when it has no texture.</item>
     /// </list>
     /// </remarks>
-    public static void AlbedoTexture(MaterialStation s)
+    public static void AlbedoTexture(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var v = s.Pick("tiled once", "tiled twice", "tiled four times", "four times, random coordinates", "swizzle bgra: red and blue swapped", "no texture: the fallback colour");
+        var v = station.Pick("tiled once", "tiled twice", "tiled four times", "four times, random coordinates", "swizzle bgra: red and blue swapped", "no texture: the fallback colour");
         var tiling = v switch { 1 => 2f, 2 or 3 => 4f, _ => 1f };
-        var brick = Recipes.Colour(s.Textures.Color("brick/brick_dif.png"), tiling);
+        var brick = Recipes.Colour(station.Textures.Color("brick/brick_dif.png"), tiling);
 
         switch (v)
         {
@@ -45,7 +45,7 @@ public static class MapStations
                 break;
         }
 
-        s.PlaceTrio(s.Material(Recipes.Mapped(brick, glossiness: new ComputeFloat(0.3f))));
+        station.PlaceTrio(station.Compile(Recipes.Mapped(brick, glossiness: new ComputeFloat(0.3f))));
     }
 
     /// <summary>
@@ -53,20 +53,20 @@ public static class MapStations
     /// as well, and the light now falls into the mortar lines that were only painted before. A
     /// normal map needs a tangent frame per vertex. V cycles the texture set.
     /// </summary>
-    public static void NormalMap(MaterialStation s)
+    public static void NormalMap(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var set = s.Pick("brick", "rock", "rooftile") switch { 0 => "brick", 1 => "rock", _ => "rooftile" };
-        var albedo = s.Textures.Color($"{set}/{set}_dif.png");
-        var normal = s.Textures.Normal($"{set}/{set}_nml.png");
-        var gloss = s.Textures.Data($"{set}/{set}_gls.png");
+        var set = station.Pick("brick", "rock", "rooftile") switch { 0 => "brick", 1 => "rock", _ => "rooftile" };
+        var albedo = station.Textures.Color($"{set}/{set}_dif.png");
+        var normal = station.Textures.Normal($"{set}/{set}_nml.png");
+        var gloss = station.Textures.Data($"{set}/{set}_gls.png");
 
-        var flat = s.Material(Recipes.Mapped(Recipes.Colour(albedo), glossiness: Recipes.Scalar(gloss)));
-        var bumped = s.Material(Recipes.Mapped(Recipes.Colour(albedo), glossiness: Recipes.Scalar(gloss), normal: Recipes.Colour(normal)));
+        var flat = station.Compile(Recipes.Mapped(Recipes.Colour(albedo), glossiness: Recipes.Scalar(gloss)));
+        var bumped = station.Compile(Recipes.Mapped(Recipes.Colour(albedo), glossiness: Recipes.Scalar(gloss), normal: Recipes.Colour(normal)));
 
-        s.Place(Primitive3D.Cube(1.8f), flat, new Vector3(-1.6f, 0.9f, 0f));
-        s.Place(Primitive3D.Cube(1.8f), bumped, new Vector3(1.6f, 0.9f, 0f));
+        station.Place(Primitive3D.Cube(1.8f), flat, new Vector3(-1.6f, 0.9f, 0f));
+        station.Place(Primitive3D.Cube(1.8f), bumped, new Vector3(1.6f, 0.9f, 0f));
     }
 
     /// <summary>
@@ -80,32 +80,32 @@ public static class MapStations
     /// its red channel, metalness in its green. <c>ComputeTextureScalar.Channel</c> picks the channel,
     /// so one packed texture can feed several slots. The iron looks the same in both variations.
     /// </remarks>
-    public static void GlossAndMetalMaps(MaterialStation s)
+    public static void GlossAndMetalMaps(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var t = s.Textures;
-        var packed = s.Pick("one texture per map", "iron: both maps packed into one texture") == 1;
+        var textures = station.Textures;
+        var packed = station.Pick("one texture per map", "iron: both maps packed into one texture") == 1;
 
-        var wood = s.Material(Recipes.Mapped(
-            Recipes.Colour(t.Color("wood_nongloss/wood_nongloss_dif.png")),
-            glossiness: Recipes.Scalar(t.Data("wood_nongloss/wood_nongloss_gls.png")),
-            specular: Recipes.Colour(t.Data("wood_nongloss/wood_nongloss_spc.png")),
-            normal: Recipes.Colour(t.Normal("wood_nongloss/wood_nongloss_nml.png"))));
+        var wood = station.Compile(Recipes.Mapped(
+            Recipes.Colour(textures.Color("wood_nongloss/wood_nongloss_dif.png")),
+            glossiness: Recipes.Scalar(textures.Data("wood_nongloss/wood_nongloss_gls.png")),
+            specular: Recipes.Colour(textures.Data("wood_nongloss/wood_nongloss_spc.png")),
+            normal: Recipes.Colour(textures.Normal("wood_nongloss/wood_nongloss_nml.png"))));
 
-        var ironMaps = packed ? t.Packed("iron-gloss-metal", "iron_blend/iron/iron_gls.png", "iron_blend/iron/iron_mtl.png") : null;
+        var ironMaps = packed ? textures.Packed("iron-gloss-metal", "iron_blend/iron/iron_gls.png", "iron_blend/iron/iron_mtl.png") : null;
 
-        var iron = s.Material(Recipes.Mapped(
-            Recipes.Colour(t.Color("iron_blend/iron/iron_dif.png")),
-            glossiness: ironMaps is null ? Recipes.Scalar(t.Data("iron_blend/iron/iron_gls.png")) : Recipes.Scalar(ironMaps, channel: ColorChannel.R),
-            metalness: ironMaps is null ? Recipes.Scalar(t.Data("iron_blend/iron/iron_mtl.png")) : Recipes.Scalar(ironMaps, channel: ColorChannel.G)));
+        var iron = station.Compile(Recipes.Mapped(
+            Recipes.Colour(textures.Color("iron_blend/iron/iron_dif.png")),
+            glossiness: ironMaps is null ? Recipes.Scalar(textures.Data("iron_blend/iron/iron_gls.png")) : Recipes.Scalar(ironMaps, channel: ColorChannel.R),
+            metalness: ironMaps is null ? Recipes.Scalar(textures.Data("iron_blend/iron/iron_mtl.png")) : Recipes.Scalar(ironMaps, channel: ColorChannel.G)));
 
-        var gold = s.Material(Recipes.Mapped(
-            Recipes.Colour(t.Color("gold/gold_dif.png")),
-            glossiness: Recipes.Scalar(t.Data("gold/gold_gls.png")),
-            metalness: Recipes.Scalar(t.Data("gold/gold_mtl.png"))));
+        var gold = station.Compile(Recipes.Mapped(
+            Recipes.Colour(textures.Color("gold/gold_dif.png")),
+            glossiness: Recipes.Scalar(textures.Data("gold/gold_gls.png")),
+            metalness: Recipes.Scalar(textures.Data("gold/gold_mtl.png"))));
 
-        s.PlaceTrio(wood, iron, gold);
+        station.PlaceTrio(wood, iron, gold);
     }
 
     /// <summary>
@@ -122,19 +122,19 @@ public static class MapStations
     /// The pack's occlusion maps are nearly white, so the last three variations use the brick's map
     /// with more contrast, made in code. That makes the three comparable with each other.
     /// </remarks>
-    public static void Occlusion(MaterialStation s)
+    public static void Occlusion(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var v = s.Pick("brick: ambient light only", "rooftile: ambient light only", "brick, deeper map: ambient light only", "brick, deeper map: direct light too", "brick, deeper map: as a cavity map");
+        var v = station.Pick("brick: ambient light only", "rooftile: ambient light only", "brick, deeper map: ambient light only", "brick, deeper map: direct light too", "brick, deeper map: as a cavity map");
         var set = v == 1 ? "rooftile" : "brick";
-        var albedo = Recipes.Colour(s.Textures.Color($"{set}/{set}_dif.png"));
-        var normal = Recipes.Colour(s.Textures.Normal($"{set}/{set}_nml.png"));
-        var gloss = Recipes.Scalar(s.Textures.Data($"{set}/{set}_gls.png"));
+        var albedo = Recipes.Colour(station.Textures.Color($"{set}/{set}_dif.png"));
+        var normal = Recipes.Colour(station.Textures.Normal($"{set}/{set}_nml.png"));
+        var gloss = Recipes.Scalar(station.Textures.Data($"{set}/{set}_gls.png"));
 
         var map = v >= 2
-            ? s.Textures.Deepened("brick-occlusion-deep", "brick/brick_AO.png", power: 8f)
-            : s.Textures.Data($"{set}/{set}_AO.png");
+            ? station.Textures.Deepened("brick-occlusion-deep", "brick/brick_AO.png", power: 8f)
+            : station.Textures.Data($"{set}/{set}_AO.png");
 
         var descriptor = Recipes.Mapped(albedo, glossiness: gloss, normal: normal, occlusion: Recipes.Scalar(map));
         var occlusion = (MaterialOcclusionMapFeature)descriptor.Attributes.Occlusion;
@@ -148,11 +148,11 @@ public static class MapStations
             occlusion.SpecularCavity = new ComputeFloat(1f);
         }
 
-        var open = s.Material(Recipes.Mapped(albedo, glossiness: gloss, normal: normal));
-        var occluded = s.Material(descriptor);
+        var open = station.Compile(Recipes.Mapped(albedo, glossiness: gloss, normal: normal));
+        var occluded = station.Compile(descriptor);
 
-        s.Place(Primitive3D.Cube(1.8f), open, new Vector3(-1.6f, 0.9f, 0f));
-        s.Place(Primitive3D.Cube(1.8f), occluded, new Vector3(1.6f, 0.9f, 0f));
+        station.Place(Primitive3D.Cube(1.8f), open, new Vector3(-1.6f, 0.9f, 0f));
+        station.Place(Primitive3D.Cube(1.8f), occluded, new Vector3(1.6f, 0.9f, 0f));
     }
 
     /// <summary>
@@ -161,29 +161,29 @@ public static class MapStations
     /// parameter, changed every frame by <see cref="EmissivePulse"/> without rebuilding anything -
     /// which is how a material animates. V cycles the colour.
     /// </summary>
-    public static void Emissive(MaterialStation s)
+    public static void Emissive(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var colour = s.Pick("cyan", "amber", "magenta") switch
+        var colour = station.Pick("cyan", "amber", "magenta") switch
         {
             0 => new Color(40, 220, 255),
             1 => new Color(255, 170, 40),
             _ => new Color(255, 60, 200),
         };
 
-        var material = s.Material(Recipes.Mapped(new ComputeColor(new Color(12, 12, 16)), glossiness: new ComputeFloat(0.5f), emissive: new ComputeColor(colour), emissiveIntensity: 1f));
+        var material = station.Compile(Recipes.Mapped(new ComputeColor(new Color(12, 12, 16)), glossiness: new ComputeFloat(0.5f), emissive: new ComputeColor(colour), emissiveIntensity: 1f));
 
-        s.State = material;
-        s.PlaceTrio(material);
+        station.State = material;
+        station.PlaceTrio(material);
     }
 
     /// <summary>The per-frame half of the emissive station: the intensity breathes between dim and bright.</summary>
-    public static void EmissivePulse(MaterialStation s)
+    public static void EmissivePulse(MaterialStation station)
     {
-        if (s.State is not Material material) return;
+        if (station.State is not Material material) return;
 
-        var pulse = 0.5f + 0.5f * MathF.Sin(s.Seconds * 2f);
+        var pulse = 0.5f + 0.5f * MathF.Sin(station.Seconds * 2f);
 
         // A material's parameters are the shader's constants; a keyed value set here is picked up
         // by the next draw. EmissiveIntensity is the key the emissive feature registers its scalar under,
@@ -200,32 +200,32 @@ public static class MapStations
     /// <c>MaterialParameters</c>, which converts a colour the way the generator did - to linear,
     /// premultiplied - and reaches every pass of the material.
     /// </summary>
-    public static void AnimatedParameters(MaterialStation s)
+    public static void AnimatedParameters(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
         // A colour node with a key of our own: what the generator would have named MaterialKeys.DiffuseValue
         // is instead this key, and this key is what the update sets
-        var tint = s.Material(Recipes.Mapped(new ComputeColor(Color.White) { Key = TintKey }, glossiness: new ComputeFloat(0.6f)));
-        var scroll = s.Material(Recipes.Mapped(Recipes.Colour(s.Textures.Color("brick/brick_dif.png"), 2f), glossiness: new ComputeFloat(0.4f)));
-        var gloss = s.Material(Recipes.Pbr(new Color(60, 110, 200), glossiness: 0.5f, metalness: 0f));
+        var tint = station.Compile(Recipes.Mapped(new ComputeColor(Color.White) { Key = TintKey }, glossiness: new ComputeFloat(0.6f)));
+        var scroll = station.Compile(Recipes.Mapped(Recipes.Colour(station.Textures.Color("brick/brick_dif.png"), 2f), glossiness: new ComputeFloat(0.4f)));
+        var gloss = station.Compile(Recipes.Pbr(new Color(60, 110, 200), glossiness: 0.5f, metalness: 0f));
 
-        s.State = new AnimatedState(tint, scroll, gloss);
-        s.Place(Primitive3D.Sphere(), tint, MaterialStation.SphereSpot);
-        s.Place(Primitive3D.Cube(), scroll, MaterialStation.CubeSpot);
-        s.Place(Primitive3D.Teapot(), gloss, MaterialStation.TeapotSpot);
+        station.State = new AnimatedState(tint, scroll, gloss);
+        station.Place(Primitive3D.Sphere(), tint, MaterialStation.SphereSpot);
+        station.Place(Primitive3D.Cube(), scroll, MaterialStation.CubeSpot);
+        station.Place(Primitive3D.Teapot(), gloss, MaterialStation.TeapotSpot);
     }
 
     /// <summary>The per-frame half: the tint round the hue, the bricks scrolling, the glossiness breathing.</summary>
-    public static void AnimatedParametersUpdate(MaterialStation s)
+    public static void AnimatedParametersUpdate(MaterialStation station)
     {
-        if (s.State is not AnimatedState state) return;
+        if (station.State is not AnimatedState state) return;
 
-        var hue = s.Seconds * 40f % 360f;
+        var hue = station.Seconds * 40f % 360f;
 
         state.Tint.SetColor(TintKey, new ColorHSV(hue, 0.7f, 1f, 1f).ToColor());
-        state.Scroll.SetTextureOffset(new Vector2(s.Seconds * 0.15f, 0f));
-        state.Gloss.Set(MaterialKeys.GlossinessValue, 0.5f + 0.5f * MathF.Sin(s.Seconds));
+        state.Scroll.SetTextureOffset(new Vector2(station.Seconds * 0.15f, 0f));
+        state.Gloss.Set(MaterialKeys.GlossinessValue, 0.5f + 0.5f * MathF.Sin(station.Seconds));
     }
 
     /// <summary>The key the tint sphere's colour node carries; named so it reads in a debugger.</summary>
@@ -237,18 +237,19 @@ public static class MapStations
     /// The colour from the vertices: a cube built with <c>MeshBuilder</c> whose corners each carry
     /// a colour, read by the material through <c>ComputeVertexStreamColor</c> - no texture, no
     /// UVs, one colour per vertex interpolated across each face. What a painter's tool exports,
-    /// and what a procedural mesh can carry for free.
+    /// and what a procedural mesh can carry for free. The stream is saturated to 0..1 on the way
+    /// in, so a vertex colour cannot carry HDR.
     /// </summary>
-    public static void VertexColours(MaterialStation s)
+    public static void VertexColours(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var material = s.Material(Recipes.Mapped(
+        var material = station.Compile(Recipes.Mapped(
             new ComputeVertexStreamColor { Stream = new ColorVertexStreamDefinition() },
             glossiness: new ComputeFloat(0.4f)));
 
-        s.PlaceModel(ColouredCube(s), material, new Vector3(-1.8f, 0.9f, 0f), 1.8f);
-        s.PlaceModel(ColouredCube(s), material, new Vector3(1.8f, 0.9f, 0f), 1.8f, Quaternion.RotationY(MathF.PI * 0.25f) * Quaternion.RotationX(MathF.PI * 0.2f));
+        station.PlaceModel(ColouredCube(station), material, new Vector3(-1.8f, 0.9f, 0f), 1.8f);
+        station.PlaceModel(ColouredCube(station), material, new Vector3(1.8f, 0.9f, 0f), 1.8f, Quaternion.RotationY(MathF.PI * 0.25f) * Quaternion.RotationX(MathF.PI * 0.2f));
     }
 
     /// <summary>
@@ -262,11 +263,11 @@ public static class MapStations
     /// layer does: a tint at half alpha adds half of itself. <c>BinaryOperator.AddMath</c> is the plain
     /// sum of the two colours.
     /// </remarks>
-    public static void NodeArithmetic(MaterialStation s)
+    public static void NodeArithmetic(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var v = s.Pick("Multiply", "Average", "Overlay", "Difference", "Screen", "Desaturate", "Add: a tint at half alpha adds half", "AddMath: the same tint adds all");
+        var v = station.Pick("Multiply", "Average", "Overlay", "Difference", "Screen", "Desaturate", "Add: a tint at half alpha adds half", "AddMath: the same tint adds all");
 
         var op = v switch
         {
@@ -280,17 +281,17 @@ public static class MapStations
             _ => BinaryOperator.AddMath,
         };
 
-        var brick = Recipes.Colour(s.Textures.Color("brick/brick_dif.png"));
+        var brick = Recipes.Colour(station.Textures.Color("brick/brick_dif.png"));
 
         IComputeColor second = v >= 6
             ? new ComputeColor(new Color4(0.1f, 0.25f, 0.6f, 0.5f))
-            : Recipes.Colour(s.Textures.Color("marble/marble_dif.png"));
+            : Recipes.Colour(station.Textures.Color("marble/marble_dif.png"));
 
-        s.PlaceTrio(s.Material(Recipes.Mapped(new ComputeBinaryColor(brick, second, op), glossiness: new ComputeFloat(0.5f))));
+        station.PlaceTrio(station.Compile(Recipes.Mapped(new ComputeBinaryColor(brick, second, op), glossiness: new ComputeFloat(0.5f))));
     }
 
     /// <summary>A unit cube with per-face normals and a colour at every corner, from the toolkit's MeshBuilder.</summary>
-    private static Model ColouredCube(MaterialStation s)
+    private static Model ColouredCube(MaterialStation station)
     {
         using var builder = new MeshBuilder();
 
@@ -329,6 +330,6 @@ public static class MapStations
             builder.AddIndex(first + 2);
         }
 
-        return new Model { new Mesh { Draw = builder.ToMeshDraw(s.Game.GraphicsDevice), MaterialIndex = 0 } };
+        return new Model { new Mesh { Draw = builder.ToMeshDraw(station.Game.GraphicsDevice), MaterialIndex = 0 } };
     }
 }

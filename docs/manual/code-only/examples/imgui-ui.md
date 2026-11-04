@@ -7,8 +7,9 @@ slug: imgui-ui
 
 An ImGui overlay for in-game tools, debug panels and live tweaking. Immediate-mode UI suits this job
 because there is no widget tree to keep in sync - you describe the panel every frame from whatever
-the values happen to be. The example is short because the toolkit owns the setup: initialising the
-integration, feeding it input and drawing it are already handled.
+the values happen to be. The toolkit owns the setup, initialising the integration, feeding it input
+and drawing it, so the example is the debug tools plus one window of its own: a menu, a slider that
+spins a cube, and live stats.
 
 The `Program.cs` file shows how to:
 
@@ -21,4 +22,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E04_ImGui).
 
-[!code-csharp[](../../../../examples/code-only/E04_ImGui/Program.cs?start=1&end=29)]
+[!code-csharp[](../../../../examples/code-only/E04_ImGui/Program.cs?start=1&end=51)]

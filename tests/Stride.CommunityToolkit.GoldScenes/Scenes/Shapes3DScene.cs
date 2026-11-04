@@ -41,6 +41,7 @@ internal sealed class Shapes3DScene : IGoldScene
         var seconds = (float)time.Total.TotalSeconds;
 
         shapes.BorderWidth = 3f;
+        shapes.StrokeWidth = 3f;
         shapes.Fill.Alpha = 0.45f;
 
         // On the ground: a disc the pillar cuts into, a ring, a field-of-view sector
@@ -132,7 +133,7 @@ internal sealed class Shapes3DScene : IGoldScene
         shapes.DepthFade = 0f;
 
         // The overlay batch: a ring drawn through pillar B, which must stay whole
-        overlay.BorderWidth = 3f;
+        overlay.StrokeWidth = 3f;
         overlay.DrawRing(new Vector3(PillarB.X, 1.2f, PillarB.Z), Vector3.UnitZ, 1.4f, Color.HotPink);
     }
 }

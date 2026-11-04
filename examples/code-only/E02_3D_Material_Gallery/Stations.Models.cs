@@ -21,14 +21,14 @@ public static class ModelStations
     /// so the silhouette changes and the shadow with it. The same map's normal map lights the
     /// bumps. V cycles the intensity.
     /// </summary>
-    public static void Displacement(MaterialStation s)
+    public static void Displacement(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var intensity = s.Pick("intensity 0.15", "intensity 0.35", "none") switch { 0 => 0.15f, 1 => 0.35f, _ => 0f };
-        var device = s.Game.GraphicsDevice;
-        var heights = s.Textures.Generated("ripples", () => RuntimeTextures.Ripples(device));
-        var normals = s.Textures.Generated("ripple-normals", () => RuntimeTextures.NormalFromHeight(device, RuntimeTextures.RipplePixels(), 256));
+        var intensity = station.Pick("intensity 0.15", "intensity 0.35", "none") switch { 0 => 0.15f, 1 => 0.35f, _ => 0f };
+        var device = station.Game.GraphicsDevice;
+        var heights = station.Textures.Generated("ripples", () => RuntimeTextures.Ripples(device));
+        var normals = station.Textures.Generated("ripple-normals", () => RuntimeTextures.NormalFromHeight(device, RuntimeTextures.RipplePixels(), 256));
 
         var descriptor = Recipes.Mapped(new ComputeColor(new Color(90, 140, 170)), glossiness: new ComputeFloat(0.6f), normal: Recipes.Colour(normals));
 
@@ -43,13 +43,13 @@ public static class ModelStations
             };
         }
 
-        var material = s.Material(descriptor);
+        var material = station.Compile(descriptor);
 
         // Dense meshes, or there are no vertices to move: 96 segments where the primitives default to far fewer.
         // No shadow casting: the shadow pass draws the undisplaced mesh, and the displaced surface then
         // sits behind its own shadow-map depth and shades itself black
-        s.PlaceModel(new PlaneProceduralModel { Size = new Vector2(3.2f), Tessellation = new Int2(96), Normal = NormalDirection.UpZ }.Generate(s.Game.Services), material, new Vector3(-2.2f, 1.6f, 0f), castShadows: false);
-        s.PlaceModel(new SphereProceduralModel { Radius = 1.1f, Tessellation = 96 }.Generate(s.Game.Services), material, new Vector3(2f, 1.2f, 0f), castShadows: false);
+        station.PlaceModel(new PlaneProceduralModel { Size = new Vector2(3.2f), Tessellation = new Int2(96), Normal = NormalDirection.UpZ }.Generate(station.Game.Services), material, new Vector3(-2.2f, 1.6f, 0f), castShadows: false);
+        station.PlaceModel(new SphereProceduralModel { Radius = 1.1f, Tessellation = 96 }.Generate(station.Game.Services), material, new Vector3(2f, 1.2f, 0f), castShadows: false);
     }
 
     /// <summary>
@@ -64,23 +64,23 @@ public static class ModelStations
     /// While the tessellated effect compiles, the engine draws the mesh with a fallback effect: it shows
     /// untessellated for the first frame or two.
     /// </remarks>
-    public static void Tessellation(MaterialStation s)
+    public static void Tessellation(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
         var descriptor = Recipes.Pbr(new Color(200, 200, 205), glossiness: 0.75f, metalness: 0f);
 
-        descriptor.Attributes.Tessellation = s.Pick("PN triangles", "flat", "none") switch
+        descriptor.Attributes.Tessellation = station.Pick("PN triangles", "flat", "none") switch
         {
             0 => new MaterialTessellationPNFeature { TriangleSize = 3f, AdjacentEdgeAverage = true },
             1 => new MaterialTessellationFlatFeature { TriangleSize = 3f },
             _ => null,
         };
 
-        var material = s.Material(descriptor);
+        var material = station.Compile(descriptor);
 
-        s.PlaceModel(new SphereProceduralModel { Radius = 1.4f, Tessellation = 5 }.Generate(s.Game.Services), material, new Vector3(-2.4f, 1.5f, 0f), castShadows: false);
-        s.PlaceModel(new TeapotProceduralModel { Size = 2.4f, Tessellation = 3 }.Generate(s.Game.Services), material, new Vector3(2.2f, 0.4f, 0f), castShadows: false);
+        station.PlaceModel(new SphereProceduralModel { Radius = 1.4f, Tessellation = 5 }.Generate(station.Game.Services), material, new Vector3(-2.4f, 1.5f, 0f), castShadows: false);
+        station.PlaceModel(new TeapotProceduralModel { Size = 2.4f, Tessellation = 3 }.Generate(station.Game.Services), material, new Vector3(2.2f, 0.4f, 0f), castShadows: false);
     }
 
     /// <summary>
@@ -91,11 +91,11 @@ public static class ModelStations
     /// <remarks>
     /// <c>CullMode.None</c> lights both sides of a face: the surface shader flips the normal on back faces.
     /// </remarks>
-    public static void Overrides(MaterialStation s)
+    public static void Overrides(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var (tiling, cull) = s.Pick("UV scale 1, cull back", "UV scale 3, cull back", "UV scale 3, cull front") switch
+        var (tiling, cull) = station.Pick("UV scale 1, cull back", "UV scale 3, cull back", "UV scale 3, cull front") switch
         {
             0 => (1f, CullMode.Back),
             1 => (3f, CullMode.Back),
@@ -103,15 +103,15 @@ public static class ModelStations
         };
 
         var descriptor = Recipes.Mapped(
-            Recipes.Colour(s.Textures.Color("rooftile/rooftile_dif.png")),
-            glossiness: Recipes.Scalar(s.Textures.Data("rooftile/rooftile_gls.png")),
-            normal: Recipes.Colour(s.Textures.Normal("rooftile/rooftile_nml.png")),
-            occlusion: Recipes.Scalar(s.Textures.Data("rooftile/rooftile_AO.png")));
+            Recipes.Colour(station.Textures.Color("rooftile/rooftile_dif.png")),
+            glossiness: Recipes.Scalar(station.Textures.Data("rooftile/rooftile_gls.png")),
+            normal: Recipes.Colour(station.Textures.Normal("rooftile/rooftile_nml.png")),
+            occlusion: Recipes.Scalar(station.Textures.Data("rooftile/rooftile_AO.png")));
 
         descriptor.Attributes.Overrides.UVScale = new Vector2(tiling);
         descriptor.Attributes.CullMode = cull;
 
-        s.PlaceTrio(s.Material(descriptor));
+        station.PlaceTrio(station.Compile(descriptor));
     }
 
     /// <summary>
@@ -125,19 +125,19 @@ public static class ModelStations
     /// shading model applies the masks wrongly. Layers that all share the base's shading model, as here,
     /// are not affected.
     /// </remarks>
-    public static void Layers(MaterialStation s)
+    public static void Layers(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var which = s.Pick("paint over iron", "rust over iron", "rust over paint over iron");
-        var descriptor = PackMaterials.Iron(s.Textures);
+        var which = station.Pick("paint over iron", "rust over iron", "rust over paint over iron");
+        var descriptor = PackMaterials.Iron(station.Textures);
 
         // A layer is compiled into the material it lies on, from its descriptor alone, so a bare
         // material holding the descriptor is enough; compiling it on its own would be wasted work
-        if (which != 1) descriptor.Layers.Add(new MaterialBlendLayer { Material = new Material { Descriptor = PackMaterials.IronPaint(s.Textures) }, BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/paint/iron_paint_msk.png")) });
-        if (which != 0) descriptor.Layers.Add(new MaterialBlendLayer { Material = new Material { Descriptor = PackMaterials.IronRust(s.Textures) }, BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/rust/rust_msk.png")) });
+        if (which != 1) descriptor.Layers.Add(new MaterialBlendLayer { Material = new Material { Descriptor = PackMaterials.IronPaint(station.Textures) }, BlendMap = Recipes.Scalar(station.Textures.Data("iron_blend/paint/iron_paint_msk.png")) });
+        if (which != 0) descriptor.Layers.Add(new MaterialBlendLayer { Material = new Material { Descriptor = PackMaterials.IronRust(station.Textures) }, BlendMap = Recipes.Scalar(station.Textures.Data("iron_blend/rust/rust_msk.png")) });
 
-        s.PlaceTrio(s.Material(descriptor));
+        station.PlaceTrio(station.Compile(descriptor));
     }
 
     /// <summary>
@@ -148,32 +148,32 @@ public static class ModelStations
     /// their own, so they move apart at the corners, plainly on the thick variation. V cycles the colour
     /// and the thickness.
     /// </summary>
-    public static void HighlightShellStation(MaterialStation s)
+    public static void HighlightShellStation(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var (colour, inflate) = s.Pick("cyan", "gold", "thick, to show the seams") switch
+        var (colour, inflate) = station.Pick("cyan", "gold", "thick, to show the seams") switch
         {
             0 => (Color.Cyan, 0.02f),
             1 => (Color.Gold, 0.02f),
             _ => (Color.Cyan, 0.08f),
         };
 
-        var grey = s.Material(Recipes.Pbr(new Color(150, 150, 155), glossiness: 0.5f, metalness: 0f));
-        var sphere = s.Place(Primitive3D.Sphere(1f), grey, MaterialStation.SphereSpot);
-        var cube = s.Place(Primitive3D.Cube(1.8f), grey, MaterialStation.CubeSpot);
-        var teapot = s.Place(Primitive3D.Teapot(2.4f), grey, MaterialStation.TeapotSpot);
-        var shell = new HighlightShell(s.Material(MaterialDescriptors.Highlight(colour, inflate: inflate)));
+        var grey = station.Compile(Recipes.Pbr(new Color(150, 150, 155), glossiness: 0.5f, metalness: 0f));
+        var sphere = station.Place(Primitive3D.Sphere(1f), grey, MaterialStation.SphereSpot);
+        var cube = station.Place(Primitive3D.Cube(1.8f), grey, MaterialStation.CubeSpot);
+        var teapot = station.Place(Primitive3D.Teapot(2.4f), grey, MaterialStation.TeapotSpot);
+        var shell = new HighlightShell(station.Compile(MaterialDescriptors.Highlight(colour, inflate: inflate)));
 
-        s.State = new ShellState(shell, [sphere.Get<ModelComponent>()!, cube.Get<ModelComponent>()!, teapot.Get<ModelComponent>()!]);
+        station.State = new ShellState(shell, [sphere.Get<ModelComponent>()!, cube.Get<ModelComponent>()!, teapot.Get<ModelComponent>()!]);
     }
 
     /// <summary>The shell on each shape in turn, a second and a half each; showing the same one again costs nothing.</summary>
-    public static void HighlightShellUpdate(MaterialStation s)
+    public static void HighlightShellUpdate(MaterialStation station)
     {
-        if (s.State is not ShellState state) return;
+        if (station.State is not ShellState state) return;
 
-        state.Shell.Show(state.Targets[(int)(s.Seconds / 1.5f) % state.Targets.Count]);
+        state.Shell.Show(state.Targets[(int)(station.Seconds / 1.5f) % state.Targets.Count]);
     }
 
     private sealed record ShellState(HighlightShell Shell, IReadOnlyList<ModelComponent> Targets);
@@ -185,11 +185,11 @@ public static class ModelStations
     /// Each variation flips its one change every second and a half while you watch; the engine picks it
     /// up on the next frame, and only the rebuild compiles anything. V cycles them.
     /// </summary>
-    public static void AtRuntime(MaterialStation s)
+    public static void AtRuntime(MaterialStation station)
     {
-        s.Clear();
+        station.Clear();
 
-        var variation = s.Pick(
+        var variation = station.Pick(
             "one entity overridden, on and off",
             "the shared model's material, on and off",
             "an override over a shared change",
@@ -198,14 +198,14 @@ public static class ModelStations
             "rebuilt from the kept descriptor");
 
         var descriptor = Recipes.Pbr(new Color(150, 150, 155), glossiness: 0.5f, metalness: 0f);
-        var grey = s.Material(descriptor);
+        var grey = station.Compile(descriptor);
 
         // One model, three entities: the teapot primitive's model, placed twice more
-        var left = s.Place(Primitive3D.Teapot(2.4f), grey, new Vector3(-3f, 0.4f, 0f));
+        var left = station.Place(Primitive3D.Teapot(2.4f), grey, new Vector3(-3f, 0.4f, 0f));
         var model = left.Get<ModelComponent>()!.Model;
-        var middle = s.PlaceModel(model, grey, new Vector3(0f, 0.4f, 0f));
+        var middle = station.PlaceModel(model, grey, new Vector3(0f, 0.4f, 0f));
 
-        s.PlaceModel(model, grey, new Vector3(3f, 0.4f, 0f));
+        station.PlaceModel(model, grey, new Vector3(3f, 0.4f, 0f));
 
         // There is no regenerating a material in place: change the descriptor it was built from and
         // build it again. Same features, different constants, so the effect it needs is compiled already
@@ -215,25 +215,25 @@ public static class ModelStations
         {
             descriptor.Attributes.MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.9f));
             descriptor.Attributes.Specular = new MaterialMetalnessMapFeature(new ComputeFloat(1f));
-            rebuilt = s.Material(descriptor);
+            rebuilt = station.Compile(descriptor);
         }
 
-        s.State = new RuntimeState(
+        station.State = new RuntimeState(
             variation,
             model,
             middle.Get<ModelComponent>()!,
             grey,
-            s.Material(Recipes.Pbr(new Color(200, 60, 50), glossiness: 0.5f, metalness: 0f)),
-            s.Material(Recipes.Pbr(new Color(60, 110, 200), glossiness: 0.5f, metalness: 0f)),
+            station.Compile(Recipes.Pbr(new Color(200, 60, 50), glossiness: 0.5f, metalness: 0f)),
+            station.Compile(Recipes.Pbr(new Color(60, 110, 200), glossiness: 0.5f, metalness: 0f)),
             rebuilt);
     }
 
     /// <summary>The one change of the variation, on for a second and a half, off for as long.</summary>
-    public static void AtRuntimeUpdate(MaterialStation s)
+    public static void AtRuntimeUpdate(MaterialStation station)
     {
-        if (s.State is not RuntimeState state) return;
+        if (station.State is not RuntimeState state) return;
 
-        var on = (int)(s.Seconds / 1.5f) % 2 == 1;
+        var on = (int)(station.Seconds / 1.5f) % 2 == 1;
         var slot = state.Model.Materials[0];
 
         switch (state.Variation)

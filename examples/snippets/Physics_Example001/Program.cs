@@ -45,7 +45,7 @@ void Start(Scene scene)
 // Update method called every frame to handle game logic
 void Update(Scene scene, GameTime gameTime)
 {
-    game.DebugTextSystem.Print("Click on a sphere, cube or ground to move camera", new Int2(5, 10));
+    game.DebugTextSystem.Print("Click on a sphere, cube or ground to turn the camera", new Int2(5, 10));
 
     if (camera is null) return;
 

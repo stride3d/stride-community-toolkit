@@ -85,7 +85,6 @@ void Start(Scene scene)
     simulation = game.GetCameraEntity().GetSimulation();
     shapes = game.AddShapeBatch();
 
-    game.AddEntityTextRenderer();
     game.AddGrabber();
 
     shotMaterial = game.CreateMaterial(colours[2], metalness: 0f, glossiness: 0.6f);
@@ -210,7 +209,8 @@ void Shoot(Scene scene)
     {
         EntityName = "Shot",
         Material = shotMaterial,
-        // No gravity and continuous detection, so a fast small body flies straight and cannot skip a thin shelf
+        ShareModel = true,
+        // No gravity, so the shot flies straight; continuous detection has Bepu sweep its path to the next step instead of checking only where it lands
         Component = new BodyComponent
         {
             Collider = new CompoundCollider(),
@@ -260,7 +260,7 @@ void CastMouseRay()
     {
         rayHit = hit.Collidable.Entity.Name;
 
-        shapes.BorderWidth = 2f;
+        shapes.StrokeWidth = 2f;
         shapes.DrawRing(hit.Point + Vector3.UnitY * 0.02f, Vector3.UnitY, 0.5f, Color.White);
     }
     else
@@ -410,7 +410,7 @@ sealed class ShotHits : IContactHandler
             if (mark.Age >= MarkLife) continue;
 
             mark.Age += elapsed;
-            shapes.BorderWidth = 2f;
+            shapes.StrokeWidth = 2f;
             shapes.DrawRing(mark.Point, mark.Normal, 0.3f + mark.Age * 0.3f, colour);
         }
     }
@@ -441,7 +441,7 @@ concepts:
   - Filtering a raycast with a CollisionMask built from the same layers
   - Firing a body on one layer and watching the matrix decide what it flies through
   - When to prefer a layer matrix over a collision group's index rule
-  - "Using helpers: SceneSetup3D, UseBepu, UseSkybox, CreatePrimitive, AddShapeBatch, AddEntityTextRenderer, AddGrabber, TeleportAtRest, ScreenToWorldRay, TextOverlay"
+  - "Using helpers: SceneSetup3D, UseBepu, UseSkybox, CreatePrimitive, AddShapeBatch, AddGrabber, TeleportAtRest, ScreenToWorldRay, TextOverlay"
 tags:
   - 3D
   - Bepu

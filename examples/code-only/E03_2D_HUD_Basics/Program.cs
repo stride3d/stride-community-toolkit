@@ -113,8 +113,6 @@ void Start(Scene rootScene)
     grid.Visible = false;
 
     #region Step5Create
-    game.AddEntityTextRenderer();
-
     healthLabel = AddLabel(rootScene, Anchor.BottomLeft);
     energyLabel = AddLabel(rootScene, Anchor.MiddleCenter);
     #endregion
@@ -135,7 +133,6 @@ void Start(Scene rootScene)
         new("1 to 8", "The HUD after that step", Color.Gold),
         new("J", "Take a hit", Color.Gold),
         new("K", "Heal", Color.Gold),
-        new("G", "Grid: off, world, screen", Color.Gold),
         new(""),
         new($"Step {step}: {stepNames[step - 1]}", Color.LightGreen),
     ]);
@@ -230,6 +227,7 @@ Vector2 PanelCentre()
 void Outline(float width = 2f)
 {
     shapeBatch.BorderWidth = width;
+    shapeBatch.StrokeWidth = width;
     shapeBatch.Fill.Set(null, 0f);
 }
 #endregion

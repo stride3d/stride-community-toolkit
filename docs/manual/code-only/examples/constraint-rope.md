@@ -20,7 +20,6 @@ The `Program.cs` file shows how to:
 - Why a rope needs a minimum distance well below its maximum
 - Why an unstable rope looks fine while slack and only misbehaves under load
 - How the mass ratio between weight and links drives instability
-- Why solver iteration count decides how extreme a ratio survives
 - Removing angular feedback with a zero lever arm
 - Letting impulses take shortcuts with skip constraints
 - Moving a constraint's anchor points and allowed distance together at runtime

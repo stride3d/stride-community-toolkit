@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.SignalR.Client;
-using System.Collections.Concurrent;
+using System.Threading.Channels;
 
 namespace E13_SignalR.SignalR;
 
@@ -11,7 +11,7 @@ namespace E13_SignalR.SignalR;
 public sealed class OutgoingQueue : IStoppable, IDisposable
 {
     private readonly SignalRHubClient _owner;
-    private readonly ConcurrentQueue<(string Method, object Payload)> _queue = new();
+    private readonly Channel<(string Method, object Payload)> _queue = Channel.CreateUnbounded<(string Method, object Payload)>(new UnboundedChannelOptions { SingleReader = true });
     private readonly CancellationTokenSource _cts = new();
     private readonly Task _loopTask;
     private int _stopped;
@@ -23,7 +23,7 @@ public sealed class OutgoingQueue : IStoppable, IDisposable
     }
 
     /// <summary>Queues one call of <paramref name="method"/> on the hub with <paramref name="payload"/> as its argument.</summary>
-    public void Enqueue(string method, object payload) => _queue.Enqueue((method, payload));
+    public void Enqueue(string method, object payload) => _queue.Writer.TryWrite((method, payload));
 
     /// <summary>
     /// Same as <see cref="Stop"/>: cancels the loop and disposes the <see cref="CancellationTokenSource"/>
@@ -39,6 +39,7 @@ public sealed class OutgoingQueue : IStoppable, IDisposable
 
         try
         {
+            _queue.Writer.TryComplete();
             _cts.Cancel();
 
             // Bounded: a send in flight against a hub that has just gone away is not worth waiting for
@@ -58,15 +59,9 @@ public sealed class OutgoingQueue : IStoppable, IDisposable
     {
         try
         {
-            while (!token.IsCancellationRequested)
+            // The reader sleeps on the channel until something is written, where a polled queue would wake a thousand times a second to find nothing
+            await foreach (var next in _queue.Reader.ReadAllAsync(token).ConfigureAwait(false))
             {
-                if (!_queue.TryDequeue(out var next))
-                {
-                    await Task.Delay(1, token).ConfigureAwait(false);
-
-                    continue;
-                }
-
                 try
                 {
                     await _owner.Connection.SendAsync(next.Method, next.Payload, token).ConfigureAwait(false);

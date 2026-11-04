@@ -6,6 +6,8 @@
   href: components-and-scripts.md
 - name: Engine Patterns
   href: engine-patterns.md
+- name: Save and Load Game Data
+  href: save-and-load.md
 - name: Using the Toolkit in Game Studio
   href: game-studio.md
 

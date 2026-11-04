@@ -590,12 +590,13 @@ public class Basic2DCameraController : SyncScript
                 // Calculate mouse delta in screen space
                 var mouseDelta = currentMousePos - _lastMousePosition.Value;
 
-                // Mouse position is normalised (0..1 across the window) and OrthographicSize is the
-                // visible height, so a cursor move of mouseDelta covers mouseDelta * size world units
-                // vertically and mouseDelta * size * aspect horizontally. Invert X so the world follows
-                // the cursor; Y is already flipped between screen space (down) and world space (up).
-                var height = _camera!.OrthographicSize;
-                var worldDelta = new Vector3(-mouseDelta.X * height * Game.GraphicsDevice.GetAspectRatio(), mouseDelta.Y * height, 0);
+                // Mouse position is normalised (0..1 across the window), so a cursor move of mouseDelta
+                // covers that fraction of the visible width and height, which an orthographic projection
+                // keeps as 2 over its first two diagonal terms (what GetOrthographicVisibleSize reads, with
+                // a custom aspect ratio counted). Invert X so the world follows the cursor; Y is already
+                // flipped between screen space (down) and world space (up).
+                var projection = _camera!.ProjectionMatrix;
+                var worldDelta = new Vector3(-mouseDelta.X * 2f / projection.M11, mouseDelta.Y * 2f / projection.M22, 0);
 
                 Pan(worldDelta);
             }

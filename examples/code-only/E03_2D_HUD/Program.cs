@@ -61,8 +61,6 @@ game.Run(new SceneSetup2D
 
 void Start(Scene scene)
 {
-    game.AddWorldTextRenderer();
-
     // One batch for everything. Its fill source is the panels' glass, a shader class of the
     // example's own, which only the shapes drawn as textured sample.
     var glass = new ComputeShaderClassColor { MixinReference = "HudGlass", CompositionNodes = { ["Settings"] = glassSettings } };

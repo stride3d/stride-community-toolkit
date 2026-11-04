@@ -137,6 +137,38 @@ public static partial class GameExtensions
     }
 
     /// <summary>
+    /// Switches the window between fullscreen and windowed mode.
+    /// </summary>
+    /// <param name="game">The <see cref="IGame"/> instance to configure.</param>
+    /// <param name="fullscreen"><see langword="true"/> for fullscreen, <see langword="false"/> for a window.</param>
+    /// <remarks>
+    /// <para>This method sets <see cref="GameWindow.IsFullscreen"/>; the graphics device manager applies the change on the next frame.</para>
+    /// <para><see cref="GameWindow.FullscreenIsBorderlessWindow"/> decides what fullscreen is: a borderless window the size of the desktop, or an exclusive mode switch.</para>
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
+    public static void SetFullScreen(this IGame game, bool fullscreen)
+    {
+        ArgumentNullException.ThrowIfNull(game);
+
+        game.Window.IsFullscreen = fullscreen;
+    }
+
+    /// <summary>
+    /// Switches the window to fullscreen if it is windowed, and back to a window if it is fullscreen.
+    /// </summary>
+    /// <param name="game">The <see cref="IGame"/> instance to configure.</param>
+    /// <remarks>
+    /// The same as <see cref="SetFullScreen(IGame, bool)"/> with the opposite of <see cref="GameWindow.IsFullscreen"/>; bind it to a key such as F11.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
+    public static void ToggleFullScreen(this IGame game)
+    {
+        ArgumentNullException.ThrowIfNull(game);
+
+        game.Window.IsFullscreen = !game.Window.IsFullscreen;
+    }
+
+    /// <summary>
     /// Requests the game to exit.
     /// </summary>
     /// <param name="game">The <see cref="IGame"/> instance to exit.</param>

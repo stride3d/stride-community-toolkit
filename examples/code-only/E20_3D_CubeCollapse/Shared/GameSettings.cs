@@ -45,6 +45,12 @@ public static class GameSettings
     /// </summary>
     public static readonly IReadOnlyList<Color> Colours = ColourPalettes.Classic.Colours;
 
+    /// <summary>
+    /// How many of a palette's colours the board plays with, two to four. Fewer colours means larger
+    /// groups and an easier board; "--colours 3" on the command line overrides it for one run.
+    /// </summary>
+    public const int ColourCount = 4;
+
     /// <summary>Width, height and depth of one cube. The grid spacing follows from it.</summary>
     public static readonly Vector3 CubeSize = new(0.5f);
 }

@@ -53,8 +53,6 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.AddEntityTextRenderer();
-
     BuildScene(scene);
 
     feeds =

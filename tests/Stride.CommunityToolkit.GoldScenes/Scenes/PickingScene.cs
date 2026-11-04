@@ -89,7 +89,7 @@ internal sealed class PickingScene : IGoldScene
             _results[Array.IndexOf(Points, result.ScreenPosition)] = result;
         }
 
-        shapes.BorderWidth = 2f;
+        shapes.StrokeWidth = 2f;
         shapes.Fill.Alpha = 0f;
 
         for (var i = 0; i < Points.Length; i++)
@@ -126,7 +126,7 @@ internal sealed class PickingScene : IGoldScene
 
         // Where the questions were asked, so the answers can be read against them
         shapes.Screen = true;
-        shapes.BorderWidth = 1.5f;
+        shapes.StrokeWidth = 1.5f;
 
         foreach (var point in Points)
         {
@@ -134,7 +134,7 @@ internal sealed class PickingScene : IGoldScene
         }
 
         shapes.Screen = false;
-        shapes.BorderWidth = 3f;
+        shapes.StrokeWidth = 1f;
         shapes.Fill.Alpha = 0.45f;
     }
 }

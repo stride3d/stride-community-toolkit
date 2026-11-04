@@ -330,8 +330,7 @@ void CreateSwingLimitComparison(Scene scene)
 /// comes from the constraints rather than from the push.
 /// </summary>
 /// <remarks>
-/// Only callable once the game is running. Setting a velocity from the start callback is silently
-/// lost, because the body has not been handed to the simulation yet.
+/// Called on P, with both arms in the scene and attached, so the velocity lands on live bodies.
 /// </remarks>
 void PushPendulums()
 {
@@ -438,7 +437,7 @@ concepts:
   - Constraint offsets and axes are in each body's local space
   - Enabling and disabling a constraint at runtime
   - Why a constraint anchor must be a kinematic body, not a static one
-  - Why a velocity set from the start callback is lost
+
   - Picking up and throwing bodies with GrabberScript
   - "Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo, AddOrientationGizmo"
 tags:

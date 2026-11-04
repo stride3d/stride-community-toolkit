@@ -74,7 +74,7 @@ public static class LookStations
             SamplerMain = v switch
             {
                 0 => Curves.Color((0f, new Color4(0.8f, 0.9f, 1f, 1f)), (1f, new Color4(0.8f, 0.9f, 1f, 0f))),
-                1 => Curves.Color((0f, new Color4(2f, 2f, 1.6f, 1f)), (0.2f, new Color4(2f, 1.2f, 0.2f, 1f)), (0.5f, new Color4(1f, 0.2f, 0.05f, 0.8f)), (1f, new Color4(0f, 0f, 0f, 0f))),
+                1 => Curves.Color((0f, new Color4(1f, 1f, 0.8f, 1f)), (0.2f, new Color4(1f, 0.6f, 0.1f, 1f)), (0.5f, new Color4(1f, 0.2f, 0.05f, 0.8f)), (1f, new Color4(0f, 0f, 0f, 0f))),
                 _ => Curves.Color((0f, new Color4(1f, 0f, 0f, 1f)), (0.33f, new Color4(0f, 1f, 0f, 1f)), (0.66f, new Color4(0f, 0f, 1f, 1f)), (1f, new Color4(1f, 0f, 1f, 0f))),
             },
         });
@@ -217,7 +217,8 @@ public static class LookStations
             ParticleLifetime = new Vector2(2f, 3f),
             SimulationSpace = EmitterSimulationSpace.World,
             ShapeBuilder = new ShapeBuilderBillboard(),
-            Material = new ParticleMaterialComputeColor { ComputeColor = graph, AlphaAdditive = v == 1 ? 1f : 0.3f },
+            // Times the particle's own colour, so the fade below reaches the shader
+            Material = new ParticleMaterialComputeColor { ComputeColor = new ComputeBinaryColor(graph, ParticleMaterials.ParticleColour(), BinaryOperator.Multiply), AlphaAdditive = v == 1 ? 1f : 0.3f },
         };
 
         emitter.Spawners.Add(new SpawnerPerSecond { SpawnCount = 16 });
@@ -256,7 +257,8 @@ public static class LookStations
             ShapeBuilder = new ShapeBuilderBillboard(),
             Material = new ParticleMaterialComputeColor
             {
-                ComputeColor = new ComputeBinaryColor(shape, new ComputeColor(tint), BinaryOperator.Multiply),
+                // Times the particle's own colour, so the fade below reaches the shader
+                ComputeColor = new ComputeBinaryColor(new ComputeBinaryColor(shape, new ComputeColor(tint), BinaryOperator.Multiply), ParticleMaterials.ParticleColour(), BinaryOperator.Multiply),
                 AlphaAdditive = 1f,
             },
         };

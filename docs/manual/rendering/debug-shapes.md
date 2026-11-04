@@ -54,7 +54,7 @@ Every method below ends with the same optional parameters, so they are listed on
 > [!NOTE]
 > `DrawCapsule`, `DrawCylinder` and `DrawCone` take **`height` before `radius`**, which is the opposite
 > way round from how most people write it. `DrawHalfSphere` takes `color` **before** `rotation`, unlike
-> every other rotatable shape. Use named arguments.
+> every other rotatable shape. Use named arguments. For all three, `height` is the whole shape, caps included.
 
 ## See also
 

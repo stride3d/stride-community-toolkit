@@ -12,7 +12,7 @@ Screen-space text keeps its pixel size at any distance and is never hidden by ge
 
 The `Program.cs` file shows how to:
 
-- Registering the text renderer once: AddEntityTextRenderer
+- The text renderer registers itself with the first label
 - Centring a label over an object with Anchor, not TextAlignment
 - Shadow and background for readability over a 3D scene
 - Scale as the cheap way to resize, instead of FontSize
@@ -24,4 +24,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E03_3D_EntityText).
 
-[!code-csharp[](../../../../examples/code-only/E03_3D_EntityText/Program.cs?start=1&end=147)]
+[!code-csharp[](../../../../examples/code-only/E03_3D_EntityText/Program.cs?start=1&end=144)]

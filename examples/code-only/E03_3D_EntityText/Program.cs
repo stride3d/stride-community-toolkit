@@ -22,9 +22,6 @@ game.Run(new SceneSetup3D { Resizable = true, DpiAware = true }.UseBepu().UseSky
 
 void Start(Scene scene)
 {
-    // Optional: EntityTextProcessor adds the renderer itself once a label needs it
-    game.AddEntityTextRenderer();
-
     // --- Row 1: placement ----------------------------------------------------------------------
 
     AddStation(scene, new Vector3(-4.5f, 0, -2), "Plain label\n(all defaults)");
@@ -168,7 +165,7 @@ description:
     přichycený k rohům okna, který přežije změnu velikosti.
     Text v prostoru obrazovky si drží velikost v pixelech na jakoukoli vzdálenost a geometrie ho nikdy nezakryje.
 concepts:
-  - "Registering the text renderer once: AddEntityTextRenderer"
+  - "The text renderer registers itself with the first label"
   - Centring a label over an object with Anchor, not TextAlignment
   - Shadow and background for readability over a 3D scene
   - Scale as the cheap way to resize, instead of FontSize

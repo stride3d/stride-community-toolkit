@@ -224,7 +224,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     /// Draws a capsule.
     /// </summary>
     /// <param name="position">Capsule center position.</param>
-    /// <param name="height">Capsule height.</param>
+    /// <param name="height">The capsule's whole height, the two caps included, the way <c>DrawCylinder</c> takes its height.</param>
     /// <param name="radius">Capsule radius.</param>
     /// <param name="rotation">Rotation applied to the capsule.</param>
     /// <param name="color">Color. Uses <see cref="PrimitiveColor"/> when default.</param>
@@ -233,7 +233,8 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     /// <param name="solid">Whether rendered solid or wireframe.</param>
     public void DrawCapsule(Vector3 position, float height, float radius, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
-        // FIXME: height is divided by two here but can probably be solved more elegantly elsewhere yes
+        // The unit capsule mesh is two units tall, a length of one plus a cap of half a unit at each end, and is scaled by
+        // Height, so the whole height asked for is halved to scale it
         var cmd = new Capsule { Position = position, Height = height / 2.0f, Radius = radius, Rotation = Resolve(rotation), Color = Resolve(color) };
 
         PushMessage(new DebugRenderable(in cmd, Flags(depthTest, solid), duration));

@@ -276,7 +276,7 @@ public static class ThrusterStations
             SortingPolicy = EmitterSortingPolicy.ByDepth,
             ShapeBuilder = new ShapeBuilderBillboard(),
             // Particles are not lit: white smoke in daylight is brighter than 1
-            Material = ParticleMaterials.Flipbook(s.Textures.Billow, 8, 8, 64, new Color4(4f, 4f, 4f, 1f), softEdge: 0.5f),
+            Material = ParticleMaterials.Flipbook(s.Textures.Billow, 8, 8, 64, new Color4(1f, 1f, 1f, 1f), softEdge: 0.5f),
             MaxParticlesOverride = 900,
         };
 
@@ -473,6 +473,8 @@ public static class ThrusterStations
     {
         FieldShape = new Cube { HalfSideX = 12f, HalfSideY = 2f, HalfSideZ = 12f },
         Position = new Vector3(0f, height, 0f),
+        // The directed force runs along the field's own axis, its Y, so the slab is turned to lay that axis along X
+        Rotation = Quaternion.RotationZ(-MathUtil.PiOverTwo),
         InheritPosition = false,
         InheritRotation = false,
         FieldFalloff = new FieldFalloff { StrengthInside = 1f, FalloffStart = 0.6f, StrengthOutside = 0f, FalloffEnd = 1f },

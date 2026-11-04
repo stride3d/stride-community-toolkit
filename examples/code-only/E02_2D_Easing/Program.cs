@@ -68,8 +68,6 @@ game.Run(new SceneSetup2D
 
 void Start(Scene rootScene)
 {
-    game.AddEntityTextRenderer();
-
     shapes = game.AddShapeBatch();
 
     // One label under every tile, and two beside the big panel

@@ -1,3 +1,4 @@
+using E03_2D_Panels;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
@@ -30,6 +31,7 @@ const int Rows = 6;
 const float ColumnPitch = 4.6f;
 const float RowPitch = 3.0f;
 const float PanelWidth = 4.0f;
+const int FontPixels = 48;
 const float PanelHeight = 2.0f;
 
 // The whole grid framed at once
@@ -58,7 +60,7 @@ KeyMenu? themeMenu = null;
 
 // The panel under the mouse, as the batch last drew it: every panel is drawn with its station as
 // the tag, and the batch answers from the frame on screen
-GalleryStation? hoveredPanel = null;
+PanelStation? hoveredPanel = null;
 
 // Dark grounds throughout: a glow is light added to what is behind it, so it only reads as a glow
 // against something dark. That is why every HUD in every spaceship is dark.
@@ -73,7 +75,7 @@ Theme[] themes =
 
 // One entry per station: how the panel is painted, and how the text on the copy below it is styled.
 // Panel settings are ShapeBatch state; text settings are WorldTextComponent properties.
-GalleryStation[] stations =
+PanelStation[] stations =
 [
     new(1, "Fill only\nBorderWidth 0", "Default text",
         (text, theme) => text.TextColor = theme.Text,
@@ -156,7 +158,7 @@ GalleryStation[] stations =
         (text, theme) => { text.TextColor = theme.Text; text.Height = 0.22f; },
         BorderWidth: 0.75f),
 
-    new(21, "Twelve vertices, cornerRadius 0.1\nany count, one shape", "Two lines,\ncentred by default",
+    new(21, "Twelve vertices, cornerRadius 0.1\nany count, one shape", "Two lines,\ncentred by AddText",
         (text, theme) => text.TextColor = theme.Text,
         Sides: 12, CornerRadius: 0.1f),
 
@@ -187,17 +189,15 @@ game.Run(new SceneSetup2D
 
 void Start(Scene scene)
 {
-    game.AddWorldTextRenderer();
-
     shapes = game.AddShapeBatch();
 
     // A code-only game has no font assets, so any font other than Stride's default one comes from
     // the machine. Asking for a list rather than a name is what keeps this working off Windows;
     // game.LoadSystemFont("Segoe UI", 48) is the one-family version.
-    sansFont = SystemFonts.LoadFirst(game.Services, SystemFonts.SansSerifCandidates, 48);
-    boldFont = SystemFonts.LoadFirst(game.Services, SystemFonts.SansSerifCandidates, 48, FontStyle.Bold);
-    italicFont = SystemFonts.LoadFirst(game.Services, SystemFonts.SansSerifCandidates, 48, FontStyle.Italic);
-    monoFont = SystemFonts.LoadFirst(game.Services, SystemFonts.MonospaceCandidates, 48);
+    sansFont = SystemFonts.LoadFirst(game.Services, SystemFonts.SansSerifCandidates, FontPixels);
+    boldFont = SystemFonts.LoadFirst(game.Services, SystemFonts.SansSerifCandidates, FontPixels, FontStyle.Bold);
+    italicFont = SystemFonts.LoadFirst(game.Services, SystemFonts.SansSerifCandidates, FontPixels, FontStyle.Italic);
+    monoFont = SystemFonts.LoadFirst(game.Services, SystemFonts.MonospaceCandidates, FontPixels);
 
     // Fills the band the overlay does not reach, and is itself a station: a big glowing title is
     // exactly what the text component is for
@@ -265,7 +265,7 @@ void Update(Scene scene, GameTime gameTime)
 {
     themeMenu?.Update(game.Input);
 
-    hoveredPanel = shapes.TryPick(game.Input.MousePosition, out var hit) ? hit.Tag as GalleryStation : null;
+    hoveredPanel = shapes.TryPick(game.Input.MousePosition, out var hit) ? hit.Tag as PanelStation : null;
 
     time += (float)gameTime.Elapsed.TotalSeconds;
 
@@ -281,7 +281,7 @@ void Update(Scene scene, GameTime gameTime)
 }
 
 /// <summary>Paints one panel: the stripe behind it, the panel itself, and any ornaments.</summary>
-void DrawPanel(GalleryStation station, Vector3 center, Theme theme)
+void DrawPanel(PanelStation station, Vector3 center, Theme theme)
 {
     // The stripe is what makes transparency visible. Drawn first: shapes blend in submission order
     // and never write depth, so within a batch "behind" simply means "earlier".
@@ -390,7 +390,7 @@ void DrawBracket(Vector3 center, Color color)
     const float Notch = 0.45f;
 
     var half = new Vector2(PanelWidth / 2f, PanelHeight / 2f);
-    var c = new Vector2(center.X, center.Y);
+    var flat = new Vector2(center.X, center.Y);
 
     // The fill, borderless, a touch inside the stroke
     var borderWidth = shapes.BorderWidth;
@@ -403,18 +403,18 @@ void DrawBracket(Vector3 center, Color color)
     // Twelve points: each corner is an inward notch of three
     ReadOnlySpan<Vector2> outline =
     [
-        c + new Vector2(-half.X + Notch, -half.Y),
-        c + new Vector2(half.X - Notch, -half.Y),
-        c + new Vector2(half.X - Notch, -half.Y + Notch),
-        c + new Vector2(half.X, -half.Y + Notch),
-        c + new Vector2(half.X, half.Y - Notch),
-        c + new Vector2(half.X - Notch, half.Y - Notch),
-        c + new Vector2(half.X - Notch, half.Y),
-        c + new Vector2(-half.X + Notch, half.Y),
-        c + new Vector2(-half.X + Notch, half.Y - Notch),
-        c + new Vector2(-half.X, half.Y - Notch),
-        c + new Vector2(-half.X, -half.Y + Notch),
-        c + new Vector2(-half.X + Notch, -half.Y + Notch),
+        flat + new Vector2(-half.X + Notch, -half.Y),
+        flat + new Vector2(half.X - Notch, -half.Y),
+        flat + new Vector2(half.X - Notch, -half.Y + Notch),
+        flat + new Vector2(half.X, -half.Y + Notch),
+        flat + new Vector2(half.X, half.Y - Notch),
+        flat + new Vector2(half.X - Notch, half.Y - Notch),
+        flat + new Vector2(half.X - Notch, half.Y),
+        flat + new Vector2(-half.X + Notch, half.Y),
+        flat + new Vector2(-half.X + Notch, half.Y - Notch),
+        flat + new Vector2(-half.X, half.Y - Notch),
+        flat + new Vector2(-half.X, -half.Y + Notch),
+        flat + new Vector2(-half.X + Notch, -half.Y + Notch),
     ];
 
     shapes.DrawPixelPolyline(outline, borderWidth, color, closed: true);
@@ -492,7 +492,7 @@ void DrawDashes(Vector3 center, Theme theme)
 {
     Reset();
 
-    shapes.BorderWidth = 1.5f;
+    shapes.StrokeWidth = 1.5f;
     shapes.Dash.Set(6f, 4f, time * 20f);
     shapes.DrawArc(new Vector2(center.X - PanelWidth / 2f + 0.75f, center.Y), 0.5f, 0f, MathF.Tau, theme.Accent);
 
@@ -506,6 +506,7 @@ void DrawDashes(Vector3 center, Theme theme)
 void Reset()
 {
     shapes.BorderWidth = 0f;
+    shapes.StrokeWidth = 1f;
     shapes.Fill.Set(null, 1f);
     shapes.Glow.Clear();
     shapes.Dash.Clear();
@@ -523,7 +524,7 @@ void AddText(Scene scene, Vector3 position, string content, float lineHeight, Ac
         // Height is the whole block, so scaling it by the line count keeps one-line and two-line
         // stations at the same letter size - the point of a comparison gallery
         Height = lineHeight * (content.AsSpan().Count('\n') + 1),
-        FontSize = 48,
+        FontSize = FontPixels,
         Font = font,
         Anchor = anchor,
         Alignment = TextAlignment.Center,
@@ -583,39 +584,6 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
 
 /// <summary>The same colour at a different alpha.</summary>
 static Color WithAlpha(Color color, byte alpha) => new(color.R, color.G, color.B, alpha);
-
-/// <summary>A palette: one accent, one dark ground, one text colour and one glow.</summary>
-sealed record Theme(string Name, Color Accent, Color Fill, Color Text, Color Glow);
-
-/// <summary>What a panel's fill gradient runs to, if anything.</summary>
-enum GradientTarget { None, Text, Transparent }
-
-/// <summary>
-/// One station of the gallery: a panel recipe, the caption naming it, and the text drawn on the
-/// second copy of the panel with the styling that names itself.
-/// </summary>
-sealed record GalleryStation(
-    int Number,
-    string Caption,
-    string Label,
-    Action<WorldTextComponent, Theme> StyleText,
-    float BorderWidth = 2f,
-    float FillAlpha = 1f,
-    float CornerRadius = 0f,
-    float GlowWidth = 0f,
-    byte GlowAlpha = 255,
-    bool DerivedFill = false,
-    bool WhiteGlow = false,
-    bool Ornaments = false,
-    bool Dashed = false,
-    GradientTarget GradientTo = GradientTarget.None,
-    float Opacity = 1f,
-    byte BorderAlpha = 255,
-    bool AdditiveGlow = false,
-    int Sides = 0,
-    bool Route = false,
-    bool Overlap = false,
-    bool Bracket = false);
 
 /*
 ---example-metadata

@@ -33,6 +33,7 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
     - `Audio/`: runtime sound without assets: procedural and `.wav` sound sources, a listener that follows an entity
     - `Collections/`: small extensions on dictionaries, lists, enumerables and `Random` over collections
     - `Engine/`: Game, Scene, Entity, Transform, Camera and Prefab extensions; the `SceneSetup` family; `CreatePrimitive`
+    - `Input/`: gamepad reads on `InputManager` with a dead zone, for the default pad, a pad by index or every pad
     - `Mathematics/`: easing and tweens, `MathUtilEx`, `RaySegment`, extensions on `Random`
     - `Rendering/`: rendering utilities, by subfolder: `Compositing/` (compositor helpers, render-texture cameras), `Gizmos/`, `Instancing/`, `Overlay/` (`TextOverlay`, `KeyMenu`, `EntityInfoRenderer`), `ProceduralModels/` (`Primitive2D`, `Primitive3D` and their models), `Text/` (screen and world text components, `TextMesh` lettering), `Utilities/` (`MeshBuilder`, `EarClipping`, `TextureCanvas`); the root holds textures, materials and `DisplayScale`
     - `Scripts/`: reusable script components: the camera controllers and the profiler

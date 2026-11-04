@@ -11,8 +11,8 @@ namespace Stride.CommunityToolkit.Bepu;
 public static class TorusCollider
 {
     /// <summary>
-    /// Creates the collider of a torus: <paramref name="radius"/> from the centre to the middle of the tube, a tube
-    /// <paramref name="thickness"/> across.
+    /// Creates the collider of a torus: <paramref name="radius"/> from the centre to the middle of the tube, a tube of
+    /// <paramref name="thickness"/> radius, the torus's minor radius.
     /// </summary>
     public static ConvexHullCollider Create(float radius, float thickness)
         => SharedHullCache.CreateCollider(

@@ -79,7 +79,7 @@ public static class SetPieceStations
         var v = s.Pick("violet", "gold", "wide and fast");
 
         var wide = v == 2;
-        var tint = v == 1 ? new Color4(2f, 1.5f, 0.5f, 1f) : new Color4(1.2f, 0.5f, 2f, 1f);
+        var tint = v == 1 ? new Color4(1f, 0.75f, 0.25f, 1f) : new Color4(0.6f, 0.25f, 1f, 1f);
 
         var ring = new ParticleEmitter
         {
@@ -115,7 +115,7 @@ public static class SetPieceStations
             ForceDirected = 0f,
             EnergyConservation = 0.3f,
         });
-        sparks.Updaters.Add(new UpdaterColorOverTime { SamplerMain = Curves.Color((0f, new Color4(1.5f, 1.5f, 1.5f, 1f)), (1f, new Color4(1f, 1f, 1f, 0f))) });
+        sparks.Updaters.Add(new UpdaterColorOverTime { SamplerMain = Curves.Color((0f, new Color4(1f, 1f, 1f, 1f)), (1f, new Color4(1f, 1f, 1f, 0f))) });
 
         var glow = new ParticleEmitter
         {
@@ -181,7 +181,7 @@ public static class SetPieceStations
             SimulationSpace = EmitterSimulationSpace.World,
             // The length is the factor times the size times the speed, so a fast particle needs a small factor
             ShapeBuilder = new ShapeBuilderOrientedQuad { ScaleLength = true, LengthFactor = 0.3f },
-            Material = ParticleMaterials.Textured(s.Textures.Radial, afterburner ? new Color4(2.5f, 2f, 3f, 1f) : new Color4(1.6f, 1.9f, 2.6f, 1f), additive: 1f),
+            Material = ParticleMaterials.Textured(s.Textures.Radial, afterburner ? new Color4(0.83f, 0.67f, 1f, 1f) : new Color4(0.62f, 0.73f, 1f, 1f), additive: 1f),
         };
 
         core.Spawners.Add(new SpawnerPerSecond { SpawnCount = afterburner ? 420 : 300 });
@@ -196,7 +196,7 @@ public static class SetPieceStations
             ParticleLifetime = new Vector2(0.4f, 0.6f),
             SimulationSpace = EmitterSimulationSpace.World,
             ShapeBuilder = new ShapeBuilderBillboard(),
-            Material = ParticleMaterials.Flipbook(s.Textures.Flame, 8, 8, 64, new Color4(2.2f, 1.1f, 0.35f, 1f), additive: 1f),
+            Material = ParticleMaterials.Flipbook(s.Textures.Flame, 8, 8, 64, new Color4(1f, 0.5f, 0.16f, 1f), additive: 1f),
         };
 
         plume.Spawners.Add(new SpawnerPerSecond { SpawnCount = afterburner ? 160 : 110 });
@@ -212,7 +212,7 @@ public static class SetPieceStations
             ParticleLifetime = new Vector2(0.6f, 1.3f),
             SimulationSpace = EmitterSimulationSpace.World,
             ShapeBuilder = new ShapeBuilderOrientedQuad { ScaleLength = true, LengthFactor = 3f },
-            Material = ParticleMaterials.Textured(s.Textures.Dot, new Color4(2f, 1.3f, 0.5f, 1f), additive: 1f),
+            Material = ParticleMaterials.Textured(s.Textures.Dot, new Color4(1f, 0.65f, 0.25f, 1f), additive: 1f),
         };
 
         sparks.Spawners.Add(new SpawnerPerSecond { SpawnCount = sooty ? 220 : 120 });
@@ -271,7 +271,7 @@ public static class SetPieceStations
             ParticleLifetime = new Vector2(0.08f, 0.16f),
             SimulationSpace = EmitterSimulationSpace.World,
             ShapeBuilder = new ShapeBuilderBillboard(),
-            Material = ParticleMaterials.Textured(s.Textures.Radial, new Color4(2f, 2.4f, 3f, 1f), additive: 1f),
+            Material = ParticleMaterials.Textured(s.Textures.Radial, new Color4(0.67f, 0.8f, 1f, 1f), additive: 1f),
         };
 
         diamonds.Spawners.Add(new SpawnerPerSecond { SpawnCount = 90 });

@@ -102,7 +102,7 @@ void CreateReferenceCube(Scene scene)
     var referenceCubeBody = referenceCube.Get<BodyComponent>();
 
     referenceCubeBody.FrictionCoefficient = 0.1f;
-    referenceCubeBody.CollisionLayer = CollisionLayer.Layer5;
+    referenceCubeBody.CollisionLayer = otherLayer;
 
     referenceCube.Add(new OneBodyAngularServoConstraintComponent
     {
@@ -120,52 +120,31 @@ void CreateReferenceCapsule(Scene scene)
 {
     var referenceCapsule = CreateEntity(Primitive3D.Capsule(), "Reference Capsule", Color.Orange, new Vector3(0, 3, 0));
 
-    referenceCapsule.Get<BodyComponent>().CollisionLayer = CollisionLayer.Layer5;
+    referenceCapsule.Get<BodyComponent>().CollisionLayer = otherLayer;
 
     Place(referenceCapsule, scene);
 }
 
+// The spheres stay between one and three units apart
 void CreateDistanceLimitConstraintExamples(Scene scene)
-{
-    var goldenSphere = CreateEntity(Primitive3D.Sphere(), GoldenSphereName, Color.Gold, new Vector3(-2, 3, -2));
-    var goldenBody = goldenSphere.Get<BodyComponent>();
-    goldenBody.CollisionLayer = CollisionLayer.Layer5;
+    => CreateSpherePair(scene, height: 3, Color.Blue, (a, b) => new DistanceLimitConstraintComponent { A = a, B = b, MinimumDistance = 1, MaximumDistance = 3.0f });
 
-    var connectedSphere = CreateEntity(Primitive3D.Sphere(), ConnectedEntityName, Color.Blue, new Vector3(-2.1f, 3, -2.9f));
-    var connectedBody = connectedSphere.Get<BodyComponent>();
-    connectedBody.CollisionLayer = CollisionLayer.Layer5;
-
-    // The spheres stay between one and three units apart
-    goldenSphere.Add(new DistanceLimitConstraintComponent
-    {
-        A = goldenBody,
-        B = connectedBody,
-        MinimumDistance = 1,
-        MaximumDistance = 3.0f
-    });
-
-    Place(goldenSphere, scene);
-    Place(connectedSphere, scene);
-}
-
+// The servo pulls the spheres to three units apart and holds them there
 void CreateDistanceServoConstraintExamples(Scene scene)
+    => CreateSpherePair(scene, height: 6, Color.LightBlue, (a, b) => new DistanceServoConstraintComponent { A = a, B = b, TargetDistance = 3.0f, SpringDampingRatio = 2 });
+
+/// <summary>A golden sphere and a connected one at a height, joined by the constraint the caller builds from their two bodies.</summary>
+void CreateSpherePair(Scene scene, float height, Color connectedColour, Func<BodyComponent, BodyComponent, EntityComponent> constraint)
 {
-    var goldenSphere = CreateEntity(Primitive3D.Sphere(), GoldenSphereName, Color.Gold, new Vector3(-2, 6, -2));
+    var goldenSphere = CreateEntity(Primitive3D.Sphere(), GoldenSphereName, Color.Gold, new Vector3(-2, height, -2));
     var goldenBody = goldenSphere.Get<BodyComponent>();
-    goldenBody.CollisionLayer = CollisionLayer.Layer5;
+    goldenBody.CollisionLayer = otherLayer;
 
-    var connectedSphere = CreateEntity(Primitive3D.Sphere(), ConnectedEntityName, Color.LightBlue, new Vector3(-2.1f, 6, -2.9f));
+    var connectedSphere = CreateEntity(Primitive3D.Sphere(), ConnectedEntityName, connectedColour, new Vector3(-2.1f, height, -2.9f));
     var connectedBody = connectedSphere.Get<BodyComponent>();
-    connectedBody.CollisionLayer = CollisionLayer.Layer5;
+    connectedBody.CollisionLayer = otherLayer;
 
-    // The servo pulls the spheres to three units apart and holds them there
-    goldenSphere.Add(new DistanceServoConstraintComponent
-    {
-        A = goldenBody,
-        B = connectedBody,
-        TargetDistance = 3.0f,
-        SpringDampingRatio = 2,
-    });
+    goldenSphere.Add(constraint(goldenBody, connectedBody));
 
     Place(goldenSphere, scene);
     Place(connectedSphere, scene);
@@ -189,11 +168,11 @@ void CreateBallSocketConstraintExample(Scene scene)
     var foundationBlock = CreateCubeEntity("Foundation Block", Color.Beige, foundationPosition, foundationSize);
     var foundationBody = foundationBlock.Get<BodyComponent>();
     foundationBody.Kinematic = true;
-    foundationBody.CollisionLayer = CollisionLayer.Layer5;
+    foundationBody.CollisionLayer = otherLayer;
 
     var platform = CreateCubeEntity("Platform", Color.Bisque, platformPosition, platformSize);
     var platformBody = platform.Get<BodyComponent>();
-    platformBody.CollisionLayer = CollisionLayer.Layer5;
+    platformBody.CollisionLayer = otherLayer;
 
     // The socket is at the top of the foundation and the bottom of the platform
     foundationBlock.Add(new BallSocketConstraintComponent
@@ -232,7 +211,7 @@ void CreatePointOnLineServoConstraintExample(Scene scene)
         var body = line.Get<BodyComponent>();
 
         body.Kinematic = true;
-        body.CollisionLayer = CollisionLayer.Layer1;
+        body.CollisionLayer = lineLayer;
 
         Place(line, scene);
 
@@ -247,7 +226,7 @@ void CreatePointOnLineServoConstraintExample(Scene scene)
         body.SpringDampingRatio = CubeSpringDampingRatio;
         body.SpringFrequency = SpringFrequency;
         body.FrictionCoefficient = FrictionCoefficient;
-        body.CollisionLayer = CollisionLayer.Layer2;
+        body.CollisionLayer = cubeLayer;
 
         // Anchored at the line's centre and the cube's, along the line's up: the cube may only slide
         line.Add(new PointOnLineServoConstraintComponent
@@ -311,7 +290,7 @@ void AddInstructions()
 {
     TextOverlay.GetOrCreate(game).AddSection("Game", static () =>
     [
-        new("Left mouse", "Pick up any body, carry it, throw it", Color.Yellow),
+        new("Left mouse", "Pick up a dynamic body, carry it, throw it", Color.Yellow),
         new("Mouse wheel", "Carry distance", Color.Yellow),
         new("T", "Hold and move the mouse to turn the held body", Color.Yellow),
         new("Middle click", "Remove a stacked cube; the ones above collapse", Color.Yellow),

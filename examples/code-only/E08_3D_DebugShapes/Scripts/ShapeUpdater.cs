@@ -49,7 +49,7 @@ public class ShapeUpdater : SyncScript
         TextOverlay.GetOrCreate(Game).AddSection("Debug shapes", () =>
         [
             new("Mouse wheel", "Primitive count", Color.Gold),
-            new("Shift", "Hold to change the count faster", Color.Gold),
+            new("M", "Hold to change the count faster", Color.Gold),
             new("Left Alt", "Next render mode", Color.Gold),
             new("Left Ctrl", "Toggle depth testing", Color.Gold),
             new("Tab", "Toggle wireframe", Color.Gold),
@@ -78,8 +78,8 @@ public class ShapeUpdater : SyncScript
 
     private void HandleInput(float dt)
     {
-        // The wheel changes the count, a hundred times faster with Shift held; primitives added by it are set up here
-        var speed = Input.IsKeyDown(Keys.LeftShift) ? 100f : 1f;
+        // The wheel changes the count, a hundred times faster with M held; primitives added by it are set up here
+        var speed = Input.IsKeyDown(Keys.M) ? 100f : 1f;
         var count = Math.Clamp(_count + (int)(Input.MouseWheelDelta * ChangePerSecond * speed * dt), MinPrimitives, MaxPrimitives);
 
         if (count > _count)

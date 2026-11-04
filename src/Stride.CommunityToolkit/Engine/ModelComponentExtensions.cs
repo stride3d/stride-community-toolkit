@@ -1,7 +1,9 @@
 using Stride.CommunityToolkit.Rendering;
 using Stride.Engine;
 using Stride.Games;
+using Stride.Graphics;
 using Stride.Rendering;
+using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -192,7 +194,7 @@ public static class ModelComponentExtensions
         internal required ModelComponent ModelComponent { get; init; }
     }
 
-    private static unsafe (List<Vector3> vertices, List<int> indices) GetMeshData(Model model, IGame game)
+    private static (List<Vector3> vertices, List<int> indices) GetMeshData(Model model, IGame game)
     {
         // Counted first so both lists are allocated once at the right size; a model with many meshes
         // would otherwise regrow them repeatedly while copying.
@@ -225,33 +227,48 @@ public static class ModelComponentExtensions
             // of vertices already collected.
             var vertMappingStart = combinedVertices.Count;
 
-            fixed (byte* bytePtr = verticesBytes)
-            {
-                var stride = vertexBinding.Declaration.VertexStride;
+            // The position is read where the declaration puts it, so an imported layout that carries
+            // something else first, or packs its position differently, is read right or refused.
+            var stride = vertexBinding.Declaration.VertexStride;
+            var positionOffset = PositionOffset(vertexBinding.Declaration);
+            var vertices = verticesBytes.AsSpan();
 
-                // Position is the first element of every Stride vertex declaration, so the start
-                // of each stride-sized block is the Vector3 wanted here.
-                for (int i = 0, head = vertexBinding.Offset; i < vertexBinding.Count; i++, head += stride)
-                    combinedVertices.Add(*(Vector3*)(bytePtr + head));
+            for (int i = 0, head = vertexBinding.Offset + positionOffset; i < vertexBinding.Count; i++, head += stride)
+                combinedVertices.Add(MemoryMarshal.Read<Vector3>(vertices.Slice(head, 12)));
+
+            // Stride narrows index buffers to 16 bits when a mesh has few enough vertices, so both
+            // widths have to be handled.
+            var indices = indicesBytes.AsSpan(indexBinding.Offset);
+
+            if (indexBinding.Is32Bit)
+            {
+                foreach (var i in MemoryMarshal.Cast<byte, int>(indices)[..indexBinding.Count])
+                    combinedIndices.Add(vertMappingStart + i);
             }
-
-            fixed (byte* bytePtr = indicesBytes)
+            else
             {
-                // Stride narrows index buffers to 16 bits when a mesh has few enough vertices, so both
-                // widths have to be handled.
-                if (indexBinding.Is32Bit)
-                {
-                    foreach (var i in new Span<int>(bytePtr + indexBinding.Offset, indexBinding.Count))
-                        combinedIndices.Add(vertMappingStart + i);
-                }
-                else
-                {
-                    foreach (var i in new Span<ushort>(bytePtr + indexBinding.Offset, indexBinding.Count))
-                        combinedIndices.Add(vertMappingStart + i);
-                }
+                foreach (var i in MemoryMarshal.Cast<byte, ushort>(indices)[..indexBinding.Count])
+                    combinedIndices.Add(vertMappingStart + i);
             }
         }
 
         return (combinedVertices, combinedIndices);
+    }
+
+    /// <summary>The byte offset of the position inside one vertex, which must be three floats.</summary>
+    /// <exception cref="InvalidOperationException">If the declaration has no position, or one that is not three floats.</exception>
+    private static int PositionOffset(VertexDeclaration declaration)
+    {
+        foreach (var element in declaration.EnumerateWithOffsets())
+        {
+            if (element.VertexElement.SemanticName != VertexElementUsage.Position) continue;
+
+            if (element.VertexElement.Format != PixelFormat.R32G32B32_Float)
+                throw new InvalidOperationException($"The vertex position is {element.VertexElement.Format}, not three floats.");
+
+            return element.Offset;
+        }
+
+        throw new InvalidOperationException("The vertex declaration has no position element.");
     }
 }

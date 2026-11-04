@@ -44,7 +44,7 @@ for (var i = 0; i < args.Length; i++)
         case "--configuration" when i + 1 < args.Length: configuration = args[++i]; break;
         case "--clean": cleanOnly = true; break;
         case "--help" or "-h":
-            Console.WriteLine("Usage: dotnet run build/pack-local.cs -- [--version <v>] [--configuration <c>] [--clean]");
+            Console.WriteLine("Usage: dotnet run --file build/pack-local.cs -- [--version <v>] [--configuration <c>] [--clean]");
             return 0;
         default:
             Console.Error.WriteLine($"Unknown argument: {args[i]}");

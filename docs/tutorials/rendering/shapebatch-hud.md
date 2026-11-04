@@ -261,7 +261,7 @@ A HUD is mostly made of two kinds of shape: outlines with nothing inside, and so
 outline. The bar uses both, and so do the dial and the crosshair later. Each kind is a
 `BorderWidth` and a `Fill`, so give each its own small function.
 
-`Outline` sets an outline of 2 pixels and an empty inside:
+`Outline` sets an outline of 2 pixels, the same width for a ring, and an empty inside:
 
 [!code-csharp[](../../../examples/code-only/E03_2D_HUD_Basics/Program.cs#Step2Outline)]
 

@@ -87,7 +87,7 @@ public class RibbonBackgroundRenderFeature : RootRenderFeature
         spriteBatch.Begin(context.GraphicsContext, SpriteSortMode.FrontToBack, BlendStates.Opaque,
             graphicsDevice.SamplerStates.LinearClamp, DepthStencilStates.DepthRead, null, effect);
 
-        spriteBatch.Parameters.Set(RibbonBackgroundShaderKeys.DeltaTime, (float)context.RenderContext.Time.Total.TotalSeconds);
+        spriteBatch.Parameters.Set(RibbonBackgroundShaderKeys.TotalTime, (float)context.RenderContext.Time.Total.TotalSeconds);
         spriteBatch.Parameters.Set(RibbonBackgroundShaderKeys.Intensity, renderBackground.Intensity);
         spriteBatch.Parameters.Set(RibbonBackgroundShaderKeys.Frequency, renderBackground.Frequency);
         spriteBatch.Parameters.Set(RibbonBackgroundShaderKeys.Amplitude, renderBackground.Amplitude);

@@ -67,12 +67,13 @@ public static class MotionStations
         emitter.Spawners.Add(new SpawnerPerSecond { SpawnCount = 80 });
         emitter.Initializers.Add(Initializers.AtEmitter());
         emitter.Initializers.Add(new InitialSizeSeed { RandomSize = new Vector2(0.12f, 0.2f) });
-        emitter.Initializers.Add(new InitialDirectionSeed
+        // The cone is in the velocity: UpdaterSpeedToDirection turns each particle along the way it moves every
+        // update, so a direction seeded on its own would be overwritten before it was seen
+        emitter.Initializers.Add(new InitialVelocitySeed
         {
-            DirectionMin = wide ? new Vector3(-0.6f, 1f, -0.6f) : new Vector3(-0.1f, 1f, -0.1f),
-            DirectionMax = wide ? new Vector3(0.6f, 1f, 0.6f) : new Vector3(0.1f, 1f, 0.1f),
+            VelocityMin = wide ? new Vector3(-4f, 6f, -4f) : new Vector3(-0.7f, 6f, -0.7f),
+            VelocityMax = wide ? new Vector3(4f, 9f, 4f) : new Vector3(0.7f, 9f, 0.7f),
         });
-        emitter.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(0f, 6f, 0f), VelocityMax = new Vector3(0f, 9f, 0f) });
         emitter.Updaters.Add(new UpdaterGravity { GravitationalAcceleration = new Vector3(0f, -9.8f, 0f) });
         emitter.Updaters.Add(new UpdaterSpeedToDirection());
 

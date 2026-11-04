@@ -13,7 +13,7 @@ namespace Stride.CommunityToolkit.Rendering.Overlay;
 ///
 /// <para>This is a game system rather than a script, so it is unaffected by scenes being swapped and draws itself once per frame with no help from the caller. Get one with <see cref="GetOrCreate(IGame)"/> - it is registered as a service, so every caller shares the same instance and the camera controller, your own instructions and any key menus end up in one place. </para>
 ///
-/// <para>Contributors add a <see cref="TextOverlaySection"/> whose callback runs each frame, so content that changes needs no pushing. Sections are separated by a blank line and sorted by <see cref="TextOverlaySection.Order"/>. </para>
+/// <para>Contributors add a <see cref="TextOverlaySection"/> whose callback runs each frame, so content that changes needs no pushing. Sections are separated by <see cref="SectionGap"/> blank lines, one by default, and sorted by <see cref="TextOverlaySection.Order"/>. </para>
 ///
 /// <para>
 /// Text is drawn with an installed font chosen by <see cref="FontFamily"/> - monospace by default, like

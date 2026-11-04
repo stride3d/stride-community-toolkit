@@ -10,3 +10,9 @@ Extension methods for `ScriptComponent`, in the `Stride.CommunityToolkit.Engine`
 > These look the camera up by its graphics compositor slot rather than by searching the scene, so they
 > find the camera that is actually being rendered from. A slot is bound a frame or two after the game
 > starts, so a script's first updates may get `null`.
+
+## See also
+
+- [Script System Extensions](../script-system-extensions/index.md)
+- [Camera Extensions](../camera-extensions/index.md)
+- [Components and Scripts](../components-and-scripts.md)

@@ -50,3 +50,10 @@ See [Camera Controllers](../camera-extensions/camera-controllers.md) for the key
 
 - [`AddGizmo()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Boolean,System.Boolean)) - Draws a translation gizmo at the entity, with optional per-axis colours and axis letters.
 - [`AddLightDirectionalGizmo()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.AddLightDirectionalGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color})) - Draws which way a directional light is pointing, which is otherwise invisible.
+
+## See also
+
+- [Game Extensions](../game-extensions/index.md)
+- [Camera Extensions](../camera-extensions/index.md)
+- [Physics Extensions](../physics-extensions/index.md)
+- [Entity Text](../rendering/entity-text.md)

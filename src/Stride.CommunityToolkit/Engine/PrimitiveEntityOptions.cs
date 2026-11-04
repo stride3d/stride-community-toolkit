@@ -58,6 +58,15 @@ public class PrimitiveEntityOptions
     public BodyMode Body { get; set; } = BodyMode.Dynamic;
 
     /// <summary>
+    /// Whether the entity draws the one model the game keeps for this shape and material, the one
+    /// <see cref="GameExtensions.GetOrCreateModel(Stride.Games.IGame, Rendering.ProceduralModels.Primitive3D, Material)"/>
+    /// returns, instead of a model generated for this call alone. Defaults to <see langword="false"/>.
+    /// Set it for the many entities that draw the same thing: one mesh and one pair of GPU buffers
+    /// between them, at the price that a change to the model shows on all of them.
+    /// </summary>
+    public bool ShareModel { get; set; }
+
+    /// <summary>
     /// A copy of the options with another <see cref="Body"/>, the rest as it is, whatever the runtime type.
     /// </summary>
     /// <param name="body">The mode of the copy.</param>

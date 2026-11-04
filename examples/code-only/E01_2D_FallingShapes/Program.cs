@@ -47,7 +47,7 @@ slug: falling-shapes-2d
 title:
   en: Basic 2D Scene (Falling Shapes)
   cs: Základní 2D scéna (Padající tvary)
-level: Getting Started
+level: Beginner
 category: Shapes
 complexity: 1
 order: 35

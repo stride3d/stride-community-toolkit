@@ -176,6 +176,7 @@ public static class ShapeStations
 
         shapes.Fill.Color = null;
         shapes.BorderWidth = 2f;
+        shapes.StrokeWidth = 2f;
         shapes.Glow.Set(8f, new Color(255, 140, 0, 160));
 
         foreach (var pillar in s.Pillars)
@@ -191,6 +192,7 @@ public static class ShapeStations
 
         shapes.Glow.Clear();
         shapes.BorderWidth = s.Style.BorderWidth;
+        shapes.StrokeWidth = s.Style.StrokeWidth;
 
         // Any polygon can be billboarded, not just circles
         ReadOnlySpan<Vector2> diamond = [new(0.9f, 0f), new(0f, 0.9f), new(-0.9f, 0f), new(0f, -0.9f)];

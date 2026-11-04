@@ -78,11 +78,6 @@ void Start(Scene rootScene)
         Shaded: game.AddShapeBatch(depthTest: true, fill: new ComputeShaderClassColor { MixinReference = "GalleryPlasma", CompositionNodes = { ["Clock"] = clock } }),
         Clock: clock);
 
-    // The text renderers, appended after the camera renderer that draws the shapes, so text lands
-    // on top of a panel's fill; neither writes depth, so coplanar is fine
-    game.AddWorldTextRenderer();
-    game.AddEntityTextRenderer();
-
     // The frame comes from Example.Common; what a ShapeBatch station needs on top of it - the
     // batches, the visitor's style, which batch to draw through this frame - is put there by these
     var galleryBatches = batches;
@@ -196,7 +191,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     // The index board is the full list; here, only where the visitor stands
     if (gallery.CurrentStation is not { } station)
     {
-        if (gallery.Stations.Count > 0) lines.Add(new($"Home - {gallery.Stations.Count} stations; N, P or a pad to visit", Color.White));
+        if (gallery.Stations.Count > 0) lines.Add(new($"Home - {gallery.Stations.Count} stations; N, P, a pad or a line of the board to visit", Color.White));
 
         return lines;
     }

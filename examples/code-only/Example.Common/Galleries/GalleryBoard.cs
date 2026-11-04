@@ -10,6 +10,8 @@ namespace Example.Common.Galleries;
 /// The index board: a HUD panel listing every station, hung in the air where the home view has its
 /// top-left corner. The list is world text placed once; the frame is drawn each frame like any
 /// other shape. Steer the camera away and the board stays put; going home brings it back to the corner.
+/// Every line of the list is a button: an invisible rectangle tagged with its station, so the same
+/// pick that finds a pad under the mouse finds a line, and the gallery flies there on a click.
 /// </summary>
 internal sealed class GalleryBoard
 {
@@ -37,6 +39,10 @@ internal sealed class GalleryBoard
     private readonly Vector3 _right;
     private readonly Vector3 _up;
     private readonly Vector2 _size;
+
+    /// <summary>Where the list's first line starts, and how wide a line's button is: the frame less the insets.</summary>
+    private readonly Vector3 _textTopLeft;
+    private readonly float _lineWidth;
 
     /// <summary>Places the board in the home camera's frame and adds its list to the scene.</summary>
     /// <param name="scene">The scene the list goes into.</param>
@@ -78,11 +84,15 @@ internal sealed class GalleryBoard
 
         // Hung from the top-left of the frame, inset like the corner brackets, a hair in front, in the board's own plane
         var towardsCamera = Vector3.Cross(_right, _up);
+
+        _textTopLeft = _centre - _right * (half.X - Inset) + _up * (half.Y - 0.5f);
+        _lineWidth = Width - 2f * Inset;
+
         var entity = new Entity("Index board")
         {
             Transform =
             {
-                Position = _centre - _right * (half.X - Inset) + _up * (half.Y - 0.5f) + towardsCamera * 0.01f,
+                Position = _textTopLeft + towardsCamera * 0.01f,
                 Rotation = homeRotation,
             },
         };
@@ -91,8 +101,15 @@ internal sealed class GalleryBoard
         entity.Scene = scene;
     }
 
-    /// <summary>Draws the frame and its corner brackets, leaving the batch's fill and border width changed and its glow cleared.</summary>
-    internal void DrawFrame(ShapeBatch shapes)
+    /// <summary>
+    /// Draws the frame, its corner brackets and the line buttons, leaving the batch's fill and border
+    /// width changed and its glow and tag cleared.
+    /// </summary>
+    /// <param name="shapes">The gallery's depth-tested batch, the one its pads are picked through.</param>
+    /// <param name="stations">The stations, one per line, which become the lines' pick tags.</param>
+    /// <param name="hovered">The index of the station under the mouse, or -1; its line is lit.</param>
+    /// <param name="current">The index of the station the visitor is at, or -1 at home; its line is marked.</param>
+    internal void DrawFrame(ShapeBatch shapes, IReadOnlyList<GalleryStation> stations, int hovered, int current)
     {
         var hudBlue = new Color(110, 200, 255);
 
@@ -111,5 +128,24 @@ internal sealed class GalleryBoard
         shapes.DrawPixelLine(topLeft, topLeft - _up * 0.5f, 1.5f, hudBlue);
         shapes.DrawPixelLine(bottomRight, bottomRight - _right * 0.8f, 1.5f, hudBlue);
         shapes.DrawPixelLine(bottomRight, bottomRight + _up * 0.5f, 1.5f, hudBlue);
+
+        // One rectangle per line, behind the text and in front of the frame, tagged with its station so
+        // the pick reports it like a pad. Unlit lines draw nothing: no border and a fill at zero alpha,
+        // which still picks as the whole rectangle. The lit ones are a wash behind the text
+        var towardsCamera = Vector3.Cross(_right, _up);
+        var lineSize = new Vector2(_lineWidth, LineHeight);
+
+        shapes.BorderWidth = 0f;
+
+        for (var i = 0; i < stations.Count; i++)
+        {
+            var centre = _textTopLeft + _right * (_lineWidth * 0.5f) - _up * ((i + 0.5f) * LineHeight) + towardsCamera * 0.005f;
+
+            shapes.Tag = stations[i];
+            shapes.Fill.Set(hudBlue, i == hovered ? 0.3f : i == current ? 0.12f : 0f);
+            shapes.DrawRectangle(centre, _right, _up, lineSize, hudBlue, cornerRadius: 0.1f);
+        }
+
+        shapes.Tag = null;
     }
 }

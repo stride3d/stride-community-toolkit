@@ -14,7 +14,7 @@ The `Program.cs` file shows how to:
 
 - Generating a ring of vertices from an angle sweep
 - Stitching consecutive rings into a quad strip of triangles
-- Closing the ends with fan-triangulated caps
+- Closing the ends with fan-triangulated caps on rings of their own, so their normals are flat
 - Why the two caps must wind in opposite directions
 - Keeping index arithmetic readable by splitting the build into stages
 - Using helpers: SceneSetup3D, UseSkybox, CreateMaterial
@@ -23,4 +23,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_CylinderMesh).
 
-[!code-csharp[](../../../../examples/code-only/E07_3D_CylinderMesh/Program.cs?start=1&end=105)]
+[!code-csharp[](../../../../examples/code-only/E07_3D_CylinderMesh/Program.cs?start=1&end=120)]

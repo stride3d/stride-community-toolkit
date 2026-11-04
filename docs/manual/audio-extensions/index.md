@@ -57,3 +57,9 @@ The audio engine pauses whenever the game window loses focus, and while paused a
 - [Procedural Sound](../code-only/examples/procedural-sound.md) - a tone with no file, waveform and pitch changed live.
 - [Wav File](../code-only/examples/wav-file.md) - a chime that overlaps with itself and a looping pad, from files on disk.
 - [Spatial Sound](../code-only/examples/spatial-sound.md) - a sound on an orbiting orb, heard from the camera, with an HRTF toggle.
+
+## See also
+
+- [Game Extensions](../game-extensions/index.md)
+- [Script System Extensions](../script-system-extensions/index.md) - waiting and timed actions, for sounds on a schedule
+- [Components and Scripts](../components-and-scripts.md)

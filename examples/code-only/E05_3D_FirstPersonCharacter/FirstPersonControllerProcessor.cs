@@ -35,67 +35,67 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         }
     }
 
-    private void UpdateOne(FirstPersonControllerComponent c, Entity entity, InputManager input, float dt)
+    private void UpdateOne(FirstPersonControllerComponent controller, Entity entity, InputManager input, float dt)
     {
-        if (!c.Initialized)
+        if (!controller.Initialized)
         {
-            SetMouseLock(c, input, true);
+            SetMouseLock(controller, input, true);
 
-            if (c.Character is not null)
+            if (controller.Character is not null)
             {
-                c.FlyPosition = c.Character.Entity.Transform.Position + new Vector3(0, c.EyeHeight, 0);
+                controller.FlyPosition = controller.Character.Entity.Transform.Position + new Vector3(0, controller.EyeHeight, 0);
             }
 
-            c.Initialized = true;
+            controller.Initialized = true;
         }
 
         // Escape frees the cursor; clicking the window grabs it again.
         if (input.IsKeyPressed(Keys.Escape))
         {
-            SetMouseLock(c, input, false);
+            SetMouseLock(controller, input, false);
         }
-        else if (!c.MouseLocked && input.IsMouseButtonPressed(MouseButton.Left))
+        else if (!controller.MouseLocked && input.IsMouseButtonPressed(MouseButton.Left))
         {
-            SetMouseLock(c, input, true);
+            SetMouseLock(controller, input, true);
         }
 
         // Mouse look (both modes). Row-vector convention: RotationX*RotationY = intrinsic
         // yaw-then-local-pitch.
-        if (c.MouseLocked)
+        if (controller.MouseLocked)
         {
-            c.Yaw -= input.MouseDelta.X * c.MouseSensitivity;
-            c.Pitch = MathUtil.Clamp(c.Pitch - input.MouseDelta.Y * c.MouseSensitivity, -MaxPitch, MaxPitch);
-            entity.Transform.Rotation = Quaternion.RotationX(c.Pitch) * Quaternion.RotationY(c.Yaw);
+            controller.Yaw -= input.MouseDelta.X * controller.MouseSensitivity;
+            controller.Pitch = MathUtil.Clamp(controller.Pitch - input.MouseDelta.Y * controller.MouseSensitivity, -MaxPitch, MaxPitch);
+            entity.Transform.Rotation = Quaternion.RotationX(controller.Pitch) * Quaternion.RotationY(controller.Yaw);
         }
 
-        var character = c.Character;
+        var character = controller.Character;
 
         if (character is null) return;
 
         // Set world gravity once the body has joined a simulation (Simulation is null until the
         // body is attached, when its entity enters the scene).
-        if (!c.GravityApplied && character.Simulation is not null)
+        if (!controller.GravityApplied && character.Simulation is not null)
         {
             character.Simulation.PoseGravity = new Vector3(0f, Gravity, 0f);
-            c.GravityApplied = true;
+            controller.GravityApplied = true;
         }
 
         if (input.IsKeyPressed(Keys.V))
         {
-            SetFly(c, !c.Fly);
+            SetFly(controller, !controller.Fly);
         }
 
-        if (c.Fly)
+        if (controller.Fly)
         {
-            UpdateFly(c, entity, input, dt);
+            UpdateFly(controller, entity, input, dt);
         }
         else
         {
-            UpdateWalk(c, entity, input, dt);
+            UpdateWalk(controller, entity, input, dt);
         }
     }
 
-    private void SetMouseLock(FirstPersonControllerComponent c, InputManager input, bool locked)
+    private void SetMouseLock(FirstPersonControllerComponent controller, InputManager input, bool locked)
     {
         if (locked)
         {
@@ -110,39 +110,39 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
 
         if (game is not null) game.IsMouseVisible = !locked;
 
-        c.MouseLocked = locked;
+        controller.MouseLocked = locked;
     }
 
-    private static void SetFly(FirstPersonControllerComponent c, bool on)
+    private static void SetFly(FirstPersonControllerComponent controller, bool on)
     {
-        c.Fly = on;
+        controller.Fly = on;
 
-        if (c.Character is null) return;
+        if (controller.Character is null) return;
 
         if (on)
         {
             // Enter fly from the current eye position; park the body. MoveVector PERSISTS - every
             // physics tick re-applies it as the character's target velocity, so without clearing it
             // the parked capsule keeps walking on its own.
-            c.FlyPosition = c.Character.Entity.Transform.Position + new Vector3(0, c.EyeHeight, 0);
-            c.Character.MoveVector = Vector2.Zero;
-            c.Character.Gravity = false;
-            c.Character.LinearVelocity = Vector3.Zero;
+            controller.FlyPosition = controller.Character.Entity.Transform.Position + new Vector3(0, controller.EyeHeight, 0);
+            controller.Character.MoveVector = Vector2.Zero;
+            controller.Character.Gravity = false;
+            controller.Character.LinearVelocity = Vector3.Zero;
         }
         else
         {
             // Exit fly: teleport the body under the camera, then resume gravity. Writing
             // Transform.Position instead would move only the mesh; the physics sync overwrites it.
-            c.Character.Teleport(c.FlyPosition - new Vector3(0, c.EyeHeight, 0), c.Character.Orientation);
-            c.Character.LinearVelocity = Vector3.Zero;
-            c.Character.Gravity = true;
+            controller.Character.Teleport(controller.FlyPosition - new Vector3(0, controller.EyeHeight, 0), controller.Character.Orientation);
+            controller.Character.LinearVelocity = Vector3.Zero;
+            controller.Character.Gravity = true;
         }
     }
 
-    private static void UpdateWalk(FirstPersonControllerComponent c, Entity entity, InputManager input, float dt)
+    private static void UpdateWalk(FirstPersonControllerComponent controller, Entity entity, InputManager input, float dt)
     {
         // Horizontal axes from yaw only (no vertical component when walking).
-        var (sinY, cosY) = MathF.SinCos(c.Yaw);
+        var (sinY, cosY) = MathF.SinCos(controller.Yaw);
         var forward = new Vector3(-sinY, 0, -cosY);
         var right = new Vector3(cosY, 0, -sinY);
         var move = Vector3.Zero;
@@ -153,12 +153,12 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         if (input.IsKeyDown(Keys.D)) move += right;
         if (move.LengthSquared() > 0) move.Normalize();
 
-        var character = c.Character!;
+        var character = controller.Character!;
 
         // Sprint: Shift scales the move vector (MoveVector treats vector length as a speed factor).
         if (input.IsKeyDown(Keys.LeftShift) && move.LengthSquared() > 0)
         {
-            move *= c.SprintMultiplier;
+            move *= controller.SprintMultiplier;
         }
 
         // MoveVector is the XZ plane of the old Move(Vector3): X stays X, world Z becomes its Y
@@ -169,19 +169,19 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         // raw edge-triggered press is often swallowed. Keep re-arming for a short window instead;
         // the first supported tick executes it. Re-arming right after a successful jump is
         // harmless: the character is airborne (unsupported) for far longer than the buffer.
-        if (input.IsKeyPressed(Keys.Space)) c.JumpBuffer = JumpBufferSeconds;
+        if (input.IsKeyPressed(Keys.Space)) controller.JumpBuffer = JumpBufferSeconds;
 
-        if (c.JumpBuffer > 0f)
+        if (controller.JumpBuffer > 0f)
         {
             character.TryJump();
-            c.JumpBuffer -= dt;
+            controller.JumpBuffer -= dt;
         }
 
         // The camera rides at eye height above the capsule; physics moves the capsule, we follow.
-        entity.Transform.Position = character.Entity.Transform.Position + new Vector3(0, c.EyeHeight, 0);
+        entity.Transform.Position = character.Entity.Transform.Position + new Vector3(0, controller.EyeHeight, 0);
     }
 
-    private static void UpdateFly(FirstPersonControllerComponent c, Entity entity, InputManager input, float dt)
+    private static void UpdateFly(FirstPersonControllerComponent controller, Entity entity, InputManager input, float dt)
     {
         // Full 3D axes from the camera orientation (W follows where you look).
         var rotation = entity.Transform.Rotation;
@@ -197,10 +197,10 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         if (input.IsKeyDown(Keys.LeftCtrl)) move -= Vector3.UnitY;
         if (move.LengthSquared() > 0) move.Normalize();
 
-        var speed = c.FlySpeed * (input.IsKeyDown(Keys.LeftShift) ? c.FlyBoost : 1f);
+        var speed = controller.FlySpeed * (input.IsKeyDown(Keys.LeftShift) ? controller.FlyBoost : 1f);
 
-        c.FlyPosition += move * speed * dt;
-        entity.Transform.Position = c.FlyPosition;
+        controller.FlyPosition += move * speed * dt;
+        entity.Transform.Position = controller.FlyPosition;
         // The body stays parked on its own: motor target zeroed and gravity off since SetFly.
     }
 }

@@ -13,10 +13,21 @@ namespace Stride.CommunityToolkit.Tests.Bepu;
 
 /// <summary>
 /// What <c>AddBepuPhysics</c> attaches: the component the body mode asks for, the fitted collider in an empty
-/// compound, the caller's own compound kept, and the mass and interpolation rules.
+/// compound, the caller's own compound kept, the mass and interpolation rules, and a wide 2D capsule clamped the way
+/// its mesh is.
 /// </summary>
 public class AddBepuPhysicsColliderTests
 {
+    [Fact]
+    public void WideCapsuleGetsAColliderClampedLikeItsMesh()
+    {
+        // A height under two radii: the mesh keeps a straight part of a hundredth of a radius, and so does the collider
+        var collider = Assert.IsType<CapsuleCollider>(CommunityToolkit.Bepu.EntityExtensions.ColliderFor(Primitive2D.Capsule(radius: 0.5f, height: 0.8f), depth: 1f));
+
+        Assert.Equal(0.5f, collider.Radius);
+        Assert.Equal(0.005f, collider.Length, 0.0001f);
+    }
+
     [Fact]
     public void EmptyCompoundGetsTheShapeFittedToThePrimitive()
     {

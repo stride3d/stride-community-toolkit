@@ -718,7 +718,7 @@ public static partial class GameExtensions
     /// </summary>
     /// <param name="game">The game instance used to access the graphics device.</param>
     /// <param name="color">The colour. Defaults to null, which uses <see cref="GameDefaults.DefaultMaterialColor"/>.</param>
-    /// <param name="metalness">0 for a dielectric, which keeps its colour as diffuse and reflects a colourless 4 percent; 1 for a metal, which has no diffuse and reflects in its own colour. Defaults to 0, a matte coloured surface.</param>
+    /// <param name="metalness">0 for a dielectric, which keeps its colour as diffuse and reflects a colourless 2 percent; 1 for a metal, which has no diffuse and reflects in its own colour. Defaults to 0, a matte coloured surface.</param>
     /// <param name="glossiness">0 for rough, where the highlight is a haze; 1 for a mirror. Defaults to 0.65f.</param>
     /// <returns>A new material instance with the specified or default attributes.</returns>
     /// <remarks>
@@ -838,17 +838,8 @@ public static partial class GameExtensions
 
     /// <summary>The game's compositor, which the scene setup or the caller must have put in place.</summary>
     /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
-    internal static GraphicsCompositor RequireGraphicsCompositor(this IGame game)
+    private static GraphicsCompositor RequireGraphicsCompositor(this IGame game)
         => game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
-
-    /// <summary>
-    /// <see cref="AddSceneRenderer(IGame, SceneRendererBase)"/> with the signature that binaries built against
-    /// toolkit preview.66 and earlier bind to, Gum.Stride 2026.10.1 among them. Source binds to the
-    /// <see cref="IGame"/> overload; this one keeps those binaries running until they are rebuilt.
-    /// </summary>
-    /// <param name="game">The game.</param>
-    /// <param name="renderer">The scene renderer to add.</param>
-    public static void AddSceneRenderer(this Game game, SceneRendererBase renderer) => ((IGame)game).AddSceneRenderer(renderer);
 
     /// <summary>
     /// Registers the renderer that draws <see cref="WorldTextComponent"/>, once, however many times
@@ -963,7 +954,7 @@ public static partial class GameExtensions
 
         options ??= new();
 
-        var entity = CreatePrimitiveEntity(game, ProceduralModelBuilder.Build(shape), options);
+        var entity = CreatePrimitiveEntity(game, ModelFor(game, shape, options), options);
 
         // The physics engine the setup chose, if any; the core alone attaches nothing
         if (options.Body != BodyMode.None)
@@ -990,7 +981,7 @@ public static partial class GameExtensions
 
         options ??= new();
 
-        var entity = CreatePrimitiveEntity(game, ProceduralModelBuilder.Build(shape), options);
+        var entity = CreatePrimitiveEntity(game, ModelFor(game, shape, options), options);
 
         if (options.Body != BodyMode.None)
             PhysicsSetupBase.Of(game).AddBody(entity, shape, options);
@@ -1005,15 +996,10 @@ public static partial class GameExtensions
             MathUtil.DegreesToRadians(yawPitchRoll.Y),
             MathUtil.DegreesToRadians(yawPitchRoll.Z));
 
-    /// <summary>The entity of a procedural model with the options' material, name, render group and position; no physics yet.</summary>
-    private static Entity CreatePrimitiveEntity(IGame game, PrimitiveProceduralModelBase modelBase, PrimitiveEntityOptions options)
+    /// <summary>The entity of a model with the options' name, render group and position; no physics yet.</summary>
+    private static Entity CreatePrimitiveEntity(IGame game, Model model, PrimitiveEntityOptions options)
     {
         ArgumentNullException.ThrowIfNull(game);
-
-        var model = modelBase.Generate(game.Services);
-
-        if (options.Material != null)
-            model.Materials.Add(options.Material);
 
         var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
 

@@ -62,7 +62,7 @@ void Start(Scene rootScene)
     TextOverlay.GetOrCreate(game).AddSection("Debug", static () =>
     [
         new("Left mouse", "Grab a shape, drag it, let go to throw", Color.Yellow),
-        new("F11", "Mesh wireframes", Color.Yellow),
+        new("F11", "Collider wireframes", Color.Yellow),
         new("P", "Collider outlines", Color.Yellow),
     ]);
 }

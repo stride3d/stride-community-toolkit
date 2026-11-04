@@ -19,8 +19,6 @@ namespace, `Anchor` in `Stride.CommunityToolkit.Rendering`; the `AddEntityTextRe
 `Stride.CommunityToolkit.Engine`.
 
 ```csharp
-game.AddEntityTextRenderer();
-
 var entity = game.CreatePrimitive(Primitive3D.Cube());
 
 entity.Add(new EntityTextComponent

@@ -71,6 +71,7 @@ The setup's gradient sky lights the scene as well; for a photographed sky, `UseS
 - [`CreateMaterial(descriptor)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,Stride.Rendering.Materials.MaterialDescriptor)) - Compiles a descriptor and keeps it on the material, so it can be a layer later. The descriptors behind every helper are in [`MaterialDescriptors`](xref:Stride.CommunityToolkit.Rendering.MaterialDescriptors): take one, add a feature, compile it.
 - [`CreatePrimitive(Primitive3D)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Engine.PrimitiveEntityOptions)) - A cube, sphere, capsule and so on as an entity. The shape comes from a [`Primitive3D`](xref:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D) factory with its dimensions: `Primitive3D.Sphere(0.5f)`, `Primitive3D.Box(new Vector3(2, 1, 1))`.
 - [`CreatePrimitive(Primitive2D)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Engine.PrimitiveEntityOptions)) - The 2D equivalent - square, circle, triangle, polygon - from a [`Primitive2D`](xref:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D) factory.
+- [`GetOrCreateModel()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.GetOrCreateModel(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.Rendering.Material)) - One model per shape and material for the life of the game, for the many entities that draw the same thing. `CreatePrimitive` generates a mesh and its GPU buffers per call: ten thousand spheres that way cost about 1.5 GB, through one shared model about 400 MB. The model goes on an instancing master or on each entity's `ModelComponent`, and `ShareModel = true` on the options has `CreatePrimitive` draw with it. It is one object, so a material swapped on it shows on every entity that shares it.
 
 > [!NOTE]
 > With `UseBepu()` or `UseBullet()` on the scene setup, both attach that engine's collider as well;
@@ -105,3 +106,14 @@ These take `IGame`, since they need nothing from the scene.
 - [`SetMaxFPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)) - Caps the frame rate; `0` removes the cap.
 - [`SetFocusLostFPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)) - Caps it separately for when the window is in the background, so a minimised game stops burning a core.
 - [`EnableVSync()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.EnableVSync(Stride.Games.IGame)) / [`DisableVSync()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DisableVSync(Stride.Games.IGame)) - Sets the presentation interval at runtime. `EnableVSync()` waits for every *second* vertical blank (`PresentInterval.Two`), which caps the frame rate at half the display's refresh rate; `DisableVSync()` presents immediately.
+
+## Window
+
+- [`SetFullScreen()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetFullScreen(Stride.Games.IGame,System.Boolean)) / [`ToggleFullScreen()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.ToggleFullScreen(Stride.Games.IGame)) - Switches between fullscreen and a window at runtime through `GameWindow.IsFullscreen`; the change is applied on the next frame. `game.Window.FullscreenIsBorderlessWindow` decides whether fullscreen is a borderless window over the desktop or an exclusive mode switch.
+
+## See also
+
+- [Scene Setup](../code-only/scene-setup.md)
+- [Entity Extensions](../entity-extensions/index.md)
+- [Camera Extensions](../camera-extensions/index.md)
+- [Physics Extensions](../physics-extensions/index.md)

@@ -8,7 +8,8 @@ slug: mesh-outline
 Draw coloured outlines around 3D primitives with a custom RootRenderFeature. Each mesh is drawn a
 second time, inflated along its normals with front faces culled, so only a shell remains visible
 behind the original mesh. Adding a MeshOutlineComponent to an entity is all it takes to outline it,
-and a high intensity pushes the outline into HDR range so bloom makes it glow.
+and a high intensity pushes the outline into HDR range, ready to glow under a bloom effect, none
+being enabled here.
 
 The `Program.cs` file shows how to:
 

@@ -24,8 +24,6 @@ game.Run(new SceneSetup2D { Ground = null }, start: Start);
 
 void Start(Scene scene)
 {
-    game.AddEntityTextRenderer();
-
     var checker = Checkerboard();
 
     // Row 1: the flat material, the one a 2D scene wants
@@ -122,7 +120,7 @@ concepts:
   - CreateScreenMaterial, the unlit texture, against the lit CreateTexturedMaterial
   - CreateOverlayMaterial for a translucent shape drawn over another
   - Labelling entities with EntityTextComponent
-  - "Using helpers: SceneSetup2D, AddEntityTextRenderer, CreatePrimitive"
+  - "Using helpers: SceneSetup2D, CreatePrimitive"
 tags:
   - 2D
   - Rendering

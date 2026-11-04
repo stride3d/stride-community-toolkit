@@ -139,7 +139,7 @@ and with sleeping disabled.
 
 Break the symmetry and it goes away. Any of these survive indefinitely:
 
-- a millimetre or so of random jitter on each spawn position - the bodies are just as close, and some
+- a few centimetres of random jitter on each spawn position, plus or minus 25 mm in the snippet below - the bodies are just as close, and some
   overlap, which is fine;
 - wider spacing, so nothing touches at spawn;
 - random placement.

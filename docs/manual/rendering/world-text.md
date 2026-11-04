@@ -17,8 +17,6 @@ The component and the renderer are in the `Stride.CommunityToolkit.Rendering.Tex
 `Stride.CommunityToolkit.Rendering`; the `AddWorldTextRenderer()` extension is in `Stride.CommunityToolkit.Engine`.
 
 ```csharp
-game.AddWorldTextRenderer();
-
 var sign = new Entity("Sign")
 {
     new WorldTextComponent

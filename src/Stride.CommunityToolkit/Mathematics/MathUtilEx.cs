@@ -40,6 +40,57 @@ public static class MathUtilEx
     public static float Clamp01(float value) => MathUtil.Clamp(value, 0, 1);
 
     /// <summary>
+    /// Moves <paramref name="current"/> towards <paramref name="target"/> by at most <paramref name="maxDelta"/>,
+    /// landing on the target exactly rather than overshooting it.
+    /// </summary>
+    /// <param name="current">The value now.</param>
+    /// <param name="target">The value to reach.</param>
+    /// <param name="maxDelta">The furthest the value may move in this call; a negative value moves it away from the target.</param>
+    /// <returns>The target when it is within reach, otherwise <paramref name="current"/> moved by <paramref name="maxDelta"/> towards it.</returns>
+    /// <remarks>
+    /// A frame-rate independent approach is <c>MoveTowards(value, target, speed * deltaTime)</c>: the value arrives at a
+    /// constant speed and stops, where a lerp towards the target slows down and never quite arrives.
+    /// </remarks>
+    public static float MoveTowards(float current, float target, float maxDelta)
+    {
+        var delta = target - current;
+
+        return MathF.Abs(delta) <= maxDelta ? target : current + MathF.Sign(delta) * maxDelta;
+    }
+
+    /// <summary>
+    /// Moves <paramref name="current"/> towards <paramref name="target"/> along the line between them by at most
+    /// <paramref name="maxDelta"/>, landing on the target exactly rather than overshooting it.
+    /// </summary>
+    /// <param name="current">The position now.</param>
+    /// <param name="target">The position to reach.</param>
+    /// <param name="maxDelta">The furthest the position may move in this call; a negative value moves it away from the target.</param>
+    /// <returns>The target when it is within reach, otherwise <paramref name="current"/> moved by <paramref name="maxDelta"/> towards it.</returns>
+    public static Vector2 MoveTowards(Vector2 current, Vector2 target, float maxDelta)
+    {
+        var delta = target - current;
+        var distance = delta.Length();
+
+        return distance <= maxDelta || distance == 0f ? target : current + delta * (maxDelta / distance);
+    }
+
+    /// <summary>
+    /// Moves <paramref name="current"/> towards <paramref name="target"/> along the line between them by at most
+    /// <paramref name="maxDelta"/>, landing on the target exactly rather than overshooting it.
+    /// </summary>
+    /// <param name="current">The position now.</param>
+    /// <param name="target">The position to reach.</param>
+    /// <param name="maxDelta">The furthest the position may move in this call; a negative value moves it away from the target.</param>
+    /// <returns>The target when it is within reach, otherwise <paramref name="current"/> moved by <paramref name="maxDelta"/> towards it.</returns>
+    public static Vector3 MoveTowards(Vector3 current, Vector3 target, float maxDelta)
+    {
+        var delta = target - current;
+        var distance = delta.Length();
+
+        return distance <= maxDelta || distance == 0f ? target : current + delta * (maxDelta / distance);
+    }
+
+    /// <summary>
     /// Orthonormalizes 2 vectors.
     /// </summary>
     /// <param name="normal">The normal vector.</param>

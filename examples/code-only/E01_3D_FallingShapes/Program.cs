@@ -48,7 +48,7 @@ slug: falling-shapes-3d
 title:
   en: Basic 3D Scene (Falling Shapes)
   cs: Základní 3D scéna (Padající tvary)
-level: Getting Started
+level: Beginner
 category: Shapes
 complexity: 1
 order: 15

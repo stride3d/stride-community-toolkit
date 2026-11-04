@@ -27,10 +27,10 @@ public enum TextPositionMode
     Screen,
 
     /// <summary>
-    /// Snaps to a corner of the window, offset by <see cref="EntityTextComponent.Offset"/>.
+    /// Snaps to a corner, an edge middle or the centre of the window, offset by <see cref="EntityTextComponent.Offset"/>.
     /// </summary>
     /// <remarks>
-    /// This is the mode for a HUD. Because the corner is resolved against the window each frame, the
+    /// This is the mode for a HUD. Because the anchor is resolved against the window each frame, the
     /// text stays put when the window is resized, which fixed pixel positions do not.
     /// </remarks>
     Anchored

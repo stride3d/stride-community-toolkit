@@ -52,6 +52,10 @@ const float ChartGlow = 6f;
 const float ShowcaseGlow = 16f;
 const float ChartLight = 20f;
 const float ShowcaseLight = 2f;
+const float ChartBloomRadius = 10f;
+const float ShowcaseBloomRadius = 20f;
+const float ChartBloomAmount = 0.3f;
+const float ShowcaseBloomAmount = 0.5f;
 var waveTime = 0f;
 var waveFrequency = 1f;
 const float WaveAmplitude = 1.5f;
@@ -234,8 +238,8 @@ void Update(Scene scene, GameTime time)
         // the frame than of one that fills it. Rather than push the camera away, widen the bloom.
         if (bloom is not null)
         {
-            bloom.Radius = showcase ? 20f : 10f;
-            bloom.Amount = showcase ? 0.5f : 0.3f;
+            bloom.Radius = showcase ? ShowcaseBloomRadius : ChartBloomRadius;
+            bloom.Amount = showcase ? ShowcaseBloomAmount : ChartBloomAmount;
         }
     }
 

@@ -61,6 +61,10 @@ var sceneSetup = new SceneSetup3D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
+// The game has exited; whatever was still playing holds a native voice until it is disposed
+padInstance?.Dispose();
+foreach (var instance in chimes) instance.Dispose();
+
 void Start(Scene scene)
 {
     // Scenery only, so no physics body

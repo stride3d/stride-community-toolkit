@@ -62,8 +62,6 @@ game.Run(new SceneSetup2D
 
 void Start(Scene rootScene)
 {
-    game.AddEntityTextRenderer();
-
     // The lift: a kinematic body, so it carries what lands on it and nothing pushes it back
     var platform = game.CreatePrimitive(Primitive2D.Rectangle(4f, 0.4f), new BepuPhysicsOptions
     {

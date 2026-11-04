@@ -13,7 +13,7 @@ The grabber on the camera picks any body up, and the joints are drawn from their
 
 The `Program.cs` file shows how to:
 
-- Creating every Box2D joint type through Joints2D with world-space pivots and axes
+- Creating every Box2D joint type but the filter joint through Joints2D with world-space pivots and axes
 - Options records that mirror the Box2D definition and leave the rest at Box2D's defaults
 - Toggling a joint's motor and limit at runtime through the Box2D joint functions
 - Drawing joints, contacts, bounds and mass with Box2DDebugDraw, Box2D's debug draw through ShapeBatch

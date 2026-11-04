@@ -45,3 +45,9 @@ var count = await game.Script.RunOnGameThreadAsync(() => rootScene.Entities.Coun
 > thread stops on its own once that component or its entity is removed. Pass a lambda that closes over
 > other state and you own the lifetime yourself - keep the `MicroThread` and cancel it.
 > `RunOnGameThread` always wraps the action, so its action runs even if its script was removed.
+
+## See also
+
+- [Script Extensions](../script-extensions/index.md)
+- [Components and Scripts](../components-and-scripts.md)
+- [Sync Script](../code-only/examples/sync-script.md) example

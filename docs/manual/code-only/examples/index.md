@@ -11,7 +11,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
 
 > [!NOTE]
 > Most examples run from a copy of their project with the toolkit packages from NuGet. `Stride.CommunityToolkit.Box2D`, `Stride.CommunityToolkit.Charts` and `Stride.CommunityToolkit.ImGuiNet` are not on NuGet yet,
-> so the examples built on them run from a clone of the repository: [Box2D Explosion](box2d-explosion.md), [Box2D Joints](box2d-joints.md), [Box2D Car](box2d-car.md), [Box2D Character Mover](box2d-character-mover.md), [Charts 2D](charts-2d.md), [Charts 3D](charts-3d.md), [Basic 2D Scene (Stress Pile, Box2D)](stress-pile-2d-box2d.md), [Junkyard (Box2D)](junkyard-box2d.md), [Junkyard Playground (Box2D)](junkyard-playground-box2d.md), [Box2D.NET Physics](box2d-physics.md), [ImGui.NET Text Rendering](imgui-net.md).
+> so the examples built on them run from a clone of the repository: [Box2D Events](box2d-events.md), [Box2D Explosion](box2d-explosion.md), [Box2D Joints](box2d-joints.md), [Box2D Car](box2d-car.md), [Box2D Character Mover](box2d-character-mover.md), [Charts 2D](charts-2d.md), [Charts 3D](charts-3d.md), [Basic 2D Scene (Stress Pile, Box2D)](stress-pile-2d-box2d.md), [Junkyard (Box2D)](junkyard-box2d.md), [Junkyard Playground (Box2D)](junkyard-playground-box2d.md), [Box2D.NET Physics](box2d-physics.md), [ImGui.NET Text Rendering](imgui-net.md).
 
 ## C# Getting Started
 
@@ -38,16 +38,6 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/falling-shapes-3d.webp" class="card-img-top" alt="Screenshot of the Basic 3D Scene (Falling Shapes) example" width="1280" height="720" loading="lazy">
-            <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-3d.md">Basic 3D Scene (Falling Shapes)</a></h3>
-                <p><span class="badge text-bg-secondary">Shapes</span></p>
-                <p class="card-text">The next step after the basic 3D scene: thirty shapes of five kinds and five colours, dropped in a column that topples into a pile.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-xxl-4 col-md-6">
-        <div class="card h-100">
             <img src="media/file-based-app.webp" class="card-img-top" alt="Screenshot of the Basic 3D Scene (Capsule) - File-Based App example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="file-based-app.md">Basic 3D Scene (Capsule) - File-Based App</a></h3>
@@ -63,16 +53,6 @@ Prefer a list? Each level has its own page, linked from the table of contents.
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="basic-2d-scene.md">Basic 2D Scene (Capsule)</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
                 <p class="card-text">Create a minimal 2D scene using toolkit helpers and place a single capsule primitive with a flat material.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-xxl-4 col-md-6">
-        <div class="card h-100">
-            <img src="media/falling-shapes-2d.webp" class="card-img-top" alt="Screenshot of the Basic 2D Scene (Falling Shapes) example" width="1280" height="720" loading="lazy">
-            <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-2d.md">Basic 2D Scene (Falling Shapes)</a></h3>
-                <p><span class="badge text-bg-secondary">Shapes</span></p>
-                <p class="card-text">The next step after the basic 2D scene: thirty shapes of five kinds and five colours, dropped in a column that topples into a pile.</p>
             </div>
         </div>
     </div>
@@ -133,11 +113,21 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/falling-shapes-3d.webp" class="card-img-top" alt="Screenshot of the Basic 3D Scene (Falling Shapes) example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-3d.md">Basic 3D Scene (Falling Shapes)</a></h3>
+                <p><span class="badge text-bg-secondary">Shapes</span></p>
+                <p class="card-text">The next step after the basic 3D scene: thirty shapes of five kinds and five colours, dropped in a column that topples into a pile.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/material.webp" class="card-img-top" alt="Screenshot of the 3D Material example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="material.md">3D Material</a></h3>
                 <p><span class="badge text-bg-secondary">Rendering</span></p>
-                <p class="card-text">The four numbers of a material, one per row of cubes: a glossiness sweep from rough to mirror, a metalness sweep from dielectric to metal, and a front...</p>
+                <p class="card-text">The four numbers of a material over three rows of cubes: a glossiness sweep from rough to mirror, a metalness sweep from dielectric to metal, and a...</p>
             </div>
         </div>
     </div>
@@ -193,11 +183,41 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/falling-shapes-2d.webp" class="card-img-top" alt="Screenshot of the Basic 2D Scene (Falling Shapes) example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-2d.md">Basic 2D Scene (Falling Shapes)</a></h3>
+                <p><span class="badge text-bg-secondary">Shapes</span></p>
+                <p class="card-text">The next step after the basic 2D scene: thirty shapes of five kinds and five colours, dropped in a column that topples into a pile.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/sync-script.webp" class="card-img-top" alt="Screenshot of the SyncScript - moving a body every frame example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="sync-script.md">SyncScript - moving a body every frame</a></h3>
                 <p><span class="badge text-bg-secondary">Scripts</span></p>
                 <p class="card-text">A cube driven in a circle by a SyncScript, which is the ordinary way to run code every frame.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/collider-shapes.webp" class="card-img-top" alt="Screenshot of the Collider Shapes example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="collider-shapes.md">Collider Shapes</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">One of every primitive shape dropped side by side, each with the collider the toolkit fits to it: a box, a sphere, a capsule and a cylinder get their...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/reset-out-of-bounds.webp" class="card-img-top" alt="Screenshot of the Reset Out of Bounds example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="reset-out-of-bounds.md">Reset Out of Bounds</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">A row of balls drops onto a tilted plank with no ground under it, rolls off its low end and falls.</p>
             </div>
         </div>
     </div>
@@ -233,6 +253,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/compound-colliders.webp" class="card-img-top" alt="Screenshot of the Compound Colliders example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="compound-colliders.md">Compound Colliders</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">A hammer, a dumbbell and an L-piece, each one body whose compound collider holds a collider per piece at its own local pose and mass, beside the same...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/give-me-cube-body.webp" class="card-img-top" alt="Screenshot of the Give Me a Cube example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="give-me-cube-body.md">Give Me a Cube</a></h3>
@@ -257,7 +287,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="easing-basics.md">Easing Basics</a></h3>
                 <p><span class="badge text-bg-secondary">Mathematics</span></p>
-                <p class="card-text">Easing from the ground up, in four lanes that move a disc over the same two seconds: by hand with no easing, by hand with one formula, with the...</p>
+                <p class="card-text">Easing from the ground up, in five lanes that move a disc over the same two seconds: by hand with no easing, by hand with one formula, with the...</p>
             </div>
         </div>
     </div>
@@ -338,6 +368,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-physics-2d.md">Falling Shapes with Physics Options (2D)</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
                 <p class="card-text">Thirty capsules and a rectangle dropped in a column, as in E01_2D_FallingShapes, with one thing added: each capsule is given its own Body2DComponent...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/box2d-events.webp" class="card-img-top" alt="Screenshot of the Box2D Events example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="box2d-events.md">Box2D Events</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">Shapes drop through a sensor zone onto a floor and one handler listens to everything Box2D reports: begin and end touch, hits with their approach...</p>
             </div>
         </div>
     </div>
@@ -458,6 +498,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/scene-switching.webp" class="card-img-top" alt="Screenshot of the Scene Switching example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="scene-switching.md">Scene Switching</a></h3>
+                <p><span class="badge text-bg-secondary">Scripts</span></p>
+                <p class="card-text">Rooms as child scenes: three rooms built in code, each a scene attached to the root by adding it to Children and detached by removing it, one at a...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/letters-3d.webp" class="card-img-top" alt="Screenshot of the 3D Text from a Font example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="letters-3d.md">3D Text from a Font</a></h3>
@@ -518,11 +568,51 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/audio-impacts.webp" class="card-img-top" alt="Screenshot of the Impact Sounds example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="audio-impacts.md">Impact Sounds</a></h3>
+                <p><span class="badge text-bg-secondary">Audio</span></p>
+                <p class="card-text">Balls of three sizes drop onto a plate and every landing is heard.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/collision-group.webp" class="card-img-top" alt="Screenshot of the Collision Group example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="collision-group.md">Collision Group</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
                 <p class="card-text">Collision groups are a number rule inside a layer: bodies with the same group Id ignore each other when their indexes are the same or adjacent, and...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/collision-layer.webp" class="card-img-top" alt="Screenshot of the Collision Layer example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="collision-layer.md">Collision Layer</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">Four layers, Players, Enemies, Shots and Debris, and the collision matrix that says which pairs collide, shown twice: as a grid on screen and as the...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/debris-filtering.webp" class="card-img-top" alt="Screenshot of the Debris Filtering example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="debris-filtering.md">Debris Filtering</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">A burst of a few hundred fragments lands in a walled pit.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/dodgeball.webp" class="card-img-top" alt="Screenshot of the Dodgeball example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="dodgeball.md">Dodgeball</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">Dodgeball on four collision layers: each team's players and each team's balls have a layer of their own, and the matrix says a team's balls pass...</p>
             </div>
         </div>
     </div>
@@ -538,11 +628,31 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/collision-layer.webp" class="card-img-top" alt="Screenshot of the Collision Layer example" width="1280" height="720" loading="lazy">
+            <img src="media/planet-gravity.webp" class="card-img-top" alt="Screenshot of the Planet Gravity example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="collision-layer.md">Collision Layer</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="planet-gravity.md">Planet Gravity</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
-                <p class="card-text">Four layers, Players, Enemies, Shots and Debris, and the collision matrix that says which pairs collide, shown twice: as a grid on screen and as the...</p>
+                <p class="card-text">A ring of bodies orbiting a planet.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/solver-substeps.webp" class="card-img-top" alt="Screenshot of the Solver Substeps example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="solver-substeps.md">Solver Substeps</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">Why a tall stack wobbles and what firms it up.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/layer-selection.webp" class="card-img-top" alt="Screenshot of the Layer Selection example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="layer-selection.md">Layer Selection</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">Selecting things through collision layers.</p>
             </div>
         </div>
     </div>
@@ -638,6 +748,26 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/third-person-camera.webp" class="card-img-top" alt="Screenshot of the Third-Person Camera example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="third-person-camera.md">Third-Person Camera</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">A character on a stepped pyramid with the toolkit's follow camera behind it: the camera trails the character's steps with a short lag, swings round it...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/planet-walker.webp" class="card-img-top" alt="Screenshot of the Planet Walker example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="planet-walker.md">Planet Walker</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">A character walking round a planet with the follow camera behind it.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/instancing.webp" class="card-img-top" alt="Screenshot of the GPU Instancing example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="instancing.md">GPU Instancing</a></h3>
@@ -693,6 +823,26 @@ Prefer a list? Each level has its own page, linked from the table of contents.
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="debug-shapes-usage.md">Debug Shapes Usage</a></h3>
                 <p><span class="badge text-bg-secondary">Debug</span></p>
                 <p class="card-text">The short version of the debug shapes example: turn the system on, draw a sphere and a circle, done.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/split-screen.webp" class="card-img-top" alt="Screenshot of the Split Screen example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="split-screen.md">Split Screen</a></h3>
+                <p><span class="badge text-bg-secondary">Rendering</span></p>
+                <p class="card-text">Two players in one window.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/view-model.webp" class="card-img-top" alt="Screenshot of the View Model example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="view-model.md">View Model</a></h3>
+                <p><span class="badge text-bg-secondary">Rendering</span></p>
+                <p class="card-text">The weapon that never clips: a tool held in front of a first-person camera is drawn by a camera of its own over the finished view.</p>
             </div>
         </div>
     </div>
@@ -1007,7 +1157,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="cube-collapse.md">Game - Cube Collapse</a></h3>
                 <p><span class="badge text-bg-secondary">Game</span></p>
-                <p class="card-text">A colour-match collapse puzzle built entirely from code.</p>
+                <p class="card-text">A colour-match collapse puzzle built from code, its six compiled sound assets the one exception.</p>
             </div>
         </div>
     </div>

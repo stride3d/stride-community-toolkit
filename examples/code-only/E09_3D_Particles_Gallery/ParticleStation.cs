@@ -203,6 +203,8 @@ public sealed class ParticleStation : GalleryStation
 /// Materials in one call, since every station wants one and the defaults are not the ones anybody wants.
 /// Each multiplies in the particle's own colour: that colour is a vertex stream, and it reaches the
 /// shader only through a node that reads it, so without one a colour updater changes nothing.
+/// Colours stay within 0 to 1: the material packs each particle's colour into bytes, so a component above
+/// 1 wraps rather than glows.
 /// </summary>
 public static class ParticleMaterials
 {
@@ -254,7 +256,7 @@ public static class ParticleMaterials
         => Textured(texture, tint, additive, new UVBuilderFlipbook { XDivisions = columns, YDivisions = rows, AnimationSpeed = speed }, softEdge);
 
     /// <summary>The node that reads a particle's own colour, as an updater or an initializer set it. White where the particles have none.</summary>
-    private static ComputeVertexStreamColor ParticleColour() => new() { Stream = new ColorVertexStreamDefinition() };
+    public static ComputeVertexStreamColor ParticleColour() => new() { Stream = new ColorVertexStreamDefinition() };
 }
 
 /// <summary>Initializers that spell out an engine default.</summary>

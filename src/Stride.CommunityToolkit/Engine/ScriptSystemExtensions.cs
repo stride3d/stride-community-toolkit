@@ -70,13 +70,13 @@ public static class ScriptSystemExtensions
         => RunFor(script, seconds, warped: true, action);
 
     /// <summary>
-    /// Executes an action every frame for a specified duration, using real time (not accounting for any time warp factors).
+    /// Executes an action every frame for a specified duration, counted in the game's elapsed time without the warp factor.
     /// </summary>
     /// <param name="script">The <see cref="ScriptSystem"/> instance used to execute the action.</param>
     /// <param name="seconds">The duration in seconds for which the action will be executed.</param>
     /// <param name="action">The action to perform on each frame, which receives the elapsed time as a parameter.</param>
     /// <returns>A <see cref="Task"/> representing the action execution.</returns>
-    /// <remarks>This method operates in real time, without considering the game's time warp.</remarks>
+    /// <remarks>Counts the game's elapsed time, <c>UpdateTime.Elapsed</c>, leaving out only the warp factor; it is not wall-clock time.</remarks>
     public static Task ExecuteInTime(this ScriptSystem script, float seconds, Action<float> action)
         => RunFor(script, seconds, warped: false, action);
 
@@ -254,8 +254,8 @@ public static class ScriptSystemExtensions
     /// Scenes and entity collections are not thread-safe; adding an entity from another thread throws
     /// "Collection was modified". Build the entity where you are, then add it to the scene inside the action.
     /// Scheduling is safe from any thread because the scheduler takes continuations from the thread pool
-    /// the same way. When the action is an instance method of a <see cref="ScriptComponent"/>, it is dropped
-    /// if that component is removed before it runs.
+    /// the same way. The action runs even if the script that scheduled it has been removed by then, so an
+    /// action that touches its own script checks that it is still attached.
     /// </remarks>
     public static MicroThread RunOnGameThread(this ScriptSystem script, Action action)
     {

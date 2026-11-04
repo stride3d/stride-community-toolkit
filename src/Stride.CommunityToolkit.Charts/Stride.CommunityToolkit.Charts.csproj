@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <Title>Stride Community Toolkit - Charts</Title>
-        <Description>Code-only math and physics charts for Stride - plots, axes, grid, legend and cursor built from meshes at runtime, with no assets to author.
+        <Description>Code-only math and physics charts for Stride - plots, axes, grid, legend and cursor drawn through a shape batch at runtime, with no assets to author.
 
 What's inside:
 - Chart: a chart entity you plot onto - y = f(x), parametric curves, point lists, scatter markers and shaded areas

@@ -37,13 +37,13 @@ public partial class Home(NavigationManager navigation) : IAsyncDisposable
             .WithAutomaticReconnect()
             .Build();
 
-        // Handlers run on SignalR's threads; InvokeAsync moves the render onto the circuit
+        // Handlers run on SignalR's threads; InvokeAsync moves the state change and the render onto the circuit
         _hub.On<ContainerEvent>(nameof(IStationClient.ContainerReleased), container => Post("released", $"Released #{container.Id} {Describe(container)} from {container.Origin.ToString().ToLowerInvariant()}", container.Paint));
         _hub.On<ContainerEvent>(nameof(IStationClient.ContainerLanded), container => Post("landed", $"Landed #{container.Id} {Describe(container)} at {Where(container)} after {container.AirTime:0.0} s", container.Paint));
         _hub.On<ContainerEvent>(nameof(IStationClient.ContainerLost), container => Post("lost", $"Lost #{container.Id} {Describe(container)} over the edge", container.Paint));
         _hub.On<int>(nameof(IStationClient.DeckCleared), removed => Post("cleared", $"Deck cleared, {removed} removed"));
 
-        _hub.On<DeckSnapshot>(nameof(IStationClient.DeckUpdated), snapshot =>
+        _hub.On<DeckSnapshot>(nameof(IStationClient.DeckUpdated), snapshot => InvokeAsync(() =>
         {
             _deck = snapshot;
             _lastCensus = DateTime.UtcNow;
@@ -52,24 +52,24 @@ public partial class Home(NavigationManager navigation) : IAsyncDisposable
             // after the first one without any special handling
             ApplyScheme(snapshot.Scheme);
 
-            InvokeAsync(StateHasChanged);
-        });
+            StateHasChanged();
+        }));
 
         // From the game, whichever console chose it. Posted even when this page chose it and has
         // already switched: the line is the game confirming that it followed.
-        _hub.On<string>(nameof(IStationClient.SchemeChanged), name =>
+        _hub.On<string>(nameof(IStationClient.SchemeChanged), name => InvokeAsync(() =>
         {
             ApplyScheme(name);
             Post("scheme", $"Scheme {name}, confirmed by the game");
-        });
+        }));
 
         // From another browser tab, relayed before the game has confirmed it. Applying it now keeps
         // the tabs in step even when the game is offline.
-        _hub.On<string>(nameof(IStationClient.SchemeRequested), name =>
+        _hub.On<string>(nameof(IStationClient.SchemeRequested), name => InvokeAsync(() =>
         {
             ApplyScheme(name);
-            InvokeAsync(StateHasChanged);
-        });
+            StateHasChanged();
+        }));
 
         _hub.Reconnecting += _ => InvokeAsync(StateHasChanged);
         _hub.Reconnected += _ => InvokeAsync(StateHasChanged);
@@ -168,7 +168,7 @@ public partial class Home(NavigationManager navigation) : IAsyncDisposable
         return true;
     }
 
-    private void Post(string kind, string text, ContainerPaint? paint = null)
+    private void Post(string kind, string text, ContainerPaint? paint = null) => InvokeAsync(() =>
     {
         _feed.Insert(0, new FeedEntry(++_sequence, DateTime.Now, kind, text, paint));
 
@@ -177,8 +177,8 @@ public partial class Home(NavigationManager navigation) : IAsyncDisposable
             _feed.RemoveAt(_feed.Count - 1);
         }
 
-        InvokeAsync(StateHasChanged);
-    }
+        StateHasChanged();
+    });
 
     private static string Describe(ContainerEvent container) => $"{container.Size.ToString().ToLowerInvariant()} {container.Paint.ToString().ToLowerInvariant()}";
 

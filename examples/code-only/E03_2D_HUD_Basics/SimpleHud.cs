@@ -31,8 +31,6 @@ public sealed class SimpleHud
         _shapeBatch = shapeBatch;
         _style = style;
 
-        game.AddEntityTextRenderer();
-
         _healthLabel = AddLabel(scene, Anchor.BottomLeft);
         _energyLabel = AddLabel(scene, Anchor.MiddleCenter);
 
@@ -90,6 +88,7 @@ public sealed class SimpleHud
     private void Outline(float width = 2f)
     {
         _shapeBatch.BorderWidth = width;
+        _shapeBatch.StrokeWidth = width;
         _shapeBatch.Fill.Set(null, 0f);
     }
 

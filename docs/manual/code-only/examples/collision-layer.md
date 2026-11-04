@@ -22,7 +22,7 @@ The `Program.cs` file shows how to:
 - Filtering a raycast with a CollisionMask built from the same layers
 - Firing a body on one layer and watching the matrix decide what it flies through
 - When to prefer a layer matrix over a collision group's index rule
-- Using helpers: SceneSetup3D, UseBepu, UseSkybox, CreatePrimitive, AddShapeBatch, AddEntityTextRenderer, AddGrabber, TeleportAtRest, ScreenToWorldRay, TextOverlay
+- Using helpers: SceneSetup3D, UseBepu, UseSkybox, CreatePrimitive, AddShapeBatch, AddGrabber, TeleportAtRest, ScreenToWorldRay, TextOverlay
 
 ![Collision Layer](media/collision-layer.webp)
 

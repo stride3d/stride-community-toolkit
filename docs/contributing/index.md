@@ -13,7 +13,7 @@ The toolkit is in preview, so the process is lightweight. You can:
 
 - Submit pull requests directly to the [GitHub repository](https://github.com/stride3d/stride-community-toolkit).
 - Report or fix issues on our [GitHub Issues](https://github.com/stride3d/stride-community-toolkit/issues) page.
-- Start a discussion on [GitHub Discussions](https://github.com/stride3d/stride/discussions) to share ideas or ask questions.
+- Start a discussion on [GitHub Discussions](https://github.com/stride3d/stride-community-toolkit/discussions) to share ideas or ask questions.
 - Join our Discord for real-time chat in `#toolkit`: <https://discord.com/channels/500285081265635328/1179562410655363132>.
 
 ## Additional resources

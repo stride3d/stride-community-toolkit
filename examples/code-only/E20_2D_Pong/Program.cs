@@ -45,8 +45,6 @@ game.Run(new SceneSetup2D
 
 void Start(Scene scene)
 {
-    game.AddWorldTextRenderer();
-
     var material = game.CreateFlatMaterial(chalk);
     var faint = game.CreateFlatMaterial(new Color(70, 80, 100));
 

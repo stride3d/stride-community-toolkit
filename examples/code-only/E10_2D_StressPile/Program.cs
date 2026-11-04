@@ -31,8 +31,7 @@ const float ColumnWidth = WallWidth - 30;
 
 // One Model per shape and sleep state, built on first use and kept. Eighteen of them cost under a
 // megabyte, and it makes switching back to a shape you have already used free.
-Dictionary<Primitive3D, Model> models = [];
-Dictionary<Primitive3D, Model> sleepingModels = [];
+Material? sleepingMaterial = null;
 
 Primitive3D[] shapes =
 [
@@ -147,34 +146,11 @@ void SetupInstancing()
     game.AddInstancingBufferUpload(sleepingInstancing);
 }
 
-/// <summary>Returns the shared model for a shape, building it once on first use.</summary>
-Model ModelFor(Primitive3D type)
-{
-    if (models.TryGetValue(type, out var cached)) return cached;
+/// <summary>Returns the shared model for a shape, built once on first use and kept by the game.</summary>
+Model ModelFor(Primitive3D type) => game.GetOrCreateModel(type);
 
-    // Only the model is kept. The entity never joins a scene, so the dynamic body CreatePrimitive
-    // attaches to it is never simulated.
-    var model = game.CreatePrimitive(type, new PrimitiveEntityOptions()).Get<ModelComponent>().Model;
-
-    models[type] = model;
-
-    return model;
-}
-
-/// <summary>Returns the shared sleeping-tint model for a shape, building it once on first use.</summary>
-Model SleepingModelFor(Primitive3D type)
-{
-    if (sleepingModels.TryGetValue(type, out var cached)) return cached;
-
-    var model = game.CreatePrimitive(type, new PrimitiveEntityOptions
-    {
-        Material = game.CreateMaterial(Color.MediumSeaGreen)
-    }).Get<ModelComponent>().Model;
-
-    sleepingModels[type] = model;
-
-    return model;
-}
+/// <summary>Returns the shared sleeping-tint model for a shape, built once on first use and kept by the game.</summary>
+Model SleepingModelFor(Primitive3D type) => game.GetOrCreateModel(type, sleepingMaterial ??= game.CreateMaterial(Color.MediumSeaGreen));
 
 void SetupMenus()
 {
@@ -283,13 +259,11 @@ void Spawn(Vector3 position)
 {
     // Not CreatePrimitive, which would build one mesh and one pair of GPU buffers per body.
     // AddBepuPhysics derives the collider from the primitive type, not the mesh.
-    var entity = new Entity("InstancedItem") { new ModelComponent(models[shape]) };
+    // No ModelComponent of its own: the master draws every instance, and one per entity would draw the
+    // whole pile twice - once per entity, once instanced - which is slower than not instancing at all
+    var entity = new Entity("InstancedItem");
 
     entity.AddBepuPhysics(shape, new BepuPhysicsOptions { Component = new Body2DComponent { Collider = new CompoundCollider() } });
-
-    // The master draws every instance. Leaving each entity its own ModelComponent would draw the
-    // whole pile twice - once per entity, once instanced - which is slower than not instancing at all
-    entity.Remove<ModelComponent>();
 
     entity.Transform.Position = position;
 

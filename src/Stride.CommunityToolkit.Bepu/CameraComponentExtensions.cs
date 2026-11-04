@@ -36,7 +36,7 @@ public static class CameraComponentExtensions
     /// Performs a raycast using a screen position.
     /// </summary>
     /// <param name="camera">The <see cref="CameraComponent"/> used to calculate the ray.</param>
-    /// <param name="screenPosition">The screen position in normalized device coordinates (NDC).</param>
+    /// <param name="screenPosition">The screen position, normalised from (0,0) at the top-left to (1,1) at the bottom-right, as <c>Input.MousePosition</c> gives it.</param>
     /// <param name="maxDistance">The maximum distance for the raycast.</param>
     /// <param name="hit">
     /// When this method returns, contains the <see cref="HitInfo"/> if the raycast hits a collider, otherwise <c>null</c>.

@@ -2,8 +2,8 @@ using E10_3D_Instancing_EntityTransform;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Instancing;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -81,22 +81,30 @@ var sceneSetup = new SceneSetup3D
 {
     // A large ground so big drops cannot spill over the edge; the static collider comes with it
     Ground = GroundSetup.Plane(new Vector2(300)),
-    Profiler = true
+    Profiler = true,
+    Resizable = true
 }.UseBepu().UseSkybox();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
+    game.AddGrabber();
+
     scene = rootScene;
 
     TextOverlay.GetOrCreate(game).AddSection("Instancing", BuildOverlayLines);
 
-    sharedModel = CreateSharedModel(rootScene);
+    // The mesh is built once: this is the model every body is drawn with, instanced or not
+    sharedModel = game.GetOrCreateModel(modelShape);
 
     // Three masters sharing one model: Stride's own, the toolkit's, and the toolkit's buffered
     stockMaster = CreateMaster(rootScene, sharedModel, new TimedInstancingEntityTransform(), "StockMaster");
-    CreateMaster(rootScene, sharedModel, toolkitInstancing, "ToolkitMaster");
+
+    // The toolkit master stands a little above the ground, which shows only when M asks for its transform to be used
+    var toolkitMaster = CreateMaster(rootScene, sharedModel, toolkitInstancing, "ToolkitMaster");
+
+    toolkitMaster.Entity.Transform.Position = new Vector3(0f, 1.5f, 0f);
 
     // The buffered one wraps a Bepu gather, so it skips the update AND the upload once bodies sleep
     CreateMaster(rootScene, sharedModel, bufferedInstancing, "BufferedMaster");
@@ -134,19 +142,6 @@ static Primitive3D Scaled(Primitive3D shape) => shape switch
     // Cube and box: full extents on all three axes
     _ => Primitive3D.Cube(ItemScale)
 };
-
-/// <summary>
-/// Builds the mesh once. This is the model every body is drawn with, instanced or not.
-/// </summary>
-Model CreateSharedModel(Scene rootScene)
-{
-    // Parked out of sight; it exists only to own the Model
-    var prototype = game.CreatePrimitive(modelShape, new PrimitiveEntityOptions { Body = BodyMode.None, Position = new Vector3(0, -100, 0) });
-
-    prototype.Scene = rootScene;
-
-    return prototype.Get<ModelComponent>().Model;
-}
 
 /// <summary>
 /// Creates a master entity: the one that actually gets drawn, once, for every instance.
@@ -322,7 +317,23 @@ void HandleInput()
     if (game.Input.IsKeyPressed(Keys.D3)) DropItems(batch, ItemKind.Toolkit);
     if (game.Input.IsKeyPressed(Keys.D4)) DropItems(batch, ItemKind.ToolkitBuffered);
     if (game.Input.IsKeyPressed(Keys.X)) ClearItems();
+
+    // The instance matrices are world-space, so Ignore is the right usage for a master of bodies; the other two
+    // apply the master's own transform as well, and the toolkit pile moves by the master's height
+    if (game.Input.IsKeyPressed(Keys.M))
+    {
+        toolkitInstancing.ModelTransformUsage = (ModelTransformUsage)(((int)toolkitInstancing.ModelTransformUsage + 1) % 3);
+    }
 }
+
+static string UsageNote(ModelTransformUsage usage) => usage switch
+{
+    // The shader's order: PreMultiply puts the master's transform before each instance's, in the body's own frame;
+    // PostMultiply puts it after, so the whole pile moves as one
+    ModelTransformUsage.PreMultiply => "every body moves 1.5 up its own axis",
+    ModelTransformUsage.PostMultiply => "the whole pile moves 1.5 up with the master",
+    _ => "the master's transform is ignored",
+};
 
 IReadOnlyList<TextElement> BuildOverlayLines()
 {
@@ -339,6 +350,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
         new("3", $"Toolkit: {toolkitItems.Count:N0} bodies, 1 draw call", toolkitItems.Count > 0 ? Color.Cyan : Color.Gray),
         new("4", $"Buffered: {bufferedItems.Count:N0} bodies, 1 draw call", bufferedItems.Count > 0 ? Color.Magenta : Color.Gray),
         new("X", "Remove all", Color.Yellow),
+        new("M", $"Toolkit master transform usage: {toolkitInstancing.ModelTransformUsage}, {UsageNote(toolkitInstancing.ModelTransformUsage)}", Color.Yellow),
         new("Shift", $"Hold for {ItemsPerDrop * 10} per drop", Color.Yellow),
         new(""),
         new($"Stock update {stockType?.LastUpdateMilliseconds:0.00} ms, uploads every frame", Color.LightGreen),

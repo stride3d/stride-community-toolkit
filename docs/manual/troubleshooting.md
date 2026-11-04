@@ -38,14 +38,13 @@
 1. **Error - Exited with code 1.**
    - Missing Stride NuGet package dependencies. Use `dotnet restore --runtime win-x64` or `dotnet build --runtime win-x64` to restore the missing dependencies. This error can occur when the build is run for the first time on your computer.
         ```
-        C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\buildTransitive\Stride.Core.Assets.CompilerApp
-        .targets(153,5): error MSB3073: The command "C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\
+        C:\Users\<you>\.nuget\packages\stride.core.assets.compilerapp\<version>\buildTransitive\Stride.Core.Assets.CompilerApp
+        .targets(153,5): error MSB3073: The command "C:\Users\<you>\.nuget\packages\stride.core.assets.compilerapp\<version>\
         buildTransitive\..\lib\net8.0\Stride.Core.Assets.CompilerApp.exe"  --disable-auto-compile --project-configuration "Debu
-        g" --platform=Windows --project-configuration=Debug --compile-property:StrideGraphicsApi=Direct3D11 --output-path="D:\P
-        rojects\GitHub\Stride Projects\Console01\bin\Debug\net8.0\data" --build-path="D:\Projects\GitHub\Stride Projects\Consol
-        e01\obj\stride\assetbuild\data" --package-file="D:\Projects\GitHub\Stride Projects\Console01\Console01.csproj" --msbuil
-        d-uptodatecheck-filebase="D:\Projects\GitHub\Stride Projects\Console01\obj\Debug\net8.0\stride\assetcompiler-uptodatech
-        eck" exited with code 1. [D:\Projects\GitHub\Stride Projects\Console01\Console01.csproj]
+        g" --platform=Windows --project-configuration=Debug --compile-property:StrideGraphicsApi=Direct3D11 --output-path="<pro
+        ject>\bin\Debug\net10.0\data" --build-path="<project>\obj\stride\assetbuild\data" --package-file="<project>\MyGame.cspr
+        oj" --msbuild-uptodatecheck-filebase="<project>\obj\Debug\net10.0\stride\assetcompiler-uptodatecheck" exited with code
+        1. [<project>\MyGame.csproj]
         ```
 1. **Error - Shader X could not be found**
    - After a Stride version bump, an incremental build keeps the project's old `data/db` bundle, so a shader that a newer engine package added is missing at runtime. Delete the project's `bin` and `obj` folders and build again.

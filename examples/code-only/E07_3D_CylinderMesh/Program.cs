@@ -51,8 +51,8 @@ void BuildCylinderMesh(MeshBuilder meshBuilder, int segments, float radius, floa
     CreateRingVertices(meshBuilder, segments, radius, position, normal, 0);
     CreateRingVertices(meshBuilder, segments, radius, position, normal, length);
     CreateSideWalls(meshBuilder, segments);
-    CreateEndCap(meshBuilder, segments, position, normal, 0, facesPositiveZ: false);
-    CreateEndCap(meshBuilder, segments, position, normal, length, facesPositiveZ: true);
+    CreateEndCap(meshBuilder, segments, radius, position, normal, 0, facesPositiveZ: false);
+    CreateEndCap(meshBuilder, segments, radius, position, normal, length, facesPositiveZ: true);
 }
 
 static void CreateRingVertices(MeshBuilder meshBuilder, int segments, float radius, int position, int normal, float z)
@@ -86,21 +86,36 @@ static void CreateSideWalls(MeshBuilder meshBuilder, int segments)
     }
 }
 
-// A fan from a centre vertex to one end's ring (the first ring is vertices 0 to segments - 1, the
-// second follows). The two caps wind opposite ways so each faces out
-static void CreateEndCap(MeshBuilder meshBuilder, int segments, int position, int normal, float z, bool facesPositiveZ)
+// A fan from a centre vertex to a ring of the cap's own. The side ring at the same height cannot be reused:
+// its normals point out from the axis, which would shade the flat cap as a dome, so the cap gets a second
+// ring at the same positions with normals along the axis. The two caps wind opposite ways so each faces out
+static void CreateEndCap(MeshBuilder meshBuilder, int segments, float radius, int position, int normal, float z, bool facesPositiveZ)
 {
+    var axis = facesPositiveZ ? Vector3.UnitZ : -Vector3.UnitZ;
+
     var centre = meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector3(0, 0, z));
-    meshBuilder.SetElement(normal, facesPositiveZ ? Vector3.UnitZ : -Vector3.UnitZ);
+    meshBuilder.SetElement(normal, axis);
 
-    var offset = facesPositiveZ ? segments : 0;
+    var ring = meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, new Vector3(0, radius, z));
+    meshBuilder.SetElement(normal, axis);
+
+    for (var i = 1; i < segments; i++)
+    {
+        var x = radius * (float)Math.Sin(Math.Tau / segments * i);
+        var y = radius * (float)Math.Cos(Math.Tau / segments * i);
+
+        meshBuilder.AddVertex();
+        meshBuilder.SetElement(position, new Vector3(x, y, z));
+        meshBuilder.SetElement(normal, axis);
+    }
 
     for (var i = 0; i < segments; i++)
     {
-        meshBuilder.AddIndex((i + 1) % segments + offset);
-        meshBuilder.AddIndex(facesPositiveZ ? centre : i + offset);
-        meshBuilder.AddIndex(facesPositiveZ ? i + offset : centre);
+        meshBuilder.AddIndex(ring + (i + 1) % segments);
+        meshBuilder.AddIndex(facesPositiveZ ? centre : ring + i);
+        meshBuilder.AddIndex(facesPositiveZ ? ring + i : centre);
     }
 }
 /*
@@ -121,7 +136,7 @@ description:
 concepts:
   - Generating a ring of vertices from an angle sweep
   - Stitching consecutive rings into a quad strip of triangles
-  - Closing the ends with fan-triangulated caps
+  - Closing the ends with fan-triangulated caps on rings of their own, so their normals are flat
   - Why the two caps must wind in opposite directions
   - Keeping index arithmetic readable by splitting the build into stages
   - "Using helpers: SceneSetup3D, UseSkybox, CreateMaterial"
