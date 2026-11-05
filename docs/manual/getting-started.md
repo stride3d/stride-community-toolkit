@@ -7,6 +7,7 @@ engine's own packages change between them. Match the two:
 
 | Stride      | Toolkit packages   |
 | ----------- | ------------------ |
+| 4.4.1       | `1.0.0-preview.69` |
 | 4.4.1       | `1.0.0-preview.68` |
 | 4.4.0       | `1.0.0-preview.67` |
 | 4.4.0       | `1.0.0-preview.66` |
