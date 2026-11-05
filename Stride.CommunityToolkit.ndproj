@@ -1239,7 +1239,11 @@ warnif count > 0
 // compiler-generated closures. A captured "new Random()" is hoisted into a <>c__DisplayClass, which
 // ND3002 already discards from JustMyCode but the stock rule never consulted. Every hand-written use
 // still matches - verified against all 16 of them at the time of the change.
+// Second tweak (2026-11-04): shipped libraries only. The examples and the tools are games and build helpers,
+// where a Random seeds colours and scatter and never a secret; the 23 per-example suppressions this replaces
+// all said so.
 from m in JustMyCode.Methods
+where m.ParentAssembly.Name.StartsWith("Stride.CommunityToolkit") && !m.ParentAssembly.Name.StartsWith("Stride.CommunityToolkit.Examples")
 where m.CreateA("System.Random".AllowNoMatch())
 select new { 
   m,
@@ -1521,7 +1525,41 @@ select new {
 // simplifying the tracking of read-write accesses in case of issues.
 //</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1806$]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1807$]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid public methods not publicly visible</Name>
+// <Id>ND1807:AvoidPublicMethodsNotPubliclyVisible</Id>
+warnif count > 0
+// Stride Community Toolkit tweak (2026-11-04): constructors are left out. A C# primary constructor,
+// which the simplification sweep of 2026-10-28 gave most internal and private classes, has no
+// accessibility of its own: the compiler makes it public, and the only "fix" would be to give the
+// class back a classic constructor. Entry points are left out as the stock rule leaves them. The
+// rest is the stock rule.
+from m in JustMyCode.Methods where
+  m.IsPublic &&
+ !m.IsPubliclyVisible &&
+ !m.IsConstructor &&
+ !m.IsClassConstructor &&
+ !m.IsOperator &&
+ !m.IsGeneratedByCompiler &&
+ !m.IsExplicitInterfaceImpl &&
+ !m.IsVirtual &&
+ !(m.IsStatic && m.SimpleName == "Main") &&
+ !m.ParentType.IsDelegate &&
+ !m.ParentType.IsEnumeration
+select new {
+   m,
+   Debt = 30.ToSeconds().ToDebt(),
+   Severity = Severity.Low
+}
+
+//<Expl>
+// The method *{0}* is declared as *public* but remains inaccessible beyond its assembly
+// because its parent type is not publicly visible. Declaring it *internal* makes its actual
+// accessibility scope explicit.
+//</Expl>
+
+//<HowToFix>
+// Declare the method *internal* if it is used outside its type, else *private*.
+//</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1808$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1809$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1810$]]></Query>

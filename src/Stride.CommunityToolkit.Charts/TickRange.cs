@@ -6,12 +6,28 @@ namespace Stride.CommunityToolkit.Charts;
 /// Computed from integer multiples so accumulated float error cannot drop the last one, and a value within
 /// a ten-thousandth of a step of an edge still counts as inside it.
 /// </summary>
-/// <param name="step">The spacing.</param>
-/// <param name="skip">A second spacing whose multiples are left out, or 0 to leave none out: the minor grid skips the lines the major one draws.</param>
-/// <param name="first">The first multiple, as a count of steps.</param>
-/// <param name="last">The last multiple, as a count of steps; below <paramref name="first"/> when there is none.</param>
-internal readonly struct TickRange(float step, float skip, int first, int last)
+internal readonly struct TickRange
 {
+    private readonly float _step;
+    private readonly float _skip;
+    private readonly int _first;
+    private readonly int _last;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TickRange"/> struct.
+    /// </summary>
+    /// <param name="step">The spacing.</param>
+    /// <param name="skip">A second spacing whose multiples are left out, or 0 to leave none out: the minor grid skips the lines the major one draws.</param>
+    /// <param name="first">The first multiple, as a count of steps.</param>
+    /// <param name="last">The last multiple, as a count of steps; below <paramref name="first"/> when there is none.</param>
+    private TickRange(float step, float skip, int first, int last)
+    {
+        _step = step;
+        _skip = skip;
+        _first = first;
+        _last = last;
+    }
+
     /// <summary>
     /// Every multiple of <paramref name="step"/> in [<paramref name="min"/>, <paramref name="max"/>], less
     /// the multiples of <paramref name="skip"/>; nothing for a step that is not positive.
@@ -21,7 +37,8 @@ internal readonly struct TickRange(float step, float skip, int first, int last)
             ? new(step, skip, (int)MathF.Ceiling(min / step - 1e-4f), (int)MathF.Floor(max / step + 1e-4f))
             : new(step, skip, 0, -1);
 
-    public Enumerator GetEnumerator() => new(step, skip, first, last);
+    // Public, as foreach demands of the collection pattern, on a struct nothing outside the assembly can name
+    public Enumerator GetEnumerator() => new(_step, _skip, _first, _last);
 
     internal struct Enumerator(float step, float skip, int first, int last)
     {

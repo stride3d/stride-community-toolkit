@@ -19,7 +19,7 @@ The `Program.cs` file shows how to:
 - HorizontalSlider, CheckButton, ComboView, SpinButton, Button, ListView, Dialog, tooltips, a progress bar
 - Widget handlers set flags or values; the scene reacts in Update, on the game thread
 - Driving a LightComponent, the simulation's TimeScale and PoseGravity, and the collider gizmos from UI
-- Using helpers: SceneSetup3D, CreatePrimitive, AddSceneRenderer, AddPhysicsDebug, CreateMaterial
+- Using helpers: SceneSetup3D, CreatePrimitive, AddSceneRenderer, AddPhysicsDebug, CreateMaterial, AddGrabber
 
 ![Myra UI - Control Panel](media/myra-control-panel.webp)
 

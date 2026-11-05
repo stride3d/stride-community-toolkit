@@ -13,33 +13,39 @@ namespace Stride.CommunityToolkit.DebugShapes;
 /// <param name="lineInputElements">The vertex layout of the lines.</param>
 internal sealed class PrimitivePipeline(MutablePipelineState pipelineState, DynamicEffectInstance primitiveEffect, DynamicEffectInstance lineEffect, InputElementDescription[] inputElements, InputElementDescription[] lineInputElements)
 {
+    /// <summary>What a pass always draws with: its effect, its primitive type and its vertex layout.</summary>
+    private readonly record struct Pass(DynamicEffectInstance Effect, PrimitiveType Type, InputElementDescription[] Layout);
+
+    private readonly Pass _shapes = new(primitiveEffect, PrimitiveType.TriangleList, inputElements);
+    private readonly Pass _lines = new(lineEffect, PrimitiveType.LineList, lineInputElements);
+
     /// <summary>
     /// Configures the pipeline for triangle primitives.
     /// </summary>
     internal void ConfigurePrimitivePipeline(CommandList commandList, bool depthTest, FillMode selectedFillMode, bool isDoubleSided, bool hasTransparency)
-        => Configure(commandList, primitiveEffect, PrimitiveType.TriangleList, selectedFillMode, selectedFillMode == FillMode.Solid && !isDoubleSided ? CullMode.Back : CullMode.None, depthTest, hasTransparency, inputElements);
+        => Configure(commandList, _shapes, selectedFillMode, selectedFillMode == FillMode.Solid && !isDoubleSided ? CullMode.Back : CullMode.None, depthTest, hasTransparency);
 
     /// <summary>
     /// Configures the pipeline for line primitives.
     /// </summary>
     internal void ConfigureLinePipeline(CommandList commandList, bool depthTest, bool hasTransparency)
-        => Configure(commandList, lineEffect, PrimitiveType.LineList, FillMode.Solid, CullMode.None, depthTest, hasTransparency, lineInputElements);
+        => Configure(commandList, _lines, FillMode.Solid, CullMode.None, depthTest, hasTransparency);
 
     // Transparent shapes read the depth buffer without writing it, so they blend over each other in order
-    private void Configure(CommandList commandList, DynamicEffectInstance effect, PrimitiveType primitiveType, FillMode fillMode, CullMode cullMode, bool depthTest, bool hasTransparency, InputElementDescription[] layout)
+    private void Configure(CommandList commandList, in Pass pass, FillMode fillMode, CullMode cullMode, bool depthTest, bool hasTransparency)
     {
         var state = pipelineState.State;
 
         state.SetDefaults();
-        state.PrimitiveType = primitiveType;
-        state.RootSignature = effect.RootSignature;
-        state.EffectBytecode = effect.Effect.Bytecode;
+        state.PrimitiveType = pass.Type;
+        state.RootSignature = pass.Effect.RootSignature;
+        state.EffectBytecode = pass.Effect.Effect.Bytecode;
         state.DepthStencilState = depthTest ? (hasTransparency ? DepthStencilStates.DepthRead : DepthStencilStates.Default) : DepthStencilStates.None;
         state.RasterizerState.FillMode = fillMode;
         state.RasterizerState.CullMode = cullMode;
         state.BlendState = hasTransparency ? BlendStates.NonPremultiplied : BlendStates.Opaque;
         state.Output.CaptureState(commandList);
-        state.InputElements = layout;
+        state.InputElements = pass.Layout;
 
         pipelineState.Update();
     }

@@ -14,7 +14,6 @@ using Stride.Rendering.Colors;
 using Stride.Rendering.Compositing;
 using Stride.Rendering.Lights;
 using Stride.Rendering.Materials;
-using Stride.Rendering.ProceduralModels;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -954,7 +953,7 @@ public static partial class GameExtensions
 
         options ??= new();
 
-        var entity = CreatePrimitiveEntity(game, ModelFor(game, shape, options), options);
+        var entity = CreatePrimitiveEntity(game, GameModelExtensions.ModelFor(game, shape, options), options);
 
         // The physics engine the setup chose, if any; the core alone attaches nothing
         if (options.Body != BodyMode.None)
@@ -981,7 +980,7 @@ public static partial class GameExtensions
 
         options ??= new();
 
-        var entity = CreatePrimitiveEntity(game, ModelFor(game, shape, options), options);
+        var entity = CreatePrimitiveEntity(game, GameModelExtensions.ModelFor(game, shape, options), options);
 
         if (options.Body != BodyMode.None)
             PhysicsSetupBase.Of(game).AddBody(entity, shape, options);

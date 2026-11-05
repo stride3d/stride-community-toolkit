@@ -36,7 +36,10 @@ internal static class InspectorValueDrawers
     private static bool TryDrawIntegerScalar(ref object? value, out bool valueChanged)
     {
         // Every case follows the same shape: edit through the closest type ImGui implements
-        // natively (int), then cast back so the boxed value keeps its original type.
+        // natively (int), then cast back so the boxed value keeps its original type. The widths
+        // differ, so a value outside int's range wraps in the cast and an unsigned type reads a
+        // negative entry as a wrap too: the inspector edits small configuration numbers, where
+        // neither happens, and a clamp would hide the entry the user typed.
         switch (value)
         {
             case uint v: { var c = (int)v; valueChanged = InputInt("", ref c); if (valueChanged) { value = (uint)c; } return true; }

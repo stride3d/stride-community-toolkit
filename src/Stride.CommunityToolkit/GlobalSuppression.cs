@@ -200,8 +200,6 @@ using System.Diagnostics.CodeAnalysis;
 // namespace needs its own pair of entries.
 [assembly: SuppressMessage("NDepend", "ND2101:AvoidDuplicatingATypeDefinitionAcrossAssemblies", Target = "E04_StrideUI_DragAndDrop:E04_StrideUI_DragAndDrop.UI", Scope = "deep", Justification = "Bepu twin of E04_StrideUI_DragAndDrop_Bullet; same scene, different engine, on purpose.")]
 [assembly: SuppressMessage("NDepend", "ND2101:AvoidDuplicatingATypeDefinitionAcrossAssemblies", Target = "E04_StrideUI_DragAndDrop_Bullet:E04_StrideUI_DragAndDrop.UI", Scope = "deep", Justification = "Bullet twin of E04_StrideUI_DragAndDrop; same scene, different engine, on purpose.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E04_StrideUI_DragAndDrop:E04_StrideUI_DragAndDrop.PrimitiveGenerator", Scope = "deep", Justification = "Scatters cubes around the scene; nothing security-related, same as Helpers.VectorHelper above.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E04_StrideUI_DragAndDrop_Bullet:E04_StrideUI_DragAndDrop.PrimitiveGenerator", Scope = "deep", Justification = "Scatters cubes around the scene; nothing security-related, same as Helpers.VectorHelper above.")]
 
 // --- Launcher: the Avalonia entry-point contract -----------------------------------------------
 // Avalonia's project template declares BuildAvaloniaApp as a public static method on an internal
@@ -215,9 +213,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("NDepend", "ND1002:AvoidTypesWithTooManyFields", Target = "Stride.CommunityToolkit.ImGuiNet:Stride.CommunityToolkit.ImGuiNet.ImGuiNetSystem", Justification = "Rendering backend: pipeline, buffers, shader, context, DPI and input references are its state - same as ImGuiSystem above.")]
 [assembly: SuppressMessage("NDepend", "ND1004:AvoidMethodsWithTooManyParameters", Target = "Stride.CommunityToolkit.ImGuiNet:Stride.CommunityToolkit.ImGuiNet.ImGuiNetExtensions.DrawText(ImGuiNetSystem,Int32,Int32,String,Byte,Byte,Byte,Byte)", Justification = "Byte-per-channel colour mirrors the Box2D.NET draw API this overload exists to match; the Vector4 overload on ImGuiNetSystem.DrawString is the shorter path.")]
 // --- E13 SignalR: the orbital cargo deck ---
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E13_SignalR:E13_SignalR.SignalR.SignalRHubClient", Scope = "deep", Justification = "Jitter on the reconnect backoff delay, so a room full of clients does not retry in lockstep after a server restart; nothing security-related.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E13_SignalR:E13_SignalR.Station.Deck", Scope = "deep", Justification = "Which size and paint a random release gets, the scatter under the hatch, and the direction of a shake; gameplay randomness, nothing security-related.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E13_SignalR:E13_SignalR.Station.StationScene", Scope = "deep", Justification = "Seeded star field: direction, size, tint and twinkle of each star; the seed is what keeps the sky the same between runs and captures.")]
 // Board is immutable and all value-type fields, which is the rule's picture of a lightweight value; it is
 // also seventy-two bytes of vectors and a quaternion, handed to every Labels.Set and Place call. Copying
 // that per call is the cost a struct would add, and the boards are three shared objects, not values.
@@ -226,9 +221,6 @@ using System.Diagnostics.CodeAnalysis;
 // Colours for the board, positions for the falling game-over letters, and the shuffle behind a
 // spawn. Gameplay randomness, same as the toolkit's RandomExtensions; a seedable System.Random is the
 // point, and CubeSpawner deliberately seeds it so the same board comes up while tuning.
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E20_3D_CubeCollapse:CubeCollapse.Setup.CubeSpawner", Scope = "deep", Justification = "Cube colours; nothing security-related.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E20_3D_CubeCollapse:CubeCollapse.Setup.FallingLetters", Scope = "deep", Justification = "Scatter on the game-over letters; nothing security-related.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E20_3D_CubeCollapse:CubeCollapse.Scripts.CubeClickScript", Scope = "deep", Justification = "Picks which of the interchangeable click sounds to play; nothing security-related.")]
 // The class the example's own docs tell a reader to start from: it owns the order things happen in
 // and holds one reference per part it drives - grid, score, levels, progress, materials, spawner,
 // audio, the four scripts, simulation and scene. Splitting it would scatter one game's wiring across
@@ -240,21 +232,6 @@ using System.Diagnostics.CodeAnalysis;
 // the same scene every run, which is what makes a screenshot or a stress measurement repeatable.
 // Kept as one entry per example, so a genuinely security-sensitive use in a future example is still
 // reported rather than silently covered.
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E08_2D_DebugRender:Program", Scope = "deep", Justification = "Spawn positions for the debug-rendered shapes.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E02_2D_Primitives:Program", Scope = "deep", Justification = "Spawn positions for the primitive shapes.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E04_2D_SpawnMenu:Program", Scope = "deep", Justification = "Spawn positions for menu-created shapes.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E10_2D_StressPile:Program", Scope = "deep", Justification = "Spawn positions and colours for the stress pile; seeding it is what makes one run comparable to the next.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E10_2D_StressPile_Box2D:Program", Scope = "deep", Justification = "The Box2D twin of the stress pile above, and seeded for the same reason.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E06_Box2D_JunkyardInteractive:Program", Scope = "deep", Justification = "Spawn positions and shape choice for the rocks raining into the yard.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E04_CubeClicker:E04_CubeClicker.Scripts.ClickHandlerComponent", Scope = "deep", Justification = "Where a clicked cube is replaced; nothing security-related.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E08_3D_DebugShapes:E08_3D_DebugShapes.Scripts.ShapeUpdater", Scope = "deep", Justification = "Positions, rotations and velocities for the debug shapes on screen.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E10_3D_Instancing_EntityTransform:Program", Scope = "deep", Justification = "Transforms for the instanced entities.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E02_3D_Material_Gallery:E02_3D_Material_Gallery.HairCards", Scope = "deep", Justification = "Seeded strand placement and card scatter for the hair textures and the haircut; the same picture every run.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E02_3D_Material_Gallery:E02_3D_Material_Gallery.RuntimeTextures", Scope = "deep", Justification = "Seeded noise for textures made in code - ripples, flakes, brushed streaks; the same texture every run.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E03_2D_HUD:E03_2D_HUD.FrameLights", Scope = "deep", Justification = "Seeded count and phase of the decorative lights around the HUD frame.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E20_2D_Pong:E20_2D_Pong.Ball", Scope = "deep", Justification = "The angle of a serve, a few degrees up or down.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E05_3D_CubeFountain:E05_3D_CubeFountain.CubeFountain", Scope = "deep", Justification = "Seeded scatter of each cube's launch velocity and spin; the same fountain every run.")]
-[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E10_3D_ComputeBoids:BoidsSimulation", Scope = "deep", Justification = "Seeded starting positions and headings for the flock; the seed is what makes the golden image reproducible.")]
 
 // --- Examples: helper types that live beside top-level statements -------------------------------
 // A code-only example is one file: top-level statements, plus the few small types they need. Two
@@ -325,8 +302,7 @@ using System.Diagnostics.CodeAnalysis;
 //
 // TRIGGER: a decision on collapsing the by-value half with optional parameters, taken with an
 // allocation measurement behind it; or any move to merge the single and multiple variants.
-[assembly: SuppressMessage("NDepend", "ND1005:AvoidMethodsWithTooManyOverloads", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Engine.PrefabExtensions.InstantiateSingle(Prefab)", Justification = "Eleven overloads: transform combinations times by-value/by-ref. The by-ref half cannot take defaults; the by-value half could collapse, pending a measurement.")]
-[assembly: SuppressMessage("NDepend", "ND1005:AvoidMethodsWithTooManyOverloads", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Engine.PrefabExtensions.Instantiate(Prefab,Vector3&)", Justification = "The list-returning twin of InstantiateSingle above, with the same ten transform combinations.")]
+[assembly: SuppressMessage("NDepend", "ND1005:AvoidMethodsWithTooManyOverloads", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Engine.PrefabExtensions", Scope = "deep", Justification = "InstantiateSingle and Instantiate each offer the ten transform combinations: by value and by ref, with a quaternion or Euler angles, with or without a scale. NDepend reports whichever overload it meets first, so the whole type is named.")]
 
 // --- Namespaces still filling in ---------------------------------------------------------------
 // ND1305 asks for at least five types per namespace, to spare callers a pile of usings. These five
@@ -383,3 +359,13 @@ using System.Diagnostics.CodeAnalysis;
 // FT_Bitmap is a field of FT_GlyphSlotRec, a struct MeshFont reads, so C# cannot make it private; it stays a struct
 // because it holds pointers and the C layout aligns it to one after the 4-byte field before it.
 [assembly: SuppressMessage("NDepend", "ND1801:TypesThatCouldHaveALowerVisibility", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Rendering.Text.Meshes.FreeType+Bitmap", Scope = "type", Justification = "A nested C layout; a private nested type cannot be the public field of an internal struct.")]
+
+// --- Release 69 final sweep (2026-11-04) -----------------------------------------------------
+// The NDepend 2027 analysis of the ten days of work done on the other computer, after the code fixes.
+[assembly: SuppressMessage("NDepend", "ND1800:MethodsThatCouldHaveALowerVisibility", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Rendering.Text.Meshes.MeshFont.get_FaceLock()", Justification = "Held by TextReviewTests through InternalsVisibleTo, to pin a face operation against a disposal; the tests are not in the analysed code.")]
+[assembly: SuppressMessage("NDepend", "ND1804:AvoidPubliclyVisibleConstantFields", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Input.InputManagerExtensions.DefaultDeadZone", Justification = "Optional-parameter default of the gamepad reads, which the compiler requires to be a constant.")]
+[assembly: SuppressMessage("NDepend", "ND1305:AvoidNamespacesWithFewTypes", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Input", Scope = "namespace", Justification = "The input helpers' namespace, below Scripts so the camera controllers can use them without a cycle with Engine; the gamepad reads are its first type, keyboard and mouse helpers follow.")]
+[assembly: SuppressMessage("NDepend", "ND2401:MovePInvokesToNativeMethodsClass", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Rendering.Text.Meshes.FreeType", Scope = "deep", Justification = "The binding is named for the library it binds, as the engine's own FreeTypeNative is; it holds nothing but the P/Invokes and the struct layouts they need, and the file tracks the engine's field for field.")]
+[assembly: SuppressMessage("NDepend", "ND1902:AvoidStaticFieldsWithAMutableFieldType", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.PhysicsQueries2D._closest", Justification = "A per-thread scratch holder for the Box2D cast callback, which takes no state of its own; ThreadLocal is the shape .NET gives that, and it is read-only.")]
+[assembly: SuppressMessage("NDepend", "ND1807:AvoidPublicMethodsNotPubliclyVisible", Target = "Stride.CommunityToolkit.Charts:Stride.CommunityToolkit.Charts.TickRange", Scope = "deep", Justification = "The foreach collection pattern demands a public GetEnumerator, MoveNext and Current, on a struct nothing outside the assembly can name.")]
+[assembly: SuppressMessage("NDepend", "ND1807:AvoidPublicMethodsNotPubliclyVisible", Target = "Stride.CommunityToolkit.Charts:Stride.CommunityToolkit.Charts.TickRange+Enumerator", Scope = "deep", Justification = "The enumerator half of the same pattern: MoveNext and Current must be public for foreach.")]

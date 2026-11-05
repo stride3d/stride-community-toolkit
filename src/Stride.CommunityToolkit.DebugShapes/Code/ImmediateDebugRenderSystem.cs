@@ -36,12 +36,12 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     public Color PrimitiveColor { get; set; } = Color.LightGreen;
 
     /// <summary>
-    /// Maximum number of one-frame primitives stored and rendered per update; past it, the oldest is dropped for each new one.
+    /// Maximum number of one-frame primitives stored and rendered per update; past it, the oldest sixteenth of them makes room.
     /// </summary>
     public int MaxPrimitives { get; set; } = 100;
 
     /// <summary>
-    /// Maximum number of lifetime-based primitives stored and rendered per update; past it, the oldest is dropped for each new one.
+    /// Maximum number of lifetime-based primitives stored and rendered per update; past it, the oldest sixteenth of them makes room.
     /// </summary>
     public int MaxPrimitivesWithLifetime { get; set; } = 100;
 
@@ -66,13 +66,16 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         UpdateOrder = -100100; //before script
     }
 
-    // A full queue drops its oldest shape for the new one, so what is drawn is always the latest asked for
+    // A full queue drops its oldest shapes for the new one, so what is drawn is always the latest asked for.
+    // They go a sixteenth of the capacity at a time: a removal at the head shifts the whole list, and a
+    // frame that overflows by hundreds of shapes would otherwise pay that shift for every one of them
     private void PushMessage(in DebugRenderable msg)
     {
         var timed = msg.Lifetime > 0f;
         var queue = timed ? _renderMessagesWithLifetime : _renderMessages;
+        var capacity = timed ? MaxPrimitivesWithLifetime : MaxPrimitives;
 
-        if (queue.Count >= (timed ? MaxPrimitivesWithLifetime : MaxPrimitives)) queue.RemoveAt(0);
+        if (queue.Count >= capacity) queue.RemoveRange(0, Math.Clamp(capacity / 16, 1, queue.Count));
 
         queue.Add(msg);
     }

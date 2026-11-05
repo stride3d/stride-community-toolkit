@@ -62,6 +62,10 @@ public class Basic3DCameraController : SyncScript
         {
             field = value;
             _instructions?.Enabled = value;
+
+            // The explicit anchor is the help's own, so it moves the shared overlay only while the help is shown;
+            // before Start there is no overlay yet, and Start applies it then
+            if (value && _instructions is not null && _helpPosition is { } position) TextOverlay.GetOrCreate(Game).Position = position;
         }
     } = true;
 
@@ -70,8 +74,8 @@ public class Basic3DCameraController : SyncScript
     /// shared overlay to an anchor.
     /// </summary>
     /// <param name="helpPosition">Where the shared <see cref="TextOverlay"/> - and so the camera help - is
-    /// drawn. <see langword="null"/>, the default, leaves the overlay where it is, so a position set elsewhere
-    /// (for example before the controller starts) is kept.
+    /// drawn while <see cref="ShowHelp"/> is on. <see langword="null"/>, the default, leaves the overlay where it
+    /// is, so a position set elsewhere (for example before the controller starts) is kept.
     /// </param>
     public Basic3DCameraController(Anchor? helpPosition = null)
     {
@@ -126,11 +130,11 @@ public class Basic3DCameraController : SyncScript
         base.Start();
 
         // The overlay is shared, and this Start runs a frame after the game's own start callback, so
-        // its position is only touched when an anchor was asked for explicitly - otherwise a position
-        // set by the example before the controller started would be silently overwritten
+        // its position is only touched when an anchor was asked for explicitly and the help is shown -
+        // otherwise a position set by the example before the controller started would be silently overwritten
         var overlay = TextOverlay.GetOrCreate(Game);
 
-        if (_helpPosition is { } position)
+        if (ShowHelp && _helpPosition is { } position)
         {
             overlay.Position = position;
         }
@@ -210,20 +214,7 @@ public class Basic3DCameraController : SyncScript
 
         var movementDirection = Vector3.Zero;
 
-        if (Gamepad && Input.HasGamePad)
-        {
-            // The left stick is signed on both axes; the triggers are positive, one lowering and the other raising.
-            // The reads apply a dead zone, so a stick that has sprung back does not creep the camera
-            var leftThumb = Input.GetLeftThumb();
-            movementDirection.Z += leftThumb.Y;
-            movementDirection.X += leftThumb.X;
-            movementDirection.Y -= Input.GetLeftTrigger();
-            movementDirection.Y += Input.GetRightTrigger();
-
-            // Sprint while A or either shoulder is held
-            if (Input.IsGamePadButtonDown(GamePadButton.A) || Input.IsGamePadButtonDown(GamePadButton.LeftShoulder) || Input.IsGamePadButtonDown(GamePadButton.RightShoulder))
-                speed *= SpeedFactor;
-        }
+        if (Gamepad && Input.HasGamePad) ApplyGamePadMovement(ref movementDirection, ref speed);
 
         if (Input.HasKeyboard)
         {
@@ -257,6 +248,22 @@ public class Basic3DCameraController : SyncScript
 
         // Finally, push all of that to the translation variable which will be used within UpdateTransform()
         _translation += movementDirection * KeyboardMovementSpeed * speed;
+    }
+
+    /// <summary>The left stick and the triggers into the direction, the sprint buttons into the speed.</summary>
+    private void ApplyGamePadMovement(ref Vector3 movementDirection, ref float speed)
+    {
+        // The left stick is signed on both axes; the triggers are positive, one lowering and the other raising.
+        // The reads apply a dead zone, so a stick that has sprung back does not creep the camera
+        var leftThumb = Input.GetLeftThumb();
+        movementDirection.Z += leftThumb.Y;
+        movementDirection.X += leftThumb.X;
+        movementDirection.Y -= Input.GetLeftTrigger();
+        movementDirection.Y += Input.GetRightTrigger();
+
+        // Sprint while A or either shoulder is held
+        if (Input.IsGamePadButtonDown(GamePadButton.A) || Input.IsGamePadButtonDown(GamePadButton.LeftShoulder) || Input.IsGamePadButtonDown(GamePadButton.RightShoulder))
+            speed *= SpeedFactor;
     }
 
     private void KeyboardAndGamePadBasedRotation(float deltaTime)

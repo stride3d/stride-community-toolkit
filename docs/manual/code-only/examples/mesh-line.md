@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - Wrapping a MeshDraw in a Mesh, Model and ModelComponent
 - Making a line visible with an emissive material
 - Parenting an entity so it follows another
-- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, GizmoEmissiveColorMaterial.Create
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, GizmoEmissiveColorMaterial.Create, AddGrabber
 
 ![Mesh Line](media/mesh-line.webp)
 

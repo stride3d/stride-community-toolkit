@@ -64,7 +64,7 @@ public class ImGuiSystem : GameSystemBase
     public float Scale { get; set; } = 1;
 
     private ImGuiIOPtr _io;
-    private ImGuiPlatformIOPtr _platform;
+    private readonly ImGuiPlatformIOPtr _platform;
 
     // dependencies
     private readonly GameBase _game;

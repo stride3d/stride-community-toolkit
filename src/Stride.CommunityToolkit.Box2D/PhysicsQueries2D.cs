@@ -41,12 +41,11 @@ public static class PhysicsQueries2D
     };
 
     // One holder per thread, reused, so a shape cast allocates nothing: CharacterMover2D casts every step
-    [ThreadStatic]
-    private static ClosestHit? t_closest;
+    private static readonly ThreadLocal<ClosestHit> _closest = new(static () => new ClosestHit());
 
     private sealed class ClosestHit
     {
-        internal ShapeCastHit? Hit;
+        internal ShapeCastHit? Hit { get; set; }
     }
 
     /// <summary>
@@ -203,7 +202,7 @@ public static class PhysicsQueries2D
     /// <returns>The closest hit, or null when the sweep is clear.</returns>
     public static ShapeCastHit? CastShapeClosest(B2WorldId worldId, ref B2ShapeProxy proxy, Vector2 translation, B2QueryFilter filter)
     {
-        var closest = t_closest ??= new ClosestHit();
+        var closest = _closest.Value!;
 
         closest.Hit = null;
 

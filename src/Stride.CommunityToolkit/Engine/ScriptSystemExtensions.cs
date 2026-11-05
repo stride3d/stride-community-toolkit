@@ -105,6 +105,8 @@ public static class ScriptSystemExtensions
     public static MicroThread AddOnEventAction<T>(this ScriptSystem scriptSystem, EventKey<T> eventKey, Action<T> action, long priority = 0L)
     {
         ArgumentNullException.ThrowIfNull(eventKey);
+        // Checked here as well as below: a receiver links itself to the key as it is made, and a throw after that would leave the link
+        ArgumentNullException.ThrowIfNull(action);
 
         return scriptSystem.AddOnEventAction(new EventReceiver<T>(eventKey), action, priority);
     }
@@ -133,6 +135,7 @@ public static class ScriptSystemExtensions
     public static MicroThread AddOnEventTask<T>(this ScriptSystem scriptSystem, EventKey<T> eventKey, Func<T, Task> action, long priority = 0L)
     {
         ArgumentNullException.ThrowIfNull(eventKey);
+        ArgumentNullException.ThrowIfNull(action);
 
         return scriptSystem.AddOnEventTask(new EventReceiver<T>(eventKey), action, priority);
     }

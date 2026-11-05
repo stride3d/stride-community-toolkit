@@ -45,7 +45,7 @@ var crateColour = new Color(220, 90, 80);
 
 HashSet<CollidableComponent> inside = [];
 var entries = 0;
-var plate = new TouchCounter();
+var plate = new PlateCounter();
 var impact = new ImpactMeter();
 List<Entity> balls = [];
 var random = new Random(5);
@@ -257,7 +257,7 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
 /// and the two callbacks keep the set of what touches it. The same body can touch through more than one
 /// contact, so the set, not a counter, is the truth.
 /// </summary>
-sealed class TouchCounter : IContactHandler
+sealed class PlateCounter : IContactHandler
 {
     public bool NoContactResponse => false;
 

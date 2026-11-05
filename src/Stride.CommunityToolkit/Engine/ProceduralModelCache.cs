@@ -3,7 +3,7 @@ using Stride.Rendering;
 namespace Stride.CommunityToolkit.Engine;
 
 /// <summary>
-/// The models <see cref="GameExtensions.GetOrCreateModel(Stride.Games.IGame, Rendering.ProceduralModels.Primitive3D, Material?)"/>
+/// The models <see cref="GameModelExtensions.GetOrCreateModel(Stride.Games.IGame, Rendering.ProceduralModels.Primitive3D, Material?)"/>
 /// hands out: one per shape and material, kept for the life of the game they were built for.
 /// Registered as a service on the game at first use.
 /// </summary>
