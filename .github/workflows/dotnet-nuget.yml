@@ -2,6 +2,7 @@ name: .NET Build and Publish Nuget
 
 permissions:
   contents: write  # required to create releases/tags
+  id-token: write  # lets the job ask GitHub for the OIDC token nuget.org trusts (trusted publishing)
 
 env:
   # One entry per package, in publish order. Optional "|extra-restore-args" suffix
@@ -19,12 +20,18 @@ env:
     src/Stride.CommunityToolkit.Effects/Stride.CommunityToolkit.Effects.csproj
   TEST_PROJECT: tests/Stride.CommunityToolkit.Tests/Stride.CommunityToolkit.Tests.csproj
   COMMON_SETTINGS_PATH: src/CommonSettings.props
-  VERSION: "1.0.0.0-preview.${{ github.run_number }}"
+  # Typed at dispatch; the run number used to be the version, until a failed run burned one
+  VERSION: ${{ inputs.version }}
   NUGET_SOURCE: "https://api.nuget.org/v3/index.json"
   NUPKG_ROOT: nupkgs
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: "The package version, for example 1.0.0.0-preview.69; the tag and the release take the same name"
+        required: true
+        type: string
 
 jobs:
   build:
@@ -38,6 +45,19 @@ jobs:
       uses: actions/setup-dotnet@v6
       with:
         dotnet-version: 10.0.x
+
+    # A typo here would publish under a name nothing points at, so the shape is checked first
+    - name: Check the version
+      shell: bash
+      run: |
+        if [[ ! "$VERSION" =~ ^1\.0\.0\.0-preview\.[0-9]+$ ]]; then
+          echo "::error::'$VERSION' is not of the form 1.0.0.0-preview.N"
+          exit 1
+        fi
+        if git ls-remote --exit-code --tags origin "refs/tags/$VERSION" > /dev/null; then
+          echo "::error::The tag $VERSION already exists; this version has been released"
+          exit 1
+        fi
 
     - name: Set Version in csproj
       run: |
@@ -83,8 +103,17 @@ jobs:
       shell: bash
       run: ls -l "$NUPKG_ROOT"
 
+    # Trusted publishing: the job's OIDC token is exchanged for an API key that lives one hour, against
+    # the policy on nuget.org (owner StrideCommunity, this repository and this workflow file). No stored
+    # key; NUGET_USER is the nuget.org profile name of the policy's creator, not an email address
+    - name: NuGet login
+      id: login
+      uses: NuGet/login@v1
+      with:
+        user: ${{ secrets.NUGET_USER }}
+
     - name: Publish all packages
-      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
+      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
 
     # Create release
     - name: Create GitHub Release
