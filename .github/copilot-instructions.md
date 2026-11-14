@@ -33,10 +33,10 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
     - `Audio/`: runtime sound without assets: procedural and `.wav` sound sources, a listener that follows an entity
     - `Collections/`: small extensions on dictionaries, lists, enumerables and `Random` over collections
     - `Engine/`: Game, Scene, Entity, Transform, Camera and Prefab extensions; the `SceneSetup` family; `CreatePrimitive`
-    - `Input/`: gamepad reads on `InputManager` with a dead zone, for the default pad, a pad by index or every pad
+    - `Input/`: gamepad reads on `InputManager` with a dead zone, for the default pad, a pad by index or every pad; modifier-key reads (`IsShiftDown`, `IsCtrlDown`, `IsAltDown`, `IsKeyPressedUnmodified`)
     - `Mathematics/`: easing and tweens, `MathUtilEx`, `RaySegment`, extensions on `Random`
     - `Rendering/`: rendering utilities, by subfolder: `Compositing/` (compositor helpers, render-texture cameras), `Gizmos/`, `Instancing/`, `Overlay/` (`TextOverlay`, `KeyMenu`, `EntityInfoRenderer`), `ProceduralModels/` (`Primitive2D`, `Primitive3D` and their models), `Text/` (screen and world text components, `TextMesh` lettering), `Utilities/` (`MeshBuilder`, `EarClipping`, `TextureCanvas`); the root holds textures, materials and `DisplayScale`
-    - `Scripts/`: reusable script components: the camera controllers and the profiler
+    - `Scripts/`: reusable script components: the camera controllers (free, follow, orbit and 2D) and the profiler
   - **Stride.CommunityToolkit.Bepu**: Bepu physics integration (primary)
   - **Stride.CommunityToolkit.Box2D**: Box2D.NET integration for 2D physics (not packed yet)
   - **Stride.CommunityToolkit.Bullet**: Bullet physics integration (legacy / transitional, pending deprecation; maintained, not extended)
@@ -44,7 +44,7 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
   - **Stride.CommunityToolkit.DebugShapes**: Debug visualization tools
   - **Stride.CommunityToolkit.Effects**: toolkit pieces that ship a shader of their own: post-processing colour transforms and GPU picking
   - **Stride.CommunityToolkit.ImGui**: ImGui integration
-  - **Stride.CommunityToolkit.ImGuiNet**: ImGui.NET bindings and helpers
+  - **Stride.CommunityToolkit.ImGuiNet**: ImGui.NET bindings and helpers (not packed yet)
   - **Stride.CommunityToolkit.Linux**: the asset compiler's Linux native libraries, for code-only projects on Linux
   - **Stride.CommunityToolkit.Shapes**: `ShapeBatch`, the signed-distance-field shape renderer behind the HUD, panel and gizmo examples (see `docs/manual/rendering/shape-batch.md`)
   - **Stride.CommunityToolkit.Skyboxes**: Skybox utilities
@@ -56,11 +56,11 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
   - **Stride.CommunityToolkit.Examples**: Console example launcher
   - **Stride.CommunityToolkit.Examples.Launcher**: Avalonia example launcher
   - **Stride.CommunityToolkit.Examples.MetadataGenerator**: Generates `examples-manifest.json` from example metadata
-- `build/`: Repository scripts, all .NET file-based apps run with `dotnet run --file build/<name>.cs`: `pack-local.cs` (local dev NuGet packages), `capture-screenshots.cs` (the documentation screenshots), `gold-images.cs` (rendering regression against `tests/gold`)
+- `build/`: Repository scripts, all .NET file-based apps run with `dotnet run --file build/<name>.cs`: `pack-local.cs` (local dev NuGet packages), `capture-screenshots.cs` (the documentation screenshots), `gold-images.cs` (rendering regression against `tests/gold`), `generate-example-sounds.cs` (the `.wav` files the audio examples load)
 - `docs/`: DocFX sources (manuals, API reference, contributing)
 - `.github/`: GitHub workflows, release metadata, automation, and this instruction file
 
-Solutions: `Stride.CommunityToolkit.slnx` contains everything, 130 projects of which 107 are
+Solutions: `Stride.CommunityToolkit.slnx` contains everything, 145 projects of which 125 are
 examples; `Stride.CommunityToolkit.Core.slnf` is a solution filter loading only libraries, tests and
 tools, because the examples slow IDE load noticeably. Build the filter for library work and the full
 solution before reporting an API change done, since only it compiles the examples.
@@ -207,7 +207,7 @@ the worked examples. Verify against a package from `build/pack-local.cs`, not a 
 - Terminology / capitalization: Use “Bepu” (capital B only) in identifiers and XML docs; never “BEPU” or “bepu”. Use “Bullet” (capital B) for Bullet physics.
 - One public type per file; avoid unrelated multi-class files.
 - Avoid `#region`; write self-explanatory code.
-- Avoid partial classes unless auto-generated code is involved.
+- Avoid partial classes unless auto-generated code is involved. The exception is a large immediate-mode API, such as `ShapeBatch`, which may split by shape family; each file then says where the shared state lives. `GameExtensions` is split the same way, by concern (`GameExtensions.Cameras.cs`, `.Lights.cs`, `.Materials.cs`, `.PostEffects.cs`, `.Run.cs`, `.Games.cs`).
 - Braces: an `if` body keeps its braces unless the statement is very short (`if (x) return;`). A `throw`, an assignment with a long right-hand side or a call spanning most of a line keeps them. The code base is inconsistent here because several people wrote it; do not strip braces as a line-saving move.
 - Validation: prefer `ArgumentNullException.ThrowIfNull()` and provide meaningful exception messages for invalid states. Say what is wrong and what to do: "The transform is driven by its matrix; set UseTRS to true to use this method", not "Must use TRS".
 - Suggestion preference order:
@@ -258,7 +258,7 @@ the worked examples. Verify against a package from `build/pack-local.cs`, not a 
 - Use `var` only when the type is obvious from the right-hand side, required by anonymous types, or improves readability.
 - Keep nullable reference types enabled and avoid the null-forgiving operator (`!`) unless the invariant is obvious or documented. Prefer nullable analysis attributes such as `[NotNullWhen]`, `[MemberNotNull]`, and `[MaybeNull]` for public contracts.
 - Prefer `.editorconfig`, Roslyn analyzers, and project settings to enforce style and quality. Do not suppress analyzer warnings without a clear reason.
-- Use `async`/`await` for I/O-bound work. Avoid sync-over-async. In library code, use `ConfigureAwait(false)` when a synchronization context is not required; in Blazor/UI code, preserve the UI context and use `InvokeAsync` when updating UI state.
+- Use `async`/`await` for I/O-bound work. Avoid sync-over-async. In library code, use `ConfigureAwait(false)` when a synchronization context is not required, and never in a Stride script or in code awaited from one: scripts run on the engine's micro-thread context, and a continuation that leaves it resumes on a pool thread, off the main thread. In Blazor/UI code, preserve the UI context and use `InvokeAsync` when updating UI state.
 - Use performance-oriented APIs such as `Span<T>`, `Memory<T>`, pooling, or unsafe code only when they clearly improve correctness or measured performance.
 - Prefer specific exception types and meaningful error messages. Do not catch `Exception` broadly unless adding context and rethrowing or handling a known boundary.
 
@@ -316,6 +316,11 @@ change in Stride to be possible at all.
 - **Mention, do not silently fix.** Unclear or missing XML documentation, typos, and suspicious
   patterns noticed in passing are worth reporting. Fixing them as a side effect of unrelated work
   makes the diff harder to review and is out of scope unless requested.
+- **Read the clone's own rules first.** Stride has an `AGENTS.md` at its root, one in `sources/shaders`, one in
+  `sources/engine/Stride.Graphics`, and a `REVIEW.md`. They cover its build, the per-checkout `-devN` package
+  versions, how a game sees an engine change, comments, code upgraders and pull requests. Two that bite: never
+  pass `-p:StrideGraphicsApis=...` to a local build (each new value recompiles the whole engine and narrows the
+  dev packages), and `build/Stride.Local.props` is git-ignored local state that `git status` does not show.
 
 ### Building the engine clone: native link fails with `could not open 'kernel32.lib'`
 
@@ -348,6 +353,24 @@ setx VCToolsInstallDir "C:\Program Files\Microsoft Visual Studio\18\Professional
   `lld.exe -flavor link -nologo -machine:x64 -dll -noentry -defaultlib:libcmt -defaultlib:oldnames -out:probe.dll kernel32.lib`
   exits 0 when discovery works; repeat with `-machine:arm64`.
 - Undo with `reg delete HKCU\Environment /v VCINSTALLDIR` and the same for `VCToolsInstallDir`.
+- `setx` reaches new processes only: a shell opened before it needs both variables exported for the native
+  projects, or it fails on the CRT as before.
+
+### Building the engine clone: the SDK and stale output
+
+- The clone pins the .NET 10 SDK in `global.json` (`rollForward: latestMinor`), so a 10.0 SDK must be installed;
+  an 11 SDK alone does not satisfy it, and Visual Studio 18 brings only its own. Install the 10.0 SDK beside it
+  (`winget install Microsoft.DotNet.SDK.10`). Do not edit `global.json` to an 11 SDK: the engine then compiles,
+  apart from one task parameter SDK 11 dropped (`GenerateRuntimeConfigDevFile` in `Stride.AssetCompiler.csproj`),
+  but the asset compiler built that way dies at start with an access violation in a module initialiser. The
+  cause is **not known**; the same code built with SDK 10 runs.
+- After a change of SDK, Visual Studio or build layout, delete the clone's `bin` and `obj` folders before
+  judging a failure. Output folders keep assemblies an older layout put there, and the asset compiler loads them
+  first (`TypeLoadException` at start); an old asset build cache fails with "are both writing ... at the same
+  time". Never `git clean -xdf` a clone that holds untracked notes.
+- `build/Stride.Local.props` is created once from `Stride.Local.props.template` and never refreshed. An old copy
+  can carry settings the template has since changed, such as `StrideGraphicsApiDependentBuildAll` set to `true`,
+  which builds Direct3D 11, Direct3D 12 and Vulkan on every build. Compare it with the template after a pull.
 
 ## Reference repositories (read them before writing physics code)
 
@@ -403,6 +426,10 @@ Guidance for the Bepu demos specifically:
   claims the arrow keys, the shifts, `H` and `F2`, and `W A S D` only when `EnableWasdMovement` is on. Binding one of those gives a key that appears to work
   intermittently while also flying the camera — `S` for "stabilise" is a real example of this. Safe
   single letters include `G J K L M N P R T Z`.
+- **Helpers claim keys too, when they are in the scene.** The profiler (`Profiler = true`) takes `F1` for its
+  help, `Ctrl+Shift+P` to show or hide, and `Ctrl` with `F1` to `F4`, the digits, `+` and `-`;
+  `AddPhysicsDebug` takes `P` and `F11`; `AddGrabber` takes `T`; `AddGrid` takes `G`. Pick another letter in an
+  example that adds one of them.
 - **A key binding lives in three places**: the `IsKeyPressed` call, the on-screen label, and any
   header comment describing the controls. Rename one and the others silently drift, leaving
   documentation that names a key doing nothing. Grep for the old letter after changing a binding.
