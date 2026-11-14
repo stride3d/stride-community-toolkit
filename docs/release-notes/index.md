@@ -30,6 +30,7 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 
 ### 🎉 New Features
 
+- The Bepu 2D stress pile example lets you drag a ramp part, hold Ctrl to rotate the whole ramp, and press R to reset their rotations.
 - `GameProfiler` lists its keys on the text overlay behind F1 (`HelpToggleKey`), with the current filter, sort, page and refresh rate; the list's title names the chord just used, for three seconds, since Stride's profiler text has no line of ours to say it on.
 - `InputManager.IsKeyPressedUnmodified(key)`: a key pressed with neither Ctrl nor Alt held. The text overlay, its collapsible sections and `KeyMenu` read their keys through it, so the profiler's Ctrl+F2 no longer also collapses the camera help, and Ctrl+1 to 5 do not pick a menu item.
 - `Capsule2DProceduralModel.StraightLength(height, radius)`: the straight part the mesh draws for a capsule, with its minimum sliver. The Bepu and Bullet 2D capsule colliders take their length from it, so a collider is exactly as tall as its mesh; the Bepu one used to be half the mesh's sliver for a wide capsule under one unit.
@@ -43,6 +44,7 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 - The four camera controllers and `GameProfiler` carry `[DataContract]`, so Game Studio lists them; the follow controller's `ObstacleTest` delegate is `[DataMemberIgnore]`.
 - Box2D: `BodyForces.TeleportAtRest(body, position, rotation)` and `Box2DBodyComponent.TeleportAtRest(position, rotation)` move a body and stop it there, awake, as a reset does; `B2Vec2Extensions.ToB2Vec2()` and `ToVector2()` are public.
 - `AddGizmo(renderGroup:)` and `TranslationGizmo`'s constructor take the render group the gizmo draws in.
+- Box2D: `ShapeFixtureBuilder.AttachShape` and `AttachPolygon` return the `B2ShapeId` they created, as `AttachChain` returns its chain, so a caller that needs the shape no longer creates it by hand.
 
 ### 🐞 Bug Fixes
 
@@ -76,6 +78,13 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 - `RandomExtensions.NextSingle(Random)` is gone: `Random.NextSingle()` is the BCL's since .NET 6 and every call already bound to it.
 - `QuaternionUtil.LookAt` is finite and unit length on every input: an eye on the target gives the identity, a zero up is taken as up, a line of sight along the up vector takes an arbitrary roll. It returned a half-length quaternion for those, which poisons a transform's world matrix. Its basis is Stride's own `Quaternion.LookRotation`, with the guards Stride's lacks.
 - `TextOverlay` resolves its system font once per family change instead of comparing four settings every frame; `KeyMenu`'s markers match the overlay's.
+- Box2D: `PhysicsStepSettings` refuses a `TargetHz`, `MaxStepsPerFrame` or `SubStepCount` of zero or less and a negative `TimeScale` or `WorkerCount`; a `TargetHz` of 0 used to freeze the world with no exception. An end-touch or sensor event that names a shape destroyed in the step no longer asks Box2D for its body: its entity is `null` and its body id the default.
+- Box2D debug draw: hollow circles are stroked `LinePixels` wide like every other line, where their band was a tenth of the radius in world units and thickened with the zoom; an outline polygon is one polyline, not one line per edge.
+- `GpuPicker` reads its pixel back without waiting, as its summary says: a result the GPU has not finished stays in flight and is waited for only when its slot is about to be reused, three frames on, where every read used to block.
+- A 3D `ChartTrajectory` rebuilds its ribbon when points are added or its width has moved by a twentieth, as `ChartRibbon` does; an orbiting camera used to rebuild and re-upload it every frame. Its points are kept once, in the buffer the flat chart draws from. The chart cursor formats its readout only when the point under it changes.
+- `AddSkybox` loads its texture immutable, not CPU-writable, and no longer sets a position on an entity that ignores it. The Bullet `Raycast` and `RaycastMouse` helpers and `ShowColliders` validate their arguments, as their neighbours do.
+- `DebugShapes`: `ImmediateDebugRenderSystem`'s constructor defaults to `RenderGroup.Group1`, the group `AddDebugShapes` has always passed; shapes are queued once, not copied into a second message type per frame.
+- ImGui: the inspector logs a failed set through Stride's log, not the console; `Child` makes no string per frame; the performance monitor's per-thread strips each have their own id; a zero-elapsed frame after the first no longer reaches ImGui as a zero step, which it asserts on.
 - Housekeeping: `GameExtensions` is split into `Run`, `Cameras`, `Lights` and `Materials` partials beside the existing two; `Camera2DMath` is `CameraMath` with the controllers' shared zoom step; the editor's axis colours, the instancing growth rule, the display-scale threshold and the bevel halving limit are each one constant; `SkyboxGenerator` spells Lambert right.
 
 ### 📄 Docs
