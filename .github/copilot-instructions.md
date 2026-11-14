@@ -207,6 +207,7 @@ the worked examples. Verify against a package from `build/pack-local.cs`, not a 
 - Terminology / capitalization: Use “Bepu” (capital B only) in identifiers and XML docs; never “BEPU” or “bepu”. Use “Bullet” (capital B) for Bullet physics.
 - One public type per file; avoid unrelated multi-class files.
 - Avoid `#region`; write self-explanatory code.
+- Comments describe the code as it is now. The story of a change (what the previous code did, the bug it caused, how it was found, an issue number) goes in the commit message or the pull request. When a reason is not obvious from the code, give it in one or two lines.
 - Avoid partial classes unless auto-generated code is involved. The exception is a large immediate-mode API, such as `ShapeBatch`, which may split by shape family; each file then says where the shared state lives. `GameExtensions` is split the same way, by concern (`GameExtensions.Cameras.cs`, `.Lights.cs`, `.Materials.cs`, `.PostEffects.cs`, `.Run.cs`, `.Games.cs`).
 - Braces: an `if` body keeps its braces unless the statement is very short (`if (x) return;`). A `throw`, an assignment with a long right-hand side or a call spanning most of a line keeps them. The code base is inconsistent here because several people wrote it; do not strip braces as a line-saving move.
 - Validation: prefer `ArgumentNullException.ThrowIfNull()` and provide meaningful exception messages for invalid states. Say what is wrong and what to do: "The transform is driven by its matrix; set UseTRS to true to use this method", not "Must use TRS".
@@ -560,6 +561,7 @@ that did not exist.
 - Avoid speculative APIs; ground suggestions in existing patterns.
 - When changing public APIs, update XML docs, examples, and conceptual documentation as needed.
 - Validate changes with the most relevant build or tests available.
+- Check exit codes and test counts, not only the absence of errors: a `dotnet test --filter` that matches no test still exits with 0, so a run that reports no tests proved nothing.
 - **Leave finished work uncommitted.** The maintainer reviews file by file and commits what is approved; do not commit, push or open a pull request unless asked for that specific action, in that context. Public renames and removals are proposed in a table with call counts, not applied.
 - Use descriptive, real-word identifier names. Avoid cryptic abbreviations for variables, parameters, or fields (e.g., prefer `textureCoordinates`, `firstEdge`, `secondEdge`, `faceNormal` over `tex`, `e1`, `e2`, `n`). Single-letter names are acceptable only for short-lived loop indices (`i`, `j`, `k`).
 - Follow C# naming conventions consistently: PascalCase for types, methods, and properties; camelCase for parameters and local variables. Prefer meaningful names that communicate intent.
