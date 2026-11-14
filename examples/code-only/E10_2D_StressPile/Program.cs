@@ -2,6 +2,7 @@ using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Input;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -22,12 +23,18 @@ using Stride.Rendering;
 // size only affects what is spawned next.
 
 Vector3 wallSize = new(1, 65, 1);
-const float WallWidth = 100;
+const float WallWidth = 110;
 
 // A body further than this from the pile, sideways or below, has escaped and is removed
-const float EscapeDistance = 70f;
+const float EscapeDistance = 100f;
 const float SpawnHeight = 150;
 const float ColumnWidth = WallWidth - 30;
+
+// How far the grabber and the arena pick reach; the camera sits well back from a pile this size
+const float GrabberDistance = 400;
+
+// Radians a wall or ramp turns for a drag across the whole window
+const float ArenaRotationSensitivity = 4f;
 
 // One Model per shape and sleep state, built on first use and kept. Eighteen of them cost under a
 // megabyte, and it makes switching back to a shape you have already used free.
@@ -51,9 +58,16 @@ int[] batchSizes = [1000, 2500, 5000, 10000, 20000];
 var random = new Random(1);
 List<Entity> bodies = [];
 
+CameraComponent camera = null!;
 Scene scene = null!;
 Entity awakeMaster = null!;
 Entity sleepingMaster = null!;
+
+// The two walls and the two ramps, under one parent so the whole arena turns as one; each remembers the
+// rotation it was built with, for the reset
+Entity arena = null!;
+Entity? draggedPart = null;
+List<(Entity Part, Quaternion InitialRotation)> arenaParts = [];
 
 // Sleep-state tracking, aligned with the bodies list: which master each body is drawn by right now
 List<BodyComponent> bodyComponents = [];
@@ -86,7 +100,7 @@ game.Run(new SceneSetup3D
 void Start(Scene rootScene)
 {
     // Left mouse grabs any body, drags it and throws it on release
-    game.AddGrabber();
+    game.AddGrabber().MaxDistance = GrabberDistance;
 
     scene = rootScene;
 
@@ -94,30 +108,39 @@ void Start(Scene rootScene)
     var light = game.AddDirectionalLight();
     light.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-30)) * Quaternion.RotationY(MathUtil.DegreesToRadians(-30));
 
-    CreateWall(new Vector3(-WallWidth / 2, 0, 0), wallSize);
-    CreateWall(new Vector3(WallWidth / 2, 0, 0), wallSize);
-    // The ramps overlap deeply at the middle: with a shallow overlap, pressure from the pile
-    // squeezes boxes through the crack where they meet and fires them out at high speed
-    CreateWall(new Vector3(-23.27f, -47.6f, 0), new Vector3(62.3f, 1, 1), Quaternion.RotationZ(MathUtil.DegreesToRadians(-30)));
-    CreateWall(new Vector3(23.27f, -47.6f, 0), new Vector3(62.3f, 1, 1), Quaternion.RotationZ(MathUtil.DegreesToRadians(30)));
+    arena = new Entity("Arena") { Scene = scene };
+
+    AddArenaPart(new Vector3(-WallWidth / 2, 0, 0), wallSize);
+    AddArenaPart(new Vector3(WallWidth / 2, 0, 0), wallSize);
+
+    // The ramps run from the foot of each wall and stop short of the middle, which leaves a hole at the
+    // bottom of the arena on purpose
+    AddArenaPart(new Vector3(-28.543f, -48.114f, 0), new Vector3(62.3f, 1, 1), Quaternion.RotationZ(MathUtil.DegreesToRadians(-31)));
+    AddArenaPart(new Vector3(28.543f, -48.114f, 0), new Vector3(62.3f, 1, 1), Quaternion.RotationZ(MathUtil.DegreesToRadians(31)));
 
     SetupInstancing();
     SetupMenus();
 
     SpawnBatch(batchSize);
+
+    camera = game.GetCameraEntity().Get<CameraComponent>();
 }
 
-void CreateWall(Vector3 position, Vector3 size, Quaternion? rotation = null)
+// A wall or a ramp: a static box, a child of the arena
+void AddArenaPart(Vector3 position, Vector3 size, Quaternion? rotation = null)
 {
-    var wall = game.CreatePrimitive(Primitive3D.Box(size), new BepuPhysicsOptions
+    var part = game.CreatePrimitive(Primitive3D.Box(size), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(Color.LightGray),
         Body = BodyMode.Static,
         Position = position,
+        EntityName = "Arena part",
     });
 
-    wall.Transform.Rotation = rotation ?? Quaternion.Identity;
-    wall.Scene = scene;
+    part.Transform.Rotation = rotation ?? Quaternion.Identity;
+
+    arena.AddChild(part);
+    arenaParts.Add((part, part.Transform.Rotation));
 }
 
 void SetupInstancing()
@@ -279,9 +302,66 @@ void Spawn(Vector3 position)
 
 void Update(Scene rootScene, GameTime time)
 {
+    RotateArena();
+    HandleInput();
     UpdateSleepTint();
     DespawnEscaped();
-    HandleInput();
+}
+
+/// <summary>
+/// A left drag that starts on a wall or a ramp turns that part about its own centre; with Ctrl held it
+/// turns the whole arena about the middle. A drag that starts on a body is the grabber's.
+/// </summary>
+void RotateArena()
+{
+    if (game.Input.IsMouseButtonPressed(MouseButton.Left))
+    {
+        // Whatever the ray meets first: a body in front of a wall is grabbed, not the wall turned
+        var hit = camera.Raycast(game.Input.MousePosition, GrabberDistance, out var hitInfo);
+
+        draggedPart = hit && hitInfo.Collidable.Entity.GetParent() == arena ? hitInfo.Collidable.Entity : null;
+    }
+
+    if (!game.Input.IsMouseButtonDown(MouseButton.Left))
+    {
+        draggedPart = null;
+
+        return;
+    }
+
+    var delta = game.Input.MouseDelta.X;
+
+    if (draggedPart is not { } part || delta == 0) return;
+
+    var target = game.Input.IsCtrlDown() ? arena : part;
+
+    target.Transform.Rotation *= Quaternion.RotationZ(-delta * ArenaRotationSensitivity);
+
+    WakeBodies();
+}
+
+void ResetArena()
+{
+    arena.Transform.Rotation = Quaternion.Identity;
+
+    foreach (var (part, initialRotation) in arenaParts)
+    {
+        part.Transform.Rotation = initialRotation;
+    }
+
+    draggedPart = null;
+
+    WakeBodies();
+}
+
+// The engine moves a static's collider with its entity at the end of the frame, but a body asleep on
+// the old position stays asleep, hanging where the wall used to be
+void WakeBodies()
+{
+    foreach (var body in bodyComponents)
+    {
+        if (!body.Awake) body.Awake = true;
+    }
 }
 
 /// <summary>
@@ -373,6 +453,7 @@ void HandleInput()
 
     if (game.Input.IsKeyPressed(Keys.Space)) SpawnBatch(batchSize);
     if (game.Input.IsKeyPressed(Keys.X)) Clear();
+    if (game.Input.IsKeyPressedUnmodified(Keys.R)) ResetArena();
 }
 
 /// <summary>
@@ -389,7 +470,10 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     [
         new("Space", $"Spawn {batchSize:N0} more", Color.Yellow),
         new("X", "Clear", Color.Yellow),
-        new("Left mouse", "Grab a body, drag it, let go to throw", Color.Yellow),
+        new("Left mouse", "Grab and throw a body", Color.Yellow),
+        new("Left drag", "Turn a wall or a ramp", Color.Yellow),
+        new("Ctrl + left drag", "Turn the whole arena", Color.Yellow),
+        new("R", "Put the arena back", Color.Yellow),
     ];
 
     // Laid out in sequence, so an expanded menu pushes the ones below it down instead of overlapping
