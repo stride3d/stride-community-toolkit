@@ -49,8 +49,7 @@ public static class PolygonCollider
         if (vertices.Length < 3)
             throw new ArgumentException("A polygon needs at least three vertices.", nameof(vertices));
 
-        if (depth <= 0)
-            throw new ArgumentOutOfRangeException(nameof(depth), "Depth must be greater than 0.");
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(depth);
 
         var vertexCount = vertices.Length;
         var halfDepth = depth / 2f;

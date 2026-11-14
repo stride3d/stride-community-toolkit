@@ -98,9 +98,15 @@ public sealed class GpuPickingRenderFeature : SubRenderFeature
     /// </summary>
     private static void BindInstancing(in RenderNode renderNode, RenderInstancing instancing)
     {
-        var entries = renderNode.RenderEffect.Effect?.Bytecode.Reflection.ResourceGroups.FirstOrDefault(group => group.Name == "PerDraw")?.Entries;
+        var groups = renderNode.RenderEffect.Effect?.Bytecode.Reflection.ResourceGroups;
 
-        if (entries is null) return;
+        if (groups is null) return;
+
+        var perDraw = groups.FindIndex(static group => group.Name == "PerDraw");
+
+        if (perDraw < 0) return;
+
+        var entries = groups[perDraw].Entries;
 
         var slot = 0;
 

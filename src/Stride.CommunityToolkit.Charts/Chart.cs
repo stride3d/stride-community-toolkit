@@ -36,8 +36,22 @@ public sealed class Chart : IDisposable
     // Each layer is nudged along Z by this much: grids behind the axes, area fills and curves in front.
     internal const float LayerStep = 0.005f;
 
-    // Where the curves sit: above the axes at 0 and the area fills at half a step
+    // The layers, back to front: minor grid, grid, the axes at 0, area fills, curves, markers, then the legend
+    // and the cursor over everything
+    internal const float MinorGridLayer = -2f * LayerStep;
+    internal const float GridLayer = -LayerStep;
+    internal const float AreaLayer = 0.5f * LayerStep;
     internal const float CurveLayer = 2f * LayerStep;
+    internal const float MarkerLayer = 2.5f * LayerStep;
+    internal const float OverlayLayer = 3f * LayerStep;
+
+    /// <summary>Where the axes cross: zero on each axis, or the nearest edge of its range; Z is 0 on a flat chart.</summary>
+    internal Vector3 AxisOrigin()
+    {
+        var r = Options.Range;
+
+        return new Vector3(Math.Clamp(0f, r.XMin, r.XMax), Math.Clamp(0f, r.YMin, r.YMax), Is3D ? Math.Clamp(0f, r.ZMin, r.ZMax) : 0f);
+    }
 
     private readonly List<ChartSeries> _series = [];
     private readonly ChartScaffold _scaffold;

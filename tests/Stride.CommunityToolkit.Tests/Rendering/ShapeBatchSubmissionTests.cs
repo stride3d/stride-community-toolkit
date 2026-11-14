@@ -11,6 +11,14 @@ namespace Stride.CommunityToolkit.Tests.Rendering;
 /// </summary>
 public class ShapeBatchSubmissionTests
 {
+    /// <summary>
+    /// The record is the GPU buffer's element, 144 bytes as the shader declares it. A hidden field, which a
+    /// primary-constructor parameter used in a method body becomes, would change it with no compile error.
+    /// </summary>
+    [Fact]
+    public void TheShapeRecord_Is144Bytes_AsTheShaderDeclaresIt()
+        => Assert.Equal(144, System.Runtime.CompilerServices.Unsafe.SizeOf<ShapeInstance>());
+
     [Fact]
     public void FlatOverloadsDrawWhatTheirXYPlaneCallsDraw()
     {

@@ -107,7 +107,7 @@ public sealed class PhysicsEventRouter2D
     // A body without an entity, a ground made from a position alone, still takes part: its side is null
     private void Dispatch(Func<B2BodyId, Entity?> entityResolver, B2ShapeId shapeIdA, B2ShapeId shapeIdB, ContactEventType type, Vector2 point, Vector2 normal, float approachSpeed)
     {
-        var data = new ContactEventData(type, entityResolver(b2Shape_GetBody(shapeIdA)), entityResolver(b2Shape_GetBody(shapeIdB)), shapeIdA, shapeIdB, point, normal, approachSpeed);
+        var data = new ContactEventData(type, EntityOf(entityResolver, shapeIdA), EntityOf(entityResolver, shapeIdB), shapeIdA, shapeIdB, point, normal, approachSpeed);
 
         // Backwards by index, so a handler may unregister from inside its callback
         for (var i = _contactHandlers.Count - 1; i >= 0; i--) _contactHandlers[i].OnContactEvent(data);
@@ -115,8 +115,12 @@ public sealed class PhysicsEventRouter2D
 
     private void Dispatch(Func<B2BodyId, Entity?> entityResolver, B2ShapeId sensorShape, B2ShapeId visitorShape, SensorEventType type)
     {
-        var data = new SensorEventData(type, entityResolver(b2Shape_GetBody(sensorShape)), entityResolver(b2Shape_GetBody(visitorShape)), sensorShape, visitorShape);
+        var data = new SensorEventData(type, EntityOf(entityResolver, sensorShape), EntityOf(entityResolver, visitorShape), sensorShape, visitorShape);
 
         for (var i = _sensorHandlers.Count - 1; i >= 0; i--) _sensorHandlers[i].OnSensorEvent(data);
     }
+
+    // An end event may name a shape that was destroyed in the step, which has no body to ask for
+    private static Entity? EntityOf(Func<B2BodyId, Entity?> entityResolver, B2ShapeId shapeId)
+        => b2Shape_IsValid(shapeId) ? entityResolver(b2Shape_GetBody(shapeId)) : null;
 }

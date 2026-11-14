@@ -1,6 +1,7 @@
 using Box2D.NET;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
+using System.Diagnostics;
 using static Box2D.NET.B2MathFunction;
 using static Box2D.NET.B2Types;
 using static Box2D.NET.B2Worlds;
@@ -127,12 +128,15 @@ public sealed class Box2DDebugDraw
     public void Draw(B2WorldId world)
     {
         var fillAlpha = _batch.Fill.Alpha;
+        var strokeWidth = _batch.StrokeWidth;
 
         _batch.Fill.Alpha = FillAlpha;
+        _batch.StrokeWidth = LinePixels;
 
         b2World_Draw(world, _draw);
 
         _batch.Fill.Alpha = fillAlpha;
+        _batch.StrokeWidth = strokeWidth;
     }
 
     /// <inheritdoc cref="Draw(B2WorldId)"/>
@@ -145,30 +149,27 @@ public sealed class Box2DDebugDraw
 
     private void DrawPolygon(ReadOnlySpan<B2Vec2> vertices, int vertexCount, B2HexColor color, object context)
     {
-        var stride = DebugDrawColors.ToColor(color);
+        Span<Vector2> outline = stackalloc Vector2[vertexCount];
 
-        for (var i = 0; i < vertexCount; i++)
-        {
-            var a = vertices[i];
-            var b = vertices[(i + 1) % vertexCount];
+        for (var i = 0; i < vertexCount; i++) outline[i] = vertices[i].ToVector2();
 
-            _batch.DrawPixelLine(a.ToVector2(), b.ToVector2(), LinePixels, stride);
-        }
+        _batch.DrawPixelPolyline(outline, LinePixels, DebugDrawColors.ToColor(color), closed: true);
     }
 
     private void DrawSolidPolygon(in B2Transform transform, ReadOnlySpan<B2Vec2> vertices, int vertexCount, float radius, B2HexColor color, object context)
     {
-        Span<Vector2> local = stackalloc Vector2[MaxPolygonVertices];
-        var count = Math.Min(vertexCount, MaxPolygonVertices);
+        // Box2D never makes a polygon of more than eight corners
+        Debug.Assert(vertexCount <= MaxPolygonVertices);
 
-        for (var i = 0; i < count; i++)
-            local[i] = new Vector2(vertices[i].X, vertices[i].Y);
+        Span<Vector2> local = stackalloc Vector2[vertexCount];
 
-        _batch.DrawSolidPolygon(local[..count], transform.p.ToVector2(), b2Rot_GetAngle(transform.q), DebugDrawColors.ToColor(color), radius);
+        for (var i = 0; i < vertexCount; i++) local[i] = vertices[i].ToVector2();
+
+        _batch.DrawSolidPolygon(local, transform.p.ToVector2(), b2Rot_GetAngle(transform.q), DebugDrawColors.ToColor(color), radius);
     }
 
     private void DrawCircle(in B2Vec2 center, float radius, B2HexColor color, object context)
-        => _batch.DrawAnnulus(center.ToVector2(), radius, radius * 0.9f, DebugDrawColors.ToColor(color));
+        => _batch.DrawRing(center.ToVector2(), radius, DebugDrawColors.ToColor(color));
 
     private void DrawSolidCircle(in B2Transform transform, float radius, B2HexColor color, object context)
     {
@@ -205,6 +206,6 @@ public sealed class Box2DDebugDraw
     private void DrawPoint(in B2Vec2 p, float size, B2HexColor color, object context)
         => _batch.DrawSolidCircle(p.ToVector2(), size * PointScale, DebugDrawColors.ToColor(color));
 
-    private void DrawText(in B2Vec2 p, string s, B2HexColor color, object context)
-        => DrawString?.Invoke(p.ToVector2(), s, DebugDrawColors.ToColor(color));
+    private void DrawText(in B2Vec2 position, string text, B2HexColor color, object context)
+        => DrawString?.Invoke(position.ToVector2(), text, DebugDrawColors.ToColor(color));
 }

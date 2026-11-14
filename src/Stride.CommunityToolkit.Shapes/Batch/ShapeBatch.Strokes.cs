@@ -31,7 +31,7 @@ public sealed partial class ShapeBatch
     /// The 2D case of <see cref="DrawPolyline(ReadOnlySpan{Vector2}, Vector3, Vector3, Vector3, float, Color, bool)"/>: a stroke in the XY plane.
     /// </summary>
     public void DrawPolyline(ReadOnlySpan<Vector2> points, float width, Color color, bool closed = false)
-        => DrawPolyline(points, Vector3.Zero, Vector3.UnitX, Vector3.UnitY, width, color, closed);
+        => AddPolyline(points, Flat, SolidStyle(color), MathF.Max(width, 0.0001f) * 0.5f, closed);
 
     /// <summary>
     /// Submits a run of points as one stroke a constant number of pixels wide at any distance, with
@@ -51,7 +51,7 @@ public sealed partial class ShapeBatch
     /// The 2D case of <see cref="DrawPixelPolyline(ReadOnlySpan{Vector2}, Vector3, Vector3, Vector3, float, Color, bool)"/>: a stroke in the XY plane.
     /// </summary>
     public void DrawPixelPolyline(ReadOnlySpan<Vector2> points, float pixelWidth, Color color, bool closed = false)
-        => DrawPixelPolyline(points, Vector3.Zero, Vector3.UnitX, Vector3.UnitY, pixelWidth, color, closed);
+        => AddPolyline(points, Flat, OutlineStyle(color, pixelWidth), 0f, closed);
 
     /// <summary>
     /// Submits a run of points anywhere in 3D as one stroke of a real world-space width, with round
@@ -155,7 +155,7 @@ public sealed partial class ShapeBatch
         var direction = end - start;
         var length = direction.Length();
 
-        if (length <= float.Epsilon) return;
+        if (MathUtil.IsZero(length)) return;
 
         var halfSegment = length * 0.5f;
 

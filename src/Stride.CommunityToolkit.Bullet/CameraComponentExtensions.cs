@@ -25,7 +25,12 @@ public static class CameraComponentExtensions
     /// <param name="collisionFilterGroupFlags">Optional. The collision filter group flags to consider during the raycasting. Default is <see cref="CollisionFilterGroupFlags.DefaultFilter"/>.</param>
     /// <returns>A <see cref="HitResult"/> containing information about the hit result, including the hit location and other collision data.</returns>
     public static HitResult RaycastMouse(this CameraComponent camera, ScriptComponent component, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
-        => camera.Raycast(component, component.Input.MousePosition, collisionGroups, collisionFilterGroupFlags);
+    {
+        ArgumentNullException.ThrowIfNull(camera);
+        ArgumentNullException.ThrowIfNull(component);
+
+        return camera.Raycast(component, component.Input.MousePosition, collisionGroups, collisionFilterGroupFlags);
+    }
 
     /// <summary>
     /// Performs a raycasting operation from the specified <see cref="CameraComponent"/>'s position through the specified normalised screen position,
@@ -38,7 +43,12 @@ public static class CameraComponentExtensions
     /// <param name="collisionFilterGroupFlags">Optional. The collision filter group flags to consider during the raycasting. Default is <see cref="CollisionFilterGroupFlags.DefaultFilter"/>.</param>
     /// <returns>A <see cref="HitResult"/> containing information about the hit result, including the hit location and other collision data.</returns>
     public static HitResult Raycast(this CameraComponent camera, ScriptComponent component, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
-        => Raycast(camera, component.GetSimulation(), screenPosition, collisionGroups, collisionFilterGroupFlags);
+    {
+        ArgumentNullException.ThrowIfNull(camera);
+        ArgumentNullException.ThrowIfNull(component);
+
+        return Raycast(camera, component.GetSimulation(), screenPosition, collisionGroups, collisionFilterGroupFlags);
+    }
 
     /// <summary>
     /// Performs a raycasting operation from the specified <see cref="CameraComponent"/>'s position through a specified screen position,
@@ -55,6 +65,9 @@ public static class CameraComponentExtensions
     /// </remarks>
     public static HitResult Raycast(this CameraComponent camera, Simulation simulation, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
     {
+        ArgumentNullException.ThrowIfNull(camera);
+        ArgumentNullException.ThrowIfNull(simulation);
+
         var ray = camera.ScreenToWorldRaySegment(screenPosition);
 
         // Perform the raycast from the near point to the far point and return the result

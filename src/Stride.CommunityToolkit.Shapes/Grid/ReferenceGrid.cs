@@ -140,12 +140,10 @@ public sealed class ReferenceGrid : SyncScript
     /// <inheritdoc/>
     public override void Start()
     {
-        var game = (Game)Game;
-
         // Batches of the grid's own. The world one is depth tested, so the scene hides the lines
         // behind it; the other draws over everything, after the post effects
-        var world = ShapeBatchExtensions.Create(game, depthTest: true, fill: null, afterPostEffects: false);
-        var overlay = ShapeBatchExtensions.Create(game, depthTest: false, fill: null, afterPostEffects: true);
+        var world = ShapeBatchExtensions.Create(Game, depthTest: true, fill: null, afterPostEffects: false);
+        var overlay = ShapeBatchExtensions.Create(Game, depthTest: false, fill: null, afterPostEffects: true);
 
         // Batches in one stage draw in the order they were made. The screen grid is a ruler laid
         // over the picture, so its batch sorts last whenever a game makes its own batches
@@ -153,10 +151,10 @@ public sealed class ReferenceGrid : SyncScript
 
         _canvas = new GridCanvas(this, world, overlay, Entity);
 
-        game.AddEntityTextRenderer();
+        Game.AddEntityTextRenderer();
 
-        _displayScale = DisplayScale.GetOrCreate(game);
-        _help = TextOverlay.GetOrCreate(game).AddSection("Grid", HelpLines);
+        _displayScale = DisplayScale.GetOrCreate(Game);
+        _help = TextOverlay.GetOrCreate(Game).AddSection("Grid", HelpLines);
     }
 
     /// <inheritdoc/>
@@ -170,16 +168,14 @@ public sealed class ReferenceGrid : SyncScript
     /// <inheritdoc/>
     public override void Cancel()
     {
-        var game = (Game)Game;
-
         if (_canvas is not null)
         {
-            game.RemoveShapeBatch(_canvas.World);
-            game.RemoveShapeBatch(_canvas.Overlay);
+            Game.RemoveShapeBatch(_canvas.World);
+            Game.RemoveShapeBatch(_canvas.Overlay);
             _canvas.RemoveLabels();
         }
 
-        if (_help is not null) TextOverlay.GetOrCreate(game).RemoveSection(_help);
+        if (_help is not null) TextOverlay.GetOrCreate(Game).RemoveSection(_help);
 
         _canvas = null;
         _help = null;

@@ -1,7 +1,5 @@
-using Hexa.NET.ImGui;
 using Stride.Core;
 using Stride.Engine;
-using System.Numerics;
 using static Hexa.NET.ImGui.ImGui;
 using static Stride.CommunityToolkit.ImGui.ImGuiExtension;
 using Guid = System.Guid;
@@ -13,8 +11,6 @@ namespace Stride.CommunityToolkit.ImGui.DebugTools;
 /// </summary>
 public class HierarchyView : BaseWindow
 {
-    private const float DummyWidth = 19;
-    private const float Indentation = DummyWidth + 8;
 
     // Ids rather than references, so the view never keeps an entity alive
     private readonly HashSet<Guid> _recursingThrough = [];
@@ -82,20 +78,13 @@ public class HierarchyView : BaseWindow
         {
             var recurse = canRecurse && _recursingThrough.Contains(source.Id);
 
-            if (!canRecurse)
-            {
-                Dummy(new Vector2(DummyWidth, 1));
-            }
-            else if (ArrowButton("", recurse ? ImGuiDir.Down : ImGuiDir.Right) && !_recursingThrough.Remove(source.Id))
-            {
-                _recursingThrough.Add(source.Id);
-            }
+            RecurseArrow(canRecurse, recurse, _recursingThrough, source.Id, Inspector.DummyWidth);
 
             SameLine();
 
             if (Button(label)) Inspector.FindFreeInspector(Services).Target = source;
 
-            using (UIndent(Indentation))
+            using (UIndent(Inspector.Indentation))
             {
                 if (recurse) DrawChildren(source);
             }

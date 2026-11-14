@@ -13,8 +13,10 @@ namespace Stride.CommunityToolkit.DebugShapes;
 [StructLayout(LayoutKind.Explicit)]
 internal struct DebugRenderable
 {
-    // The payload follows the type, the flags and the lifetime
-    private const int PayloadOffset = sizeof(byte) * 2 + sizeof(float);
+    // The type and the flags share the first four bytes with two of padding, the lifetime takes the next four,
+    // and the payload starts on the eighth, so the vectors and floats inside it are aligned
+    private const int LifetimeOffset = 4;
+    private const int PayloadOffset = 8;
 
     private DebugRenderable(DebugPrimitiveType type, DebugRenderableFlags flags, float lifetime)
     {
@@ -47,8 +49,23 @@ internal struct DebugRenderable
     [FieldOffset(sizeof(byte))]
     public DebugRenderableFlags Flags;
 
-    [FieldOffset(sizeof(byte) * 2)]
+    [FieldOffset(LifetimeOffset)]
     public float Lifetime;
+
+    /// <summary>The alpha of the shape's colour, whichever kind it is: what decides the opaque or the transparent pass.</summary>
+    internal readonly byte Alpha => Type switch
+    {
+        DebugPrimitiveType.Quad => QuadData.Color.A,
+        DebugPrimitiveType.Circle => CircleData.Color.A,
+        DebugPrimitiveType.Line => LineData.Color.A,
+        DebugPrimitiveType.Cube => CubeData.Color.A,
+        DebugPrimitiveType.Sphere => SphereData.Color.A,
+        DebugPrimitiveType.HalfSphere => HalfSphereData.Color.A,
+        DebugPrimitiveType.Capsule => CapsuleData.Color.A,
+        DebugPrimitiveType.Cylinder => CylinderData.Color.A,
+        DebugPrimitiveType.Cone => ConeData.Color.A,
+        _ => byte.MaxValue,
+    };
 
     [FieldOffset(PayloadOffset)]
     public Quad QuadData;

@@ -17,18 +17,19 @@ namespace Stride.CommunityToolkit.Charts;
 /// </remarks>
 public sealed class ChartTrajectory : ChartSeries
 {
-    private readonly TrailBuffer? _trail;
+    private readonly TrailBuffer _trail;
     private readonly GrowingPolyline? _ribbon;
     private readonly Entity? _entity;
+    private bool _ribbonStale;
     private Vector2[] _scratch = [];
     private Vector3? _previous;
     private bool _tipOnLine;
 
     /// <summary>How many points the trail holds.</summary>
-    public int Count => _trail?.Count ?? _ribbon!.Count;
+    public int Count => _trail.Count;
 
     /// <summary>The most points the trail can hold, set by <see cref="Chart.AddTrajectory"/>.</summary>
-    public int Capacity => _trail?.Capacity ?? _ribbon!.Capacity;
+    public int Capacity => _trail.Capacity;
 
     internal ChartTrajectory(Chart chart, string name, Color color, ChartSeriesStyle? style, int capacity, bool rollOver)
         : base(chart, name, color, style)
@@ -39,15 +40,14 @@ public sealed class ChartTrajectory : ChartSeries
             // a view-driven chart can widen its ranges after the trail starts
             var options = new PolylineOptions { Width = 1f, Color = color, EmissiveIntensity = Glow > 0f ? ChartRibbon.GlowEmissive : 1f };
 
-            _ribbon = new GrowingPolyline(chart.Game, capacity, options) { RollOver = rollOver };
+            _ribbon = new GrowingPolyline(chart.Game, capacity, options);
             _entity = new Entity(name) { PolylineMeshBuilder.CreateModel(chart.Game, _ribbon.Mesh, options) };
             _entity.Transform.Position = new Vector3(0f, 0f, Chart.CurveLayer);
             chart.Root.AddChild(_entity);
         }
-        else
-        {
-            _trail = new TrailBuffer(capacity) { RollOver = rollOver };
-        }
+
+        // The points are recorded once, for either kind of chart; a 3D chart's ribbon is built from them
+        _trail = new TrailBuffer(capacity) { RollOver = rollOver };
 
         IsEmpty = true;
     }
@@ -130,8 +130,8 @@ public sealed class ChartTrajectory : ChartSeries
     /// </summary>
     public void Clear()
     {
-        _trail?.Clear();
-        _ribbon?.Clear();
+        _trail.Clear();
+        _ribbonStale = true;
         _previous = null;
         _tipOnLine = false;
         IsEmpty = true;
@@ -148,12 +148,13 @@ public sealed class ChartTrajectory : ChartSeries
             // The ribbon's width is in chart units; one pixel's worth at the chart's centre, times the width
             var r = Chart.Options.Range;
             var centre = new Vector3((r.XMin + r.XMax) * 0.5f, (r.YMin + r.YMax) * 0.5f, (r.ZMin + r.ZMax) * 0.5f);
-            _ribbon.SetWidthScale(view.ToUnits(Width, centre));
+            _ribbon.Update(_trail.Items, view.ToUnits(Width, centre), _ribbonStale);
+            _ribbonStale = false;
 
             return;
         }
 
-        var items = _trail!.Items;
+        var items = _trail.Items;
 
         if (items.Length < 2)
             return;
@@ -194,15 +195,15 @@ public sealed class ChartTrajectory : ChartSeries
 
     private void Record(Vector3 point)
     {
-        _trail?.Add(point);
-        _ribbon?.Add(point);
+        _trail.Add(point);
+        _ribbonStale = true;
         IsEmpty = false;
     }
 
     private void BreakRun()
     {
-        _trail?.Break();
-        _ribbon?.Break();
+        _trail.Break();
+        _ribbonStale = true;
     }
 
     /// <summary>The chart's ranges as a clip box; a flat chart just leaves Z unbounded.</summary>
@@ -211,8 +212,8 @@ public sealed class ChartTrajectory : ChartSeries
         var o = Chart.Options;
 
         return new BoundingBox(
-            new Vector3(o.Range.XMin, o.Range.YMin, o.Range.ZMax > o.Range.ZMin ? o.Range.ZMin : -PolylineClipping.UnboundedZ),
-            new Vector3(o.Range.XMax, o.Range.YMax, o.Range.ZMax > o.Range.ZMin ? o.Range.ZMax : PolylineClipping.UnboundedZ));
+            new Vector3(o.Range.XMin, o.Range.YMin, Chart.Is3D ? o.Range.ZMin : -PolylineClipping.UnboundedZ),
+            new Vector3(o.Range.XMax, o.Range.YMax, Chart.Is3D ? o.Range.ZMax : PolylineClipping.UnboundedZ));
     }
 
     private bool IsInside(Vector3 point)
@@ -220,6 +221,6 @@ public sealed class ChartTrajectory : ChartSeries
         var o = Chart.Options;
 
         return point.X >= o.Range.XMin && point.X <= o.Range.XMax && point.Y >= o.Range.YMin && point.Y <= o.Range.YMax
-            && (o.Range.ZMax <= o.Range.ZMin || (point.Z >= o.Range.ZMin && point.Z <= o.Range.ZMax));
+            && (!Chart.Is3D || (point.Z >= o.Range.ZMin && point.Z <= o.Range.ZMax));
     }
 }

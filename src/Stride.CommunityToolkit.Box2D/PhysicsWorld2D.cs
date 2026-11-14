@@ -102,10 +102,10 @@ public sealed class PhysicsWorld2D : IDisposable
     /// Advances the simulation using a fixed-timestep accumulator strategy.
     /// </summary>
     /// <param name="deltaSeconds">Elapsed real time in seconds since the last call.</param>
-    /// <param name="perFixedStep">Optional callback invoked after each fixed step with the step duration.</param>
     /// <param name="beforeFixedStep">Optional callback invoked before each fixed step with the step duration.</param>
+    /// <param name="afterFixedStep">Optional callback invoked after each fixed step with the step duration.</param>
     /// <returns>The number of fixed steps performed this call.</returns>
-    public int Step(float deltaSeconds, Action<float>? perFixedStep = null, Action<float>? beforeFixedStep = null)
+    public int Step(float deltaSeconds, Action<float>? beforeFixedStep = null, Action<float>? afterFixedStep = null)
     {
         if (deltaSeconds <= 0f) return 0;
 
@@ -120,7 +120,7 @@ public sealed class PhysicsWorld2D : IDisposable
             b2World_Step(_worldId, fixedStep, Settings.SubStepCount);
             _accumulator -= fixedStep;
             performed++;
-            perFixedStep?.Invoke(fixedStep);
+            afterFixedStep?.Invoke(fixedStep);
         }
 
         // The cap stopped the catch-up: the rest of the debt is dropped, or the next frames would replay the
@@ -136,7 +136,7 @@ public sealed class PhysicsWorld2D : IDisposable
     /// </summary>
     public void Dispose()
     {
-        if (_worldId.index1 != 0)
+        if (b2World_IsValid(_worldId))
         {
             b2DestroyWorld(_worldId);
 

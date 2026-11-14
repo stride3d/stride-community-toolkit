@@ -69,6 +69,8 @@ public static class GameExtensions
     /// </remarks>
     public static IGame ShowColliders(this IGame game)
     {
+        ArgumentNullException.ThrowIfNull(game);
+
         var simulation = game.GetSceneSystem().SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
 
         if (simulation is not null) simulation.ColliderShapesRendering = true;

@@ -70,7 +70,7 @@ internal sealed class ChartLegend(IGame game, Chart chart) : IDisposable
             return;
 
         var o = chart.Options;
-        var z = 3f * Chart.LayerStep;
+        var z = Chart.OverlayLayer;
         var corner = new Vector3(o.Range.XMin, o.Range.YMax, z);
         var unitsPerPixel = view.UnitsPerPixel(corner);
 

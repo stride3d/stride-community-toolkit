@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Globalization;
 
 namespace Stride.CommunityToolkit.Shapes;
@@ -65,8 +66,12 @@ internal static class GridSteps
     /// <summary>A line's value as text, with the decimals its step needs and never a negative zero.</summary>
     internal static string Format(float value, float step)
     {
-        var text = value.ToString("F" + Decimals(step), CultureInfo.InvariantCulture);
+        var text = value.ToString(Formats[Math.Min(Decimals(step), Formats.Length - 1)], CultureInfo.InvariantCulture);
 
-        return text.TrimStart('-').Trim('0', '.').Length == 0 ? text.TrimStart('-') : text;
+        // "-0.00" is nothing but a sign, zeros and a point
+        return text.StartsWith('-') && !text.AsSpan(1).ContainsAnyExcept(ZeroOrPoint) ? text[1..] : text;
     }
+
+    private static readonly string[] Formats = ["F0", "F1", "F2", "F3", "F4", "F5", "F6", "F7"];
+    private static readonly SearchValues<char> ZeroOrPoint = SearchValues.Create("0.");
 }

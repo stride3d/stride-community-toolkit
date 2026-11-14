@@ -133,15 +133,13 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("NDepend", "ND1903:StructuresShouldBeImmutable", Target = "Stride.CommunityToolkit.Bullet:Stride.CommunityToolkit.Bullet.VertexTypePosTexNormColor", Justification = "GPU vertex layout with public fields, the same shape as Stride's own vertex structs.")]
 
 // --- DebugShapes: the tagged-union design -------------------------------------------------------
-// Renderable and DebugRenderable are tagged unions: one constructor per shape kind, all payloads at
-// the same FieldOffset. That is what lets a frame of debug shapes live in one flat list with no
-// allocation per shape.
-[assembly: SuppressMessage("NDepend", "ND1005:AvoidMethodsWithTooManyOverloads", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.Renderable", Scope = "deep", Justification = "One constructor per shape kind is the tagged union's discriminator.")]
+// DebugRenderable is a tagged union: one constructor per shape kind, all payloads at the same
+// FieldOffset. That is what lets a frame of debug shapes live in one flat list with no allocation
+// per shape.
 [assembly: SuppressMessage("NDepend", "ND1005:AvoidMethodsWithTooManyOverloads", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.DebugRenderable", Scope = "deep", Justification = "One constructor per shape kind is the tagged union's discriminator.")]
 // SizeOfInst sums the nine overlapping payloads; because they share one FieldOffset the real value
 // is only as large as the biggest of them. ImmediateDebugRenderObject is a genuinely wide render
 // object, but exactly four of them exist (solid/wireframe x opaque/transparent).
-[assembly: SuppressMessage("NDepend", "ND1309:InstancesSizeShouldntBeTooBig", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.Renderable", Justification = "Explicit-layout union: the payloads overlap, so the instance is the size of its largest member.")]
 [assembly: SuppressMessage("NDepend", "ND1309:InstancesSizeShouldntBeTooBig", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.DebugRenderable", Justification = "Explicit-layout union: the payloads overlap, so the instance is the size of its largest member.")]
 [assembly: SuppressMessage("NDepend", "ND1309:InstancesSizeShouldntBeTooBig", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderObject", Justification = "Holds six per-shape counter structs; four instances exist for the whole system.")]
 // The byte width is load-bearing: DebugPrimitiveType sits at FieldOffset(0) and the payloads start

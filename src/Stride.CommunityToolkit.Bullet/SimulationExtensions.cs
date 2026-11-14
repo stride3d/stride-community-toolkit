@@ -24,6 +24,9 @@ public static class SimulationExtensions
     /// </remarks>
     public static HitResult Raycast(this Simulation simulation, Entity entity, float length = 1, CollisionFilterGroupFlags collisionFlags = CollisionFilterGroupFlags.AllFilter, EFlags eFlags = EFlags.None)
     {
+        ArgumentNullException.ThrowIfNull(simulation);
+        ArgumentNullException.ThrowIfNull(entity);
+
         var start = entity.Transform.WorldMatrix.TranslationVector;
         var end = start + entity.Transform.WorldMatrix.Forward * length;
 
@@ -42,6 +45,9 @@ public static class SimulationExtensions
     /// <returns>A <see cref="HitResult"/> that contains information about the first object hit by the ray, or an empty result if nothing is hit.</returns>
     public static HitResult Raycast(this Simulation simulation, Entity entity, Vector3 direction, float length = 1, CollisionFilterGroupFlags collisionFlags = CollisionFilterGroupFlags.AllFilter, EFlags eFlags = EFlags.None)
     {
+        ArgumentNullException.ThrowIfNull(simulation);
+        ArgumentNullException.ThrowIfNull(entity);
+
         var start = entity.Transform.WorldMatrix.TranslationVector;
 
         return simulation.Raycast(start, start + direction * length, filterFlags: collisionFlags, eFlags: eFlags);

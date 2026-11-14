@@ -74,7 +74,6 @@ public class PerfMonitor : BaseWindow
     private GraphPoint[] _graph = new GraphPoint[256];
     private GraphPoint Average => _graphAggregated / _graph.Length;
 
-    private bool _windowSizeApplied;
     private bool _profiling;
     private PerfSampler? _frame;
 
@@ -101,7 +100,7 @@ public class PerfMonitor : BaseWindow
     protected override Vector2? WindowPos => new Vector2(1f, 1f);
 
     /// <inheritdoc />
-    protected override Vector2? WindowSize => _windowSizeApplied ? null : new Vector2(420f, 240f);
+    protected override Vector2? WindowSize => new Vector2(420f, 240f);
 
     private Vector2 GetGraphSize() => new(GetContentRegionAvail().X, GraphHeight * Scale);
 
@@ -202,9 +201,6 @@ public class PerfMonitor : BaseWindow
         DrawFrameTimeGraph();
         DrawMemoryAndDrawCallGraphs();
         DrawFrameSection();
-
-        // Leave it as dynamic after first set
-        _windowSizeApplied = true;
     }
 
     private void DrawControls()
@@ -295,7 +291,11 @@ public class PerfMonitor : BaseWindow
     {
         foreach (var (thread, collection) in _cpuSamples)
         {
-            if (CollapsingHeader(thread.Name ?? "unnamed")) DrawStrip(collection.Displayed, _cpuFrame.start, _cpuFrame.duration);
+            // One id per thread: two unnamed threads share a header label, and every strip shares this line
+            using (ID(thread.ManagedThreadId))
+            {
+                if (CollapsingHeader(thread.Name ?? "unnamed")) DrawStrip(collection.Displayed, _cpuFrame.start, _cpuFrame.duration);
+            }
         }
     }
 

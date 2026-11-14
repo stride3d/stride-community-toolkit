@@ -144,12 +144,12 @@ public sealed class ScreenFade : SyncScript
             var left = _phase == Phase.In ? size.X - width : 0f;
 
             batch.Fill.Set(Color, 1f);
-            batch.DrawRectangle(new Vector3(left + width * 0.5f, size.Y * 0.5f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(width, size.Y), Color);
+            batch.DrawRectangle(new Vector2(left + width * 0.5f, size.Y * 0.5f), new Vector2(width, size.Y), Color);
         }
         else
         {
             batch.Fill.Set(Color, Covered);
-            batch.DrawRectangle(new Vector3(size * 0.5f, 0f), Vector3.UnitX, Vector3.UnitY, size, Color);
+            batch.DrawRectangle(size * 0.5f, size, Color);
         }
 
         batch.Fill.Set(null, 1f);

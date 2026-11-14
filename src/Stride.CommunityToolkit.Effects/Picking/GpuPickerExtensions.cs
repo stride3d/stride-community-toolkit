@@ -64,6 +64,6 @@ public static class GpuPickerExtensions
 
         compositor.AddSceneRenderer(renderer);
 
-        return new GpuPicker(compositor, meshFeature, stage, feature, selector, renderer);
+        return new GpuPicker(compositor, meshFeature, feature, selector, renderer);
     }
 }

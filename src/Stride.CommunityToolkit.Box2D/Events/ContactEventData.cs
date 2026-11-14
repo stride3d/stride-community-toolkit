@@ -2,6 +2,7 @@ using Box2D.NET;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using static Box2D.NET.B2Shapes;
+using static Box2D.NET.B2Worlds;
 
 namespace Stride.CommunityToolkit.Box2D;
 
@@ -31,9 +32,9 @@ public readonly record struct ContactEventData(
     Vector2 Normal,
     float ApproachSpeed)
 {
-    /// <summary>The body the first shape belongs to.</summary>
-    public B2BodyId BodyIdA => b2Shape_GetBody(ShapeIdA);
+    /// <summary>The body the first shape belongs to; the default id when an end event names a shape destroyed in the step.</summary>
+    public B2BodyId BodyIdA => b2Shape_IsValid(ShapeIdA) ? b2Shape_GetBody(ShapeIdA) : default;
 
-    /// <summary>The body the second shape belongs to.</summary>
-    public B2BodyId BodyIdB => b2Shape_GetBody(ShapeIdB);
+    /// <summary>The body the second shape belongs to; the default id when an end event names a shape destroyed in the step.</summary>
+    public B2BodyId BodyIdB => b2Shape_IsValid(ShapeIdB) ? b2Shape_GetBody(ShapeIdB) : default;
 }

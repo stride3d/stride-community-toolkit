@@ -69,9 +69,9 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
         var o = chart.Options;
 
         // Each axis sits on the other coordinates' zero, or on the nearest edge when zero is out of range
-        var axisY = Math.Clamp(0f, o.Range.YMin, o.Range.YMax);
-        var axisX = Math.Clamp(0f, o.Range.XMin, o.Range.XMax);
-        var axisZ = chart.Is3D ? Math.Clamp(0f, o.Range.ZMin, o.Range.ZMax) : 0f;
+        var axisY = chart.AxisOrigin().Y;
+        var axisX = chart.AxisOrigin().X;
+        var axisZ = chart.AxisOrigin().Z;
 
         batch.DrawPixelLine(view.ToWorld(new Vector3(o.Range.XMin, axisY, axisZ)), view.ToWorld(new Vector3(o.Range.XMax, axisY, axisZ)), o.Axes.Width, o.Axes.XColor);
         batch.DrawPixelLine(view.ToWorld(new Vector3(axisX, o.Range.YMin, axisZ)), view.ToWorld(new Vector3(axisX, o.Range.YMax, axisZ)), o.Axes.Width, o.Axes.YColor);
@@ -82,14 +82,14 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
         }
 
         // Ticks are centred across their axis; drawn after it, they blend on top of it
-        foreach (var x in TickValues(o.Range.XMin, o.Range.XMax, o.Range.TickStep))
+        foreach (var x in TickRange.Of(o.Range.XMin, o.Range.XMax, o.Range.TickStep))
         {
             var at = new Vector3(x, axisY, axisZ);
             var half = view.ToUnits(o.Axes.TickLength, at) * 0.5f;
             batch.DrawPixelLine(view.ToWorld(at with { Y = axisY - half }), view.ToWorld(at with { Y = axisY + half }), o.Axes.TickWidth, o.Axes.XColor);
         }
 
-        foreach (var y in TickValues(o.Range.YMin, o.Range.YMax, o.Range.TickStep))
+        foreach (var y in TickRange.Of(o.Range.YMin, o.Range.YMax, o.Range.TickStep))
         {
             var at = new Vector3(axisX, y, axisZ);
             var half = view.ToUnits(o.Axes.TickLength, at) * 0.5f;
@@ -100,7 +100,7 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
             return;
 
         // Z ticks are little X-direction dashes along the Z axis
-        foreach (var z in TickValues(o.Range.ZMin, o.Range.ZMax, o.Range.TickStep))
+        foreach (var z in TickRange.Of(o.Range.ZMin, o.Range.ZMax, o.Range.TickStep))
         {
             var at = new Vector3(axisX, axisY, z);
             var half = view.ToUnits(o.Axes.TickLength, at) * 0.5f;
@@ -111,9 +111,9 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
     private void BuildLabels()
     {
         var o = chart.Options;
-        var axisY = Math.Clamp(0f, o.Range.YMin, o.Range.YMax);
-        var axisX = Math.Clamp(0f, o.Range.XMin, o.Range.XMax);
-        var axisZ = chart.Is3D ? Math.Clamp(0f, o.Range.ZMin, o.Range.ZMax) : 0f;
+        var axisY = chart.AxisOrigin().Y;
+        var axisX = chart.AxisOrigin().X;
+        var axisZ = chart.AxisOrigin().Z;
 
         // Half the tick plus a few pixels of breathing room, in the direction the anchor pushes the text:
         // below an x tick, left of a y or z tick
@@ -121,7 +121,7 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
         var below = new Vector2(0f, gap);
         var left = new Vector2(-gap, 0f);
 
-        foreach (var x in TickValues(o.Range.XMin, o.Range.XMax, o.Range.TickStep))
+        foreach (var x in TickRange.Of(o.Range.XMin, o.Range.XMax, o.Range.TickStep))
         {
             // The origin is labelled once, by the y axis, so the two "0"s do not overlap
             if (IsZero(x) && IsZero(axisY))
@@ -130,7 +130,7 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
             Place(Format(x), new Vector3(x, axisY, axisZ), Anchor.TopCenter, below);
         }
 
-        foreach (var y in TickValues(o.Range.YMin, o.Range.YMax, o.Range.TickStep))
+        foreach (var y in TickRange.Of(o.Range.YMin, o.Range.YMax, o.Range.TickStep))
         {
             Place(Format(y), new Vector3(axisX, y, axisZ), Anchor.MiddleRight, left);
         }
@@ -138,7 +138,7 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
         if (!chart.Is3D)
             return;
 
-        foreach (var z in TickValues(o.Range.ZMin, o.Range.ZMax, o.Range.TickStep))
+        foreach (var z in TickRange.Of(o.Range.ZMin, o.Range.ZMax, o.Range.TickStep))
         {
             // The origin is already labelled by the y axis
             if (IsZero(z) && IsZero(axisY))
@@ -156,11 +156,11 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
     private void BuildTitles()
     {
         var o = chart.Options;
-        var axisY = Math.Clamp(0f, o.Range.YMin, o.Range.YMax);
-        var axisX = Math.Clamp(0f, o.Range.XMin, o.Range.XMax);
+        var axisY = chart.AxisOrigin().Y;
+        var axisX = chart.AxisOrigin().X;
 
         // The same depth the axes and their tick labels are drawn at, so the titles sit on the axes
-        var axisZ = chart.Is3D ? Math.Clamp(0f, o.Range.ZMin, o.Range.ZMax) : 0f;
+        var axisZ = chart.AxisOrigin().Z;
 
         if (o.Title.Text is { Length: > 0 } title)
         {
@@ -218,7 +218,6 @@ internal sealed class ChartScaffold(IGame game, Chart chart) : IDisposable
 
     private string Format(float value) => value.ToString(chart.Options.Labels.Format, CultureInfo.InvariantCulture);
 
-    private static TickRange TickValues(float min, float max, float step) => TickRange.Of(min, max, step);
-
+    // A tick is a multiple of the step, so one that is zero is zero to within rounding, not exactly
     private static bool IsZero(float value) => MathF.Abs(value) < 1e-5f;
 }

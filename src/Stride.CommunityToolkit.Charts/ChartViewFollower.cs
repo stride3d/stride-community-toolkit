@@ -22,8 +22,10 @@ namespace Stride.CommunityToolkit.Charts;
 /// <param name="chart">The chart whose range follows the camera.</param>
 internal sealed class ChartViewFollower(IGame game, Chart chart)
 {
-    private Vector4? _lastRange;
+    private ViewRect? _lastRange;
     private float _lastPixelHeight;
+
+    private readonly record struct ViewRect(float Left, float Right, float Bottom, float Top);
 
     /// <summary>
     /// Writes the camera's visible rectangle into the chart's range if the view has meaningfully changed.
@@ -47,7 +49,7 @@ internal sealed class ChartViewFollower(IGame game, Chart chart)
         var height = camera.OrthographicSize;
         var width = height * aspect;
 
-        var range = new Vector4(
+        var range = new ViewRect(
             centre.X - width * 0.5f,
             centre.X + width * 0.5f,
             centre.Y - height * 0.5f,
@@ -58,8 +60,8 @@ internal sealed class ChartViewFollower(IGame game, Chart chart)
         {
             var threshold = height * 0.005f;
 
-            if (MathF.Abs(range.X - last.X) < threshold && MathF.Abs(range.Y - last.Y) < threshold
-                && MathF.Abs(range.Z - last.Z) < threshold && MathF.Abs(range.W - last.W) < threshold)
+            if (MathF.Abs(range.Left - last.Left) < threshold && MathF.Abs(range.Right - last.Right) < threshold
+                && MathF.Abs(range.Bottom - last.Bottom) < threshold && MathF.Abs(range.Top - last.Top) < threshold)
             {
                 return;
             }
@@ -77,9 +79,9 @@ internal sealed class ChartViewFollower(IGame game, Chart chart)
         var r = chart.Options.Range;
         r.TickStep = step;
         r.MinorDivisions = mantissa is > 1.5f and < 3f ? 4 : 5;
-        r.XMin = range.X;
-        r.XMax = range.Y;
-        r.YMin = range.Z;
-        r.YMax = range.W;
+        r.XMin = range.Left;
+        r.XMax = range.Right;
+        r.YMin = range.Bottom;
+        r.YMax = range.Top;
     }
 }

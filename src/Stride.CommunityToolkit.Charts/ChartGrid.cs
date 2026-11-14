@@ -33,10 +33,10 @@ internal sealed class ChartGrid(Chart chart)
 
             if (o.Range.MinorDivisions > 1)
             {
-                DrawLines(batch, in view, plane, new Weight(step / o.Range.MinorDivisions, step, o.Grid.MinorColor, o.Grid.MinorWidth, -2f * Chart.LayerStep));
+                DrawLines(batch, in view, plane, new Weight(step / o.Range.MinorDivisions, step, o.Grid.MinorColor, o.Grid.MinorWidth, Chart.MinorGridLayer));
             }
 
-            DrawLines(batch, in view, plane, new Weight(step, 0f, o.Grid.Color, o.Grid.Width, -Chart.LayerStep));
+            DrawLines(batch, in view, plane, new Weight(step, 0f, o.Grid.Color, o.Grid.Width, Chart.GridLayer));
         }
     }
 
@@ -49,10 +49,7 @@ internal sealed class ChartGrid(Chart chart)
         var r = chart.Options.Range;
 
         // The plane sits on the third coordinate's zero, or its nearest edge, nudged behind the axes
-        var anchor = new Vector3(
-            Math.Clamp(0f, r.XMin, r.XMax) + w.Offset,
-            Math.Clamp(0f, r.YMin, r.YMax) + w.Offset,
-            (chart.Is3D ? Math.Clamp(0f, r.ZMin, r.ZMax) : 0f) + w.Offset);
+        var anchor = chart.AxisOrigin() + new Vector3(w.Offset);
 
         // Each case: first the lines across one spanned axis, then across the other, at the anchor on the
         // third

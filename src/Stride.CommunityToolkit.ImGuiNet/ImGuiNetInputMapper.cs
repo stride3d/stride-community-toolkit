@@ -26,8 +26,13 @@ internal static class ImGuiNetInputMapper
             io.MouseDown[2] = inputManager.IsMouseButtonDown(MouseButton.Middle);
         }
 
-        foreach (var inputEvent in inputManager.Events)
+        // By index: the list is an interface here, and a foreach over it boxes an enumerator every frame
+        var events = inputManager.Events;
+
+        for (var i = 0; i < events.Count; i++)
         {
+            var inputEvent = events[i];
+
             switch (inputEvent)
             {
                 case TextInputEvent textEvent when textEvent.Text != "\t":

@@ -1,10 +1,12 @@
 using Hexa.NET.ImGui;
+using Stride.CommunityToolkit.Input;
 using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Input;
 using Stride.Rendering;
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using static Hexa.NET.ImGui.ImGui;
@@ -27,7 +29,7 @@ public class ImGuiSystem : GameSystemBase
     private const bool Is32BitIndices = false;
 
     // The Stride keys with an ImGui counterpart; everything else only reaches ImGui as text
-    private static readonly Dictionary<Keys, ImGuiKey> _keys = new()
+    private static readonly FrozenDictionary<Keys, ImGuiKey> _keys = new Dictionary<Keys, ImGuiKey>
     {
         [Keys.Tab] = ImGuiKey.Tab,
         [Keys.Left] = ImGuiKey.LeftArrow,
@@ -49,7 +51,7 @@ public class ImGuiSystem : GameSystemBase
         [Keys.X] = ImGuiKey.X,
         [Keys.Y] = ImGuiKey.Y,
         [Keys.Z] = ImGuiKey.Z,
-    };
+    }.ToFrozenDictionary();
 
     /// <summary>
     /// The ImGui context this system created and renders. Pass it to add-on libraries (ImNodes, ImPlot) that need to
@@ -82,7 +84,6 @@ public class ImGuiSystem : GameSystemBase
     private IndexBufferBinding _indexBinding;
     private EffectInstance _shader;
 
-    private bool _isFirstFrame = true;
 
     /// <summary>
     /// Whether <see cref="Hexa.NET.ImGui.ImGui.NewFrame"/> has been called without a matching
@@ -210,9 +211,10 @@ public class ImGuiSystem : GameSystemBase
     public override void Update(GameTime gameTime)
     {
         // The first frame has no elapsed time worth reporting
-        var deltaTime = _isFirstFrame ? 1 / 60f : (float)gameTime.Elapsed.TotalSeconds;
+        // ImGui asserts on a zero step, which the first frame and any zero-elapsed frame have
+        var elapsed = (float)gameTime.Elapsed.TotalSeconds;
+        var deltaTime = elapsed > 0f ? elapsed : 1f / 60f;
 
-        _isFirstFrame = false;
 
         var surfaceSize = _game.Window.ClientBounds;
 
@@ -254,8 +256,13 @@ public class ImGuiSystem : GameSystemBase
     /// </summary>
     private void ForwardInputEvents()
     {
-        foreach (var ev in _input.Events)
+        // By index: the list is an interface here, and a foreach over it boxes an enumerator every frame
+        var events = _input.Events;
+
+        for (var i = 0; i < events.Count; i++)
         {
+            var ev = events[i];
+
             switch (ev)
             {
                 case TextInputEvent tev when tev.Text != "\t":
@@ -278,9 +285,9 @@ public class ImGuiSystem : GameSystemBase
     /// <summary>Forwards the modifier key states to ImGui.</summary>
     private void ForwardModifiers()
     {
-        _io.AddKeyEvent(ImGuiKey.ModAlt, _input.IsKeyDown(Keys.LeftAlt) || _input.IsKeyDown(Keys.RightAlt));
-        _io.AddKeyEvent(ImGuiKey.ModShift, _input.IsKeyDown(Keys.LeftShift) || _input.IsKeyDown(Keys.RightShift));
-        _io.AddKeyEvent(ImGuiKey.ModCtrl, _input.IsKeyDown(Keys.LeftCtrl) || _input.IsKeyDown(Keys.RightCtrl));
+        _io.AddKeyEvent(ImGuiKey.ModAlt, _input.IsAltDown());
+        _io.AddKeyEvent(ImGuiKey.ModShift, _input.IsShiftDown());
+        _io.AddKeyEvent(ImGuiKey.ModCtrl, _input.IsCtrlDown());
         _io.AddKeyEvent(ImGuiKey.ModSuper, _input.IsKeyDown(Keys.LeftWin) || _input.IsKeyDown(Keys.RightWin));
     }
 

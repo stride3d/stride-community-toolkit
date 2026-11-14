@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
+using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -111,8 +112,8 @@ public static class ShapeBatchExtensions
 
         foreach (var stage in renderSystem.RenderStages)
         {
-            if (stage.Name == "Transparent") transparentStage = stage;
-            else if (stage.Name == "UiStage") uiStage = stage;
+            if (stage.Name == RenderStageNames.Transparent) transparentStage = stage;
+            else if (stage.Name == RenderStageNames.Ui) uiStage = stage;
         }
 
         if (transparentStage is null)

@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using static Hexa.NET.ImGui.ImGui;
 using static Stride.CommunityToolkit.ImGui.ImGuiExtension;
 
@@ -76,7 +75,7 @@ internal static class InspectorValueDrawers
                 // A flag is toggled; a plain value replaces the whole thing
                 if (flags) compValue = selected ? fieldValue & ~compValue : fieldValue | compValue;
 
-                value = GetEnumValueFromBits(compValue, value!.GetType());
+                value = Enum.ToObject(value!.GetType(), compValue);
                 valueChanged = true;
             }
 
@@ -102,25 +101,6 @@ internal static class InspectorValueDrawers
             TypeCode.Byte => (byte)enumValue,
             TypeCode.SByte => (ulong)(sbyte)enumValue,
             _ => throw new ArgumentException(valueType.ToString()),
-        };
-    }
-
-    [SuppressMessage("Performance", "CA1859:Use concrete types when possible for improved performance", Justification = "The method exists to box an arbitrary enum's underlying value; there is no single concrete return type.")]
-    private static object GetEnumValueFromBits(ulong bits, Type enumType)
-    {
-        if (!enumType.IsEnum) throw new ArgumentException(enumType.ToString());
-
-        return Type.GetTypeCode(Enum.GetUnderlyingType(enumType)) switch
-        {
-            TypeCode.Int32 => (int)bits,
-            TypeCode.UInt32 => (uint)bits,
-            TypeCode.Int64 => (long)bits,
-            TypeCode.UInt64 => bits,
-            TypeCode.Int16 => (short)bits,
-            TypeCode.UInt16 => (ushort)bits,
-            TypeCode.Byte => (byte)bits,
-            TypeCode.SByte => (sbyte)bits,
-            _ => throw new ArgumentException(enumType.ToString()),
         };
     }
 

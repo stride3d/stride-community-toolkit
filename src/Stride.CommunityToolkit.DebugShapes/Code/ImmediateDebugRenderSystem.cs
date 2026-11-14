@@ -55,7 +55,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     /// </summary>
     /// <param name="registry">The service registry.</param>
     /// <param name="renderGroup">The render group to use for the debug render objects.</param>
-    public ImmediateDebugRenderSystem(IServiceRegistry registry, RenderGroup renderGroup = RenderGroup.Group31) : base(registry)
+    public ImmediateDebugRenderSystem(IServiceRegistry registry, RenderGroup renderGroup = RenderGroup.Group1) : base(registry)
     {
         Enabled = true;
         Visible = Platform.IsRunningDebugAssembly;
@@ -358,8 +358,8 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         _transparentSolidPrimitiveRenderer!.RenderGroup = RenderGroup;
         _transparentWireframePrimitiveRenderer!.RenderGroup = RenderGroup;
 
-        HandlePrimitives(gameTime, _renderMessages);
-        HandlePrimitives(gameTime, _renderMessagesWithLifetime);
+        HandlePrimitives(_renderMessages);
+        HandlePrimitives(_renderMessagesWithLifetime);
 
         var delta = (float)gameTime.Elapsed.TotalSeconds;
 
@@ -377,10 +377,10 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     }
 
     /// <summary>
-    /// Hands one frame's queued shapes to the render objects: each message carries its own shape kind
-    /// in a tagged union, so the loop reads the tag and forwards the matching payload.
+    /// Hands one frame's queued shapes to the render objects: each message goes, as it is, to the one of the
+    /// four that draws its fill and its opacity.
     /// </summary>
-    private void HandlePrimitives(GameTime gameTime, List<DebugRenderable> messages)
+    private void HandlePrimitives(List<DebugRenderable> messages)
     {
         // Four render objects exist so that one pipeline state covers a whole batch: solid or wireframe,
         // opaque or transparent. A shape picks its own by its fill flag and its colour's alpha.
@@ -403,36 +403,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
             ref var msg = ref span[i];
             var useDepthTest = (msg.Flags & DebugRenderableFlags.DepthTest) != 0;
 
-            switch (msg.Type)
-            {
-                case DebugPrimitiveType.Quad:
-                    ChooseRenderer(msg.Flags, msg.QuadData.Color.A).DrawQuad(in msg.QuadData.Position, in msg.QuadData.Size, in msg.QuadData.Rotation, in msg.QuadData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Circle:
-                    ChooseRenderer(msg.Flags, msg.CircleData.Color.A).DrawCircle(in msg.CircleData.Position, msg.CircleData.Radius, in msg.CircleData.Rotation, in msg.CircleData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Line:
-                    ChooseRenderer(msg.Flags, msg.LineData.Color.A).DrawLine(in msg.LineData.Start, in msg.LineData.End, in msg.LineData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Cube:
-                    ChooseRenderer(msg.Flags, msg.CubeData.Color.A).DrawCube(in msg.CubeData.Center, in msg.CubeData.Size, in msg.CubeData.Rotation, in msg.CubeData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Sphere:
-                    ChooseRenderer(msg.Flags, msg.SphereData.Color.A).DrawSphere(in msg.SphereData.Position, msg.SphereData.Radius, in msg.SphereData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.HalfSphere:
-                    ChooseRenderer(msg.Flags, msg.HalfSphereData.Color.A).DrawHalfSphere(in msg.HalfSphereData.Position, msg.HalfSphereData.Radius, in msg.HalfSphereData.Rotation, in msg.HalfSphereData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Capsule:
-                    ChooseRenderer(msg.Flags, msg.CapsuleData.Color.A).DrawCapsule(in msg.CapsuleData.Position, msg.CapsuleData.Height, msg.CapsuleData.Radius, in msg.CapsuleData.Rotation, in msg.CapsuleData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Cylinder:
-                    ChooseRenderer(msg.Flags, msg.CylinderData.Color.A).DrawCylinder(in msg.CylinderData.Position, msg.CylinderData.Height, msg.CylinderData.Radius, in msg.CylinderData.Rotation, in msg.CylinderData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Cone:
-                    ChooseRenderer(msg.Flags, msg.ConeData.Color.A).DrawCone(in msg.ConeData.Position, msg.ConeData.Height, msg.ConeData.Radius, in msg.ConeData.Rotation, in msg.ConeData.Color, depthTest: useDepthTest);
-                    break;
-            }
+            ChooseRenderer(msg.Flags, msg.Alpha).Push(in msg, useDepthTest);
         }
     }
 }

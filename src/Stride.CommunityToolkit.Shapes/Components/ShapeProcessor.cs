@@ -145,7 +145,7 @@ public sealed class ShapeProcessor : EntityProcessor<ShapeComponent>
         var axisY = new Vector3(world.M21, world.M22, world.M23);
         var scale = axisX.Length();
 
-        if (scale <= float.Epsilon) return;
+        if (scale < MathUtil.ZeroTolerance) return;
 
         batch.DrawSolidPolygon(vertices, position, axisX, axisY, component.Color, component.Radius, scale);
     }

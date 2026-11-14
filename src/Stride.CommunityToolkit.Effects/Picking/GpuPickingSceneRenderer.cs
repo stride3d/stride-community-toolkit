@@ -79,8 +79,13 @@ public sealed class GpuPickingSceneRenderer : SceneCameraRenderer
     {
         var slot = _frame % Ring;
 
-        // The slot written two frames ago is read before this frame's request goes into its own
-        ReadBack(drawContext, (slot + 1) % Ring);
+        // Oldest first, so results arrive in the order they were asked for. This frame's slot was written three
+        // frames ago and read a frame ago; if its pixel was not ready then and the slot is about to be reused, it
+        // is waited for rather than dropped, or a continuous pick on a GPU that runs behind would never deliver
+        ReadBack(drawContext, slot, wait: Pending is not null);
+
+        // The slot written two frames ago, read without waiting: the GPU has almost always finished by now
+        ReadBack(drawContext, (slot + 1) % Ring, wait: false);
 
         if (Pending is { } position && ResolveCamera(context) is not null)
         {
@@ -128,13 +133,14 @@ public sealed class GpuPickingSceneRenderer : SceneCameraRenderer
         _inFlight[slot] = new Request(position, x, y, width, height, RenderView.ViewProjection);
     }
 
-    private void ReadBack(RenderDrawContext drawContext, int slot)
+    private void ReadBack(RenderDrawContext drawContext, int slot, bool wait)
     {
         if (_inFlight[slot] is not { } request || _staging[slot] is not { } staging) return;
 
-        _inFlight[slot] = null;
+        // A pixel that is not ready stays in flight for the next read of its slot
+        if (!staging.GetData(drawContext.CommandList, _pixel, doNotWait: !wait)) return;
 
-        if (!staging.GetData(drawContext.CommandList, _pixel)) return;
+        _inFlight[slot] = null;
 
         Result = Decode(request, _pixel[0]);
     }

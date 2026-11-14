@@ -79,9 +79,7 @@ public class CollidableGizmoScript : SyncScript
     {
         _gizmos.Clear();
 
-        var scene = Entity?.Scene ?? SceneSystem?.SceneInstance?.RootScene;
-
-        if (scene is null) return;
+        var scene = Entity.Scene;
 
         foreach (var component in scene.GetComponentsInScene<CollidableComponent>(includeChildScenes: false))
         {

@@ -89,8 +89,11 @@ internal sealed class ChartCursor : IDisposable
             return;
         }
 
+        // The same point as last frame keeps its label: formatting it is two strings a frame for nothing
+        if (Position == local) return;
+
         Position = local;
-        _label.Position = new Vector3(local.X, local.Y, 3f * Chart.LayerStep);
+        _label.Position = new Vector3(local.X, local.Y, Chart.OverlayLayer);
         _label.Text = $"x = {local.X.ToString(o.Cursor.Format, CultureInfo.InvariantCulture)}  y = {local.Y.ToString(o.Cursor.Format, CultureInfo.InvariantCulture)}";
         _label.Visible = true;
     }
@@ -110,7 +113,7 @@ internal sealed class ChartCursor : IDisposable
 
         batch.StrokeWidth = RingWidth;
         batch.Glow.Set(o.Cursor.Glow);
-        batch.DrawPixelRing(view.ToWorld(new Vector3(local.X, local.Y, 3f * Chart.LayerStep)), o.Cursor.Radius, o.Labels.Color);
+        batch.DrawPixelRing(view.ToWorld(new Vector3(local.X, local.Y, Chart.OverlayLayer)), o.Cursor.Radius, o.Labels.Color);
 
         batch.StrokeWidth = stroke;
         batch.Glow.Set(glowWidth, glowColor);

@@ -5,7 +5,7 @@ namespace Stride.CommunityToolkit.DebugShapes;
 /// <summary>
 /// Holds generated primitive meshes and computed offsets to pack them into shared vertex and index buffers.
 /// </summary>
-internal sealed class PrimitiveGeometryCache
+internal sealed class PrimitiveGeometry
 {
     private const float DefaultCircleRadius = 0.5f;
     private const float DefaultSphereRadius = 0.5f;
@@ -24,13 +24,13 @@ internal sealed class PrimitiveGeometryCache
     private const int CylinderTesselation = 16;
     private const int ConeTesselation = 16;
 
-    private (VertexPositionTexture[] Vertices, int[] Indices) _circle = default!;
-    private (VertexPositionTexture[] Vertices, int[] Indices) _plane = default!;
-    private (VertexPositionTexture[] Vertices, int[] Indices) _sphere = default!;
-    private (VertexPositionTexture[] Vertices, int[] Indices) _cube = default!;
-    private (VertexPositionTexture[] Vertices, int[] Indices) _capsule = default!;
-    private (VertexPositionTexture[] Vertices, int[] Indices) _cylinder = default!;
-    private (VertexPositionTexture[] Vertices, int[] Indices) _cone = default!;
+    private (VertexPositionTexture[] Vertices, int[] Indices) _circle;
+    private (VertexPositionTexture[] Vertices, int[] Indices) _plane;
+    private (VertexPositionTexture[] Vertices, int[] Indices) _sphere;
+    private (VertexPositionTexture[] Vertices, int[] Indices) _cube;
+    private (VertexPositionTexture[] Vertices, int[] Indices) _capsule;
+    private (VertexPositionTexture[] Vertices, int[] Indices) _cylinder;
+    private (VertexPositionTexture[] Vertices, int[] Indices) _cone;
 
     /// <summary>
     /// Vertex offsets into the packed vertex buffer for each primitive type.
@@ -50,7 +50,10 @@ internal sealed class PrimitiveGeometryCache
     /// <summary>
     /// Builds geometry primitives and returns a packed vertex array while computing vertex offsets.
     /// </summary>
-    internal VertexPositionTexture[] BuildVertexData()
+    /// <summary>The vertices and the indices of every unit primitive, in one buffer each; fills both offset tables.</summary>
+    internal (VertexPositionTexture[] Vertices, int[] Indices) Build() => (BuildVertexData(), BuildIndexData());
+
+    private VertexPositionTexture[] BuildVertexData()
     {
         _circle = ImmediateDebugPrimitives.GenerateCircle(DefaultCircleRadius, CircleTesselation);
         _plane = ImmediateDebugPrimitives.GenerateQuad(DefaultPlaneSize, DefaultPlaneSize);
@@ -91,7 +94,8 @@ internal sealed class PrimitiveGeometryCache
     /// <summary>
     /// Builds a packed index array and computes index offsets for each primitive.
     /// </summary>
-    internal int[] BuildIndexData()
+    // After the vertices: the index arrays are the ones the vertex pass generated
+    private int[] BuildIndexData()
     {
         var indexData = new int[
             _circle.Indices.Length +

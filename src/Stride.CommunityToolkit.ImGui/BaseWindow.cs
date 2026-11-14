@@ -15,6 +15,7 @@ public abstract class BaseWindow : GameSystem
 {
     // The next number for each window type, so two windows of one type get distinct titles
     private static readonly Dictionary<string, uint> _windowId = [];
+    private static readonly Lock _windowIdLock = new();
 
     private readonly string _uniqueName;
     private ImGuiSystem? _imGui;
@@ -60,7 +61,7 @@ public abstract class BaseWindow : GameSystem
 
         var name = GetType().Name;
 
-        lock (_windowId)
+        lock (_windowIdLock)
         {
             Id = _windowId.TryGetValue(name, out var next) ? next : 1;
             _windowId[name] = Id + 1;

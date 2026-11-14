@@ -191,7 +191,7 @@ public sealed class Box2DSimulation : IDisposable
     /// <param name="elapsed">Frame time delta.</param>
     public void Update(TimeSpan elapsed)
     {
-        if (Enabled) _world.Step((float)elapsed.TotalSeconds, perFixedStep: _afterFixedStep, beforeFixedStep: _beforeFixedStep);
+        if (Enabled) _world.Step((float)elapsed.TotalSeconds, _beforeFixedStep, _afterFixedStep);
     }
 
     // The handler loops run backwards by index, so a handler may unregister itself, or another, from inside its

@@ -36,7 +36,7 @@ internal sealed class PrimitiveInstanceStore
     /// Processes renderables and writes instance/line data into backing lists.
     /// Offsets are incremented in-place to reflect consumed slots.
     /// </summary>
-    internal void ProcessRenderables(List<Renderable> renderables, ref Primitives offsets)
+    internal void ProcessRenderables(List<DebugRenderable> renderables, ref Primitives offsets)
     {
         // One instance slot per shape, written at the offset its own kind has reached so far, so shapes
         // of a kind end up contiguous and can be drawn with a single instanced call.

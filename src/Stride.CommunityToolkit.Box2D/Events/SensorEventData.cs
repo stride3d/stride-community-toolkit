@@ -1,6 +1,7 @@
 using Box2D.NET;
 using Stride.Engine;
 using static Box2D.NET.B2Shapes;
+using static Box2D.NET.B2Worlds;
 
 namespace Stride.CommunityToolkit.Box2D;
 
@@ -23,9 +24,9 @@ public readonly record struct SensorEventData(
     B2ShapeId SensorShapeId,
     B2ShapeId VisitorShapeId)
 {
-    /// <summary>The body the sensor shape belongs to.</summary>
-    public B2BodyId SensorBodyId => b2Shape_GetBody(SensorShapeId);
+    /// <summary>The body the sensor shape belongs to; the default id when the shape was destroyed in the step.</summary>
+    public B2BodyId SensorBodyId => b2Shape_IsValid(SensorShapeId) ? b2Shape_GetBody(SensorShapeId) : default;
 
-    /// <summary>The body the visiting shape belongs to.</summary>
-    public B2BodyId VisitorBodyId => b2Shape_GetBody(VisitorShapeId);
+    /// <summary>The body the visiting shape belongs to; the default id when an end event names a shape destroyed in the step.</summary>
+    public B2BodyId VisitorBodyId => b2Shape_IsValid(VisitorShapeId) ? b2Shape_GetBody(VisitorShapeId) : default;
 }

@@ -66,6 +66,9 @@ public sealed class CharacterMover2D : IBox2DSimulationUpdate
     private const int MaxIterations = 5;
     private const float Tolerance = 0.01f;
 
+    // The upward speed above which a mover counts as rising, and so does not land
+    private const float RisingSpeed = 0.01f;
+
     // One delegate for every mover, so collecting planes allocates nothing per step.
     private static readonly b2PlaneResultFcn PlaneCallback = CollectPlane;
 
@@ -308,17 +311,21 @@ public sealed class CharacterMover2D : IBox2DSimulationUpdate
                 translation = new Vector2(0f, -rayLength + circleRadius);
                 hit = PhysicsQueries2D.CastCircleClosest(worldId, origin, circleRadius, translation, PogoFilter);
                 break;
-            default:
+            case PogoShape.Segment:
                 var half = new Vector2(0.75f * Radius, 0f);
                 translation = new Vector2(0f, -rayLength);
                 hit = PhysicsQueries2D.CastSegmentClosest(worldId, origin - half, origin + half, translation, PogoFilter);
                 break;
+            default:
+                throw new InvalidOperationException($"Unknown pogo shape {PogoShape}.");
         }
 
         PogoOrigin = origin;
         PogoHit = hit is not null;
 
-        IsOnGround = IsOnGround ? hit is not null : hit is not null && _velocity.Y <= 0.01f;
+        // Grounded needs a hit; landing also needs the mover not to be rising, so it does not snap back to the
+        // ground it is leaving
+        IsOnGround = hit is not null && (IsOnGround || _velocity.Y <= RisingSpeed);
 
         if (hit is not { } ground)
         {

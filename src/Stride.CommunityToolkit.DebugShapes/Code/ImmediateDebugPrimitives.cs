@@ -98,11 +98,9 @@ public static class ImmediateDebugPrimitives
     /// <returns>A <see cref="Vector3"/> representing the position on the circle.</returns>
     public static Vector3 GetCircleVector(int i, int tessellation)
     {
-        var angle = (float)(i * 2.0 * Math.PI / tessellation);
-        var dx = (float)Math.Sin(angle);
-        var dz = (float)Math.Cos(angle);
+        var (sin, cos) = MathF.SinCos(MathUtil.TwoPi * i / tessellation);
 
-        return new Vector3(dx, 0, dz);
+        return new Vector3(sin, 0f, cos);
     }
 
     /// <summary>

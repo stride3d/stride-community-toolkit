@@ -24,6 +24,7 @@ public static class ShapeFixtureBuilder
     /// Optional shape definition (density, friction, restitution, sensor flag). If <c>null</c>,
     /// <see cref="CreateDefaultShapeDef"/> is used.
     /// </param>
+    /// <returns>The shape created, for a caller that sets a filter, reads it back or hands it to a mover; a capsule shorter than two radii returns the circle it becomes.</returns>
     /// <exception cref="ArgumentException">Thrown when <paramref name="shape"/> is not one of the known shapes.</exception>
     /// <example>
     /// <code>
@@ -31,35 +32,22 @@ public static class ShapeFixtureBuilder
     /// ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(0.5f), bodyId);
     /// </code>
     /// </example>
-    public static void AttachShape(Primitive2D shape, B2BodyId bodyId, B2ShapeDef? shapeDef = null)
+    public static B2ShapeId AttachShape(Primitive2D shape, B2BodyId bodyId, B2ShapeDef? shapeDef = null)
     {
         ArgumentNullException.ThrowIfNull(shape);
 
         var def = shapeDef ?? CreateDefaultShapeDef();
 
-        switch (shape)
+        return shape switch
         {
-            case Primitive2D.RectangleShape rectangle:
-                AttachBox(rectangle.Size, bodyId, def);
-                break;
-            case Primitive2D.CircleShape circle:
-                AttachCircle(circle.Radius, bodyId, def);
-                break;
-            case Primitive2D.TriangleShape triangle:
-                AttachTriangle(triangle.Size, bodyId, def);
-                break;
-            case Primitive2D.CapsuleShape capsule:
-                AttachCapsule(capsule.Radius, capsule.Height, bodyId, def);
-                break;
-            case Primitive2D.RegularPolygonShape polygon:
-                AttachPolygon(PolygonProceduralModel.GenerateRegularPolygonVertices(polygon.Radius, polygon.Sides), bodyId, def);
-                break;
-            case Primitive2D.PolygonShape polygon:
-                AttachPolygon(polygon.Vertices, bodyId, def);
-                break;
-            default:
-                throw new ArgumentException($"Unknown shape {shape.GetType().Name}.", nameof(shape));
-        }
+            Primitive2D.RectangleShape rectangle => AttachBox(rectangle.Size, bodyId, def),
+            Primitive2D.CircleShape circle => AttachCircle(circle.Radius, bodyId, def),
+            Primitive2D.TriangleShape triangle => AttachTriangle(triangle.Size, bodyId, def),
+            Primitive2D.CapsuleShape capsule => AttachCapsule(capsule.Radius, capsule.Height, bodyId, def),
+            Primitive2D.RegularPolygonShape polygon => AttachPolygon(PolygonProceduralModel.GenerateRegularPolygonVertices(polygon.Radius, polygon.Sides), bodyId, def),
+            Primitive2D.PolygonShape polygon => AttachPolygon(polygon.Vertices, bodyId, def),
+            _ => throw new ArgumentException($"Unknown shape {shape.GetType().Name}.", nameof(shape)),
+        };
     }
 
     /// <summary>
@@ -71,22 +59,22 @@ public static class ShapeFixtureBuilder
     /// Optional shape definition (density, friction, restitution, sensor flag). If <c>null</c>,
     /// <see cref="CreateDefaultShapeDef"/> is used.
     /// </param>
+    /// <returns>The polygon shape created.</returns>
     /// <exception cref="ArgumentException">Thrown when fewer than 3 vertices are provided.</exception>
-    public static void AttachPolygon(Vector2[] vertices, B2BodyId bodyId, B2ShapeDef? shapeDef = null)
+    public static B2ShapeId AttachPolygon(Vector2[] vertices, B2BodyId bodyId, B2ShapeDef? shapeDef = null)
     {
         ArgumentNullException.ThrowIfNull(vertices);
 
         if (vertices.Length < 3) throw new ArgumentException("A polygon needs at least 3 vertices.", nameof(vertices));
 
         var def = shapeDef ?? CreateDefaultShapeDef();
-        var points = new B2Vec2[vertices.Length];
+
+        // On the stack for any outline a hull can come from; a longer one is the caller's mistake but still handled
+        Span<B2Vec2> points = vertices.Length <= 64 ? stackalloc B2Vec2[vertices.Length] : new B2Vec2[vertices.Length];
 
         for (var i = 0; i < vertices.Length; i++) points[i] = vertices[i].ToB2Vec2();
 
-        var hull = b2ComputeHull(points, points.Length);
-        var polygon = b2MakePolygon(in hull, 0f);
-
-        b2CreatePolygonShape(bodyId, in def, in polygon);
+        return AttachHull(points, bodyId, def);
     }
 
     /// <summary>
@@ -204,53 +192,54 @@ public static class ShapeFixtureBuilder
         return shapeDef;
     }
 
-    private static void AttachBox(Vector2 size, B2BodyId bodyId, in B2ShapeDef shapeDef)
+    private static B2ShapeId AttachBox(Vector2 size, B2BodyId bodyId, in B2ShapeDef shapeDef)
     {
         var box = b2MakeBox(size.X / 2, size.Y / 2);
 
-        b2CreatePolygonShape(bodyId, in shapeDef, in box);
+        return b2CreatePolygonShape(bodyId, in shapeDef, in box);
     }
 
-    private static void AttachCircle(float radius, B2BodyId bodyId, in B2ShapeDef shapeDef)
+    private static B2ShapeId AttachCircle(float radius, B2BodyId bodyId, in B2ShapeDef shapeDef)
     {
         var circle = new B2Circle(b2Vec2_zero, radius);
 
-        b2CreateCircleShape(bodyId, in shapeDef, in circle);
+        return b2CreateCircleShape(bodyId, in shapeDef, in circle);
     }
 
     // The procedural mesh's first three vertices are the corners, so the fixture matches the rendered triangle exactly
-    private static void AttachTriangle(Vector2 size, B2BodyId bodyId, in B2ShapeDef shapeDef)
+    private static B2ShapeId AttachTriangle(Vector2 size, B2BodyId bodyId, in B2ShapeDef shapeDef)
     {
         var vertices = TriangleProceduralModel.New(size).Vertices;
         Span<B2Vec2> points = stackalloc B2Vec2[3];
 
         for (var i = 0; i < points.Length; i++) points[i] = new B2Vec2(vertices[i].Position.X, vertices[i].Position.Y);
 
-        var hull = b2ComputeHull(points, points.Length);
-        var triangle = b2MakePolygon(in hull, 0f);
+        return AttachHull(points, bodyId, shapeDef);
+    }
 
-        b2CreatePolygonShape(bodyId, in shapeDef, in triangle);
+    // The convex hull of the points as one polygon shape: what a triangle and any polygon outline both become
+    private static B2ShapeId AttachHull(ReadOnlySpan<B2Vec2> points, B2BodyId bodyId, in B2ShapeDef shapeDef)
+    {
+        var hull = b2ComputeHull(points, points.Length);
+        var polygon = b2MakePolygon(in hull, 0f);
+
+        return b2CreatePolygonShape(bodyId, in shapeDef, in polygon);
     }
 
     // The shape's Height is the whole capsule, caps included; Box2D wants the half length of the straight part. The mesh
     // of a capsule shorter than two radii is a circle, and Box2D.NET attaches nothing for a capsule shorter than its
     // linear slop (the shape id comes back null), so that case is attached as the circle it draws as
-    private static void AttachCapsule(float radius, float height, B2BodyId bodyId, in B2ShapeDef shapeDef)
+    private static B2ShapeId AttachCapsule(float radius, float height, B2BodyId bodyId, in B2ShapeDef shapeDef)
     {
         // Box2D's linear slop, at one length unit per metre, below which it declines the capsule
         const float LinearSlop = 0.005f;
 
         var halfLength = height / 2 - radius;
 
-        if (halfLength <= LinearSlop)
-        {
-            AttachCircle(radius, bodyId, shapeDef);
-
-            return;
-        }
+        if (halfLength <= LinearSlop) return AttachCircle(radius, bodyId, shapeDef);
 
         var capsule = new B2Capsule(new B2Vec2(0, -halfLength), new B2Vec2(0, halfLength), radius);
 
-        b2CreateCapsuleShape(bodyId, in shapeDef, in capsule);
+        return b2CreateCapsuleShape(bodyId, in shapeDef, in capsule);
     }
 }

@@ -27,17 +27,7 @@ internal readonly record struct ShapeView(
     Vector3 EyePosition)
 {
     /// <summary>The ray through a screen position, normalised (0,0) top left to (1,1) bottom right, from the near plane into the scene.</summary>
-    internal Ray RayAt(Vector2 screenPosition)
-    {
-        var clip = new Vector3(screenPosition.X * 2f - 1f, 1f - screenPosition.Y * 2f, 0f);
-        var near = Vector3.TransformCoordinate(clip, InverseViewProjection);
-
-        clip.Z = 1f;
-
-        var far = Vector3.TransformCoordinate(clip, InverseViewProjection);
-
-        return new Ray(near, Vector3.Normalize(far - near));
-    }
+    internal Ray RayAt(Vector2 screenPosition) => ScreenRay.Through(screenPosition, InverseViewProjection);
 
     /// <summary>The clip w of a world point: its distance term, 1 under an orthographic projection.</summary>
     internal float ClipW(Vector3 world) => Vector4.Transform(new Vector4(world, 1f), ViewProjection).W;

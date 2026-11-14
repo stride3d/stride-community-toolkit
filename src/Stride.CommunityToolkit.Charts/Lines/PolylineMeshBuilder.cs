@@ -14,7 +14,7 @@ namespace Stride.CommunityToolkit.Charts;
 /// <remarks>
 /// <para>
 /// Every point becomes two vertices, offset by half the width to either side of the line's direction
-/// within the plane given by <see cref="PolylineOptions.Normal"/>. Consecutive pairs are joined with two
+/// within the chart plane, whose normal is Z. Consecutive pairs are joined with two
 /// triangles. At interior points the offset direction is the average of the incoming and outgoing
 /// directions, which gives a mitred join; very sharp corners therefore pinch, which is acceptable for
 /// sampled curves and axes and avoids the extra geometry a rounded join would need.
@@ -35,7 +35,7 @@ internal static class PolylineMeshBuilder
     /// <param name="options">Width, plane and closure of the ribbon.</param>
     /// <returns>A mesh whose bounds are set, ready to be put in a <see cref="Model"/>.</returns>
     /// <exception cref="ArgumentNullException">If any argument is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If there are fewer than two points, or <see cref="PolylineOptions.Normal"/> has no length.</exception>
+    /// <exception cref="ArgumentException">If there are fewer than two points.</exception>
     internal static Mesh Build(GraphicsDevice device, IReadOnlyList<Vector3> points, PolylineOptions options)
     {
         ArgumentNullException.ThrowIfNull(device);
@@ -47,7 +47,7 @@ internal static class PolylineMeshBuilder
             throw new ArgumentException("A polyline needs at least two points.", nameof(points));
         }
 
-        var normal = NormalOf(options);
+        var normal = Vector3.UnitZ;
         var vertices = new List<VertexPositionNormalTexture>(points.Count * 2);
         var indices = new List<int>(points.Count * 6);
 
@@ -65,7 +65,7 @@ internal static class PolylineMeshBuilder
     /// <param name="options">Width and plane of the ribbons. <see cref="PolylineOptions.Closed"/> is ignored.</param>
     /// <returns>A mesh whose bounds are set, ready to be put in a <see cref="Model"/>.</returns>
     /// <exception cref="ArgumentNullException">If any argument is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If there are no polylines, one has fewer than two points, or <see cref="PolylineOptions.Normal"/> has no length.</exception>
+    /// <exception cref="ArgumentException">If there are no polylines, or one has fewer than two points.</exception>
     internal static Mesh BuildMany(GraphicsDevice device, IReadOnlyList<IReadOnlyList<Vector3>> polylines, PolylineOptions options)
     {
         ArgumentNullException.ThrowIfNull(device);
@@ -77,7 +77,7 @@ internal static class PolylineMeshBuilder
             throw new ArgumentException("At least one polyline is required.", nameof(polylines));
         }
 
-        var normal = NormalOf(options);
+        var normal = Vector3.UnitZ;
         var halfWidth = options.Width * 0.5f;
         var vertices = new List<VertexPositionNormalTexture>();
         var indices = new List<int>();
@@ -131,16 +131,6 @@ internal static class PolylineMeshBuilder
         }
 
         draw.IndexBuffer?.Buffer?.Dispose();
-    }
-
-    internal static Vector3 NormalOf(PolylineOptions options)
-    {
-        if (options.Normal.LengthSquared() <= MathUtil.ZeroTolerance)
-        {
-            throw new ArgumentException("The plane normal must not be zero.", nameof(options));
-        }
-
-        return Vector3.Normalize(options.Normal);
     }
 
     /// <summary>

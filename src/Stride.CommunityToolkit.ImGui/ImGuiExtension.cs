@@ -149,9 +149,30 @@ public static class ImGuiExtension
     /// <returns>A scope whose <see cref="DisposableImGui.Dispose"/> calls <c>EndChild</c>.</returns>
     public static DisposableImGui Child([CallerLineNumber] int cln = 0, Vector2 size = default, ImGuiChildFlags childFlags = ImGuiChildFlags.None, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
     {
-        BeginChild(cln.ToString(), size, childFlags, flags);
+        // Hashed with the id stack, like a string id, so the same line under two pushed ids is two regions
+        BeginChild(GetID(cln), size, childFlags, flags);
 
         return new DisposableImGui(true, DisposableTypes.Child);
+    }
+
+    /// <summary>
+    /// The arrow of a tree row that opens and closes it, or a gap of the same width for a row with nothing inside.
+    /// </summary>
+    /// <param name="canRecurse">Whether the row has anything to open.</param>
+    /// <param name="open">Whether it is open now.</param>
+    /// <param name="opened">The ids of the open rows; a click adds or removes <paramref name="id"/>.</param>
+    /// <param name="id">The row's id.</param>
+    /// <param name="gapWidth">The width of the gap, the arrow's own.</param>
+    internal static void RecurseArrow<T>(bool canRecurse, bool open, HashSet<T> opened, T id, float gapWidth)
+    {
+        if (!canRecurse)
+        {
+            Dummy(new Vector2(gapWidth, 1));
+        }
+        else if (ArrowButton("", open ? ImGuiDir.Down : ImGuiDir.Right) && !opened.Remove(id))
+        {
+            opened.Add(id);
+        }
     }
 
     /// <summary>

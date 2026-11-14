@@ -20,23 +20,8 @@ internal readonly record struct ShapeSlice(bool Hollow, float RingWidth, float S
     /// <summary>The whole shape, which is what every ordinary draw call submits.</summary>
     public static readonly ShapeSlice Whole = default;
 
-    /// <summary>Bit 0 of the GPU flags: hollow.</summary>
-    internal const int HollowFlag = 1;
-
-    /// <summary>Bit 1 of the GPU flags: round caps.</summary>
-    internal const int RoundCapsFlag = 2;
-
-    /// <summary>Bit 3 of the GPU flags: radius and band depth are in pixels.</summary>
-    internal const int PixelRadiusFlag = 8;
-
-    /// <summary>Bit 4 of the GPU flags: the points are a polyline run.</summary>
-    internal const int PolylineFlag = 16;
-
-    /// <summary>Bit 6 of the GPU flags: the points are 3D and the run is stroked on screen.</summary>
-    internal const int SpaceFlag = 64;
-
     /// <summary>The slice as the shader reads it.</summary>
-    internal int Flags => (Hollow ? HollowFlag : 0) | (RoundCaps ? RoundCapsFlag : 0) | (PixelRadius ? PixelRadiusFlag : 0) | (Polyline ? PolylineFlag : 0) | (Space ? SpaceFlag : 0);
+    internal ShapeFlags Flags => (Hollow ? ShapeFlags.Hollow : 0) | (RoundCaps ? ShapeFlags.RoundCaps : 0) | (PixelRadius ? ShapeFlags.PixelRadius : 0) | (Polyline ? ShapeFlags.Polyline : 0) | (Space ? ShapeFlags.Space : 0);
 
     /// <summary>
     /// Turns the sweep a draw call was given into the form the shader reads. Zero means two

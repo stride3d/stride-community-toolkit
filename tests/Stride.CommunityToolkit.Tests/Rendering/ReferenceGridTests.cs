@@ -58,6 +58,9 @@ public class ReferenceGridMathTests
     [InlineData(0.25f, 0.05f, "0.25")]
     [InlineData(-0.0001f, 1f, "0")]
     [InlineData(1200f, 100f, "1200")]
+    [InlineData(-0.001f, 0.1f, "0.0")]
+    [InlineData(-2f, 1f, "-2")]
+    [InlineData(-0.05f, 0.05f, "-0.05")]
     public void ValuesAreWrittenWithTheDecimalsTheirStepNeeds(float value, float step, string expected)
         => Assert.Equal(expected, GridSteps.Format(value, step));
 

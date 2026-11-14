@@ -101,9 +101,9 @@ internal static class PerfMonitorHelpers
         }
     }
 
-    internal static string S(float val, string? format = null) => val.ToString(format ?? "F2", CultureInfo.CurrentCulture);
+    internal static string S(float val) => val.ToString("F2", CultureInfo.CurrentCulture);
 
-    private static string S(double val, string? format = null) => val.ToString(format ?? "F2", CultureInfo.CurrentCulture);
+    private static string S(double val) => val.ToString("F2", CultureInfo.CurrentCulture);
 
     internal static bool IsStrideProfilingAll()
     {
