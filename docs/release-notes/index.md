@@ -31,7 +31,7 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 
 ### 🎉 New Features
 
-- The Bepu 2D stress pile example lets you drag a ramp part, hold Ctrl to rotate the whole ramp, and press R to reset their rotations.
+- The Bepu 2D stress pile example lets you turn a wall or a ramp by dragging it, the whole arena with Ctrl held, and puts the arena back with R.
 - `GameProfiler` lists its keys on the text overlay behind F1 (`HelpToggleKey`), with the current filter, sort, page and refresh rate; the list's title names the chord just used, for three seconds, since Stride's profiler text has no line of ours to say it on.
 - `InputManager.IsKeyPressedUnmodified(key)`: a key pressed with neither Ctrl nor Alt held. The text overlay, its collapsible sections and `KeyMenu` read their keys through it, so the profiler's Ctrl+F2 no longer also collapses the camera help, and Ctrl+1 to 5 do not pick a menu item.
 - `Capsule2DProceduralModel.StraightLength(height, radius)`: the straight part the mesh draws for a capsule, with its minimum sliver. The Bepu and Bullet 2D capsule colliders take their length from it, so a collider is exactly as tall as its mesh; the Bepu one used to be half the mesh's sliver for a wide capsule under one unit.
@@ -92,3 +92,11 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 ### 📄 Docs
 
 - Physics extensions manual: a paragraph on the loading stall, why a scene's first fall differs from a restart and how to hold the simulation until the first short frame.
+- The generated example pages and the gallery match their sources again: fifteen pages had stale code ranges.
+
+### 🔁 Build & Deploy
+
+- The examples manifest is regenerated only when an example source file, an example project file or the metadata generator changed; a build that changed nothing no longer starts the generator.
+- The metadata generator has no generic host, `appsettings.json` or log file: logging is set up in code and goes to the console. `scan` returns 1 for a missing examples directory, as `generate` does.
+- `Stride.CommunityToolkit.Skyboxes` no longer references `Stride.Engine` itself; the core package brings it.
+- The Avalonia launcher appends to its log in one buffer and refreshes the panel once for the lines already waiting; it reads each example's files once at start, not on every keystroke.

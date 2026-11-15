@@ -10,7 +10,7 @@ A major release moves the toolkit to a new .NET version, such as **.NET 10** to 
    - Update `.NET` references in `manual\code-only\create-project.md`, `create-project-engine-only.md`, `create-file-based-app.md` and `create-file-based-app-engine-only.md`.
    - Update the `bin/Debug/net10.0` output paths in `contributing\toolkit\building.md` and `.github\copilot-instructions.md`.
 2. **Update Project Files**:
-   - Update `TargetFramework` in `Directory.Build.props` and `src\CommonSettings.props`.
+   - Update `TargetFramework` in `Directory.Build.props`.
    - Update the projects that set their own `TargetFramework`: `E04_GumUI`, `E01_3D_BasicScene_FSharp`, `E01_3D_BasicScene_VisualBasic` and `E07_3D_PartialTorus_FSharp`.
    - Update the `TargetFramework` in `docs\docfx.json`.
    - Update the version in `docs\docfx.json`, under `build:globalMetadata:_appFooter`.
