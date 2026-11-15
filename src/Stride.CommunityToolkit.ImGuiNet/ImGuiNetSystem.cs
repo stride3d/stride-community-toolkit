@@ -36,8 +36,7 @@ public class ImGuiNetSystem : GameSystemBase
     /// <c>IsFixedTimeStep</c> is set, because the game then runs extra updates to catch up whenever a
     /// frame overruns. The startup shader compile causes exactly that, and two <c>NewFrame</c> calls in a
     /// row abort the process from native code with "Forgot to call Render() or EndFrame() at the end of
-    /// the previous frame?" - an abort, so neither the <see cref="IsInitialized"/> guard nor the
-    /// try/catch in <see cref="EndDraw"/> can intercept it.
+    /// the previous frame?" - an abort, which no exception handler can intercept.
     /// </remarks>
     private bool _frameBegun;
 
@@ -104,7 +103,8 @@ public class ImGuiNetSystem : GameSystemBase
     public bool ShowUI { get; set; } = true;
 
     /// <summary>
-    /// Gets whether the ImGui system is initialized and ready for use.
+    /// Gets whether the ImGui system is initialized and ready for use: <see langword="false"/> before
+    /// <see cref="Initialize"/> has run, and for a game without a graphics device.
     /// </summary>
     public bool IsInitialized { get; private set; }
 
@@ -161,12 +161,8 @@ public class ImGuiNetSystem : GameSystemBase
         _dpiScale = dpiScale;
         _pendingFontRebuild = true;
 
-        // Scale ImGui style sizes proportionally to maintain UI sizing
-        try
-        {
-            if (old > 0) ImGui.GetStyle().ScaleAllSizes(_dpiScale / old);
-        }
-        catch { /* ignore if context not ready */ }
+        // Scale ImGui style sizes proportionally to maintain UI sizing; there is no style without a context
+        if (old > 0 && _context != IntPtr.Zero) ImGui.GetStyle().ScaleAllSizes(_dpiScale / old);
 
         _logger.Info($"ImGuiNetSystem: DPI scale updated to {_dpiScale:F2} (pending font rebuild)");
     }
@@ -187,46 +183,40 @@ public class ImGuiNetSystem : GameSystemBase
             return;
         }
 
-        try
+        _context = ImGui.CreateContext();
+        ImGui.SetCurrentContext(_context);
+
+        var io = ImGui.GetIO();
+
+        io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+
+        // The backbuffer-to-window ratio alone is 1 on Windows at any scaling; the display
+        // scale service also knows the monitor's DPI, and says when the window moves
+        _displayScale = DisplayScale.GetOrCreate(_game);
+
+        _displayScale.Refresh();
+        _dpiScale = _displayScale.Value;
+
+        // Kept in a field so Destroy can unsubscribe: the service outlives this system, and a monitor change
+        // after the context is gone would otherwise reach a context-less ImGui call
+        _onDisplayScaleChanged = (_, _) =>
         {
-            _context = ImGui.CreateContext();
-            ImGui.SetCurrentContext(_context);
+            if (AutoScaleFonts) SetDpiScale(_displayScale.Value);
+        };
+        _displayScale.Changed += _onDisplayScaleChanged;
 
-            var io = ImGui.GetIO();
+        _logger.Info($"ImGuiNetSystem: display scale {_dpiScale:F2}");
 
-            io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+        // Build the font atlas at the current DPI - this keeps fonts crisp
+        SetupFontAtlas(_dpiScale);
+        _pendingFontRebuild = false;
+        CreateRenderingResources();
 
-            // The backbuffer-to-window ratio alone is 1 on Windows at any scaling; the display
-            // scale service also knows the monitor's DPI, and says when the window moves
-            _displayScale = DisplayScale.GetOrCreate(_game);
+        // A system added before the game has a scene has no camera, and so no world-anchored text
+        _camera = _game.Services.GetService<SceneSystem>()?.SceneInstance?.RootScene?.GetCamera();
+        IsInitialized = true;
 
-            _displayScale.Refresh();
-            _dpiScale = _displayScale.Value;
-
-            // Kept in a field so Destroy can unsubscribe: the service outlives this system, and a monitor change
-            // after the context is gone would otherwise reach a context-less ImGui call
-            _onDisplayScaleChanged = (_, _) =>
-            {
-                if (AutoScaleFonts) SetDpiScale(_displayScale.Value);
-            };
-            _displayScale.Changed += _onDisplayScaleChanged;
-
-            _logger.Info($"ImGuiNetSystem: display scale {_dpiScale:F2}");
-
-            // Build the font atlas at the current DPI - this keeps fonts crisp
-            SetupFontAtlas(_dpiScale);
-            _pendingFontRebuild = false;
-            CreateRenderingResources();
-
-            _camera = _game.Services.GetService<SceneSystem>()?.SceneInstance.RootScene.GetCamera();
-            IsInitialized = true;
-
-            _logger.Info("ImGuiNetSystem initialized successfully");
-        }
-        catch (Exception ex)
-        {
-            _logger.Error($"Failed to initialize ImGuiNetSystem: {ex.Message}");
-        }
+        _logger.Info("ImGuiNetSystem initialized successfully");
     }
 
     private void CreateRenderingResources()
@@ -235,17 +225,9 @@ public class ImGuiNetSystem : GameSystemBase
 
         if (Services.GetService<EffectSystem>() is { } effectSystem)
         {
-            try
-            {
-                _imguiShader = new EffectInstance(effectSystem.LoadEffect("ImGuiNetShader").WaitForResult());
-                _imguiShader.UpdateEffect(_graphicsDevice);
-                _logger.Info("Using ImGuiNetShader for rendering");
-            }
-            catch
-            {
-                _logger.Warning("Could not load any ImGui shader, text will not be visible");
-                return;
-            }
+            _imguiShader = new EffectInstance(effectSystem.LoadEffect("ImGuiNetShader").WaitForResult());
+            _imguiShader.UpdateEffect(_graphicsDevice);
+            _logger.Info("Using ImGuiNetShader for rendering");
         }
 
         _vertexLayout = new VertexDeclaration(VertexElement.Position<Vector2>(), VertexElement.TextureCoordinate<Vector2>(), VertexElement.Color(PixelFormat.R8G8B8A8_UNorm));
@@ -392,17 +374,10 @@ public class ImGuiNetSystem : GameSystemBase
         // NewFrame() asserts just as loudly as the reverse.
         if (!IsInitialized || !_frameBegun) return;
 
-        try
-        {
-            ImGui.Render();
-            _frameBegun = false;
+        ImGui.Render();
+        _frameBegun = false;
 
-            RenderImGuiDrawData();
-        }
-        catch (Exception ex)
-        {
-            _logger.Warning($"Error in ImGui EndDraw: {ex.Message}");
-        }
+        RenderImGuiDrawData();
     }
 
     private unsafe void RenderImGuiDrawData()
@@ -509,6 +484,9 @@ public class ImGuiNetSystem : GameSystemBase
 
         // The context exists from CreateContext on, whether or not Initialize got as far as IsInitialized
         if (_context != IntPtr.Zero) ImGui.DestroyContext(_context);
+
+        _context = IntPtr.Zero;
+        IsInitialized = false;
 
         base.Destroy();
     }
