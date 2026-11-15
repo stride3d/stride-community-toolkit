@@ -58,7 +58,7 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
   - **Stride.CommunityToolkit.Examples.MetadataGenerator**: Generates `examples-manifest.json` from example metadata
 - `build/`: Repository scripts, all .NET file-based apps run with `dotnet run --file build/<name>.cs`: `pack-local.cs` (local dev NuGet packages), `capture-screenshots.cs` (the documentation screenshots), `gold-images.cs` (rendering regression against `tests/gold`), `generate-example-sounds.cs` (the `.wav` files the audio examples load)
 - `docs/`: DocFX sources (manuals, API reference, contributing)
-- `.github/`: GitHub workflows, release metadata, automation, and this instruction file
+- `.github/`: GitHub workflows, release metadata, automation, this instruction file and `git-commit-instructions.md` (the full commit message rules)
 
 Solutions: `Stride.CommunityToolkit.slnx` contains everything, 145 projects of which 125 are
 examples; `Stride.CommunityToolkit.Core.slnf` is a solution filter loading only libraries, tests and
@@ -570,6 +570,40 @@ that did not exist.
 - **Leave finished work uncommitted.** The maintainer reviews file by file and commits what is approved; do not commit, push or open a pull request unless asked for that specific action, in that context. Public renames and removals are proposed in a table with call counts, not applied.
 - Use descriptive, real-word identifier names. Avoid cryptic abbreviations for variables, parameters, or fields (e.g., prefer `textureCoordinates`, `firstEdge`, `secondEdge`, `faceNormal` over `tex`, `e1`, `e2`, `n`). Single-letter names are acceptable only for short-lived loop indices (`i`, `j`, `k`).
 - Follow C# naming conventions consistently: PascalCase for types, methods, and properties; camelCase for parameters and local variables. Prefer meaningful names that communicate intent.
+
+## Commit messages
+
+Visual Studio's commit message generator reads this file and not `.github/git-commit-instructions.md`, so the rules
+are here in short. That file is the full version, with the type table, the scopes and examples, and it wins where
+the two differ.
+
+```text
+<type>[(scope)][!]: <description>                   several files changed
+<type>[(scope)][!]: FileName.ext - <description>    one file changed
+
+- body bullets, optional
+```
+
+- The type is one of `feat`, `fix`, `refactor`, `perf`, `docs`, `test`, `build`, `ci`, `style`, `chore`, `revert`. The
+  scope is optional and lowercase, the changed area: `fix(shapes): ...`. `!` before the colon marks a breaking change.
+- One file changed: its name stands before the description, then ` - `. An example's `Program.cs` is named by its
+  folder: `feat(examples): E10_2D_StressPile - Turn the arena by dragging`. Several files changed: no file name in
+  the subject.
+- The description is imperative ("Add", not "Added"), starts with a capital letter and has no
+  full stop; pull request titles take the same form. The whole subject line is 72 characters or fewer; aim for about 50.
+- Spelling is British, as in the documentation ("modernise", "colour"); identifiers and file names keep their own.
+- The body follows one blank line and is bullet points starting with `- `, never paragraphs; leave it out for a
+  small change. With several files, one bullet per file, `- FileName.ext: What changed`; above about ten files,
+  group by area.
+- No trailers nobody asked for (`Signed-off-by`, `Co-authored-by`). For the commit box, output the message alone,
+  with no code fence and no introduction.
+
+```text
+fix(shapes): ShapeShader.sdsl - Draw textured fills on Stride 4.4.2
+
+- Write TexCoord once at the top of VSMain
+- Stride 4.4.2 reads a stream written only in a branch from the vertex buffer
+```
 
 ## Formatting rules for edits
 
