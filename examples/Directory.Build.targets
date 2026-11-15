@@ -13,10 +13,4 @@
 
     <!-- Drops package XML docs and native symbol files from the output; shared with tests/ and tools/. -->
     <Import Project="$(MSBuildThisFileDirectory)../build/HostRuntime.targets" />
-
-    <!--
-    Silences the asset compiler's "Could not find game settings asset" warning, which every code-only
-    project produces by design. Version-guarded: see the comment in the imported file.
-  -->
-    <Import Project="Stride.AssetCompiler.Overrides.targets" Condition="'$(StrideVersion)' == '4.4.0-beta5'" />
 </Project>

@@ -9,10 +9,8 @@
 // Stride.CommunityToolkit.slnx and Visual Studio will not build it with the rest of the solution -
 // run it from the command line.
 
-#:package Stride.BepuPhysics.Debug@$(StrideVersion)
 #:project ../../../src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
 #:project ../../../src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
-#:project ../../../src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
 #:property PublishAot=false
 
 // Stride before 4.4.0 built its asset cache path by concatenating $(ProjectDir) with
