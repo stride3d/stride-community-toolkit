@@ -63,7 +63,7 @@ linking its Core files into this project:
 ## Technical Details
 
 - **Framework**: .NET 10
-- **UI**: Avalonia 12.1.5
+- **UI**: Avalonia 12.1.6
 - **Pattern**: MVVM-lite (no formal framework)
 - **Process Management**: Spawns examples as separate processes
 - **Output Filtering**: Regex-based warning suppression
