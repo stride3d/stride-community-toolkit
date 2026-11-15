@@ -17,13 +17,10 @@ Depends on the Hexa.NET.ImGui package.$(StrideVersionNote)</Description>
     <Import Project="..\CommonSettings.props" />
 
     <ItemGroup>
-        <!-- Effects/ and the .sdpkg manifest are staged into the package by the Stride.AssetCompiler
-             targets below; hand-packing them shipped a manifest pointing at stride\Effects while the
-             shaders actually land in stride\Assets\Effects. -->
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Hexa.NET.ImGui" Version="2.2.9" />
+        <!-- Effects/ and the .sdpkg manifest are staged into the package by this package's targets;
+             hand-packing them shipped a manifest pointing at stride\Effects while the shaders
+             actually land in stride\Assets\Effects. -->
         <PackageReference Include="Stride.AssetCompiler" Version="$(StrideVersion)" IncludeAssets="build;buildTransitive" />
     </ItemGroup>
 

@@ -12,10 +12,6 @@ What's inside:
     <Import Project="..\CommonSettings.props" />
 
     <ItemGroup>
-        <PackageReference Include="Stride.Engine" Version="$(StrideVersion)" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 

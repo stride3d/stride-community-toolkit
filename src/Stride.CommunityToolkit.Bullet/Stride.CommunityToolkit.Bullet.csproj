@@ -16,6 +16,9 @@ Maintenance mode: kept working, not extended. New projects should use Stride.Com
 
     <ItemGroup>
         <PackageReference Include="Stride.Physics" Version="$(StrideVersion)" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 
