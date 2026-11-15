@@ -324,36 +324,43 @@ static Stats Compare(string actualPath, string expectedPath, AllowBucket[] bucke
 
     using var mask = new Image<Rgba32>(actual.Width, actual.Height);
 
-    for (var y = 0; y < actual.Height; y++)
+    actual.ProcessPixelRows(expected, mask, (actualRows, expectedRows, maskRows) =>
     {
-        for (var x = 0; x < actual.Width; x++)
+        for (var y = 0; y < actualRows.Height; y++)
         {
-            var a = actual[x, y];
-            var e = expected[x, y];
-            var r = Math.Abs(a.R - e.R);
-            var g = Math.Abs(a.G - e.G);
-            var b = Math.Abs(a.B - e.B);
-            var d = Math.Max(r, Math.Max(g, b));
+            var actualRow = actualRows.GetRowSpan(y);
+            var expectedRow = expectedRows.GetRowSpan(y);
+            var maskRow = maskRows.GetRowSpan(y);
 
-            histogram[d]++;
-            squaredError += (long)(r * r + g * g + b * b);
-            maxDiff = Math.Max(maxDiff, d);
-
-            if (d >= 3)
+            for (var x = 0; x < actualRow.Length; x++)
             {
-                minX = Math.Min(minX, x);
-                minY = Math.Min(minY, y);
-                maxX = Math.Max(maxX, x);
-                maxY = Math.Max(maxY, y);
-            }
+                var a = actualRow[x];
+                var e = expectedRow[x];
+                var r = Math.Abs(a.R - e.R);
+                var g = Math.Abs(a.G - e.G);
+                var b = Math.Abs(a.B - e.B);
+                var d = Math.Max(r, Math.Max(g, b));
 
-            mask[x, y] = d >= 3
-                ? new Rgba32(255, 40, 40, 255)
-                : d > 0
-                    ? new Rgba32(255, 220, 0, 255)
-                    : new Rgba32((byte)(a.R / 4), (byte)(a.G / 4), (byte)(a.B / 4), 255);
+                histogram[d]++;
+                squaredError += (long)(r * r + g * g + b * b);
+                maxDiff = Math.Max(maxDiff, d);
+
+                if (d >= 3)
+                {
+                    minX = Math.Min(minX, x);
+                    minY = Math.Min(minY, y);
+                    maxX = Math.Max(maxX, x);
+                    maxY = Math.Max(maxY, y);
+                }
+
+                maskRow[x] = d >= 3
+                    ? new Rgba32(255, 40, 40, 255)
+                    : d > 0
+                        ? new Rgba32(255, 220, 0, 255)
+                        : new Rgba32((byte)(a.R / 4), (byte)(a.G / 4), (byte)(a.B / 4), 255);
+            }
         }
-    }
+    });
 
     mask.SaveAsPng(diffPath);
 
@@ -490,19 +497,19 @@ readonly record struct AllowBucket(int Min, int Max, int Limit)
     }
 }
 
-sealed class Stats
+sealed record Stats
 {
-    public int Pixels;
-    public int Exact;
-    public int Bucket1To2;
-    public int Bucket3To5;
-    public int Bucket6To15;
-    public int Bucket16Plus;
-    public int MaxDiff;
-    public string? Bounds;
-    public double Psnr;
-    public bool Passed;
-    public string? SizeMismatch;
+    public int Pixels { get; init; }
+    public int Exact { get; init; }
+    public int Bucket1To2 { get; init; }
+    public int Bucket3To5 { get; init; }
+    public int Bucket6To15 { get; init; }
+    public int Bucket16Plus { get; init; }
+    public int MaxDiff { get; init; }
+    public string? Bounds { get; init; }
+    public double Psnr { get; init; }
+    public bool Passed { get; init; }
+    public string? SizeMismatch { get; init; }
 
     public string Describe()
         => SizeMismatch is not null
