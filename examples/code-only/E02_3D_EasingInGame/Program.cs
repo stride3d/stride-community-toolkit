@@ -116,7 +116,7 @@ void Start(Scene rootScene)
 
     frame.Scene = rootScene;
 
-    doorEntity = new Entity("Door hinge") { Transform = { Position = doorHinge } };
+    doorEntity = new Entity("Door hinge", doorHinge);
 
     var leaf = game.CreatePrimitive(Primitive3D.Box(new Vector3(0.12f, 2.4f, 1.6f)), new PrimitiveEntityOptions
     {

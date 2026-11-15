@@ -3,6 +3,7 @@ using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Input;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -41,6 +42,9 @@ Entity nose = null!;
 Basic3DFollowCameraController follow = null!;
 BepuSimulation simulation = null!;
 var walkDirection = -Vector3.UnitZ;
+
+// Where the nose sits on the capsule, in the body's own space
+var noseOffset = new Vector3(0f, 0.3f, -0.4f);
 
 using var game = new Game();
 
@@ -89,9 +93,9 @@ void Start(Scene scene)
         EntityName = "Nose",
         Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(60, 60, 70)),
+        Position = noseOffset,
     });
 
-    nose.Transform.Position = new Vector3(0f, 0.3f, -0.4f);
     body.AddChild(nose);
 
     // The pull rides on the character and runs every physics step
@@ -130,7 +134,7 @@ void Update(Scene scene, GameTime time)
     // frame's ground and right rebuilt from the two, so the three are at right angles and make a rotation
     var forward = follow.Forward - up * Vector3.Dot(follow.Forward, up);
 
-    if (forward.LengthSquared() < 1e-6f) forward = Vector3.Cross(up, follow.Right);
+    if (forward.LengthSquared() < MathUtil.ZeroTolerance) forward = Vector3.Cross(up, follow.Right);
 
     forward.Normalize();
 
@@ -149,33 +153,21 @@ void Update(Scene scene, GameTime time)
         move.Normalize();
         walkDirection = move;
 
-        if (input.IsKeyDown(Keys.LeftShift) || input.IsKeyDown(Keys.RightShift)) move *= SprintMultiplier;
+        if (input.IsShiftDown()) move *= SprintMultiplier;
     }
 
     // The character's own frame: up away from the centre, forward where the camera looks along the surface. The
     // move vector is read in that frame, X to its right and Y along its back, so forward is a negative Y
-    var basis = Matrix.Identity;
-
-    basis.Right = right;
-    basis.Up = up;
-    basis.Backward = -forward;
-
     // Teleport is what the obsolete Orientation setter did
-    character.Teleport(character.Position, Quaternion.Normalize(Quaternion.RotationMatrix(basis)));
+    character.Teleport(character.Position, Frame(right, up, -forward));
     character.MoveVector = new Vector2(Vector3.Dot(move, right), -Vector3.Dot(move, forward));
 
     // The nose turns within that frame to the last walk direction
-    var noseBasis = Matrix.Identity;
     var noseBack = -Vector3.Normalize(walkDirection - up * Vector3.Dot(walkDirection, up));
-
-    noseBasis.Right = Vector3.Cross(up, noseBack);
-    noseBasis.Up = up;
-    noseBasis.Backward = noseBack;
-
-    var noseRotation = Quaternion.Normalize(Quaternion.RotationMatrix(noseBasis) * Quaternion.Invert(character.Orientation));
+    var noseRotation = Quaternion.Normalize(Frame(Vector3.Cross(up, noseBack), up, noseBack) * Quaternion.Invert(character.Orientation));
 
     nose.Transform.Rotation = noseRotation;
-    nose.Transform.Position = Vector3.Transform(new Vector3(0f, 0.3f, -0.4f), noseRotation);
+    nose.Transform.Position = Vector3.Transform(noseOffset, noseRotation);
 
     if (input.IsKeyPressed(Keys.Space)) character.TryJump();
 }
@@ -229,13 +221,20 @@ static Quaternion Upright(Vector3 up)
 {
     var reference = MathF.Abs(up.Y) < 0.9f ? Vector3.UnitY : Vector3.UnitX;
     var right = Vector3.Normalize(Vector3.Cross(reference, up));
+
+    return Frame(right, up, Vector3.Cross(right, up));
+}
+
+// The rotation whose axes are the three given: a frame, as a quaternion
+static Quaternion Frame(Vector3 right, Vector3 up, Vector3 backward)
+{
     var basis = Matrix.Identity;
 
     basis.Right = right;
     basis.Up = up;
-    basis.Backward = Vector3.Cross(right, up);
+    basis.Backward = backward;
 
-    return Quaternion.RotationMatrix(basis);
+    return Quaternion.Normalize(Quaternion.RotationMatrix(basis));
 }
 
 IReadOnlyList<TextElement> BuildOverlayLines() =>
@@ -246,7 +245,8 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
     new("Right drag", "Swing the camera round", Color.Gold),
     new("Mouse wheel", "Closer or further", Color.Gold),
     new(""),
-    new($"Pulled towards the centre at {SurfaceGravity:0} m/s² on the surface; up is away from it", Color.White),
+    new($"Gravity {SurfaceGravity:0} m/s² towards the centre", Color.White),
+    new("Up is away from the centre", Color.White),
     new("Keep walking: the way back is round the planet", Color.LightGray),
 ];
 

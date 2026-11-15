@@ -20,13 +20,13 @@ namespace E02_3D_Material_Gallery;
 public sealed record HairStyle(int Strips, int Segments, float TopLength, float SideLength, float Width, float Droop, float Lift, float Sweep)
 {
     /// <summary>Short at the sides, long on top and swept up and back, the forehead clear.</summary>
-    public static HairStyle Quiff { get; } = new(520, 6, 0.75f, 0.28f, Width: 0.04f, 0.35f, 0.9f, 0.8f);
+    public static HairStyle Quiff { get; } = new(Strips: 520, Segments: 6, TopLength: 0.75f, SideLength: 0.28f, Width: 0.04f, Droop: 0.35f, Lift: 0.9f, Sweep: 0.8f);
 
     /// <summary>Chin length all round, lying flat.</summary>
-    public static HairStyle Bob { get; } = new(400, 8, 1.1f, 1f, Width: 0.07f, 1f, 0.15f, 0.5f);
+    public static HairStyle Bob { get; } = new(Strips: 400, Segments: 8, TopLength: 1.1f, SideLength: 1f, Width: 0.07f, Droop: 1f, Lift: 0.15f, Sweep: 0.5f);
 
     /// <summary>Hanging well past the shoulders; the head it sits on should be raised.</summary>
-    public static HairStyle Long { get; } = new(400, 12, 2.4f, 2.2f, Width: 0.08f, 1.4f, 0.1f, 0.5f);
+    public static HairStyle Long { get; } = new(Strips: 400, Segments: 12, TopLength: 2.4f, SideLength: 2.2f, Width: 0.08f, Droop: 1.4f, Lift: 0.1f, Sweep: 0.5f);
 }
 
 /// <summary>
@@ -127,18 +127,7 @@ public static class HairCards
 
         for (var i = 0; i < style.Strips; i++)
         {
-            // A root anywhere on the head that hair grows: above the ears, and on the front only
-            // above the hairline, which drops towards the temples
-            Vector3 radial;
-            do
-            {
-                var phi = (float)random.NextDouble() * MathF.Tau;
-                var y = -1f + (float)random.NextDouble() * 2f;
-                var ring = MathF.Sqrt(MathF.Max(0f, 1f - y * y));
-                radial = new Vector3(ring * MathF.Cos(phi), y, ring * MathF.Sin(phi));
-            }
-            while (radial.Y < 0.05f || (radial.Z > 0f && radial.Y < 0.45f + 0.4f * radial.Z));
-
+            var radial = RootOnScalp(random);
             var root = radial * headRadius;
 
             // Sides to crown, 0 to 1: what the length and the lift follow
@@ -151,17 +140,7 @@ public static class HairCards
             var back = Tangential(-Vector3.UnitZ, radial);
             var start = Vector3.Normalize(Vector3.Lerp(down, back, style.Sweep * crown) + Vector3.UnitY * (style.Lift * crown) + radial * 0.2f);
 
-            for (var s = 0; s <= style.Segments; s++)
-            {
-                var t = s / (float)style.Segments;
-                var p = root + start * (length * t) + Vector3.UnitY * (-style.Droop * length * t * t);
-
-                // Never inside the head: pushed out to just above the scalp, a little further along the card
-                var clearance = headRadius + 0.03f + 0.02f * t;
-                if (p.LengthSquared() < clearance * clearance) p = Vector3.Normalize(p) * clearance;
-
-                points[s] = p;
-            }
+            BendSpine(points, root, start, length, style, headRadius);
 
             var first = builder.VertexCount;
 
@@ -171,7 +150,7 @@ public static class HairCards
                 var direction = Vector3.Normalize(s < style.Segments ? points[s + 1] - points[s] : points[s] - points[s - 1]);
                 var outward = Vector3.Normalize(points[s]);
                 var across = Vector3.Cross(outward, direction);
-                across = across.LengthSquared() < 0.0001f ? Vector3.UnitX : Vector3.Normalize(across);
+                across = MathUtil.IsZero(across.LengthSquared()) ? Vector3.UnitX : Vector3.Normalize(across);
                 var cardNormal = Vector3.Normalize(Vector3.Cross(across, direction));
                 var halfWidth = style.Width * 0.5f * (1f - 0.3f * t);
 
@@ -205,11 +184,50 @@ public static class HairCards
         return new Model { new Mesh { Draw = builder.ToMeshDraw(device), MaterialIndex = 0 } };
     }
 
+    /// <summary>
+    /// A root anywhere on the head that hair grows, as a direction from the head's centre: above the
+    /// ears, and on the front only above the hairline, which drops towards the temples.
+    /// </summary>
+    private static Vector3 RootOnScalp(Random random)
+    {
+        Vector3 radial;
+
+        do
+        {
+            var phi = (float)random.NextDouble() * MathF.Tau;
+            var y = -1f + (float)random.NextDouble() * 2f;
+            var ring = MathF.Sqrt(MathF.Max(0f, 1f - y * y));
+            radial = new Vector3(ring * MathF.Cos(phi), y, ring * MathF.Sin(phi));
+        }
+        while (radial.Y < 0.05f || (radial.Z > 0f && radial.Y < 0.45f + 0.4f * radial.Z));
+
+        return radial;
+    }
+
+    /// <summary>
+    /// Fills a card's spine from its root: straight along <paramref name="start"/>, drooping with the
+    /// square of the distance, and never inside the head.
+    /// </summary>
+    private static void BendSpine(Span<Vector3> points, Vector3 root, Vector3 start, float length, HairStyle style, float headRadius)
+    {
+        for (var s = 0; s <= style.Segments; s++)
+        {
+            var t = s / (float)style.Segments;
+            var p = root + start * (length * t) + Vector3.UnitY * (-style.Droop * length * t * t);
+
+            // Pushed out to just above the scalp, a little further along the card
+            var clearance = headRadius + 0.03f + 0.02f * t;
+            if (p.LengthSquared() < clearance * clearance) p = Vector3.Normalize(p) * clearance;
+
+            points[s] = p;
+        }
+    }
+
     /// <summary>A direction flattened onto the scalp at a root: the part of it that is not along the radial.</summary>
     private static Vector3 Tangential(Vector3 direction, Vector3 radial)
     {
         var flat = direction - radial * Vector3.Dot(direction, radial);
 
-        return flat.LengthSquared() < 0.0001f ? Vector3.UnitX : Vector3.Normalize(flat);
+        return MathUtil.IsZero(flat.LengthSquared()) ? Vector3.UnitX : Vector3.Normalize(flat);
     }
 }

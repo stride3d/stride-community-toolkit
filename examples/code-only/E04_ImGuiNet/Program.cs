@@ -9,8 +9,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 
-WindowsDpiManager.LogDpiInfo("Before Game: ");
-
 // Path the cube travels along
 const float OrbitRadius = 3f;
 const float OrbitHeight = 2f;
@@ -85,9 +83,8 @@ void Update(Scene rootScene, GameTime gameTime)
 /// </summary>
 Entity CreateOrbitingCube(Scene rootScene)
 {
-    var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions { Body = BodyMode.Kinematic });
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions { Body = BodyMode.Kinematic, Position = new Vector3(0, OrbitHeight, 0) });
 
-    cube.Transform.Position = new Vector3(0, OrbitHeight, 0);
     cube.Scene = rootScene;
 
     return cube;
@@ -106,8 +103,8 @@ void CreateObstacleStacks(Scene rootScene)
 
         for (var level = 0; level < BoxesPerStack; level++)
         {
-            var box = game.CreatePrimitive(Primitive3D.Cube());
-            box.Transform.Position = new Vector3(x, BoxSize * (0.5f + level), z);
+            var box = game.CreatePrimitive(Primitive3D.Cube(), new() { Position = new Vector3(x, BoxSize * (0.5f + level), z) });
+
             box.Scene = rootScene;
         }
     }

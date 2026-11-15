@@ -1,4 +1,3 @@
-using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
@@ -26,7 +25,7 @@ public sealed class SimpleHud
     private readonly EntityTextComponent _warningLabel;
 
     #region Step8Class
-    public SimpleHud(Game game, Scene scene, ShapeBatch shapeBatch, HudStyle style)
+    public SimpleHud(Scene scene, ShapeBatch shapeBatch, HudStyle style)
     {
         _shapeBatch = shapeBatch;
         _style = style;

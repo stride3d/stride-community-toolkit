@@ -43,9 +43,9 @@ public static class HudPanel
 
         // The body, tagged so the pointer finds the panel
         canvas.Style(new HudStyle(HudCanvas.Thin + 0.6f * hover, 0.62f, theme.Ground) { Glow = 3f * hover, GlowColour = theme.Glow, Additive = true });
-        canvas.Shapes.Tag = new HudId(name);
+        canvas.Tag(name);
         canvas.ChamferedPanel(bounds.Center, bounds.Size, Cut, accent.WithAlpha(0.55f + 0.45f * hover));
-        canvas.Shapes.Tag = null;
+        canvas.Untag();
 
         // The glass over it: the batch's fill source, tinted by the accent. Squares cover less of
         // the panel than lines, so they are drawn stronger.

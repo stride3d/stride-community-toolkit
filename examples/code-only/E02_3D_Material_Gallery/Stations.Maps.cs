@@ -57,7 +57,8 @@ public static class MapStations
     {
         station.Clear();
 
-        var set = station.Pick("brick", "rock", "rooftile") switch { 0 => "brick", 1 => "rock", _ => "rooftile" };
+        var choice = station.Pick("brick", "rock", "rooftile");
+        var set = station.VariationNames[choice];
         var albedo = station.Textures.Color($"{set}/{set}_dif.png");
         var normal = station.Textures.Normal($"{set}/{set}_nml.png");
         var gloss = station.Textures.Data($"{set}/{set}_gls.png");

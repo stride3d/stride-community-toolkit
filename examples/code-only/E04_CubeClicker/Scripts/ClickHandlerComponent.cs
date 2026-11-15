@@ -71,7 +71,7 @@ public class ClickHandlerComponent : AsyncScript
 
         if (loadedCubes.Count == 0)
         {
-            CreateCube();
+            CreateCube(_defaultCubePosition);
         }
         else
         {
@@ -110,7 +110,7 @@ public class ClickHandlerComponent : AsyncScript
 
         Console.WriteLine("Adding new entity");
 
-        CreateCube(_random.NextPoint(new BoundingBox(Vector3.One * -7, Vector3.One * 7)) + new Vector3(0, 10, 0), Vector3.Zero);
+        CreateCube(_random.NextPoint(new BoundingBox(Vector3.One * -7, Vector3.One * 7)) + new Vector3(0, 10, 0));
     }
 
     private static void RemoveEntity(Entity entity)
@@ -146,12 +146,12 @@ public class ClickHandlerComponent : AsyncScript
         }
     }
 
-    private void CreateCube(Vector3? position = null, Vector3? size = null)
+    private void CreateCube(Vector3 position)
     {
-        var entity = Game.CreatePrimitive(Primitive3D.Cube(), new() { EntityName = HitEntityName });
+        var entity = Game.CreatePrimitive(Primitive3D.Cube(), new() { EntityName = HitEntityName, Position = position });
 
-        entity.Transform.Scale = size ?? Vector3.One;
-        entity.Transform.Position = position ?? _defaultCubePosition;
+        // Nothing to see until the grower's first frame
+        entity.Transform.Scale = Vector3.Zero;
         entity.Add(new CubeGrower());
         entity.Scene = Entity.Scene;
     }

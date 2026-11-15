@@ -47,7 +47,7 @@ public static class NumberStations
         var metalness = station.Pick("dielectric", "metal") == 0 ? 0f : 1f;
         var colour = metalness > 0f ? new Color(255, 200, 120) : new Color(80, 130, 200);
 
-        station.PlaceRow([.. Enumerable.Range(0, 5).Select(i => station.Compile(Recipes.Pbr(colour, glossiness: i / 4f, metalness)))]);
+        station.PlaceRow([.. Enumerable.Range(0, 5).Select(i => station.Compile(Recipes.Pbr(colour, metalness, glossiness: i / 4f)))]);
     }
 
     /// <summary>
@@ -103,9 +103,9 @@ public static class NumberStations
 
         station.PlaceRow(
         [
-            station.Compile(Recipes.Pbr(colour, glossiness, metalness: 0f, new MaterialSpecularMicrofacetNormalDistributionGGX())),
-            station.Compile(Recipes.Pbr(colour, glossiness, metalness: 0f, new MaterialSpecularMicrofacetNormalDistributionBeckmann())),
-            station.Compile(Recipes.Pbr(colour, glossiness, metalness: 0f, new MaterialSpecularMicrofacetNormalDistributionBlinnPhong())),
+            station.Compile(Recipes.Pbr(colour, metalness: 0f, glossiness, new MaterialSpecularMicrofacetNormalDistributionGGX())),
+            station.Compile(Recipes.Pbr(colour, metalness: 0f, glossiness, new MaterialSpecularMicrofacetNormalDistributionBeckmann())),
+            station.Compile(Recipes.Pbr(colour, metalness: 0f, glossiness, new MaterialSpecularMicrofacetNormalDistributionBlinnPhong())),
         ], spacing: 2.4f);
     }
 

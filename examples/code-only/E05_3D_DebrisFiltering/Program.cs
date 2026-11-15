@@ -21,7 +21,7 @@ using Stride.Rendering;
 // This is the first reason to filter: not a rule of the game but a saving, for things whose mutual
 // collisions nobody would see. E05_3D_CollisionLayer is the example for the matrix itself.
 //
-// Space fires the burst again, F flips the debris-against-debris pair and fires again, and 1 to 3
+// Space fires the burst again, F flips the debris-against-debris pair and fires again, and 1 to 4
 // pick how many fragments there are.
 
 const CollisionLayer SceneryLayer = CollisionLayer.Layer1;
@@ -58,7 +58,7 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    simulation = game.GetCameraEntity().GetSimulation();
+    simulation = game.GetSimulation();
     fragmentMaterial = game.CreateMaterial(new Color(200, 120, 70), metalness: 0f, glossiness: 0.4f);
 
     // The ground the setup made is on the default layer; the pit's walls go on the scenery layer with it

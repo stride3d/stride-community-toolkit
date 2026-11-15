@@ -20,7 +20,7 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: scen
     game.AddOrientationGizmo();
 
     // Screen-space labels for the EntityTextComponents below
-    game.AddSceneRenderer(new EntityTextRenderer());
+    game.AddEntityTextRenderer();
 
     AddTriangleEntity(scene);
 });
@@ -30,12 +30,14 @@ void AddTriangleEntity(Scene scene)
     const float startX = -4f;
     const float startZ = -1f;
 
-    var vertices = new VertexPositionTexture[3];
-    vertices[0].Position = new Vector3(startX, 0f, startZ);
-    vertices[1].Position = new Vector3(startX + 0.5f, 1f, startZ);
-    vertices[2].Position = new Vector3(startX + 1f, 0f, startZ);
+    VertexPositionTexture[] vertices =
+    [
+        new(new Vector3(startX, 0f, startZ), default),
+        new(new Vector3(startX + 0.5f, 1f, startZ), default),
+        new(new Vector3(startX + 1f, 0f, startZ), default),
+    ];
 
-    var vertexBuffer = Buffer.Vertex.New(game.GraphicsDevice, vertices, GraphicsResourceUsage.Dynamic);
+    var vertexBuffer = Buffer.Vertex.New(game.GraphicsDevice, vertices);
     int[] indices = [0, 1, 2];
     var indexBuffer = Buffer.Index.New(game.GraphicsDevice, indices);
 
@@ -45,7 +47,7 @@ void AddTriangleEntity(Scene scene)
         {
             PrimitiveType = PrimitiveType.TriangleList,
             DrawCount = indices.Length,
-            IndexBuffer = new IndexBufferBinding(indexBuffer, true, indices.Length),
+            IndexBuffer = new IndexBufferBinding(indexBuffer, is32Bit: true, indices.Length),
             VertexBuffers = [new VertexBufferBinding(vertexBuffer, VertexPositionTexture.Layout, vertexBuffer.ElementCount)],
         }
     };
@@ -64,7 +66,7 @@ void AddVertexLabels(Entity parent, ReadOnlySpan<Vector3> localPositions, string
     for (var i = 0; i < localPositions.Length; i++)
     {
         var position = localPositions[i];
-        var label = new Entity($"{labelPrefix}{i}")
+        var label = new Entity($"{labelPrefix}{i}", position)
         {
             new EntityTextComponent
             {
@@ -81,7 +83,6 @@ void AddVertexLabels(Entity parent, ReadOnlySpan<Vector3> localPositions, string
         };
 
         // In the parent's local space, like the mesh vertices
-        label.Transform.Position = position;
         parent.AddChild(label);
     }
 }
@@ -106,7 +107,7 @@ concepts:
   - Building a single triangle from a vertex and index buffer
   - "Choosing a vertex format: VertexPositionTexture and its Layout"
   - Labelling vertices on screen to debug a mesh
-  - "Registering the label renderer with AddSceneRenderer(new EntityTextRenderer())"
+  - "Registering the label renderer with AddEntityTextRenderer()"
   - Orienting yourself with a named-axis ground gizmo
   - "Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo, AddOrientationGizmo, CreateFlatMaterial"
 tags:

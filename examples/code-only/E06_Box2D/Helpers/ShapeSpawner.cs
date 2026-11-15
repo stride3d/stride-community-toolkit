@@ -4,27 +4,25 @@ using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using static Box2D.NET.B2Joints;
 
 namespace E06_Box2D.Helpers;
 
 /// <summary>
-/// Creates and removes the dynamic shapes the demo spawns, and keeps the running total.
+/// Creates and removes the dynamic shapes the demo spawns, and keeps count of them.
 /// </summary>
 /// <remarks>
 /// Split out of <see cref="SceneManager"/>, which orchestrates the demo: input, UI and the static
 /// yard. Everything here is about one shape becoming an entity, a body and a fixture, which is the
 /// part of the Box2D integration worth reading on its own.
 /// </remarks>
-/// <param name="scene">The scene the shape entities are added to and removed from.</param>
 /// <param name="simulation">The simulation the bodies are created in.</param>
 /// <param name="shapeFactory">Supplies the models and entities the bodies are attached to.</param>
-public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeFactory shapeFactory)
+public sealed class ShapeSpawner(Box2DSimulation simulation, ShapeFactory shapeFactory)
 {
-    private readonly B2WorldId _worldId = simulation.WorldId;
+    private readonly List<Entity> _spawned = [];
 
-    /// <summary>Gets how many shapes have been spawned since the last <see cref="Clear"/>.</summary>
-    public int TotalCreated { get; private set; }
+    /// <summary>Gets how many spawned shapes there are: every one since the last <see cref="Clear"/>.</summary>
+    public int Count => _spawned.Count;
 
     /// <summary>
     /// The shape definition used for every fixture in this demo, built from the
@@ -49,6 +47,16 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
     }
 
     /// <summary>
+    /// Spawns one of the factory's models at a world position.
+    /// </summary>
+    /// <param name="model">The model to spawn.</param>
+    /// <param name="position">The world position to spawn at.</param>
+    /// <param name="color">An override colour, or <see langword="null"/> for the model's own.</param>
+    /// <returns>The body created, for a caller that sets something on it.</returns>
+    public B2BodyId Add(Shape2DModel model, Vector2 position, Color? color = null)
+        => AttachBody(model, shapeFactory.CreateEntity(model, color, position));
+
+    /// <summary>
     /// Spawns <paramref name="count"/> shapes of randomly chosen types.
     /// </summary>
     /// <param name="count">How many to spawn.</param>
@@ -56,7 +64,7 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
     {
         for (var i = 0; i < count; i++)
         {
-            var shapeModel = ShapeFactory.GetRandomShapeModel();
+            var shapeModel = shapeFactory.GetRandomShapeModel();
 
             AttachBody(shapeModel, shapeFactory.CreateEntity(shapeModel, overrideColor: GameConfig.ShapeColor));
         }
@@ -81,7 +89,7 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
     /// <returns>The model that was spawned.</returns>
     public Shape2DModel AddAtPosition(Vector2 position)
     {
-        var shapeModel = ShapeFactory.GetRandomShapeModel();
+        var shapeModel = shapeFactory.GetRandomShapeModel();
 
         AttachBody(shapeModel, shapeFactory.CreateEntity(shapeModel, GameConfig.SelectedShapeColor, position));
 
@@ -89,19 +97,17 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
     }
 
     /// <summary>
-    /// Removes every spawned shape from the scene and the simulation, and resets the total.
+    /// Removes every spawned shape from the scene and the simulation.
     /// </summary>
     public void Clear()
     {
-        var shapesToRemove = scene.Entities.Where(e => e.Name.EndsWith(GameConfig.ShapeName)).ToList();
-
-        foreach (var entity in shapesToRemove)
+        foreach (var entity in _spawned)
         {
             simulation.RemoveBody(entity);
             entity.Remove();
         }
 
-        TotalCreated = 0;
+        _spawned.Clear();
     }
 
     private B2BodyId AttachBody(Shape2DModel shapeModel, Entity entity)
@@ -110,15 +116,15 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
 
         ShapeFixtureBuilder.AttachShape(shapeModel.Type, bodyId, DefaultShapeDef());
 
-        TotalCreated++;
+        _spawned.Add(entity);
 
         return bodyId;
     }
 
     private void CreateConnectedShapePair()
     {
-        var shapeModel1 = ShapeFactory.GetRandomShapeModel();
-        var shapeModel2 = ShapeFactory.GetRandomShapeModel();
+        var shapeModel1 = shapeFactory.GetRandomShapeModel();
+        var shapeModel2 = shapeFactory.GetRandomShapeModel();
 
         var entity1 = shapeFactory.CreateEntity(shapeModel1, GameConfig.ConstraintColor);
         var entity2 = shapeFactory.CreateEntity(shapeModel2, GameConfig.ConstraintColor);
@@ -127,25 +133,19 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
         // rather than yanking the pair together on the first step.
         entity2.Transform.Position = entity1.Transform.Position + new Vector3(GameConfig.DefaultJointLength, 0, 0);
 
-        CreateDistanceJoint(AttachBody(shapeModel1, entity1), AttachBody(shapeModel2, entity2));
-    }
+        var bodyA = AttachBody(shapeModel1, entity1);
+        var bodyB = AttachBody(shapeModel2, entity2);
 
-    private void CreateDistanceJoint(B2BodyId bodyA, B2BodyId bodyB)
-    {
-        var jointDef = b2DefaultDistanceJointDef();
-        jointDef.hertz = GameConfig.JointHertz;
-        jointDef.dampingRatio = GameConfig.JointDampingRatio;
-        jointDef.length = GameConfig.DefaultJointLength;
-        jointDef.maxLength = GameConfig.DefaultJointLength;
-        jointDef.minLength = GameConfig.DefaultJointLength;
-        jointDef.enableSpring = true;
-        jointDef.enableLimit = true;
-
-        jointDef.@base.bodyIdA = bodyA;
-        jointDef.@base.bodyIdB = bodyB;
-        jointDef.@base.localFrameA.p = new B2Vec2(0, 0);
-        jointDef.@base.localFrameB.p = new B2Vec2(0, 0);
-
-        b2CreateDistanceJoint(_worldId, in jointDef);
+        // Centre to centre, sprung, and limited to the length it starts at
+        simulation.Joints.CreateDistance(bodyA, bodyB, entity1.Transform.Position.XY(), entity2.Transform.Position.XY(), new DistanceJointOptions
+        {
+            EnableSpring = true,
+            Hertz = GameConfig.JointHertz,
+            DampingRatio = GameConfig.JointDampingRatio,
+            EnableLimit = true,
+            Length = GameConfig.DefaultJointLength,
+            MinLength = GameConfig.DefaultJointLength,
+            MaxLength = GameConfig.DefaultJointLength,
+        });
     }
 }

@@ -145,8 +145,10 @@ void BuildScene(Scene scene)
         var z = -4 + i * 3f;
         var shade = (byte)(170 - i * 8);
 
-        Place(Primitive3D.Cylinder(0.6f, 2), new Vector3(-4, 1, z), game.CreateMaterial(new Color(shade, shade, (byte)(shade + 20))));
-        Place(Primitive3D.Cylinder(0.6f, 2), new Vector3(4, 1, z), game.CreateMaterial(new Color(shade, shade, (byte)(shade + 20))));
+        var stone = game.CreateMaterial(new Color(shade, shade, (byte)(shade + 20)));
+
+        Place(Primitive3D.Cylinder(0.6f, 2), new Vector3(-4, 1, z), stone);
+        Place(Primitive3D.Cylinder(0.6f, 2), new Vector3(4, 1, z), stone);
     }
 
     // Three lamps brighter than white: bloom haloes them, light streaks and lens flare stretch them.

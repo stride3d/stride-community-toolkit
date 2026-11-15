@@ -7,7 +7,7 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 
-ImmediateDebugRenderSystem? debugDraw = null;
+ImmediateDebugRenderSystem debugDraw = null!;
 
 // Kept in a list, so Update does not search the scene every frame
 List<Entity> spheres = [];
@@ -31,8 +31,7 @@ void CreateSpheres(Scene rootScene, int count)
 
     for (var i = -half; i < half; i++)
     {
-        var entity = game.CreatePrimitive(Primitive3D.Sphere());
-        entity.Transform.Position = new Vector3(i * 0.99f, 8, 0);
+        var entity = game.CreatePrimitive(Primitive3D.Sphere(), new() { Position = new Vector3(i * 0.99f, 8, 0) });
         entity.Scene = rootScene;
         spheres.Add(entity);
     }
@@ -40,8 +39,6 @@ void CreateSpheres(Scene rootScene, int count)
 
 void Update(Scene scene, GameTime gameTime)
 {
-    if (debugDraw is null) return;
-
     foreach (var sphere in spheres)
     {
         var position = sphere.Transform.Position;

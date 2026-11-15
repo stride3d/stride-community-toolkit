@@ -52,7 +52,7 @@ var sceneSetup = new SceneSetup2D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     var cameraEntity = game.GetCameraEntity();
 
@@ -65,7 +65,7 @@ void Start(Scene rootScene)
     // Left mouse picks bodies up: rebuild the pyramid by hand, or throw something into the blast.
     game.AddGrabber2D(simulation);
 
-    BuildScene(rootScene);
+    BuildScene(scene);
     AddInstructions();
 }
 
@@ -102,7 +102,7 @@ void BuildScene(Scene scene)
     DynamicCircle(scene, new Vector2(19, 0.8f), 0.8f, gold, density: 2f / (MathF.PI * 0.8f * 0.8f));
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     simulation.Update(time.Elapsed);
 
@@ -130,7 +130,7 @@ void Update(Scene rootScene, GameTime time)
 
     if (game.Input.IsKeyPressed(Keys.R))
     {
-        Reset(rootScene);
+        Reset(scene);
     }
 
     ringAge += dt;
@@ -151,14 +151,11 @@ void DrawBlast()
 {
     if (lastBlast is not { } centre || ringAge > RingSeconds) return;
 
-    var alpha = 1 - ringAge / RingSeconds;
-    var ring = salmon;
-    ring.A = (byte)(255 * alpha);
-    var band = gold;
-    band.A = (byte)(120 * alpha);
-
-    shapeBatch.DrawAnnulus(centre, Radius + Falloff, Radius, band);
-    shapeBatch.DrawAnnulus(centre, Radius, Radius - 0.15f, ring);
+    // Both rings fade together: one opacity on the batch, put back when they are drawn
+    shapeBatch.Opacity = 1 - ringAge / RingSeconds;
+    shapeBatch.DrawAnnulus(centre, Radius + Falloff, Radius, gold with { A = 120 });
+    shapeBatch.DrawAnnulus(centre, Radius, Radius - 0.15f, salmon);
+    shapeBatch.Opacity = 1f;
 }
 
 void Reset(Scene scene)
@@ -176,8 +173,7 @@ void Reset(Scene scene)
 
 void Ground(Scene scene)
 {
-    var entity = new Entity("Ground") { new ShapeComponent { Vertices = [.. ShapeComponent.Box(new Vector2(52, 1))], Color = paleGreen } };
-    entity.Transform.Position = new Vector3(0, -0.5f, 0);
+    var entity = new Entity("Ground", new Vector3(0, -0.5f, 0)) { new ShapeComponent { Vertices = [.. ShapeComponent.Box(new Vector2(52, 1))], Color = paleGreen } };
     entity.Scene = scene;
     spawned.Add(entity);
 
@@ -187,8 +183,7 @@ void Ground(Scene scene)
 
 void DynamicBox(Scene scene, Vector2 centre, Vector2 size, Color color, float density = 1f)
 {
-    var entity = new Entity("Box") { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = color } };
-    entity.Transform.Position = new Vector3(centre, 0);
+    var entity = new Entity("Box", new Vector3(centre, 0)) { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = color } };
     entity.Scene = scene;
     spawned.Add(entity);
 
@@ -198,8 +193,7 @@ void DynamicBox(Scene scene, Vector2 centre, Vector2 size, Color color, float de
 
 void DynamicCircle(Scene scene, Vector2 centre, float radius, Color color, float density = 1f)
 {
-    var entity = new Entity("Circle") { new ShapeComponent { Vertices = [Vector2.Zero], Radius = radius, Color = color } };
-    entity.Transform.Position = new Vector3(centre, 0);
+    var entity = new Entity("Circle", new Vector3(centre, 0)) { new ShapeComponent { Vertices = [Vector2.Zero], Radius = radius, Color = color } };
     entity.Scene = scene;
     spawned.Add(entity);
 

@@ -90,6 +90,12 @@ public sealed class MaterialTextures(GraphicsDevice device) : IDisposable
         return [.. image.PixelBuffer[0].GetPixels<Pixel>().Select(pixel => pixel.G)];
     }
 
+    /// <summary>The ripple height map two stations share, made in code on first use.</summary>
+    public Texture Ripples() => Generated("ripples", () => RuntimeTextures.Ripples(device));
+
+    /// <summary>The normal map computed from the ripples' heights, made on first use.</summary>
+    public Texture RippleNormals() => Generated("ripple-normals", () => RuntimeTextures.NormalFromHeight(device, RuntimeTextures.RipplePixels(), 256));
+
     /// <summary>A texture computed in code, made on first use and kept for the run.</summary>
     /// <param name="name">Its name, the key it is kept under.</param>
     /// <param name="make">How to make it.</param>

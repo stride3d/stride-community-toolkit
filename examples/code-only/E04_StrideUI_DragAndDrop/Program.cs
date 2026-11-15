@@ -28,8 +28,7 @@ void Start(Scene scene)
     uiManager = new UIManager(game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont"), GenerateRandomSpheres);
     uiManager.Entity.Scene = scene;
 
-    var capsule = game.CreatePrimitive(Primitive3D.Capsule());
-    capsule.Transform.Position = new Vector3(0, 8, 0);
+    var capsule = game.CreatePrimitive(Primitive3D.Capsule(), new() { Position = new Vector3(0, 8, 0) });
     capsule.Scene = scene;
 }
 

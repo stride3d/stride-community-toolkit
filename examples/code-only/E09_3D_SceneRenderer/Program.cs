@@ -8,17 +8,14 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
 
-BodyComponent body = null!;
-var impulseApplied = false;
 
 using var game = new Game();
 
 // Three ways to draw over the scene: a scene-wide renderer (MyCustomSceneRenderer), the toolkit's
 // EntityTextRenderer for EntityTextComponent labels, and a renderer that belongs to one entity
 // (SpriteBatchRendererScript)
-game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
@@ -28,7 +25,7 @@ void Start(Scene scene)
     game.AddSceneRenderer(new MyCustomSceneRenderer());
 
     // 2. The toolkit's renderer for EntityTextComponent labels
-    game.AddSceneRenderer(new EntityTextRenderer());
+    game.AddEntityTextRenderer();
 
     var cube = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions { Position = new Vector3(0, 0.5f, 0) });
 
@@ -47,8 +44,6 @@ void Start(Scene scene)
     // Tilted, so it rolls when it lands
     capsule.Transform.Rotation = Quaternion.RotationZ(MathUtil.DegreesToRadians(2));
 
-    body = capsule.Get<BodyComponent>();
-
     // 3. A startup script that draws for this one entity
     capsule.Add(new SpriteBatchRendererScript());
 
@@ -62,16 +57,9 @@ void Start(Scene scene)
     });
 
     capsule.Scene = scene;
-}
 
-void Update(Scene scene, GameTime time)
-{
-    if (impulseApplied) return;
-
-    // A push, so it rolls after it lands
-    body.ApplyAngularImpulse(new(0, 10, 0));
-
-    impulseApplied = true;
+    // A push, so it rolls after it lands: the body takes it from the moment its entity is in the scene
+    capsule.Get<BodyComponent>().ApplyAngularImpulse(new(0, 10, 0));
 }
 /*
 ---example-metadata

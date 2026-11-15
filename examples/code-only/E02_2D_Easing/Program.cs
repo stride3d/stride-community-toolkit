@@ -47,6 +47,7 @@ var clock = 0f;
 var t = 0f;
 
 ShapeBatch? shapes = null;
+TextOverlay overlay = null!;
 EntityTextComponent? title = null;
 EntityTextComponent? note = null;
 
@@ -83,14 +84,15 @@ void Start(Scene rootScene)
     rootScene.Entities.Add(title.Entity);
     rootScene.Entities.Add(note.Entity);
 
-    TextOverlay.GetOrCreate(game).AddSection("Easing", BuildOverlayLines);
+    overlay = TextOverlay.GetOrCreate(game);
+    overlay.AddSection("Easing", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
 {
     if (shapes is null) return;
 
-    HandleInput();
+    HandleInput(shapes);
 
     // One clock for every tile: a run of `duration` seconds, held at each end so the arrival reads
     if (!paused) clock += (float)time.Elapsed.TotalSeconds;
@@ -113,7 +115,6 @@ void Update(Scene scene, GameTime time)
 // view allows, with room for the title and race lanes above it and the note below
 void PlacePanel()
 {
-    var overlay = TextOverlay.GetOrCreate(game);
     var pixelsPerUnit = game.GraphicsDevice.Presenter.BackBuffer.Height / ViewHeight;
     var overlayBottom = ViewHeight / 2f - overlay.BlockBounds.Bottom / pixelsPerUnit;
 
@@ -122,15 +123,8 @@ void PlacePanel()
     panelSize = Math.Clamp(top - (-ViewHeight / 2f + NoteBand), 4f, MaxPanelSize);
     panelCentre = new Vector2(panelCentre.X, top - panelSize / 2f);
 
-    if (title is not null)
-    {
-        title.Entity.Transform.Position = new Vector3(panelCentre + new Vector2(0f, panelSize / 2f + TitleBand), 0f);
-    }
-
-    if (note is not null)
-    {
-        note.Entity.Transform.Position = new Vector3(panelCentre + new Vector2(0f, -panelSize / 2f - 0.2f), 0f);
-    }
+    title?.Entity.Transform.Position = new Vector3(panelCentre + new Vector2(0f, panelSize / 2f + TitleBand), 0f);
+    note?.Entity.Transform.Position = new Vector3(panelCentre + new Vector2(0f, -panelSize / 2f - 0.2f), 0f);
 }
 
 void DrawTile(ShapeBatch shapes, Tile tile, bool isSelected)
@@ -146,7 +140,7 @@ void DrawTile(ShapeBatch shapes, Tile tile, bool isSelected)
     shapes.BorderWidth = isSelected ? 2f : 1f;
     shapes.Fill.Set(new Color(32, 36, 46), 0.9f);
 
-    if (isSelected) shapes.Glow.Set(10f, new Color(colour.R, colour.G, colour.B, (byte)140));
+    if (isSelected) shapes.Glow.Set(10f, colour.WithAlpha(140));
 
     // The box carries the tile as its tag, so a click can ask the batch which tile it hit
     shapes.Tag = tile;
@@ -199,7 +193,7 @@ void DrawPanel(ShapeBatch shapes, Tile tile)
         points[i] = new Vector2(left + s * panelSize, bottom + tile.Function.Ease(s) * panelSize);
     }
 
-    shapes.Glow.Set(8f, new Color(colour.R, colour.G, colour.B, (byte)110));
+    shapes.Glow.Set(8f, colour.WithAlpha(110));
     shapes.DrawPixelPolyline(points, 3f, colour);
     shapes.Glow.Clear();
 
@@ -219,11 +213,11 @@ void DrawPanel(ShapeBatch shapes, Tile tile)
     shapes.DrawDisc(new Vector2(left + t * panelSize, laneY - 0.7f), 0.2f, new Color(150, 156, 170));
     shapes.Fill.Set(null, 1f);
 
-    if (title is not null) title.Text = tile.Function.ToString();
-    if (note is not null) note.Text = Notes.Of(tile.Function);
+    title?.Text = tile.Function.ToString();
+    note?.Text = Notes.Of(tile.Function);
 }
 
-void HandleInput()
+void HandleInput(ShapeBatch shapes)
 {
     var input = game.Input;
 
@@ -239,7 +233,7 @@ void HandleInput()
     if (input.IsKeyPressed(Keys.Right)) duration = MathF.Min(8f, duration + 0.5f);
 
     // A click picks the tile under the mouse: the batch knows which box it drew there
-    if (input.IsMouseButtonPressed(MouseButton.Left) && shapes is not null && shapes.TryPick(input.MousePosition, out var hit) && hit.Tag is Tile picked)
+    if (input.IsMouseButtonPressed(MouseButton.Left) && shapes.TryPick(input.MousePosition, out var hit) && hit.Tag is Tile picked)
     {
         selected = Array.IndexOf(tiles, picked);
     }
@@ -266,7 +260,7 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
 
 static Entity Label(string text, Vector2 position, float fontSize, Color colour)
 {
-    var entity = new Entity($"Label {text}")
+    return new Entity($"Label {text}", new Vector3(position, 0f))
     {
         new EntityTextComponent
         {
@@ -277,10 +271,6 @@ static Entity Label(string text, Vector2 position, float fontSize, Color colour)
             Alignment = TextAlignment.Center,
         },
     };
-
-    entity.Transform.Position = new Vector3(position, 0f);
-
-    return entity;
 }
 
 static string ShortName(EasingFunction function)

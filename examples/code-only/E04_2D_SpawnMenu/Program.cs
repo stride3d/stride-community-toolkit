@@ -70,8 +70,7 @@ void Start(Scene rootScene)
         Items = [.. shapes.Index().Select(pair => new KeyMenuItem(
             Key: (Keys)(Keys.D1 + pair.Index),
             Text: pair.Item.Name ?? pair.Item.Type.Name,
-            Action: () => Spawn(pair.Item, random.NextVector3(new Vector3(-7, 6, 0), new Vector3(7, 20, 0))))
-)]
+            Action: () => Spawn(pair.Item, random.NextVector3(new Vector3(-7, 6, 0), new Vector3(7, 20, 0)))))]
     };
     // No order given, so it lands after the camera controller's help, which registers at -100
     var overlay = TextOverlay.GetOrCreate(game);

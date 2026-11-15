@@ -26,8 +26,7 @@ game.Run(new SceneSetup3D
     Resizable = true,
 }.UseBepu().UseSkybox(), start: (Scene rootScene) =>
 {
-    var entity = game.CreatePrimitive(Primitive3D.Capsule());
-    entity.Transform.Position = new Vector3(0, 8, 0);
+    var entity = game.CreatePrimitive(Primitive3D.Capsule(), new() { Position = new Vector3(0, 8, 0) });
     entity.Scene = rootScene;
 
     // The manifest makes the window sharp; this is the other half. With the process DPI-aware,

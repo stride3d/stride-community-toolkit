@@ -43,7 +43,7 @@ var random = new Random(9);
 var nextDrop = 0.0;
 
 BodyComponent spinner = null!;
-BepuSimulation? simulation = null;
+BepuSimulation simulation = null!;
 Material ballMaterial = null!;
 
 using var game = new Game();
@@ -71,22 +71,15 @@ void Start(Scene scene)
     var clockEntity = new Entity("Physics clock") { clock };
     clockEntity.Scene = scene;
 
+    // Room for 4x: the default cap of three steps per frame is for a game that never runs fast
+    simulation = game.GetSimulation();
+    simulation.MaxStepPerFrame = 8;
+
     TextOverlay.GetOrCreate(game).AddSection("Time control", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
 {
-    // The body carries its simulation from the moment its entity joins the scene; read once, here, and kept
-    if (simulation is null)
-    {
-        simulation = spinner.Simulation;
-
-        if (simulation is null) return;
-
-        // Room for 4x: the default cap of three steps per frame is for a game that never runs fast
-        simulation.MaxStepPerFrame = 8;
-    }
-
     if (game.Input.IsKeyPressed(Keys.J)) simulation.TimeScale = MathF.Max(simulation.TimeScale * 0.5f, 1f / 16f);
     if (game.Input.IsKeyPressed(Keys.K)) simulation.TimeScale = MathF.Min(simulation.TimeScale * 2f, 4f);
     if (game.Input.IsKeyPressed(Keys.N)) simulation.TimeScale = 1f;
@@ -180,20 +173,20 @@ void Reset()
     clock.Reset();
     gravityIndex = 0;
 
-    simulation!.TimeScale = 1f;
+    simulation.TimeScale = 1f;
     simulation.Enabled = true;
     simulation.PoseGravity = gravities[0].Value;
 }
 
 IReadOnlyList<TextElement> BuildOverlayLines()
 {
-    var scale = simulation?.TimeScale ?? 1f;
-    var running = simulation?.Enabled ?? true;
+    var scale = simulation.TimeScale;
+    var running = simulation.Enabled;
     var speed = scale >= 1f ? $"{scale:0}x" : $"1/{1f / scale:0}";
 
     return
     [
-        new("J / K", "Slower / faster, 1/16x to 4x", Color.Gold),
+        new(["J", "K"], "Slower or faster, 1/16x to 4x", Color.Gold),
         new("N", "Normal speed", Color.Gold),
         new("Space", "Pause and resume the simulation", Color.Gold),
         new("G", "Next gravity: Earth, Moon, none, upside down", Color.Gold),

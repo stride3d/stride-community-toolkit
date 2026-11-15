@@ -35,6 +35,9 @@ public sealed class HudCanvas
     private readonly Dictionary<HudId, Label> _labels = [];
     private readonly Dictionary<HudId, float> _animated = [];
 
+    // ShapeBatch.Tag is an object: an id assigned to it is boxed, so each id is boxed once and kept
+    private readonly Dictionary<HudId, object> _tags = [];
+
     private HudId? _hovered;
     private bool _clicked;
     private float _boot;
@@ -93,6 +96,17 @@ public sealed class HudCanvas
         _hovered = Shapes.TryPick(pointer, out var hit, PickSlack) ? hit.Tag as HudId? : null;
     }
 
+    /// <summary>Tags the shapes drawn from here on with an id, for the pointer to find.</summary>
+    public void Tag(HudId id)
+    {
+        if (!_tags.TryGetValue(id, out var tag)) _tags[id] = tag = id;
+
+        Shapes.Tag = tag;
+    }
+
+    /// <summary>Stops tagging: the shapes drawn from here on are not the pointer's to find.</summary>
+    public void Untag() => Shapes.Tag = null;
+
     /// <summary>Ends a frame: hides the labels no widget drew.</summary>
     public void End()
     {
@@ -101,7 +115,7 @@ public sealed class HudCanvas
             if (label.Frame != _frame) label.Component.IsVisible = false;
         }
 
-        Shapes.Tag = null;
+        Untag();
     }
 
     /// <summary>Changes the scheme and starts the fade-in again.</summary>

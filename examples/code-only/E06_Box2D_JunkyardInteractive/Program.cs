@@ -11,9 +11,7 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 using static Box2D.NET.B2Bodies;
-using static Box2D.NET.B2Geometries;
 using static Box2D.NET.B2MathFunction;
-using static Box2D.NET.B2Shapes;
 
 // The playground sibling of E06_Box2D_Junkyard: the same walled yard and sweeping plow, built the
 // Stride way - every shape is an entity carrying ShapeComponent (the testbed look, no meshes or
@@ -55,7 +53,7 @@ Basic2DCameraController cameraController = null!;
 var random = new Random(1);
 List<SpawnedShape> shapes = [];
 var sensorWatcher = new SensorWatcher();
-List<KeyMenu> menus = [];
+KeyMenu shapeMenu = null!;
 
 // The shape catalogue: outline vertices plus the rounding radius the shader applies. A single
 // vertex with a radius is a circle, two vertices with a radius a capsule - and the collider is
@@ -85,7 +83,7 @@ var sceneSetup = new SceneSetup2D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
@@ -102,11 +100,11 @@ void Start(Scene rootScene)
     // under the cursor, so the held shape still collides with the pile and the plow.
     game.AddGrabber2D(simulation);
 
-    CreateGround(rootScene);
-    CreateSensorGate(rootScene);
-    CreatePusher(rootScene);
-    SetupMenus();
-    SpawnBatch(rootScene, InitialCount);
+    CreateGround(scene);
+    CreateSensorGate(scene);
+    CreatePusher(scene);
+    SetupMenu();
+    SpawnBatch(scene, InitialCount);
 }
 
 /// <summary>
@@ -116,18 +114,18 @@ void Start(Scene rootScene)
 void CreateGround(Scene scene)
 {
     var groundId = simulation.CreateStaticBody(Vector2.Zero);
-    var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
 
-    var floorSquare = ShapeComponent.Box(new Vector2(1.1f * GridSize, GridSize));
-    var wallSquare = ShapeComponent.Box(new Vector2(GridSize, 1.1f * GridSize));
+    var floorSize = new Vector2(1.1f * GridSize, GridSize);
+    var wallSize = new Vector2(GridSize, 1.1f * GridSize);
+    var floorSquare = ShapeComponent.Box(floorSize);
+    var wallSquare = ShapeComponent.Box(wallSize);
 
     var y = 0.0f;
     var x = -80.0f * GridSize;
 
     for (var i = 0; i < 161; ++i)
     {
-        var box = b2MakeOffsetBox(0.55f * GridSize, 0.5f * GridSize, new B2Vec2(x, y), b2Rot_identity);
-        b2CreatePolygonShape(groundId, in shapeDef, in box);
+        ShapeFixtureBuilder.AttachBox(floorSize, groundId, new Vector2(x, y));
         AddStaticSquare(scene, floorSquare, x, y);
         x += GridSize;
     }
@@ -136,12 +134,10 @@ void CreateGround(Scene scene)
 
     for (var i = 0; i < 50; ++i)
     {
-        var leftBox = b2MakeOffsetBox(0.5f * GridSize, 0.55f * GridSize, new B2Vec2(-80.0f * GridSize, y), b2Rot_identity);
-        b2CreatePolygonShape(groundId, in shapeDef, in leftBox);
+        ShapeFixtureBuilder.AttachBox(wallSize, groundId, new Vector2(-80.0f * GridSize, y));
         AddStaticSquare(scene, wallSquare, -80.0f * GridSize, y);
 
-        var rightBox = b2MakeOffsetBox(0.5f * GridSize, 0.55f * GridSize, new B2Vec2(80.0f * GridSize, y), b2Rot_identity);
-        b2CreatePolygonShape(groundId, in shapeDef, in rightBox);
+        ShapeFixtureBuilder.AttachBox(wallSize, groundId, new Vector2(80.0f * GridSize, y));
         AddStaticSquare(scene, wallSquare, 80.0f * GridSize, y);
 
         y += GridSize;
@@ -150,9 +146,8 @@ void CreateGround(Scene scene)
 
 void AddStaticSquare(Scene scene, Vector2[] vertices, float x, float y)
 {
-    var entity = new Entity("StaticSquare") { new ShapeComponent { Vertices = [.. vertices], Color = paleGreen } };
+    var entity = new Entity("StaticSquare", new Vector3(x, y, 0)) { new ShapeComponent { Vertices = [.. vertices], Color = paleGreen } };
 
-    entity.Transform.Position = new Vector3(x, y, 0);
     entity.Scene = scene;
 }
 
@@ -164,9 +159,8 @@ void CreateSensorGate(Scene scene)
 {
     var gateVertices = ShapeComponent.Box(new Vector2(16f, 6f));
 
-    var entity = new Entity("SensorGate") { new ShapeComponent { Vertices = [.. gateVertices], Color = wheat } };
+    var entity = new Entity("SensorGate", new Vector3(0, 22, 0)) { new ShapeComponent { Vertices = [.. gateVertices], Color = wheat } };
 
-    entity.Transform.Position = new Vector3(0, 22, 0);
     entity.Scene = scene;
 
     var bodyId = simulation.CreateStaticBody(entity, new Vector2(0, 22));
@@ -189,27 +183,22 @@ void CreatePusher(Scene scene)
 
     var pusherId = simulation.CreateKinematicBody(entity, Vector2.Zero);
 
-    var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
-    var pusherBox = b2MakeOffsetBox(2.0f, 4.0f, new B2Vec2(0.0f, 4.0f), b2Rot_identity);
-    b2CreatePolygonShape(pusherId, in shapeDef, in pusherBox);
+    ShapeFixtureBuilder.AttachBox(new Vector2(4.0f, 8.0f), pusherId, new Vector2(0.0f, 4.0f));
 
     simulation.RegisterSimulationUpdate(new PusherDriver(pusherId));
 }
 
-void SetupMenus()
+void SetupMenu()
 {
-    menus =
-    [
-        new KeyMenu
-        {
-            Title = "Shape",
-            ToggleKey = Keys.C,
-            TitleColor = Color.Yellow,
-            SelectedIndex = currentShape,
-            Items = [.. catalogue.Select((definition, index) => new KeyMenuItem(
-                (Keys)(Keys.D1 + index), definition.Name, () => currentShape = index))]
-        },
-    ];
+    shapeMenu = new KeyMenu
+    {
+        Title = "Shape",
+        ToggleKey = Keys.C,
+        TitleColor = Color.Yellow,
+        SelectedIndex = currentShape,
+        Items = [.. catalogue.Select((definition, index) => new KeyMenuItem(
+            (Keys)(Keys.D1 + index), definition.Name, () => currentShape = index))]
+    };
 
     TextOverlay.GetOrCreate(game).AddSection("Playground", BuildOverlayLines);
 }
@@ -236,7 +225,7 @@ void SpawnBatch(Scene scene, int count)
 void Spawn(Scene scene, ShapeDefinition definition, Vector2 position)
 {
     var component = new ShapeComponent { Vertices = [.. definition.Vertices], Radius = definition.Radius, Color = pink };
-    var entity = new Entity("Shape") { component };
+    var entity = new Entity("Shape", new Vector3(position.X, position.Y, 0)) { component };
 
     var bodyId = simulation.CreateDynamicBody(entity, position);
 
@@ -245,7 +234,6 @@ void Spawn(Scene scene, ShapeDefinition definition, Vector2 position)
 
     AttachCollider(definition, bodyId, shapeDef);
 
-    entity.Transform.Position = new Vector3(position.X, position.Y, 0);
     entity.Scene = scene;
 
     shapes.Add(new SpawnedShape(entity, bodyId, component));
@@ -270,12 +258,12 @@ void AttachCollider(ShapeDefinition definition, B2BodyId bodyId, B2ShapeDef shap
     }
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     simulation.Update(time.Elapsed);
 
     UpdateShapeColors();
-    HandleInput(rootScene);
+    HandleInput(scene);
 }
 
 /// <summary>
@@ -300,16 +288,13 @@ Color BodyColor(SpawnedShape shape)
     return velocity.X * velocity.X + velocity.Y * velocity.Y > FastSpeed * FastSpeed ? salmon : pink;
 }
 
-void HandleInput(Scene rootScene)
+void HandleInput(Scene scene)
 {
     if (!game.Input.HasKeyboard) return;
 
-    foreach (var menu in menus)
-    {
-        if (menu.Update(game.Input)) return;
-    }
+    if (shapeMenu.Update(game.Input)) return;
 
-    if (game.Input.IsKeyPressed(Keys.Space)) SpawnBatch(rootScene, InitialCount / 2);
+    if (game.Input.IsKeyPressed(Keys.Space)) SpawnBatch(scene, InitialCount / 2);
     if (game.Input.IsKeyPressed(Keys.X)) ClearShapes();
     if (game.Input.IsKeyPressed(Keys.Escape)) cameraController.FollowTarget = null;
 
@@ -318,7 +303,7 @@ void HandleInput(Scene rootScene)
     // The left button belongs to the grabber; N drops one of the selected kind at the cursor.
     if (game.Input.IsKeyPressed(Keys.N) && camera.ScreenToWorldPointOnXYPlane(game.Input.MousePosition) is { } dropPoint)
     {
-        Spawn(rootScene, catalogue[currentShape], dropPoint);
+        Spawn(scene, catalogue[currentShape], dropPoint);
     }
 
     if (game.Input.IsMouseButtonPressed(MouseButton.Middle))
@@ -362,12 +347,8 @@ IReadOnlyList<TextElement> BuildOverlayLines()
         new("N", "Drop a new one at the cursor", Color.Yellow),
         new("Space", $"Spawn {InitialCount / 2} more", Color.Yellow),
         new("X", "Clear", Color.Yellow),
+        .. shapeMenu.GetLines(),
     ];
-
-    foreach (var menu in menus)
-    {
-        lines.AddRange(menu.GetLines());
-    }
 
     lines.Add(new(string.Empty));
     lines.Add(new($"{shapes.Count:N0} shapes as entities, one shader batch", Color.LightGreen));

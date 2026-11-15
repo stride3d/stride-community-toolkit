@@ -33,7 +33,7 @@ var startVariation = args.Length >= 4 && args[2] == "--variation" && int.TryPars
 var clean = args.Contains("--clean");
 
 Gallery<ParticleStation> gallery = null!;
-ParticleTextures? textures = null;
+ParticleTextures textures = null!;
 
 using var game = new Game();
 
@@ -56,11 +56,9 @@ void Start(Scene rootScene)
     textures = ParticleTextures.Load(game.GraphicsDevice);
 
     // The frame comes from Example.Common; what a particle station needs on top of it is the textures
-    var loaded = textures;
-
     gallery = new Gallery<ParticleStation>(game, rootScene, Stations.All, configure: station =>
     {
-        station.Textures = loaded;
+        station.Textures = textures;
         if (station.Number == startStation) station.Variation = startVariation;
     });
     gallery.UpdateLabels();
@@ -114,7 +112,7 @@ void HandleInput()
     if (game.Input.IsKeyPressed(Keys.V) && station.VariationNames.Count > 1)
     {
         station.Variation++;
-        Gallery<ParticleStation>.Guarded(station, Stations.All[gallery.Current].Setup);
+        gallery.RunSetup(station);
     }
 
     if (game.Input.IsKeyPressed(Keys.Space)) station.Restart();

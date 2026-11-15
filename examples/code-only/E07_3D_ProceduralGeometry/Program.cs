@@ -14,12 +14,16 @@ using Stride.Rendering.Materials.ComputeColors;
 using var game = new Game();
 
 Entity? circleEntity = null;
-Material? sharedMaterial = null;
+
+// One material for every mesh, so the animated circle does not generate a new one each frame
+Material sharedMaterial = null!;
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
+    sharedMaterial = CreateMaterial(game.GraphicsDevice);
+
     CreateMeshEntity(rootScene, Vector3.Zero, CreateTriangleMesh);
     CreateMeshEntity(rootScene, Vector3.UnitX * 2, CreatePlaneMesh);
     CreateMeshEntity(rootScene, Vector3.UnitX * 4, CreateNonIndexedTriangleMesh);
@@ -60,7 +64,10 @@ void CreateNonIndexedTriangleMesh(MeshBuilder meshBuilder)
 
 void Update(Scene rootScene, GameTime gameTime)
 {
-    var segments = (int)((Math.Cos(gameTime.Total.TotalMilliseconds / 500) + 1) / 2 * 47) + 3;
+    // The circle's segment count swings between the two on a cosine, a cycle about every three seconds
+    const int MinSegments = 3, MaxSegments = 50;
+
+    var segments = (int)((Math.Cos(gameTime.Total.TotalMilliseconds / 500) + 1) / 2 * (MaxSegments - MinSegments)) + MinSegments;
 
     // Release the old mesh first: ToMeshDraw hands the caller two GPU buffers that no content manager
     // tracks, so removing the entity alone leaks them - every frame, here.
@@ -176,9 +183,6 @@ Entity CreateMeshEntity(Scene scene, Vector3 position, Action<MeshBuilder> build
     build(meshBuilder);
 
     var entity = new Entity { Scene = scene, Transform = { Position = position } };
-
-    // One material for every mesh, so the animated circle does not generate a new one each frame.
-    sharedMaterial ??= CreateMaterial(game.GraphicsDevice);
 
     var model = new Model { new Mesh { Draw = meshBuilder.ToMeshDraw(game.GraphicsDevice) }, sharedMaterial };
 

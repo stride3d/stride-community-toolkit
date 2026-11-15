@@ -10,12 +10,8 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 using static Box2D.NET.B2Bodies;
-using static Box2D.NET.B2Geometries;
-using static Box2D.NET.B2Hulls;
 using static Box2D.NET.B2Joints;
-using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2WheelJoints;
-using static Box2D.NET.B2Worlds;
 
 // A car on two wheel joints, over hilly terrain built from a chain. Ported from the Box2D.NET
 // samples' Car struct and Driving scene (MIT, (c) 2022 Erin Catto, (c) 2025 Choi Ikpil).
@@ -32,9 +28,8 @@ using static Box2D.NET.B2Worlds;
 // A and D drive, J and K change the suspension stiffness while you ride, the camera follows the
 // chassis, and the left mouse button picks the car up - the quickest way to see the suspension.
 
-const float Scale = 1f;
 const float DriveSpeed = 35f;          // wheel rad/s at full throttle
-const float Torque = 2.5f * Scale;
+const float Torque = 2.5f;
 
 ShapeBatch shapeBatch = null!;
 Basic2DCameraController cameraController = null!;
@@ -69,7 +64,7 @@ var sceneSetup = new SceneSetup2D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
@@ -81,7 +76,7 @@ void Start(Scene rootScene)
     game.AddGrabber2D(simulation);
 
     BuildTerrain();
-    SpawnCar(rootScene, new Vector2(0, 1));
+    SpawnCar(scene, new Vector2(0, 1));
     AddInstructions();
 }
 
@@ -126,33 +121,24 @@ void SpawnCar(Scene scene, Vector2 position)
         new(-1.5f, -0.5f), new(1.5f, -0.5f), new(1.5f, 0.0f), new(0.0f, 0.9f), new(-1.15f, 0.9f), new(-1.5f, 0.2f),
     ];
 
-    var hullPoints = new B2Vec2[outline.Length];
+    for (var i = 0; i < outline.Length; i++) outline[i] *= 0.85f;
 
-    for (var i = 0; i < outline.Length; i++)
-    {
-        outline[i] *= 0.85f * Scale;
-        hullPoints[i] = new B2Vec2(outline[i].X, outline[i].Y);
-    }
+    var chassisDef = ShapeFixtureBuilder.CreateCustomShapeDef(1f, 0.2f, 0f);
 
-    var hull = b2ComputeHull(hullPoints, hullPoints.Length);
-    var chassisShape = b2MakePolygon(hull, 0.15f * Scale);
-    var chassisDef = ShapeFixtureBuilder.CreateCustomShapeDef(1f / Scale, 0.2f, 0f);
-
-    var chassisPosition = position + new Vector2(0, 1f * Scale);
-    chassis = new Entity("Chassis") { new ShapeComponent { Vertices = [.. outline], Radius = 0.15f * Scale, Color = royalBlue } };
-    chassis.Transform.Position = new Vector3(chassisPosition, 0);
+    var chassisPosition = position + new Vector2(0, 1f);
+    chassis = new Entity("Chassis", new Vector3(chassisPosition, 0)) { new ShapeComponent { Vertices = [.. outline], Radius = 0.15f, Color = royalBlue } };
     chassis.Scene = scene;
     spawned.Add(chassis);
 
     chassisBody = simulation.CreateDynamicBody(chassis, chassisPosition);
-    b2CreatePolygonShape(chassisBody, in chassisDef, in chassisShape);
+    ShapeFixtureBuilder.AttachPolygon(outline, chassisBody, chassisDef, radius: 0.15f);
 
     // The wheels: heavy, grippy, with rolling resistance so the car does not coast forever.
-    var wheelDef = ShapeFixtureBuilder.CreateCustomShapeDef(2f / Scale, 1.5f, 0f);
+    var wheelDef = ShapeFixtureBuilder.CreateCustomShapeDef(2f, 1.5f, 0f);
     wheelDef.material.rollingResistance = 0.1f;
 
-    var rearCentre = position + new Vector2(-1f * Scale, 0.35f * Scale);
-    var frontCentre = position + new Vector2(1f * Scale, 0.4f * Scale);
+    var rearCentre = position + new Vector2(-1f, 0.35f);
+    var frontCentre = position + new Vector2(1f, 0.4f);
     var rear = Wheel(scene, rearCentre, wheelDef);
     var front = Wheel(scene, frontCentre, wheelDef);
 
@@ -164,8 +150,8 @@ void SpawnCar(Scene scene, Vector2 position)
         Hertz = hertz,
         DampingRatio = 0.7f,
         EnableLimit = true,
-        LowerTranslation = -0.25f * Scale,
-        UpperTranslation = 0.25f * Scale,
+        LowerTranslation = -0.25f,
+        UpperTranslation = 0.25f,
         EnableMotor = true,
         MaxMotorTorque = Torque,
         MotorSpeed = 0,
@@ -179,9 +165,8 @@ void SpawnCar(Scene scene, Vector2 position)
 
 B2BodyId Wheel(Scene scene, Vector2 centre, B2ShapeDef shapeDef)
 {
-    var radius = 0.4f * Scale;
-    var entity = new Entity("Wheel") { new ShapeComponent { Vertices = [Vector2.Zero], Radius = radius, Color = pink } };
-    entity.Transform.Position = new Vector3(centre, 0);
+    var radius = 0.4f;
+    var entity = new Entity("Wheel", new Vector3(centre, 0)) { new ShapeComponent { Vertices = [Vector2.Zero], Radius = radius, Color = pink } };
     entity.Scene = scene;
     spawned.Add(entity);
 
@@ -191,7 +176,7 @@ B2BodyId Wheel(Scene scene, Vector2 centre, B2ShapeDef shapeDef)
     return body;
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     simulation.Update(time.Elapsed);
 
@@ -215,15 +200,13 @@ void Update(Scene rootScene, GameTime time)
         b2WheelJoint_SetSpringHertz(frontAxle, hertz);
     }
 
-    if (input.IsKeyPressed(Keys.R)) Reset(rootScene);
+    if (input.IsKeyPressed(Keys.R)) Reset(scene);
 
     DrawTerrain();
 }
 
 void SetMotorSpeed(float speed)
 {
-    if (!simulation.Joints.IsValid(rearAxle)) return;
-
     b2WheelJoint_SetMotorSpeed(rearAxle, speed);
     b2WheelJoint_SetMotorSpeed(frontAxle, speed);
     b2Joint_WakeBodies(rearAxle);
@@ -256,7 +239,7 @@ void AddInstructions()
 {
     TextOverlay.GetOrCreate(game).AddSection("Car", () =>
     {
-        var speed = b2Body_IsValid(chassisBody) ? b2Body_GetLinearVelocity(chassisBody).X : 0;
+        var speed = b2Body_GetLinearVelocity(chassisBody).X;
 
         return
         [

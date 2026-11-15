@@ -109,8 +109,8 @@ void Spawn(Scene scene)
     {
         var height = dropHeight + i * 1.1f;
 
-        SpawnCube($"Earth Cube {i}", Color.MediumSeaGreen, -laneOffset + new Vector3(0, height, 0), Earth, scene);
-        SpawnCube($"Moon Cube {i}", Color.LightSkyBlue, laneOffset + new Vector3(0, height, 0), Moon, scene);
+        SpawnCube(scene, $"Earth Cube {i}", Color.MediumSeaGreen, -laneOffset + new Vector3(0, height, 0), Earth);
+        SpawnCube(scene, $"Moon Cube {i}", Color.LightSkyBlue, laneOffset + new Vector3(0, height, 0), Moon);
     }
 
     // Simulation 1 (Moon gravity, so it takes its time), positioned over the Earth ground: nothing
@@ -128,7 +128,7 @@ void Spawn(Scene scene)
     spawned.Add(ghost);
 }
 
-void SpawnCube(string name, Color color, Vector3 position, int simulation, Scene scene)
+void SpawnCube(Scene scene, string name, Color color, Vector3 position, int simulation)
 {
     var cube = game.CreatePrimitive(Primitive3D.Cube(), new()
     {

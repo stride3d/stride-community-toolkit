@@ -119,7 +119,9 @@ public static class ThrusterStations
         // The smoke and steam of a launch: it comes down with the exhaust and rolls out over the pad
         var cloud = Exhaust.Smoke(s.Textures, new(1.2f, 2.6f, Hue(245, 238, 230), Hue(190, 190, 195), Opacity: 0.6f, Brightness: 3.5f), (new Vector3(6f, -1.6f, -1.6f), new Vector3(9f, 1.6f, 1.6f)), new Vector2(1.8f, 2.8f), rate: three ? 35 : 70, at: new Vector3(1.5f, 0f, 0f));
 
-        foreach (var emitter in (ParticleEmitter[])[body, tail, cloud])
+        ReadOnlySpan<ParticleEmitter> padded = [body, tail, cloud];
+
+        foreach (var emitter in padded)
         {
             emitter.Updaters.Add(Pad(NozzleHeight));
         }
@@ -583,9 +585,9 @@ public static class ThrusterStations
         {
             EntityName = $"Station {s.Number} {shape.Name}",
             Material = s.Game.CreateMaterial(colour, metalness: 0.4f, glossiness: 0.6f),
+            Position = s.At(local),
         });
 
-        part.Transform.Position = s.At(local);
         part.Transform.Rotation = (rotation ?? Quaternion.Identity) * s.FacingRotation();
         part.Scene = s.Scene;
 

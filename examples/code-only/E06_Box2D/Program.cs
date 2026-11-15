@@ -25,7 +25,7 @@ var sceneSetup = new SceneSetup2D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Every shape is a ShapeComponent drawn through this batch - testbed-style fill and
     // pixel-constant borders from an SDF shader
@@ -39,31 +39,19 @@ void Start(Scene rootScene)
     shapeBatch.Glow.Strength = 0.35f;
     shapeBatch.Glow.Additive = true;
 
-    ConfigurePhysicsWorld();
+    // The simulation is left at its defaults: gravity -10 on Y, contact and sensor events on
 
     // Left mouse picks any shape up and throws it; a click on empty space still spawns one
     game.AddGrabber2D(simulation);
 
-    sceneManager = new SceneManager(game, rootScene, simulation);
+    sceneManager = new SceneManager(game, scene, simulation);
     sceneManager.Initialize();
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     simulation.Update(time.Elapsed);
-    sceneManager.Update(time);
-}
-
-void ConfigurePhysicsWorld()
-{
-    // Negative Y is down
-    simulation.Gravity = new Vector2(0f, GameConfig.Gravity);
-
-    simulation.EnableContactEvents = true;
-    simulation.EnableSensorEvents = true;
-
-    simulation.Settings.TimeScale = 1.0f;
-    simulation.Settings.MaxStepsPerFrame = 3;
+    sceneManager.Update();
 }
 /*
 ---example-metadata

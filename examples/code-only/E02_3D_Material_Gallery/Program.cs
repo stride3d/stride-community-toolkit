@@ -139,7 +139,7 @@ void HandleInput(Gallery<MaterialStation> gallery)
     if (game.Input.IsKeyPressed(Keys.V) && station.VariationNames.Count > 1)
     {
         station.Variation++;
-        Gallery<MaterialStation>.Guarded(station, Stations.All[gallery.Current].Setup);
+        gallery.RunSetup(station);
     }
 }
 
@@ -158,7 +158,7 @@ void LightTheRing(Scene scene, float radius, Entity sun)
     // mismatch and the frame is wrong (an engine matter, reported upstream), so it stays off
     ((LightDirectional)sun.Get<LightComponent>().Type).Shadow.ComputeTransmittance = true;
 
-    var key = new Entity("Key light")
+    var key = new Entity("Key light", new Vector3(0f, radius, 0f))
     {
         new LightComponent
         {
@@ -168,7 +168,6 @@ void LightTheRing(Scene scene, float radius, Entity sun)
         }
     };
 
-    key.Transform.Position = new Vector3(0f, radius, 0f);
     key.Scene = scene;
 }
 

@@ -14,6 +14,7 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 using Stride.Rendering;
+using ContinuousDetectionMode = BepuPhysics.Collidables.ContinuousDetectionMode;
 
 // Collision layers. A body sits on one layer, and a matrix on the simulation says which pairs of layers
 // collide. Four layers here - Players, Enemies, Shots, Debris - and the matrix shown twice: as a grid on
@@ -82,7 +83,7 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    simulation = game.GetCameraEntity().GetSimulation();
+    simulation = game.GetSimulation();
     shapes = game.AddShapeBatch();
 
     game.AddGrabber();
@@ -216,7 +217,7 @@ void Shoot(Scene scene)
             Collider = new CompoundCollider(),
             ContactEventHandler = hits,
             Gravity = false,
-            ContinuousDetectionMode = BepuPhysics.Collidables.ContinuousDetectionMode.Continuous,
+            ContinuousDetectionMode = ContinuousDetectionMode.Continuous,
         },
         Position = start,
     });
@@ -328,28 +329,27 @@ EntityTextComponent AddGridLabel(Scene scene, int index)
 
 void AddLabel(Scene scene, string text, Color colour, Vector3 position)
 {
-    var label = new Entity("Label")
+    var label = new Entity("Label", position)
     {
         new EntityTextComponent { Text = text, FontSize = 13, TextColor = colour, Anchor = Anchor.MiddleCenter, EnableShadow = true },
     };
 
-    label.Transform.Position = position;
     label.Scene = scene;
 }
 
-IReadOnlyList<TextElement> BuildOverlayLines()
-{
-    var lines = new List<TextElement>
-    {
-        new("1 to 0, or a click on a cell", "Flip a pair of the matrix, and drop the cubes again", Color.Gold),
-        new(["Space", "R"], "Drop the cubes again", Color.Gold),
-        new("M", $"Mouse ray hits {rayMasks[rayMask].Name}: now {rayHit}", Color.Gold),
-        new("Right mouse", $"Shoot at the cursor from the Shots layer: last hit {hits.Last}", Color.Gold),
-        new("Left mouse", "Grab a cube and drop it on another shelf", Color.Gold),
-    };
-
-    return lines;
-}
+IReadOnlyList<TextElement> BuildOverlayLines() =>
+[
+    new(["1", "0"], "Keys 1 to 0 flip a pair of the matrix", Color.Gold),
+    new("Left click", "A cell of the grid flips its pair too", Color.Gold),
+    new(["Space", "R"], "Drop the cubes again", Color.Gold),
+    new("M", $"Mouse ray hits {rayMasks[rayMask].Name}", Color.Gold),
+    new("Right mouse", "Shoot at the cursor from the Shots layer", Color.Gold),
+    new("Left mouse", "Grab a cube and drop it on another shelf", Color.Gold),
+    new(""),
+    new("A flipped pair drops the cubes again", Color.White),
+    new($"Under the mouse: {rayHit}", Color.White),
+    new($"Last shot hit: {hits.Last}", Color.White),
+];
 
 IReadOnlyList<TextElement> BuildPairLines()
 {

@@ -24,4 +24,17 @@ public sealed record RopeSettings(
     float LeverArm,
     int SkipSpan,
     float WeightRadius,
-    float WeightMass);
+    float WeightMass)
+{
+    /// <summary>The centre-to-centre distance between neighbouring segments.</summary>
+    public float Step => LinkRadius * 2 + LinkSpacing;
+
+    /// <summary>
+    /// The longest a link constraint may stretch. Pulling the anchors in from the segment ends shortens
+    /// the allowed gap by the same amount at both ends, which is why the lever arm is subtracted twice.
+    /// </summary>
+    public float LinkMaximum(float leverArm) => Step - leverArm * 2;
+
+    /// <summary>The longest the constraint between the last segment and the weight may stretch.</summary>
+    public float WeightMaximum(float leverArm) => LinkSpacing + LinkRadius - leverArm;
+}

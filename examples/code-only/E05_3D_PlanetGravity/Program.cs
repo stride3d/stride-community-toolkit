@@ -42,13 +42,12 @@ var speedChoice = 1;
 var trails = true;
 
 var orbiters = new List<BodyComponent>();
-var trailPoints = new List<Vector3[]>();
-var trailHeads = new List<int>();
+var trailBuffers = new List<Trail>();
 var trailScratch = new Vector3[TrailLength];
 var gravity = new PlanetGravity { Centre = Vector3.Zero, StandardGravityParameter = StandardGravityParameter };
 
-ShapeBatch? shapes = null;
-Material? orbiterMaterial = null;
+ShapeBatch shapes = null!;
+Material orbiterMaterial = null!;
 
 using var game = new Game();
 
@@ -108,7 +107,7 @@ void Update(Scene scene, GameTime time)
 
     RecordTrails();
 
-    if (trails && shapes is not null) DrawTrails(shapes);
+    if (trails) DrawTrails(shapes);
 }
 
 /// <summary>A ring of orbiters around the planet, each moving sideways at the chosen multiple of the circular speed.</summary>
@@ -143,11 +142,7 @@ void Launch(Scene scene)
         orbiters.Add(body);
         gravity.Bodies.Add(body);
 
-        var trail = new Vector3[TrailLength];
-
-        Array.Fill(trail, position);
-        trailPoints.Add(trail);
-        trailHeads.Add(0);
+        trailBuffers.Add(new Trail(position, TrailLength));
     }
 }
 
@@ -157,8 +152,7 @@ void Clear()
 
     orbiters.Clear();
     gravity.Bodies.Clear();
-    trailPoints.Clear();
-    trailHeads.Clear();
+    trailBuffers.Clear();
 }
 
 // Each trail is a ring buffer of the body's last positions, written once per frame
@@ -166,10 +160,10 @@ void RecordTrails()
 {
     for (var i = 0; i < orbiters.Count; i++)
     {
-        var head = trailHeads[i];
+        var trail = trailBuffers[i];
 
-        trailPoints[i][head] = orbiters[i].Entity.Transform.Position;
-        trailHeads[i] = (head + 1) % TrailLength;
+        trail.Points[trail.Head] = orbiters[i].Entity.Transform.Position;
+        trail.Head = (trail.Head + 1) % TrailLength;
     }
 }
 
@@ -177,13 +171,12 @@ void DrawTrails(ShapeBatch shapes)
 {
     for (var i = 0; i < orbiters.Count; i++)
     {
-        var points = trailPoints[i];
-        var head = trailHeads[i];
+        var trail = trailBuffers[i];
 
         // Unroll the ring into the scratch array, oldest first, so the polyline runs along the path
         for (var j = 0; j < TrailLength; j++)
         {
-            trailScratch[j] = points[(head + j) % TrailLength];
+            trailScratch[j] = trail.Points[(trail.Head + j) % TrailLength];
         }
 
         shapes.DrawPixelPolyline(trailScratch, 1.5f, new Color(255, 220, 140, 140));
@@ -200,9 +193,25 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
     new("3", SpeedLine(2), speedChoice == 2 ? Color.LightGreen : Color.Gold),
     new("T", trails ? "Trails on" : "Trails off", Color.Gold),
     new(""),
-    new($"Surface gravity {SurfaceGravity:0} m/s², no gravity in the simulation itself", Color.White),
-    new($"{orbiters.Count} orbiters pulled towards the centre every physics step", Color.White),
+    new($"Surface gravity {SurfaceGravity:0} m/s²", Color.White),
+    new("No gravity in the simulation itself", Color.White),
+    new($"{orbiters.Count} orbiters pulled to the centre every step", Color.White),
 ];
+
+/// <summary>A ring buffer of a body's last positions: the points, and where the next one is written.</summary>
+sealed class Trail
+{
+    public Trail(Vector3 start, int length)
+    {
+        Points = new Vector3[length];
+
+        Array.Fill(Points, start);
+    }
+
+    public Vector3[] Points { get; }
+
+    public int Head { get; set; }
+}
 
 /*
 ---example-metadata

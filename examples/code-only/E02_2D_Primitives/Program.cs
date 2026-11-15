@@ -34,9 +34,9 @@ void Start(Scene rootScene)
         var entity = game.CreatePrimitive(shape, new()
         {
             Material = game.CreateFlatMaterial(colours[index % colours.Length]),
+            Position = new Vector3(0, 10 + index * 1.5f, 0),
         });
 
-        entity.Transform.Position = new Vector3(0, 10 + index * 1.5f, 0);
         entity.Scene = rootScene;
     }
 }

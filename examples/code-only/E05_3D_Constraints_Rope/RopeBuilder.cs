@@ -1,6 +1,5 @@
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Constraints;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -37,8 +36,7 @@ public static class RopeBuilder
         var linkConstraints = new List<DistanceLimitConstraintComponent>();
         var skipConstraints = new List<DistanceLimitConstraintComponent>();
 
-        // Centre-to-centre distance between neighbouring segments.
-        var step = settings.LinkRadius * 2 + settings.LinkSpacing;
+        var step = settings.Step;
 
         for (var i = 0; i < settings.LinkCount; i++)
         {
@@ -65,9 +63,8 @@ public static class RopeBuilder
         weightEntity.Scene = scene;
         var weight = weightEntity.Get<BodyComponent>();
 
-        // Neighbour links. Pulling the anchors in from the segment ends shortens the allowed gap by
-        // the same amount at both ends, which is why the lever arm is subtracted twice.
-        var linkMaximum = step - settings.LeverArm * 2;
+        // Neighbour links
+        var linkMaximum = settings.LinkMaximum(settings.LeverArm);
 
         for (var i = 0; i < links.Count - 1; i++)
         {
@@ -100,7 +97,7 @@ public static class RopeBuilder
         // The weight itself, tied to the last segment and - when skip constraints are in use - to
         // several segments above it, so its load does not rest on one link alone.
         var weightOffset = new Vector3(0, settings.WeightRadius, 0);
-        var weightMaximum = settings.LinkSpacing + settings.LinkRadius - settings.LeverArm;
+        var weightMaximum = settings.WeightMaximum(settings.LeverArm);
 
         var weightConstraint = CreateLimit(
             links[^1], weight,
@@ -156,7 +153,7 @@ public static class RopeBuilder
             EntityName = name,
             Material = game.CreateMaterial(color),
             Mass = mass,
-            Component = new BodyComponent { Kinematic = kinematic, Collider = new CompoundCollider() },
+            Body = kinematic ? BodyMode.Kinematic : BodyMode.Dynamic,
             Position = position,
         });
 }

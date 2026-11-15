@@ -79,12 +79,11 @@ void AddText(Scene scene, string word, float y, Material material)
 {
     var options = new TextMeshOptions { Size = 0.75f, Depth = 0.25f, Anchor = Anchor.MiddleCenter, Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 3) };
 
-    var entity = new Entity($"Text {word}")
+    var entity = new Entity($"Text {word}", new Vector3(0f, y, 0f))
     {
         new ModelComponent { Model = TextMesh.CreateModel(game.GraphicsDevice, material, MeshFont.Default, word, options) },
     };
 
-    entity.Transform.Position = new Vector3(0f, y, 0f);
     entity.Scene = scene;
 }
 

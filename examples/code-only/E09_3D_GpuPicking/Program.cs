@@ -68,7 +68,9 @@ void Start(Scene scene)
 
     // The hover glow, a shell that moves onto whatever is under the mouse, kept out of the picking pass
     hover = new HighlightShell(game.CreateMaterial(MaterialDescriptors.Highlight(Color.Cyan)));
-    picker.Pickable = RenderGroupMask.All & ~RenderGroupMask.Group30;
+
+    // Everything but the shell's own render group
+    picker.Pickable = RenderGroupMask.All & ~(RenderGroupMask)(1u << (int)hover.RenderGroup);
 
     var overlay = TextOverlay.GetOrCreate(game);
     overlay.AddSection("Picking", BuildOverlayLines);

@@ -1,8 +1,8 @@
 using E04_StrideUI_DragAndDrop;
 using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -27,8 +27,7 @@ void Start(Scene scene)
     uiManager = new UIManager(game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont"), GenerateRandomSpheres);
     uiManager.Entity.Scene = scene;
 
-    var capsule = game.CreatePrimitive(Primitive3D.Capsule());
-    capsule.Transform.Position = new Vector3(0, 8, 0);
+    var capsule = game.CreatePrimitive(Primitive3D.Capsule(), new() { Position = new Vector3(0, 8, 0) });
     capsule.Scene = scene;
 }
 

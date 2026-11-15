@@ -125,7 +125,7 @@ void Start(Scene rootScene)
     #endregion
 
     #region Step8Create
-    hud = new SimpleHud(game, rootScene, shapeBatch, new HudStyle());
+    hud = new SimpleHud(rootScene, shapeBatch, new HudStyle());
     #endregion
 
     TextOverlay.GetOrCreate(game).AddSection("HUD basics", () =>
@@ -140,10 +140,7 @@ void Start(Scene rootScene)
 
 void Update(Scene scene, GameTime time)
 {
-    for (var i = 0; i < LastStep; i++)
-    {
-        if (game.Input.IsKeyPressed(Keys.D1 + i) || game.Input.IsKeyPressed(Keys.NumPad1 + i)) step = i + 1;
-    }
+    SelectStepFromKeys();
 
     #region Step2Update
     if (game.Input.IsKeyPressed(Keys.K)) health = 1f;
@@ -166,13 +163,7 @@ void Update(Scene scene, GameTime time)
 
     if (holdFlash >= 0f) flash = holdFlash;
 
-    // Labels are entities, not draw calls: they stay until they are hidden. Hide those the
-    // chosen step has not reached yet, and all of them when the class draws its own
-    healthLabel.Opacity = energyLabel.Opacity = step is >= 5 and < 8 ? 1f : 0f;
-
-    if (step is < 6 or 8) warningLabel.IsVisible = false;
-
-    hud.Visible = step == 8;
+    ShowStepPieces();
 
     if (step == 8)
     {
@@ -199,6 +190,26 @@ void Update(Scene scene, GameTime time)
     if (step >= 6) DrawWarning(seconds);
 
     shapeBatch.Screen = false;
+}
+
+// The number keys choose how far through the tutorial the HUD is drawn
+void SelectStepFromKeys()
+{
+    for (var i = 0; i < LastStep; i++)
+    {
+        if (game.Input.IsKeyPressed(Keys.D1 + i) || game.Input.IsKeyPressed(Keys.NumPad1 + i)) step = i + 1;
+    }
+}
+
+// Labels are entities, not draw calls: they stay until they are hidden. Hides those the chosen
+// step has not reached yet, and all of them when the class draws its own
+void ShowStepPieces()
+{
+    healthLabel.Opacity = energyLabel.Opacity = step is >= 5 and < 8 ? 1f : 0f;
+
+    if (step is < 6 or 8) warningLabel.IsVisible = false;
+
+    hud.Visible = step == 8;
 }
 
 #region Step1
@@ -391,9 +402,12 @@ void AddFallingShapes(Scene scene)
     for (var i = 0; i < 30; i++)
     {
         var (type, colour) = kinds[i % kinds.Length];
-        var entity = game.CreatePrimitive(type, new() { Material = game.CreateFlatMaterial(colour) });
+        var entity = game.CreatePrimitive(type, new()
+        {
+            Material = game.CreateFlatMaterial(colour),
+            Position = new Vector3(0.1f * (i % 3 - 1), 8 + i * 1.5f, 0),
+        });
 
-        entity.Transform.Position = new Vector3(0.1f * (i % 3 - 1), 8 + i * 1.5f, 0);
         entity.Scene = scene;
     }
 }

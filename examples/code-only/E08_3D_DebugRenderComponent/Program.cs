@@ -21,8 +21,7 @@ void Start(Scene rootScene)
     var debug = new Entity("Physics Debug") { new DebugRenderComponent { Visible = true } };
     debug.Scene = rootScene;
 
-    var cube = game.CreatePrimitive(Primitive3D.Cube());
-    cube.Transform.Position = new Vector3(1f, 0.5f, 3f);
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new() { Position = new Vector3(1f, 0.5f, 3f) });
     cube.Scene = rootScene;
 
     CreateSpheres(rootScene, 6);
@@ -34,8 +33,7 @@ void CreateSpheres(Scene rootScene, int count)
 
     for (var i = -half; i < half; i++)
     {
-        var entity = game.CreatePrimitive(Primitive3D.Sphere());
-        entity.Transform.Position = new Vector3(i * 0.99f, 1, 0);
+        var entity = game.CreatePrimitive(Primitive3D.Sphere(), new() { Position = new Vector3(i * 0.99f, 1, 0) });
         entity.Scene = rootScene;
     }
 }

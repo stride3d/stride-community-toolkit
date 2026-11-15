@@ -35,7 +35,7 @@ public sealed class RingInitializer : ParticleInitializer
     /// <inheritdoc/>
     public override void Initialize(ParticlePool pool, int startIdx, int endIdx, int maxCapacity)
     {
-        if (!pool.FieldExists(ParticleFields.Position) || !pool.FieldExists(ParticleFields.Velocity) || !pool.FieldExists(ParticleFields.RandomSeed)) return;
+        if (!pool.FieldExists(ParticleFields.Position) || !pool.FieldExists(ParticleFields.OldPosition) || !pool.FieldExists(ParticleFields.Velocity) || !pool.FieldExists(ParticleFields.RandomSeed)) return;
 
         var positions = pool.GetField(ParticleFields.Position);
         var oldPositions = pool.GetField(ParticleFields.OldPosition);

@@ -59,7 +59,7 @@ var sceneSetup = new SceneSetup2D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;
@@ -72,7 +72,7 @@ void Start(Scene rootScene)
     // Left mouse picks any dynamic body up.
     game.AddGrabber2D(simulation);
 
-    BuildScene(rootScene);
+    BuildScene(scene);
     AddInstructions();
 }
 
@@ -173,7 +173,7 @@ void BuildScene(Scene scene)
     }));
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     simulation.Update(time.Elapsed);
 
@@ -206,7 +206,7 @@ void Update(Scene rootScene, GameTime time)
 
     if (game.Input.IsKeyPressed(Keys.R))
     {
-        Reset(rootScene);
+        Reset(scene);
     }
 
     // Draws every joint, and whatever else is switched on, from Box2D's own view of the world.
@@ -238,8 +238,7 @@ void Reset(Scene scene)
 
 void Ground(Scene scene)
 {
-    var entity = new Entity("Ground") { new ShapeComponent { Vertices = [.. ShapeComponent.Box(new Vector2(48, 1))], Color = paleGreen } };
-    entity.Transform.Position = new Vector3(0, -0.5f, 0);
+    var entity = new Entity("Ground", new Vector3(0, -0.5f, 0)) { new ShapeComponent { Vertices = [.. ShapeComponent.Box(new Vector2(48, 1))], Color = paleGreen } };
     entity.Scene = scene;
     spawned.Add(entity);
 
@@ -249,8 +248,7 @@ void Ground(Scene scene)
 
 Entity StaticBox(Scene scene, Vector2 centre, Vector2 size)
 {
-    var entity = new Entity("Static") { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = paleGreen } };
-    entity.Transform.Position = new Vector3(centre, 0);
+    var entity = new Entity("Static", new Vector3(centre, 0)) { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = paleGreen } };
     entity.Scene = scene;
     spawned.Add(entity);
 
@@ -262,8 +260,7 @@ Entity StaticBox(Scene scene, Vector2 centre, Vector2 size)
 
 Entity DynamicBox(Scene scene, Vector2 centre, Vector2 size, Color color)
 {
-    var entity = new Entity("Box") { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = color } };
-    entity.Transform.Position = new Vector3(centre, 0);
+    var entity = new Entity("Box", new Vector3(centre, 0)) { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = color } };
     entity.Scene = scene;
     spawned.Add(entity);
 
@@ -275,8 +272,7 @@ Entity DynamicBox(Scene scene, Vector2 centre, Vector2 size, Color color)
 
 Entity DynamicCircle(Scene scene, Vector2 centre, float radius, Color color)
 {
-    var entity = new Entity("Circle") { new ShapeComponent { Vertices = [Vector2.Zero], Radius = radius, Color = color } };
-    entity.Transform.Position = new Vector3(centre, 0);
+    var entity = new Entity("Circle", new Vector3(centre, 0)) { new ShapeComponent { Vertices = [Vector2.Zero], Radius = radius, Color = color } };
     entity.Scene = scene;
     spawned.Add(entity);
 

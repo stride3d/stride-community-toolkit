@@ -138,7 +138,7 @@ void BuildZone(Scene scene)
 
     trigger.OnLeave += (_, other) => inside.Remove(other);
 
-    var zone = new Entity("Zone")
+    var zone = new Entity("Zone", zoneCentre)
     {
         new StaticComponent
         {
@@ -147,7 +147,6 @@ void BuildZone(Scene scene)
         },
     };
 
-    zone.Transform.Position = zoneCentre;
     zone.Scene = scene;
 
     pad = game.CreatePrimitive(Primitive3D.Box(new Vector3(zoneSize.X, 0.06f, zoneSize.Z)), new BepuPhysicsOptions
@@ -230,12 +229,11 @@ void Reset()
 
 void AddLabel(Scene scene, string text, float x)
 {
-    var label = new Entity("Label")
+    var label = new Entity("Label", new Vector3(x, 0f, 2.6f))
     {
         new EntityTextComponent { Text = text, FontSize = 14, Anchor = Anchor.MiddleCenter, EnableShadow = true },
     };
 
-    label.Transform.Position = new Vector3(x, 0f, 2.6f);
     label.Scene = scene;
 }
 

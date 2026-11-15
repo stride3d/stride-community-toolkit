@@ -79,8 +79,8 @@ public static class HudShapes
     public static void HitDisc(this HudCanvas canvas, HudId id, Vector2 center, float radius)
     {
         canvas.Style(new HudStyle(0f, 1f) { Opacity = 0f });
-        canvas.Shapes.Tag = id;
+        canvas.Tag(id);
         canvas.Shapes.DrawSolidCircle(center, radius, Color.White);
-        canvas.Shapes.Tag = null;
+        canvas.Untag();
     }
 }

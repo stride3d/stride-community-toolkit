@@ -4,8 +4,8 @@ using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -28,8 +28,8 @@ using Stride.Input;
 // it is usually static. What moves is better off convex, a hull or a compound of several, because a
 // convex pair is cheap and a convex shape has an inside.
 //
-// A mesh collider is built from the model, so it is attached once the model exists. The entity's
-// scale scales the mesh with it. Closed says the surface has no holes, which is what the inertia of a
+// A mesh collider is built from a model: the one the entity draws, shared through the game. The
+// entity's scale scales the mesh with it. Closed says the surface has no holes, which is what the inertia of a
 // moving mesh is computed from; the ring is closed, a bowl or a terrain is not.
 
 const float RingRadius = 1.2f;      // From the centre to the middle of the tube
@@ -45,7 +45,6 @@ var meshColour = new Color(90, 190, 200);
 var ballColour = new Color(235, 235, 240);
 
 List<DropStation> stations = [];
-var launched = false;
 
 using var game = new Game();
 
@@ -78,13 +77,8 @@ void Start(Scene scene)
 
 void Update(Scene scene, GameTime time)
 {
-    // A teleport only takes on a body the simulation already knows, so the first drop waits for it
-    var ready = stations.Count > 0 && stations[^1].Body.Simulation is not null;
-
-    if (ready && (!launched || game.Input.IsKeyPressed(Keys.R)))
+    if (game.Input.IsKeyPressed(Keys.R))
     {
-        launched = true;
-
         foreach (var station in stations) station.Replay();
     }
 }
@@ -94,7 +88,7 @@ void BuildRingStation(Scene scene, string label, float x, bool mesh)
 {
     AddRing(scene, new Vector3(x, RestHeight, 0f), mesh, moving: false);
 
-    var ball = AddBall(scene, new Vector3(x, RestHeight + DropHeight, 0f));
+    var ball = AddBall(scene, new Vector3(x - 0.8f, RestHeight + DropHeight, 0f));
 
     stations.Add(new DropStation(label, ball, mesh ? meshColour : hullColour,
         static y => y > RestHeight ? "on the lid" : "through the hole"));
@@ -105,14 +99,17 @@ void BuildRingStation(Scene scene, string label, float x, bool mesh)
 /// <summary>A static mesh sphere, hollow as every mesh is, with a ball dropped onto it and a ball started inside it.</summary>
 void BuildShellStation(Scene scene, string label, float x)
 {
-    var shell = game.CreatePrimitive(Primitive3D.Sphere(ShellRadius), new BepuPhysicsOptions
+    var shape = Primitive3D.Sphere(ShellRadius);
+    var material = game.CreateMaterial(meshColour, metalness: 0f, glossiness: 0.4f);
+
+    var shell = game.CreatePrimitive(shape, new BepuPhysicsOptions
     {
-        Material = game.CreateMaterial(meshColour, metalness: 0f, glossiness: 0.4f),
-        Body = BodyMode.None,
+        Material = material,
+        ShareModel = true,
+        Component = new StaticComponent { Collider = new MeshCollider { Model = game.GetOrCreateModel(shape, material), Closed = true } },
         Position = new Vector3(x, RestHeight, 0f),
     });
 
-    shell.Add(new StaticComponent { Collider = new MeshCollider { Model = shell.Get<ModelComponent>().Model, Closed = true } });
     shell.Scene = scene;
 
     var outer = AddBall(scene, new Vector3(x, RestHeight + DropHeight, 0f));
@@ -143,43 +140,30 @@ void BuildMovingRingStation(Scene scene, string label, float x)
 /// <summary>
 /// One ring of the shared model. A hull ring gets <see cref="TorusCollider"/>, the convex hull of the
 /// same mesh, inside a compound like any other shape; a mesh ring gets a <see cref="MeshCollider"/>
-/// built from its model once the model exists.
+/// built from the model it draws.
 /// </summary>
 Entity AddRing(Scene scene, Vector3 position, bool mesh, bool moving)
 {
-    var options = new BepuPhysicsOptions
+    var shape = Primitive3D.Torus(RingRadius, TubeRadius);
+    var material = game.CreateMaterial(mesh ? meshColour : hullColour, metalness: 0f, glossiness: 0.4f);
+
+    // The model is all a mesh collider needs: when the component attaches, Bepu reads the model's vertex
+    // and index buffers and builds the triangles from them, scaled by the entity's transform. No
+    // shape is written by hand and no asset is involved, so any model will do, loaded or procedural
+    ICollider collider = mesh
+        ? new MeshCollider { Model = game.GetOrCreateModel(shape, material), Closed = true }
+        : new CompoundCollider { Colliders = { TorusCollider.Create(RingRadius, TubeRadius) } };
+
+    var ring = game.CreatePrimitive(shape, new BepuPhysicsOptions
     {
-        Material = game.CreateMaterial(mesh ? meshColour : hullColour, metalness: 0f, glossiness: 0.4f),
+        Material = material,
         Position = position,
-    };
-
-    if (mesh)
-    {
-        // The mesh collider needs the model, so the physics is attached below
-        options.Body = BodyMode.None;
-    }
-    else
-    {
-        var hull = new CompoundCollider { Colliders = { TorusCollider.Create(RingRadius, TubeRadius) } };
-
-        options.Component = moving
-            ? new BodyComponent { Collider = hull, InterpolationMode = InterpolationMode.Interpolated }
-            : new StaticComponent { Collider = hull };
-    }
-
-    var ring = game.CreatePrimitive(Primitive3D.Torus(RingRadius, TubeRadius), options);
-
-    if (mesh)
-    {
-        // The model is all the collider needs: when the component attaches, Bepu reads the model's vertex
-        // and index buffers and builds the triangles from them, scaled by the entity's transform. No
-        // shape is written by hand and no asset is involved, so any model will do, loaded or procedural
-        var collider = new MeshCollider { Model = ring.Get<ModelComponent>().Model, Closed = true };
-
-        ring.Add(moving
+        // The entity draws the model the collider was built from
+        ShareModel = mesh,
+        Component = moving
             ? new BodyComponent { Collider = collider, InterpolationMode = InterpolationMode.Interpolated }
-            : new StaticComponent { Collider = collider });
-    }
+            : new StaticComponent { Collider = collider },
+    });
 
     ring.Scene = scene;
 
@@ -203,12 +187,11 @@ BodyComponent AddBall(Scene scene, Vector3 position)
 /// <summary>The station's name on the ground in front of it.</summary>
 void AddLabel(Scene scene, string text, float x)
 {
-    var label = new Entity("Label")
+    var label = new Entity("Label", new Vector3(x, 0f, RingRadius + 0.8f))
     {
         new EntityTextComponent { Text = text, FontSize = 14, Anchor = Anchor.MiddleCenter, EnableShadow = true },
     };
 
-    label.Transform.Position = new Vector3(x, 0f, RingRadius + 0.8f);
     label.Scene = scene;
 }
 
@@ -281,7 +264,7 @@ description:
     prstenci. Překryv vypisuje, kde se každá puštěná věc zastavila, a P vykreslí kolidery.
 concepts:
   - ConvexHullCollider from a model through TorusCollider, and what a hull does to a hole
-  - MeshCollider from a model, attached once the model exists, Closed for the inertia
+  - MeshCollider from the model the entity draws, Closed for the inertia
   - A mesh is a surface with no inside, so a body that starts inside is not pushed out
   - Meshes meet meshes, triangle against triangle, which is why what moves is better off convex
   - Reading where a body came to rest from its position and velocity, with Teleport for the replay

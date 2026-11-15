@@ -27,8 +27,7 @@ void Start(Scene rootScene)
     debug.Scene = rootScene;
 
     // A cube without physics beside the row: no gizmo appears for it, because physics knows nothing of it
-    var cube = game.CreatePrimitive(Primitive3D.Cube(), new() { Body = BodyMode.None });
-    cube.Transform.Position = new Vector3(1f, 0.5f, 3f);
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new() { Body = BodyMode.None, Position = new Vector3(1f, 0.5f, 3f) });
     cube.Scene = rootScene;
 
     CreateCubes(rootScene, 6);
@@ -40,8 +39,7 @@ void CreateCubes(Scene rootScene, int count)
 
     for (var i = -half; i < half; i++)
     {
-        var entity = game.CreatePrimitive(Primitive3D.Cube());
-        entity.Transform.Position = new Vector3(i * 0.99f, 1, 0);
+        var entity = game.CreatePrimitive(Primitive3D.Cube(), new() { Position = new Vector3(i * 0.99f, 1, 0) });
         entity.Scene = rootScene;
     }
 }

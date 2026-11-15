@@ -10,7 +10,9 @@ namespace E06_Box2D.Helpers;
 /// The 2D shapes the Box2D demo spawns, each a shape with its dimensions and a colour, and the
 /// entities drawn for them.
 /// </summary>
-public class ShapeFactory(Scene scene)
+/// <param name="scene">The scene the entities join.</param>
+/// <param name="random">The example's own seeded random, so a run and its screenshot repeat.</param>
+public class ShapeFactory(Scene scene, Random random)
 {
     /// <summary>A green square, <see cref="GameConfig.BoxSize"/> across.</summary>
     public static Shape2DModel Square { get; } = new() { Type = Primitive2D.Square(GameConfig.BoxSize.X), Color = Color.Green };
@@ -33,16 +35,15 @@ public class ShapeFactory(Scene scene)
     /// <summary>Every model, for a random pick.</summary>
     public static IReadOnlyList<Shape2DModel> All { get; } = [Square, Rectangle, Circle, LargeCircle, Triangle, Capsule];
 
-    public static Shape2DModel GetRandomShapeModel()
-        => All[Random.Shared.Next(All.Count)];
+    public Shape2DModel GetRandomShapeModel()
+        => All[random.Next(All.Count)];
 
     public Entity CreateEntity(Shape2DModel shape, Color? overrideColor = null, Vector2? position = null)
     {
         // A ShapeComponent draws the shape testbed-style - fill plus a pixel-constant border from
         // the same numbers the collider uses. No mesh, no material.
-        var entity = new Entity($"{shape.Type.Name}-{GameConfig.ShapeName}") { CreateShapeComponent(shape, overrideColor ?? shape.Color) };
+        var entity = new Entity(shape.Type.Name, position is { } at ? new Vector3(at, 0) : GetRandomPosition()) { CreateShapeComponent(shape, overrideColor ?? shape.Color) };
 
-        entity.Transform.Position = position is { } at ? new Vector3(at, 0) : GetRandomPosition();
         entity.Scene = scene;
 
         return entity;
@@ -80,5 +81,5 @@ public class ShapeFactory(Scene scene)
         _ => throw new NotSupportedException($"No outline for a {shape.Type.Name}."),
     };
 
-    private static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);
+    private Vector3 GetRandomPosition() => new(random.Next(-5, 5), random.Next(10, 30), 0);
 }

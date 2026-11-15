@@ -68,21 +68,22 @@ for (var i = 0; i < args.Length; i++)
 (string Name, Func<Material> Make)[] materials = [];
 Material?[] built = [];
 
-WindowsDpiManager.EnablePerMonitorV2();
-
 using var game = new Game();
 
 // Nothing from the default scene: the thumbnail rig below is the whole scene, compositor, camera and lights
-game.Run(SceneSetup.None, start: Start, update: Update);
+var setup = SceneSetup.None;
+
+setup.WindowTitle = "Material Preview - Stride Community Toolkit";
+setup.Resizable = true;
+setup.DpiAware = true;
+
+game.Run(setup, start: Start, update: Update);
 
 // The textures loaded in Start are this example's own: released once the game has ended
 textures?.Dispose();
 
 void Start(Scene scene)
 {
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "Material Preview - Stride Community Toolkit";
-
     // The editor's thumbnail compositor: the forward renderer, no post effects, the editor's grey. The
     // game's adds tone mapping and is swapped in on G
     thumbnail = GraphicsCompositorHelper.CreateDefault(enablePostEffects: false, clearColor: Color.FromBgra(0xFF434343));
@@ -165,10 +166,8 @@ CameraComponent AddThumbnailCamera(Scene scene)
     component.NearClipPlane = distance / 50f;
     component.FarClipPlane = distance * 50f;
 
-    var entity = new Entity("Thumbnail camera") { component };
+    var entity = new Entity("Thumbnail camera", position, rotation) { component };
 
-    entity.Transform.Position = position;
-    entity.Transform.Rotation = rotation;
     entity.Scene = scene;
 
     // The editor's pose is the start; the controller flies from there and H brings it back
@@ -184,17 +183,17 @@ void AddThumbnailLights(Scene scene)
     new Entity("Thumbnail ambient") { new LightComponent { Type = new LightAmbient(), Intensity = 0.02f } }.Scene = scene;
     new Entity("Thumbnail front") { new LightComponent { Type = new LightDirectional(), Intensity = 0.07f * HdrFactor } }.Scene = scene;
 
-    var top = new Entity("Thumbnail top") { new LightComponent { Type = new LightDirectional(), Intensity = 0.8f * HdrFactor } };
-
-    top.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-80f));
-    top.Scene = scene;
+    new Entity("Thumbnail top", Vector3.Zero, Quaternion.RotationX(MathUtil.DegreesToRadians(-80f)))
+    {
+        new LightComponent { Type = new LightDirectional(), Intensity = 0.8f * HdrFactor }
+    }.Scene = scene;
 }
 
 // The subject: the chosen shape in the chosen material, scaled to its unit bounding sphere and turned
 // half round, so every shape fills the thumbnail the same and the texture's middle faces the camera
 void Rebuild(Scene scene)
 {
-    if (subject is not null) subject.Scene = null;
+    subject?.Scene = null;
 
     built[materialIndex] ??= materials[materialIndex].Make();
 

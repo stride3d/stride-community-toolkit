@@ -45,11 +45,11 @@ const float SpacingPerRadius = 0.5f / 0.32f;
 float[] nodeRadii = [0.04f, 0.08f, 0.16f, 0.24f, 0.32f, 0.48f];
 var nodeRadius = 0.32f;
 
-Scene? rootScene = null;
-BufferedEntityInstancing? instancing = null;
-Entity? master = null;
-Material? nodeMaterial = null;
-KeyMenu? sizeMenu = null;
+Scene rootScene = null!;
+BufferedEntityInstancing instancing = null!;
+Entity master = null!;
+Material nodeMaterial = null!;
+KeyMenu sizeMenu = null!;
 List<Entity> nodes = [];
 List<Entity> extras = [];
 var constraintCount = 0;
@@ -94,7 +94,7 @@ void Start(Scene scene)
 void Update(Scene scene, GameTime time)
 {
     // The menu owns the digit keys while it is open.
-    if (sizeMenu?.Update(game.Input) == true) return;
+    if (sizeMenu.Update(game.Input)) return;
 
     if (game.Input.IsKeyPressed(Keys.N))
     {
@@ -106,11 +106,9 @@ void Update(Scene scene, GameTime time)
 
 void Rebuild()
 {
-    if (rootScene is null) return;
-
     foreach (var entity in nodes.Concat(extras))
     {
-        instancing?.RemoveInstance(entity);
+        instancing.RemoveInstance(entity);
         entity.Scene = null;
     }
 
@@ -148,7 +146,7 @@ void SetupMenu()
         Items = [.. nodeRadii.Select((radius, index) => new KeyMenuItem((Keys)(Keys.D1 + index), $"radius {radius:0.00}, {NodeCount(radius):N0} nodes", () =>
         {
             nodeRadius = radius;
-            master!.Get<ModelComponent>().Model = ModelFor(radius);
+            master.Get<ModelComponent>().Model = ModelFor(radius);
             Rebuild();
         }))],
     };
@@ -243,7 +241,7 @@ void DrapeSheet(Scene scene, Vector3 centre, float distanceHertz, float? areaHer
 // neighbours and must not collide, or the lattice fights itself.
 Entity Node(Scene scene, Vector3 position, ushort groupId, int row, int column, bool pinned)
 {
-    var entity = new Entity("Node")
+    var entity = new Entity("Node", position)
     {
         new BodyComponent
         {
@@ -252,10 +250,9 @@ Entity Node(Scene scene, Vector3 position, ushort groupId, int row, int column, 
             CollisionGroup = new CollisionGroup { Id = groupId, IndexA = (ushort)row, IndexB = (ushort)column },
         },
     };
-    entity.Transform.Position = position;
     entity.Scene = scene;
 
-    instancing?.AddInstance(entity);
+    instancing.AddInstance(entity);
     nodes.Add(entity);
 
     return entity;
@@ -356,7 +353,7 @@ void AddInstructions()
 
     overlay.AddSection("Cloth", () =>
     [
-        .. sizeMenu?.GetLines() ?? [],
+        .. sizeMenu.GetLines(),
         new("Left mouse", "Pull on a sheet", Color.Yellow),
         new("N", "Drop a ball on the draped sheet", Color.Yellow),
         new("R", "Rebuild", Color.Yellow),

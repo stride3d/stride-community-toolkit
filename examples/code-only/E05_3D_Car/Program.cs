@@ -4,6 +4,7 @@ using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Input;
 using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
@@ -59,7 +60,7 @@ const float WheelRadius = 0.4f;
 const float WheelWidth = 0.18f;
 var wheelTurn = Quaternion.RotationZ(MathUtil.PiOverTwo);   // the quarter turn that makes a cylinder's Y the axle
 
-Car? car = null;
+Car car = null!;
 var steeringAngle = 0f;
 var previousTargetSpeed = float.NaN;
 var previousTargetForce = float.NaN;
@@ -87,7 +88,7 @@ void Start(Scene scene)
     // Car parts on one layer that does not collide with itself; everything else stays as it was.
     var matrix = CollisionMatrix.All;
     matrix.Set(CollisionLayer.Layer1, CollisionLayer.Layer1, shouldCollide: false);
-    game.GetCameraEntity().GetSimulation().CollisionMatrix = matrix;
+    game.GetSimulation().CollisionMatrix = matrix;
 
     BuildCourse(scene);
     car = BuildCar(scene, start);
@@ -100,8 +101,6 @@ void Start(Scene scene)
 
 void Update(Scene scene, GameTime time)
 {
-    if (car is null) return;
-
     var input = game.Input;
     var dt = (float)time.Elapsed.TotalSeconds;
 
@@ -122,7 +121,7 @@ void Update(Scene scene, GameTime time)
     }
 
     var throttle = (input.IsKeyDown(Keys.W) ? 1 : 0) - (input.IsKeyDown(Keys.S) ? 1 : 0);
-    var zoom = input.IsKeyDown(Keys.LeftShift) || input.IsKeyDown(Keys.RightShift);
+    var zoom = input.IsShiftDown();
     Drive(car, throttle, zoom, brake: input.IsKeyDown(Keys.Space));
 }
 
@@ -133,7 +132,7 @@ void ResetCar(Car car)
 {
     car.Chassis.TeleportAtRest(start);
 
-    foreach (var wheel in new[] { car.FrontLeft, car.FrontRight, car.RearLeft, car.RearRight })
+    foreach (var wheel in car.Wheels)
     {
         wheel.Body.TeleportAtRest(start + wheel.Mount + suspensionDirection * SuspensionLength, wheelTurn);
     }
@@ -213,7 +212,7 @@ void Drive(Car car, int throttle, bool zoom, bool brake)
 Car BuildCar(Scene scene, Vector3 position)
 {
     // One body, two box colliders: the long hull carries the mass, the cabin sits on it.
-    var chassisEntity = new Entity("Car")
+    var chassisEntity = new Entity("Car", position)
     {
         new BodyComponent
         {
@@ -230,7 +229,6 @@ Car BuildCar(Scene scene, Vector3 position)
             InterpolationMode = InterpolationMode.Interpolated,
         },
     };
-    chassisEntity.Transform.Position = position;
 
     var body = game.CreateMaterial(new Color(200, 60, 50), metalness: 0.6f, glossiness: 0.8f);
     chassisEntity.AddChild(Model(Primitive3D.Box(hullSize), body, Vector3.Zero));
@@ -250,7 +248,7 @@ Car BuildCar(Scene scene, Vector3 position)
 // constraints hang off its entity, each naming the chassis as the other body.
 Wheel BuildWheel(Scene scene, BodyComponent chassis, Vector3 mount)
 {
-    var entity = new Entity("Wheel")
+    var entity = new Entity("Wheel", chassis.Entity.Transform.Position + mount + suspensionDirection * SuspensionLength)
     {
         new BodyComponent
         {
@@ -260,7 +258,6 @@ Wheel BuildWheel(Scene scene, BodyComponent chassis, Vector3 mount)
             InterpolationMode = InterpolationMode.Interpolated,
         },
     };
-    entity.Transform.Position = chassis.Entity.Transform.Position + mount + suspensionDirection * SuspensionLength;
     entity.Transform.Rotation = wheelTurn;
     entity.AddChild(Model(Primitive3D.Cylinder(WheelRadius, WheelWidth), game.CreateMaterial(new Color(40, 40, 45), metalness: 0.2f, glossiness: 0.5f), Vector3.Zero));
 
@@ -375,7 +372,7 @@ void AddInstructions()
 {
     TextOverlay.GetOrCreate(game).AddSection("Car", () =>
     {
-        var speed = car?.Chassis.LinearVelocity.Length() ?? 0;
+        var speed = car.Chassis.LinearVelocity.Length();
 
         return
         [
@@ -395,7 +392,10 @@ void AddInstructions()
 }
 
 /// <summary>The chassis body and its four wheels, front pair first.</summary>
-sealed record Car(BodyComponent Chassis, Wheel FrontLeft, Wheel FrontRight, Wheel RearLeft, Wheel RearRight);
+sealed record Car(BodyComponent Chassis, Wheel FrontLeft, Wheel FrontRight, Wheel RearLeft, Wheel RearRight)
+{
+    public Wheel[] Wheels => [FrontLeft, FrontRight, RearLeft, RearRight];
+}
 
 /// <summary>A wheel body, the two constraints the controller drives - the motor and the steering hinge - and where it mounts on the chassis.</summary>
 sealed record Wheel(BodyComponent Body, AngularAxisMotorConstraintComponent Motor, AngularHingeConstraintComponent Hinge, Vector3 Mount);

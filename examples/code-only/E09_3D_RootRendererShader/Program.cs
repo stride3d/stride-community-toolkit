@@ -1,7 +1,6 @@
 using E09_3D_RootRendererShader.Renderers;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
-using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Rendering;
 
@@ -33,8 +32,6 @@ void Start(Scene scene)
             WidthFactor = 0.9f,
         },
     });
-
-    game.Window.Position = new Int2(50, 50);
 }
 
 // The render feature that draws a RibbonBackgroundComponent, in the opaque stage

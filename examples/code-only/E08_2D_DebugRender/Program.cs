@@ -35,7 +35,7 @@ void Start(Scene rootScene)
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
 
-    var ground = rootScene.Entities.First(e => e.Name == GameDefaults.DefaultGroundName);
+    var ground = rootScene.FindEntity(GameDefaults.DefaultGroundName)!;
     ground.Transform.Position = new Vector3(0, -4, 0);
 
     // 2D scenes are lit like any other, and look flat without a light
@@ -48,9 +48,9 @@ void Start(Scene rootScene)
             var entity = game.CreatePrimitive(primitive, new()
             {
                 Material = game.CreateFlatMaterial(random.NextColor()),
+                Position = new Vector3(i, 10 + index * 1.5f, 0),
             });
 
-            entity.Transform.Position = new Vector3(i, 10 + index * 1.5f, 0);
             entity.Scene = rootScene;
         }
     }
@@ -69,7 +69,7 @@ void Start(Scene rootScene)
 
 static void AddSpotLight(Scene rootScene)
 {
-    var spotLight = new Entity("SpotLight")
+    var spotLight = new Entity("SpotLight", new Vector3(0, -4, 2))
     {
         new LightComponent
         {
@@ -83,7 +83,6 @@ static void AddSpotLight(Scene rootScene)
         }
     };
 
-    spotLight.Transform.Position = new Vector3(0, -4, 2);
     spotLight.Scene = rootScene;
 }
 /*

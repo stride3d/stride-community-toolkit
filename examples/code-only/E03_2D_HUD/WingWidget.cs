@@ -37,9 +37,9 @@ public sealed class WingWidget(ShipState ship) : HudWidget
         var pulse = 0.5f + 0.5f * MathF.Sin(canvas.Time * 3f);
 
         canvas.Style(new HudStyle(MathUtil.Lerp(HudCanvas.Thin, HudCanvas.Thick, selected), 0.45f + 0.3f * lit, theme.Ground) { Glow = (4f + 4f * pulse) * selected, GlowColour = theme.GlowFor(HudRole.Engaged), Additive = true });
-        canvas.Shapes.Tag = id;
+        canvas.Tag(id);
         canvas.ChamferedPanel(tile.Center, tile.Size, 0.16f, Color.Lerp(theme.Dim(HudRole.Engaged), accent, lit));
-        canvas.Shapes.Tag = null;
+        canvas.Untag();
 
         var colour = Color.Lerp(accent, theme.Text, selected);
         var left = tile.Left + 0.3f;

@@ -7,9 +7,7 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using static Box2D.NET.B2Bodies;
-using static Box2D.NET.B2Geometries;
 using static Box2D.NET.B2MathFunction;
-using static Box2D.NET.B2Shapes;
 
 // A faithful replica of the Box2D.NET sample Benchmarks/BenchmarkJunkyard (MIT, (c) 2022 Erin Catto,
 // (c) 2025 Choi Ikpil): a walled yard whose floor and walls are rows of overlapping static squares,
@@ -74,7 +72,7 @@ var sceneSetup = new SceneSetup2D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;
@@ -104,35 +102,24 @@ void Start(Scene rootScene)
 void CreateGround()
 {
     var groundId = simulation.CreateStaticBody(Vector2.Zero);
-    var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
+    var floorSquare = new Vector2(1.1f * GridSize, GridSize);
+    var wallSquare = new Vector2(GridSize, 1.1f * GridSize);
 
     var y = 0.0f;
     var x = -80.0f * GridSize;
 
     for (var i = 0; i < 161; ++i)
     {
-        var box = b2MakeOffsetBox(0.55f * GridSize, 0.5f * GridSize, new B2Vec2(x, y), b2Rot_identity);
-        b2CreatePolygonShape(groundId, in shapeDef, in box);
+        ShapeFixtureBuilder.AttachBox(floorSquare, groundId, new Vector2(x, y));
         x += GridSize;
     }
 
     y = GridSize;
-    x = -80.0f * GridSize;
 
     for (var i = 0; i < 50; ++i)
     {
-        var box = b2MakeOffsetBox(0.5f * GridSize, 0.55f * GridSize, new B2Vec2(x, y), b2Rot_identity);
-        b2CreatePolygonShape(groundId, in shapeDef, in box);
-        y += GridSize;
-    }
-
-    y = GridSize;
-    x = 80.0f * GridSize;
-
-    for (var i = 0; i < 50; ++i)
-    {
-        var box = b2MakeOffsetBox(0.5f * GridSize, 0.55f * GridSize, new B2Vec2(x, y), b2Rot_identity);
-        b2CreatePolygonShape(groundId, in shapeDef, in box);
+        ShapeFixtureBuilder.AttachBox(wallSquare, groundId, new Vector2(-80.0f * GridSize, y));
+        ShapeFixtureBuilder.AttachBox(wallSquare, groundId, new Vector2(80.0f * GridSize, y));
         y += GridSize;
     }
 }
@@ -173,14 +160,12 @@ void CreatePusher()
 {
     pusherId = simulation.CreateKinematicBody(Vector2.Zero);
 
-    var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
-    var pusherBox = b2MakeOffsetBox(2.0f, 4.0f, new B2Vec2(0.0f, 4.0f), b2Rot_identity);
-    b2CreatePolygonShape(pusherId, in shapeDef, in pusherBox);
+    ShapeFixtureBuilder.AttachBox(new Vector2(4.0f, 8.0f), pusherId, new Vector2(0.0f, 4.0f));
 
     simulation.RegisterSimulationUpdate(new PusherDriver(pusherId));
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     // Fixed-step accumulation and the pusher drive happen inside
     simulation.Update(time.Elapsed);
@@ -221,7 +206,7 @@ void SubmitShapes()
 
 void SubmitBodyPolygon(Vector2[] vertices, B2Transform transform, Color color)
 {
-    shapeBatch.DrawSolidPolygon(vertices, new Vector2(transform.p.X, transform.p.Y), MathF.Atan2(transform.q.s, transform.q.c), color);
+    shapeBatch.DrawSolidPolygon(vertices, new Vector2(transform.p.X, transform.p.Y), b2Rot_GetAngle(transform.q), color);
 }
 
 // The testbed's body colouring: gray asleep, salmon fast, pink otherwise

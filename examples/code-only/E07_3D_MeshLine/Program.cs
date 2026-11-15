@@ -18,13 +18,11 @@ void Start(Scene rootScene)
     game.AddGrabber();
 
     // The line is a child of the first sphere, so it falls and rolls with it
-    var sphere1 = game.CreatePrimitive(Primitive3D.Sphere());
-    sphere1.Transform.Position = new Vector3(0, 8, 0);
+    var sphere1 = game.CreatePrimitive(Primitive3D.Sphere(), new() { Position = new Vector3(0, 8, 0) });
     sphere1.AddChild(CreateLineEntity());
     sphere1.Scene = rootScene;
 
-    var sphere2 = game.CreatePrimitive(Primitive3D.Sphere());
-    sphere2.Transform.Position = new Vector3(-0.01f, 9, -0.01f);
+    var sphere2 = game.CreatePrimitive(Primitive3D.Sphere(), new() { Position = new Vector3(-0.01f, 9, -0.01f) });
     sphere2.Scene = rootScene;
 }
 
