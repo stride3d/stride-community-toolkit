@@ -44,6 +44,8 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 - `TextureCanvas` and `CreateTextureCanvas` default `size` to 1024 by 1024, so it can be left out.
 - `MeshBuilder` 16-bit indices take the whole unsigned range the GPU reads, 0 to 65,535; the limit was 32,767.
 - The four camera controllers and `GameProfiler` carry `[DataContract]`, so Game Studio lists them; the follow controller's `ObstacleTest` delegate is `[DataMemberIgnore]`.
+- Bepu: `game.GetSimulation(index = 0)` returns one of the game's simulations, the first by default, without an entity to ask.
+- Box2D: `ShapeFixtureBuilder.AttachBox(size, body, offset)` attaches a box off the body's centre, `AttachPolygon` takes a `radius` that rounds the hull, and `shapeDef.InCategory(category, mask)` sets Box2D's category filter.
 - Box2D: `BodyForces.TeleportAtRest(body, position, rotation)` and `Box2DBodyComponent.TeleportAtRest(position, rotation)` move a body and stop it there, awake, as a reset does; `B2Vec2Extensions.ToB2Vec2()` and `ToVector2()` are public.
 - `AddGizmo(renderGroup:)` and `TranslationGizmo`'s constructor take the render group the gizmo draws in.
 - Box2D: `ShapeFixtureBuilder.AttachShape` and `AttachPolygon` return the `B2ShapeId` they created, as `AttachChain` returns its chain, so a caller that needs the shape no longer creates it by hand.
@@ -93,8 +95,21 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 ### 📄 Docs
 
 - Physics extensions manual: a paragraph on the loading stall, why a scene's first fall differs from a restart and how to hold the simulation until the first short frame.
-- The generated example pages and the gallery match their sources again: fifteen pages had stale code ranges.
+- The generated example pages and the gallery match their sources again after the example changes.
 - The file-based app page says what `PublishAot=false` is for: `dotnet publish` fails with `NETSDK1102` without it; `dotnet run` and `dotnet build` do not need it.
+
+### 🎓 Examples
+
+- Entities take their name and starting position where they are made: through `Position` and `EntityName` on the `CreatePrimitive` options, or `new Entity(name, position)`. E01 and the two GiveMeACube examples keep `Transform.Position`, which is what they teach.
+- Fields built in `Start` are declared `= null!` and their guards are gone, in the Bepu, debug-shapes, gallery, chart and audio examples.
+- Bepu examples read the simulation with `game.GetSimulation()` and the Shift key with `input.IsShiftDown()`; the first-person example now sprints and boosts on either Shift.
+- Overlay help in six Bepu examples (`E05_3D_CollisionGroup`, `CollisionLayer`, `Dodgeball`, `LayerSelection`, `PlanetGravity`, `PlanetWalker`) is one key a line of about fifty characters, with the state on the lines below.
+- `E06_Box2D`: shapes come from a seeded random, the overlay shows one count, and the status message runs on the game clock. `E06_Box2D_Car`, `Junkyard` and `JunkyardInteractive` build their fixtures with `ShapeFixtureBuilder.AttachPolygon` and `AttachBox`.
+- `E06_Box2D_CharacterMover` is four files: `Program.cs`, `Course.cs`, `Elevator.cs` and `GroundPaths.cs`.
+- `E02_3D_Material_Gallery`: `Recipes.Pbr` and `Recipes.Mapped` take metalness before glossiness, as `MaterialDescriptors.Pbr` does; `WobbleFeature`, `DissolveFeature` and `PackMaterials` have a file each.
+- `E13_SignalR`: one `SignalRHubClient(hubUrl, logger)` constructor; `SignalRClientOptions`, `IStoppable` and `IStationCommands` are removed; `ContainerEvent.Describe()` is shared with the Blazor page.
+- `Example.Common`: `ThrownBall` and `SampleData.ScatterAroundSine` for the two chart examples, `Gallery.RunSetup(station)`, and `Exhibit` lists `Setup` before `Update`. `ColorTheme` and `ColorThemes` are removed; Cube Collapse and the playgrounds hold the colours themselves.
+- The first examples no longer reference the empty `Stride.CommunityToolkit.Windows` project (F# and Visual Basic basic scene, F# partial torus), or restate properties `Directory.Build.props` sets.
 
 ### 🔁 Build & Deploy
 

@@ -478,7 +478,7 @@ of one class, `HudStyle.cs`:
 
 [!code-csharp[](../../../examples/code-only/E03_2D_HUD_Basics/HudStyle.cs)]
 
-**The drawing goes into a class.** `SimpleHud.cs` takes the game, the scene, the batch and a style, keeps the labels, and
+**The drawing goes into a class.** `SimpleHud.cs` takes the scene, the batch and a style, keeps the labels, and
 offers three numbers to set and one method to call:
 
 [!code-csharp[](../../../examples/code-only/E03_2D_HUD_Basics/SimpleHud.cs#Step8Class)]

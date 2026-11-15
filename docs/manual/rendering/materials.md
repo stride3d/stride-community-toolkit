@@ -351,7 +351,7 @@ discard pixels or add a shading term.
 A feature is a class that derives from `MaterialFeature` and implements the interface of the slot it goes in.
 
 ```csharp
-// examples/code-only/E02_3D_Material_Gallery/CustomFeatures.cs
+// examples/code-only/E02_3D_Material_Gallery/WobbleFeature.cs
 [DataContract]
 public class WobbleFeature : MaterialFeature, IMaterialDisplacementFeature
 {
