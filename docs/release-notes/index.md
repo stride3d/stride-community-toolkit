@@ -93,6 +93,7 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 
 - Physics extensions manual: a paragraph on the loading stall, why a scene's first fall differs from a restart and how to hold the simulation until the first short frame.
 - The generated example pages and the gallery match their sources again: fifteen pages had stale code ranges.
+- The file-based app page says what `PublishAot=false` is for: `dotnet publish` fails with `NETSDK1102` without it; `dotnet run` and `dotnet build` do not need it.
 
 ### 🔁 Build & Deploy
 
@@ -100,3 +101,5 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 - The metadata generator has no generic host, `appsettings.json` or log file: logging is set up in code and goes to the console. `scan` returns 1 for a missing examples directory, as `generate` does.
 - `Stride.CommunityToolkit.Skyboxes` no longer references `Stride.Engine` itself; the core package brings it.
 - The Avalonia launcher appends to its log in one buffer and refreshes the panel once for the lines already waiting; it reads each example's files once at start, not on every keystroke.
+- `examples/Stride.AssetCompiler.Overrides.targets` is removed; it applied to Stride 4.4.0-beta5 only.
+- The `FastList<T>` benchmarks are removed; they measured no toolkit code.
