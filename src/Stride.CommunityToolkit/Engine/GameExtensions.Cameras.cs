@@ -137,7 +137,7 @@ public static partial class GameExtensions
     /// <exception cref="InvalidOperationException">No camera entity with that name exists in the root scene.</exception>
     /// <remarks>
     /// <para>
-    /// For adjusting the camera that <c>SetupBase3DScene</c> has already created. Calling
+    /// For adjusting the camera that the scene setup has already created. Calling
     /// <see cref="Add3DCamera"/> a second time is not the way to do it: that method builds a
     /// <em>new</em> entity, binds it to camera slot 0 and adds it to the root scene, leaving two camera
     /// entities competing for one slot.

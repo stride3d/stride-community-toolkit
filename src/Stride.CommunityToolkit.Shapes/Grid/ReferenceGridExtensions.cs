@@ -29,8 +29,7 @@ public static class ReferenceGridExtensions
     /// <exception cref="InvalidOperationException">The game has no scene yet.</exception>
     /// <example>
     /// <code>
-    /// game.SetupBase3DScene();
-    ///
+    /// // In the Start callback, once the scene setup has run
     /// var grid = game.AddGrid();
     /// </code>
     /// </example>

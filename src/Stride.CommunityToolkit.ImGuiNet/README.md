@@ -36,8 +36,6 @@ game.Run(start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    
     // Initialize ImGui.NET system
     imguiSystem = game.AddImGuiNet();
 }

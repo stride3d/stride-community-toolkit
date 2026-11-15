@@ -59,11 +59,14 @@ public static class ShapeFixtureBuilder
     /// Optional shape definition (density, friction, restitution, sensor flag). If <c>null</c>,
     /// <see cref="CreateDefaultShapeDef"/> is used.
     /// </param>
+    /// <param name="radius">Rounds the polygon: its outline moves out by this much, with round corners. Zero for sharp corners.</param>
     /// <returns>The polygon shape created.</returns>
     /// <exception cref="ArgumentException">Thrown when fewer than 3 vertices are provided.</exception>
-    public static B2ShapeId AttachPolygon(Vector2[] vertices, B2BodyId bodyId, B2ShapeDef? shapeDef = null)
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="radius"/> is negative.</exception>
+    public static B2ShapeId AttachPolygon(Vector2[] vertices, B2BodyId bodyId, B2ShapeDef? shapeDef = null, float radius = 0f)
     {
         ArgumentNullException.ThrowIfNull(vertices);
+        ArgumentOutOfRangeException.ThrowIfNegative(radius);
 
         if (vertices.Length < 3) throw new ArgumentException("A polygon needs at least 3 vertices.", nameof(vertices));
 
@@ -74,7 +77,27 @@ public static class ShapeFixtureBuilder
 
         for (var i = 0; i < vertices.Length; i++) points[i] = vertices[i].ToB2Vec2();
 
-        return AttachHull(points, bodyId, def);
+        return AttachHull(points, bodyId, def, radius);
+    }
+
+    /// <summary>
+    /// Creates and attaches a box that need not be centred on the body: a wall of a room, a step, one
+    /// piece of a body made of several.
+    /// </summary>
+    /// <param name="size">The full width and height of the box.</param>
+    /// <param name="bodyId">The Box2D body to which the box will be attached.</param>
+    /// <param name="offset">The centre of the box in the body's local space.</param>
+    /// <param name="shapeDef">
+    /// Optional shape definition (density, friction, restitution, sensor flag). If <c>null</c>,
+    /// <see cref="CreateDefaultShapeDef"/> is used.
+    /// </param>
+    /// <returns>The polygon shape created.</returns>
+    public static B2ShapeId AttachBox(Vector2 size, B2BodyId bodyId, Vector2 offset = default, B2ShapeDef? shapeDef = null)
+    {
+        var def = shapeDef ?? CreateDefaultShapeDef();
+        var box = b2MakeOffsetBox(size.X / 2, size.Y / 2, offset.ToB2Vec2(), b2Rot_identity);
+
+        return b2CreatePolygonShape(bodyId, in def, in box);
     }
 
     /// <summary>
@@ -192,6 +215,22 @@ public static class ShapeFixtureBuilder
         return shapeDef;
     }
 
+    /// <summary>
+    /// The shape definition with its shape in Box2D's own category filter: two shapes collide when each one's
+    /// category is in the other's mask. The collision group is left as it is.
+    /// </summary>
+    /// <param name="shapeDef">The definition to filter; the copy returned is the one to attach shapes with.</param>
+    /// <param name="category">The bits that say what the shape is.</param>
+    /// <param name="mask">The bits of the categories the shape collides with; every category when omitted.</param>
+    /// <returns>The definition with the category and the mask set.</returns>
+    public static B2ShapeDef InCategory(this B2ShapeDef shapeDef, ulong category, ulong mask = ulong.MaxValue)
+    {
+        shapeDef.filter.categoryBits = category;
+        shapeDef.filter.maskBits = mask;
+
+        return shapeDef;
+    }
+
     private static B2ShapeId AttachBox(Vector2 size, B2BodyId bodyId, in B2ShapeDef shapeDef)
     {
         var box = b2MakeBox(size.X / 2, size.Y / 2);
@@ -218,10 +257,10 @@ public static class ShapeFixtureBuilder
     }
 
     // The convex hull of the points as one polygon shape: what a triangle and any polygon outline both become
-    private static B2ShapeId AttachHull(ReadOnlySpan<B2Vec2> points, B2BodyId bodyId, in B2ShapeDef shapeDef)
+    private static B2ShapeId AttachHull(ReadOnlySpan<B2Vec2> points, B2BodyId bodyId, in B2ShapeDef shapeDef, float radius = 0f)
     {
         var hull = b2ComputeHull(points, points.Length);
-        var polygon = b2MakePolygon(in hull, 0f);
+        var polygon = b2MakePolygon(in hull, radius);
 
         return b2CreatePolygonShape(bodyId, in shapeDef, in polygon);
     }

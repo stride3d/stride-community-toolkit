@@ -1,3 +1,4 @@
+using Stride.BepuPhysics;
 using Stride.BepuPhysics.Debug;
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
@@ -13,6 +14,26 @@ namespace Stride.CommunityToolkit.Bepu;
 /// </summary>
 public static class GameExtensions
 {
+    /// <summary>
+    /// Gets one of the game's Bepu simulations: the first, which is the one every entity is in unless the
+    /// game configured more.
+    /// </summary>
+    /// <param name="game">The game the simulation belongs to.</param>
+    /// <param name="index">Which simulation, in the order of <see cref="BepuConfiguration.BepuSimulations"/>.</param>
+    /// <returns>The simulation, for its gravity, its time scale, its queries and its step settings.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">The game has no simulation at <paramref name="index"/>.</exception>
+    public static BepuSimulation GetSimulation(this IGame game, int index = 0)
+    {
+        ArgumentNullException.ThrowIfNull(game);
+
+        var simulations = game.Services.GetOrCreate<BepuConfiguration>().BepuSimulations;
+
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, simulations.Count);
+
+        return simulations[index];
+    }
+
     /// <summary>
     /// Puts a <see cref="GrabberScript"/> on the camera entity, so the left mouse button picks up any
     /// dynamic body, carries it on the end of the camera ray and throws it on release.

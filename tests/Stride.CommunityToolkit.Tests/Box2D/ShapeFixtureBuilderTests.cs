@@ -50,6 +50,55 @@ public class ShapeFixtureBuilderTests
     }
 
     [Fact]
+    public void AttachPolygon_RoundsTheHullByTheRadius()
+    {
+        using var simulation = new Box2DSimulation();
+        var body = simulation.CreateStaticBody(Vector2.Zero);
+
+        Vector2[] outline = [new(0, 0), new(1, 0), new(1, 1), new(0, 1)];
+        var sharp = ShapeFixtureBuilder.AttachPolygon(outline, body);
+        var rounded = ShapeFixtureBuilder.AttachPolygon(outline, body, radius: 0.15f);
+
+        Assert.Equal(0f, b2Shape_GetPolygon(sharp).radius);
+        Assert.Equal(0.15f, b2Shape_GetPolygon(rounded).radius, Tolerances.Float);
+        Assert.Throws<ArgumentOutOfRangeException>(() => ShapeFixtureBuilder.AttachPolygon(outline, body, radius: -0.1f));
+    }
+
+    [Fact]
+    public void AttachBox_CentresTheBoxOnTheOffset()
+    {
+        using var simulation = new Box2DSimulation();
+        var body = simulation.CreateStaticBody(Vector2.Zero);
+
+        var box = ShapeFixtureBuilder.AttachBox(new Vector2(2f, 1f), body, new Vector2(3f, -4f));
+        var centre = b2Shape_GetPolygon(box).centroid;
+        var bounds = b2Shape_GetAABB(box);
+
+        Assert.Equal(3f, centre.X, Tolerances.Geometry);
+        Assert.Equal(-4f, centre.Y, Tolerances.Geometry);
+
+        // The bounds carry Box2D's margin, a couple of centimetres a side
+        Assert.Equal(2f, bounds.upperBound.X - bounds.lowerBound.X, 0.05f);
+        Assert.Equal(1f, bounds.upperBound.Y - bounds.lowerBound.Y, 0.05f);
+    }
+
+    [Fact]
+    public void InCategory_SetsTheCategoryAndTheMask_AndLeavesTheGroup()
+    {
+        using var simulation = new Box2DSimulation();
+        var body = simulation.CreateStaticBody(Vector2.Zero);
+
+        var everything = b2Shape_GetFilter(ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(0.5f), body, ShapeFixtureBuilder.CreateDefaultShapeDef().InCategory(0x4)));
+        var masked = b2Shape_GetFilter(ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(0.5f), body, ShapeFixtureBuilder.CreateDefaultShapeDef().InCollisionGroup(2).InCategory(0x8, 0x3)));
+
+        Assert.Equal(0x4UL, everything.categoryBits);
+        Assert.Equal(ulong.MaxValue, everything.maskBits);
+        Assert.Equal(0x8UL, masked.categoryBits);
+        Assert.Equal(0x3UL, masked.maskBits);
+        Assert.Equal(2, masked.groupIndex);
+    }
+
+    [Fact]
     public void StepSettings_RefuseWhatWouldFreezeOrReverseTheWorld()
     {
         var settings = new PhysicsStepSettings();

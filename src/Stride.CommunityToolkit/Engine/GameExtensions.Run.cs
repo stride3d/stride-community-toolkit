@@ -46,7 +46,7 @@ public static partial class GameExtensions
     ///
     /// game.Run(start: Start, update: Update);
     ///
-    /// void Start(Scene rootScene) => game.SetupBase3DScene();
+    /// void Start(Scene rootScene) { /* the default 3D scene is in place: add entities */ }
     ///
     /// void Update(Scene rootScene, GameTime time) { /* per frame */ }
     /// </code>
@@ -89,8 +89,6 @@ public static partial class GameExtensions
     ///
     /// game.Run(start: async rootScene =>
     /// {
-    ///     game.SetupBase3DScene();
-    ///
     ///     await game.GetScriptSystem().Delay(3);   // countdown, splash, loading...
     ///
     ///     SpawnPlayer(rootScene);
