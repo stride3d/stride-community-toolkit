@@ -9,8 +9,6 @@ namespace Stride.CommunityToolkit.Tests.Charts;
 /// </summary>
 public class NiceTickStepTests
 {
-    private const float Tolerance = 1e-5f;
-
     [Theory]
     [InlineData(10f, 1f)]
     [InlineData(7f, 1f)]
@@ -22,7 +20,7 @@ public class NiceTickStepTests
     [InlineData(0.09f, 0.01f)]
     public void ReturnsTheExpectedStep(float range, float expected)
     {
-        Assert.Equal(expected, ChartFraming.NiceTickStep(range), Tolerance);
+        Assert.Equal(expected, ChartFraming.NiceTickStep(range), Tolerances.Float);
     }
 
     [Fact]
@@ -33,7 +31,7 @@ public class NiceTickStepTests
         {
             var step = ChartFraming.NiceTickStep(range, targetLines: 10);
 
-            Assert.True(range / step <= 10f + Tolerance, $"range {range} gave step {step} = {range / step} lines");
+            Assert.True(range / step <= 10f + Tolerances.Float, $"range {range} gave step {step} = {range / step} lines");
         }
     }
 
@@ -51,11 +49,10 @@ public class NiceTickStepTests
         }
     }
 
-    [Fact]
-    public void RejectsNonPositiveRanges()
-    {
-        Assert.Throws<ArgumentOutOfRangeException>(() => ChartFraming.NiceTickStep(0f));
-        Assert.Throws<ArgumentOutOfRangeException>(() => ChartFraming.NiceTickStep(-1f));
-        Assert.Throws<ArgumentOutOfRangeException>(() => ChartFraming.NiceTickStep(float.NaN));
-    }
+    [Theory]
+    [InlineData(0f)]
+    [InlineData(-1f)]
+    [InlineData(float.NaN)]
+    public void RejectsNonPositiveRanges(float range)
+        => Assert.Throws<ArgumentOutOfRangeException>(() => ChartFraming.NiceTickStep(range));
 }

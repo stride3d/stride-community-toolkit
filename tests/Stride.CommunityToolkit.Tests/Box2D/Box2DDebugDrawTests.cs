@@ -23,6 +23,5 @@ public class Box2DDebugDrawTests
         var color = DebugDrawColors.ToColor(hex);
 
         Assert.Equal(new Color((byte)r, (byte)g, (byte)b), color);
-        Assert.Equal(255, color.A);
     }
 }

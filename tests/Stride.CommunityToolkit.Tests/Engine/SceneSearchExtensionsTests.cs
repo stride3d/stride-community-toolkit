@@ -138,8 +138,9 @@ public class SceneSearchGameTests
         Scene scene = null!;
         IGame game = null!;
 
-        Assert.Throws<ArgumentNullException>(() => scene.GetComponentsInScene<CameraComponent>());
-        Assert.Throws<ArgumentNullException>(() => game.GetComponentsInScene<CameraComponent>());
-        Assert.Throws<ArgumentNullException>(() => scene.GetCamera("Main"));
+        Assert.Multiple(
+            () => Assert.Throws<ArgumentNullException>(() => scene.GetComponentsInScene<CameraComponent>()),
+            () => Assert.Throws<ArgumentNullException>(() => game.GetComponentsInScene<CameraComponent>()),
+            () => Assert.Throws<ArgumentNullException>(() => scene.GetCamera("Main")));
     }
 }

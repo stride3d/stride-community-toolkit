@@ -10,9 +10,9 @@ namespace Stride.CommunityToolkit.Tests.Bepu;
 /// </summary>
 /// <remarks>
 /// <para>
-/// The plane confinement itself only exists while a <c>BepuSimulation</c> is stepping, so it belongs
-/// in an integration test built on Stride's <c>GameTestBase</c> rather than here. What is testable in
-/// isolation is the <see cref="Body2DComponent.ZTolerance"/> validation, which rejects values that
+/// The plane confinement itself only exists while a <c>BepuSimulation</c> is stepping, so it is tested
+/// in a headless game by <see cref="Body2DPlaneConfinementTests"/>. What is testable in isolation is
+/// the <see cref="Body2DComponent.ZTolerance"/> validation, which rejects values that
 /// would otherwise break the correction: negative or zero would make it fire on floating-point noise
 /// and write a velocity every step, stopping bodies from sleeping, while NaN and infinity would
 /// disable it altogether.

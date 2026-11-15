@@ -20,7 +20,7 @@ public class TextMeshTests
         var data = TextMesh.Create(Font, "B");
 
         MeshAssertions.AssertWatertight(data);
-        Assert.All(data.Vertices, v => Assert.InRange(v.Normal.Length(), 0.999f, 1.001f));
+        Assert.All(data.Vertices, v => Assert.Equal(1f, v.Normal.Length(), Tolerances.Projection));
     }
 
     [Fact]
@@ -111,8 +111,8 @@ public class TextMeshTests
 
         static float SecondLineMinX(GeometricMeshData<VertexPositionNormalTexture> data) => data.Vertices.Where(v => v.Position.Y < -0.5f).Min(v => v.Position.X);
 
-        Assert.True(SecondLineMinX(left) < SecondLineMinX(centre));
-        Assert.True(SecondLineMinX(centre) < SecondLineMinX(right));
+        Assert.True(SecondLineMinX(left) < SecondLineMinX(centre), $"left starts at {SecondLineMinX(left)}, centre at {SecondLineMinX(centre)}");
+        Assert.True(SecondLineMinX(centre) < SecondLineMinX(right), $"centre starts at {SecondLineMinX(centre)}, right at {SecondLineMinX(right)}");
         Assert.Equal(left.Vertices.Max(v => v.Position.X), right.Vertices.Max(v => v.Position.X), 4);
     }
 
@@ -151,7 +151,7 @@ public class TextMeshTests
         Assert.Equal(2, glyphs.Count);
         Assert.Equal('A', glyphs[0].Codepoint);
         Assert.Equal('B', glyphs[1].Codepoint);
-        Assert.True(glyphs[1].Position.X > glyphs[0].Position.X);
+        Assert.True(glyphs[1].Position.X > glyphs[0].Position.X, $"B is at {glyphs[1].Position.X}, A at {glyphs[0].Position.X}");
 
         foreach (var glyph in glyphs)
         {

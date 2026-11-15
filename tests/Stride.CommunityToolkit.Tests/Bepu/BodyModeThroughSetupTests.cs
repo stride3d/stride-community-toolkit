@@ -83,13 +83,4 @@ public class BodyModeThroughSetupTests
         Assert.Equal("Crate", copy.EntityName);
         Assert.Equal(BodyMode.Kinematic, options.Body);
     }
-
-    [Fact]
-    public void AShapeRefusesADepthThatIsNotPositive()
-    {
-        Assert.Throws<ArgumentOutOfRangeException>(() => Primitive2D.Circle(depth: 0f));
-        Assert.Throws<ArgumentOutOfRangeException>(() => Primitive2D.Square(depth: -1f));
-        Assert.Throws<ArgumentOutOfRangeException>(() => Primitive2D.Rectangle(depth: float.NaN));
-        Assert.Equal(2.5f, Primitive2D.Triangle(depth: 2.5f).Depth);
-    }
 }

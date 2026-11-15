@@ -51,9 +51,9 @@ public class QuaternionUtilTests
         var forward = Vector3.Transform(-Vector3.UnitZ, rotation);
         var expected = Vector3.Normalize(target - eye);
 
-        Assert.Equal(expected.X, forward.X, 0.0001f);
-        Assert.Equal(expected.Y, forward.Y, 0.0001f);
-        Assert.Equal(expected.Z, forward.Z, 0.0001f);
+        Assert.Equal(expected.X, forward.X, Tolerances.Geometry);
+        Assert.Equal(expected.Y, forward.Y, Tolerances.Geometry);
+        Assert.Equal(expected.Z, forward.Z, Tolerances.Geometry);
     }
 
     /// <summary>The by-reference form is the same rotation as the by-value one.</summary>
@@ -131,7 +131,7 @@ public class QuaternionUtilTests
 
     /// <summary>A quaternion and its negation are one rotation, so the comparison is on the absolute dot product.</summary>
     private static void AssertSameRotation(Quaternion expected, Quaternion actual)
-        => Assert.Equal(1f, MathF.Abs(Quaternion.Dot(expected, actual)), 0.0001f);
+        => Assert.Equal(1f, MathF.Abs(Quaternion.Dot(expected, actual)), Tolerances.Geometry);
 
     private static void AssertFiniteAndUnit(Quaternion rotation)
     {

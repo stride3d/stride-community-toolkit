@@ -3,6 +3,7 @@ using CubeCollapse.Gameplay;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Xunit;
+using static Stride.CommunityToolkit.Tests.CubeCollapse.CubeFixtures;
 
 namespace Stride.CommunityToolkit.Tests.CubeCollapse;
 
@@ -11,17 +12,6 @@ namespace Stride.CommunityToolkit.Tests.CubeCollapse;
 /// </summary>
 public class MatchFinderTests
 {
-    private static Entity MakeCube(Color colour) => new("Cube") { new CubeComponent(colour) };
-
-    private static Entity Place(CubeGrid grid, Int3 at, Color colour)
-    {
-        var cube = MakeCube(colour);
-
-        grid.Add(at, cube);
-
-        return cube;
-    }
-
     [Fact]
     public void AloneCubeIsItsOwnGroup()
     {

@@ -5,6 +5,11 @@ using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Examples;
 
+/// <summary>
+/// The console launcher's menu loop, run as the real program through <c>dotnet run --no-build</c> against a
+/// manifest of two examples that are not on disk: what choosing an example, a command and a wrong id each
+/// print. With nothing on disk the launch reports a missing project and no game process starts.
+/// </summary>
 public class ConsoleLauncherTests
 {
     [Theory]
@@ -26,27 +31,46 @@ public class ConsoleLauncherTests
     [Theory]
     [InlineData("q")]
     [InlineData("Q")]
-    [InlineData("c\nq")]
-    [InlineData("C\nQ")]
-    [InlineData("invalid\nq")]
-    [InlineData("\nq")]
-    public async Task NonExampleInput_DoesNotAnnounceLaunch(string input)
+    public async Task Quit_LaunchesNothingAndComplainsOfNothing(string input)
     {
         var output = await RunLauncher($"{input}\n");
 
+        AssertNothingLaunched(output);
+        Assert.DoesNotContain("Invalid choice.", output);
+        Assert.Equal(1, MenuCount(output));
+    }
+
+    [Theory]
+    [InlineData("c\nq")]
+    [InlineData("C\nQ")]
+    public async Task Clear_RedrawsTheMenu(string input)
+    {
+        var output = await RunLauncher($"{input}\n");
+
+        AssertNothingLaunched(output);
+        Assert.Equal(2, MenuCount(output));
+    }
+
+    [Theory]
+    [InlineData("invalid\nq")]
+    [InlineData("\nq")]
+    public async Task InvalidChoice_SaysSo(string input)
+    {
+        var output = await RunLauncher($"{input}\n");
+
+        AssertNothingLaunched(output);
+        Assert.Contains("Invalid choice. Try again.", output);
+    }
+
+    private static void AssertNothingLaunched(string output)
+    {
         Assert.DoesNotContain("Starting example:", output);
         Assert.DoesNotContain("It might take a few moments to start the example...", output);
         Assert.DoesNotContain("Cannot run", output);
-
-        if (input.StartsWith('c') || input.StartsWith('C'))
-        {
-            Assert.Equal(2, output.Split("Stride Community Toolkit Examples").Length - 1);
-        }
-        else if (input is not "q" and not "Q")
-        {
-            Assert.Contains("Invalid choice. Try again.", output);
-        }
     }
+
+    // How many times the menu was drawn: its heading is printed once per draw
+    private static int MenuCount(string output) => output.Split("Stride Community Toolkit Examples").Length - 1;
 
     private static async Task<string> RunLauncher(string input)
     {

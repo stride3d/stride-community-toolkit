@@ -7,10 +7,23 @@ namespace Stride.CommunityToolkit.Tests.Rendering;
 
 /// <summary>
 /// The flat primitives and the prism: vertex and index counts, winding, bounds and normals, so a
-/// rewrite of a mesh function cannot change the geometry unnoticed.
+/// rewrite of a mesh function cannot change the geometry unnoticed; and the depth a flat shape accepts.
 /// </summary>
 public class ProceduralModel2DTests
 {
+    [Theory]
+    [InlineData(0f)]
+    [InlineData(-1f)]
+    [InlineData(float.NaN)]
+    public void AFlatShape_RefusesADepthThatIsNotPositive(float depth)
+        => Assert.Multiple(
+            () => Assert.Throws<ArgumentOutOfRangeException>(() => Primitive2D.Circle(depth: depth)),
+            () => Assert.Throws<ArgumentOutOfRangeException>(() => Primitive2D.Square(depth: depth)),
+            () => Assert.Throws<ArgumentOutOfRangeException>(() => Primitive2D.Rectangle(depth: depth)));
+
+    [Fact]
+    public void AFlatShape_KeepsAPositiveDepth() => Assert.Equal(2.5f, Primitive2D.Triangle(depth: 2.5f).Depth);
+
     [Theory]
     [InlineData(0)]
     [InlineData(2)]

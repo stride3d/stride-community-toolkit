@@ -16,16 +16,14 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal sealed class TexturedShapesScene : IGoldScene
 {
-    private ShapeBatch? _pictures;
-    private ShapeBatch? _stripes;
-    private ComputeTextureColor? _stripe;
+    private ShapeBatch _pictures = null!;
+    private ShapeBatch _stripes = null!;
+    private ComputeTextureColor _stripe = null!;
 
-    public SceneSetup Setup => GoldSetup.Orthographic;
+    public SceneSetup Setup => GoldSetup.Orthographic(14f);
 
     public void Start(Game game, Scene scene)
     {
-        GoldSetup.SetOrthographicSize(scene, 14f);
-
         var picture = CreatePicture(game.GraphicsDevice);
 
         _pictures = game.AddShapeBatch();
@@ -37,20 +35,18 @@ internal sealed class TexturedShapesScene : IGoldScene
 
     public void Update(Game game, Scene scene, GameTime time)
     {
-        if (_pictures is not { } pictures || _stripes is not { } stripes || _stripe is not { } stripe) return;
-
         var seconds = (float)time.Total.TotalSeconds;
 
-        pictures.BorderWidth = 3f;
+        _pictures.BorderWidth = 3f;
 
         // Row 1: the picture as it is, in a rounded panel with a glow, a disc, a sector and a hexagon
-        pictures.Fill.Set(Color.White, 1f);
-        pictures.Glow.Set(8f, new Color(0, 150, 255, 160));
-        pictures.DrawRectangle(new Vector3(-8f, 4f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(5f, 3.5f), new Color(110, 200, 255), cornerRadius: 0.5f);
-        pictures.Glow.Clear();
+        _pictures.Fill.Set(Color.White, 1f);
+        _pictures.Glow.Set(8f, new Color(0, 150, 255, 160));
+        _pictures.DrawRectangle(new Vector3(-8f, 4f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(5f, 3.5f), new Color(110, 200, 255), cornerRadius: 0.5f);
+        _pictures.Glow.Clear();
 
-        pictures.DrawSolidCircle(new Vector2(-2f, 4f), 1.7f, Color.Cyan);
-        pictures.DrawSector(new Vector2(3f, 4f), 1.9f, 0.4f, 4.6f, Color.Orange);
+        _pictures.DrawSolidCircle(new Vector2(-2f, 4f), 1.7f, Color.Cyan);
+        _pictures.DrawSector(new Vector2(3f, 4f), 1.9f, 0.4f, 4.6f, Color.Orange);
 
         Span<Vector2> hexagon = stackalloc Vector2[6];
 
@@ -60,30 +56,30 @@ internal sealed class TexturedShapesScene : IGoldScene
             hexagon[i] = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * 1.8f;
         }
 
-        pictures.DrawSolidPolygon(hexagon, new Vector2(8f, 4f), 0f, Color.LimeGreen, radius: 0.2f);
+        _pictures.DrawSolidPolygon(hexagon, new Vector2(8f, 4f), 0f, Color.LimeGreen, radius: 0.2f);
 
         // Row 2: a tint, a gradient to nothing over the picture, a thick line, and the same panel
         // with the texture turned off - a flat fill in the same batch
-        pictures.Fill.Set(new Color(255, 160, 60), 1f);
-        pictures.DrawSolidCircle(new Vector2(-8f, -1.5f), 1.7f, Color.White);
+        _pictures.Fill.Set(new Color(255, 160, 60), 1f);
+        _pictures.DrawSolidCircle(new Vector2(-8f, -1.5f), 1.7f, Color.White);
 
-        pictures.Fill.Set(Color.White, 1f);
-        pictures.Gradient.Set(new Color(255, 255, 255, 0), Vector2.UnitX);
-        pictures.DrawRectangle(new Vector3(-2f, -1.5f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(5f, 3.5f), Color.White, cornerRadius: 0.3f);
-        pictures.Gradient.Clear();
+        _pictures.Fill.Set(Color.White, 1f);
+        _pictures.Gradient.Set(new Color(255, 255, 255, 0), Vector2.UnitX);
+        _pictures.DrawRectangle(new Vector3(-2f, -1.5f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(5f, 3.5f), Color.White, cornerRadius: 0.3f);
+        _pictures.Gradient.Clear();
 
-        pictures.DrawLine(new Vector3(1.5f, -3f, 0f), new Vector3(5f, 0f, 0f), 1.2f, Color.Yellow);
+        _pictures.DrawLine(new Vector3(1.5f, -3f, 0f), new Vector3(5f, 0f, 0f), 1.2f, Color.Yellow);
 
-        pictures.Textured = false;
-        pictures.Fill.Set(new Color(4, 14, 30), 0.85f);
-        pictures.DrawRectangle(new Vector3(8f, -1.5f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(3.5f, 3.5f), new Color(110, 200, 255), cornerRadius: 0.5f);
-        pictures.Textured = true;
+        _pictures.Textured = false;
+        _pictures.Fill.Set(new Color(4, 14, 30), 0.85f);
+        _pictures.DrawRectangle(new Vector3(8f, -1.5f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(3.5f, 3.5f), new Color(110, 200, 255), cornerRadius: 0.5f);
+        _pictures.Textured = true;
 
         // Row 3: the picture tiled four times across a wide bar and scrolling, in its own batch
-        stripe.Offset = new Vector2(seconds * 0.25f, 0f);
-        stripes.BorderWidth = 2f;
-        stripes.Fill.Set(Color.White, 1f);
-        stripes.DrawRectangle(new Vector3(0f, -6f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(20f, 1.6f), Color.White, cornerRadius: 0.2f);
+        _stripe.Offset = new Vector2(seconds * 0.25f, 0f);
+        _stripes.BorderWidth = 2f;
+        _stripes.Fill.Set(Color.White, 1f);
+        _stripes.DrawRectangle(new Vector3(0f, -6f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(20f, 1.6f), Color.White, cornerRadius: 0.2f);
     }
 
     /// <summary>

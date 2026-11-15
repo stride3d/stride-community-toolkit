@@ -55,7 +55,7 @@ public class TextBevelTests
         var leaning = data.Vertices.Where(v => MathF.Abs(v.Normal.Z) is > 0.01f and < 0.99f).ToList();
 
         Assert.NotEmpty(leaning);
-        Assert.All(data.Vertices, v => Assert.InRange(v.Normal.Length(), 0.999f, 1.001f));
+        Assert.All(data.Vertices, v => Assert.Equal(1f, v.Normal.Length(), Tolerances.Projection));
 
         // On the front half the leaning normals lean forward, on the back half backward
         Assert.All(leaning, v => Assert.True(MathF.Sign(v.Normal.Z) == MathF.Sign(v.Position.Z), $"a bevel normal at z {v.Position.Z} leans the other way"));
@@ -69,8 +69,8 @@ public class TextBevelTests
         var plain = TextMesh.Create(Font, "H", new TextMeshOptions { Depth = 0.3f });
 
         // A chamfer adds one ring of quads per side on top of the walls; four segments add four
-        Assert.True(plain.Vertices.Length < chamfer.Vertices.Length);
-        Assert.True(chamfer.Vertices.Length < round.Vertices.Length);
+        Assert.True(plain.Vertices.Length < chamfer.Vertices.Length, $"plain has {plain.Vertices.Length} vertices, the chamfer {chamfer.Vertices.Length}");
+        Assert.True(chamfer.Vertices.Length < round.Vertices.Length, $"the chamfer has {chamfer.Vertices.Length} vertices, the round bevel {round.Vertices.Length}");
         MeshAssertions.AssertWatertight(chamfer);
     }
 
@@ -113,17 +113,16 @@ public class TextBevelTests
         var data = TextMesh.Create(Font, "Hello", Bevelled);
         var capsAndBevels = data.Vertices.Where(v => MathF.Abs(v.Normal.Z) > 0.01f);
 
-        Assert.All(capsAndBevels, v => Assert.InRange(v.TextureCoordinate.X, -0.001f, 1.001f));
-        Assert.All(capsAndBevels, v => Assert.InRange(v.TextureCoordinate.Y, -0.001f, 1.001f));
+        Assert.All(capsAndBevels, v => Assert.InRange(v.TextureCoordinate.X, -Tolerances.Projection, 1f + Tolerances.Projection));
+        Assert.All(capsAndBevels, v => Assert.InRange(v.TextureCoordinate.Y, -Tolerances.Projection, 1f + Tolerances.Projection));
     }
 
     [Fact]
     public void TheBevelRejectsNonsense()
-    {
-        Assert.Throws<ArgumentOutOfRangeException>(() => new TextBevel(0f, 0.1f));
-        Assert.Throws<ArgumentOutOfRangeException>(() => new TextBevel(0.1f, 0f));
-        Assert.Throws<ArgumentOutOfRangeException>(() => new TextBevel(0.1f, 0.1f, segments: 0));
-    }
+        => Assert.Multiple(
+            () => Assert.Throws<ArgumentOutOfRangeException>(() => new TextBevel(0f, 0.1f)),
+            () => Assert.Throws<ArgumentOutOfRangeException>(() => new TextBevel(0.1f, 0f)),
+            () => Assert.Throws<ArgumentOutOfRangeException>(() => new TextBevel(0.1f, 0.1f, segments: 0)));
 
     [Fact]
     public void PerGlyphMeshesTakeTheBevelToo()

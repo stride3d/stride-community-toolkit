@@ -11,8 +11,6 @@ namespace Stride.CommunityToolkit.Tests.Mathematics;
 /// </summary>
 public class TweenTests
 {
-    private const float Tolerance = 1e-5f;
-
     [Fact]
     public void DoesNotAdvanceUntilStarted()
     {
@@ -31,14 +29,14 @@ public class TweenTests
 
         tween.Update(1f);
 
-        Assert.Equal(0.5f, tween.Progress, Tolerance);
-        Assert.Equal(0.25f, tween.Value, Tolerance);
+        Assert.Equal(0.5f, tween.Progress, Tolerances.Float);
+        Assert.Equal(0.25f, tween.Value, Tolerances.Float);
         Assert.False(tween.IsComplete);
 
         tween.Update(5f);
 
-        Assert.Equal(1f, tween.Progress, Tolerance);
-        Assert.Equal(1f, tween.Value, Tolerance);
+        Assert.Equal(1f, tween.Progress, Tolerances.Float);
+        Assert.Equal(1f, tween.Value, Tolerances.Float);
         Assert.True(tween.IsComplete);
         Assert.False(tween.IsRunning);
     }
@@ -50,7 +48,7 @@ public class TweenTests
 
         tween.Update(2.25f);
 
-        Assert.Equal(0.25f, tween.Progress, Tolerance);
+        Assert.Equal(0.25f, tween.Progress, Tolerances.Float);
         Assert.True(tween.IsRunning);
         Assert.False(tween.IsComplete);
     }
@@ -62,11 +60,11 @@ public class TweenTests
 
         tween.Update(1.25f);
 
-        Assert.Equal(0.75f, tween.Progress, Tolerance);
+        Assert.Equal(0.75f, tween.Progress, Tolerances.Float);
 
         tween.Update(1f);
 
-        Assert.Equal(0.25f, tween.Progress, Tolerance);
+        Assert.Equal(0.25f, tween.Progress, Tolerances.Float);
     }
 
     [Fact]
@@ -78,12 +76,12 @@ public class TweenTests
         tween.Stop();
         tween.Update(0.25f);
 
-        Assert.Equal(0.25f, tween.Progress, Tolerance);
+        Assert.Equal(0.25f, tween.Progress, Tolerances.Float);
 
         tween.Resume();
         tween.Update(0.25f);
 
-        Assert.Equal(0.5f, tween.Progress, Tolerance);
+        Assert.Equal(0.5f, tween.Progress, Tolerances.Float);
     }
 
     [Fact]
@@ -105,8 +103,8 @@ public class TweenTests
 
         tween.Update(0.5f);
 
-        Assert.Equal(7.5f, tween.Lerp(0f, 10f), Tolerance);
-        Assert.Equal(7.5f, tween.Lerp(new Vector3(0f), new Vector3(10f)).X, Tolerance);
+        Assert.Equal(7.5f, tween.Lerp(0f, 10f), Tolerances.Float);
+        Assert.Equal(7.5f, tween.Lerp(new Vector3(0f), new Vector3(10f)).X, Tolerances.Float);
     }
 
     [Fact]
@@ -126,11 +124,10 @@ public class TweenTests
     public void RejectsANonPositiveDuration()
         => Assert.Throws<ArgumentOutOfRangeException>(() => new Tween(0f));
 
-    [Fact]
-    public void RejectsANonFiniteDuration()
-    {
-        // NaN passes every comparison, so it would slip past a sign check and make a tween whose progress is NaN
-        Assert.Throws<ArgumentOutOfRangeException>(() => new Tween(float.NaN));
-        Assert.Throws<ArgumentOutOfRangeException>(() => new Tween(float.PositiveInfinity));
-    }
+    // NaN passes every comparison, so it would slip past a sign check and make a tween whose progress is NaN
+    [Theory]
+    [InlineData(float.NaN)]
+    [InlineData(float.PositiveInfinity)]
+    public void RejectsANonFiniteDuration(float duration)
+        => Assert.Throws<ArgumentOutOfRangeException>(() => new Tween(duration));
 }

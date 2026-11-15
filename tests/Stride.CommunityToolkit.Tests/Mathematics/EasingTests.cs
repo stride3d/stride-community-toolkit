@@ -13,8 +13,6 @@ namespace Stride.CommunityToolkit.Tests.Mathematics;
 /// </summary>
 public class EasingTests
 {
-    private const float Tolerance = 1e-5f;
-
     public static TheoryData<EasingFunction> AllFunctions
         => new(Enum.GetValues<EasingFunction>());
 
@@ -40,21 +38,21 @@ public class EasingTests
     [MemberData(nameof(AllFunctions))]
     public void StartsAtZeroAndEndsAtOne(EasingFunction function)
     {
-        Assert.Equal(0f, Easing.Ease(0f, function), Tolerance);
-        Assert.Equal(1f, Easing.Ease(1f, function), Tolerance);
+        Assert.Equal(0f, Easing.Ease(0f, function), Tolerances.Float);
+        Assert.Equal(1f, Easing.Ease(1f, function), Tolerances.Float);
     }
 
     [Theory]
     [MemberData(nameof(InOutFunctions))]
     public void InOutPassesThroughTheMiddle(EasingFunction function)
-        => Assert.Equal(0.5f, Easing.Ease(0.5f, function), Tolerance);
+        => Assert.Equal(0.5f, Easing.Ease(0.5f, function), Tolerances.Float);
 
     [Theory]
     [InlineData(EasingFunction.Linear)]
     [InlineData(EasingFunction.SmoothStep)]
     [InlineData(EasingFunction.SmootherStep)]
     public void SymmetricBlendsPassThroughTheMiddle(EasingFunction function)
-        => Assert.Equal(0.5f, Easing.Ease(0.5f, function), Tolerance);
+        => Assert.Equal(0.5f, Easing.Ease(0.5f, function), Tolerances.Float);
 
     [Theory]
     [MemberData(nameof(InOutPairs))]
@@ -64,7 +62,7 @@ public class EasingTests
         {
             var t = i / 20f;
 
-            Assert.Equal(1f - Easing.Ease(1f - t, easeIn), Easing.Ease(t, easeOut), Tolerance);
+            Assert.Equal(1f - Easing.Ease(1f - t, easeIn), Easing.Ease(t, easeOut), Tolerances.Float);
         }
     }
 
@@ -81,7 +79,7 @@ public class EasingTests
         {
             var t = i / 20f;
 
-            Assert.Equal((float)direct.Invoke(null, [t])!, Easing.Ease(t, function), Tolerance);
+            Assert.Equal((float)direct.Invoke(null, [t])!, Easing.Ease(t, function), Tolerances.Float);
         }
     }
 
@@ -111,23 +109,23 @@ public class EasingTests
 
     [Fact]
     public void SmootherStepIsPerlinsQuintic()
-        => Assert.Equal(0.103515625f, Easing.SmootherStep(0.25f), Tolerance);
+        => Assert.Equal(0.103515625f, Easing.SmootherStep(0.25f), Tolerances.Float);
 
     [Fact]
     public void TheExtensionsForwardToTheSameCurve()
     {
-        Assert.Equal(Easing.CubicEaseOut(0.3f), EasingFunction.CubicEaseOut.Ease(0.3f), Tolerance);
-        Assert.Equal(MathUtilEx.Interpolate(2f, 6f, 0.5f, EasingFunction.Linear), EasingFunction.Linear.Interpolate(2f, 6f, 0.5f), Tolerance);
+        Assert.Equal(Easing.CubicEaseOut(0.3f), EasingFunction.CubicEaseOut.Ease(0.3f), Tolerances.Float);
+        Assert.Equal(MathUtilEx.Interpolate(2f, 6f, 0.5f, EasingFunction.Linear), EasingFunction.Linear.Interpolate(2f, 6f, 0.5f), Tolerances.Float);
 
         var point = EasingFunction.QuadraticEaseOut.Interpolate(Vector3.Zero, new Vector3(0f, 10f, 0f), 0.5f);
 
-        Assert.Equal(7.5f, point.Y, Tolerance);
+        Assert.Equal(7.5f, point.Y, Tolerances.Float);
     }
 
     [Fact]
     public void InterpolateHoldsAtTheEndsPastTheClock()
     {
-        Assert.Equal(6f, EasingFunction.ElasticEaseOut.Interpolate(2f, 6f, 1.5f), Tolerance);
-        Assert.Equal(2f, EasingFunction.ElasticEaseIn.Interpolate(2f, 6f, -0.5f), Tolerance);
+        Assert.Equal(6f, EasingFunction.ElasticEaseOut.Interpolate(2f, 6f, 1.5f), Tolerances.Float);
+        Assert.Equal(2f, EasingFunction.ElasticEaseIn.Interpolate(2f, 6f, -0.5f), Tolerances.Float);
     }
 }

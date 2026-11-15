@@ -16,7 +16,7 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal sealed class ScreenShapesScene : IGoldScene
 {
-    private ShapeBatch? _shapes;
+    private ShapeBatch _shapes = null!;
 
     public SceneSetup Setup => GoldSetup.Perspective;
 
@@ -35,68 +35,66 @@ internal sealed class ScreenShapesScene : IGoldScene
 
     public void Update(Game game, Scene scene, GameTime time)
     {
-        if (_shapes is not { } shapes) return;
-
         var seconds = (float)time.Total.TotalSeconds;
 
         // In the world first: a disc on the ground, cut by the pillar, as any depth-tested shape is
-        shapes.BorderWidth = 3f;
-        shapes.Fill.Alpha = 0.45f;
-        shapes.DrawDisc(new Vector3(0f, 0.02f, 1.5f), Vector3.UnitY, 3f, Color.OrangeRed);
+        _shapes.BorderWidth = 3f;
+        _shapes.Fill.Alpha = 0.45f;
+        _shapes.DrawDisc(new Vector3(0f, 0.02f, 1.5f), Vector3.UnitY, 3f, Color.OrangeRed);
 
         // Then on the screen, from the same batch
-        shapes.Screen = true;
+        _shapes.Screen = true;
 
-        var centre = shapes.ScreenSize * 0.5f;
+        var centre = _shapes.ScreenSize * 0.5f;
 
         // A crosshair: a ring and two pixel lines with a gap at the middle
-        shapes.BorderWidth = 2f;
-        shapes.StrokeWidth = 2f;
-        shapes.DrawRing(new Vector3(centre, 0f), Vector3.UnitZ, 22f, Color.White);
-        shapes.DrawPixelLine(new Vector3(centre.X - 40f, centre.Y, 0f), new Vector3(centre.X - 10f, centre.Y, 0f), 2f, Color.White);
-        shapes.DrawPixelLine(new Vector3(centre.X + 10f, centre.Y, 0f), new Vector3(centre.X + 40f, centre.Y, 0f), 2f, Color.White);
-        shapes.DrawPixelLine(new Vector3(centre.X, centre.Y - 40f, 0f), new Vector3(centre.X, centre.Y - 10f, 0f), 2f, Color.White);
-        shapes.DrawPixelLine(new Vector3(centre.X, centre.Y + 10f, 0f), new Vector3(centre.X, centre.Y + 40f, 0f), 2f, Color.White);
+        _shapes.BorderWidth = 2f;
+        _shapes.StrokeWidth = 2f;
+        _shapes.DrawRing(new Vector3(centre, 0f), Vector3.UnitZ, 22f, Color.White);
+        _shapes.DrawPixelLine(new Vector3(centre.X - 40f, centre.Y, 0f), new Vector3(centre.X - 10f, centre.Y, 0f), 2f, Color.White);
+        _shapes.DrawPixelLine(new Vector3(centre.X + 10f, centre.Y, 0f), new Vector3(centre.X + 40f, centre.Y, 0f), 2f, Color.White);
+        _shapes.DrawPixelLine(new Vector3(centre.X, centre.Y - 40f, 0f), new Vector3(centre.X, centre.Y - 10f, 0f), 2f, Color.White);
+        _shapes.DrawPixelLine(new Vector3(centre.X, centre.Y + 10f, 0f), new Vector3(centre.X, centre.Y + 40f, 0f), 2f, Color.White);
 
         // Corner widgets, each placed as a corner plus an offset
-        shapes.Fill.Set(new Color(4, 14, 30), 0.7f);
-        shapes.Glow.Set(8f, new Color(0, 150, 255, 160));
-        shapes.DrawRectangle(new Vector3(shapes.AnchorPoint(Anchor.TopLeft) + new Vector2(110f, 60f), 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(180f, 80f), new Color(110, 200, 255), cornerRadius: 12f);
-        shapes.Glow.Clear();
+        _shapes.Fill.Set(new Color(4, 14, 30), 0.7f);
+        _shapes.Glow.Set(8f, new Color(0, 150, 255, 160));
+        _shapes.DrawRectangle(new Vector3(_shapes.AnchorPoint(Anchor.TopLeft) + new Vector2(110f, 60f), 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(180f, 80f), new Color(110, 200, 255), cornerRadius: 12f);
+        _shapes.Glow.Clear();
 
-        shapes.Fill.Set(null, 0.45f);
-        shapes.Dash.Set(8f, 6f, seconds * 30f);
-        shapes.DrawRing(new Vector3(shapes.AnchorPoint(Anchor.TopRight) + new Vector2(-90f, 80f), 0f), Vector3.UnitZ, 50f, Color.Orange);
-        shapes.Dash.Clear();
+        _shapes.Fill.Set(null, 0.45f);
+        _shapes.Dash.Set(8f, 6f, seconds * 30f);
+        _shapes.DrawRing(new Vector3(_shapes.AnchorPoint(Anchor.TopRight) + new Vector2(-90f, 80f), 0f), Vector3.UnitZ, 50f, Color.Orange);
+        _shapes.Dash.Clear();
 
         // A radial gauge: a faint full track and a bright arc, clockwise from twelve because Y is down
-        var bottomLeft = shapes.AnchorPoint(Anchor.BottomLeft) + new Vector2(100f, -90f);
+        var bottomLeft = _shapes.AnchorPoint(Anchor.BottomLeft) + new Vector2(100f, -90f);
 
-        shapes.Fill.Alpha = 0.25f;
-        shapes.DrawArc(bottomLeft, 50f, 0f, MathF.Tau, Color.Gray, width: 14f);
-        shapes.Fill.Alpha = 0.9f;
-        shapes.DrawArc(bottomLeft, 50f, -MathF.PI * 0.5f, MathF.Tau * 0.65f, Color.LimeGreen, width: 14f);
-        shapes.Fill.Alpha = 0.45f;
+        _shapes.Fill.Alpha = 0.25f;
+        _shapes.DrawArc(bottomLeft, 50f, 0f, MathF.Tau, Color.Gray, width: 14f);
+        _shapes.Fill.Alpha = 0.9f;
+        _shapes.DrawArc(bottomLeft, 50f, -MathF.PI * 0.5f, MathF.Tau * 0.65f, Color.LimeGreen, width: 14f);
+        _shapes.Fill.Alpha = 0.45f;
 
         // A sector in the bottom-right corner, its sweep turning clockwise on screen
-        shapes.Fill.Color = Color.DodgerBlue;
-        shapes.DrawSector(shapes.AnchorPoint(Anchor.BottomRight) + new Vector2(-100f, -90f), 60f, 0.3f, 4.2f, Color.White, innerRadius: 28f);
-        shapes.Fill.Color = null;
+        _shapes.Fill.Color = Color.DodgerBlue;
+        _shapes.DrawSector(_shapes.AnchorPoint(Anchor.BottomRight) + new Vector2(-100f, -90f), 60f, 0.3f, 4.2f, Color.White, innerRadius: 28f);
+        _shapes.Fill.Color = null;
 
         // A viewport rectangle: the panel and its bar are drawn in the rectangle's own coordinates
-        shapes.Viewport = new RectangleF(360f, 470f, 560f, 150f);
-        shapes.Fill.Set(new Color(4, 14, 30), 0.7f);
-        shapes.BorderWidth = 1.5f;
-        shapes.DrawRectangle(new Vector3(shapes.AnchorPoint(Anchor.MiddleCenter), 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(560f, 150f), new Color(110, 200, 255), cornerRadius: 10f);
-        shapes.Fill.Set(new Color(255, 120, 40, 200), 1f);
-        shapes.Gradient.Set(new Color(255, 230, 120), Vector2.UnitX);
-        shapes.DrawRectangle(new Vector3(200f, 75f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(340f, 24f), Color.Orange);
-        shapes.Gradient.Clear();
-        shapes.Fill.Set(null, 0.45f);
-        shapes.Viewport = null;
+        _shapes.Viewport = new RectangleF(360f, 470f, 560f, 150f);
+        _shapes.Fill.Set(new Color(4, 14, 30), 0.7f);
+        _shapes.BorderWidth = 1.5f;
+        _shapes.DrawRectangle(new Vector3(_shapes.AnchorPoint(Anchor.MiddleCenter), 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(560f, 150f), new Color(110, 200, 255), cornerRadius: 10f);
+        _shapes.Fill.Set(new Color(255, 120, 40, 200), 1f);
+        _shapes.Gradient.Set(new Color(255, 230, 120), Vector2.UnitX);
+        _shapes.DrawRectangle(new Vector3(200f, 75f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(340f, 24f), Color.Orange);
+        _shapes.Gradient.Clear();
+        _shapes.Fill.Set(null, 0.45f);
+        _shapes.Viewport = null;
 
-        shapes.BorderWidth = 3f;
-        shapes.StrokeWidth = 1f;
-        shapes.Screen = false;
+        _shapes.BorderWidth = 3f;
+        _shapes.StrokeWidth = 1f;
+        _shapes.Screen = false;
     }
 }

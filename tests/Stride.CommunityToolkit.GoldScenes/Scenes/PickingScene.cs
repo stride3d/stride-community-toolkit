@@ -29,8 +29,8 @@ internal sealed class PickingScene : IGoldScene
     ];
 
     private readonly PickResult?[] _results = new PickResult?[Points.Length];
-    private GpuPicker? _picker;
-    private ShapeBatch? _shapes;
+    private GpuPicker _picker = null!;
+    private ShapeBatch _shapes = null!;
     private int _frame;
 
     public SceneSetup Setup => GoldSetup.Perspective;
@@ -79,18 +79,16 @@ internal sealed class PickingScene : IGoldScene
 
     public void Update(Game game, Scene scene, GameTime time)
     {
-        if (_picker is not { } picker || _shapes is not { } shapes) return;
-
         // One point per frame, round and round; every answer is kept under the point it was for
-        picker.Request(Points[_frame++ % Points.Length]);
+        _picker.Request(Points[_frame++ % Points.Length]);
 
-        if (picker.Result is { } result)
+        if (_picker.Result is { } result)
         {
             _results[Array.IndexOf(Points, result.ScreenPosition)] = result;
         }
 
-        shapes.StrokeWidth = 2f;
-        shapes.Fill.Alpha = 0f;
+        _shapes.StrokeWidth = 2f;
+        _shapes.Fill.Alpha = 0f;
 
         for (var i = 0; i < Points.Length; i++)
         {
@@ -109,32 +107,32 @@ internal sealed class PickingScene : IGoldScene
                 // One ring per instance index plus one, so the third cube shows three rings
                 for (var ring = 0; ring <= answer.InstanceIndex; ring++)
                 {
-                    shapes.DrawPixelRing(at, 10f + ring * 8f, colour);
+                    _shapes.DrawPixelRing(at, 10f + ring * 8f, colour);
                 }
             }
             else
             {
-                shapes.Screen = true;
+                _shapes.Screen = true;
 
-                var centre = Points[i] * shapes.ScreenSize;
+                var centre = Points[i] * _shapes.ScreenSize;
 
-                shapes.DrawPixelLine(new Vector3(centre.X - 14f, centre.Y - 14f, 0f), new Vector3(centre.X + 14f, centre.Y + 14f, 0f), 3f, Color.Red);
-                shapes.DrawPixelLine(new Vector3(centre.X - 14f, centre.Y + 14f, 0f), new Vector3(centre.X + 14f, centre.Y - 14f, 0f), 3f, Color.Red);
-                shapes.Screen = false;
+                _shapes.DrawPixelLine(new Vector3(centre.X - 14f, centre.Y - 14f, 0f), new Vector3(centre.X + 14f, centre.Y + 14f, 0f), 3f, Color.Red);
+                _shapes.DrawPixelLine(new Vector3(centre.X - 14f, centre.Y + 14f, 0f), new Vector3(centre.X + 14f, centre.Y - 14f, 0f), 3f, Color.Red);
+                _shapes.Screen = false;
             }
         }
 
         // Where the questions were asked, so the answers can be read against them
-        shapes.Screen = true;
-        shapes.StrokeWidth = 1.5f;
+        _shapes.Screen = true;
+        _shapes.StrokeWidth = 1.5f;
 
         foreach (var point in Points)
         {
-            shapes.DrawRing(new Vector3(point * shapes.ScreenSize, 0f), Vector3.UnitZ, 6f, Color.White);
+            _shapes.DrawRing(new Vector3(point * _shapes.ScreenSize, 0f), Vector3.UnitZ, 6f, Color.White);
         }
 
-        shapes.Screen = false;
-        shapes.StrokeWidth = 1f;
-        shapes.Fill.Alpha = 0.45f;
+        _shapes.Screen = false;
+        _shapes.StrokeWidth = 1f;
+        _shapes.Fill.Alpha = 0.45f;
     }
 }

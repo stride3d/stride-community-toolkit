@@ -10,8 +10,6 @@ namespace Stride.CommunityToolkit.Tests.Rendering;
 /// </summary>
 public class AreaColumnsTests
 {
-    private const float Tolerance = 1e-5f;
-
     [Fact]
     public void Columns_KeepsABandInsideTheRange_Unchanged()
     {
@@ -22,7 +20,7 @@ public class AreaColumnsTests
 
         var run = Assert.Single(runs);
         Assert.Equal(3, run.Count);
-        Assert.Equal(2f, run[1].Upper.Y, Tolerance);
+        Assert.Equal(2f, run[1].Upper.Y, Tolerances.Float);
     }
 
     [Fact]
@@ -34,8 +32,8 @@ public class AreaColumnsTests
         var runs = AreaColumns.Columns(upper, lower, -5, 5);
 
         var run = Assert.Single(runs);
-        Assert.Equal(5f, run[1].Upper.Y, Tolerance);
-        Assert.Equal(0f, run[1].Lower.Y, Tolerance);
+        Assert.Equal(5f, run[1].Upper.Y, Tolerances.Float);
+        Assert.Equal(0f, run[1].Lower.Y, Tolerances.Float);
     }
 
     [Fact]
@@ -49,7 +47,7 @@ public class AreaColumnsTests
 
         var run = Assert.Single(runs);
         Assert.Equal(2, run.Count);
-        Assert.Equal(2f, run[0].Upper.X, Tolerance);
+        Assert.Equal(2f, run[0].Upper.X, Tolerances.Float);
     }
 
     [Fact]

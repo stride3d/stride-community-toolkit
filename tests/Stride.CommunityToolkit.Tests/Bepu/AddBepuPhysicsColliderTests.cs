@@ -26,7 +26,7 @@ public class AddBepuPhysicsColliderTests
 
         Assert.Equal(0.5f, collider.Radius);
         Assert.Equal(Capsule2DProceduralModel.StraightLength(0.8f, 0.5f), collider.Length);
-        Assert.Equal(0.01f, collider.Length, 0.0001f);
+        Assert.Equal(0.01f, collider.Length, Tolerances.Geometry);
     }
 
     [Fact]

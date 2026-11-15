@@ -2,13 +2,14 @@ using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Rendering;
 
 namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 
 /// <summary>
-/// What the gold scenes share: the two bare setups, the dark slab most of them stand on, the grey
-/// pillar several of them hide shapes behind, and the 2D camera's zoom. Each scene stays a picture
-/// of one feature; this is only the furniture.
+/// What the gold scenes share: the two bare setups, the dark slab most of them stand on and the grey
+/// pillar several of them hide shapes behind. Each scene stays a picture of one feature; this is only
+/// the furniture.
 /// </summary>
 internal static class GoldSetup
 {
@@ -18,27 +19,17 @@ internal static class GoldSetup
     /// <summary>A perspective camera and a light, no ground and no sky.</summary>
     internal static SceneSetup Perspective => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
 
-    /// <summary>An orthographic camera over a dark clear colour, no ground.</summary>
-    internal static SceneSetup Orthographic => new SceneSetup2D { ClearColor = new Color(24, 26, 32), Camera = CameraSetup.Orthographic(), Ground = null };
+    /// <summary>An orthographic camera over a dark clear colour, no ground; <paramref name="size"/> is the height of the view in world units.</summary>
+    internal static SceneSetup Orthographic(float size)
+        => new SceneSetup2D { ClearColor = new Color(24, 26, 32), Camera = CameraSetup.Orthographic(orthographicSize: size), Ground = null };
 
-    /// <summary>Zooms the 2D camera: the half-height of the view in world units.</summary>
-    internal static void SetOrthographicSize(Scene scene, float size)
-    {
-        var camera = scene.GetCamera() ?? throw new InvalidOperationException("The 2D scene has no camera.");
-
-        camera.OrthographicSize = size;
-    }
-
-    /// <summary>A square slab half a unit thick, its top at y = 0, in the default dark grey.</summary>
-    internal static void AddGround(Game game, Scene scene, float size = 30f) => AddGround(game, scene, size, GroundColour, metalness: 0.04f, glossiness: 0.25f);
-
-    /// <summary>A square slab half a unit thick, its top at y = 0.</summary>
-    internal static void AddGround(Game game, Scene scene, float size, Color colour, float metalness, float glossiness)
+    /// <summary>A square slab half a unit thick, its top at y = 0, dark grey unless a colour is given.</summary>
+    internal static void AddGround(Game game, Scene scene, float size = 30f, Color? colour = null, float metalness = 0.04f, float glossiness = 0.25f)
     {
         var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(size, 0.5f, size)), new PrimitiveEntityOptions
         {
             EntityName = "Ground",
-            Material = game.CreateMaterial(colour, metalness: metalness, glossiness: glossiness),
+            Material = game.CreateMaterial(colour ?? GroundColour, metalness: metalness, glossiness: glossiness),
             Position = new Vector3(0f, -0.25f, 0f),
         });
 
@@ -51,7 +42,7 @@ internal static class GoldSetup
         var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.6f, height, 1.6f)), new PrimitiveEntityOptions
         {
             EntityName = name,
-            Material = game.CreateMaterial(PillarColour, metalness: 0.1f, glossiness: 0.35f),
+            Material = PillarMaterial(game),
             Position = new Vector3(at.X, height * 0.5f, at.Z),
         });
 
@@ -59,4 +50,7 @@ internal static class GoldSetup
 
         return pillar;
     }
+
+    /// <summary>The grey of the pillars, for a scene that stands something else in their place.</summary>
+    internal static Material PillarMaterial(Game game) => game.CreateMaterial(PillarColour, metalness: 0.1f, glossiness: 0.35f);
 }

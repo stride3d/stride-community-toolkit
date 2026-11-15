@@ -7,14 +7,14 @@ using Xunit;
 namespace Stride.CommunityToolkit.Tests.Rendering;
 
 /// <summary>
-/// The cases the 2026-10-17 review found, one test per finding, on synthetic geometry and the
-/// embedded font so no installed font is needed.
+/// Edge cases of the solid lettering, one test per case, on synthetic geometry and the embedded font
+/// so no installed font is needed.
 /// </summary>
 public class TextReviewTests
 {
     private static MeshFont Font => MeshFont.Default;
 
-    // F1: a contour of a single point, which Consolas has 364 of, is skipped rather than crashing the decode
+    // A contour of a single point, which Consolas has 364 of, is skipped rather than crashing the decode
 
     [Fact]
     public void ASinglePointContourIsSkipped()
@@ -36,7 +36,7 @@ public class TextReviewTests
         Assert.Equal(2, contours.Length);
     }
 
-    // F2: the triangulation does not depend on the size the text is built at
+    // The triangulation does not depend on the size the text is built at
 
     [Theory]
     [InlineData("H", 0.01f)]
@@ -58,7 +58,7 @@ public class TextReviewTests
     {
         // Corners 1 and 3 sit a twentieth of a percent of the extent apart: distinct corners, not the two
         // ends of a bridge. Taking them as one lost the triangle between them and the cap came out
-        // a quarter too large (the second review's Times New Roman k)
+        // a quarter too large (Times New Roman's k)
         Vector2[] polygon =
         [
             new(0.008300781f, 0f),
@@ -69,15 +69,9 @@ public class TextReviewTests
         ];
 
         var triangles = EarClipping.Triangulate(polygon);
-        var area = 0f;
-
-        for (var i = 0; i < triangles.Count; i += 3)
-        {
-            area += EarClipping.SignedArea([polygon[triangles[i]], polygon[triangles[i + 1]], polygon[triangles[i + 2]]]);
-        }
 
         Assert.Equal(9, triangles.Count);
-        Assert.Equal(EarClipping.SignedArea(polygon), area, 1e-6f);
+        Assert.Equal(EarClipping.SignedArea(polygon), TestGeometry.AreaOf(polygon, triangles), 1e-6f);
     }
 
     [Fact]
@@ -100,7 +94,7 @@ public class TextReviewTests
         Assert.Equal(EarClipping.Triangulate(polygon), EarClipping.Triangulate(moved));
     }
 
-    // F3: an inset that passes through a collapse is refused, and no bevel triangle faces inward
+    // An inset that passes through a collapse is refused, and no bevel triangle faces inward
 
     [Fact]
     public void AnInsetThroughTheMiddleIsNotAFit()
@@ -141,7 +135,7 @@ public class TextReviewTests
         Assert.Equal(TestGeometry.Width(plain, Dot) - TestGeometry.Width(data, Dot), TestGeometry.Width(plain, Stem) - TestGeometry.Width(data, Stem), 3);
     }
 
-    // F4: a cubic with parallel end tangents still gets its bends
+    // A cubic with parallel end tangents still gets its bends
 
     [Fact]
     public void AnInflectedCubicIsNotAChord()
@@ -159,8 +153,8 @@ public class TextReviewTests
         var finest = contour.Flatten(128).Length;
 
         Assert.True(coarse > 4, $"{coarse} corners at quality 8: the curve became its chord");
-        Assert.True(fine > coarse);
-        Assert.True(finest > fine);
+        Assert.True(fine > coarse, $"{fine} corners at quality 32, {coarse} at 8");
+        Assert.True(finest > fine, $"{finest} corners at quality 128, {fine} at 32");
 
         // The curve rises above the chord and dips below it
         var points = contour.Flatten(32);
@@ -168,7 +162,7 @@ public class TextReviewTests
         Assert.Contains(points, p => p.Y < -0.05f && p.X < 1f && p.Y > -1f);
     }
 
-    // F7: filled pieces that cross or overlap are kept as separate pieces, which is how composite glyphs
+    // Filled pieces that cross or overlap are kept as separate pieces, which is how composite glyphs
     // are drawn; a self-crossing contour is reported with the glyph named
 
     [Fact]
@@ -218,7 +212,7 @@ public class TextReviewTests
         Vector2[] outer = [new(0, 0), new(4, 0), new(4, 4), new(0, 4)];
         Vector2[] hole = [new(1, 1), new(3, 1), new(3, 3), new(1, 4)];
 
-        var polygon = Assert.Single(GlyphShape.FromContours([outer, hole.Reverse().ToArray()]).Polygons);
+        var polygon = Assert.Single(GlyphShape.FromContours([outer, TestGeometry.Reversed(hole)]).Polygons);
 
         Assert.Single(polygon.Holes);
     }
@@ -268,7 +262,7 @@ public class TextReviewTests
         Vector2[] inner = [new(1, 1), new(3, 1), new(3, 3), new(1, 3)];
 
         Assert.Throws<InvalidDataException>(() => GlyphShape.FromContours([outer, inner]));
-        Assert.Single(GlyphShape.FromContours([outer, inner.Reverse().ToArray()]).Polygons);
+        Assert.Single(GlyphShape.FromContours([outer, TestGeometry.Reversed(inner)]).Polygons);
     }
 
     [Fact]
@@ -280,7 +274,7 @@ public class TextReviewTests
         Assert.Throws<InvalidDataException>(() => GlyphShape.FromContours([crossed]));
     }
 
-    // F8: the bevel's normals follow its ellipse
+    // The bevel's normals follow its ellipse
 
     [Fact]
     public void BevelNormalsFollowTheEllipse()
@@ -298,7 +292,7 @@ public class TextReviewTests
         Assert.All(leftSide, v => Assert.InRange(Vector3.Dot(v.Normal, expected), 0.9999f, 1.0001f));
     }
 
-    // F9: options that cannot make geometry are refused at the door
+    // Options that cannot make geometry are refused at the door
 
     [Theory]
     [InlineData(0f, 0.25f)]
@@ -318,13 +312,12 @@ public class TextReviewTests
 
     [Fact]
     public void OtherInvalidOptionsAreRejected()
-    {
-        Assert.Throws<ArgumentOutOfRangeException>(() => TextMesh.Create(Font, "H", new TextMeshOptions { LineSpacing = 0f }));
-        Assert.Throws<ArgumentOutOfRangeException>(() => TextMesh.Create(Font, "H", new TextMeshOptions { LetterSpacing = float.NaN }));
-        Assert.Throws<ArgumentOutOfRangeException>(() => TextMesh.Create(Font, "H", new TextMeshOptions { CurveQuality = 0 }));
-        Assert.Throws<ArgumentOutOfRangeException>(() => new TextBevel(float.NaN, 0.1f));
-        Assert.Throws<ArgumentOutOfRangeException>(() => new TextBevel(0.1f, float.PositiveInfinity));
-    }
+        => Assert.Multiple(
+            () => Assert.Throws<ArgumentOutOfRangeException>(() => TextMesh.Create(Font, "H", new TextMeshOptions { LineSpacing = 0f })),
+            () => Assert.Throws<ArgumentOutOfRangeException>(() => TextMesh.Create(Font, "H", new TextMeshOptions { LetterSpacing = float.NaN })),
+            () => Assert.Throws<ArgumentOutOfRangeException>(() => TextMesh.Create(Font, "H", new TextMeshOptions { CurveQuality = 0 })),
+            () => Assert.Throws<ArgumentOutOfRangeException>(() => new TextBevel(float.NaN, 0.1f)),
+            () => Assert.Throws<ArgumentOutOfRangeException>(() => new TextBevel(0.1f, float.PositiveInfinity)));
 
     // Diagnostics: a glyph that cannot be built says which
 
@@ -348,7 +341,7 @@ public class TextReviewTests
         Assert.Throws<ArgumentOutOfRangeException>(() => MeshFont.Load(TestGeometry.DefaultFontBytes(), "copy", faceIndex: -1));
     }
 
-    // F6: a reader that was waiting finds the font gone, not a freed face
+    // A reader that was waiting finds the font gone, not a freed face
 
     [Fact]
     public void AReaderWaitingThroughDisposalIsRefused()
@@ -419,12 +412,14 @@ public class TextReviewTests
         var (box, sphere) = data.Bounds();
 
         Assert.All(data.Vertices, v => { var position = v.Position; Assert.Equal(ContainmentType.Contains, box.Contains(ref position)); });
-        Assert.All(data.Vertices, v => Assert.True((v.Position - sphere.Center).Length() <= sphere.Radius + 1e-5f));
+        Assert.All(data.Vertices, v => Assert.InRange((v.Position - sphere.Center).Length(), 0f, sphere.Radius + Tolerances.Float));
 
         // The ink sits inside the typographic block the anchor centred, bearings and all
         var block = TextMesh.Measure(Font, "Hello", new TextMeshOptions { Anchor = Anchor.MiddleCenter });
 
-        Assert.True(box.Minimum.X >= block.Minimum.X - 1e-4f && box.Maximum.X <= block.Maximum.X + 1e-4f);
-        Assert.True(box.Minimum.Y >= block.Minimum.Y - 1e-4f && box.Maximum.Y <= block.Maximum.Y + 1e-4f);
+        Assert.InRange(box.Minimum.X, block.Minimum.X - Tolerances.Geometry, block.Maximum.X);
+        Assert.InRange(box.Maximum.X, block.Minimum.X, block.Maximum.X + Tolerances.Geometry);
+        Assert.InRange(box.Minimum.Y, block.Minimum.Y - Tolerances.Geometry, block.Maximum.Y);
+        Assert.InRange(box.Maximum.Y, block.Minimum.Y, block.Maximum.Y + Tolerances.Geometry);
     }
 }

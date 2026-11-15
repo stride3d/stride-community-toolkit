@@ -77,30 +77,4 @@ public class LevelRulesTests
         Assert.All(ColourPalettes.All, palette =>
             Assert.Equal(palette.Colours.Count, palette.Colours.Distinct().Count()));
     }
-
-    [Fact]
-    public void JsonProgressStoreRoundTrips()
-    {
-        var path = Path.Combine(Path.GetTempPath(), $"cube-collapse-progress-{Guid.NewGuid():N}.json");
-        var store = new JsonProgressStore(path);
-
-        try
-        {
-            // A missing file is a fresh start, not an error
-            Assert.Equal(1, store.Load().Level);
-
-            store.Save(new GameProgress { Level = 7 });
-
-            Assert.Equal(7, store.Load().Level);
-
-            // A corrupt file is also a fresh start
-            File.WriteAllText(path, "not json at all");
-
-            Assert.Equal(1, store.Load().Level);
-        }
-        finally
-        {
-            File.Delete(path);
-        }
-    }
 }

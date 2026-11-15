@@ -93,10 +93,11 @@ public class EntitySearchExtensionsTests
     {
         Entity entity = null!;
 
-        Assert.Throws<ArgumentNullException>(() => entity.GetComponentInChildren<CameraComponent>());
-        Assert.Throws<ArgumentNullException>(() => entity.GetComponentsInDescendants<CameraComponent>());
-        Assert.Throws<ArgumentNullException>(() => entity.GetComponentsInChildren<CameraComponent>());
-        Assert.Throws<ArgumentNullException>(() => entity.GetComponentsInParent<CameraComponent>());
+        Assert.Multiple(
+            () => Assert.Throws<ArgumentNullException>(() => entity.GetComponentInChildren<CameraComponent>()),
+            () => Assert.Throws<ArgumentNullException>(() => entity.GetComponentsInDescendants<CameraComponent>()),
+            () => Assert.Throws<ArgumentNullException>(() => entity.GetComponentsInChildren<CameraComponent>()),
+            () => Assert.Throws<ArgumentNullException>(() => entity.GetComponentsInParent<CameraComponent>()));
     }
 
     [Fact]

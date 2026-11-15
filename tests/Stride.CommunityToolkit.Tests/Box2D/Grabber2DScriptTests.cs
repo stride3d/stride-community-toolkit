@@ -59,7 +59,7 @@ public class Grabber2DScriptTests
             if (frames is > 2 and <= 40)
             {
                 grabber!.Carry(new Vector2(3, 0));
-                simulation.Update(TimeSpan.FromSeconds(1 / 60.0));
+                simulation.Update(Frame);
                 return;
             }
 

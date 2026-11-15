@@ -10,8 +10,6 @@ namespace Stride.CommunityToolkit.Tests.Rendering;
 /// </summary>
 public class WorldTextOrientationTests
 {
-    private const float Tolerance = 1e-4f;
-
     [Fact]
     public void AScaledRotatedEntity_GivesAPureRotation()
     {
@@ -23,15 +21,15 @@ public class WorldTextOrientationTests
         var expected = Matrix.RotationQuaternion(rotation);
 
         // The axes keep their unit length, so Height is the text's only size
-        Assert.Equal(1f, orientation.Right.Length(), Tolerance);
-        Assert.Equal(1f, orientation.Up.Length(), Tolerance);
-        Assert.Equal(1f, orientation.Backward.Length(), Tolerance);
+        Assert.Equal(1f, orientation.Right.Length(), Tolerances.Geometry);
+        Assert.Equal(1f, orientation.Up.Length(), Tolerances.Geometry);
+        Assert.Equal(1f, orientation.Backward.Length(), Tolerances.Geometry);
 
         for (var row = 0; row < 3; row++)
         {
             for (var column = 0; column < 3; column++)
             {
-                Assert.Equal(expected[row, column], orientation[row, column], Tolerance);
+                Assert.Equal(expected[row, column], orientation[row, column], Tolerances.Geometry);
             }
         }
 
@@ -63,7 +61,7 @@ public class WorldTextOrientationTests
         {
             for (var column = 0; column < 3; column++)
             {
-                Assert.Equal(world[row, column], orientation[row, column], Tolerance);
+                Assert.Equal(world[row, column], orientation[row, column], Tolerances.Geometry);
             }
         }
     }

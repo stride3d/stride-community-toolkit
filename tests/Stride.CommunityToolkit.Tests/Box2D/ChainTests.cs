@@ -41,8 +41,7 @@ public class ChainTests
 
         var box = Box(simulation, new Vector3(0, 1, 0));
 
-        for (var i = 0; i < 120; i++)
-            simulation.Update(TimeSpan.FromSeconds(1 / 60.0));
+        StepFor(simulation, 120);
 
         // Resting on the chain: half a unit up, not fallen through.
         Assert.InRange(b2Body_GetPosition(box).Y, 0.4f, 0.6f);
@@ -54,7 +53,8 @@ public class ChainTests
         using var simulation = new Box2DSimulation();
         var ground = simulation.CreateStaticBody(Vector2.Zero);
 
-        Assert.Throws<ArgumentException>(() => ShapeFixtureBuilder.AttachChain([new(0, 0)], ground));
-        Assert.Throws<ArgumentException>(() => ShapeFixtureBuilder.AttachChain([new(0, 0), new(1, 0), new(1, 1)], ground, isLoop: true));
+        Assert.Multiple(
+            () => Assert.Throws<ArgumentException>(() => ShapeFixtureBuilder.AttachChain([new(0, 0)], ground)),
+            () => Assert.Throws<ArgumentException>(() => ShapeFixtureBuilder.AttachChain([new(0, 0), new(1, 0), new(1, 1)], ground, isLoop: true)));
     }
 }

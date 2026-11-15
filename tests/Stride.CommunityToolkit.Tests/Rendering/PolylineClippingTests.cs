@@ -11,8 +11,6 @@ namespace Stride.CommunityToolkit.Tests.Rendering;
 /// </summary>
 public class PolylineClippingTests
 {
-    private const float Tolerance = 1e-5f;
-
     [Fact]
     public void Clip_KeepsALineThatIsEntirelyInside_AsOneUnchangedRun()
     {
@@ -34,8 +32,8 @@ public class PolylineClippingTests
 
         var run = Assert.Single(runs);
         Assert.Equal(3, run.Length);
-        Assert.Equal(1f, run[^1].Y, Tolerance);
-        Assert.Equal(1.5f, run[^1].X, Tolerance); // halfway along the segment, where y crosses 1
+        Assert.Equal(1f, run[^1].Y, Tolerances.Float);
+        Assert.Equal(1.5f, run[^1].X, Tolerances.Float); // halfway along the segment, where y crosses 1
     }
 
     [Fact]
@@ -47,10 +45,10 @@ public class PolylineClippingTests
         var runs = PolylineClipping.Clip(points, -5, 5, -1, 1);
 
         Assert.Equal(2, runs.Count);
-        Assert.Equal(-1f, runs[0][^1].Y, Tolerance);
-        Assert.Equal(-1f, runs[1][0].Y, Tolerance);
-        Assert.Equal(-1f, runs[0][^1].X, Tolerance);
-        Assert.Equal(1f, runs[1][0].X, Tolerance);
+        Assert.Equal(-1f, runs[0][^1].Y, Tolerances.Float);
+        Assert.Equal(-1f, runs[1][0].Y, Tolerances.Float);
+        Assert.Equal(-1f, runs[0][^1].X, Tolerances.Float);
+        Assert.Equal(1f, runs[1][0].X, Tolerances.Float);
     }
 
     [Fact]
@@ -83,8 +81,8 @@ public class PolylineClippingTests
         var runs = PolylineClipping.Clip(points, -5, 5, -5, 5);
 
         var run = Assert.Single(runs);
-        Assert.Equal(1f, run[0].Z, Tolerance);
-        Assert.Equal(3f, run[1].Z, Tolerance);
+        Assert.Equal(1f, run[0].Z, Tolerances.Float);
+        Assert.Equal(3f, run[1].Z, Tolerances.Float);
     }
 
     [Fact]
@@ -99,12 +97,11 @@ public class PolylineClippingTests
         Assert.Equal(new Vector3(2, 0, 0), run[1]);
     }
 
-    [Fact]
-    public void Clip_ReturnsNothing_ForFewerThanTwoPoints()
-    {
-        Assert.Empty(PolylineClipping.Clip([], -5, 5, -5, 5));
-        Assert.Empty(PolylineClipping.Clip([new Vector3(0, 0, 0)], -5, 5, -5, 5));
-    }
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    public void Clip_ReturnsNothing_ForFewerThanTwoPoints(int points)
+        => Assert.Empty(PolylineClipping.Clip(new Vector3[points], -5, 5, -5, 5));
 
     [Fact]
     public void Clip_Throws_WhenTheRectangleIsInsideOut()
@@ -138,7 +135,7 @@ public class PolylineClippingTests
         // begins far on the other. Steep same-sign segments inside a branch stay connected.
         for (var i = 0; i < runs.Count - 1; i++)
         {
-            Assert.True(MathF.Sign(runs[i][^1].Y) != MathF.Sign(runs[i + 1][0].Y));
+            Assert.NotEqual(MathF.Sign(runs[i][^1].Y), MathF.Sign(runs[i + 1][0].Y));
         }
     }
 
@@ -170,8 +167,8 @@ public class PolylineClippingTests
         var hit = PolylineClipping.ClipSegment(new Vector3(-10, 0, 0), new Vector3(10, 0, 0), Rect(-5, 5, -5, 5), out var t0, out var t1);
 
         Assert.True(hit);
-        Assert.Equal(0.25f, t0, Tolerance);
-        Assert.Equal(0.75f, t1, Tolerance);
+        Assert.Equal(0.25f, t0, Tolerances.Float);
+        Assert.Equal(0.75f, t1, Tolerances.Float);
     }
 
     [Fact]
@@ -180,8 +177,8 @@ public class PolylineClippingTests
         var hit = PolylineClipping.ClipSegment(new Vector3(-1, 0, 0), new Vector3(1, 0, 0), Rect(-5, 5, -5, 5), out var t0, out var t1);
 
         Assert.True(hit);
-        Assert.Equal(0f, t0, Tolerance);
-        Assert.Equal(1f, t1, Tolerance);
+        Assert.Equal(0f, t0, Tolerances.Float);
+        Assert.Equal(1f, t1, Tolerances.Float);
     }
 
     [Fact]
@@ -230,8 +227,8 @@ public class PolylineClippingTests
         var runs = PolylineClipping.Clip(points, -5, 5, -5, 5, -1, 1);
 
         var run = Assert.Single(runs);
-        Assert.Equal(1f, run[^1].Z, Tolerance);
-        Assert.Equal(1f, run[^1].X, Tolerance);
+        Assert.Equal(1f, run[^1].Z, Tolerances.Float);
+        Assert.Equal(1f, run[^1].X, Tolerances.Float);
     }
 
     [Fact]
@@ -253,8 +250,8 @@ public class PolylineClippingTests
         var hit = PolylineClipping.ClipSegment(a, b, Rect(-5, 5, -5, 5), out var t0, out var t1);
 
         Assert.True(hit);
-        Assert.Equal(0.25f, t0, Tolerance);
-        Assert.Equal(0.75f, t1, Tolerance);
+        Assert.Equal(0.25f, t0, Tolerances.Float);
+        Assert.Equal(0.75f, t1, Tolerances.Float);
     }
 
     /// <summary>A clip box bounded in X and Y and unbounded in Z - the 2D chart case.</summary>
