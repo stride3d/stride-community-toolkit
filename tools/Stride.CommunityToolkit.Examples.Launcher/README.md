@@ -4,8 +4,9 @@ An Avalonia-based launcher application for browsing and running Stride Community
 
 ## Features
 
-- **Browse Examples**: View all available examples organized by category (Basic, Advanced, Other)
-- **Search**: Filter examples by title, ID, or category
+- **Browse Examples**: Every published example, in manifest order: by language, then level (Getting Started, Beginner, Intermediate, Advanced, Other), then the example's own order
+- **Search**: Filter examples by title, slug, project name, level, category or tag
+- **Details**: Level, category, complexity, language, description and tags of the selected example
 - **One-Click Run**: Launch examples with a single click
 - **Live Output**: View real-time stdout/stderr output from running examples
 - **Filtered Warnings**: Automatically filters shader/effect compilation warnings (can be disabled)
@@ -25,7 +26,7 @@ dotnet run
 
 ### Controls
 
-- **Search Box**: Type to filter examples by name, ID, or category
+- **Search Box**: Type to filter examples by title, slug, project name, level, category or tag
 - **▶ Run**: Start the selected example
 - **⏹ Stop**: Stop the currently running example
 - **📁 Open Folder**: Open the example's project folder
@@ -44,21 +45,25 @@ dotnet run
 
 ## Architecture
 
-The launcher reuses the example discovery logic from `Stride.CommunityToolkit.Examples` by linking the Core files:
+The launcher reads `examples-manifest.json`, which `tools/ExamplesManifest.targets` generates before the
+build and copies next to the executable. It scans nothing itself: the metadata generator has already
+validated, filtered and sorted the examples.
 
-- `Constants.cs` - Shared constants
-- `Example.cs` - Example model
-- `ExampleProjectMeta.cs` - Project metadata
-- `ExampleProvider.cs` - Example discovery logic
-- `ColorHelper.cs` - Color utilities
-- `ProjectFileHelper.cs` - Project file parsing
+Reading the manifest is shared with the console launcher, `Stride.CommunityToolkit.Examples`, by
+linking its Core files into this project:
 
-Examples are discovered by scanning `examples/code-only/` for projects with `<ExampleTitle>` metadata.
+- `ExampleManifest.cs` - The manifest envelope
+- `ManifestExample.cs` - One example as the manifest stores it
+- `ManifestLoader.cs` - Finds and reads the manifest, and resolves each example's run target
+- `ExampleEntry.cs` - An example ready to display and start
+- `Levels.cs` - The level names
+- `OutputFilter.cs` - Which output lines are hidden or shown as warnings
+- `Constants.cs` - The titles of the console menu's commands
 
 ## Technical Details
 
 - **Framework**: .NET 10
-- **UI**: Avalonia 11.3.7
+- **UI**: Avalonia 12.1.5
 - **Pattern**: MVVM-lite (no formal framework)
 - **Process Management**: Spawns examples as separate processes
 - **Output Filtering**: Regex-based warning suppression
@@ -69,8 +74,7 @@ Potential improvements:
 
 - Visual preview/screenshots for examples
 - Favorites/pinning
-- Category grouping in UI
-- Example descriptions
+- Level grouping in UI
 - Launch configuration (custom args, env vars)
 - Recent examples list
 - Multiple example launch

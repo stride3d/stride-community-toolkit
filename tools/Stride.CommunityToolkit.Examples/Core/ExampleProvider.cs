@@ -26,9 +26,21 @@ public class ExampleProvider
         foreach (var entry in entries) list.Add(new Example(GetIndex(), entry.Title, entry, () => Launch(entry)));
 
         list.Add(new Example("Q", Constants.Quit, null, () => Environment.Exit(0)));
-        list.Add(new Example("C", Constants.Clear, null, Constants.SafeClear));
+        list.Add(new Example("C", Constants.Clear, null, SafeClear));
 
         return list;
+    }
+
+    /// <summary>
+    /// Clears the console, tolerating a redirected output stream.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="Console.Clear"/> throws "The handle is invalid" when stdout is piped to a file or
+    /// another process, which crashed the runner on startup before it printed anything at all.
+    /// </remarks>
+    public static void SafeClear()
+    {
+        try { Console.Clear(); } catch (IOException) { /* redirected output has nothing to clear */ }
     }
 
     /// <summary>
