@@ -32,8 +32,11 @@ public class ManifestService(
     /// </summary>
     /// <param name="examplesRootPath">The root directory containing example projects.</param>
     /// <param name="cancellationToken">Cancels the scan.</param>
-    /// <returns>The parsed examples, including any marked <c>enabled: false</c>, and the failure count.</returns>
-    public async Task<ScanResult> ScanExamplesAsync(DirectoryInfo? examplesRootPath, CancellationToken cancellationToken = default)
+    /// <returns>
+    /// The parsed examples, including any marked <c>enabled: false</c>, and the failure count; or
+    /// <see langword="null"/> when the directory does not exist.
+    /// </returns>
+    public async Task<ScanResult?> ScanExamplesAsync(DirectoryInfo? examplesRootPath, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(examplesRootPath);
 
@@ -43,7 +46,7 @@ public class ManifestService(
         {
             logger.LogError("Examples directory does not exist: {Path}", examplesRootPath.FullName);
 
-            return new ScanResult([], 0);
+            return null;
         }
 
         var examples = new List<ParsedExample>();
@@ -61,7 +64,7 @@ public class ManifestService(
 
                 examples.Add(parsed);
 
-                logger.LogInformation("  ✅ {ProjectName} - {Title}", parsed.Metadata.ProjectName, parsed.Metadata.Title?.GetValueOrDefault("en") ?? "(no title)");
+                logger.LogInformation("  ✅ {ProjectName} - {Title}", parsed.Metadata.ProjectName, parsed.Metadata.TitleFor(ExampleMetadata.FallbackLanguage) ?? "(no title)");
             }
             catch (Exception ex)
             {
@@ -93,7 +96,7 @@ public class ManifestService(
     {
         ArgumentNullException.ThrowIfNull(examplesRootPath);
 
-        var scan = await ScanExamplesAsync(examplesRootPath, cancellationToken);
+        if (await ScanExamplesAsync(examplesRootPath, cancellationToken) is not { } scan) return ExitFailure;
 
         if (scan.Examples.Count == 0) return ExitNoExamplesFound;
 
@@ -123,14 +126,7 @@ public class ManifestService(
 
         logger.LogInformation("Starting manifest generation for: {Path}", examplesRootPath.FullName);
 
-        if (!examplesRootPath.Exists)
-        {
-            logger.LogError("Examples directory does not exist: {Path}", examplesRootPath.FullName);
-
-            return ExitFailure;
-        }
-
-        var scan = await ScanExamplesAsync(examplesRootPath, cancellationToken);
+        if (await ScanExamplesAsync(examplesRootPath, cancellationToken) is not { } scan) return ExitFailure;
 
         if (scan.Examples.Count == 0)
         {
@@ -186,7 +182,7 @@ public class ManifestService(
             return ExitFailure;
         }
 
-        var scan = await ScanExamplesAsync(examplesRootPath, cancellationToken);
+        if (await ScanExamplesAsync(examplesRootPath, cancellationToken) is not { } scan) return ExitFailure;
 
         if (scan.Examples.Count == 0)
         {
@@ -242,7 +238,7 @@ public class ManifestService(
     /// Validates the published examples of a scan, reporting every finding.
     /// </summary>
     /// <returns>The published examples, and how many findings were errors, parse failures included.</returns>
-    private (List<ParsedExample> published, int errorCount) ValidatePublished(ScanResult scan, DirectoryInfo examplesRootPath, DirectoryInfo? mediaDirectory)
+    private (List<ParsedExample> Published, int ErrorCount) ValidatePublished(ScanResult scan, DirectoryInfo examplesRootPath, DirectoryInfo? mediaDirectory)
     {
         // enabled: false means excluded from the manifest entirely, so a disabled example is invisible
         // to every consumer and takes no part in the uniqueness checks.

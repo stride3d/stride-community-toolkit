@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using Stride.CommunityToolkit.Examples.MetadataGenerator.Core;
-using System.Collections.Frozen;
 using System.Text.RegularExpressions;
 
 namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Services;
@@ -26,8 +25,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
     /// that check.
     /// </param>
     /// <param name="knownProjects">
-    /// Every example project folder name, used to resolve <c>related:</c>. Pass <see langword="null"/>
-    /// to resolve against the parsed examples alone.
+    /// Every example project folder name, with or without metadata, used to resolve <c>related:</c>.
     /// </param>
     /// <param name="disabledProjects">
     /// Project folder names excluded by <c>enabled: false</c>. A <c>related:</c> link pointing at one of
@@ -38,17 +36,14 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
     public IReadOnlyList<ValidationMessage> Validate(
         IReadOnlyList<ParsedExample> examples,
         DirectoryInfo? mediaDirectory,
-        IReadOnlySet<string>? knownProjects = null,
-        IReadOnlySet<string>? disabledProjects = null)
+        IReadOnlySet<string> knownProjects,
+        IReadOnlySet<string> disabledProjects)
     {
         ArgumentNullException.ThrowIfNull(examples);
+        ArgumentNullException.ThrowIfNull(knownProjects);
+        ArgumentNullException.ThrowIfNull(disabledProjects);
 
         var messages = new List<ValidationMessage>();
-
-        knownProjects ??= examples
-            .Select(example => example.Metadata.ProjectName)
-            .OfType<string>()
-            .ToHashSet(StringComparer.Ordinal);
 
         foreach (var example in examples)
         {
@@ -63,7 +58,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
         ValidateSlugUniqueness(examples, messages);
         ValidateMediaUniqueness(examples, messages);
         ValidateOrderUniqueness(examples, messages);
-        ResolveRelated(examples, knownProjects, disabledProjects ?? FrozenSet<string>.Empty, messages);
+        ResolveRelated(examples, knownProjects, disabledProjects, messages);
 
         var errors = messages.Count(message => message.Severity == ValidationSeverity.Error);
         var warnings = messages.Count(message => message.Severity == ValidationSeverity.Warning);
@@ -191,7 +186,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
         if (mediaDirectory is null || !mediaDirectory.Exists) return;
 
         // Only an explicit media: entry is an error when missing. A defaulted <slug>.webp that does not
-        // exist yet is expected - most examples have no screenshot at all (see plan §5).
+        // exist yet is expected - most examples have no screenshot at all.
         if (example.Metadata.Media is not { Length: > 0 } media) return;
 
         if (!File.Exists(Path.Combine(mediaDirectory.FullName, media)))

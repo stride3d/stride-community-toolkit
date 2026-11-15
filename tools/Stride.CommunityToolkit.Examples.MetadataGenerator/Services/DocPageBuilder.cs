@@ -63,7 +63,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
         body.AppendLine($"# {title}");
         body.AppendLine();
 
-        if (example.Description?.GetValueOrDefault("en") is { Length: > 0 } description)
+        if (example.DescriptionFor(ExampleMetadata.FallbackLanguage) is { Length: > 0 } description)
         {
             body.AppendLine(description.Trim());
             body.AppendLine();
@@ -93,7 +93,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
             body.AppendLine();
         }
 
-        // Only link a screenshot that exists. Most examples have none yet (see plan §5), and a broken
+        // Only link a screenshot that exists. Most examples have none yet, and a broken
         // image is worse than no image.
         if (ExistingMedia(example) is { Length: > 0 } media)
         {
@@ -127,7 +127,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     /// </remarks>
     /// <param name="groups">The example groups, in toc order.</param>
     /// <returns>The full file content.</returns>
-    public string BuildGallery(IReadOnlyList<(string Language, string Level, IReadOnlyList<ExampleMetadata> Examples)> groups)
+    public string BuildGallery(IReadOnlyList<ExampleGroup> groups)
     {
         ArgumentNullException.ThrowIfNull(groups);
 
@@ -222,7 +222,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     /// </summary>
     private static void AppendCardText(StringBuilder page, ExampleMetadata example)
     {
-        if (Summarise(example.Description?.GetValueOrDefault("en")) is { Length: > 0 } summary) page.AppendLine($"                <p class=\"card-text\">{Escape(summary)}</p>");
+        if (Summarise(example.DescriptionFor(ExampleMetadata.FallbackLanguage)) is { Length: > 0 } summary) page.AppendLine($"                <p class=\"card-text\">{Escape(summary)}</p>");
     }
 
     /// <summary>
@@ -287,7 +287,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
         {
             var title = TitleOf(example);
 
-            page.AppendLine(FirstSentence(example.Description?.GetValueOrDefault("en")) is { } summary
+            page.AppendLine(FirstSentence(example.DescriptionFor(ExampleMetadata.FallbackLanguage)) is { } summary
                 ? $"- [{title}]({example.Slug}.md): {summary}"
                 : $"- [{title}]({example.Slug}.md)");
         }
@@ -356,7 +356,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     /// The English title, falling back to the project name and then the slug, the same way everywhere.
     /// </summary>
     private static string TitleOf(ExampleMetadata example)
-        => example.Title?.GetValueOrDefault("en") ?? example.ProjectName ?? example.Slug ?? "Example";
+        => example.TitleFor(ExampleMetadata.FallbackLanguage) ?? example.ProjectName ?? example.Slug ?? "Example";
 
     /// <summary>
     /// <see cref="FirstSentence"/>, capped to what fits on a card.

@@ -1,8 +1,5 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
         <Version>1.0.0.0</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Authors>Stride Contributors</Authors>
@@ -16,13 +13,8 @@
         <!-- StrideVersionNote (appended to package descriptions) lives in the repository Directory.Build.props,
              which is evaluated before the package projects set their Description. -->
 
-        <!--<DebugType>full</DebugType>-->
-        <!--<DebugSymbols>true</DebugSymbols>-->
-        <!--<DebugType>embedded</DebugType>-->
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <!--<IncludeSymbols>true</IncludeSymbols>-->
-        <!--<SymbolPackageFormat>snupkg</SymbolPackageFormat>-->
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
 
