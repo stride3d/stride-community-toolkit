@@ -12,6 +12,7 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 
 ### 💥 Breaking Changes
 
+- Built against Stride 4.4.2 (was 4.4.1). What a game sees from the engine: a GPU without Direct3D 12 Enhanced Barriers or the Vulkan 1.3 features is skipped at startup; scenes with many draws render faster; a removed entity with an `InstanceComponent` is collected again, and an instanced model keeps its instances through a second compositor and while its effect compiles; a scene no longer fades in from near-white; effects compile again once on the first run.
 - `GameProfiler`'s keys are chorded with Ctrl: Ctrl+F1 filter, Ctrl+F2 sort, Ctrl+F3 and Ctrl+F4 page, Ctrl+1 to Ctrl+5 jump to a page, Ctrl+minus and Ctrl+plus refresh rate. The plain F2, F3 and F4 belong to the camera help and the text overlay, which the profiler used to fight in every scene with `Profiler = true`.
 - `CollidableGizmoScript.Color` is a `Color4`, not a `Color4?`; the fully transparent default keeps the gizmo material's own colour. Game Studio's property grid cannot edit a nullable value type. `AddPhysicsDebug(gizmoColor)` is unchanged.
 - `MathUtilEx.LookRotation` is gone; `QuaternionUtil.LookAt(eye, target, up)` is the one look-at, by value with an optional up, or by reference as `LookAt(in eye, in target, in up, out rotation)`. The name follows Stride's own `Quaternion.LookRotation(forward, up)`, which takes a direction, not two points.
@@ -48,6 +49,7 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 
 ### 🐞 Bug Fixes
 
+- `ShapeBatch`: a batch with a `FillSource` draws on Stride 4.4.2. Its shader compiler carries a stream written only inside an `if` or after an early return from the vertex buffer, which made the texture coordinate a vertex input the quad does not have; the first draw threw from `CreateInputLayout`.
 - `ScreenFade` draws through a batch of its own. It used to register the game's default `ShapeBatch`, so every shape component in a scene with a fade drew after the post effects and without depth. It also takes the batch out of rendering when removed, and `AddScreenFade` before the scene exists says what to do.
 - `AddUIStage` and `AddCleanUIStage` add the UI stage once; a second call stacked another stage, UI render feature and renderer.
 - `AddOnEventAction` and `AddOnEventTask` handle every event that arrived since the last frame, not one per frame.

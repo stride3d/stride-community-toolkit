@@ -217,18 +217,11 @@ void DropItems(int count, ItemKind kind)
 /// Removes every body from the scene.
 /// </summary>
 /// <remarks>
-/// An <see cref="InstanceComponent"/> disconnects from the stock master when its entity leaves the
-/// scene, but it unsubscribes from the master's InstancingChanged event only when Master changes, so
-/// the master keeps every instance it ever had alive, bodies and all, unless Master is cleared first.
-/// The toolkit types unregister an entity that leaves the scene by themselves.
+/// An entity that leaves the scene unregisters itself: the stock <see cref="InstanceComponent"/> from
+/// its master, the toolkit types from their instancing.
 /// </remarks>
 void ClearItems()
 {
-    foreach (var entity in stockItems)
-    {
-        if (entity.Get<InstanceComponent>() is { } instance) instance.Master = null;
-    }
-
     foreach (var entity in stockItems.Concat(toolkitItems).Concat(bufferedItems).Concat(plainItems))
     {
         entity.Scene = null;
