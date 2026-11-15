@@ -1182,7 +1182,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="debug-render-component.md">Debug Render Component</a></h3>
                 <p><span class="badge text-bg-secondary">Debug</span></p>
-                <p class="card-text">The companion to the collidable gizmo: Bepu's own DebugRenderComponent draws the wireframe of every entity's mesh rather than its collider, from one component...</p>
+                <p class="card-text">The companion to the collidable gizmo: Bepu's own DebugRenderComponent draws the wireframe of every entity's mesh rather than its collider, from one...</p>
             </div>
         </div>
     </div>
