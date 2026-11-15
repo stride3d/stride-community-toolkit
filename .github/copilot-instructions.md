@@ -238,6 +238,11 @@ the worked examples. Verify against a package from `build/pack-local.cs`, not a 
   `*.sdsl.cs` on disk and nothing to regenerate; do not add `<None Update>` / `LastGenOutput` blocks
   to a project file, they are a vestige of the old Visual Studio custom tool. `Stride.AssetCompiler`
   is what stages `Effects/` into the package.
+- **A stream written only inside an `if`, a loop or after an early return is carried from the stage before**
+  (Stride 4.4.2). In the vertex stage that makes a stream whose semantic is a vertex input (`TEXCOORD0`,
+  `COLOR`, `NORMAL`) an input of the shader, and a vertex buffer without it fails at the first draw with an
+  `ArgumentException` from `PipelineState.CreateInputLayout`. Write such a stream once, unconditionally, at the
+  top of the stage. The generated `_vs.hlsl` shows the inputs in `SPIRV_Cross_Input`.
 - **Reserved words that are easy to trip over:** `linear` and `half` (interpolation modifier and a
   type) cannot be identifiers. The parse error points at the wrong line; look for these first.
 - Integer streams are flat (`nointerpolation`) automatically; the keyword itself is parsed and
