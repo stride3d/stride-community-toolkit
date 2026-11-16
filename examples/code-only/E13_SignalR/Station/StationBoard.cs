@@ -106,7 +106,7 @@ public sealed class StationBoard
         return _hovered >= 0 && input.IsMouseButtonPressed(MouseButton.Left) ? Schemes.All[_hovered].Name : null;
     }
 
-    public void Draw(ShapeBatch shapes, StationConsole console, DeckSnapshot snapshot, int pending, bool linkOnline, float uptime, float time)
+    public void Draw(ShapeBatch shapes, StationConsole console, DeckSnapshot snapshot, int pending, bool linkOnline, float uptime)
     {
         var accent = console.Accent;
         var faint = Hex.WithAlpha(accent, 70);
@@ -122,7 +122,7 @@ public sealed class StationBoard
         DrawCornerTicks(shapes, accent);
 
         // A marching rail under the header, and quiet dividers between the sections
-        shapes.Dash.Set(8f, 6f, time * 12f);
+        shapes.Dash.Set(8f, 6f, uptime * 12f);
         Line(shapes, -Margin, RailRow, Margin, RailRow, 1f, Hex.WithAlpha(accent, 110));
         shapes.Dash.Clear();
 

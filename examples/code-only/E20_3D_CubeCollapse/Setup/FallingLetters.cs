@@ -71,7 +71,13 @@ public static class FallingLetters
 
         foreach (var glyph in glyphs)
         {
-            var entity = new Entity($"{EntityNames.LetterPrefix}{(char)glyph.Codepoint}")
+            // Its place in the word, a little higher and a little turned at random
+            var position = centre
+                + right * glyph.Position.X
+                + new Vector3(0, glyph.Position.Y + (float)random.NextDouble() * 1.5f, 0);
+            var rotation = wordRotation * Quaternion.RotationY((float)(random.NextDouble() - 0.5) * 0.6f);
+
+            var entity = new Entity($"{EntityNames.LetterPrefix}{(char)glyph.Codepoint}", position, rotation)
             {
                 new ModelComponent
                 {
@@ -99,12 +105,6 @@ public static class FallingLetters
                     }
                 }
             });
-
-            entity.Transform.Position = centre
-                + right * glyph.Position.X
-                + new Vector3(0, glyph.Position.Y + (float)random.NextDouble() * 1.5f, 0);
-
-            entity.Transform.Rotation = wordRotation * Quaternion.RotationY((float)(random.NextDouble() - 0.5) * 0.6f);
 
             entity.Scene = scene;
         }

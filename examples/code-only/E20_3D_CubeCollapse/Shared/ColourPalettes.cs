@@ -1,4 +1,3 @@
-using Example.Common;
 using Stride.Core.Mathematics;
 
 namespace CubeCollapse.Shared;
@@ -30,11 +29,11 @@ public static class ColourPalettes
         [new Color(230, 159, 0), new Color(86, 180, 233), new Color(0, 158, 115), new Color(213, 94, 0)]);
 
     /// <summary>
-    /// The colour theme of the first examples and the playgrounds, from Example.Common: its blue,
-    /// orange, red and green. Its purple is left out, as a board has four colours.
+    /// The colours of the first examples and the playgrounds: their blue, orange, red and green.
+    /// Their purple is left out, as a board has four colours.
     /// </summary>
     public static readonly ColourPalette Examples = new("Examples",
-        [ColorThemes.Default.Blue, ColorThemes.Default.Orange, ColorThemes.Default.Red, ColorThemes.Default.Green]);
+        [new Color(30, 70, 170), new Color(240, 150, 60), new Color(235, 100, 80), new Color(110, 200, 110)]);
 
     /// <summary>
     /// The material gallery's clear glass, and the same glass tinted pink, mint and amber. Harder to play:

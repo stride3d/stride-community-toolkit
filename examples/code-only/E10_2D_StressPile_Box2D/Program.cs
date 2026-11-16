@@ -30,8 +30,7 @@ const float EscapeDistance = 70f;
 const float SpawnHeight = 150;
 const float ColumnWidth = WallWidth - 30;
 
-// One Model per shape and sleep state, built on first use and kept. Eighteen of them cost under a
-// megabyte, and it makes switching back to a shape you have already used free.
+// The sleeping tint, built once
 Material? sleepingMaterial = null;
 
 Primitive3D[] shapes =
@@ -50,15 +49,14 @@ Primitive3D[] shapes =
 int[] batchSizes = [1000, 2500, 5000, 10000, 20000];
 
 var random = new Random(1);
-List<Entity> bodies = [];
+
+// Every body of the pile, with which master draws it right now
+List<PileBody> bodies = [];
 
 Scene scene = null!;
 Entity awakeMaster = null!;
 Entity sleepingMaster = null!;
 
-// Sleep-state tracking, aligned with the bodies list: which master each body is drawn by right now
-List<B2BodyId> bodyIds = [];
-List<bool> awakeStates = [];
 var sleepingCount = 0;
 
 // One shape definition for every fixture in the pile. Contact events are off: nothing listens to
@@ -170,6 +168,9 @@ void SetupInstancing()
     game.AddInstancingBufferUpload(sleepingInstancing);
 }
 
+// One Model per shape and sleep state, built on first use and kept. Eighteen of them cost under a
+// megabyte, and it makes switching back to a shape you have already used free.
+
 /// <summary>Returns the shared model for a shape, built once on first use and kept by the game.</summary>
 Model ModelFor(Primitive3D type) => game.GetOrCreateModel(type);
 
@@ -263,14 +264,12 @@ void Clear()
     {
         // Unlike Bepu, no engine processor watches the scene: the simulation must be told the body
         // is gone, or the invisible pile keeps colliding with everything spawned after it
-        simulation.RemoveBody(body);
+        simulation.RemoveBody(body.Entity);
 
-        body.Scene = null;
+        body.Entity.Scene = null;
     }
 
     bodies.Clear();
-    bodyIds.Clear();
-    awakeStates.Clear();
     sleepingCount = 0;
 }
 
@@ -306,23 +305,19 @@ void SpawnBatch(int count)
 void Spawn(Vector3 position)
 {
     // No ModelComponent: the master draws the entity
-    var entity = new Entity("InstancedItem");
+    var entity = new Entity("InstancedItem", position);
 
     var bodyId = simulation.CreateDynamicBody(entity, position.XY());
     ShapeFixtureBuilder.AttachShape(FixtureFor(shape), bodyId, pileShapeDef);
 
     // The instancing reads this component to skip all its work while every body is asleep
 
-    entity.Transform.Position = position;
-
     // New bodies are awake by definition; UpdateSleepTint moves them once Box2D puts them to sleep
     awakeInstancing.AddInstance(entity);
 
     entity.Scene = scene;
 
-    bodies.Add(entity);
-    bodyIds.Add(bodyId);
-    awakeStates.Add(true);
+    bodies.Add(new PileBody(entity, bodyId));
 }
 
 void Update(Scene rootScene, GameTime time)
@@ -341,24 +336,24 @@ void Update(Scene rootScene, GameTime time)
 /// </summary>
 void UpdateSleepTint()
 {
-    for (var i = 0; i < bodies.Count; i++)
+    foreach (var body in bodies)
     {
-        var awake = b2Body_IsAwake(bodyIds[i]);
+        var awake = b2Body_IsAwake(body.Id);
 
-        if (awake == awakeStates[i]) continue;
+        if (awake == body.Awake) continue;
 
-        awakeStates[i] = awake;
+        body.Awake = awake;
 
         if (awake)
         {
-            sleepingInstancing.RemoveInstance(bodies[i]);
-            awakeInstancing.AddInstance(bodies[i]);
+            sleepingInstancing.RemoveInstance(body.Entity);
+            awakeInstancing.AddInstance(body.Entity);
             sleepingCount--;
         }
         else
         {
-            awakeInstancing.RemoveInstance(bodies[i]);
-            sleepingInstancing.AddInstance(bodies[i]);
+            awakeInstancing.RemoveInstance(body.Entity);
+            sleepingInstancing.AddInstance(body.Entity);
             sleepingCount++;
         }
     }
@@ -377,13 +372,13 @@ void DespawnEscaped()
 {
     for (var i = bodies.Count - 1; i >= 0; i--)
     {
-        var position = b2Body_GetPosition(bodyIds[i]);
+        var position = b2Body_GetPosition(bodies[i].Id);
 
         if (MathF.Abs(position.X) < EscapeDistance && position.Y > -EscapeDistance) continue;
 
-        var entity = bodies[i];
+        var entity = bodies[i].Entity;
 
-        if (awakeStates[i])
+        if (bodies[i].Awake)
         {
             awakeInstancing.RemoveInstance(entity);
         }
@@ -397,8 +392,6 @@ void DespawnEscaped()
         entity.Scene = null;
 
         bodies.RemoveAt(i);
-        bodyIds.RemoveAt(i);
-        awakeStates.RemoveAt(i);
     }
 }
 
@@ -464,6 +457,12 @@ public enum SpawnLayout
 
     /// <summary>Scattered through a tall band above the walls.</summary>
     Random
+}
+
+/// <summary>One body of the pile: its entity, its Box2D body, and whether the awake master is the one drawing it.</summary>
+sealed record PileBody(Entity Entity, B2BodyId Id)
+{
+    public bool Awake { get; set; } = true;
 }
 
 /*

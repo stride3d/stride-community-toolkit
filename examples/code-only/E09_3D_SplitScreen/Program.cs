@@ -60,6 +60,7 @@ void Start(Scene scene)
         feeds[i] = game.AddRenderTextureCamera(cameras[i], 960, 1080, postEffects: fx => fx.ColorTransforms.Transforms.Add(new ToneMap()));
         batches[i] = game.AddShapeBatch(afterPostEffects: true);
         batches[i].FillWith(feeds[i].Texture);
+        batches[i].Screen = true;
     }
 
     TextOverlay.GetOrCreate(game).AddSection("Split screen", BuildOverlayLines);
@@ -94,9 +95,9 @@ Entity AddPlayer(Scene scene, string name, Color colour)
         EntityName = $"{name} nose",
         Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(60, 60, 70)),
+        Position = new Vector3(0f, 0.3f, -0.45f),
     });
 
-    nose.Transform.Position = new Vector3(0f, 0.3f, -0.45f);
     player.AddChild(nose);
     player.Scene = scene;
 
@@ -140,9 +141,6 @@ void DrawFeed(int index)
     // so the camera's aspect follows the rectangle, and the picture keeps its proportions whatever the window
     feeds[index].Camera.AspectRatio = half.X / half.Y;
 
-    batch.Screen = true;
-    batch.Fill.Set(Color.White, 1f);
-    batch.BorderWidth = 0f;
     batch.DrawRectangle(new Vector3(centre, 0f), Vector3.UnitX, Vector3.UnitY, half, Color.White);
 
     // The seam: a dark line between the two pictures, drawn by whichever batch is drawn second
@@ -155,8 +153,6 @@ void DrawFeed(int index)
             3f, new Color(20, 20, 24));
         batch.Textured = true;
     }
-
-    batch.Screen = false;
 }
 
 /// <summary>A ground, a ring of pillars round the track and a few blocks inside it, so the feeds have something to pass.</summary>

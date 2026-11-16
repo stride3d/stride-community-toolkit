@@ -22,16 +22,16 @@ public record ExhibitInfo(string Title, string Summary, string Method, int Pilla
 /// <param name="Title">A short name, as the index board and the labels print it.</param>
 /// <param name="Summary">A few words on what to look at, for the widest label.</param>
 /// <param name="Method">The API member the station is mostly made of, via <c>nameof</c>.</param>
-/// <param name="Update">Runs every frame the station is shown, in the station's own coordinates: drawing, animating, or nothing.</param>
 /// <param name="Setup">Builds what the station needs once - entities, textures, props - or nothing.</param>
+/// <param name="Update">Runs every frame the station is shown, in the station's own coordinates: drawing, animating, or nothing.</param>
 /// <param name="Pillars">How many of the standard pillars the station wants, 0 to 2.</param>
 /// <param name="Anchor">Where the label's dotted line touches the exhibit, in station coordinates.</param>
 public sealed record Exhibit<TStation>(
     string Title,
     string Summary,
     string Method,
-    Action<TStation>? Update = null,
     Action<TStation>? Setup = null,
+    Action<TStation>? Update = null,
     int Pillars = 0,
     Vector3? Anchor = null) : ExhibitInfo(Title, Summary, Method, Pillars, Anchor)
     where TStation : GalleryStation;

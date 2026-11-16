@@ -54,13 +54,13 @@ public class GalleryStation
     public string? Error { get; internal set; }
 
     /// <summary>A point in station coordinates, in the world.</summary>
-    public Vector3 At(float x, float y, float z) => Origin + Right * x + Vector3.UnitY * y + Forward * z;
+    public Vector3 At(float x, float y, float z) => Origin + Right * x + Up * y + Forward * z;
 
     /// <summary>A point in station coordinates, in the world.</summary>
     public Vector3 At(Vector3 local) => At(local.X, local.Y, local.Z);
 
     /// <summary>A direction in station coordinates, in the world; not normalised.</summary>
-    public Vector3 Direction(float x, float y, float z) => Right * x + Vector3.UnitY * y + Forward * z;
+    public Vector3 Direction(float x, float y, float z) => Right * x + Up * y + Forward * z;
 
     /// <summary>
     /// The rotation of an entity whose X and Y lie in the station's upright plane and whose Z faces
@@ -71,7 +71,7 @@ public class GalleryStation
         var basis = Matrix.Identity;
 
         basis.Right = Right;
-        basis.Up = Vector3.UnitY;
+        basis.Up = Up;
         basis.Backward = Forward;
 
         return Quaternion.RotationMatrix(basis);

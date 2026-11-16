@@ -60,11 +60,8 @@ var modelShape = Scaled(modelType);
 
 var random = new Random(1);
 
-// Every body ever spawned, so they can all be removed again
-List<Entity> stockItems = [];
-List<Entity> toolkitItems = [];
-List<Entity> bufferedItems = [];
-List<Entity> plainItems = [];
+// Every body ever spawned, by kind, so they can be counted and all removed again
+var items = Enum.GetValues<ItemKind>().ToDictionary(kind => kind, _ => new List<Entity>());
 
 InstancingComponent stockMaster = null!;
 Model sharedModel = null!;
@@ -188,26 +185,17 @@ void DropItems(int count, ItemKind kind)
             (random.NextSingle() - 0.5f) * DropSpread);
 
         entity.Scene = scene;
+        items[kind].Add(entity);
 
+        // No InstanceComponent on the toolkit kinds: their master is told about the entity directly
         switch (kind)
         {
-            case ItemKind.Stock:
-                stockItems.Add(entity);
-                break;
-
             case ItemKind.Toolkit:
-                // No InstanceComponent: the toolkit master is told about the entity directly
                 toolkitInstancing.AddInstance(entity);
-                toolkitItems.Add(entity);
                 break;
 
             case ItemKind.ToolkitBuffered:
                 bufferedInstancing.AddInstance(entity);
-                bufferedItems.Add(entity);
-                break;
-
-            default:
-                plainItems.Add(entity);
                 break;
         }
     }
@@ -222,18 +210,15 @@ void DropItems(int count, ItemKind kind)
 /// </remarks>
 void ClearItems()
 {
-    foreach (var entity in stockItems.Concat(toolkitItems).Concat(bufferedItems).Concat(plainItems))
+    foreach (var list in items.Values)
     {
-        entity.Scene = null;
+        foreach (var entity in list) entity.Scene = null;
+
+        list.Clear();
     }
 
     toolkitInstancing.Clear();
     bufferedInstancing.Clear();
-
-    stockItems.Clear();
-    toolkitItems.Clear();
-    bufferedItems.Clear();
-    plainItems.Clear();
 }
 
 /// <summary>
@@ -338,10 +323,10 @@ IReadOnlyList<TextElement> BuildOverlayLines()
 
     return
     [
-        new("1", $"Stock: {stockItems.Count:N0} bodies, 1 draw call", stockItems.Count > 0 ? Color.LightGreen : Color.Gray),
-        new("2", $"Plain: {plainItems.Count:N0} bodies, {plainItems.Count:N0} draw calls", plainItems.Count > 0 ? Color.Orange : Color.Gray),
-        new("3", $"Toolkit: {toolkitItems.Count:N0} bodies, 1 draw call", toolkitItems.Count > 0 ? Color.Cyan : Color.Gray),
-        new("4", $"Buffered: {bufferedItems.Count:N0} bodies, 1 draw call", bufferedItems.Count > 0 ? Color.Magenta : Color.Gray),
+        new("1", $"Stock: {items[ItemKind.Stock].Count:N0} bodies, 1 draw call", items[ItemKind.Stock].Count > 0 ? Color.LightGreen : Color.Gray),
+        new("2", $"Plain: {items[ItemKind.Plain].Count:N0} bodies, {items[ItemKind.Plain].Count:N0} draw calls", items[ItemKind.Plain].Count > 0 ? Color.Orange : Color.Gray),
+        new("3", $"Toolkit: {items[ItemKind.Toolkit].Count:N0} bodies, 1 draw call", items[ItemKind.Toolkit].Count > 0 ? Color.Cyan : Color.Gray),
+        new("4", $"Buffered: {items[ItemKind.ToolkitBuffered].Count:N0} bodies, 1 draw call", items[ItemKind.ToolkitBuffered].Count > 0 ? Color.Magenta : Color.Gray),
         new("X", "Remove all", Color.Yellow),
         new("M", $"Toolkit master transform usage: {toolkitInstancing.ModelTransformUsage}, {UsageNote(toolkitInstancing.ModelTransformUsage)}", Color.Yellow),
         new("Shift", $"Hold for {ItemsPerDrop * 10} per drop", Color.Yellow),
@@ -352,7 +337,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
         new($"Shape: {modelType.Name}, set modelType at the top of Program.cs", Color.LightGray),
         new("Drop one kind at a time and let the pile come to rest.", Color.LightGray),
         new("The frame counter is a rolling average; give it a second.", Color.LightGray),
-        new("Kinds 3 and 4 stop working once Bepu sleeps every body:", Color.LightGray),
+        new("Kinds 3 and 4 stop updating once Bepu sleeps every body:", Color.LightGray),
         new("their update cost falls to zero as the pile rests, while", Color.LightGray),
         new("kind 1 keeps paying for a scene that is not moving.", Color.LightGray),
         new("Kind 4 stops uploading to the GPU as well.", Color.LightGray),

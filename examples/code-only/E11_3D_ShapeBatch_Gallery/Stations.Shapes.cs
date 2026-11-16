@@ -1,7 +1,5 @@
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
-using Stride.Engine;
-using Stride.Graphics;
 using static E11_3D_ShapeBatch_Gallery.Palette;
 
 namespace E11_3D_ShapeBatch_Gallery;
@@ -220,27 +218,8 @@ public static class ShapeStations
     /// </summary>
     public static void HudPanelSetup(ShapeStation s)
     {
-        var text = new WorldTextComponent
-        {
-            Text = "",
-            FontSize = 48,
-            Height = 1.3f,
-            TextColor = HudBlue,
-            GlowColor = new Color(0, 140, 255, 170),
-            GlowSize = 4f,
-            Alignment = TextAlignment.Center,
-            Billboard = false,
-        };
-
         // A hair in front of the panel, so the text is unambiguously the nearer surface
-        var entity = new Entity($"Station {s.Number} text")
-        {
-            Transform = { Position = s.At(0f, 3f, -1f) + s.Forward * 0.01f, Rotation = s.FacingRotation() },
-        };
-
-        entity.Add(text);
-        entity.Scene = s.Scene;
-        s.State = text;
+        s.State = HudLabel.Add(s, "text", height: 1.3f, new Vector3(0f, 3f, -0.99f));
     }
 
     /// <summary>
@@ -283,35 +262,11 @@ public static class ShapeStations
     /// </summary>
     public static void TextOverflowSetup(ShapeStation s)
     {
-        var spilling = Label(s, Overflowing, 0.5f, new Vector3(-2.4f, 2.6f, -1f));
-        var wrapped = Label(s, Wrapped, 1.25f, new Vector3(2.4f, 2.6f, -1f));
+        // Each a hair in front of its panel
+        var spilling = HudLabel.Add(s, "spilling", height: 0.5f, new Vector3(-2.4f, 2.6f, -0.99f), Overflowing);
+        var wrapped = HudLabel.Add(s, "wrapped", height: 1.25f, new Vector3(2.4f, 2.6f, -0.99f), Wrapped);
 
         s.State = new[] { spilling, wrapped };
-
-        static WorldTextComponent Label(ShapeStation s, string text, float height, Vector3 local)
-        {
-            var label = new WorldTextComponent
-            {
-                Text = text,
-                FontSize = 48,
-                Height = height,
-                TextColor = HudBlue,
-                GlowColor = new Color(0, 140, 255, 170),
-                GlowSize = 4f,
-                Alignment = TextAlignment.Center,
-                Billboard = false,
-            };
-
-            var entity = new Entity($"Station {s.Number} {(text == Overflowing ? "spilling" : "wrapped")}")
-            {
-                Transform = { Position = s.At(local) + s.Forward * 0.01f, Rotation = s.FacingRotation() },
-            };
-
-            entity.Add(label);
-            entity.Scene = s.Scene;
-
-            return label;
-        }
     }
 
     /// <summary>

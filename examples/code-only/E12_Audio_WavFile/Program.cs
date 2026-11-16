@@ -10,7 +10,6 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 using Stride.Media;
-using System.Reflection;
 
 // Play a .wav from disk with no compiled asset: read the file at runtime, keep the samples in
 // memory, and create as many instances as there are things to play.
@@ -25,17 +24,17 @@ using System.Reflection;
 // disposed then (each holds a native source), and OpenAL pans only mono sources - which both files
 // are, deliberately.
 
-var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
+var directory = AppContext.BaseDirectory;
 
-WavSound? chime = null;
-WavSound? pad = null;
-SoundInstance? padInstance = null;
+WavSound chime = null!;
+WavSound pad = null!;
+SoundInstance padInstance = null!;
 
 var chimes = new List<SoundInstance>();
 var volume = 0.8f;
 var pan = 0f;
 
-Entity? speaker = null;
+Entity speaker = null!;
 var bump = 0f;
 
 using var game = new Game();
@@ -79,7 +78,7 @@ void Update(Scene scene, GameTime time)
 {
     var input = game.Input;
 
-    if (input.IsKeyPressed(Keys.Space) && chime is not null)
+    if (input.IsKeyPressed(Keys.Space))
     {
         var instance = chime.CreateInstance();
         instance.Volume = volume;
@@ -90,7 +89,7 @@ void Update(Scene scene, GameTime time)
         bump = 1;
     }
 
-    if (input.IsKeyPressed(Keys.L) && padInstance is not null)
+    if (input.IsKeyPressed(Keys.L))
     {
         if (padInstance.PlayState == PlayState.Playing) padInstance.Stop(); else padInstance.Play();
     }
@@ -103,14 +102,14 @@ void Update(Scene scene, GameTime time)
     {
         volume = Math.Clamp(volume + volumeChange * dt, 0, 1);
 
-        if (padInstance is not null) padInstance.Volume = volume * 0.5f;
+        padInstance.Volume = volume * 0.5f;
     }
 
     if (panChange != 0)
     {
         pan = Math.Clamp(pan + panChange * dt, -1, 1);
 
-        if (padInstance is not null) padInstance.Pan = pan;
+        padInstance.Pan = pan;
     }
 
     // A finished instance still holds a native source: dispose it once it reports Stopped.
@@ -122,18 +121,15 @@ void Update(Scene scene, GameTime time)
         return true;
     });
 
-    if (speaker is not null)
-    {
-        bump = MathF.Max(0, bump - dt * 4);
-        speaker.Transform.Scale = new Vector3(1 + bump * 0.35f);
-    }
+    bump = MathF.Max(0, bump - dt * 4);
+    speaker.Transform.Scale = new Vector3(1 + bump * 0.35f);
 }
 
 void AddInstructions()
 {
     TextOverlay.GetOrCreate(game).AddSection("Wav file", () =>
     {
-        var padOn = padInstance?.PlayState == PlayState.Playing;
+        var padOn = padInstance.PlayState == PlayState.Playing;
 
         return
         [
@@ -147,8 +143,8 @@ void AddInstructions()
         ];
     });
 
-    static string Describe(WavSound? sound)
-        => sound is null ? "not loaded" : $"{sound.SampleRate} Hz, {(sound.Channels == 1 ? "mono" : "stereo")}, {sound.Duration.TotalSeconds:0.00} s, {sound.Samples.Length * 2 / 1024} KB in memory";
+    static string Describe(WavSound sound)
+        => $"{sound.SampleRate} Hz, {(sound.Channels == 1 ? "mono" : "stereo")}, {sound.Duration.TotalSeconds:0.00} s, {sound.Samples.Length * 2 / 1024} KB in memory";
 }
 
 /*

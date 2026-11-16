@@ -50,14 +50,14 @@ public class CubeClickScript : AsyncScript
     public required GameAudio Sounds { get; init; }
 
     /// <summary>
-    /// Gets or sets the scoreboard, so a clear can make the total jump.
+    /// Gets the scoreboard, so a clear can make the total jump.
     /// </summary>
-    public ScoreboardScript? Scoreboard { get; set; }
+    public required ScoreboardScript Scoreboard { get; init; }
 
     /// <summary>
-    /// Gets or sets the banner revealed when no clearable group is left.
+    /// Gets the banner revealed when no clearable group is left.
     /// </summary>
-    public EntityTextComponent? GameOverText { get; set; }
+    public required EntityTextComponent GameOverText { get; init; }
 
     /// <summary>
     /// The colour a score pops up in, from the colour of the cubes it cleared. Unset, the score is
@@ -135,7 +135,7 @@ public class CubeClickScript : AsyncScript
 
         var cube = hitInfo.Collidable.Entity;
 
-        if (cube.Name != EntityNames.Cube) return;
+        if (cube.Get<CubeComponent>() is null) return;
 
         ClearFrom(cube);
     }
@@ -180,7 +180,7 @@ public class CubeClickScript : AsyncScript
 
         foreach (var cleared in group) cleared.Remove();
 
-        Scoreboard?.Punch();
+        Scoreboard.Punch();
 
         CheckForGameOver();
     }
@@ -204,8 +204,6 @@ public class CubeClickScript : AsyncScript
 
         // Back off a little, so the words landing and the menu above the board are all in view
         Entity.Scene.GetCamera()?.Entity.Add(new CameraPullBackScript { Centre = Levels.Current.PlatformCentre });
-
-        if (GameOverText is null) return;
 
         GameOverText.Text = $"{Keeper.TotalScore:N0} points\n{Grid.Count} cubes stranded";
         GameOverText.IsVisible = true;
@@ -270,7 +268,7 @@ public class CubeClickScript : AsyncScript
     {
         IsGameOver = false;
 
-        if (GameOverText is not null) GameOverText.IsVisible = false;
+        GameOverText.IsVisible = false;
 
         foreach (var entity in Entity.Scene.Entities.Where(e => e.Name == EntityNames.GameOverMenu).ToList())
         {

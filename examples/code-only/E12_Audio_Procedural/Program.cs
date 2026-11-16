@@ -37,8 +37,8 @@ var level = 0f;                        // audio thread writes, game thread reads
 
 var phase = 0.0;                       // audio thread only, in cycles
 
-SoundInstance? tone = null;
-Entity? orb = null;
+SoundInstance tone = null!;
+Entity orb = null!;
 
 using var game = new Game();
 
@@ -122,25 +122,23 @@ void Update(Scene scene, GameTime time)
 
     if (input.IsKeyPressed(Keys.M)) muted = !muted;
 
-    if (input.IsKeyPressed(Keys.Space) && tone is not null)
+    if (input.IsKeyPressed(Keys.Space))
     {
         if (tone.PlayState == PlayState.Playing) tone.Stop(); else tone.Play();
     }
 
     // The meter is the audio thread's last block; ease toward it so the orb does not flicker.
-    if (orb is not null)
-    {
-        var target = 1 + level * 2;
-        var scale = orb.Transform.Scale.X;
-        orb.Transform.Scale = new Vector3(scale + (target - scale) * 0.3f);
-    }
+    var target = 1 + level * 2;
+    var scale = orb.Transform.Scale.X;
+
+    orb.Transform.Scale = new Vector3(scale + (target - scale) * 0.3f);
 }
 
 void AddInstructions()
 {
     TextOverlay.GetOrCreate(game).AddSection("Procedural sound", () =>
     {
-        var playing = tone?.PlayState == PlayState.Playing;
+        var playing = tone.PlayState == PlayState.Playing;
 
         return
         [

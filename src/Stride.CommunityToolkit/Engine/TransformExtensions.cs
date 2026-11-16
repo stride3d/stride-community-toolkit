@@ -401,7 +401,10 @@ public static class TransformExtensions
             Vector3.TransformNormal(ref worldUp, ref inverseParent, out localUp);
         }
 
-        var localEye = transform.LocalMatrix.TranslationVector;
+        // The position, not the local matrix: the engine rebuilds the matrix once a frame, so until then it
+        // holds the position of the frame before, and a transform moved and then turned in the same
+        // update would aim from where it was
+        var localEye = transform.Position;
 
         QuaternionUtil.LookAt(in localEye, in localTarget, in localUp, out var lookRotation);
 

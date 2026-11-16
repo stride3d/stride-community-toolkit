@@ -78,9 +78,8 @@ void CreateIndividualCubes(Scene rootScene, Model sharedModel)
     foreach (var position in GridPositions(-WallOffset))
     {
         var model = new ModelComponent(sharedModel);
-        var entity = new Entity { model };
+        var entity = new Entity("Cube", position) { model };
 
-        entity.Transform.Position = position;
         entity.Scene = rootScene;
 
         individualCubes.Add(model);

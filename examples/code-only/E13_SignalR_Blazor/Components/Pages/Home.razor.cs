@@ -38,9 +38,9 @@ public partial class Home(NavigationManager navigation) : IAsyncDisposable
             .Build();
 
         // Handlers run on SignalR's threads; InvokeAsync moves the state change and the render onto the circuit
-        _hub.On<ContainerEvent>(nameof(IStationClient.ContainerReleased), container => Post("released", $"Released #{container.Id} {Describe(container)} from {container.Origin.ToString().ToLowerInvariant()}", container.Paint));
-        _hub.On<ContainerEvent>(nameof(IStationClient.ContainerLanded), container => Post("landed", $"Landed #{container.Id} {Describe(container)} at {Where(container)} after {container.AirTime:0.0} s", container.Paint));
-        _hub.On<ContainerEvent>(nameof(IStationClient.ContainerLost), container => Post("lost", $"Lost #{container.Id} {Describe(container)} over the edge", container.Paint));
+        _hub.On<ContainerEvent>(nameof(IStationClient.ContainerReleased), container => Post("released", $"Released {container.Describe()} from {container.Origin.ToString().ToLowerInvariant()}", container.Paint));
+        _hub.On<ContainerEvent>(nameof(IStationClient.ContainerLanded), container => Post("landed", $"Landed {container.Describe()} at {Where(container)} after {container.AirTime:0.0} s", container.Paint));
+        _hub.On<ContainerEvent>(nameof(IStationClient.ContainerLost), container => Post("lost", $"Lost {container.Describe()} over the edge", container.Paint));
         _hub.On<int>(nameof(IStationClient.DeckCleared), removed => Post("cleared", $"Deck cleared, {removed} removed"));
 
         _hub.On<DeckSnapshot>(nameof(IStationClient.DeckUpdated), snapshot => InvokeAsync(() =>
@@ -157,15 +157,9 @@ public partial class Home(NavigationManager navigation) : IAsyncDisposable
         }
     }
 
-    private bool ApplyScheme(string name)
+    private void ApplyScheme(string name)
     {
-        var scheme = Schemes.Find(name);
-
-        if (scheme is null || scheme == _scheme) return false;
-
-        _scheme = scheme;
-
-        return true;
+        if (Schemes.Find(name) is { } scheme) _scheme = scheme;
     }
 
     private void Post(string kind, string text, ContainerPaint? paint = null) => InvokeAsync(() =>
@@ -179,8 +173,6 @@ public partial class Home(NavigationManager navigation) : IAsyncDisposable
 
         StateHasChanged();
     });
-
-    private static string Describe(ContainerEvent container) => $"{container.Size.ToString().ToLowerInvariant()} {container.Paint.ToString().ToLowerInvariant()}";
 
     private static string Where(ContainerEvent container) => container.Position is { } p ? $"({p.X:0.0}, {p.Z:0.0})" : "?";
 

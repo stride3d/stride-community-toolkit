@@ -33,7 +33,7 @@ using Stride.Rendering.Images;
 const float HeartbeatSeconds = 1f;
 
 var console = new StationConsole();
-var link = new StationLink(ResolveHubUrl(), new StrideLoggerAdapter<SignalRHubClient>(GlobalLogger.GetLogger("SignalR")));
+var link = new StationLink(ResolveHubUrl(), new StrideLoggerAdapter(GlobalLogger.GetLogger("SignalR")));
 
 // Not `using`: the disposal order at the bottom is deliberate, and `using` would reverse it
 var game = new Game();
@@ -63,6 +63,8 @@ game.Run(new SceneSetup3D
             toneMap.Exposure = 1f;
         }
     },
+    // Looking down at the pad from the open side, so lost cargo slides towards the viewer
+    Camera = CameraSetup.Perspective(StationScene.CameraPosition, new Vector3(0, StationScene.CameraPitch, 0)).WithController(),
     // The station aims its own sun and lays its own deck
     Lighting = null,
     Skybox = null,
@@ -99,24 +101,25 @@ void Start(Scene scene)
     deck.Released += container =>
     {
         station.Pulse();
+        effects.OnReleased(container, console);
 
-        if (deck.Find(container.Id) is { } live) effects.OnReleased(live, console);
+        var released = container.ToEvent();
 
-        console.Note($"Released {Describe(container)}", LogKind.Released);
-        link.ReportReleased(container);
+        console.Note($"Released {released.Describe()}", LogKind.Released);
+        link.ReportReleased(released);
     };
 
     deck.Landed += container =>
     {
         effects.OnLanded(container, console);
-        console.Note($"Landed {Describe(container)} · {container.AirTime:0.0} s", LogKind.Landed);
+        console.Note($"Landed {container.Describe()} · {container.AirTime:0.0} s", LogKind.Landed);
         link.ReportLanded(container);
     };
 
     deck.Lost += container =>
     {
         effects.OnLost(container);
-        console.Note($"Lost {Describe(container)}", LogKind.Lost);
+        console.Note($"Lost {container.Describe()}", LogKind.Lost);
         link.ReportLost(container);
     };
 
@@ -181,7 +184,7 @@ void Update(Scene scene, GameTime time)
     var snapshot = deck.Snapshot(console.Scheme.Name, uptime);
 
     station.Draw(console, deltaSeconds, uptime);
-    board.Draw(station.Shapes, console, snapshot, deck.PendingCount, link.IsConnected, uptime, uptime);
+    board.Draw(station.Shapes, console, snapshot, deck.PendingCount, link.IsConnected, uptime);
     feed.Draw(station.Shapes, console, uptime);
     effects.Draw(station.Shapes, console);
 
@@ -191,7 +194,8 @@ void Update(Scene scene, GameTime time)
     {
         untilHeartbeat = HeartbeatSeconds;
 
-        link.ReportDeck(snapshot);
+        // Copies of the counts: the report is sent from another thread, after the deck has counted again
+        link.ReportDeck(snapshot with { BySize = [.. snapshot.BySize], ByPaint = [.. snapshot.ByPaint] });
     }
 }
 
@@ -224,8 +228,6 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
     new("Click", "Pick a scheme", Color.Gold),
     new("Left drag", "Carry a container; R turns it", Color.Gold),
 ];
-
-static string Describe(ContainerEvent container) => $"#{container.Id} {container.Size.ToString().ToLowerInvariant()} {container.Paint.ToString().ToLowerInvariant()}";
 
 /// <summary>The hub URL: the shared default, unless the environment says otherwise.</summary>
 static Uri ResolveHubUrl()

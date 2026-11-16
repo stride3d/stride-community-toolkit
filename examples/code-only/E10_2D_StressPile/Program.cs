@@ -36,8 +36,7 @@ const float GrabberDistance = 400;
 // Radians a wall or ramp turns for a drag across the whole window
 const float ArenaRotationSensitivity = 4f;
 
-// One Model per shape and sleep state, built on first use and kept. Eighteen of them cost under a
-// megabyte, and it makes switching back to a shape you have already used free.
+// The sleeping tint, built once
 Material? sleepingMaterial = null;
 
 Primitive3D[] shapes =
@@ -56,7 +55,9 @@ Primitive3D[] shapes =
 int[] batchSizes = [1000, 2500, 5000, 10000, 20000];
 
 var random = new Random(1);
-List<Entity> bodies = [];
+
+// Every body of the pile, with which master draws it right now
+List<PileBody> bodies = [];
 
 CameraComponent camera = null!;
 Scene scene = null!;
@@ -69,9 +70,6 @@ Entity arena = null!;
 Entity? draggedPart = null;
 List<(Entity Part, Quaternion InitialRotation)> arenaParts = [];
 
-// Sleep-state tracking, aligned with the bodies list: which master each body is drawn by right now
-List<BodyComponent> bodyComponents = [];
-List<bool> awakeStates = [];
 var sleepingCount = 0;
 
 var shape = Primitive3D.Sphere();
@@ -169,6 +167,9 @@ void SetupInstancing()
     game.AddInstancingBufferUpload(sleepingInstancing);
 }
 
+// One Model per shape and sleep state, built on first use and kept. Eighteen of them cost under a
+// megabyte, and it makes switching back to a shape you have already used free.
+
 /// <summary>Returns the shared model for a shape, built once on first use and kept by the game.</summary>
 Model ModelFor(Primitive3D type) => game.GetOrCreateModel(type);
 
@@ -240,11 +241,9 @@ void Clear()
     awakeInstancing.Clear();
     sleepingInstancing.Clear();
 
-    foreach (var body in bodies) body.Scene = null;
+    foreach (var body in bodies) body.Entity.Scene = null;
 
     bodies.Clear();
-    bodyComponents.Clear();
-    awakeStates.Clear();
     sleepingCount = 0;
 }
 
@@ -284,20 +283,16 @@ void Spawn(Vector3 position)
     // AddBepuPhysics derives the collider from the primitive type, not the mesh.
     // No ModelComponent of its own: the master draws every instance, and one per entity would draw the
     // whole pile twice - once per entity, once instanced - which is slower than not instancing at all
-    var entity = new Entity("InstancedItem");
+    var entity = new Entity("InstancedItem", position);
 
     entity.AddBepuPhysics(shape, new BepuPhysicsOptions { Component = new Body2DComponent { Collider = new CompoundCollider() } });
-
-    entity.Transform.Position = position;
 
     // New bodies are awake by definition; UpdateSleepTint moves them once Bepu puts them to sleep
     awakeInstancing.AddInstance(entity);
 
     entity.Scene = scene;
 
-    bodies.Add(entity);
-    bodyComponents.Add(entity.Get<BodyComponent>());
-    awakeStates.Add(true);
+    bodies.Add(new PileBody(entity, entity.Get<BodyComponent>()));
 }
 
 void Update(Scene rootScene, GameTime time)
@@ -358,9 +353,9 @@ void ResetArena()
 // the old position stays asleep, hanging where the wall used to be
 void WakeBodies()
 {
-    foreach (var body in bodyComponents)
+    foreach (var body in bodies)
     {
-        if (!body.Awake) body.Awake = true;
+        if (!body.Body.Awake) body.Body.Awake = true;
     }
 }
 
@@ -370,24 +365,24 @@ void WakeBodies()
 /// </summary>
 void UpdateSleepTint()
 {
-    for (var i = 0; i < bodies.Count; i++)
+    foreach (var body in bodies)
     {
-        var awake = bodyComponents[i].Awake;
+        var awake = body.Body.Awake;
 
-        if (awake == awakeStates[i]) continue;
+        if (awake == body.Awake) continue;
 
-        awakeStates[i] = awake;
+        body.Awake = awake;
 
         if (awake)
         {
-            sleepingInstancing.RemoveInstance(bodies[i]);
-            awakeInstancing.AddInstance(bodies[i]);
+            sleepingInstancing.RemoveInstance(body.Entity);
+            awakeInstancing.AddInstance(body.Entity);
             sleepingCount--;
         }
         else
         {
-            awakeInstancing.RemoveInstance(bodies[i]);
-            sleepingInstancing.AddInstance(bodies[i]);
+            awakeInstancing.RemoveInstance(body.Entity);
+            sleepingInstancing.AddInstance(body.Entity);
             sleepingCount++;
         }
     }
@@ -406,13 +401,12 @@ void DespawnEscaped()
 {
     for (var i = bodies.Count - 1; i >= 0; i--)
     {
-        var position = bodies[i].Transform.Position;
+        var entity = bodies[i].Entity;
+        var position = entity.Transform.Position;
 
         if (MathF.Abs(position.X) < EscapeDistance && position.Y > -EscapeDistance) continue;
 
-        var entity = bodies[i];
-
-        if (awakeStates[i])
+        if (bodies[i].Awake)
         {
             awakeInstancing.RemoveInstance(entity);
         }
@@ -426,8 +420,6 @@ void DespawnEscaped()
         entity.Scene = null;
 
         bodies.RemoveAt(i);
-        bodyComponents.RemoveAt(i);
-        awakeStates.RemoveAt(i);
     }
 }
 
@@ -497,6 +489,12 @@ public enum SpawnLayout
 
     /// <summary>Scattered through a tall band above the walls.</summary>
     Random
+}
+
+/// <summary>One body of the pile: its entity, its body, and whether the awake master is the one drawing it.</summary>
+sealed record PileBody(Entity Entity, BodyComponent Body)
+{
+    public bool Awake { get; set; } = true;
 }
 
 /*

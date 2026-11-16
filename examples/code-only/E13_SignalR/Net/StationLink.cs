@@ -18,11 +18,11 @@ public sealed class StationLink : IAsyncDisposable
     private readonly OutgoingQueue _outgoing;
 
     // One queue for every kind of request, so they replay in the order they arrived
-    private readonly ConcurrentQueue<Action<IStationCommands>> _inbox = new();
+    private readonly ConcurrentQueue<Action<StationCommands>> _inbox = new();
 
-    public StationLink(Uri hubUrl, ILogger<SignalRHubClient>? logger = null)
+    public StationLink(Uri hubUrl, ILogger? logger = null)
     {
-        _client = new SignalRHubClient(new SignalRClientOptions { HubUrl = hubUrl }, logger);
+        _client = new SignalRHubClient(hubUrl, logger);
         _outgoing = _client.CreateOutgoingQueue();
 
         // Handlers only enqueue. They run on SignalR's threads, and the deck is not theirs to touch.
@@ -40,7 +40,7 @@ public sealed class StationLink : IAsyncDisposable
     public void BeginConnect() => _client.BeginConnect();
 
     /// <summary>Replays every request that arrived since the last frame. Call from the game's update.</summary>
-    public void Drain(IStationCommands target)
+    public void Drain(StationCommands target)
     {
         while (_inbox.TryDequeue(out var command))
         {

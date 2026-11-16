@@ -8,7 +8,7 @@ namespace E13_SignalR.SignalR;
 /// sends in order. One queue for every hub method, rather than one per method, because order across
 /// methods matters - a landing must never reach the page before the release it belongs to.
 /// </summary>
-public sealed class OutgoingQueue : IStoppable, IDisposable
+public sealed class OutgoingQueue : IDisposable
 {
     private readonly SignalRHubClient _owner;
     private readonly Channel<(string Method, object Payload)> _queue = Channel.CreateUnbounded<(string Method, object Payload)>(new UnboundedChannelOptions { SingleReader = true });
