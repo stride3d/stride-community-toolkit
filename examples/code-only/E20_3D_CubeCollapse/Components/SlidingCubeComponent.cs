@@ -3,7 +3,6 @@ using BepuPhysics.Collidables;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Components;
 using Stride.Core.Mathematics;
-using Stride.Engine;
 using NRigidPose = BepuPhysics.RigidPose;
 
 namespace CubeCollapse.Components;
@@ -23,7 +22,6 @@ namespace CubeCollapse.Components;
 /// can only come to rest in the slot the grid has already given it.
 /// </para>
 /// </remarks>
-[ComponentCategory("Cube Collapse")]
 public class SlidingCubeComponent : BodyComponent, ISimulationUpdate
 {
     /// <summary>

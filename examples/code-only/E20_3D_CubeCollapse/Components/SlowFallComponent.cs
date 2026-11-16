@@ -1,6 +1,5 @@
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Components;
-using Stride.Engine;
 
 namespace CubeCollapse.Components;
 
@@ -23,7 +22,6 @@ namespace CubeCollapse.Components;
 /// accelerate, bounce and tumble.
 /// </para>
 /// </remarks>
-[ComponentCategory("Cube Collapse")]
 public class SlowFallComponent : BodyComponent, ISimulationUpdate
 {
     /// <summary>

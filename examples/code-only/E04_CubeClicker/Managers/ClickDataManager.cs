@@ -2,6 +2,11 @@ using E04_CubeClicker.Core;
 
 namespace E04_CubeClicker.Managers;
 
+/// <summary>
+/// The click counts as the game uses them, kept in a YAML file through <see cref="DataSaver{TData}"/>.
+/// It owns the file name and the default counts, which come back when the save is deleted, so the
+/// rest of the game asks for the counts and never deals with the file.
+/// </summary>
 public class ClickDataManager
 {
     // The default data stands until a load replaces it, so there is never a null to deal with

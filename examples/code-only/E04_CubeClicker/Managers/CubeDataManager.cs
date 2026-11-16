@@ -3,6 +3,11 @@ using Stride.Core.Mathematics;
 
 namespace E04_CubeClicker.Managers;
 
+/// <summary>
+/// The cube positions as the game uses them, kept in a YAML file through <see cref="DataSaver{TData}"/>.
+/// The file holds <see cref="SimpleVector"/> values; this class converts them to and from
+/// <see cref="Vector3"/>, so the rest of the game never sees the saved form.
+/// </summary>
 public class CubeDataManager
 {
     private readonly DataSaver<CubeData> _dataSaver = new() { Data = new CubeData(), FileName = "StrideExampleCubeData.yaml" };
