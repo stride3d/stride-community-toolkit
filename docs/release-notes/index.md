@@ -53,6 +53,7 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 ### 🐞 Bug Fixes
 
 - `ShapeBatch`: a batch with a `FillSource` draws on Stride 4.4.2. Its shader compiler carries a stream written only inside an `if` or after an early return from the vertex buffer, which made the texture coordinate a vertex input the quad does not have; the first draw threw from `CreateInputLayout`.
+- `TransformExtensions.LookAt` aims from the transform's `Position`, not from its local matrix. The engine rebuilds that matrix once a frame, so a transform moved and then turned in the same update aimed from the position of the frame before, off by an angle that grew with the frame time: a follow camera swung on every slow frame.
 - `ScreenFade` draws through a batch of its own. It used to register the game's default `ShapeBatch`, so every shape component in a scene with a fade drew after the post effects and without depth. It also takes the batch out of rendering when removed, and `AddScreenFade` before the scene exists says what to do.
 - `AddUIStage` and `AddCleanUIStage` add the UI stage once; a second call stacked another stage, UI render feature and renderer.
 - `AddOnEventAction` and `AddOnEventTask` handle every event that arrived since the last frame, not one per frame.
@@ -104,6 +105,7 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 - Fields built in `Start` are declared `= null!` and their guards are gone, in the Bepu, debug-shapes, gallery, chart and audio examples.
 - Bepu examples read the simulation with `game.GetSimulation()` and the Shift key with `input.IsShiftDown()`; the first-person example now sprints and boosts on either Shift.
 - Overlay help in six Bepu examples (`E05_3D_CollisionGroup`, `CollisionLayer`, `Dodgeball`, `LayerSelection`, `PlanetGravity`, `PlanetWalker`) is one key a line of about fifty characters, with the state on the lines below.
+- `E10_3D_ComputeBoids` transitions its two matrix buffers to shader resource after the dispatch. Stride 4.4.2 no longer unbinds a buffer from the compute stage when it is bound for reading, so the flock was drawn only while frozen.
 - `E06_Box2D`: shapes come from a seeded random, the overlay shows one count, and the status message runs on the game clock. `E06_Box2D_Car`, `Junkyard` and `JunkyardInteractive` build their fixtures with `ShapeFixtureBuilder.AttachPolygon` and `AttachBox`.
 - `E06_Box2D_CharacterMover` is four files: `Program.cs`, `Course.cs`, `Elevator.cs` and `GroundPaths.cs`.
 - `E02_3D_Material_Gallery`: `Recipes.Pbr` and `Recipes.Mapped` take metalness before glossiness, as `MaterialDescriptors.Pbr` does; `WobbleFeature`, `DissolveFeature` and `PackMaterials` have a file each.
