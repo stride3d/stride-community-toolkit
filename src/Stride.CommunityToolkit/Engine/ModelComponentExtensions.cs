@@ -208,7 +208,7 @@ public static class ModelComponentExtensions
             var verticesBytes = vertexBinding.Buffer.GetData<byte>(game.GraphicsContext.CommandList);
             var indicesBytes = indexBinding.Buffer.GetData<byte>(game.GraphicsContext.CommandList);
 
-            // Empty lists if there is an issue
+            // A buffer that cannot be read ends the read; what the meshes before it gave is returned
             if (verticesBytes is not { Length: > 0 } || indicesBytes is not { Length: > 0 })
                 return (combinedVertices, combinedIndices);
 

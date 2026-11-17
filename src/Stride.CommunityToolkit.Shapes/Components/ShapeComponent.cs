@@ -44,7 +44,7 @@ public sealed class ShapeComponent : ActivableEntityComponent
     /// corner: the four vertices a rectangular shape needs, so they are not written out by hand.
     /// </summary>
     /// <param name="size">The box's width and height, in world units.</param>
-    /// <returns>A new array of the four corners, for <see cref="Vertices"/> or for a shape batch.</returns>
+    /// <returns>A new array of the four corners, for <see cref="Vertices"/> (<c>Vertices = [.. ShapeComponent.Box(size)]</c>) or for a shape batch.</returns>
     public static Vector2[] Box(Vector2 size)
     {
         var half = size * 0.5f;

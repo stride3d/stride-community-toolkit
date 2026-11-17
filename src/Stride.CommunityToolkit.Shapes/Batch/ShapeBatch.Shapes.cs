@@ -200,7 +200,7 @@ public sealed partial class ShapeBatch
 
     /// <summary>
     /// Submits an arc of a circle with round ends, lying flat in the plane a normal defines. With no
-    /// width it is a stroke the border's pixel width - a partial <see cref="DrawRing(Vector3, Vector3, float, Color)"/>; with one it
+    /// width it is a stroke <see cref="StrokeWidth"/> pixels wide - a partial <see cref="DrawRing(Vector3, Vector3, float, Color)"/>; with one it
     /// is a filled, outlined band of that world width centred on the radius - a radial progress bar.
     /// </summary>
     /// <param name="center">World-space centre of the circle.</param>

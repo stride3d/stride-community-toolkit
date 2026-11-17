@@ -6,10 +6,9 @@ using Stride.Rendering.Images;
 namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
-/// Provides functionality for drawing and manipulating textures on a canvas.
-/// This class supports various operations such as drawing rectangles, drawing textures,
-/// applying filters, transforming colors, and resampling textures. It is designed to work
-/// with the Stride graphics framework and provides methods for loading and storing texture data.
+/// A texture built and edited at run time on the GPU: textures and rectangles are drawn into it, and it is
+/// filtered, recoloured and resampled through the engine's image effects. <see cref="ToTexture"/> hands out a
+/// copy of the result, so the canvas can go on being drawn into.
 /// </summary>
 public class TextureCanvas : IDisposable
 {

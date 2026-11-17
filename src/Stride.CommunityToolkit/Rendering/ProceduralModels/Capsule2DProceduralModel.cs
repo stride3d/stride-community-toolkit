@@ -13,12 +13,12 @@ public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
     /// <summary>
     /// Gets or sets the height of the capsule: the whole shape end to end, the two semicircles included.
     /// </summary>
-    public float Height { get; set; } = 1.2f;
+    public float Height { get; set; } = 1f;
 
     /// <summary>
     /// Gets or sets the radius of the capsule.
     /// </summary>
-    public float Radius { get; set; } = 0.35f;
+    public float Radius { get; set; } = 0.25f;
 
     /// <summary>
     /// Gets or sets the tessellation for the semicircle ends (higher values = smoother curves).

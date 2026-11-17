@@ -124,8 +124,7 @@ public class EntityTextRenderer : SpriteTextRendererBase
         // and stays on screen. Anchor is ignored here rather than obeyed, because the combination
         // that a HUD wants is the only one that keeps the text visible - and getting it wrong shows
         // up as text half off the edge of the window. Screen mode is there when the caller wants to
-        // place and anchor text independently. The two enums share one layout, so the text anchor
-        // of the same name is the cast.
+        // place and anchor text independently.
         DrawAt(data, ResolveAnchoredPosition(component.ScreenAnchor, offset, screenSize), opacity, component.ScreenAnchor, display);
     }
 

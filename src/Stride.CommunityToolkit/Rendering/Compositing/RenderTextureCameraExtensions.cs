@@ -58,7 +58,7 @@ public static class RenderTextureCameraExtensions
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
 
         var compositor = game.Services.GetSafeServiceAs<SceneSystem>().GraphicsCompositor
-            ?? throw new InvalidOperationException("The game has no graphics compositor; call AddGraphicsCompositor or SetupBase3D first.");
+            ?? throw new InvalidOperationException("The game has no graphics compositor; run it with a SceneSetup3D or SceneSetup2D, or call AddGraphicsCompositor first.");
 
         if (!compositor.TryGetRenderStage(RenderStageNames.Opaque, out var opaque) || !compositor.TryGetRenderStage(RenderStageNames.Transparent, out var transparent))
         {

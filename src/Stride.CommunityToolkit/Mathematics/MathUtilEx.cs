@@ -328,8 +328,8 @@ public static class MathUtilEx
     /// </summary>
     /// <param name="start">Start color.</param>
     /// <param name="end">End color.</param>
-    /// <param name="easingFunction">The function used to ease the interpolation.</param>
     /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>; values outside that range are clamped to it.</param>
+    /// <param name="easingFunction">The function used to ease the interpolation.</param>
     /// <returns>The interpolation of the two colors.</returns>
     /// <remarks>
     /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned.

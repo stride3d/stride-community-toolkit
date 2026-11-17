@@ -4,6 +4,7 @@ using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Rendering;
@@ -18,6 +19,49 @@ namespace Stride.CommunityToolkit.Tests.Bepu;
 /// </summary>
 public class AddBepuPhysicsColliderTests
 {
+    [Fact]
+    public void EveryThreeDimensionalShapeHasACollider()
+    {
+        Primitive3D[] shapes =
+        [
+            Primitive3D.Box(new Vector3(1f, 2f, 3f)),
+            Primitive3D.Sphere(),
+            Primitive3D.Capsule(),
+            Primitive3D.Cylinder(),
+            Primitive3D.Cone(),
+            Primitive3D.Torus(),
+            Primitive3D.Plane(),
+            Primitive3D.Teapot(),
+            Primitive3D.TriangularPrism(Vector3.One),
+            Primitive3D.Text("A", MeshFont.Default),
+        ];
+
+        foreach (var shape in shapes) Assert.NotNull(Colliders.For(shape));
+
+        // One of each record: a record added without a case here, and so perhaps without a collider, fails
+        Assert.Equal(ShapeRecords(typeof(Primitive3D)), shapes.Select(shape => shape.GetType()).Distinct().Count());
+    }
+
+    [Fact]
+    public void EveryFlatShapeHasACollider()
+    {
+        Primitive2D[] shapes =
+        [
+            Primitive2D.Rectangle(),
+            Primitive2D.Circle(),
+            Primitive2D.Capsule(),
+            Primitive2D.Triangle(),
+            Primitive2D.RegularPolygon(),
+            Primitive2D.Polygon(new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 1f)),
+        ];
+
+        foreach (var shape in shapes) Assert.NotNull(Colliders.For(shape, shape.Depth));
+
+        Assert.Equal(ShapeRecords(typeof(Primitive2D)), shapes.Select(shape => shape.GetType()).Distinct().Count());
+    }
+
+    private static int ShapeRecords(Type set) => set.GetNestedTypes().Count(type => type.IsSubclassOf(set));
+
     [Fact]
     public void WideCapsuleGetsAColliderClampedLikeItsMesh()
     {

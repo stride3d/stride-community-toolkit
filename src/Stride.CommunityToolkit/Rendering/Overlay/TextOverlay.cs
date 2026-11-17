@@ -158,11 +158,11 @@ public sealed class TextOverlay : GameSystemBase
     /// </summary>
     public float TextNudge { get; set; } = -1f;
 
-    /// <summary>Gets or sets the gap kept between the overlay and the edge of the screen, in pixels.</summary>
+    /// <summary>Gets or sets the gap kept between the overlay and the edge of the screen, in unscaled pixels.</summary>
     public Int2 Margin { get; set; } = new(5, 10);
 
     /// <summary>Gets or sets the marker shown on a collapsed section's title line.</summary>
-    /// <remarks>Printable ASCII only; arrow glyphs such as <c>▼</c> render as blanks.</remarks>
+    /// <remarks>A glyph the font lacks, as many lack <c>▼</c>, draws as the font's missing-glyph box.</remarks>
     public string CollapsedMarker { get; set; } = "[+]";
 
     /// <summary>Gets or sets the marker shown on an expanded section's title line.</summary>

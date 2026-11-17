@@ -12,6 +12,7 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 
 ### 💥 Breaking Changes
 
+- ImGui: `ImGuiExtension.Tooltip()` is `Tooltip(out bool open)`, as `MenuBar` and `Menu` are. The scope ends the tooltip only when it opened, which is ImGui's contract; emit the content when `open` is `true`.
 - Built against Stride 4.4.2 (was 4.4.1). What a game sees from the engine: a GPU without Direct3D 12 Enhanced Barriers or the Vulkan 1.3 features is skipped at startup; scenes with many draws render faster; a removed entity with an `InstanceComponent` is collected again, and an instanced model keeps its instances through a second compositor and while its effect compiles; a scene no longer fades in from near-white; effects compile again once on the first run.
 - `GameProfiler`'s keys are chorded with Ctrl: Ctrl+F1 filter, Ctrl+F2 sort, Ctrl+F3 and Ctrl+F4 page, Ctrl+1 to Ctrl+5 jump to a page, Ctrl+minus and Ctrl+plus refresh rate. The plain F2, F3 and F4 belong to the camera help and the text overlay, which the profiler used to fight in every scene with `Profiler = true`.
 - `CollidableGizmoScript.Color` is a `Color4`, not a `Color4?`; the fully transparent default keeps the gizmo material's own colour. Game Studio's property grid cannot edit a nullable value type. `AddPhysicsDebug(gizmoColor)` is unchanged.
@@ -54,6 +55,11 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 
 - `ShapeBatch`: a batch with a `FillSource` draws on Stride 4.4.2. Its shader compiler carries a stream written only inside an `if` or after an early return from the vertex buffer, which made the texture coordinate a vertex input the quad does not have; the first draw threw from `CreateInputLayout`.
 - `TransformExtensions.LookAt` aims from the transform's `Position`, not from its local matrix. The engine rebuilds that matrix once a frame, so a transform moved and then turned in the same update aimed from the position of the frame before, off by an angle that grew with the frame time: a follow camera swung on every slow frame.
+- DebugShapes: `MaxPrimitives` and `MaxPrimitivesWithLifetime` default to 4096, up from 100, so the thousands of shapes a frame the package is for need no setting.
+- `Capsule2DProceduralModel`: the `Radius` and `Height` properties default to 0.25 and 1, as `New()`, `CreateMesh()` and `Primitive2D.Capsule` do; `new Capsule2DProceduralModel()` used to give a different capsule (0.35 and 1.2).
+- Charts: a ribbon keeps the distances along its points on the stack, or in a rented array for a long run; a growing trail allocated an array on every point added.
+- `Body2DComponent` is listed as "Body 2D (Bepu)" in Game Studio's component list.
+- The "no graphics compositor" errors of `AddRenderTextureCamera`, the material stream view and `GpuPicker` name `SceneSetup3D`, `SceneSetup2D` and `AddGraphicsCompositor`, not a method removed in preview.67.
 - `ScreenFade` draws through a batch of its own. It used to register the game's default `ShapeBatch`, so every shape component in a scene with a fade drew after the post effects and without depth. It also takes the batch out of rendering when removed, and `AddScreenFade` before the scene exists says what to do.
 - `AddUIStage` and `AddCleanUIStage` add the UI stage once; a second call stacked another stage, UI render feature and renderer.
 - `AddOnEventAction` and `AddOnEventTask` handle every event that arrived since the last frame, not one per frame.
@@ -97,6 +103,9 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 
 - Physics extensions manual: a paragraph on the loading stall, why a scene's first fall differs from a restart and how to hold the simulation until the first short frame.
 - The generated example pages and the gallery match their sources again after the example changes.
+- Package descriptions name the current API: `SceneSetup3D` and `SceneSetup2D`, `UseBepu()` and `UseBullet()`, `CreatePrimitive`. The core description adds the follow and orbit cameras, audio and input; the Skyboxes one no longer lists `SkyboxGenerator`, which is in the core package.
+- The ImGui and ImGuiNet READMEs show the current API: `new ImGuiSystem(game.Services)`, `game.AddImGuiNet()`, the `Stride.CommunityToolkit.ImGui` namespaces and Stride 4.4.
+- XML docs corrected where they described older behaviour: a system font's `size` is its default size, glyphs being rasterised at the size drawn; `KeyMenu` and the overlay markers draw whatever the font has a glyph for; dashes apply to polylines; `ShapeFill.Alpha` dims the fill only; `Box2DSimulation.Bodies` holds bodies created with an entity; a missed raycast leaves `HitInfo` at `default`; `LightingSetup.Shadows` says which rigs read it; the audio docs say `game.GetAudioSystem()` throughout; the chart label and title options say when each is read, and `ChartTrajectory` that a 3D trail reads its glow once.
 - The file-based app page says what `PublishAot=false` is for: `dotnet publish` fails with `NETSDK1102` without it; `dotnet run` and `dotnet build` do not need it.
 
 ### 🎓 Examples
@@ -119,5 +128,8 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 - The metadata generator has no generic host, `appsettings.json` or log file: logging is set up in code and goes to the console. `scan` returns 1 for a missing examples directory, as `generate` does.
 - `Stride.CommunityToolkit.Skyboxes` no longer references `Stride.Engine` itself; the core package brings it.
 - The Avalonia launcher appends to its log in one buffer and refreshes the panel once for the lines already waiting; it reads each example's files once at start, not on every keystroke.
+- The four package project files that began with a byte-order mark no longer do, as `.editorconfig` asks (core, Bepu, DebugShapes, ImGuiNet).
+- `GlobalSuppression.cs`: entries sit under the headers that describe them, and two justifications whose entries were gone are removed.
+- Tests: `Colliders.For` is called for one shape of every `Primitive3D` and `Primitive2D` record, and a record added without a case fails the count.
 - `examples/Stride.AssetCompiler.Overrides.targets` is removed; it applied to Stride 4.4.0-beta5 only.
 - The `FastList<T>` benchmarks are removed; they measured no toolkit code.

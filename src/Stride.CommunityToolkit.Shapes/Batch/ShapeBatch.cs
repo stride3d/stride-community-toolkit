@@ -29,7 +29,7 @@ namespace Stride.CommunityToolkit.Shapes;
 /// <para>
 /// <see cref="BorderWidth"/>, <see cref="StrokeWidth"/>, <see cref="Fill"/>, <see cref="Glow"/>, <see cref="Dash"/>,
 /// <see cref="Gradient"/>, <see cref="Opacity"/>, <see cref="DepthFade"/>, <see cref="Textured"/>,
-/// <see cref="Screen"/> and <see cref="Tag"/> are current state, captured by each draw call as it is
+/// <see cref="Screen"/>, <see cref="Viewport"/> and <see cref="Tag"/> are current state, captured by each draw call as it is
 /// made, so you can change them between calls the way you would with a sprite batch.
 /// </para>
 /// </remarks>
@@ -122,7 +122,7 @@ public sealed partial class ShapeBatch : RenderObject
 
     /// <summary>
     /// The dash pattern along outlines - length, gap and phase in on-screen pixels. A length of 0,
-    /// the default, draws solid. Circles, arcs and lines dash; polygons stay solid. See
+    /// the default, draws solid. Circles, arcs, lines and polylines dash; polygons stay solid. See
     /// <see cref="DashPattern"/>. Captured by each draw call as it is made.
     /// </summary>
     public DashPattern Dash { get; } = new();

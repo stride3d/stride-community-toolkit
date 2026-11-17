@@ -6,7 +6,7 @@ namespace Stride.CommunityToolkit.ImGui;
 /// <summary>
 /// Owns the textures Dear ImGui manages through its 1.92+ texture protocol (RendererHasTextures):
 /// creates, updates and destroys them as the draw data requests, and resolves texture ids at draw
-/// time. Split out of <see cref="ImGuiSystem"/>, which forwards the protocol events here.
+/// time. <see cref="ImGuiSystem"/> forwards the protocol events here.
 /// </summary>
 /// <param name="device">The device the textures are created on.</param>
 /// <param name="commandList">The command list the pixels are uploaded through.</param>

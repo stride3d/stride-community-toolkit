@@ -12,13 +12,13 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// <para>
 /// A code-only game has no compiled font assets, so Stride's default font - bold, proportional, and
 /// the same in every such game - is the only one it gets for free. This finds a family's file in the
-/// operating system's font folders, registers it with Stride's font system and rasterises it at the
-/// size asked for, producing exactly what <see cref="WorldTextComponent.Font"/>,
+/// operating system's font folders and registers it with Stride's font system as a runtime-rasterised
+/// font, producing exactly what <see cref="WorldTextComponent.Font"/>,
 /// <see cref="EntityTextComponent.Font"/> and the text overlay all accept.
 /// </para>
 /// <para>
-/// Rasterised, not scaled: the font is sharp at whatever size it was loaded at, and a size well above
-/// what you draw at costs glyph cache space for nothing.
+/// The size is the font's default, used when a draw does not pass one. Glyphs are rasterised at the
+/// size they are drawn at, so one loaded font is sharp at every size.
 /// </para>
 /// <para>
 /// The result belongs to the caller. Loading the same family and size twice returns two separate
@@ -62,7 +62,7 @@ public static class SystemFonts
     /// </summary>
     /// <param name="services">The game's services, which must include Stride's font system.</param>
     /// <param name="family">The family name as the system knows it, such as <c>"Segoe UI"</c>.</param>
-    /// <param name="size">The height the glyphs are rasterised at, in pixels.</param>
+    /// <param name="size">The default size in pixels, used when a draw does not pass one; glyphs are rasterised at the size they are drawn at.</param>
     /// <param name="style">The weight and slant wanted. Defaults to <see cref="FontStyle.Regular"/>.</param>
     /// <param name="fontFile">
     /// The TrueType file to register the family from, for fonts that are not in the system font
@@ -83,7 +83,7 @@ public static class SystemFonts
     /// </summary>
     /// <param name="services">The game's services, which must include Stride's font system.</param>
     /// <param name="families">Family names in order of preference, such as <see cref="MonospaceCandidates"/>.</param>
-    /// <param name="size">The height the glyphs are rasterised at, in pixels.</param>
+    /// <param name="size">The default size in pixels, used when a draw does not pass one; glyphs are rasterised at the size they are drawn at.</param>
     /// <param name="style">The weight and slant wanted. Defaults to <see cref="FontStyle.Regular"/>.</param>
     /// <param name="fontFile">A TrueType file to register the first family from, bypassing the search.</param>
     /// <returns>The font, or <see langword="null"/> if none of the families was found.</returns>

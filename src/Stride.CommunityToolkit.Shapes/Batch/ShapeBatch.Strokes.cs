@@ -30,6 +30,10 @@ public sealed partial class ShapeBatch
     /// <summary>
     /// The 2D case of <see cref="DrawPolyline(ReadOnlySpan{Vector2}, Vector3, Vector3, Vector3, float, Color, bool)"/>: a stroke in the XY plane.
     /// </summary>
+    /// <param name="points">The run, in the XY plane, of any length.</param>
+    /// <param name="width">Stroke width in world units.</param>
+    /// <param name="color">The stroke colour. Drawn solid, ignoring <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="closed">Whether the last point joins back to the first.</param>
     public void DrawPolyline(ReadOnlySpan<Vector2> points, float width, Color color, bool closed = false)
         => AddPolyline(points, Flat, SolidStyle(color), MathF.Max(width, 0.0001f) * 0.5f, closed);
 
@@ -50,6 +54,10 @@ public sealed partial class ShapeBatch
     /// <summary>
     /// The 2D case of <see cref="DrawPixelPolyline(ReadOnlySpan{Vector2}, Vector3, Vector3, Vector3, float, Color, bool)"/>: a stroke in the XY plane.
     /// </summary>
+    /// <param name="points">The run, in the XY plane, of any length.</param>
+    /// <param name="pixelWidth">Stroke width in pixels on a 100% display.</param>
+    /// <param name="color">The stroke colour.</param>
+    /// <param name="closed">Whether the last point joins back to the first.</param>
     public void DrawPixelPolyline(ReadOnlySpan<Vector2> points, float pixelWidth, Color color, bool closed = false)
         => AddPolyline(points, Flat, OutlineStyle(color, pixelWidth), 0f, closed);
 

@@ -7,8 +7,7 @@ namespace Stride.CommunityToolkit.ImGuiNet;
 /// <summary>
 /// Feeds one frame of Stride input into ImGui.NET: mouse position and buttons, text and wheel events. Keys
 /// and modifiers are not forwarded; the overlay this system draws takes no keyboard input, and the legacy
-/// modifier flags ImGui 1.87 and later recompute at every frame would be overwritten anyway. Split out of
-/// <see cref="ImGuiNetSystem"/>; stateless.
+/// modifier flags ImGui 1.87 and later recompute at every frame would be overwritten anyway. Stateless.
 /// </summary>
 internal static class ImGuiNetInputMapper
 {

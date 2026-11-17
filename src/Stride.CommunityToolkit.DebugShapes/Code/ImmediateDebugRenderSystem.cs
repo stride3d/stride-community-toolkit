@@ -38,12 +38,12 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     /// <summary>
     /// Maximum number of one-frame primitives stored and rendered per update; past it, the oldest sixteenth of them makes room.
     /// </summary>
-    public int MaxPrimitives { get; set; } = 100;
+    public int MaxPrimitives { get; set; } = 4096;
 
     /// <summary>
     /// Maximum number of lifetime-based primitives stored and rendered per update; past it, the oldest sixteenth of them makes room.
     /// </summary>
-    public int MaxPrimitivesWithLifetime { get; set; } = 100;
+    public int MaxPrimitivesWithLifetime { get; set; } = 4096;
 
     /// <summary>
     /// Render group used for the internal debug render objects.

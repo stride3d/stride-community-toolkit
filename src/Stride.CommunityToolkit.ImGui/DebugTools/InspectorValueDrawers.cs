@@ -5,8 +5,7 @@ namespace Stride.CommunityToolkit.ImGui.DebugTools;
 
 /// <summary>
 /// The leaf-value widgets <see cref="Inspector"/> draws: one ImGui control per primitive type, the
-/// enum combo, and the bit twiddling enum editing needs. Split out of <see cref="Inspector"/>;
-/// everything here is stateless.
+/// enum combo, and the bit twiddling enum editing needs. Everything here is stateless.
 /// </summary>
 internal static class InspectorValueDrawers
 {

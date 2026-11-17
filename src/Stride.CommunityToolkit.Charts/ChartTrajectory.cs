@@ -12,8 +12,10 @@ namespace Stride.CommunityToolkit.Charts;
 /// Points are clipped to the chart's ranges the way <see cref="Chart.Plot"/> clips a function: a segment
 /// that leaves the chart ends exactly on the edge, and when the path comes back the trail resumes from the
 /// edge as a separate run. On a flat chart the trail is a stroke, resubmitted each frame from the recorded
-/// points; on a 3D chart it may leave the chart plane, so it is a ribbon mesh grown in place. Call
-/// <see cref="Add"/> from the game thread.
+/// points; on a 3D chart it may leave the chart plane, so it is a ribbon mesh grown in place. That ribbon's
+/// material is made once, so on a 3D chart <see cref="ChartSeries.Glow"/> is read when the trajectory is
+/// added: whether it glows does not change afterwards, where every other series reads the glow each frame.
+/// Call <see cref="Add"/> from the game thread.
 /// </remarks>
 public sealed class ChartTrajectory : ChartSeries
 {

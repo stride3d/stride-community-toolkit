@@ -6,7 +6,7 @@
 
 What's inside:
 - AddSkybox(): the one-call setup, with a bundled HDR texture
-- SkyboxGenerator: turns any cubemap or HDR texture into a Stride Skybox at run time, for your own environment maps$(StrideVersionNote)</Description>
+- UseSkybox() on SceneSetup3D: the same skybox as part of the scene setup$(StrideVersionNote)</Description>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />

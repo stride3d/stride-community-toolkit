@@ -17,7 +17,7 @@ public static class CameraComponentExtensions
     /// <param name="component">The <see cref="ScriptComponent"/> providing access to the mouse position.</param>
     /// <param name="maxDistance">The maximum distance for the raycast.</param>
     /// <param name="hit">
-    /// When this method returns, contains the <see cref="HitInfo"/> if the raycast hits a collider, otherwise <c>null</c>.
+    /// When this method returns, contains the <see cref="HitInfo"/> if the raycast hits a collider, otherwise <c>default</c>.
     /// </param>
     /// <param name="collisionMask">
     /// Specifies the collision mask to filter which objects the raycast can hit. Defaults to <see cref="CollisionMask.Everything"/>.
@@ -39,7 +39,7 @@ public static class CameraComponentExtensions
     /// <param name="screenPosition">The screen position, normalised from (0,0) at the top-left to (1,1) at the bottom-right, as <c>Input.MousePosition</c> gives it.</param>
     /// <param name="maxDistance">The maximum distance for the raycast.</param>
     /// <param name="hit">
-    /// When this method returns, contains the <see cref="HitInfo"/> if the raycast hits a collider, otherwise <c>null</c>.
+    /// When this method returns, contains the <see cref="HitInfo"/> if the raycast hits a collider, otherwise <c>default</c>.
     /// </param>
     /// <param name="collisionMask">
     /// Specifies the collision mask to filter which objects the raycast can hit. Defaults to <see cref="CollisionMask.Everything"/>.

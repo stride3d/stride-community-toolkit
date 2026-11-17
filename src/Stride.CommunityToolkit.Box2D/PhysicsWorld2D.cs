@@ -7,7 +7,7 @@ using static Box2D.NET.B2Worlds;
 namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
-/// Engine-agnostic 2D physics world wrapper around Box2D.NET: owns the native world and advances it
+/// A 2D physics world wrapper around Box2D.NET: owns the native world and advances it
 /// on a fixed timestep. It deliberately avoids any dependency on Stride <c>Entity</c> types; pairing
 /// bodies with entities is <see cref="Box2DStrideBridge"/>'s job.
 /// </summary>

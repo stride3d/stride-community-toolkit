@@ -9,8 +9,8 @@ namespace Stride.CommunityToolkit.ImGui.DebugTools;
 /// <summary>
 /// The collection views of <see cref="Inspector"/>: an <see cref="IEnumerable"/> shown item by item,
 /// with in-place editing, add and remove for types that expose <see cref="IList"/> or
-/// <see cref="IDictionary"/> shapes. Split out of <see cref="Inspector"/>, which owns the member
-/// tree; this owns the collection editing and the pending dictionary-add entry.
+/// <see cref="IDictionary"/> shapes. <see cref="Inspector"/> owns the member tree; this owns the
+/// collection editing and the pending dictionary-add entry.
 /// </summary>
 /// <param name="inspector">The inspector whose values and type cache the views draw with.</param>
 internal sealed class InspectorCollectionsView(Inspector inspector)

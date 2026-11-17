@@ -20,7 +20,7 @@ var debugDraw = game.AddDebugShapes();
 
 > [!NOTE]
 > At most `MaxPrimitives` one-frame shapes and `MaxPrimitivesWithLifetime` timed shapes are kept (both
-> default to `100`); past that, each new shape drops the oldest. Raise them when drawing many shapes.
+> default to `4096`); past that, the oldest sixteenth of them makes room. Raise them when drawing more.
 
 ## Shared parameters
 

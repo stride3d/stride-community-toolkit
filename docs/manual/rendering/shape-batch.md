@@ -91,7 +91,7 @@ Style properties are the batch's current state. Each draw call captures the stat
 | `StrokeWidth` | 1 | Width in pixels of the rings and arcs drawn without a width |
 | `Fill` | The draw call's colour, alpha 1 | Fill colour and alpha |
 | `Glow` | Off | Halo outside the outline: width in pixels, colour, `Strength`, `Additive` |
-| `Dash` | Solid | Dash pattern in pixels, for circles, arcs and lines. Polygons stay solid |
+| `Dash` | Solid | Dash pattern in pixels, for circles, arcs, lines and polylines. Polygons stay solid |
 | `Gradient` | None | A second fill colour and a direction |
 | `Opacity` | 1 | Multiplies the alpha of border, fill and glow |
 | `DepthFade` | 0 | Distance in world units over which a shape fades as it approaches scene geometry |

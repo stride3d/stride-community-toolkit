@@ -5,7 +5,7 @@ namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
 /// A raw hit from <see cref="PhysicsQueries2D"/>, of a ray or of a swept shape: the body and shape struck, where,
-/// the surface normal there, and how far along the ray or the sweep it happened. Engine-agnostic, Box2D
+/// the surface normal there, and how far along the ray or the sweep it happened. No Stride <c>Entity</c> types, Box2D
 /// identifiers and value types only; <see cref="RaycastHit"/> is the entity-resolved variant <see cref="Box2DSimulation"/> returns.
 /// </summary>
 /// <param name="BodyId">The body that was struck.</param>

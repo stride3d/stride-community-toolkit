@@ -8,7 +8,7 @@ namespace Stride.CommunityToolkit.Engine;
 /// </summary>
 /// <param name="Rig">Which lights.</param>
 /// <param name="Intensity">The intensity of the main light; the studio rig scales its fill and rim from it.</param>
-/// <param name="Shadows">Whether the main light casts shadows.</param>
+/// <param name="Shadows">Whether the main light casts shadows. Read by the directional light and the studio rig; the all-directions rig casts none.</param>
 /// <param name="YawDegrees">The studio rig's turn about Y.</param>
 public sealed record LightingSetup(LightingRig Rig, float Intensity, bool Shadows = true, float YawDegrees = 45f)
 {

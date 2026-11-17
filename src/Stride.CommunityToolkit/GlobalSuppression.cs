@@ -42,13 +42,13 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("NDepend", "ND1905:AFieldMustNotBeAssignedFromOutsideItsParentHierarchyTypes", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.Cube", Scope = "field", Justification = "Interop/GPU payload - requires blittable sequential fields.")]
 [assembly: SuppressMessage("NDepend", "ND1905:AFieldMustNotBeAssignedFromOutsideItsParentHierarchyTypes", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.Capsule", Scope = "field", Justification = "Interop/GPU payload - requires blittable sequential fields.")]
 [assembly: SuppressMessage("NDepend", "ND1905:AFieldMustNotBeAssignedFromOutsideItsParentHierarchyTypes", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.Cylinder", Scope = "field", Justification = "Interop/GPU payload - requires blittable sequential fields.")]
-[assembly: SuppressMessage("NDepend", "ND1300:AvoidCustomDelegates", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Audio.SampleFiller", Scope = "type", Justification = "Action<Span<short>, int, int> would leave the two integers (sample rate, channels) indistinguishable at the call site; the parameter names are the API.")]
-[assembly: SuppressMessage("NDepend", "ND1300:AvoidCustomDelegates", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Scripts.CameraObstacleTest", Scope = "type", Justification = "Func<Vector3, Vector3, float?> would leave the two positions (the pivot, the wanted camera position) indistinguishable at the call site; the parameter names are the API.")]
 [assembly: SuppressMessage("NDepend", "ND1905:AFieldMustNotBeAssignedFromOutsideItsParentHierarchyTypes", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.Cone", Scope = "field", Justification = "Interop/GPU payload - requires blittable sequential fields.")]
 [assembly: SuppressMessage("NDepend", "ND1905:AFieldMustNotBeAssignedFromOutsideItsParentHierarchyTypes", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.Line", Scope = "field", Justification = "Interop/GPU payload - requires blittable sequential fields.")]
 [assembly: SuppressMessage("NDepend", "ND1905:AFieldMustNotBeAssignedFromOutsideItsParentHierarchyTypes", Target = "Stride.CommunityToolkit.DebugShapes:Stride.CommunityToolkit.DebugShapes.Primitives", Scope = "field", Justification = "Per-primitive vertex/index ranges filled by the mesh builders (SetupPrimitiveOffsets, BuildVertexData, BuildIndexData); plain data struct by design.")]
 
 // --- Deliberate design the rules read as a defect ------------------------------------------------
+[assembly: SuppressMessage("NDepend", "ND1300:AvoidCustomDelegates", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Audio.SampleFiller", Scope = "type", Justification = "Action<Span<short>, int, int> would leave the two integers (sample rate, channels) indistinguishable at the call site; the parameter names are the API.")]
+[assembly: SuppressMessage("NDepend", "ND1300:AvoidCustomDelegates", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Scripts.CameraObstacleTest", Scope = "type", Justification = "Func<Vector3, Vector3, float?> would leave the two positions (the pivot, the wanted camera position) indistinguishable at the call site; the parameter names are the API.")]
 [assembly: SuppressMessage("NDepend", "ND1306:NestedTypesShouldNotBeVisible", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Engine.WindowsDpiManager+ProcessDpiAwareness", Justification = "Returned by WindowsDpiManager.GetProcessDpiAwareness and meaningful only next to it; un-nesting would break callers for a purely taxonomic gain, as for the ImGui nested types below.")]
 
 // --- Deliberate naming / API mirroring ---------------------------------------------------------
@@ -95,7 +95,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("NDepend", "ND1002:AvoidTypesWithTooManyFields", Target = "Stride.CommunityToolkit.ImGui:Stride.CommunityToolkit.ImGui.DebugTools.PerfMonitor", Justification = "Profiler window: graphs, per-thread samples and Stride profiler plumbing are its state.")]
 [assembly: SuppressMessage("NDepend", "ND1004:AvoidMethodsWithTooManyParameters", Target = "Stride.CommunityToolkit.ImGui:Stride.CommunityToolkit.ImGui.ImGuiExtension", Scope = "deep", Justification = "PlotLines mirrors the native Dear ImGui signature parameter for parameter.")]
 [assembly: SuppressMessage("NDepend", "ND1701:PotentiallyDeadMethods", Target = "Stride.CommunityToolkit.ImGui:Stride.CommunityToolkit.ImGui.DebugTools.PerfMonitor+ThreadSampleCollection", Scope = "deep", Justification = "Instantiated through the generic new() constraint in PerfMonitorHelpers.Guaranteed, which static analysis cannot see.")]
-[assembly: SuppressMessage("NDepend", "ND1701:PotentiallyDeadMethods", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Rendering.Text.Meshes.MeshFont.get_FaceLock()", Justification = "Held by the tests to queue a reader behind the disposal of the font and the disposal behind a reader; the analysis does not see the test assembly.")]
 [assembly: SuppressMessage("NDepend", "ND1207:NonStaticClassesShouldBeInstantiatedOrTurnedToStatic", Target = "Stride.CommunityToolkit.ImGui:Stride.CommunityToolkit.ImGui.DebugTools.PerfMonitor+ThreadSampleCollection", Justification = "Instantiated through the generic new() constraint in PerfMonitorHelpers.Guaranteed, which static analysis cannot see.")]
 // --- Overload families the rule's own remedies cannot collapse ---------------------------------
 // ND1005 suggests optional parameters, named arguments or params. For these three, none of the three
@@ -166,6 +165,7 @@ using System.Diagnostics.CodeAnalysis;
 // The transform overload is the one JointFrames2DTests exercises on a bare transform; the analysis does
 // not include the test project, so within it the body overload is the only caller.
 [assembly: SuppressMessage("NDepend", "ND1800:MethodsThatCouldHaveALowerVisibility", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.JointFrames2D.LocalFrame(B2Transform&,Vector2,Single)", Justification = "Called by the unit tests, which the analysis does not cover.")]
+// --- Shapes and outlines: settable collections, the instance wire format ---
 [assembly: SuppressMessage("NDepend", "ND2300:CollectionPropertiesShouldBeReadOnly", Target = "Stride.CommunityToolkit.Shapes:Stride.CommunityToolkit.Shapes.ShapeComponent.Vertices", Justification = "A runtime-swappable shape outline is the point of the component; the next frame draws whatever list is assigned or edited.")]
 // ShapeInstance is a wire format: the shader's ShapeData struct field for field, 160 bytes, uploaded
 // as-is through a structured buffer. Grouping the fields into smaller types would be a layout change,
@@ -216,21 +216,11 @@ using System.Diagnostics.CodeAnalysis;
 // that per call is the cost a struct would add, and the boards are three shared objects, not values.
 [assembly: SuppressMessage("NDepend", "ND1304:ClassesThatAreCandidateToBeTurnedIntoStructures", Target = "E13_SignalR:E13_SignalR.Station.Board", Justification = "72-byte immutable object shared by reference between the boards and the labels; a struct would copy it on every call.")]
 // --- Cube Collapse: a game example ---
-// Colours for the board, positions for the falling game-over letters, and the shuffle behind a
-// spawn. Gameplay randomness, same as the toolkit's RandomExtensions; a seedable System.Random is the
-// point, and CubeSpawner deliberately seeds it so the same board comes up while tuning.
 // The class the example's own docs tell a reader to start from: it owns the order things happen in
 // and holds one reference per part it drives - grid, score, levels, progress, materials, spawner,
 // audio, the four scripts, simulation and scene. Splitting it would scatter one game's wiring across
 // several types and cost exactly the readability the example is for.
 [assembly: SuppressMessage("NDepend", "ND1002:AvoidTypesWithTooManyFields", Target = "E20_3D_CubeCollapse:CubeCollapse.CubeCollapseGame", Justification = "Game root: one field per part it owns, which is what makes the startup order readable in one place.")]
-// --- Examples: gameplay randomness -------------------------------------------------------------
-// Every System.Random below places, colours or shuffles something on screen. None of it is security
-// related, and the seedable constructor is wanted rather than tolerated: an example that seeds gets
-// the same scene every run, which is what makes a screenshot or a stress measurement repeatable.
-// Kept as one entry per example, so a genuinely security-sensitive use in a future example is still
-// reported rather than silently covered.
-
 // --- Examples: helper types that live beside top-level statements -------------------------------
 // A code-only example is one file: top-level statements, plus the few small types they need. Two
 // examples that teach the same scene through different physics engines therefore declare the same
@@ -314,7 +304,7 @@ using System.Diagnostics.CodeAnalysis;
 // 2026-10-13: Graphics, Renderers, Extensions and Helpers were folded into Rendering, Rendering.Compositing
 // and Mathematics, and the overlay moved from Scripts.Utilities to Rendering.Text (architecture item 21).
 // What is left here is at its natural size.
-[assembly: SuppressMessage("NDepend", "ND1305:AvoidNamespacesWithFewTypes", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Scripts", Justification = "Four camera controllers and a profiler, with more scripts planned; Scripts.Utilities beneath it is already at ten types.")]
+[assembly: SuppressMessage("NDepend", "ND1305:AvoidNamespacesWithFewTypes", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Scripts", Justification = "Four camera controllers, a profiler, and the delegate and maths they share: the scripts a game puts on an entity, kept apart from the engine extensions.")]
 [assembly: SuppressMessage("NDepend", "ND1305:AvoidNamespacesWithFewTypes", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Rendering.Instancing", Justification = "Four types with a written plan for more; mirrors where instancing sits in Stride.")]
 
 // Stride's effect source generator emits one static ShaderMixins class per .sdfx namespace; the name is the generator's, not ours, and every package with an effect file gets one.
@@ -360,9 +350,10 @@ using System.Diagnostics.CodeAnalysis;
 
 // --- Release 69 final sweep (2026-11-04) -----------------------------------------------------
 // The NDepend 2027 analysis of the ten days of work done on the other computer, after the code fixes.
+[assembly: SuppressMessage("NDepend", "ND1701:PotentiallyDeadMethods", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Rendering.Text.Meshes.MeshFont.get_FaceLock()", Justification = "Held by the tests to queue a reader behind the disposal of the font and the disposal behind a reader; the analysis does not see the test assembly.")]
 [assembly: SuppressMessage("NDepend", "ND1800:MethodsThatCouldHaveALowerVisibility", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Rendering.Text.Meshes.MeshFont.get_FaceLock()", Justification = "Held by TextReviewTests through InternalsVisibleTo, to pin a face operation against a disposal; the tests are not in the analysed code.")]
 [assembly: SuppressMessage("NDepend", "ND1804:AvoidPubliclyVisibleConstantFields", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Input.InputManagerExtensions.DefaultDeadZone", Justification = "Optional-parameter default of the gamepad reads, which the compiler requires to be a constant.")]
-[assembly: SuppressMessage("NDepend", "ND1305:AvoidNamespacesWithFewTypes", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Input", Scope = "namespace", Justification = "The input helpers' namespace, below Scripts so the camera controllers can use them without a cycle with Engine; the gamepad reads are its first type, keyboard and mouse helpers follow.")]
+[assembly: SuppressMessage("NDepend", "ND1305:AvoidNamespacesWithFewTypes", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Input", Scope = "namespace", Justification = "The input helpers' namespace, below Scripts so the camera controllers can use them without a cycle with Engine; the gamepad reads and the keyboard helpers are its two types; mouse helpers follow.")]
 [assembly: SuppressMessage("NDepend", "ND2401:MovePInvokesToNativeMethodsClass", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Rendering.Text.Meshes.FreeType", Scope = "deep", Justification = "The binding is named for the library it binds, as the engine's own FreeTypeNative is; it holds nothing but the P/Invokes and the struct layouts they need, and the file tracks the engine's field for field.")]
 [assembly: SuppressMessage("NDepend", "ND1902:AvoidStaticFieldsWithAMutableFieldType", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.PhysicsQueries2D._closest", Justification = "A per-thread scratch holder for the Box2D cast callback, which takes no state of its own; ThreadLocal is the shape .NET gives that, and it is read-only.")]
 [assembly: SuppressMessage("NDepend", "ND1807:AvoidPublicMethodsNotPubliclyVisible", Target = "Stride.CommunityToolkit.Charts:Stride.CommunityToolkit.Charts.TickRange", Scope = "deep", Justification = "The foreach collection pattern demands a public GetEnumerator, MoveNext and Current, on a struct nothing outside the assembly can name.")]

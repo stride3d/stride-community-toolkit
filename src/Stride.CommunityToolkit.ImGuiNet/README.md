@@ -1,14 +1,13 @@
 # Stride Community Toolkit - ImGui.NET Integration
 
-This library provides ImGui.NET integration for the Stride Game Engine, offering Box2D.NET-style text rendering capabilities. It serves as an alternative to the existing Hexa.NET.ImGui implementation in the toolkit.
+Dear ImGui for the Stride Game Engine through ImGui.NET, with the text drawing calls of the Box2D.NET samples. It is an alternative to `Stride.CommunityToolkit.ImGui`, which uses Hexa.NET.ImGui.
 
 ## Features
 
-- **Box2D.NET-style API**: Familiar `DrawString` methods similar to those found in Box2D.NET samples
-- **Screen and World Coordinates**: Render text at both screen coordinates and world positions
-- **ImGui.NET Integration**: Uses the popular ImGui.NET library for immediate mode GUI rendering
-- **Fluent API**: Chainable extension methods following Stride Community Toolkit patterns
-- **Lightweight**: Focuses specifically on text rendering scenarios
+- **Box2D.NET-style API**: `DrawString` at a screen position or a world position, as in the Box2D.NET samples
+- **Screen and world coordinates**: world positions are projected through the scene's camera
+- **DPI aware**: the font atlas is rebuilt when the display scale changes, so text stays sharp
+- **Chainable**: the `DrawText` extensions return the system
 
 ## Installation
 
@@ -20,154 +19,96 @@ Add a reference to the `Stride.CommunityToolkit.ImGuiNet` project in your Stride
 
 ## Quick Start
 
-### Basic Setup
-
 ```csharp
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ImGuiNet;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 
 using var game = new Game();
 
-ImGuiNetSystem? imguiSystem = null;
+ImGuiNetSystem? imGuiSystem = null;
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    // Initialize ImGui.NET system
-    imguiSystem = game.AddImGuiNet();
+    imGuiSystem = game.AddImGuiNet();
 }
 
 void Update(Scene scene, GameTime gameTime)
 {
-    // Draw text at screen coordinates (like Box2D.NET)
-    imguiSystem?.DrawString(10, 10, "Hello, ImGui.NET!");
-    
-    // Draw text at world coordinates
-    imguiSystem?.DrawString(Vector3.Zero, "World Text");
+    if (imGuiSystem is null) return;
+
+    // Text at a screen position, in pixels from the top left
+    imGuiSystem.DrawString(10, 10, "Hello, ImGui.NET!");
+
+    // Text at a world position, projected through the camera
+    imGuiSystem.DrawString(Vector3.Zero, "World Text");
 }
 ```
 
 ### Drawing Text at Screen Coordinates
 
-Similar to Box2D.NET's `DrawString(int x, int y, string message)` method:
+The counterpart of Box2D.NET's `DrawString(int x, int y, string message)`:
 
 ```csharp
-// Basic white text
-imguiSystem.DrawString(10, 50, "Frame Time: 16.7ms");
+imGuiSystem.DrawString(10, 50, "Frame Time: 16.7ms");
 
-// Colored text using extension methods
-imguiSystem.DrawText(10, 70, "Red Text", 255, 0, 0);
-imguiSystem.DrawText(10, 90, "Green Text", 0, 255, 0);
-imguiSystem.DrawText(10, 110, "Blue Text", 0, 0, 255);
-imguiSystem.DrawText(10, 130, "Semi-transparent", 255, 255, 255, 128);
+// Coloured text through the extension methods, red, green, blue and alpha from 0 to 255
+imGuiSystem.DrawText(10, 70, "Red Text", 255, 0, 0);
+imGuiSystem.DrawText(10, 90, "Semi-transparent", 255, 255, 255, 128);
 ```
 
-### Drawing Text at World Coordinates  
+### Drawing Text at World Coordinates
 
-Similar to Box2D.NET's `DrawString(B2Vec2 p, string message)` method:
-
-```csharp
-// Text that follows a 3D object in the world
-var entityPosition = myEntity.Transform.Position;
-imguiSystem.DrawString(entityPosition + Vector3.UnitY, "Object Label");
-
-// Colored world text
-imguiSystem.DrawText(new Vector3(5, 0, 0), "Waypoint", 255, 255, 0);
-```
-
-### Advanced Usage
+The counterpart of Box2D.NET's `DrawString(B2Vec2 p, string message)`:
 
 ```csharp
-void Update(Scene scene, GameTime gameTime)
-{
-    if (imguiSystem?.IsInitialized != true) return;
+// Text that follows an entity
+imGuiSystem.DrawString(entity.Transform.Position + Vector3.UnitY, "Object Label");
 
-    // Control UI visibility (similar to Box2D.NET's m_showUI)
-    imguiSystem.ShowUI = showDebugInfo;
-
-    // Performance information
-    imguiSystem.DrawString(10, 10, $"FPS: {1.0 / gameTime.Elapsed.TotalSeconds:F1}");
-    imguiSystem.DrawString(10, 30, $"Entities: {scene.Entities.Count}");
-    
-    // Object tracking
-    foreach (var entity in scene.Entities.Where(e => e.Name.StartsWith("TrackedObject")))
-    {
-        var worldPos = entity.Transform.Position;
-        imguiSystem.DrawText(worldPos, entity.Name, 255, 255, 0);
-    }
-
-    // Debug information
-    var camera = scene.Entities.GetCamera();
-    if (camera != null)
-    {
-        var camPos = camera.Transform.Position;
-        imguiSystem.DrawString(10, Game.Window.ClientBounds.Height - 20, 
-            $"Camera: ({camPos.X:F1}, {camPos.Y:F1}, {camPos.Z:F1})");
-    }
-}
+imGuiSystem.DrawText(new Vector3(5, 0, 0), "Waypoint", 255, 255, 0);
 ```
 
 ## API Reference
 
-### Core Methods
+### `ImGuiNetSystem`
 
-#### `DrawString(int x, int y, string message, Vector4? color = null)`
-Draws text at screen coordinates.
-- `x, y`: Screen pixel coordinates
-- `message`: Text to display
-- `color`: Optional ImGui Vector4 color (defaults to light gray)
-
-#### `DrawString(Vector3 worldPosition, string message, Vector4? color = null)`
-Draws text at world coordinates.
-- `worldPosition`: 3D world position (Stride Vector3)
-- `message`: Text to display  
-- `color`: Optional ImGui Vector4 color (defaults to light gray)
+| Member | Description |
+| --- | --- |
+| `DrawString(int x, int y, string message, Vector4? color = null)` | Text at a screen position. The colour is an ImGui `Vector4`; light grey when omitted |
+| `DrawString(Vector3 worldPosition, string message, Vector4? color = null)` | Text at a world position |
+| `ShowUI` | Whether the text is drawn; the counterpart of Box2D.NET's `m_showUI` |
+| `IsInitialized` | `false` before the system has initialised, and for a game without a graphics device |
+| `FontPath`, `FontSize` | A TrueType file to use in place of the default font, and its size in pixels |
+| `AutoScaleFonts` | Rebuild the font atlas when the display scale changes. On by default |
 
 ### Extension Methods
 
-#### `AddImGuiNet(this Game game)`
-Adds and initializes the ImGui.NET system to your game.
-
-#### `DrawText(this ImGuiNetSystem system, int x, int y, string text)`
-Draws white text at screen coordinates.
-
-#### `DrawText(this ImGuiNetSystem system, int x, int y, string text, byte r, byte g, byte b, byte a = 255)`
-Draws colored text at screen coordinates using RGB values (0-255).
-
-#### `DrawText(this ImGuiNetSystem system, Vector3 worldPosition, string text)`
-Draws white text at world coordinates.
-
-#### `DrawText(this ImGuiNetSystem system, Vector3 worldPosition, string text, byte r, byte g, byte b, byte a = 255)`
-Draws colored text at world coordinates using RGB values (0-255).
-
-### Properties
-
-#### `bool ShowUI`
-Gets or sets whether UI elements should be displayed (similar to Box2D.NET's `m_showUI`).
-
-#### `bool IsInitialized`
-Gets whether the ImGui system is initialized and ready for use.
+| Method | Description |
+| --- | --- |
+| `game.AddImGuiNet()` | Adds the system to the game and returns it |
+| `game.GetImGuiNetSystem()` | The system added earlier, or `null` |
+| `DrawText(x, y, text)` | White text at a screen position |
+| `DrawText(x, y, text, r, g, b, a = 255)` | Coloured text at a screen position |
+| `DrawText(worldPosition, text)` | White text at a world position |
+| `DrawText(worldPosition, text, r, g, b, a = 255)` | Coloured text at a world position |
 
 ## Comparison with Box2D.NET
 
-This implementation provides a familiar API for developers coming from Box2D.NET:
-
 | Box2D.NET | Stride Community Toolkit ImGui.NET |
 |-----------|-------------------------------------|
-| `draw.DrawString(10, 20, "text")` | `imguiSystem.DrawString(10, 20, "text")` |
-| `draw.DrawString(worldPos, "text")` | `imguiSystem.DrawString(worldPos, "text")` |
-| `draw.m_showUI` | `imguiSystem.ShowUI` |
-| `ImGui.Begin("Overlay", ImGuiWindowFlags.NoTitleBar \| ...)` | Handled automatically |
+| `draw.DrawString(10, 20, "text")` | `imGuiSystem.DrawString(10, 20, "text")` |
+| `draw.DrawString(worldPos, "text")` | `imGuiSystem.DrawString(worldPos, "text")` |
+| `draw.m_showUI` | `imGuiSystem.ShowUI` |
+| `ImGui.Begin("Overlay", ImGuiWindowFlags.NoTitleBar \| ...)` | Handled by the system |
 
 ## Technical Notes
 
-- **Rendering**: Currently provides the ImGui.NET integration structure; full rendering pipeline integration is a future enhancement
-- **World-to-Screen Conversion**: Uses a simplified approximation; proper matrix transformations can be added for precise positioning
-- **Performance**: Draw commands are queued and processed each frame, then cleared
-- **Threading**: Must be called from the main thread, following Stride's threading requirements
+- **Queueing**: draw calls are queued, drawn once in the frame they were made and then cleared, so call them every frame
+- **Threading**: call from the game thread, as for the rest of Stride
 
 ## Example Projects
 
@@ -175,16 +116,10 @@ See `examples/code-only/E04_ImGuiNet/Program.cs` for a complete working example.
 
 ## Dependencies
 
-- ImGui.NET 1.91.6.1+
+- ImGui.NET 1.91.6.1
 - Stride.CommunityToolkit
-- Stride Game Engine 4.2+
+- Stride Game Engine 4.4
 
 ## Relationship to Existing ImGui Integration
 
-This library complements the existing `Stride.CommunityToolkit.ImGui` (which uses Hexa.NET.ImGui) by providing:
-- A different ImGui backend (ImGui.NET vs Hexa.NET.ImGui)
-- Focus on text rendering scenarios
-- Box2D.NET-compatible API
-- Alternative for developers who prefer ImGui.NET
-
-Choose the implementation that best fits your project's needs.
+`Stride.CommunityToolkit.ImGui` (Hexa.NET.ImGui) is the package for windows, widgets and the debug tools. This one draws text through ImGui.NET with the Box2D.NET calls, for a project that already depends on ImGui.NET or ports a Box2D.NET sample.

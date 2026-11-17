@@ -8,8 +8,8 @@ using static Box2D.NET.B2Worlds;
 namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
-/// Stateless helper methods for common Box2D query patterns. These wrappers avoid any Stride engine
-/// types and operate directly on world ids and primitive math structs only.
+/// Stateless helper methods for common Box2D query patterns. These wrappers take no Stride
+/// <c>Entity</c> types: they work on world ids and math structs only.
 /// </summary>
 public static class PhysicsQueries2D
 {

@@ -154,7 +154,10 @@ public class Inspector : BaseWindow
 
                     if (IsItemHovered())
                     {
-                        using (Tooltip()) TextUnformatted(summary);
+                        using (Tooltip(out var open))
+                        {
+                            if (open) TextUnformatted(summary);
+                        }
                     }
 
                     SameLine();

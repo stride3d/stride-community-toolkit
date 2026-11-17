@@ -7,7 +7,7 @@ namespace Stride.CommunityToolkit.Box2D;
 /// <summary>
 /// A 2D raycast hit with the owning Stride entity resolved, as returned by
 /// <see cref="Box2DSimulation.Raycast"/> and <see cref="Box2DSimulation.RaycastAll"/>.
-/// See <see cref="QueryHit"/> for the raw engine-agnostic variant.
+/// See <see cref="QueryHit"/> for the raw variant, which carries no entity.
 /// </summary>
 /// <param name="Entity">The entity associated with the hit body, or null when the body has none.</param>
 /// <param name="BodyId">The body hit by the ray.</param>

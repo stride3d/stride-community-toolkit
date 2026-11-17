@@ -25,7 +25,7 @@ public static class MaterialStreamViewExtensions
         ArgumentNullException.ThrowIfNull(game);
 
         var compositor = game.Services.GetSafeServiceAs<SceneSystem>().GraphicsCompositor
-            ?? throw new InvalidOperationException("The game has no graphics compositor; call AddGraphicsCompositor or SetupBase3D first.");
+            ?? throw new InvalidOperationException("The game has no graphics compositor; run it with a SceneSetup3D or SceneSetup2D, or call AddGraphicsCompositor first.");
         var meshFeature = compositor.RenderFeatures.OfType<MeshRenderFeature>().FirstOrDefault()
             ?? throw new InvalidOperationException("The compositor has no MeshRenderFeature; there are no meshes to view.");
 

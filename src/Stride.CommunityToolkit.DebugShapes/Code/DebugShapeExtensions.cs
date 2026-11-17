@@ -22,7 +22,7 @@ public static class DebugShapeExtensions
     /// <param name="game">The game to add debug shapes to.</param>
     /// <param name="debugShapeRenderGroup">The render group the shapes are drawn in.</param>
     /// <returns>The system the shapes are drawn through, also registered as a service.</returns>
-    /// <remarks>Shapes are visible by default only when the toolkit itself is a Debug build; set <see cref="ImmediateDebugRenderSystem"/>.<c>Visible</c> otherwise.</remarks>
+    /// <remarks>Shapes are visible by default only in a Debug build of your game or of the toolkit; set <see cref="ImmediateDebugRenderSystem"/>.<c>Visible</c> otherwise.</remarks>
     public static ImmediateDebugRenderSystem AddDebugShapes(this IGame game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
     {
         game.GetSceneSystem().GraphicsCompositor.AddImmediateDebugRenderFeature();

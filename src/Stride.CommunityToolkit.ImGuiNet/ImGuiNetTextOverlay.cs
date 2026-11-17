@@ -8,8 +8,8 @@ namespace Stride.CommunityToolkit.ImGuiNet;
 
 /// <summary>
 /// The Box2D.NET-style text overlay of <see cref="ImGuiNetSystem"/>: buffers the frame's DrawString
-/// requests and draws them into one fullscreen, input-transparent ImGui window. Split out of
-/// <see cref="ImGuiNetSystem"/>, which owns the frame and forwards its DrawString API here.
+/// requests and draws them into one fullscreen, input-transparent ImGui window.
+/// <see cref="ImGuiNetSystem"/> owns the frame and forwards its DrawString API here.
 /// </summary>
 internal sealed class ImGuiNetTextOverlay
 {

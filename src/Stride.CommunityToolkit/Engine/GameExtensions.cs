@@ -262,7 +262,7 @@ public static partial class GameExtensions
     /// </summary>
     /// <param name="game">The game whose services provide Stride's font system.</param>
     /// <param name="family">The family name as the system knows it, such as <c>"Segoe UI"</c>.</param>
-    /// <param name="size">The height the glyphs are rasterised at, in pixels.</param>
+    /// <param name="size">The default size in pixels, used when a draw does not pass one; glyphs are rasterised at the size they are drawn at.</param>
     /// <param name="style">The weight and slant wanted. Defaults to <see cref="FontStyle.Regular"/>.</param>
     /// <param name="fontFile">A TrueType file to load the family from, for fonts outside the system font folders.</param>
     /// <returns>The font, or <see langword="null"/> if the family is not installed.</returns>
@@ -341,7 +341,7 @@ public static partial class GameExtensions
     /// </summary>
     /// <param name="game">The <see cref="IGame"/> instance used to access game services.</param>
     /// <param name="shape">The shape and its dimensions, from the <see cref="Primitive2D"/> factories, such as <c>Primitive2D.Circle(0.5f)</c>.</param>
-    /// <param name="options">Optional creation parameters: material, render group, entity name, position, and the depth a physics package gives the collider. If <see langword="null"/>, default options are used.</param>
+    /// <param name="options">Optional creation parameters: material, render group, entity name and position; the collider depth is the shape's <see cref="Primitive2D.Depth"/>. If <see langword="null"/>, default options are used.</param>
     /// <returns>A new <see cref="Entity"/> with a <see cref="ModelComponent"/> containing the generated primitive model.</returns>
     /// <remarks>
     /// <para>The returned entity is not added to a scene automatically. Assign it to a scene before rendering.</para>

@@ -9,9 +9,7 @@ namespace Stride.CommunityToolkit.ImGui.DebugTools;
 
 /// <summary>
 /// The stateless companions of <see cref="PerfMonitor"/>: sample-strip drawing, Stride profiler
-/// marker collection, and small formatting and lookup helpers. Split out of
-/// <see cref="PerfMonitor"/>, whose code keeps calling them unqualified through
-/// <c>using static</c>.
+/// marker collection, and small formatting and lookup helpers.
 /// </summary>
 internal static class PerfMonitorHelpers
 {
@@ -92,11 +90,14 @@ internal static class PerfMonitorHelpers
 
         if (IsItemHovered())
         {
-            using (Tooltip())
+            using (Tooltip(out var open))
             {
-                TextUnformatted(sample.DeltaMemAlloc is { } bytes
-                    ? $"{sample.Id}:\n{S(sample.Duration)}ms - {bytes} byte(s)"
-                    : $"{sample.Id}:\n{S(sample.Duration)}ms");
+                if (open)
+                {
+                    TextUnformatted(sample.DeltaMemAlloc is { } bytes
+                        ? $"{sample.Id}:\n{S(sample.Duration)}ms - {bytes} byte(s)"
+                        : $"{sample.Id}:\n{S(sample.Duration)}ms");
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
+using System.Buffers;
 using Buffer = Stride.Graphics.Buffer;
 
 namespace Stride.CommunityToolkit.Charts;
@@ -27,6 +28,9 @@ namespace Stride.CommunityToolkit.Charts;
 /// </remarks>
 internal static class PolylineMeshBuilder
 {
+    // The longest run whose distances are kept on the stack
+    private const int StackDistances = 256;
+
     /// <summary>
     /// Builds one continuous ribbon through <paramref name="points"/>.
     /// </summary>
@@ -142,8 +146,12 @@ internal static class PolylineMeshBuilder
         var segmentCount = closed ? count : count - 1;
         var baseIndex = vertices.Count;
 
-        // Distance along the line at each point, for the U texture coordinate
-        var distances = new float[count];
+        // Distance along the line at each point, for the U texture coordinate. A growing trail builds its
+        // ribbon again on every point added, so the scratch is the stack's for a short run and rented for a long one
+        float[]? rented = null;
+        Span<float> distances = count <= StackDistances ? stackalloc float[count] : (rented = ArrayPool<float>.Shared.Rent(count)).AsSpan(0, count);
+
+        distances[0] = 0f;
 
         for (var i = 1; i < count; i++)
         {
@@ -167,6 +175,8 @@ internal static class PolylineMeshBuilder
             vertices.Add(new VertexPositionNormalTexture(points[i] - side, normal, new Vector2(u, 0f)));
             vertices.Add(new VertexPositionNormalTexture(points[i] + side, normal, new Vector2(u, 1f)));
         }
+
+        if (rented is not null) ArrayPool<float>.Shared.Return(rented);
 
         // Two triangles per segment, joining each vertex pair to the next; a closed loop wraps the
         // last pair back to the first

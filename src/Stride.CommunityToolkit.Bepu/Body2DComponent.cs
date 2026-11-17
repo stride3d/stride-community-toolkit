@@ -41,6 +41,7 @@ namespace Stride.CommunityToolkit.Bepu;
 /// </para>
 /// </remarks>
 [ComponentCategory("Physics - Bepu 2D")]
+[Display("Body 2D (Bepu)")]
 public class Body2DComponent : BodyComponent, ISimulationUpdate
 {
     /// <summary>

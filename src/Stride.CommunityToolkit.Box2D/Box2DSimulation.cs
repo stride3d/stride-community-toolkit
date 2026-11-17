@@ -224,7 +224,7 @@ public sealed class Box2DSimulation : IDisposable
     /// <returns>The associated entity, or null when the body has none.</returns>
     public Entity? GetEntity(B2BodyId bodyId) => _bridge.GetEntity(bodyId);
 
-    /// <summary>Every body the simulation created, as a live view: do not create or remove bodies while enumerating it.</summary>
+    /// <summary>Every body created with an entity, as a live view: do not create or remove bodies while enumerating it. A body made without an entity is not in it.</summary>
     public IEnumerable<B2BodyId> Bodies => _bridge.Bodies;
 
     /// <summary>

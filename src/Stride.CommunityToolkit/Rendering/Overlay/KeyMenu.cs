@@ -5,7 +5,7 @@ using Stride.Input;
 namespace Stride.CommunityToolkit.Rendering.Overlay;
 
 /// <summary>
-/// A collapsible list of choices drawn with the debug text system, driven entirely by the keyboard.
+/// A collapsible list of choices, drawn by the <see cref="TextOverlay"/> section it is handed to and driven entirely by the keyboard.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -20,9 +20,8 @@ namespace Stride.CommunityToolkit.Rendering.Overlay;
 /// key menu shares one position and one toggle key with the camera help and everything else on screen.
 /// </para>
 /// <para>
-/// Keep every title and label to printable ASCII. The debug text renderer replaces anything outside
-/// the range 32 to 126 with a space, so accented letters and arrow glyphs vanish silently rather than
-/// failing loudly.
+/// A title or a label can hold any character the overlay's font has a glyph for; one it lacks draws
+/// as the font's missing-glyph box.
 /// </para>
 /// </remarks>
 /// <example>

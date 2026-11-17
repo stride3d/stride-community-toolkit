@@ -93,15 +93,11 @@ public static class ImGuiExtension
         => new(open = BeginCombo(label, previewValue, flags), DisposableTypes.Combo);
 
     /// <summary>
-    /// Begins a tooltip; disposing the result ends it.
+    /// Begins a tooltip; disposing the result ends it when it was opened.
     /// </summary>
-    /// <returns>A scope whose <see cref="DisposableImGui.Dispose"/> calls <c>EndTooltip</c>.</returns>
-    public static DisposableImGui Tooltip()
-    {
-        BeginTooltip();
-
-        return new DisposableImGui(true, DisposableTypes.Tooltip);
-    }
+    /// <param name="open">Set to <see langword="true"/> when the tooltip is shown and its content should be emitted.</param>
+    /// <returns>A scope whose <see cref="DisposableImGui.Dispose"/> calls <c>EndTooltip</c> only if <paramref name="open"/> was <see langword="true"/>.</returns>
+    public static DisposableImGui Tooltip(out bool open) => new(open = BeginTooltip(), DisposableTypes.Tooltip);
 
     /// <summary>
     /// Indents the following widgets; disposing the result unindents by the same amount.

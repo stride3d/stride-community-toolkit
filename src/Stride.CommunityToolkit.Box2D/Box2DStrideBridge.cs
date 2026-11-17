@@ -10,7 +10,7 @@ namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
 /// Bridge responsible for mapping Box2D bodies to Stride entities and synchronizing transforms.
-/// This isolates engine-specific concerns away from the engine-agnostic <see cref="PhysicsWorld2D"/>.
+/// This keeps entities out of <see cref="PhysicsWorld2D"/>, which knows bodies only.
 /// An entity given a body also gets a <see cref="Box2DBodyComponent"/> carrying the id, so the entity and the map agree.
 /// </summary>
 /// <param name="world">The physics world bodies are created in.</param>
