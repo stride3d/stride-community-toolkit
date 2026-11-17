@@ -185,8 +185,8 @@ void Start(Scene rootScene)
 
 Shapes are closed record sets: `Primitive3D.Sphere(0.5f)`, `Primitive2D.Circle(0.5f)` and the other
 factories name exactly the dimensions a shape has. `ProceduralModelBuilder` builds the mesh and each
-physics package derives the collider by switching over the same set, so a shape added to one and
-missed in the other is a compile error.
+physics package derives the collider by switching over the same set. A shape missed by one of them
+fails on first use with an `ArgumentException` naming the shape; the collider tests call every factory.
 
 ### Components in Game Studio
 
