@@ -107,10 +107,14 @@ Two rules when editing these:
 - `MathUtil.ZeroTolerance` is `1e-6f` and `MathUtil.IsZero` tests against it; use them instead of a
   literal tolerance.
 - **Losing window focus pauses the whole audio engine.** `AudioSystem` hooks `Game.Deactivated` and
-  calls `AudioEngine.PauseAudio()`, and `SoundInstance.Play` then returns *silently* — no exception,
-  no queued playback. The click that brings the window back is delivered before the matching
-  `ResumeAudio()`, so the first sound after refocusing is dropped and every later one works, which
-  reads as a flaky sound bug. Check `AudioEngine.State` and resume before playing if it matters.
+  calls `AudioEngine.PauseAudio()`. What `SoundInstance.Play` does while it is paused depends on the
+  instance (Stride 4.4.3): a looping instance, or one on a streamed or dynamic source, is remembered
+  and starts on `ResumeAudio()`; every sound the toolkit creates (`CreateProceduralSound`, `WavSound`)
+  is on a dynamic source, and they are paused and resumed with the engine too. A short in-memory
+  `Sound` from an asset still returns *silently*, with no exception and no queued playback: the click
+  that brings the window back is delivered before the matching `ResumeAudio()`, so its first sound
+  after refocusing is dropped and every later one works, which reads as a flaky sound bug. Check
+  `AudioEngine.State` and resume before playing if it matters.
 - A `SoundInstance` plays one sound at a time: replaying one that is still sounding cuts it off. For
   effects that can overlap, keep several instances and cycle through them.
 - **Front faces wind clockwise as seen by the camera** — the Direct3D convention
