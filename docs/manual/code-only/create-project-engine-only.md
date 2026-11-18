@@ -28,7 +28,7 @@ can see what `SceneSetup3D` and `CreatePrimitive()` stand for. It is not the rec
 4. Make that reference build-only. Open the `.csproj` and add `IncludeAssets` to the line the previous
    step wrote, so it reads:
    ```xml
-   <PackageReference Include="Stride.AssetCompiler" Version="4.4.2" IncludeAssets="build;buildTransitive" />
+   <PackageReference Include="Stride.AssetCompiler" Version="4.4.3" IncludeAssets="build;buildTransitive" />
    ```
    Without it the package's own assemblies are copied next to your app and it fails at start-up with
    `Could not load file or assembly 'Stride.NuGetResolver'`. The `Stride.CommunityToolkit` package

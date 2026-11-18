@@ -254,9 +254,8 @@ public class ImGuiNetSystem : GameSystemBase
 
         _pipelineState = PipelineState.New(_graphicsDevice, pipelineDesc);
 
-        // The 'bufferSize'/'usage' arguments must be named. Buffer.Vertex.New also exposes a generic
-        // New<T>(device, ref readonly T value, usage) overload, and positional arguments bind to it
-        // (T = int) instead of the size-based overload, producing a 4-byte buffer.
+        // The size and the usage are named so the calls cannot be read as the generic
+        // New<T>(device, value, usage) overload, which takes a value to upload and not a size.
         var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(_graphicsDevice, bufferSize: 1024 * _vertexLayout.CalculateSize(), usage: GraphicsResourceUsage.Dynamic);
         var indexBuffer = Stride.Graphics.Buffer.Index.New(_graphicsDevice, bufferSize: 2048 * sizeof(ushort), usage: GraphicsResourceUsage.Dynamic);
 

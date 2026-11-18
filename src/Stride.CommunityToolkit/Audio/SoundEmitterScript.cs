@@ -13,9 +13,9 @@ namespace Stride.CommunityToolkit.Audio;
 /// runtime instance - from <see cref="AudioSystemExtensions.CreateProceduralSound"/> or
 /// <see cref="WavSound.CreateInstance"/> with <c>spatialized: true</c> - is positioned by calling
 /// <see cref="SoundInstance.Apply3D"/> with an <see cref="AudioEmitter"/>, and this script does
-/// that with the entity's world transform: position, forward and up from the matrix, velocity as
-/// the position change since the previous frame. That last one matches how the engine's listener
-/// processor estimates velocity, so Doppler sees both sides the same way.
+/// that with the entity's world transform: position, forward and up from the matrix, velocity in
+/// units per second from the position change since the previous frame. That last one matches how
+/// the engine's listener processor reports velocity, so Doppler sees both sides the same way.
 /// </para>
 /// <para>
 /// Spatialisation is relative to the listener the instance was created with. By default that is the
@@ -61,7 +61,11 @@ public class SoundEmitterScript : SyncScript
         var position = world.TranslationVector;
 
         Emitter.Position = position;
-        Emitter.Velocity = _previousPosition is { } previous ? position - previous : Vector3.Zero;
+        // Units per second, which is what the audio backends read; zero on the first frame and on a frame
+        // with no elapsed time, where there is nothing to divide by
+        var elapsed = (float)Game.UpdateTime.Elapsed.TotalSeconds;
+
+        Emitter.Velocity = _previousPosition is { } previous && elapsed > 0f ? (position - previous) / elapsed : Vector3.Zero;
         Emitter.Forward = SafeNormalize((Vector3)world.Row3, Vector3.UnitZ);
         Emitter.Up = SafeNormalize((Vector3)world.Row2, Vector3.UnitY);
 

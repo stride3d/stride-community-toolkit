@@ -194,8 +194,8 @@ public class ImGuiSystem : GameSystemBase
         _pipeline = PipelineState.New(_device, pipeline);
 
         // Default usage, like the buffers CheckBuffers grows into: UpdateBuffers uploads each draw list at an offset,
-        // and Stride allows an offset only on a Default buffer. The argument is named so the size-based overload
-        // is picked over the generic New<T>(device, ref readonly T value, usage) one, which would make a 4-byte buffer.
+        // and Stride allows an offset only on a Default buffer. The size is named so the call cannot be read as the
+        // generic New<T>(device, value, usage) overload.
         _indexBinding = new IndexBufferBinding(Stride.Graphics.Buffer.Index.New(_device, bufferSize: InitialIndexBufferSize * sizeof(ushort)), Is32BitIndices, 0);
 
         var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(_device, bufferSize: InitialVertexBufferSize * _vertexLayout.CalculateSize());
