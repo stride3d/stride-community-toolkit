@@ -55,6 +55,9 @@ BodyComponent[] riders = [];
 Vector3[] riderHomes = [];
 var liftTargetBefore = liftHome;
 var doorOpen = false;
+var doorAngle = 0f;
+var doorFrom = 0f;
+var doorTo = 0f;
 var viewpoint = 0;
 var flightFrom = Vector3.Zero;
 var flightFromRotation = Quaternion.Identity;
@@ -149,10 +152,6 @@ void Start(Scene scene)
 
     Pop();
 
-    // The door starts closed: a finished run of the closing tween is the closed pose
-    door.Start();
-    door.Update(door.Duration);
-
     TextOverlay.GetOrCreate(game).AddSection("Easing", BuildOverlayLines);
 }
 
@@ -178,14 +177,14 @@ void Update(Scene scene, GameTime time)
 
     liftTargetBefore = liftTarget;
 
-    // 2. The door: an angle between closed and open, written straight to a transform
+    // 2. The door: an angle between where the swing began and where it ends, written straight to a transform
     door.Update(time);
 
     if (doorEntity is not null)
     {
-        var angle = doorOpen ? door.Lerp(0f, DoorOpenAngle) : door.Lerp(DoorOpenAngle, 0f);
+        doorAngle = door.Lerp(doorFrom, doorTo);
 
-        doorEntity.Transform.Rotation = Quaternion.RotationY(MathUtil.DegreesToRadians(angle));
+        doorEntity.Transform.Rotation = Quaternion.RotationY(MathUtil.DegreesToRadians(doorAngle));
     }
 
     // 3. The crystals: scale from nothing with an overshoot, then a slow rise and fall forever
@@ -235,7 +234,11 @@ void HandleInput()
 
     if (input.IsKeyPressed(Keys.O))
     {
+        // A swing begins where the door is, so a press in the middle of one turns it round instead of
+        // jumping it to the far end
         doorOpen = !doorOpen;
+        doorFrom = doorAngle;
+        doorTo = doorOpen ? DoorOpenAngle : 0f;
         door.Start();
     }
 
@@ -323,7 +326,8 @@ concepts:
   - Tween - start, feed the frame time, read Lerp or Slerp
   - Driving a kinematic Bepu body towards an eased target with feed-forward velocity plus a correction
   - TweenLoop.PingPong for a lift and a bob, TweenLoop.None for a door and a camera flight
-  - A staggered pop-in by starting tweens with a negative head start
+  - A staggered pop-in - each tween waits out its delay before it starts
+  - Reversing a tween in mid-run by starting the next one from the current value
   - A camera flight as one tween over position and rotation
 tags:
   - 3D
