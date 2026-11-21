@@ -38,8 +38,30 @@ public class EasingTests
     [MemberData(nameof(AllFunctions))]
     public void StartsAtZeroAndEndsAtOne(EasingFunction function)
     {
-        Assert.Equal(0f, Easing.Ease(0f, function), Tolerances.Float);
-        Assert.Equal(1f, Easing.Ease(1f, function), Tolerances.Float);
+        // Exactly, in both precisions: a value a rounding error below zero is a negative scale, which the
+        // engine draws as a mirrored mesh
+        Assert.Equal(0f, Easing.Ease(0f, function));
+        Assert.Equal(1f, Easing.Ease(1f, function));
+        Assert.Equal(0d, Easing.Ease(0d, function));
+        Assert.Equal(1d, Easing.Ease(1d, function));
+    }
+
+    [Theory]
+    [InlineData(EasingFunction.BackEaseOut)]
+    [InlineData(EasingFunction.BounceEaseIn)]
+    [InlineData(EasingFunction.BounceEaseOut)]
+    [InlineData(EasingFunction.BounceEaseInOut)]
+    public void StaysAtOrAboveZeroJustAfterTheStart(EasingFunction function)
+    {
+        // Times too small to survive a subtraction from one, where a rounding error used to show as a
+        // negative value. The curves that dip below zero on purpose are not in the list
+        for (var exponent = -1074; exponent <= -20; exponent++)
+        {
+            var time = Math.Pow(2, exponent);
+
+            Assert.True(Easing.Ease(time, function) >= 0d, $"double, 2^{exponent}");
+            Assert.True(Easing.Ease((float)time, function) >= 0f, $"float, 2^{exponent}");
+        }
     }
 
     [Theory]
