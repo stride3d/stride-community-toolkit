@@ -64,7 +64,7 @@ game.Run(new SceneSetup2D
     Ground = null,
     WindowTitle = "Easing - Stride Community Toolkit",
     Resizable = true,
-    DpiAware = true,
+    DpiAware = true
 }, start: Start, update: Update);
 
 void Start(Scene scene)

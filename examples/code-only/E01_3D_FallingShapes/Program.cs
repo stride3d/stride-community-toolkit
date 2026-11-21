@@ -36,7 +36,6 @@ void Start(Scene scene)
             Material = game.CreateMaterial(colour)
         });
 
-        // One above the other, each a little to one side, so the column topples into a pile
         entity.Transform.Position = new Vector3(0, 8 + i * 1.5f, 0);
         entity.Scene = scene;
     }
