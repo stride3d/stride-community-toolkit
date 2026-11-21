@@ -24,7 +24,7 @@ using var game = new Game();
 
 game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
@@ -37,7 +37,7 @@ void Start(Scene rootScene)
             Position = new Vector3(0, 10 + index * 1.5f, 0),
         });
 
-        entity.Scene = rootScene;
+        entity.Scene = scene;
     }
 }
 
@@ -61,7 +61,7 @@ description:
 concepts:
   - Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, RegularPolygon, Triangle, Polygon)
   - Positioning entities with Transform.Position
-  - Adding entities to a Scene (rootScene)
+  - Adding entities to a Scene (scene)
   - "Using helpers: SceneSetup2D, AddGrabber"
 tags:
   - 2D

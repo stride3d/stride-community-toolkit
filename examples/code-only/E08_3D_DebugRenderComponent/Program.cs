@@ -10,7 +10,7 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
@@ -19,22 +19,22 @@ void Start(Scene rootScene)
     // entity of its own; the engine holds it back until the scene is ready, so it can go in before the
     // first frame. game.AddPhysicsDebug() makes this entity, with the collider gizmos too
     var debug = new Entity("Physics Debug") { new DebugRenderComponent { Visible = true } };
-    debug.Scene = rootScene;
+    debug.Scene = scene;
 
     var cube = game.CreatePrimitive(Primitive3D.Cube(), new() { Position = new Vector3(1f, 0.5f, 3f) });
-    cube.Scene = rootScene;
+    cube.Scene = scene;
 
-    CreateSpheres(rootScene, 6);
+    CreateSpheres(scene, 6);
 }
 
-void CreateSpheres(Scene rootScene, int count)
+void CreateSpheres(Scene scene, int count)
 {
     var half = count / 2;
 
     for (var i = -half; i < half; i++)
     {
         var entity = game.CreatePrimitive(Primitive3D.Sphere(), new() { Position = new Vector3(i * 0.99f, 1, 0) });
-        entity.Scene = rootScene;
+        entity.Scene = scene;
     }
 }
 /*

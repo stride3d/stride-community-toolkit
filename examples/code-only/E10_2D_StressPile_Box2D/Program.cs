@@ -2,8 +2,8 @@ using Box2D.NET;
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Instancing;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -91,9 +91,9 @@ game.Run(new SceneSetup3D
     Resizable = true,
 }.UseSkybox(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
-    scene = rootScene;
+    scene = scene;
 
     // The default aim shines toward +Z, which leaves the faces turned towards the camera unlit
     var light = game.AddDirectionalLight();
@@ -320,7 +320,7 @@ void Spawn(Vector3 position)
     bodies.Add(new PileBody(entity, bodyId));
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     // Box2D is stepped by hand: fixed-timestep accumulation and entity transform sync happen inside
     simulation.Update(time.Elapsed);

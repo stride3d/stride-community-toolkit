@@ -78,7 +78,7 @@ game.Run(new SceneSetup2D
     DpiAware = true,
 }, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     shapes = game.AddShapeBatch();
     // The markers are coloured discs with a white rim
@@ -86,8 +86,8 @@ void Start(Scene rootScene)
 
     for (var lane = 0; lane < laneY.Length; lane++)
     {
-        rootScene.Entities.Add(Label(titles[lane], new Vector2(StartX, laneY[lane] + 1.3f), 16, Color.White, Anchor.BottomLeft));
-        rootScene.Entities.Add(Label(code[lane], new Vector2(EndX + 2.2f, laneY[lane]), 13, new Color(170, 210, 255), Anchor.MiddleLeft));
+        scene.Entities.Add(Label(titles[lane], new Vector2(StartX, laneY[lane] + 1.3f), 16, Color.White, Anchor.BottomLeft));
+        scene.Entities.Add(Label(code[lane], new Vector2(EndX + 2.2f, laneY[lane]), 13, new Color(170, 210, 255), Anchor.MiddleLeft));
     }
 
     TextOverlay.GetOrCreate(game).AddSection("Easing basics", BuildOverlayLines);

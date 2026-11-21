@@ -20,18 +20,18 @@ Material sharedMaterial = null!;
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     sharedMaterial = CreateMaterial(game.GraphicsDevice);
 
-    CreateMeshEntity(rootScene, Vector3.Zero, CreateTriangleMesh);
-    CreateMeshEntity(rootScene, Vector3.UnitX * 2, CreatePlaneMesh);
-    CreateMeshEntity(rootScene, Vector3.UnitX * 4, CreateNonIndexedTriangleMesh);
+    CreateMeshEntity(scene, Vector3.Zero, CreateTriangleMesh);
+    CreateMeshEntity(scene, Vector3.UnitX * 2, CreatePlaneMesh);
+    CreateMeshEntity(scene, Vector3.UnitX * 4, CreateNonIndexedTriangleMesh);
 
-    CreateLetterEntity(rootScene);
+    CreateLetterEntity(scene);
 }
 
-void CreateLetterEntity(Scene rootScene)
+void CreateLetterEntity(Scene scene)
 {
     // Solid lettering: the toolkit's embedded font's glyph outlines, triangulated by ear clipping and
     // extruded. Real geometry, so it is lit and shadowed like any other mesh - unlike
@@ -39,7 +39,7 @@ void CreateLetterEntity(Scene rootScene)
     //
     // Standing on the ground (the baseline is at Y = 0) behind the gallery row, on purpose: letters
     // floating in mid-air seem to turn as the camera orbits, with nothing to anchor the parallax
-    var entity = new Entity { Scene = rootScene, Transform = { Position = new Vector3(-1.5f, 0, -2.5f) } };
+    var entity = new Entity { Scene = scene, Transform = { Position = new Vector3(-1.5f, 0, -2.5f) } };
 
     // Not the shared material: that one reads colour from a vertex stream, which the text mesh lacks
     var model = TextMesh.CreateModel(game.GraphicsDevice, game.CreateMaterial(Color.Gold, metalness: 0.1f, glossiness: 0.4f), MeshFont.Default, "XYZ");
@@ -62,7 +62,7 @@ void CreateNonIndexedTriangleMesh(MeshBuilder meshBuilder)
     AddVertex(meshBuilder, position, color, new Vector3(1, 0, 0), Color.Teal);
 }
 
-void Update(Scene rootScene, GameTime gameTime)
+void Update(Scene scene, GameTime gameTime)
 {
     // The circle's segment count swings between the two on a cosine, a cycle about every three seconds
     const int MinSegments = 3, MaxSegments = 50;
@@ -77,7 +77,7 @@ void Update(Scene rootScene, GameTime gameTime)
         circleEntity.Remove();
     }
 
-    circleEntity = CreateMeshEntity(rootScene, Vector3.UnitX * -2, b => CreateCircleMesh(b, segments));
+    circleEntity = CreateMeshEntity(scene, Vector3.UnitX * -2, b => CreateCircleMesh(b, segments));
 }
 
 // Disposes the GPU buffers behind an entity's meshes. Only for meshes this example built itself -

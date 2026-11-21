@@ -62,7 +62,7 @@ follow the steps, but it is there if you want to compare.
 
    game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
-   void Start(Scene rootScene)
+   void Start(Scene scene)
    {
        // Left mouse grabs any body, drags it and throws it on release
        game.AddGrabber();
@@ -79,7 +79,7 @@ follow the steps, but it is there if you want to compare.
 
            // One above the other, each a little to one side, so the column topples into a pile
            entity.Transform.Position = new Vector3(0.1f * (i % 3 - 1), 8 + i * 1.5f, 0);
-           entity.Scene = rootScene;
+           entity.Scene = scene;
        }
    }
    ```

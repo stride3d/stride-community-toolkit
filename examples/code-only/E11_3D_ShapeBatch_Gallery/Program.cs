@@ -53,7 +53,7 @@ var sceneSetup = new SceneSetup3D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Depth-tested: scene geometry occludes these, so a disc on the floor goes behind a pillar.
     // Overlay: drawn on top of everything, which is what you want for gizmos and debug marks.
@@ -80,7 +80,7 @@ void Start(Scene rootScene)
 
     // The frame comes from Example.Common; what a ShapeBatch station needs on top of it - the
     // batches, the visitor's style, which batch to draw through this frame - is put there by these
-    gallery = new Gallery<ShapeStation>(game, rootScene, Stations.All, configure: station =>
+    gallery = new Gallery<ShapeStation>(game, scene, Stations.All, configure: station =>
     {
         station.Batches = batches;
         station.Style = style;

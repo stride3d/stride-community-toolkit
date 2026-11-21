@@ -171,9 +171,9 @@ public static partial class GameExtensions
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        var rootScene = game.GetSceneSystem().SceneInstance.RootScene;
+        var scene = game.GetSceneSystem().SceneInstance.RootScene;
 
-        foreach (var existing in rootScene.Entities)
+        foreach (var existing in scene.Entities)
         {
             if (existing.Get<GameProfiler>() is { } profiler)
             {
@@ -185,7 +185,7 @@ public static partial class GameExtensions
 
         var entity = new Entity(entityName) { new GameProfiler { Enabled = enabled } };
 
-        entity.Scene = rootScene;
+        entity.Scene = scene;
 
         return entity;
     }

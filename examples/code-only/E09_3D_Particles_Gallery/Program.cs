@@ -49,14 +49,14 @@ game.Run(new SceneSetup3D
 // The textures loaded in Start are this example's own: released once the game has ended
 textures?.Dispose();
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     game.AddParticleRenderer();
 
     textures = ParticleTextures.Load(game.GraphicsDevice);
 
     // The frame comes from Example.Common; what a particle station needs on top of it is the textures
-    gallery = new Gallery<ParticleStation>(game, rootScene, Stations.All, configure: station =>
+    gallery = new Gallery<ParticleStation>(game, scene, Stations.All, configure: station =>
     {
         station.Textures = textures;
         if (station.Number == startStation) station.Variation = startVariation;

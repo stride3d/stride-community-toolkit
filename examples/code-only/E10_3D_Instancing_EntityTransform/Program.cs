@@ -84,11 +84,11 @@ var sceneSetup = new SceneSetup3D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     game.AddGrabber();
 
-    scene = rootScene;
+    scene = scene;
 
     TextOverlay.GetOrCreate(game).AddSection("Instancing", BuildOverlayLines);
 
@@ -96,15 +96,15 @@ void Start(Scene rootScene)
     sharedModel = game.GetOrCreateModel(modelShape);
 
     // Three masters sharing one model: Stride's own, the toolkit's, and the toolkit's buffered
-    stockMaster = CreateMaster(rootScene, sharedModel, new TimedInstancingEntityTransform(), "StockMaster");
+    stockMaster = CreateMaster(scene, sharedModel, new TimedInstancingEntityTransform(), "StockMaster");
 
     // The toolkit master stands a little above the ground, which shows only when M asks for its transform to be used
-    var toolkitMaster = CreateMaster(rootScene, sharedModel, toolkitInstancing, "ToolkitMaster");
+    var toolkitMaster = CreateMaster(scene, sharedModel, toolkitInstancing, "ToolkitMaster");
 
     toolkitMaster.Entity.Transform.Position = new Vector3(0f, 1.5f, 0f);
 
     // The buffered one wraps a Bepu gather, so it skips the update AND the upload once bodies sleep
-    CreateMaster(rootScene, sharedModel, bufferedInstancing, "BufferedMaster");
+    CreateMaster(scene, sharedModel, bufferedInstancing, "BufferedMaster");
 
     // Creates and uploads the buffered master's GPU buffers, ahead of the renderer that draws them
     game.AddInstancingBufferUpload(bufferedInstancing);
@@ -148,7 +148,7 @@ static Primitive3D Scaled(Primitive3D shape) => shape switch
 /// instancing type decides where the matrices come from - collected from entities in every case
 /// here, but by three different implementations.
 /// </remarks>
-InstancingComponent CreateMaster(Scene rootScene, Model model, IInstancing instancingType, string name)
+InstancingComponent CreateMaster(Scene scene, Model model, IInstancing instancingType, string name)
 {
     var entity = new Entity(name)
     {
@@ -156,7 +156,7 @@ InstancingComponent CreateMaster(Scene rootScene, Model model, IInstancing insta
         new InstancingComponent { Type = instancingType }
     };
 
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 
     return entity.Get<InstancingComponent>();
 }
@@ -276,7 +276,7 @@ Entity CreatePhysicsItem(string name)
     return entity;
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     HandleInput();
 }

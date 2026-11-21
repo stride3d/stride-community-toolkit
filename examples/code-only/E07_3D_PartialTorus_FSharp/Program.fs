@@ -77,7 +77,7 @@ let BuildPartialTorusMesh (meshBuilder:MeshBuilder) cylinderRadius torusAngle be
         meshBuilder.AddIndex(i_next)
         meshBuilder.AddIndex(i_next + circumferenceStepsCount)
 
-let Start rootScene =
+let Start scene =
     // Torus parameters
     let cylinderRadius = 0.3f
     let torusAngle = 270.0f
@@ -87,7 +87,7 @@ let Start rootScene =
 
     CreateMeshEntity
         game.GraphicsDevice
-        rootScene
+        scene
         (Vector3(0.0f, 1.0f, 0.0f))
         (fun b -> BuildPartialTorusMesh b (float cylinderRadius) (float torusAngle) (float bendRadius) circumferenceStepsCount bendSegmentSteps)
     |> ignore

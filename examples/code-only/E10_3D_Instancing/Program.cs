@@ -1,7 +1,7 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Instancing;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -54,7 +54,7 @@ var sceneSetup = new SceneSetup3D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     TextOverlay.GetOrCreate(game).AddSection("Instancing", BuildOverlayLines);
 
@@ -65,22 +65,22 @@ void Start(Scene rootScene)
     // One shared model per wall, for a fair comparison: a model per cube would also mean a vertex and
     // an index buffer per cube, so the slow side would lose on memory as well as on draw calls, and the
     // measurement would not be about instancing any more
-    CreateIndividualCubes(rootScene, game.GetOrCreateModel(Primitive3D.Cube(), game.CreateMaterial(Color.Orange)));
-    CreateInstancedCubes(rootScene, game.GetOrCreateModel(Primitive3D.Cube(), game.CreateMaterial(Color.LightGreen)));
+    CreateIndividualCubes(scene, game.GetOrCreateModel(Primitive3D.Cube(), game.CreateMaterial(Color.Orange)));
+    CreateInstancedCubes(scene, game.GetOrCreateModel(Primitive3D.Cube(), game.CreateMaterial(Color.LightGreen)));
 }
 
 /// <summary>
 /// The straightforward approach: one entity per cube, each with its own <see cref="ModelComponent"/>.
 /// Costs one draw call per cube.
 /// </summary>
-void CreateIndividualCubes(Scene rootScene, Model sharedModel)
+void CreateIndividualCubes(Scene scene, Model sharedModel)
 {
     foreach (var position in GridPositions(-WallOffset))
     {
         var model = new ModelComponent(sharedModel);
         var entity = new Entity("Cube", position) { model };
 
-        entity.Scene = rootScene;
+        entity.Scene = scene;
 
         individualCubes.Add(model);
     }
@@ -90,7 +90,7 @@ void CreateIndividualCubes(Scene rootScene, Model sharedModel)
 /// The instanced approach: a single entity carrying an <see cref="InstancingComponent"/>, plus one
 /// world matrix per cube. Costs one draw call for the whole wall.
 /// </summary>
-void CreateInstancedCubes(Scene rootScene, Model sharedModel)
+void CreateInstancedCubes(Scene scene, Model sharedModel)
 {
     var matrices = new Matrix[cubeCount];
     var index = 0;
@@ -114,7 +114,7 @@ void CreateInstancedCubes(Scene rootScene, Model sharedModel)
 
     var entity = new Entity { instancedWall, new InstancingComponent { Type = instancing } };
 
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 }
 
 /// <summary>
@@ -137,7 +137,7 @@ IEnumerable<Vector3> GridPositions(float offsetX)
     }
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     HandleInput();
 }

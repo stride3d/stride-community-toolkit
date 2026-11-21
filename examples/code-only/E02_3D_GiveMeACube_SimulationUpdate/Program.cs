@@ -1,5 +1,4 @@
 using E02_3D_GiveMeACube_SimulationUpdate;
-using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -27,30 +26,30 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
-    CreateCentreCube(rootScene);
-    CreateLooseCubes(rootScene);
-    CreateOrbitingCube(rootScene);
+    CreateCentreCube(scene);
+    CreateLooseCubes(scene);
+    CreateOrbitingCube(scene);
 }
 
 /// <summary>
 /// Creates the cube the orbit is centred on, using the toolkit's default Bepu physics: a dynamic body
 /// with a matching box collider. It rests on the ground and the orbit never reaches it.
 /// </summary>
-void CreateCentreCube(Scene rootScene)
+void CreateCentreCube(Scene scene)
 {
     var cube = game.CreatePrimitive(Primitive3D.Cube());
 
     cube.Transform.Position = new Vector3(0, CubeRestingHeight, 0);
-    cube.Scene = rootScene;
+    cube.Scene = scene;
 }
 
 /// <summary>
 /// Scatters small dynamic cubes evenly around the orbit path, so there is something for the orbiting
 /// cube to collide with.
 /// </summary>
-void CreateLooseCubes(Scene rootScene)
+void CreateLooseCubes(Scene scene)
 {
     for (var i = 0; i < LooseCubeCount; i++)
     {
@@ -61,7 +60,7 @@ void CreateLooseCubes(Scene rootScene)
         var cube = game.CreatePrimitive(Primitive3D.Cube(LooseCubeSize));
 
         cube.Transform.Position = new Vector3(MathF.Sin(angle) * OrbitRadius, LooseCubeSize / 2, MathF.Cos(angle) * OrbitRadius);
-        cube.Scene = rootScene;
+        cube.Scene = scene;
     }
 }
 
@@ -72,7 +71,7 @@ void CreateLooseCubes(Scene rootScene)
 /// The body is kinematic, so it follows the scripted path without being affected by gravity or by the
 /// cubes it hits, while still pushing them aside.
 /// </remarks>
-void CreateOrbitingCube(Scene rootScene)
+void CreateOrbitingCube(Scene scene)
 {
     var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions { Body = BodyMode.Kinematic });
 
@@ -87,7 +86,7 @@ void CreateOrbitingCube(Scene rootScene)
         AngularSpeed = OrbitSpeed
     });
 
-    cube.Scene = rootScene;
+    cube.Scene = scene;
 }
 
 /*

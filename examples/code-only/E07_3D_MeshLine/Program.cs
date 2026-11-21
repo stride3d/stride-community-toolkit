@@ -13,17 +13,17 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     game.AddGrabber();
 
     // The line is a child of the first sphere, so it falls and rolls with it
     var sphere1 = game.CreatePrimitive(Primitive3D.Sphere(), new() { Position = new Vector3(0, 8, 0) });
     sphere1.AddChild(CreateLineEntity());
-    sphere1.Scene = rootScene;
+    sphere1.Scene = scene;
 
     var sphere2 = game.CreatePrimitive(Primitive3D.Sphere(), new() { Position = new Vector3(-0.01f, 9, -0.01f) });
-    sphere2.Scene = rootScene;
+    sphere2.Scene = scene;
 }
 
 Entity CreateLineEntity()

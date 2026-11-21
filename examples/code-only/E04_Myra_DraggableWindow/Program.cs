@@ -13,10 +13,10 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
-void Start(Scene rootScene) => game.AddSceneRenderer(new MyraSceneRenderer());
+void Start(Scene scene) => game.AddSceneRenderer(new MyraSceneRenderer());
 
 // The second health bar is added while the game runs, once the renderer has put the view in the services
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     if (healthBarAdded || game.Services.GetService<MainView>() is not { } mainView) return;
 

@@ -13,10 +13,10 @@ game.Run(new SceneSetup3D
     Profiler = true
 }.UseBepu().UseSkybox(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     game.AddDebugShapes();
-    rootScene.Entities.Add(new Entity("Debug Shapes") { new ShapeUpdater() });
+    scene.Entities.Add(new Entity("Debug Shapes") { new ShapeUpdater() });
 }
 /*
 ---example-metadata

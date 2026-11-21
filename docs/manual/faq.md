@@ -40,7 +40,7 @@ Rename the namespace, or write `Stride.Engine.Game` in full.
 
 A script runs only while its entity is in a running scene. Add the script with
 `entity.Add(new MyScript())`, and make sure the entity is in the scene, for example with
-`entity.Scene = rootScene`.
+`entity.Scene = scene`.
 
 ### How do I get a reference to another entity?
 

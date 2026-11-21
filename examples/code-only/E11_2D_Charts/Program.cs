@@ -62,7 +62,7 @@ game.Run(new SceneSetup2D
     DpiAware = true,
 }, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     var cameraEntity = game.GetCameraEntity();
     var controller = cameraEntity.Get<Basic2DCameraController>()!;
@@ -90,7 +90,7 @@ void Start(Scene rootScene)
     options.Axes.YTitle = "y";
 
     chart = new Chart(game, options);
-    chart.Root.Scene = rootScene;
+    chart.Root.Scene = scene;
 
     // Curves added without a colour take the next one from the palette
     chart.Plot(x => 2f * MathF.Sin(x), name: "sin");

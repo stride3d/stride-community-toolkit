@@ -45,7 +45,7 @@ const float SpacingPerRadius = 0.5f / 0.32f;
 float[] nodeRadii = [0.04f, 0.08f, 0.16f, 0.24f, 0.32f, 0.48f];
 var nodeRadius = 0.32f;
 
-Scene rootScene = null!;
+Scene scene = null!;
 BufferedEntityInstancing instancing = null!;
 Entity master = null!;
 Material nodeMaterial = null!;
@@ -84,7 +84,7 @@ void Start(Scene scene)
 {
     game.AddGrabber();
 
-    rootScene = scene;
+    scene = scene;
     SetupInstancing(scene);
     SetupMenu();
     BuildScene(scene);
@@ -115,7 +115,7 @@ void Rebuild()
     nodes.Clear();
     extras.Clear();
     constraintCount = 0;
-    BuildScene(rootScene);
+    BuildScene(scene);
 }
 
 void SetupInstancing(Scene scene)

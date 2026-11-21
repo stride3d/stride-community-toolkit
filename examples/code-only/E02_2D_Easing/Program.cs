@@ -67,22 +67,22 @@ game.Run(new SceneSetup2D
     DpiAware = true,
 }, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     shapes = game.AddShapeBatch();
 
     // One label under every tile, and two beside the big panel
     foreach (var tile in tiles)
     {
-        rootScene.Entities.Add(Label(ShortName(tile.Function), tile.Centre + new Vector2(0f, -TileSize / 2f - 0.4f), 10, Color.LightGray));
+        scene.Entities.Add(Label(ShortName(tile.Function), tile.Centre + new Vector2(0f, -TileSize / 2f - 0.4f), 10, Color.LightGray));
     }
 
     // Placed every frame by PlacePanel, once the overlay has drawn and knows its height
     title = Label("", Vector2.Zero, 24, Color.White).Get<EntityTextComponent>();
     note = Label("", Vector2.Zero, 13, Color.LightGray).Get<EntityTextComponent>();
 
-    rootScene.Entities.Add(title.Entity);
-    rootScene.Entities.Add(note.Entity);
+    scene.Entities.Add(title.Entity);
+    scene.Entities.Add(note.Entity);
 
     overlay = TextOverlay.GetOrCreate(game);
     overlay.AddSection("Easing", BuildOverlayLines);

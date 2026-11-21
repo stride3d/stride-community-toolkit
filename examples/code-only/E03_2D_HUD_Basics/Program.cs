@@ -2,8 +2,8 @@ using E03_2D_HUD_Basics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -97,10 +97,10 @@ game.Run(new SceneSetup2D
     DpiAware = true,
 }.UseBepu(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Something for the HUD to sit over: the scene of E01_2D_FallingShapes
-    AddFallingShapes(rootScene);
+    AddFallingShapes(scene);
 
     #region Step1Create
     // After the post effects, so that the HUD's colours are drawn as written
@@ -113,19 +113,19 @@ void Start(Scene rootScene)
     grid.Visible = false;
 
     #region Step5Create
-    healthLabel = AddLabel(rootScene, Anchor.BottomLeft);
-    energyLabel = AddLabel(rootScene, Anchor.MiddleCenter);
+    healthLabel = AddLabel(scene, Anchor.BottomLeft);
+    energyLabel = AddLabel(scene, Anchor.MiddleCenter);
     #endregion
 
     #region Step6Create
-    warningLabel = AddLabel(rootScene, Anchor.MiddleCenter);
+    warningLabel = AddLabel(scene, Anchor.MiddleCenter);
     warningLabel.Text = "WARNING";
     warningLabel.TextColor = hurt;
     warningLabel.FontSize = 20;
     #endregion
 
     #region Step8Create
-    hud = new SimpleHud(rootScene, shapeBatch, new HudStyle());
+    hud = new SimpleHud(scene, shapeBatch, new HudStyle());
     #endregion
 
     TextOverlay.GetOrCreate(game).AddSection("HUD basics", () =>

@@ -61,7 +61,7 @@ game.Run(new SceneSetup3D
 // The textures loaded in Start are this example's own: released once the game has ended
 textures?.Dispose();
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     var sun = game.AddDirectionalLight();
 
@@ -88,13 +88,13 @@ void Start(Scene rootScene)
     // The frame comes from Example.Common; what a material station needs on top of it is the textures
     var loaded = textures;
 
-    gallery = new Gallery<MaterialStation>(game, rootScene, Stations.All, configure: station =>
+    gallery = new Gallery<MaterialStation>(game, scene, Stations.All, configure: station =>
     {
         station.Textures = loaded;
         if (station.Number == startStation) station.Variation = startVariation;
     });
     gallery.UpdateLabels();
-    LightTheRing(rootScene, gallery.Radius, sun);
+    LightTheRing(scene, gallery.Radius, sun);
 
     if (startStation > 0)
     {

@@ -2,8 +2,8 @@ using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -71,7 +71,7 @@ game.Run(new SceneSetup3D
     DpiAware = true,
 }.UseBepu().UseSkybox(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     LookFrom(viewpoints[0]);
 
@@ -84,7 +84,7 @@ void Start(Scene rootScene)
         Body = BodyMode.Kinematic,
     });
 
-    platform.Scene = rootScene;
+    platform.Scene = scene;
     liftBody = platform.Get<BodyComponent>();
 
     // The stack it carries: ordinary dynamic bodies, dropped on from a little above
@@ -100,7 +100,7 @@ void Start(Scene rootScene)
             Position = riderHomes[i],
         });
 
-        rider.Scene = rootScene;
+        rider.Scene = scene;
         riders[i] = rider.Get<BodyComponent>();
     }
 
@@ -114,7 +114,7 @@ void Start(Scene rootScene)
         Position = doorHinge,
     });
 
-    frame.Scene = rootScene;
+    frame.Scene = scene;
 
     doorEntity = new Entity("Door hinge", doorHinge);
 
@@ -127,7 +127,7 @@ void Start(Scene rootScene)
     });
 
     doorEntity.AddChild(leaf);
-    doorEntity.Scene = rootScene;
+    doorEntity.Scene = scene;
 
     // The crystals: visuals that arrive by scale and then bob by position
     crystals = new Entity[crystalSpots.Length];
@@ -143,7 +143,7 @@ void Start(Scene rootScene)
         });
 
         crystal.Transform.Scale = Vector3.Zero;
-        crystal.Scene = rootScene;
+        crystal.Scene = scene;
         crystals[i] = crystal;
     }
 

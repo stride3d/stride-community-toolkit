@@ -9,7 +9,7 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
@@ -24,23 +24,23 @@ void Start(Scene rootScene)
             Visible = true
         }
     };
-    debug.Scene = rootScene;
+    debug.Scene = scene;
 
     // A cube without physics beside the row: no gizmo appears for it, because physics knows nothing of it
     var cube = game.CreatePrimitive(Primitive3D.Cube(), new() { Body = BodyMode.None, Position = new Vector3(1f, 0.5f, 3f) });
-    cube.Scene = rootScene;
+    cube.Scene = scene;
 
-    CreateCubes(rootScene, 6);
+    CreateCubes(scene, 6);
 }
 
-void CreateCubes(Scene rootScene, int count)
+void CreateCubes(Scene scene, int count)
 {
     var half = count / 2;
 
     for (var i = -half; i < half; i++)
     {
         var entity = game.CreatePrimitive(Primitive3D.Cube(), new() { Position = new Vector3(i * 0.99f, 1, 0) });
-        entity.Scene = rootScene;
+        entity.Scene = scene;
     }
 }
 /*

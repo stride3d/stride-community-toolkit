@@ -1,8 +1,8 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Rendering.Lights;
@@ -30,16 +30,16 @@ game.Run(new SceneSetup2D
     Resizable = true,
 }.UseBepu(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
 
-    var ground = rootScene.FindEntity(GameDefaults.DefaultGroundName)!;
+    var ground = scene.FindEntity(GameDefaults.DefaultGroundName)!;
     ground.Transform.Position = new Vector3(0, -4, 0);
 
     // 2D scenes are lit like any other, and look flat without a light
-    AddSpotLight(rootScene);
+    AddSpotLight(scene);
 
     for (var i = -Count / 2; i < Count / 2; i++)
     {
@@ -51,7 +51,7 @@ void Start(Scene rootScene)
                 Position = new Vector3(i, 10 + index * 1.5f, 0),
             });
 
-            entity.Scene = rootScene;
+            entity.Scene = scene;
         }
     }
 
@@ -67,7 +67,7 @@ void Start(Scene rootScene)
     ]);
 }
 
-static void AddSpotLight(Scene rootScene)
+static void AddSpotLight(Scene scene)
 {
     var spotLight = new Entity("SpotLight", new Vector3(0, -4, 2))
     {
@@ -83,7 +83,7 @@ static void AddSpotLight(Scene rootScene)
         }
     };
 
-    spotLight.Scene = rootScene;
+    spotLight.Scene = scene;
 }
 /*
 ---example-metadata

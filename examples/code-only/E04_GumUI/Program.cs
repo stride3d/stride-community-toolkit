@@ -10,7 +10,7 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D { Camera = CameraSetup.Orthographic(), Lighting = null, Skybox = null, Ground = null }, start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     GumService.Default.Initialize(game);
 

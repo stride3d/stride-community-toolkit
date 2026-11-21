@@ -95,12 +95,12 @@ game.Run(new SceneSetup3D
     Resizable = true,
 }.UseBepu().UseSkybox(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber().MaxDistance = GrabberDistance;
 
-    scene = rootScene;
+    scene = scene;
 
     // The default aim shines toward +Z, which leaves the faces turned towards the camera unlit
     var light = game.AddDirectionalLight();
@@ -295,7 +295,7 @@ void Spawn(Vector3 position)
     bodies.Add(new PileBody(entity, entity.Get<BodyComponent>()));
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     RotateArena();
     HandleInput();

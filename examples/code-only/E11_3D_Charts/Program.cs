@@ -71,7 +71,7 @@ game.Run(new SceneSetup3D
     DpiAware = true,
 }, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     keyLight = game.AddDirectionalLight(intensity: chartLook.Light).Get<LightComponent>();
 
@@ -103,7 +103,7 @@ void Start(Scene rootScene)
 
     // Lifted so most of the chart stands above y = 0
     chart.Root.Transform.Position = new Vector3(0, 3f, 0);
-    chart.Root.Scene = rootScene;
+    chart.Root.Scene = scene;
 
     chart.Plot(x => 2f * MathF.Sin(x), name: "sin");
 

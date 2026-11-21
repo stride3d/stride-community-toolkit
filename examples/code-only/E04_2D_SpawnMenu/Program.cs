@@ -44,12 +44,12 @@ using var game = new Game();
 
 game.Run(new SceneSetup2D().UseBepu(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
 
-    scene = rootScene;
+    scene = scene;
 
     // The starting column, one of each shape
     foreach (var (index, shape) in shapes.Index())
@@ -85,7 +85,7 @@ void Spawn(ShapeItem shape, Vector3 position)
     entity.Scene = scene;
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     // Only the input. The overlay draws the menu for us, every frame, from GetLines()
     spawnMenu?.Update(game.Input);

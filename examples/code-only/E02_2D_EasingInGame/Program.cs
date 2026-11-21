@@ -60,7 +60,7 @@ game.Run(new SceneSetup2D
     DpiAware = true,
 }.UseBepu(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // The lift: a kinematic body, so it carries what lands on it and nothing pushes it back
     var platform = game.CreatePrimitive(Primitive2D.Rectangle(4f, 0.4f), new BepuPhysicsOptions
@@ -71,7 +71,7 @@ void Start(Scene rootScene)
         Position = liftHome,
     });
 
-    platform.Scene = rootScene;
+    platform.Scene = scene;
     liftBody = platform.Get<BodyComponent>();
 
     // The boxes it carries: ordinary dynamic bodies
@@ -87,7 +87,7 @@ void Start(Scene rootScene)
             Position = boxHomes[i],
         });
 
-        box.Scene = rootScene;
+        box.Scene = scene;
         boxes[i] = box.Get<BodyComponent>();
     }
 
@@ -106,7 +106,7 @@ void Start(Scene rootScene)
         });
 
         coin.Transform.Scale = Vector3.Zero;
-        coin.Scene = rootScene;
+        coin.Scene = scene;
         coins[i] = new Coin(coin, spot, new Tween(0.5f, EasingFunction.BackEaseOut), new Tween(0.6f, EasingFunction.QuadraticEaseIn));
     }
 
@@ -115,7 +115,7 @@ void Start(Scene rootScene)
 
     var scoreEntity = new Entity("Score", scoreSpot) { scoreText };
 
-    rootScene.Entities.Add(scoreEntity);
+    scene.Entities.Add(scoreEntity);
 
     // Two coins to start with, so the scene is not empty
     PopNextCoin();
