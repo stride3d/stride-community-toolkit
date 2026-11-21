@@ -16,11 +16,12 @@ The `Program.cs` file shows how to:
 - Tween - start, feed the frame time, read Lerp or Slerp
 - Driving a kinematic Bepu body towards an eased target with feed-forward velocity plus a correction
 - TweenLoop.PingPong for a lift and a bob, TweenLoop.None for a door and a camera flight
-- A staggered pop-in by starting tweens with a negative head start
+- A staggered pop-in - each tween waits out its delay before it starts
+- Reversing a tween in mid-run by starting the next one from the current value
 - A camera flight as one tween over position and rotation
 
 ![Easing in a 3D Game](media/easing-3d-game.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_3D_EasingInGame).
 
-[!code-csharp[](../../../../examples/code-only/E02_3D_EasingInGame/Program.cs?start=1&end=297)]
+[!code-csharp[](../../../../examples/code-only/E02_3D_EasingInGame/Program.cs?start=1&end=300)]

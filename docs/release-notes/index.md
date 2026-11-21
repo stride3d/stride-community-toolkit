@@ -53,6 +53,7 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 
 ### 🐞 Bug Fixes
 
+- `Easing`: `BackEaseOut` starts at exactly 0, `BackEaseIn` and `BounceEaseOut` end at exactly 1, and the bounce curves stay between 0 and 1, in `float` and `double`. `BackEaseOut(0f)` was -1.19e-7, so a scale tweened up from zero was negative on its first frame, and Stride went on drawing a mesh that started that way inside-out: the first crystal of `E02_3D_EasingInGame`, until P popped it again.
 - `SoundEmitterScript` reports its velocity in units per second, as Stride 4.4.3's listener does. It was the distance moved in one frame, so the Doppler effect depended on the frame rate and no longer matched the listener.
 - `ShapeBatch`: a batch with a `FillSource` draws on Stride 4.4.2. Its shader compiler carries a stream written only inside an `if` or after an early return from the vertex buffer, which made the texture coordinate a vertex input the quad does not have; the first draw threw from `CreateInputLayout`.
 - `TransformExtensions.LookAt` aims from the transform's `Position`, not from its local matrix. The engine rebuilds that matrix once a frame, so a transform moved and then turned in the same update aimed from the position of the frame before, off by an angle that grew with the frame time: a follow camera swung on every slow frame.
@@ -115,6 +116,7 @@ The toolkit moves faster than the Stride Game Engine, so expect frequent release
 - Fields built in `Start` are declared `= null!` and their guards are gone, in the Bepu, debug-shapes, gallery, chart and audio examples.
 - Bepu examples read the simulation with `game.GetSimulation()` and the Shift key with `input.IsShiftDown()`; the first-person example now sprints and boosts on either Shift.
 - Overlay help in six Bepu examples (`E05_3D_CollisionGroup`, `CollisionLayer`, `Dodgeball`, `LayerSelection`, `PlanetGravity`, `PlanetWalker`) is one key a line of about fifty characters, with the state on the lines below.
+- `E02_3D_EasingInGame`: the door turns round from where it is when O is pressed in the middle of a swing. It jumped to the far end before.
 - `E10_3D_ComputeBoids` transitions its two matrix buffers to shader resource after the dispatch. Stride 4.4.2 no longer unbinds a buffer from the compute stage when it is bound for reading, so the flock was drawn only while frozen.
 - `E06_Box2D`: shapes come from a seeded random, the overlay shows one count, and the status message runs on the game clock. `E06_Box2D_Car`, `Junkyard` and `JunkyardInteractive` build their fixtures with `ShapeFixtureBuilder.AttachPolygon` and `AttachBox`.
 - `E06_Box2D_CharacterMover` is four files: `Program.cs`, `Course.cs`, `Elevator.cs` and `GroundPaths.cs`.
