@@ -215,6 +215,7 @@ the worked examples. Verify against a package from `build/pack-local.cs`, not a 
 - Avoid partial classes unless auto-generated code is involved. The exception is a large immediate-mode API, such as `ShapeBatch`, which may split by shape family; each file then says where the shared state lives. `GameExtensions` is split the same way, by concern (`GameExtensions.Cameras.cs`, `.Lights.cs`, `.Materials.cs`, `.PostEffects.cs`, `.Run.cs`, `.Games.cs`).
 - Braces: an `if` body keeps its braces unless the statement is very short (`if (x) return;`). A `throw`, an assignment with a long right-hand side or a call spanning most of a line keeps them. The code base is inconsistent here because several people wrote it; do not strip braces as a line-saving move.
 - Validation: prefer `ArgumentNullException.ThrowIfNull()` and provide meaningful exception messages for invalid states. Say what is wrong and what to do: "The transform is driven by its matrix; set UseTRS to true to use this method", not "Must use TRS".
+- Maths in examples and documentation snippets: `float` code takes its angle constants from `MathUtil` (`Pi`, `TwoPi`, `PiOverTwo`, `PiOverFour`), not from `MathF.PI` or `MathF.Tau`, and calls `MathUtil.DegreesToRadians`, `RadiansToDegrees`, `Mod` and `ExpDecay` rather than writing them out. `Math.Clamp`, `Min` and `Max` are the .NET ones, and `double` geometry stays on `Math.PI` and `Math.Tau`.
 - Suggestion preference order:
   1. Existing, reviewed toolkit extension/helper
   2. New small, composable extension (documented)
