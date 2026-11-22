@@ -70,8 +70,9 @@ public class OrbitSimulationScript : StartupScript, ISimulationUpdate
         if (_body is null) return;
 
         // Advancing by the physics step rather than by frame delta time keeps the orbit at the same
-        // real-world speed no matter how fast or slow the game is rendering
-        _angle += AngularSpeed * simTimeStep;
+        // real-world speed no matter how fast or slow the game is rendering. The angle wraps at a full
+        // turn, so it stays small and keeps its precision however long the scene runs
+        _angle = (_angle + AngularSpeed * simTimeStep) % MathUtil.TwoPi;
 
         var target = Centre + new Vector3(MathF.Sin(_angle), 0, MathF.Cos(_angle)) * Radius;
 

@@ -8,7 +8,8 @@ using Stride.Engine;
 
 // A cube orbits the scene and knocks a ring of smaller cubes out of its way.
 // The orbit is driven by OrbitScript, a SyncScript attached to the entity, rather than by the update
-// callback of game.Run(...) - the point of the example.
+// callback of game.Run(...) - the point of the example. The left mouse button picks up a loose cube
+// and throws it.
 
 // Half of a 1x1x1 cube, so it sits exactly on the ground
 const float CubeRestingHeight = 0.5f;
@@ -17,7 +18,12 @@ const float OrbitRadius = 3f;
 const float OrbitSpeed = 1f;
 
 const float LooseCubeSize = 0.4f;
-const int LooseCubeCount = 8;
+
+// The orbit is divided into this many equal slots, one loose cube to a slot
+const int OrbitSlotCount = 30;
+
+// The orbiting cube starts on slot 0, so that slot and this many on each side of it stay empty
+const int ClearSlotsEachSide = 1;
 
 using var game = new Game();
 
@@ -25,6 +31,8 @@ game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
+    game.AddGrabber();
+
     CreateCentreCube(scene);
     CreateLooseCubes(scene);
     CreateOrbitingCube(scene);
@@ -43,15 +51,15 @@ void CreateCentreCube(Scene scene)
 }
 
 /// <summary>
-/// Scatters small dynamic cubes evenly around the orbit path, so there is something for the orbiting
-/// cube to collide with.
+/// Places small dynamic cubes around the orbit path, so there is something for the orbiting cube to
+/// collide with, and leaves a gap where that cube starts.
 /// </summary>
 void CreateLooseCubes(Scene scene)
 {
-    for (var i = 0; i < LooseCubeCount; i++)
+    for (var slot = ClearSlotsEachSide + 1; slot < OrbitSlotCount - ClearSlotsEachSide; slot++)
     {
-        // The half step keeps the first cube clear of the orbiting cube's spawn point
-        var angle = MathF.Tau * (i + 0.5f) / LooseCubeCount;
+        // Slot 0 is along +Z from the centre, where the orbiting cube spawns
+        var angle = MathF.Tau * slot / OrbitSlotCount;
 
         // Size drives both the generated model and the generated collider
         var cube = game.CreatePrimitive(Primitive3D.Cube(LooseCubeSize));
@@ -117,7 +125,7 @@ concepts:
   - Waking a body after changing its velocity
   - Why writing Transform.Position does not move a physics body
   - Sizing a primitive and its collider together
-  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, UseSkybox, AddGrabber, CreatePrimitive"
 tags:
   - 3D
   - Script
