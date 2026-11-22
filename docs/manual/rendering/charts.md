@@ -154,7 +154,7 @@ stretch of `x`. It is translucent at `Options.Series.AreaOpacity` and drawn behi
 the grid shows through it:
 
 ```csharp
-chart.AddArea(x => 2f * MathF.Sin(x), from: 0f, to: MathF.PI, name: "integral");
+chart.AddArea(x => 2f * MathF.Sin(x), from: 0f, to: MathUtil.Pi, name: "integral");
 chart.AddArea(x => 2f * MathF.Sin(x), x => MathF.Cos(x), from: -2f, to: 2f, name: "between");
 
 options.Series.AreaOpacity = 0.4f;

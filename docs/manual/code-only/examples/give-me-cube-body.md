@@ -20,13 +20,13 @@ The `Program.cs` file shows how to:
 - Waking a body after changing its velocity
 - Why writing Transform.Position does not move a physics body
 - Sizing a primitive and its collider together
-- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive
+- Using helpers: SceneSetup3D, UseSkybox, AddGrabber, CreatePrimitive
 
 ![Give Me a Cube](media/give-me-cube-body.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_3D_GiveMeACube).
 
-[!code-csharp[](../../../../examples/code-only/E02_3D_GiveMeACube/Program.cs?start=1&end=89)]
+[!code-csharp[](../../../../examples/code-only/E02_3D_GiveMeACube/Program.cs?start=1&end=97)]
 <!-- #endregion generated -->
 
 ## OrbitScript.cs

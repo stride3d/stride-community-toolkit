@@ -315,7 +315,7 @@ Add `DrawEnergyDial();` after `DrawHealthBar();`.
 What to notice:
 
 - **Angles.** An arc takes a start angle and a sweep, in radians. Zero points right and a positive
-  angle turns clockwise, so `-MathF.PI * 0.5f` is the top. `MathF.Tau` is a full turn.
+  angle turns clockwise, so `-MathUtil.PiOverTwo` is the top. `MathUtil.TwoPi` is a full turn.
 - **An arc is a band.** Its last argument is the band's width. The band is filled like any other
   shape, which is why the function starts with `Solid()`.
 - **Set what you need.** The state stays as the last piece left it. Here the bar happened to leave
