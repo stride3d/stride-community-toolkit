@@ -21,7 +21,7 @@ namespace Stride.CommunityToolkit.Shapes;
 /// <code>
 /// shapes.Dash.Length = 6f;          // gap defaults to the same
 /// shapes.Dash.Phase += 30f * dt;    // and the ring turns
-/// shapes.DrawArc(center, radius, 0f, MathF.Tau, color);
+/// shapes.DrawArc(center, radius, 0f, MathUtil.TwoPi, color);
 /// shapes.Dash.Clear();
 /// </code>
 /// </example>

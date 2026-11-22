@@ -18,7 +18,7 @@ public sealed class Elevator(B2BodyId body, Vector2 origin, float amplitude) : I
     {
         _time += deltaTime;
 
-        var y = amplitude * MathF.Cos(_time + MathF.PI) + origin.Y;
+        var y = amplitude * MathF.Cos(_time + MathUtil.Pi) + origin.Y;
         var target = new B2Transform(new B2Vec2(origin.X, y), b2Rot_identity);
 
         b2Body_SetTargetTransform(body, in target, deltaTime, true);

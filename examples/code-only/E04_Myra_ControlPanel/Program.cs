@@ -40,7 +40,7 @@ var pendingReset = false;
 var spawnShape = 0;
 var spawnCount = 10f;
 
-Scene? scene = null;
+Scene? rootScene = null;
 LightComponent? sun = null;
 BepuSimulation? simulation = null;
 Entity? physicsDebug = null;
@@ -69,7 +69,7 @@ void Start(Scene scene)
 {
     game.AddGrabber();
 
-    scene = scene;
+    rootScene = scene;
 
     sun = scene.FindEntity("Directional Light")?.Get<LightComponent>();
     physicsDebug = game.AddPhysicsDebug();
@@ -345,7 +345,7 @@ void Spawn(int count)
         });
 
         entity.Transform.Rotation = Quaternion.RotationY(random.NextSingle() * MathUtil.TwoPi);
-        entity.Scene = scene;
+        entity.Scene = rootScene;
 
         spawned.Add(entity);
         bodyList?.Widgets.Add(new Label { Text = entity.Name, Tag = entity });

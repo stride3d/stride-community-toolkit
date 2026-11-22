@@ -226,7 +226,7 @@ public sealed class Contact(string callsign, string type, bool hostile)
     public float Closing { get; private set; }
 
     /// <summary>The bearing in degrees, clockwise from the top of the scope.</summary>
-    public float Bearing => ((90f - MathUtil.RadiansToDegrees(Angle)) % 360f + 360f) % 360f;
+    public float Bearing => MathUtil.Mod(90f - MathUtil.RadiansToDegrees(Angle), 360f);
 
     /// <summary>The range in kilometres.</summary>
     public float Range => Distance * ShipState.RadarRange;

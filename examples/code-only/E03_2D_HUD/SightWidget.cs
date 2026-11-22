@@ -29,7 +29,7 @@ public sealed class SightWidget(ShipState ship) : HudWidget
         // Four arcs read as a sight; a full ring reads as a target
         for (var i = 0; i < 4; i++)
         {
-            canvas.Shapes.DrawArc(center, 0.42f, i * MathF.PI / 2f + 0.25f, MathF.PI / 2f - 0.5f, theme.Text);
+            canvas.Shapes.DrawArc(center, 0.42f, i * MathUtil.PiOverTwo + 0.25f, MathUtil.PiOverTwo - 0.5f, theme.Text);
         }
 
         canvas.Style(new HudStyle(0f, 1f, theme.Text) { Glow = 2.5f, GlowColour = glow, Additive = true });

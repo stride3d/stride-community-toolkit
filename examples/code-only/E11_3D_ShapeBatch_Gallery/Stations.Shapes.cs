@@ -71,7 +71,7 @@ public static class ShapeStations
 
         for (var i = 0; i < 4; i++)
         {
-            var angle = s.Seconds * 0.4f + i * MathF.PI * 0.5f;
+            var angle = s.Seconds * 0.4f + i * MathUtil.PiOverTwo;
             var (sin, cos) = MathF.SinCos(angle);
             var axisX = s.Direction(cos, 0f, -sin);
             var axisY = s.Direction(sin, 0f, cos);
@@ -101,11 +101,11 @@ public static class ShapeStations
         ];
 
         var chart = s.At(1.5f, Lift, 0.5f);
-        var angle = MathF.PI * 0.5f;
+        var angle = MathUtil.PiOverTwo;
 
         foreach (var (share, fill) in segments)
         {
-            var sweep = share * MathF.Tau;
+            var sweep = share * MathUtil.TwoPi;
 
             shapes.Fill.Color = fill;
             shapes.DrawSector(chart, s.Up, 2.4f, angle + 0.03f, sweep - 0.06f, Color.White, innerRadius: 1.2f);
@@ -115,11 +115,11 @@ public static class ShapeStations
 
         shapes.Fill.Color = null;
 
-        shapes.DrawSector(s.At(4.6f, Lift, -1f), s.Up, 1.5f, s.Seconds * 0.8f, MathF.PI * 0.6f, Color.Gold);
+        shapes.DrawSector(s.At(4.6f, Lift, -1f), s.Up, 1.5f, s.Seconds * 0.8f, MathUtil.Pi * 0.6f, Color.Gold);
 
         // A cone that starts at the centre: the watcher's field of view, sweeping
         var watcher = s.Pillars[0].Base + Vector3.UnitY * Lift;
-        var facing = MathF.Sin(s.Seconds * 0.5f) * 0.9f - MathF.PI * 0.5f;
+        var facing = MathF.Sin(s.Seconds * 0.5f) * 0.9f - MathUtil.PiOverTwo;
 
         shapes.DrawSector(watcher, s.Up, 5f, facing - 0.45f, 0.9f, Color.Yellow);
     }
@@ -142,15 +142,15 @@ public static class ShapeStations
             var progress = (MathF.Sin(s.Seconds * 0.7f + i * 1.1f) + 1f) * 0.5f;
 
             shapes.Fill.Alpha = 0.25f;
-            shapes.DrawArc(centre, s.Forward, 1f, 0f, MathF.Tau, Color.Gray, width: 0.3f);
+            shapes.DrawArc(centre, s.Forward, 1f, 0f, MathUtil.TwoPi, Color.Gray, width: 0.3f);
 
             shapes.Fill.Alpha = 0.9f;
-            shapes.DrawArc(centre, s.Forward, 1f, MathF.PI * 0.5f, -progress * MathF.Tau, Color.LimeGreen, width: 0.3f);
+            shapes.DrawArc(centre, s.Forward, 1f, MathUtil.PiOverTwo, -progress * MathUtil.TwoPi, Color.LimeGreen, width: 0.3f);
         }
 
         shapes.Fill.Alpha = s.Style.FillAlpha;
 
-        shapes.DrawArc(s.At(2f, Lift, 1.5f), s.Up, 3f, s.Seconds, MathF.Tau * 0.8f, Color.HotPink);
+        shapes.DrawArc(s.At(2f, Lift, 1.5f), s.Up, 3f, s.Seconds, MathUtil.TwoPi * 0.8f, Color.HotPink);
     }
 
     /// <summary>

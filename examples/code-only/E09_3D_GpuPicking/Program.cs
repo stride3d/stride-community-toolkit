@@ -142,7 +142,7 @@ void BuildScene(Scene scene)
 
     for (var i = 0; i < colours.Length; i++)
     {
-        var angle = i * MathF.Tau / colours.Length;
+        var angle = i * MathUtil.TwoPi / colours.Length;
         var height = 2f + (i % 3) * 1.2f;
 
         var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new PrimitiveEntityOptions

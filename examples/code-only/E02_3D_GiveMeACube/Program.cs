@@ -59,7 +59,7 @@ void CreateLooseCubes(Scene scene)
     for (var slot = ClearSlotsEachSide + 1; slot < OrbitSlotCount - ClearSlotsEachSide; slot++)
     {
         // Slot 0 is along +Z from the centre, where the orbiting cube spawns
-        var angle = MathF.Tau * slot / OrbitSlotCount;
+        var angle = MathUtil.TwoPi * slot / OrbitSlotCount;
 
         // Size drives both the generated model and the generated collider
         var cube = game.CreatePrimitive(Primitive3D.Cube(LooseCubeSize));

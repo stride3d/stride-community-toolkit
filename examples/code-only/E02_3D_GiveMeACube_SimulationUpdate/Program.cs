@@ -54,7 +54,7 @@ void CreateLooseCubes(Scene scene)
     for (var i = 0; i < LooseCubeCount; i++)
     {
         // The half step keeps the first cube clear of the orbiting cube's spawn point
-        var angle = MathF.Tau * (i + 0.5f) / LooseCubeCount;
+        var angle = MathUtil.TwoPi * (i + 0.5f) / LooseCubeCount;
 
         // Size drives both the generated model and the generated collider
         var cube = game.CreatePrimitive(Primitive3D.Cube(LooseCubeSize));

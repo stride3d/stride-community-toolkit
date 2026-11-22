@@ -212,7 +212,7 @@ public sealed class StationScene(Game game)
         {
             // Uniform over the sphere: a random direction, not random angles
             var z = random.NextSingle() * 2f - 1f;
-            var angle = random.NextSingle() * MathF.Tau;
+            var angle = random.NextSingle() * MathUtil.TwoPi;
             var ring = MathF.Sqrt(1f - z * z);
             var direction = new Vector3(ring * MathF.Cos(angle), z, ring * MathF.Sin(angle));
 
@@ -225,7 +225,7 @@ public sealed class StationScene(Game game)
             };
 
             stars[i] = new Star(direction, 0.8f + random.NextSingle() * random.NextSingle() * 2.2f, tint,
-                (byte)(120 + random.Next(136)), 0.4f + random.NextSingle() * 1.6f, random.NextSingle() * MathF.Tau);
+                (byte)(120 + random.Next(136)), 0.4f + random.NextSingle() * 1.6f, random.NextSingle() * MathUtil.TwoPi);
         }
 
         return stars;

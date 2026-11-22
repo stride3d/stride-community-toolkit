@@ -86,7 +86,7 @@ void Fill(Span<short> samples, int sampleRate, int channels)
 
         var value = shape switch
         {
-            0 => MathF.Sin(2 * MathF.PI * t),
+            0 => MathF.Sin(MathUtil.TwoPi * t),
             1 => t < 0.5f ? 1f : -1f,
             2 => 2 * t - 1,
             _ => 1 - 4 * MathF.Abs(t - 0.5f),

@@ -296,9 +296,9 @@ public sealed class StationBoard
             var elbow = corner - new Vector2(signX * Radius, signY * Radius);
 
             // The quadrant facing the corner: the arc's axes are the board's, so angles are in (u, v)
-            var start = MathF.Atan2(signY, signX) - MathF.PI / 4f;
+            var start = MathF.Atan2(signY, signX) - MathUtil.PiOverFour;
 
-            shapes.DrawArc(_board.Place(elbow), _board.Normal, Radius, start, MathF.PI / 2f, accent);
+            shapes.DrawArc(_board.Place(elbow), _board.Normal, Radius, start, MathUtil.PiOverTwo, accent);
 
             Line(shapes, elbow.X, corner.Y, elbow.X - signX * Tick, corner.Y, 2f, accent);
             Line(shapes, corner.X, elbow.Y, corner.X, elbow.Y - signY * Tick, 2f, accent);

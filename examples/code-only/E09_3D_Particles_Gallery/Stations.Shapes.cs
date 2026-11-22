@@ -182,13 +182,13 @@ public static class ShapeStations
         emitter.Initializers.Add(new InitialPositionSeed { PositionMin = new Vector3(-2f, 0f, -1f), PositionMax = new Vector3(2f, 0f, 1f) });
         emitter.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(-0.3f, -1.2f, -0.3f), VelocityMax = new Vector3(0.3f, -0.8f, 0.3f) });
 
-        var flat = Quaternion.RotationX(MathF.PI * 0.5f);
-        var edge = Quaternion.RotationY(MathF.PI * 0.5f);
+        var flat = Quaternion.RotationX(MathUtil.PiOverTwo);
+        var edge = Quaternion.RotationY(MathUtil.PiOverTwo);
 
         emitter.Initializers.Add(new Initial3DRotationSeed
         {
-            RotationQuaternionMin = v switch { 0 => Quaternion.RotationYawPitchRoll(-MathF.PI, -MathF.PI, -MathF.PI), 1 => flat, _ => edge },
-            RotationQuaternionMax = v switch { 0 => Quaternion.RotationYawPitchRoll(MathF.PI, MathF.PI, MathF.PI), 1 => flat, _ => edge },
+            RotationQuaternionMin = v switch { 0 => Quaternion.RotationYawPitchRoll(-MathUtil.Pi, -MathUtil.Pi, -MathUtil.Pi), 1 => flat, _ => edge },
+            RotationQuaternionMax = v switch { 0 => Quaternion.RotationYawPitchRoll(MathUtil.Pi, MathUtil.Pi, MathUtil.Pi), 1 => flat, _ => edge },
         });
 
         s.Place(new Vector3(0f, 4.5f, 0f), 2f, emitter);

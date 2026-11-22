@@ -124,7 +124,7 @@ void Start(Scene scene)
     chart.AddMarkers(SampleData.ScatterAroundSine(z: 1.5f), color: new Color(186, 132, 255), name: "samples");
 
     // A shaded region still belongs to the XY plane - the picture of a definite integral
-    chart.AddArea(x => 2f * MathF.Sin(x), from: 0f, to: MathF.PI, color: options.Series.Palette[0], name: "integral");
+    chart.AddArea(x => 2f * MathF.Sin(x), from: 0f, to: MathUtil.Pi, color: options.Series.Palette[0], name: "integral");
 
     wave = chart.Plot(x => WaveAmplitude * MathF.Sin(waveFrequency * x), color: new Color(0, 210, 200), name: "wave");
 

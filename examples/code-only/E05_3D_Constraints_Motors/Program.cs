@@ -203,7 +203,7 @@ void CreateLooseCubes(Scene scene)
     {
         // The half step keeps every cube clear of the blade's own footprint at spawn - bodies that
         // start interpenetrating get shoved apart hard and can jam the joint on the first frame.
-        var angle = MathF.Tau * (i + 0.5f) / LooseCubeCount;
+        var angle = MathUtil.TwoPi * (i + 0.5f) / LooseCubeCount;
 
         var cube = CreateBox("Loose Cube", Color.LightGoldenrodYellow,
             new Vector3(MixerX + MathF.Sin(angle) * 1.3f, 0.25f, MathF.Cos(angle) * 1.3f),

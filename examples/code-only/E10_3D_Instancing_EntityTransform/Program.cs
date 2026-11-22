@@ -65,7 +65,7 @@ var items = Enum.GetValues<ItemKind>().ToDictionary(kind => kind, _ => new List<
 
 InstancingComponent stockMaster = null!;
 Model sharedModel = null!;
-Scene scene = null!;
+Scene rootScene = null!;
 
 using var game = new Game();
 
@@ -88,7 +88,7 @@ void Start(Scene scene)
 {
     game.AddGrabber();
 
-    scene = scene;
+    rootScene = scene;
 
     TextOverlay.GetOrCreate(game).AddSection("Instancing", BuildOverlayLines);
 
@@ -184,7 +184,7 @@ void DropItems(int count, ItemKind kind)
             DropHeight + random.NextSingle() * DropHeight,
             (random.NextSingle() - 0.5f) * DropSpread);
 
-        entity.Scene = scene;
+        entity.Scene = rootScene;
         items[kind].Add(entity);
 
         // No InstanceComponent on the toolkit kinds: their master is told about the entity directly

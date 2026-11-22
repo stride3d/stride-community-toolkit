@@ -250,7 +250,7 @@ public static class MapStations
             glossiness: new ComputeFloat(0.4f)));
 
         station.PlaceModel(ColouredCube(station), material, new Vector3(-1.8f, 0.9f, 0f), 1.8f);
-        station.PlaceModel(ColouredCube(station), material, new Vector3(1.8f, 0.9f, 0f), 1.8f, Quaternion.RotationY(MathF.PI * 0.25f) * Quaternion.RotationX(MathF.PI * 0.2f));
+        station.PlaceModel(ColouredCube(station), material, new Vector3(1.8f, 0.9f, 0f), 1.8f, Quaternion.RotationY(MathUtil.PiOverFour) * Quaternion.RotationX(MathUtil.Pi * 0.2f));
     }
 
     /// <summary>

@@ -368,11 +368,11 @@ void DrawPolygon(Vector3 center, int sides, float radius, Color color, float cor
     Span<Vector2> vertices = stackalloc Vector2[sides];
 
     // Counter-clockwise, starting so that one edge lies flat at the bottom
-    var start = -MathF.PI / 2f - MathF.PI / sides;
+    var start = -MathUtil.PiOverTwo - MathUtil.Pi / sides;
 
     for (var i = 0; i < sides; i++)
     {
-        var (sin, cos) = MathF.SinCos(start + i * MathF.Tau / sides);
+        var (sin, cos) = MathF.SinCos(start + i * MathUtil.TwoPi / sides);
 
         vertices[i] = new Vector2(cos, sin) * (radius - cornerRadius);
     }
@@ -432,7 +432,7 @@ void DrawRoute(Vector3 center, Theme theme)
     {
         var t = i / (route.Length - 1f);
         var x = center.X - PanelWidth / 2f + 0.3f + t * (PanelWidth - 0.6f);
-        var y = center.Y + MathF.Sin(t * MathF.Tau * 1.5f + time) * 0.55f;
+        var y = center.Y + MathF.Sin(t * MathUtil.TwoPi * 1.5f + time) * 0.55f;
 
         route[i] = new Vector2(x, y);
     }
@@ -477,8 +477,8 @@ void DrawOrnaments(Vector3 center, Theme theme)
     shapes.DrawArc(
         new Vector2(center.X + PanelWidth / 2f - 0.5f, center.Y - PanelHeight / 2f + 0.5f),
         0.28f,
-        -MathF.PI / 2f,
-        MathF.PI * 1.5f,
+        -MathUtil.PiOverTwo,
+        MathUtil.Pi * 1.5f,
         theme.Accent,
         0.05f);
 }
@@ -494,7 +494,7 @@ void DrawDashes(Vector3 center, Theme theme)
 
     shapes.StrokeWidth = 1.5f;
     shapes.Dash.Set(6f, 4f, time * 20f);
-    shapes.DrawArc(new Vector2(center.X - PanelWidth / 2f + 0.75f, center.Y), 0.5f, 0f, MathF.Tau, theme.Accent);
+    shapes.DrawArc(new Vector2(center.X - PanelWidth / 2f + 0.75f, center.Y), 0.5f, 0f, MathUtil.TwoPi, theme.Accent);
 
     shapes.Dash.Set(8f, 5f, -time * 30f);
     shapes.DrawPixelLine(center + new Vector3(-PanelWidth / 2f + 1.5f, 0f, 0f), center + new Vector3(PanelWidth / 2f - 0.3f, 0f, 0f), 1.5f, theme.Accent);

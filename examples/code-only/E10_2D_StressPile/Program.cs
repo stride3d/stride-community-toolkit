@@ -60,7 +60,7 @@ var random = new Random(1);
 List<PileBody> bodies = [];
 
 CameraComponent camera = null!;
-Scene scene = null!;
+Scene rootScene = null!;
 Entity awakeMaster = null!;
 Entity sleepingMaster = null!;
 
@@ -100,7 +100,7 @@ void Start(Scene scene)
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber().MaxDistance = GrabberDistance;
 
-    scene = scene;
+    rootScene = scene;
 
     // The default aim shines toward +Z, which leaves the faces turned towards the camera unlit
     var light = game.AddDirectionalLight();
@@ -159,8 +159,8 @@ void SetupInstancing()
         new InstancingComponent { Type = sleepingInstancing }
     };
 
-    awakeMaster.Scene = scene;
-    sleepingMaster.Scene = scene;
+    awakeMaster.Scene = rootScene;
+    sleepingMaster.Scene = rootScene;
 
     // Registers with the graphics compositor, not the scene, so it outlives anything in the scene
     game.AddInstancingBufferUpload(awakeInstancing);
@@ -290,7 +290,7 @@ void Spawn(Vector3 position)
     // New bodies are awake by definition; UpdateSleepTint moves them once Bepu puts them to sleep
     awakeInstancing.AddInstance(entity);
 
-    entity.Scene = scene;
+    entity.Scene = rootScene;
 
     bodies.Add(new PileBody(entity, entity.Get<BodyComponent>()));
 }

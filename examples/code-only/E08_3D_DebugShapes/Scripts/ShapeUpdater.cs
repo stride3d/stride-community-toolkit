@@ -273,7 +273,7 @@ public class ShapeUpdater : SyncScript
         _debugDraw.DrawCylinder(row + new Vector3(6, 0, 0), 1f, 0.5f, solid: !_wireframe);
         _debugDraw.DrawCone(row + new Vector3(7, 0, 0), 1f, 0.5f, solid: !_wireframe);
         _debugDraw.DrawHalfSphere(row + new Vector3(8, 0, 0), 0.5f, solid: !_wireframe);
-        _debugDraw.DrawHalfSphere(row + new Vector3(9, 0, 0), 0.5f, rotation: Quaternion.RotationX(MathF.PI), solid: !_wireframe);
+        _debugDraw.DrawHalfSphere(row + new Vector3(9, 0, 0), 0.5f, rotation: Quaternion.RotationX(MathUtil.Pi), solid: !_wireframe);
         _debugDraw.DrawCone(new Vector3(0, 0.5f, 0), 2f, 0.5f, color: Color.HotPink);
     }
 }

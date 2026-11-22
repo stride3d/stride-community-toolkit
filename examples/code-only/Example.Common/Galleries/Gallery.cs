@@ -88,7 +88,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         _scene = scene;
         _exhibits = exhibits;
         Options = options ?? GalleryOptions.Default;
-        Radius = MathF.Max(Options.MinimumRadius, exhibits.Count * Options.Spacing / MathF.Tau);
+        Radius = MathF.Max(Options.MinimumRadius, exhibits.Count * Options.Spacing / MathUtil.TwoPi);
         _camera = new GalleryCamera(game);
         // A regular face for the labels: Stride's built-in font is bold
         _labelFont = SystemFonts.LoadFirst(game.Services, SystemFonts.SansSerifCandidates, 20f);
@@ -261,7 +261,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     private TStation BuildStation(int index, int count, Exhibit<TStation> exhibit, Action<TStation>? configure)
     {
         // Station 1 straight ahead of the home view, the rest clockwise as seen from above
-        var angle = -MathF.PI * 0.5f + index * MathF.Tau / count;
+        var angle = -MathUtil.PiOverTwo + index * MathUtil.TwoPi / count;
         var (sin, cos) = MathF.SinCos(angle);
         var outward = new Vector3(cos, 0f, sin);
         var forward = -outward;

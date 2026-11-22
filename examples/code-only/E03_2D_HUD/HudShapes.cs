@@ -43,7 +43,7 @@ public static class HudShapes
     public static void DashedRing(this HudCanvas canvas, Vector2 center, float radius, float dash, float gap, Color colour, float phase = 0f)
     {
         canvas.Style(new HudStyle(HudCanvas.Thin, 0f) { Dash = dash, Gap = gap, Phase = phase });
-        canvas.Shapes.DrawArc(center, radius, 0f, MathF.Tau, colour);
+        canvas.Shapes.DrawArc(center, radius, 0f, MathUtil.TwoPi, colour);
     }
 
     /// <summary>A bar made of cells, lit up to the value. Sets the style.</summary>

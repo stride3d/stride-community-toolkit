@@ -69,5 +69,5 @@ public sealed class HeadingTapeWidget(ShipState ship) : HudWidget
         canvas.Text(new(Name, part), text, center, HudText.Caption, colour);
     }
 
-    private static float Wrap(float degrees) => (degrees % 360f + 360f) % 360f;
+    private static float Wrap(float degrees) => MathUtil.Mod(degrees, 360f);
 }

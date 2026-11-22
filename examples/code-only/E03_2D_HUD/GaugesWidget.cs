@@ -39,7 +39,7 @@ public sealed class GaugesWidget(ShipState ship) : HudWidget
 
         // Progress, clockwise from twelve o'clock, its glow adding light to the track
         canvas.Style(new HudStyle(0f, 0.95f, colour) { Glow = 3f, GlowColour = colour, Additive = true });
-        canvas.Shapes.DrawSector(center, radius, MathF.PI / 2f, -MathF.Tau * value, colour, radius - Band);
+        canvas.Shapes.DrawSector(center, radius, MathUtil.PiOverTwo, -MathUtil.TwoPi * value, colour, radius - Band);
 
         canvas.DashedRing(center, radius + 0.16f, 3f, 5f, dim);
 

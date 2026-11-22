@@ -129,7 +129,7 @@ void Start(Scene scene)
 
     // The integral picture: one arch of the sine shaded down to the x axis, re-sampled and re-clipped
     // with the curves whenever the view changes
-    chart.AddArea(x => 2f * MathF.Sin(x), from: 0f, to: MathF.PI, color: options.Series.Palette[0], name: "integral");
+    chart.AddArea(x => 2f * MathF.Sin(x), from: 0f, to: MathUtil.Pi, color: options.Series.Palette[0], name: "integral");
 
     // The animated curve. An explicit colour: the palette's pick here would repeat the samples' purple.
     wave = chart.Plot(x => WaveAmplitude * MathF.Sin(waveFrequency * x), color: new Color(0, 158, 150), name: "wave");

@@ -37,7 +37,7 @@ ShapeItem[] shapes =
     new(Primitive2D.Polygon(parallelogram), "Parallelogram")
 ];
 
-Scene? scene = null;
+Scene? rootScene = null;
 KeyMenu? spawnMenu = null;
 
 using var game = new Game();
@@ -49,7 +49,7 @@ void Start(Scene scene)
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
 
-    scene = scene;
+    rootScene = scene;
 
     // The starting column, one of each shape
     foreach (var (index, shape) in shapes.Index())
@@ -82,7 +82,7 @@ void Spawn(ShapeItem shape, Vector3 position)
 {
     var entity = game.CreatePrimitive(shape.Type, new() { Material = game.CreateFlatMaterial(random.NextColor()), Position = position });
 
-    entity.Scene = scene;
+    entity.Scene = rootScene;
 }
 
 void Update(Scene scene, GameTime time)

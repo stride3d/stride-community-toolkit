@@ -94,7 +94,7 @@ public static class StrokeStations
         for (var i = 0; i < helix.Length; i++)
         {
             var t = (float)i / (helix.Length - 1);
-            var angle = t * MathF.Tau * 3f + s.Seconds;
+            var angle = t * MathUtil.TwoPi * 3f + s.Seconds;
 
             helix[i] = pillar.Base + new Vector3(MathF.Cos(angle) * 1.8f, 0.6f + t * (pillar.Height + 0.4f), MathF.Sin(angle) * 1.8f);
         }
@@ -107,7 +107,7 @@ public static class StrokeStations
 
         for (var i = 0; i < trefoil.Length; i++)
         {
-            var angle = i * MathF.Tau / trefoil.Length;
+            var angle = i * MathUtil.TwoPi / trefoil.Length;
             var x = (MathF.Sin(angle) + 2f * MathF.Sin(2f * angle)) * 0.9f;
             var y = MathF.Sin(3f * angle) * 0.8f;
             var z = (MathF.Cos(angle) - 2f * MathF.Cos(2f * angle)) * 0.9f;

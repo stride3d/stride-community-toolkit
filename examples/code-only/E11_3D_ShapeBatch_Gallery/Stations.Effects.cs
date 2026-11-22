@@ -57,7 +57,7 @@ public static class EffectStations
         shapes.Glow.Additive = true;
         shapes.DrawRing(s.At(0f, 2.6f, -1f), s.Forward, 1.2f, Color.Cyan);
         shapes.DrawDisc(s.At(-3.4f, 2.6f, -1f), s.Forward, 0.9f, Color.Magenta);
-        shapes.DrawArc(s.At(3.4f, 2.6f, -1f), s.Forward, 1.2f, s.Seconds * 1.5f, MathF.PI * 1.2f, Color.OrangeRed);
+        shapes.DrawArc(s.At(3.4f, 2.6f, -1f), s.Forward, 1.2f, s.Seconds * 1.5f, MathUtil.Pi * 1.2f, Color.OrangeRed);
 
         s.ResetStyle(shapes);
     }
@@ -359,9 +359,9 @@ public static class EffectStations
         var level = (MathF.Sin(s.Seconds * 0.8f) + 1f) * 0.5f;
 
         shapes.Fill.Alpha = 0.25f;
-        shapes.DrawArc(gauge, 50f, 0f, MathF.Tau, Color.Gray, width: 14f);
+        shapes.DrawArc(gauge, 50f, 0f, MathUtil.TwoPi, Color.Gray, width: 14f);
         shapes.Fill.Alpha = 0.9f;
-        shapes.DrawArc(gauge, 50f, -MathF.PI * 0.5f, MathF.Tau * level, Color.LimeGreen, width: 14f);
+        shapes.DrawArc(gauge, 50f, -MathUtil.PiOverTwo, MathUtil.TwoPi * level, Color.LimeGreen, width: 14f);
 
         // A panel in the bottom-right corner, HUD style, with a dashed ring turning inside it
         var panel = shapes.AnchorPoint(Anchor.BottomRight) + new Vector2(-150f, -90f);

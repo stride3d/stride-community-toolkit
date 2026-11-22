@@ -54,7 +54,7 @@ public static class HairCards
             // One strand: where it starts, how it sways, how wide, how dark and how long
             var x0 = (float)random.NextDouble() * size;
             var wobble = ((float)random.NextDouble() - 0.5f) * 5f;
-            var phase = (float)random.NextDouble() * MathF.Tau;
+            var phase = (float)random.NextDouble() * MathUtil.TwoPi;
             var width = 2.2f + (float)random.NextDouble() * 2.6f;
             var shade = 0.65f + (float)random.NextDouble() * 0.5f;
             var length = 0.7f + (float)random.NextDouble() * 0.3f;
@@ -194,7 +194,7 @@ public static class HairCards
 
         do
         {
-            var phi = (float)random.NextDouble() * MathF.Tau;
+            var phi = (float)random.NextDouble() * MathUtil.TwoPi;
             var y = -1f + (float)random.NextDouble() * 2f;
             var ring = MathF.Sqrt(MathF.Max(0f, 1f - y * y));
             radial = new Vector3(ring * MathF.Cos(phi), y, ring * MathF.Sin(phi));

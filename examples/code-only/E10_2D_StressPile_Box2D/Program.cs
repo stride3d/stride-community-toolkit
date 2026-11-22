@@ -53,7 +53,7 @@ var random = new Random(1);
 // Every body of the pile, with which master draws it right now
 List<PileBody> bodies = [];
 
-Scene scene = null!;
+Scene rootScene = null!;
 Entity awakeMaster = null!;
 Entity sleepingMaster = null!;
 
@@ -93,7 +93,7 @@ game.Run(new SceneSetup3D
 
 void Start(Scene scene)
 {
-    scene = scene;
+    rootScene = scene;
 
     // The default aim shines toward +Z, which leaves the faces turned towards the camera unlit
     var light = game.AddDirectionalLight();
@@ -132,7 +132,7 @@ void CreateWall(Vector3 position, Vector3 size, float rotation = 0f)
     });
 
     wall.Transform.Rotation = Quaternion.RotationZ(rotation);
-    wall.Scene = scene;
+    wall.Scene = rootScene;
 
     var bodyId = simulation.CreateStaticBody(wall, position.XY(), rotation);
 
@@ -160,8 +160,8 @@ void SetupInstancing()
         new InstancingComponent { Type = sleepingInstancing }
     };
 
-    awakeMaster.Scene = scene;
-    sleepingMaster.Scene = scene;
+    awakeMaster.Scene = rootScene;
+    sleepingMaster.Scene = rootScene;
 
     // Registers with the graphics compositor, not the scene, so it outlives anything in the scene
     game.AddInstancingBufferUpload(awakeInstancing);
@@ -315,7 +315,7 @@ void Spawn(Vector3 position)
     // New bodies are awake by definition; UpdateSleepTint moves them once Box2D puts them to sleep
     awakeInstancing.AddInstance(entity);
 
-    entity.Scene = scene;
+    entity.Scene = rootScene;
 
     bodies.Add(new PileBody(entity, bodyId));
 }

@@ -37,7 +37,7 @@ using Stride.Rendering;
 // the car would stutter on any display faster than the simulation.
 
 const float SuspensionLength = 0.25f;
-const float MaxSteeringAngle = MathF.PI * 0.3f;      // the demo's 0.23 turns wide; 54 degrees at the lock makes the slalom drivable
+const float MaxSteeringAngle = MathUtil.Pi * 0.3f;      // the demo's 0.23 turns wide; 54 degrees at the lock makes the slalom drivable
 const float SteeringSpeed = 2.5f;                    // radians per second towards the key
 const float ForwardSpeed = 75f;
 const float ForwardForce = 6f;
@@ -151,7 +151,7 @@ void Steer(Car car, float angle)
 
     if (!MathUtil.IsZero(magnitude))
     {
-        var turnRadius = MathF.Abs(WheelBaseLength * MathF.Tan(MathF.PI * 0.5f - magnitude));
+        var turnRadius = MathF.Abs(WheelBaseLength * MathF.Tan(MathUtil.PiOverTwo - magnitude));
         var halfWidth = WheelBaseWidth * 0.5f;
         var inner = MathF.Atan(WheelBaseLength / (turnRadius - halfWidth));
         var outer = MathF.Atan(WheelBaseLength / (turnRadius + halfWidth));

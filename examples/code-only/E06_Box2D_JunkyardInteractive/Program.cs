@@ -363,7 +363,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
 /// </summary>
 static Vector2[] FibonacciPentagon(float radius)
 {
-    var phi = MathF.PI * (MathF.Sqrt(5.0f) - 1.0f);
+    var phi = MathUtil.Pi * (MathF.Sqrt(5.0f) - 1.0f);
     var points = new Vector2[5];
 
     for (var i = 0; i < 5; ++i)

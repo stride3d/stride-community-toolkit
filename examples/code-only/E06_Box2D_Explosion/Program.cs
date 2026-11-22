@@ -99,7 +99,7 @@ void BuildScene(Scene scene)
     // the same mass, equally far from a blast centred between them. The slab shows the wave more
     // edge, so it flies harder.
     DynamicBox(scene, new Vector2(13, 2), new Vector2(4, 0.5f), gold, density: 1f);
-    DynamicCircle(scene, new Vector2(19, 0.8f), 0.8f, gold, density: 2f / (MathF.PI * 0.8f * 0.8f));
+    DynamicCircle(scene, new Vector2(19, 0.8f), 0.8f, gold, density: 2f / (MathUtil.Pi * 0.8f * 0.8f));
 }
 
 void Update(Scene scene, GameTime time)

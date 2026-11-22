@@ -61,7 +61,7 @@ public sealed class Deck(ContainerFactory factory)
         // A little scatter under the hatch and a random tilt, so no two drops are the same and stacks
         // form by accident rather than by alignment
         var position = new Vector3(Jitter(2f), HatchHeight, Jitter(2f));
-        var rotation = Quaternion.RotationYawPitchRoll(Jitter(MathF.PI), Jitter(0.35f), Jitter(0.35f));
+        var rotation = Quaternion.RotationYawPitchRoll(Jitter(MathUtil.Pi), Jitter(0.35f), Jitter(0.35f));
 
         var entity = factory.Create(_nextId, size, paint, position, rotation);
 

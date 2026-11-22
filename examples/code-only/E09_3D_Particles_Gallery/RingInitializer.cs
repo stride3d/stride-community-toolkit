@@ -48,7 +48,7 @@ public sealed class RingInitializer : ParticleInitializer
             var seed = particle.Get(seeds);
 
             // Around the ring by seed, so a burst covers it evenly and a stream fills it over time
-            var angle = seed.GetFloat(RandomOffset.Offset2A + SeedOffset) * MathF.Tau;
+            var angle = seed.GetFloat(RandomOffset.Offset2A + SeedOffset) * MathUtil.TwoPi;
             var radius = Radius + (seed.GetFloat(RandomOffset.Offset2B + SeedOffset) - 0.5f) * Thickness * 2f;
             var (sin, cos) = MathF.SinCos(angle);
 

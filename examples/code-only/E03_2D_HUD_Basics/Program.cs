@@ -283,11 +283,11 @@ void DrawEnergyDial()
     Solid();
 
     // The whole circle, dim
-    shapeBatch.DrawArc(DialCentre(), DialRadius, 0f, MathF.Tau, dialTrack, DialWidth);
+    shapeBatch.DrawArc(DialCentre(), DialRadius, 0f, MathUtil.TwoPi, dialTrack, DialWidth);
 
     // The part that is full. An angle of zero points right and a positive angle turns clockwise,
     // so this starts at the top and runs round to the right
-    shapeBatch.DrawArc(DialCentre(), DialRadius, -MathF.PI * 0.5f, MathF.Tau * energy, energyColour, DialWidth);
+    shapeBatch.DrawArc(DialCentre(), DialRadius, -MathUtil.PiOverTwo, MathUtil.TwoPi * energy, energyColour, DialWidth);
 }
 #endregion
 
@@ -351,7 +351,7 @@ void DrawWarning(float seconds)
     var centre = new Vector2(shapeBatch.ScreenSize.X * 0.5f, Margin + warningSize.Y * 0.5f);
 
     // Rises and falls twice a second
-    var pulse = 0.4f + 0.6f * MathF.Abs(MathF.Sin(seconds * MathF.Tau));
+    var pulse = 0.4f + 0.6f * MathF.Abs(MathF.Sin(seconds * MathUtil.TwoPi));
 
     // A panel like the first one, with a red edge, a soft halo and the pulse as its opacity
     shapeBatch.BorderWidth = 2f;

@@ -493,7 +493,7 @@ public static class ThrusterStations
 
         for (var i = 0; i < 8; i++)
         {
-            var (sin, cos) = MathF.SinCos(i * MathF.Tau / 8f);
+            var (sin, cos) = MathF.SinCos(i * MathUtil.TwoPi / 8f);
 
             nozzles[i + 1] = new Vector3(0f, cos * radius, sin * radius);
         }

@@ -209,7 +209,7 @@ public sealed class HudCanvas
     /// <param name="rate">How fast it gets there. At 12 it covers most of the distance in a fifth of a second.</param>
     public float Animate(HudId id, float target, float rate = 12f)
     {
-        var value = _animated.TryGetValue(id, out var current) ? current + (target - current) * (1f - MathF.Exp(-rate * Elapsed)) : target;
+        var value = _animated.TryGetValue(id, out var current) ? MathUtil.ExpDecay(current, target, rate, Elapsed) : target;
 
         _animated[id] = value;
 

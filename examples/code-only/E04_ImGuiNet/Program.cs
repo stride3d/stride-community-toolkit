@@ -97,7 +97,7 @@ void CreateObstacleStacks(Scene scene)
 {
     for (var stack = 0; stack < ObstacleStackCount; stack++)
     {
-        var angle = MathF.Tau * stack / ObstacleStackCount;
+        var angle = MathUtil.TwoPi * stack / ObstacleStackCount;
         var x = MathF.Sin(angle) * OrbitRadius;
         var z = MathF.Cos(angle) * OrbitRadius;
 
