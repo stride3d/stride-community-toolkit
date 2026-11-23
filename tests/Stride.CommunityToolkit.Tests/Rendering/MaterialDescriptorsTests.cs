@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
+using Stride.Graphics;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
 using Xunit;
@@ -21,8 +22,8 @@ public class MaterialDescriptorsTests
 
         Assert.Equal(Color.Green, Assert.IsType<ComputeColor>(Assert.IsType<MaterialDiffuseMapFeature>(a.Diffuse).DiffuseMap).Value);
         Assert.IsType<MaterialDiffuseLambertModelFeature>(a.DiffuseModel);
-        Assert.Equal(0.8f, Assert.IsType<ComputeFloat>(Assert.IsType<MaterialGlossinessMapFeature>(a.MicroSurface).GlossinessMap).Value);
-        Assert.Equal(0.25f, Assert.IsType<ComputeFloat>(Assert.IsType<MaterialMetalnessMapFeature>(a.Specular).MetalnessMap).Value);
+        Assert.Equal(0.8f, Glossiness(a));
+        Assert.Equal(0.25f, Metalness(a));
         Assert.IsType<MaterialSpecularMicrofacetEnvironmentGGXLUT>(Assert.IsType<MaterialSpecularMicrofacetModelFeature>(a.SpecularModel).Environment);
     }
 
@@ -32,8 +33,8 @@ public class MaterialDescriptorsTests
         var a = MaterialDescriptors.Pbr(Color.Red).Attributes;
 
         // A colour alone is a matte cube of that colour: no metalness, the middling glossiness
-        Assert.Equal(0f, Assert.IsType<ComputeFloat>(Assert.IsType<MaterialMetalnessMapFeature>(a.Specular).MetalnessMap).Value);
-        Assert.Equal(MaterialDescriptors.DefaultGlossiness, Assert.IsType<ComputeFloat>(Assert.IsType<MaterialGlossinessMapFeature>(a.MicroSurface).GlossinessMap).Value);
+        Assert.Equal(0f, Metalness(a));
+        Assert.Equal(MaterialDescriptors.DefaultGlossiness, Glossiness(a));
     }
 
     [Fact]
@@ -55,7 +56,7 @@ public class MaterialDescriptorsTests
         var emissive = Assert.IsType<MaterialEmissiveMapFeature>(a.Emissive);
 
         Assert.Equal(Color.Orange, Assert.IsType<ComputeColor>(emissive.EmissiveMap).Value);
-        Assert.Equal(6f, Assert.IsType<ComputeFloat>(emissive.Intensity).Value);
+        Assert.Equal(6f, Scalar(emissive.Intensity));
         Assert.IsType<MaterialDiffuseLambertModelFeature>(a.DiffuseModel);
         Assert.Null(a.Specular);
         Assert.Null(a.SpecularModel);
@@ -67,8 +68,8 @@ public class MaterialDescriptorsTests
         var a = MaterialDescriptors.Screen(null!).Attributes;
         var node = Assert.IsType<ComputeTextureColor>(Assert.IsType<MaterialEmissiveMapFeature>(a.Emissive).EmissiveMap);
 
-        Assert.Equal(Stride.Graphics.TextureAddressMode.Clamp, node.AddressModeU);
-        Assert.Equal(Stride.Graphics.TextureAddressMode.Clamp, node.AddressModeV);
+        Assert.Equal(TextureAddressMode.Clamp, node.AddressModeU);
+        Assert.Equal(TextureAddressMode.Clamp, node.AddressModeV);
         Assert.Null(a.Diffuse);
         Assert.Null(a.DiffuseModel);
         Assert.Null(a.SpecularModel);
@@ -98,7 +99,7 @@ public class MaterialDescriptorsTests
         Assert.Equal(colour, node.Value);
         Assert.True(node.PremultiplyAlpha);
         Assert.True(emissive.UseAlpha);
-        Assert.Equal(3f, Assert.IsType<ComputeFloat>(emissive.Intensity).Value);
+        Assert.Equal(3f, Scalar(emissive.Intensity));
 
         Assert.IsType<MaterialTransparencyBlendFeature>(a.Transparency);
 
@@ -116,17 +117,26 @@ public class MaterialDescriptorsTests
 
         var displacement = Assert.IsType<MaterialDisplacementMapFeature>(a.Displacement);
         Assert.Equal(DisplacementMapStage.Vertex, displacement.Stage);
-        Assert.Equal(0.05f, Assert.IsType<ComputeFloat>(displacement.Intensity).Value);
+        Assert.Equal(0.05f, Scalar(displacement.Intensity));
 
         var emissive = Assert.IsType<MaterialEmissiveMapFeature>(a.Emissive);
         Assert.True(emissive.UseAlpha);
-        Assert.Equal(2f, Assert.IsType<ComputeFloat>(emissive.Intensity).Value);
+        Assert.Equal(2f, Scalar(emissive.Intensity));
 
         // A float4 node is passed raw, so white goes in as linear white, alpha the template's tenth
         Assert.Equal(new Vector4(1f, 1f, 1f, 0.1f), Assert.IsType<ComputeFloat4>(emissive.EmissiveMap).Value);
 
         Assert.IsType<MaterialTransparencyBlendFeature>(a.Transparency);
-        Assert.Equal(Stride.Graphics.CullMode.None, a.CullMode);
+        Assert.Equal(CullMode.None, a.CullMode);
         Assert.Null(a.Diffuse);
     }
+
+    private static float Glossiness(MaterialAttributes attributes)
+        => Scalar(Assert.IsType<MaterialGlossinessMapFeature>(attributes.MicroSurface).GlossinessMap);
+
+    private static float Metalness(MaterialAttributes attributes)
+        => Scalar(Assert.IsType<MaterialMetalnessMapFeature>(attributes.Specular).MetalnessMap);
+
+    // The number in a scalar slot, which every helper fills with a constant
+    private static float Scalar(IComputeScalar? node) => Assert.IsType<ComputeFloat>(node).Value;
 }

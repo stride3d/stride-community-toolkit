@@ -2,8 +2,8 @@ using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -46,6 +46,7 @@ var door = new Tween(1.2f, EasingFunction.CubicEaseInOut);
 var bob = Tween.Run(1.6f, EasingFunction.SineEaseInOut, TweenLoop.PingPong);
 var flight = new Tween(1.5f, EasingFunction.SmootherStep);
 var pops = crystalSpots.Select(_ => new Tween(0.7f, EasingFunction.BackEaseOut)).ToArray();
+var popDelays = new float[crystalSpots.Length];
 
 BodyComponent? liftBody = null;
 Entity? doorEntity = null;
@@ -54,6 +55,9 @@ BodyComponent[] riders = [];
 Vector3[] riderHomes = [];
 var liftTargetBefore = liftHome;
 var doorOpen = false;
+var doorAngle = 0f;
+var doorFrom = 0f;
+var doorTo = 0f;
 var viewpoint = 0;
 var flightFrom = Vector3.Zero;
 var flightFromRotation = Quaternion.Identity;
@@ -70,7 +74,7 @@ game.Run(new SceneSetup3D
     DpiAware = true,
 }.UseBepu().UseSkybox(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     LookFrom(viewpoints[0]);
 
@@ -83,7 +87,7 @@ void Start(Scene rootScene)
         Body = BodyMode.Kinematic,
     });
 
-    platform.Scene = rootScene;
+    platform.Scene = scene;
     liftBody = platform.Get<BodyComponent>();
 
     // The stack it carries: ordinary dynamic bodies, dropped on from a little above
@@ -99,7 +103,7 @@ void Start(Scene rootScene)
             Position = riderHomes[i],
         });
 
-        rider.Scene = rootScene;
+        rider.Scene = scene;
         riders[i] = rider.Get<BodyComponent>();
     }
 
@@ -113,9 +117,9 @@ void Start(Scene rootScene)
         Position = doorHinge,
     });
 
-    frame.Scene = rootScene;
+    frame.Scene = scene;
 
-    doorEntity = new Entity("Door hinge") { Transform = { Position = doorHinge } };
+    doorEntity = new Entity("Door hinge", doorHinge);
 
     var leaf = game.CreatePrimitive(Primitive3D.Box(new Vector3(0.12f, 2.4f, 1.6f)), new PrimitiveEntityOptions
     {
@@ -126,7 +130,7 @@ void Start(Scene rootScene)
     });
 
     doorEntity.AddChild(leaf);
-    doorEntity.Scene = rootScene;
+    doorEntity.Scene = scene;
 
     // The crystals: visuals that arrive by scale and then bob by position
     crystals = new Entity[crystalSpots.Length];
@@ -142,15 +146,11 @@ void Start(Scene rootScene)
         });
 
         crystal.Transform.Scale = Vector3.Zero;
-        crystal.Scene = rootScene;
+        crystal.Scene = scene;
         crystals[i] = crystal;
     }
 
     Pop();
-
-    // The door starts closed: a finished run of the closing tween is the closed pose
-    door.Start();
-    door.Update(door.Duration);
 
     TextOverlay.GetOrCreate(game).AddSection("Easing", BuildOverlayLines);
 }
@@ -177,14 +177,14 @@ void Update(Scene scene, GameTime time)
 
     liftTargetBefore = liftTarget;
 
-    // 2. The door: an angle between closed and open, written straight to a transform
+    // 2. The door: an angle between where the swing began and where it ends, written straight to a transform
     door.Update(time);
 
     if (doorEntity is not null)
     {
-        var angle = doorOpen ? door.Lerp(0f, DoorOpenAngle) : door.Lerp(DoorOpenAngle, 0f);
+        doorAngle = door.Lerp(doorFrom, doorTo);
 
-        doorEntity.Transform.Rotation = Quaternion.RotationY(MathUtil.DegreesToRadians(angle));
+        doorEntity.Transform.Rotation = Quaternion.RotationY(MathUtil.DegreesToRadians(doorAngle));
     }
 
     // 3. The crystals: scale from nothing with an overshoot, then a slow rise and fall forever
@@ -192,6 +192,14 @@ void Update(Scene scene, GameTime time)
 
     for (var i = 0; i < crystals.Length; i++)
     {
+        // Each crystal waits its turn, then its tween starts; a tween cannot be wound back before zero
+        if (popDelays[i] > 0f)
+        {
+            popDelays[i] -= dt;
+
+            if (popDelays[i] <= 0f) pops[i].Start();
+        }
+
         pops[i].Update(time);
 
         crystals[i].Transform.Scale = new Vector3(pops[i].Lerp(0f, 1f));
@@ -209,7 +217,7 @@ void Update(Scene scene, GameTime time)
         var eye = viewpoints[viewpoint];
 
         camera.Position = flight.Lerp(flightFrom, eye);
-        camera.Rotation = flight.Slerp(flightFromRotation, MathUtilEx.LookRotation(eye, lookTarget, Vector3.UnitY));
+        camera.Rotation = flight.Slerp(flightFromRotation, QuaternionUtil.LookAt(eye, lookTarget));
 
         if (flight.IsComplete) flight.Reset();
     }
@@ -226,7 +234,11 @@ void HandleInput()
 
     if (input.IsKeyPressed(Keys.O))
     {
+        // A swing begins where the door is, so a press in the middle of one turns it round instead of
+        // jumping it to the far end
         doorOpen = !doorOpen;
+        doorFrom = doorAngle;
+        doorTo = doorOpen ? DoorOpenAngle : 0f;
         door.Start();
     }
 
@@ -251,13 +263,16 @@ void HandleInput()
     }
 }
 
-// Each crystal starts a little after the one before, which is all a stagger is
+// Each crystal starts a little after the one before, which is all a stagger is: the first pops now, the
+// others wait their delay out in Update
 void Pop()
 {
     for (var i = 0; i < pops.Length; i++)
     {
-        pops[i].Start();
-        pops[i].Update(-0.15f * i);
+        popDelays[i] = 0.15f * i;
+
+        if (i == 0) pops[i].Start();
+        else pops[i].Reset();
     }
 }
 
@@ -266,7 +281,7 @@ void LookFrom(Vector3 eye)
     var camera = game.GetCameraEntity().Transform;
 
     camera.Position = eye;
-    camera.Rotation = MathUtilEx.LookRotation(eye, lookTarget, Vector3.UnitY);
+    camera.Rotation = QuaternionUtil.LookAt(eye, lookTarget);
 }
 
 IReadOnlyList<TextElement> BuildOverlayLines() =>
@@ -311,7 +326,8 @@ concepts:
   - Tween - start, feed the frame time, read Lerp or Slerp
   - Driving a kinematic Bepu body towards an eased target with feed-forward velocity plus a correction
   - TweenLoop.PingPong for a lift and a bob, TweenLoop.None for a door and a camera flight
-  - A staggered pop-in by starting tweens with a negative head start
+  - A staggered pop-in - each tween waits out its delay before it starts
+  - Reversing a tween in mid-run by starting the next one from the current value
   - A camera flight as one tween over position and rotation
 tags:
   - 3D

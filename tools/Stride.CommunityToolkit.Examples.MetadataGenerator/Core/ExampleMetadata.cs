@@ -33,10 +33,10 @@ public class ExampleMetadata
 
     // --- classification ---------------------------------------------------
 
-    /// <summary>Gets or sets the teaching level. One of <see cref="Core.MetadataVocabulary.Levels"/>.</summary>
+    /// <summary>Gets or sets the teaching level. One of <see cref="MetadataVocabulary.Levels"/>.</summary>
     public string? Level { get; set; }
 
-    /// <summary>Gets or sets the topic. One of <see cref="Core.MetadataVocabulary.Categories"/>.</summary>
+    /// <summary>Gets or sets the topic. One of <see cref="MetadataVocabulary.Categories"/>.</summary>
     public string? Category { get; set; }
 
     /// <summary>Gets or sets the relative difficulty, 1 to 5.</summary>
@@ -46,7 +46,7 @@ public class ExampleMetadata
     public int? Order { get; set; }
 
     /// <summary>
-    /// Gets or sets the source language. One of <see cref="Core.MetadataVocabulary.Languages"/>;
+    /// Gets or sets the source language. One of <see cref="MetadataVocabulary.Languages"/>;
     /// defaults to <c>csharp</c> when omitted.
     /// </summary>
     public string? Language { get; set; }
@@ -134,7 +134,7 @@ public class ExampleMetadata
 
     /// <summary>
     /// Gets or sets the toolkit packages this example references that are not on NuGet - see
-    /// <see cref="Core.DocPaths.PackagesNotOnNuGet"/> - read from its project file or its
+    /// <see cref="DocPaths.PackagesNotOnNuGet"/> - read from its project file or its
     /// <c>#:project</c> directives. Empty for an example that runs from a copy of its project alone.
     /// </summary>
     [YamlIgnore]
@@ -146,14 +146,14 @@ public class ExampleMetadata
     /// </summary>
     [YamlIgnore]
     [JsonIgnore]
-    public Core.MetadataBlockLocation BlockLocation { get; set; }
+    public MetadataBlockLocation BlockLocation { get; set; }
 
     /// <summary>Gets the effective language, applying the <c>csharp</c> default.</summary>
     /// <remarks>A convenience for the generator only. It is kept out of the manifest because it would
     /// duplicate <see cref="Language"/>, which the parser already fills in from the file extension.</remarks>
     [YamlIgnore]
     [JsonIgnore]
-    public string EffectiveLanguage => Language ?? Core.MetadataVocabulary.DefaultLanguage;
+    public string EffectiveLanguage => Language ?? MetadataVocabulary.DefaultLanguage;
 
     /// <summary>Gets the effective media filename, applying the <c>&lt;slug&gt;.webp</c> default.</summary>
     /// <remarks>A convenience for the docs generator only. It is kept out of the manifest because a
@@ -180,7 +180,7 @@ public class ExampleMetadata
     /// </summary>
     /// <remarks>
     /// Translations are optional and partial by design: <c>cs</c> is consumed only by the launchers,
-    /// never by the docs (D5), and most examples will carry English alone. A missing translation must
+    /// never by the docs, and most examples will carry English alone. A missing translation must
     /// therefore read as "not translated yet" and show the English, never as a blank label. Putting the
     /// rule here rather than in each consumer is what stops one of them forgetting it.
     /// </remarks>

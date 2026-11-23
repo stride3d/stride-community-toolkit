@@ -1,8 +1,14 @@
+using System.Runtime.InteropServices;
+
 namespace Stride.CommunityToolkit.Collections;
 
 /// <summary>
 /// Extensions for resizing and ensuring capacity of <see cref="List{T}"/> without allocations per element.
 /// </summary>
+/// <remarks>
+/// Both go through <see cref="CollectionsMarshal.SetCount{T}"/>, which resizes in one step, and clear the slots
+/// they add, since the marshal leaves whatever a shrunken list left in them.
+/// </remarks>
 public static class ListExtensions
 {
     /// <summary>
@@ -12,19 +18,11 @@ public static class ListExtensions
     public static void EnsureSize<T>(this List<T> list, int size)
     {
         ArgumentNullException.ThrowIfNull(list);
-
         ArgumentOutOfRangeException.ThrowIfNegative(size);
 
         if (list.Count >= size) return;
 
-        list.Capacity = Math.Max(list.Capacity, size);
-
-        int toAdd = size - list.Count;
-
-        for (int i = 0; i < toAdd; i++)
-        {
-            list.Add(default!);
-        }
+        Grow(list, size);
     }
 
     /// <summary>
@@ -36,12 +34,16 @@ public static class ListExtensions
         ArgumentOutOfRangeException.ThrowIfNegative(size);
 
         if (list.Count < size)
-        {
-            EnsureSize(list, size);
-        }
-        else if (list.Count > size)
-        {
-            list.RemoveRange(size, list.Count - size);
-        }
+            Grow(list, size);
+        else
+            CollectionsMarshal.SetCount(list, size);
+    }
+
+    private static void Grow<T>(List<T> list, int size)
+    {
+        var count = list.Count;
+
+        CollectionsMarshal.SetCount(list, size);
+        CollectionsMarshal.AsSpan(list)[count..].Clear();
     }
 }

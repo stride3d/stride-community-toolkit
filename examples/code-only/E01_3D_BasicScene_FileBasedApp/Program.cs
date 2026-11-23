@@ -9,10 +9,8 @@
 // Stride.CommunityToolkit.slnx and Visual Studio will not build it with the rest of the solution -
 // run it from the command line.
 
-#:package Stride.BepuPhysics.Debug@$(StrideVersion)
 #:project ../../../src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
 #:project ../../../src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
-#:project ../../../src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
 #:property PublishAot=false
 
 // Stride before 4.4.0 built its asset cache path by concatenating $(ProjectDir) with
@@ -36,11 +34,11 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     var entity = game.CreatePrimitive(Primitive3D.Capsule());
     entity.Transform.Position = new Vector3(0, 8, 0);
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 }
 
 /*
@@ -56,18 +54,17 @@ order: 20
 description:
   en: |-
     The same minimal 3D scene as E01_3D_BasicScene, written as a .NET 10 file-based app: a single
-    C# file with no .csproj. NuGet packages, project references and MSBuild properties are declared
-    inline with #:package, #:project and #:property directives, so the example runs with
-    "dotnet run Program.cs". Use "dotnet project convert" to turn it back into a regular project.
+    C# file with no .csproj. Project references and MSBuild properties are declared inline with
+    #:project and #:property directives, so the example runs with "dotnet run Program.cs". Use
+    "dotnet project convert" to turn it back into a regular project.
   cs: |-
     Stejná minimální 3D scéna jako E01_3D_BasicScene, ale napsaná jako aplikace bez projektu
-    (.NET 10 file-based app): jediný soubor C# bez .csproj. Balíčky NuGet, odkazy na projekty
-    a vlastnosti MSBuild se deklarují přímo pomocí direktiv #:package, #:project a #:property,
-    takže příklad se spustí příkazem "dotnet run Program.cs". Příkazem "dotnet project convert"
-    jej lze převést zpět na běžný projekt.
+    (.NET 10 file-based app): jediný soubor C# bez .csproj. Odkazy na projekty a vlastnosti
+    MSBuild se deklarují přímo pomocí direktiv #:project a #:property, takže příklad se spustí
+    příkazem "dotnet run Program.cs". Příkazem "dotnet project convert" jej lze převést zpět
+    na běžný projekt.
 concepts:
   - Running a Stride game as a .NET 10 file-based app (no .csproj)
-  - "Declaring NuGet packages inline with #:package"
   - "Referencing projects inline with #:project"
   - "Setting MSBuild properties inline with #:property"
   - Converting a file-based app to a project with dotnet project convert

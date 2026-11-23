@@ -40,7 +40,7 @@ var rigs = new List<Rig>();
 var looseBodies = new List<(BodyComponent Body, Vector3 Start, Quaternion Rotation)>();
 var random = new Random(3);
 
-ShapeBatch? shapes = null;
+ShapeBatch shapes = null!;
 
 using var game = new Game();
 
@@ -106,8 +106,6 @@ void Update(Scene scene, GameTime time)
     if (game.Input.IsKeyPressed(Keys.Space)) Drop(spin: false);
     if (game.Input.IsKeyPressed(Keys.T)) Drop(spin: true);
 
-    if (shapes is null) return;
-
     // The centre of mass is a local point: it rides with the body, so it is drawn through the body's world matrix
     foreach (var rig in rigs)
     {
@@ -126,7 +124,7 @@ Rig AddCompound(Scene scene, string name, Piece[] pieces, Vector3 position)
 
     foreach (var piece in pieces)
     {
-        var collider = Stride.CommunityToolkit.Bepu.EntityExtensions.ColliderFor(piece.Shape);
+        var collider = Colliders.For(piece.Shape);
 
         collider.PositionLocal = piece.Position;
         collider.RotationLocal = piece.Rotation;
@@ -135,16 +133,13 @@ Rig AddCompound(Scene scene, string name, Piece[] pieces, Vector3 position)
     }
 
     var body = new BodyComponent { Collider = compound };
-    var entity = new Entity(name) { body };
-
-    entity.Transform.Position = position;
+    var entity = new Entity(name, position) { body };
 
     foreach (var piece in pieces)
     {
         // Model only: the body's collider already covers this piece
-        var model = game.CreatePrimitive(piece.Shape, new BepuPhysicsOptions { Body = BodyMode.None, Material = piece.Material, EntityName = $"{name} piece" });
+        var model = game.CreatePrimitive(piece.Shape, new BepuPhysicsOptions { Body = BodyMode.None, Material = piece.Material, EntityName = $"{name} piece", Position = piece.Position });
 
-        model.Transform.Position = piece.Position;
         model.Transform.Rotation = piece.Rotation;
         entity.AddChild(model);
     }
@@ -195,15 +190,15 @@ Vector3 Spin() => new Vector3(random.NextSingle() - 0.5f, random.NextSingle() - 
 
 IReadOnlyList<TextElement> BuildOverlayLines()
 {
-    var lines = new List<TextElement>
-    {
+    List<TextElement> lines =
+    [
         new("Space", "Drop everything again", Color.Gold),
         new("T", "Drop it with a spin", Color.Gold),
         new(""),
         new("Left: one body per rig, a collider per piece", Color.LightGreen),
         new("Right: the same pieces as separate bodies", Color.Orange),
         new(""),
-    };
+    ];
 
     foreach (var rig in rigs)
     {
@@ -242,7 +237,7 @@ concepts:
   - The body's mass as the sum, and CenterOfMass where the masses put it
   - Models as child entities of the body, so one transform moves the lot
   - The same pieces as separate bodies for the contrast
-  - "Using helpers: SceneSetup3D, UseBepu, UseSkybox, CreatePrimitive, ColliderFor, CreateMaterial, TeleportAtRest, ShapeBatch, TextOverlay"
+  - "Using helpers: SceneSetup3D, UseBepu, UseSkybox, CreatePrimitive, Colliders.For, CreateMaterial, TeleportAtRest, ShapeBatch, TextOverlay"
 tags:
   - 3D
   - Physics

@@ -14,7 +14,8 @@ namespace E08_3D_DebugShapes.Scripts;
 
 public class ShapeUpdater : SyncScript
 {
-    private const int ChangePerSecond = 8192 + 2048;
+    // How many primitives a notch of the mouse wheel adds or removes in a second
+    private const int ChangePerSecond = 10240;
     private const int InitialPrimitives = 1024;
     private const int AreaSize = 64;
     private const int MinPrimitives = 0;
@@ -90,7 +91,7 @@ public class ShapeUpdater : SyncScript
 
         _count = count;
 
-        if (Input.IsKeyPressed(Keys.LeftAlt)) _mode = (CurrentRenderMode)(((int)_mode + 1) % ((int)CurrentRenderMode.None + 1));
+        if (Input.IsKeyPressed(Keys.LeftAlt)) _mode = Next(_mode);
         if (Input.IsKeyPressed(Keys.LeftCtrl)) _depthTest = !_depthTest;
         if (Input.IsKeyPressed(Keys.Tab)) _wireframe = !_wireframe;
         if (Input.IsKeyPressed(Keys.Space)) _running = !_running;
@@ -207,6 +208,9 @@ public class ShapeUpdater : SyncScript
         return shape;
     }
 
+    /// <summary>The mode after this one, from the last, <see cref="CurrentRenderMode.None"/>, back to the first.</summary>
+    private static CurrentRenderMode Next(CurrentRenderMode mode) => (CurrentRenderMode)(((int)mode + 1) % ((int)CurrentRenderMode.None + 1));
+
     /// <summary>Draws the shape selected by <see cref="_mode"/> for one primitive.</summary>
     private void DrawShapeForMode(int index, in Vector3 position, in Quaternion rotation, in Vector3 velocity, in Color color)
     {
@@ -216,6 +220,7 @@ public class ShapeUpdater : SyncScript
             case CurrentRenderMode.Circle: _debugDraw.DrawCircle(position, 0.5f, rotation, color, depthTest: _depthTest, solid: !_wireframe); break;
             case CurrentRenderMode.Sphere: _debugDraw.DrawSphere(position, 0.5f, color, depthTest: _depthTest, solid: !_wireframe); break;
             case CurrentRenderMode.HalfSphere: _debugDraw.DrawHalfSphere(position, 0.5f, color, rotation, depthTest: _depthTest, solid: !_wireframe); break;
+            // Half the cubes stay wireframe whatever Tab says, so both fills show at once
             case CurrentRenderMode.Cube: _debugDraw.DrawCube(position, Vector3.One, rotation, color, depthTest: _depthTest, solid: !_wireframe && index % 2 == 0); break;
             case CurrentRenderMode.Capsule: _debugDraw.DrawCapsule(position, 2.0f, 0.5f, rotation, color, depthTest: _depthTest, solid: !_wireframe); break;
             case CurrentRenderMode.Cylinder: _debugDraw.DrawCylinder(position, 2.0f, 0.5f, rotation, color, depthTest: _depthTest, solid: !_wireframe); break;
@@ -268,7 +273,7 @@ public class ShapeUpdater : SyncScript
         _debugDraw.DrawCylinder(row + new Vector3(6, 0, 0), 1f, 0.5f, solid: !_wireframe);
         _debugDraw.DrawCone(row + new Vector3(7, 0, 0), 1f, 0.5f, solid: !_wireframe);
         _debugDraw.DrawHalfSphere(row + new Vector3(8, 0, 0), 0.5f, solid: !_wireframe);
-        _debugDraw.DrawHalfSphere(row + new Vector3(9, 0, 0), 0.5f, rotation: Quaternion.RotationX(MathF.PI), solid: !_wireframe);
+        _debugDraw.DrawHalfSphere(row + new Vector3(9, 0, 0), 0.5f, rotation: Quaternion.RotationX(MathUtil.Pi), solid: !_wireframe);
         _debugDraw.DrawCone(new Vector3(0, 0.5f, 0), 2f, 0.5f, color: Color.HotPink);
     }
 }

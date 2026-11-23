@@ -14,14 +14,15 @@ namespace E06_Box2D.Helpers;
 /// </summary>
 public class UiHelper
 {
+    private readonly Box2DSimulation _simulation;
     private int _shapeCount;
-    private int _totalCreated;
-    private Box2DSimulation? _simulation;
     private string? _status;
     private Color _statusColor = Color.White;
 
-    public UiHelper(Game game)
+    public UiHelper(Game game, Box2DSimulation simulation)
     {
+        _simulation = simulation;
+
         var overlay = TextOverlay.GetOrCreate(game);
 
         // The callbacks run every frame the overlay is drawn, so the numbers stay live without
@@ -32,16 +33,12 @@ public class UiHelper
 
     /// <summary>
     /// Records what the overlay shows this frame. Call it every update; a status message set with
-    /// <see cref="RenderStatusMessage"/> lasts until the next call.
+    /// <see cref="SetStatus"/> lasts until the next call.
     /// </summary>
     /// <param name="shapeCount">Current number of physics objects</param>
-    /// <param name="totalCreated">How many shapes have been spawned since the last clear</param>
-    /// <param name="simulation">The physics simulation for additional stats</param>
-    public void RenderNavigation(int shapeCount, int totalCreated, Box2DSimulation simulation)
+    public void SetReadout(int shapeCount)
     {
         _shapeCount = shapeCount;
-        _totalCreated = totalCreated;
-        _simulation = simulation;
         _status = null;
     }
 
@@ -50,10 +47,10 @@ public class UiHelper
     /// </summary>
     /// <param name="message">The message to display</param>
     /// <param name="color">Color of the message</param>
-    public void RenderStatusMessage(string message, Color color = default)
+    public void SetStatus(string message, Color color)
     {
         _status = message;
-        _statusColor = color == default ? Color.White : color;
+        _statusColor = color;
     }
 
     private IReadOnlyList<TextElement> BuildOverlayLines()
@@ -69,14 +66,10 @@ public class UiHelper
             new("V", "Generate capsules", Color.Gold),
             new("P", "Generate random shapes with mass", Color.Gold),
             new(""),
-            new($"Objects {_shapeCount}, total created {_totalCreated}", Color.LightGreen),
+            new($"Objects {_shapeCount}", Color.LightGreen),
+            new($"Gravity {_simulation.Gravity.Y:0.0}, time scale {_simulation.Settings.TimeScale:0.00}", Color.LightGreen),
+            new(_simulation.Enabled ? "Simulation enabled" : "Simulation disabled", _simulation.Enabled ? Color.LightGreen : Color.OrangeRed),
         ];
-
-        if (_simulation is { } simulation)
-        {
-            lines.Add(new($"Gravity {simulation.Gravity.Y:0.0}, time scale {simulation.TimeScale:0.00}", Color.LightGreen));
-            lines.Add(new(simulation.Enabled ? "Simulation enabled" : "Simulation disabled", simulation.Enabled ? Color.LightGreen : Color.OrangeRed));
-        }
 
         if (_status is not null) lines.Add(new(_status, _statusColor));
 

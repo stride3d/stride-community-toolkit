@@ -63,12 +63,5 @@ public static class SceneExtensions
     /// Searches every top-level entity of the scene and all of its descendants; disabled cameras count.
     /// </remarks>
     public static CameraComponent? GetCamera(this Scene scene, string name)
-    {
-        foreach (var camera in scene.GetComponentsInScene<CameraComponent>(includeChildScenes: false))
-        {
-            if (camera.Entity.Name == name) return camera;
-        }
-
-        return null;
-    }
+        => scene.GetComponentsInScene<CameraComponent>(includeChildScenes: false).FirstOrDefault(camera => camera.Entity.Name == name);
 }

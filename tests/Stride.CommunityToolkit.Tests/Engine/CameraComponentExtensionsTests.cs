@@ -1,7 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Engine.Processors;
 using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Engine;
@@ -22,8 +21,8 @@ public class CameraComponentExtensionsTests
         var camera = Camera();
 
         Assert.True(camera.TryWorldToScreenPoint(Vector3.Zero, out var screen));
-        Assert.Equal(0.5f, screen.X, 0.001f);
-        Assert.Equal(0.5f, screen.Y, 0.001f);
+        Assert.Equal(0.5f, screen.X, Tolerances.Projection);
+        Assert.Equal(0.5f, screen.Y, Tolerances.Projection);
     }
 
     [Fact]
@@ -41,7 +40,7 @@ public class CameraComponentExtensionsTests
 
         Assert.False(camera.TryWorldToScreenPoint(new Vector3(100, 0, 0), out _));
         Assert.True(camera.TryWorldToScreenPoint(new Vector3(1, 0, 0), out var screen));
-        Assert.True(screen.X > 0.5f);
+        Assert.True(screen.X > 0.5f, $"a point right of the view's centre landed at x {screen.X}");
     }
 
     [Fact]
@@ -51,8 +50,8 @@ public class CameraComponentExtensionsTests
 
         var visible = camera.GetOrthographicVisibleSize();
 
-        Assert.Equal(10f * Aspect, visible.X, 0.001f);
-        Assert.Equal(10f, visible.Y, 0.001f);
+        Assert.Equal(10f * Aspect, visible.X, Tolerances.Projection);
+        Assert.Equal(10f, visible.Y, Tolerances.Projection);
     }
 
     [Fact]
@@ -62,10 +61,10 @@ public class CameraComponentExtensionsTests
 
         var (min, max) = camera.GetOrthographicVisibleBounds();
 
-        Assert.Equal(3f - 5f * Aspect, min.X, 0.001f);
-        Assert.Equal(-1f, min.Y, 0.001f);
-        Assert.Equal(3f + 5f * Aspect, max.X, 0.001f);
-        Assert.Equal(9f, max.Y, 0.001f);
+        Assert.Equal(3f - 5f * Aspect, min.X, Tolerances.Projection);
+        Assert.Equal(-1f, min.Y, Tolerances.Projection);
+        Assert.Equal(3f + 5f * Aspect, max.X, Tolerances.Projection);
+        Assert.Equal(9f, max.Y, Tolerances.Projection);
     }
 
     [Fact]
@@ -77,32 +76,8 @@ public class CameraComponentExtensionsTests
     }
 
     /// <summary>An orthographic camera of the given view height at <paramref name="position"/>, looking down the Z axis.</summary>
-    private static CameraComponent OrthographicCamera(float size, Vector3 position)
-    {
-        var entity = new Entity("camera") { new CameraComponent { Projection = CameraProjectionMode.Orthographic, OrthographicSize = size } };
-
-        entity.Transform.Position = position;
-        entity.Transform.UpdateWorldMatrix();
-
-        var camera = entity.Get<CameraComponent>();
-
-        camera.Update(Aspect);
-
-        return camera;
-    }
+    private static CameraComponent OrthographicCamera(float size, Vector3 position) => TestCameras.Orthographic(size, position, Aspect);
 
     /// <summary>A perspective camera ten units up the Z axis, looking down it at the origin.</summary>
-    private static CameraComponent Camera()
-    {
-        var entity = new Entity("camera") { new CameraComponent() };
-
-        entity.Transform.Position = new Vector3(0, 0, 10);
-        entity.Transform.UpdateWorldMatrix();
-
-        var camera = entity.Get<CameraComponent>();
-
-        camera.Update(Aspect);
-
-        return camera;
-    }
+    private static CameraComponent Camera() => TestCameras.Perspective(new Vector3(0, 0, 10), Aspect);
 }

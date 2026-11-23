@@ -7,12 +7,12 @@ open Stride.Engine
 
 let game = new Game()
 
-let Start rootScene =
+let Start scene =
     game.AddProfiler() |> ignore
 
     let capsule = game.CreatePrimitive(Primitive3D.Capsule(), BepuPhysicsOptions())
     capsule.Transform.Position <- new Vector3(0f, 2.5f, 0f)
-    capsule.Scene <- rootScene
+    capsule.Scene <- scene
 
 [<EntryPoint>]
 let main argv =

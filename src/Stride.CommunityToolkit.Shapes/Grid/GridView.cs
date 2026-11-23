@@ -96,14 +96,9 @@ internal readonly struct GridView(Matrix viewProjection, Vector2 size, bool orth
 
     private (Vector3 Origin, Vector3 Direction) RayAt(Vector2 normalised)
     {
-        var clip = new Vector3(normalised.X * 2f - 1f, 1f - normalised.Y * 2f, 0f);
-        var near = Vector3.TransformCoordinate(clip, _inverse);
+        var ray = ScreenRay.Through(normalised, _inverse);
 
-        clip.Z = 1f;
-
-        var far = Vector3.TransformCoordinate(clip, _inverse);
-
-        return (near, Vector3.Normalize(far - near));
+        return (ray.Position, ray.Direction);
     }
 
     /// <summary>Solves <c>origin + direction * t = 0</c> on one axis, for a ray that reaches the plane ahead of it.</summary>

@@ -8,14 +8,14 @@ using var game = new Game();
 
 game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     var entity = game.CreatePrimitive(Primitive2D.Capsule(), new()
     {
-        Material = game.CreateFlatMaterial(Color.White)
+        Material = game.CreateFlatMaterial(Color.White),
     });
     entity.Transform.Position = new Vector3(0, 8, 0);
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 }
 
 /*
@@ -39,7 +39,7 @@ concepts:
   - Creating a 2D primitive with CreatePrimitive
   - Applying a flat material with CreateFlatMaterial
   - Positioning an entity with Transform.Position
-  - Adding entities to a Scene (rootScene)
+  - Adding entities to a Scene (scene)
   - "Using helpers: SceneSetup2D"
 tags:
   - 2D

@@ -27,9 +27,12 @@ public class CollidableGizmoScript : SyncScript
     public Keys Key { get; set; } = Keys.P;
 
     /// <summary>
-    /// Gets or sets an optional emissive color applied to created gizmos. When <see langword="null"/>, the default material color is used.
+    /// Gets or sets the emissive colour applied to the gizmos. The default, fully transparent, keeps the gizmo material's own colour.
     /// </summary>
-    public Color4? Color { get; set; }
+    /// <remarks>
+    /// Not nullable, because Game Studio's property grid cannot edit a nullable value type and takes the editor down trying.
+    /// </remarks>
+    public Color4 Color { get; set; }
 
     /// <summary>
     /// Gets or sets the size multiplier applied to created gizmos. Defaults to <c>1.0</c>.
@@ -76,9 +79,7 @@ public class CollidableGizmoScript : SyncScript
     {
         _gizmos.Clear();
 
-        var scene = Entity?.Scene ?? SceneSystem?.SceneInstance?.RootScene;
-
-        if (scene is null) return;
+        var scene = Entity.Scene;
 
         foreach (var component in scene.GetComponentsInScene<CollidableComponent>(includeChildScenes: false))
         {
@@ -95,16 +96,19 @@ public class CollidableGizmoScript : SyncScript
         ApplyGizmoEmissiveColor(scene);
     }
 
+    /// <summary>Removes the gizmos when the script leaves the scene; they are entities of their own and would stay otherwise.</summary>
+    public override void Cancel() => RemoveGizmos();
+
     // Each gizmo puts its own entity, named after it, at the top of the scene; the colour goes on their models
     private void ApplyGizmoEmissiveColor(Scene scene)
     {
-        if (Color is not { } color) return;
+        if (Color.A <= 0f) return;
 
         foreach (var entity in scene.Entities)
         {
             if (entity.Name.Contains(GizmoEntityName) && entity.Get<ModelComponent>() is { } model)
             {
-                model.SetMaterialParameter(MaterialKeys.EmissiveValue, color);
+                model.SetMaterialParameter(MaterialKeys.EmissiveValue, Color);
             }
         }
     }

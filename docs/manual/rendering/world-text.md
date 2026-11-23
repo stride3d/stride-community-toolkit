@@ -28,7 +28,7 @@ var sign = new Entity("Sign")
 };
 
 sign.Transform.Position = new Vector3(0, 0, -3);
-sign.Scene = rootScene;
+sign.Scene = scene;
 ```
 
 > [!NOTE]

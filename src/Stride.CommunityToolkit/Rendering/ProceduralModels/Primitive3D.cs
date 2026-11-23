@@ -14,8 +14,8 @@ namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 /// procedural models, so a factory called with no arguments gives the same mesh as <c>new SphereProceduralModel()</c>.
 /// </para>
 /// <para>
-/// The mesh builder and each physics package switch over the same set, so a shape added to one and missed in the
-/// other is a compile error, not a mesh that does not match its collider.
+/// The mesh builder and each physics package switch over the same set. A shape missed by one of them fails on
+/// first use with an <see cref="ArgumentException"/> naming the shape, and the collider tests call every factory.
 /// </para>
 /// </remarks>
 public abstract record Primitive3D

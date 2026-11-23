@@ -1,4 +1,3 @@
-using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
@@ -26,7 +25,7 @@ public sealed class SimpleHud
     private readonly EntityTextComponent _warningLabel;
 
     #region Step8Class
-    public SimpleHud(Game game, Scene scene, ShapeBatch shapeBatch, HudStyle style)
+    public SimpleHud(Scene scene, ShapeBatch shapeBatch, HudStyle style)
     {
         _shapeBatch = shapeBatch;
         _style = style;
@@ -123,8 +122,8 @@ public sealed class SimpleHud
     private void DrawEnergyDial()
     {
         Solid();
-        _shapeBatch.DrawArc(DialCentre, _style.DialRadius, 0f, MathF.Tau, _style.DialTrack, _style.DialWidth);
-        _shapeBatch.DrawArc(DialCentre, _style.DialRadius, -MathF.PI * 0.5f, MathF.Tau * Energy, _style.Energy, _style.DialWidth);
+        _shapeBatch.DrawArc(DialCentre, _style.DialRadius, 0f, MathUtil.TwoPi, _style.DialTrack, _style.DialWidth);
+        _shapeBatch.DrawArc(DialCentre, _style.DialRadius, -MathUtil.PiOverTwo, MathUtil.TwoPi * Energy, _style.Energy, _style.DialWidth);
     }
 
     private void DrawCrosshair()
@@ -175,7 +174,7 @@ public sealed class SimpleHud
         if (Health > _style.LowHealth) return;
 
         var centre = new Vector2(_shapeBatch.ScreenSize.X * 0.5f, _style.Margin + _style.WarningSize.Y * 0.5f);
-        var pulse = 0.4f + 0.6f * MathF.Abs(MathF.Sin(seconds * MathF.Tau));
+        var pulse = 0.4f + 0.6f * MathF.Abs(MathF.Sin(seconds * MathUtil.TwoPi));
 
         _shapeBatch.BorderWidth = 2f;
         _shapeBatch.Fill.Set(_style.PanelFill, 0.8f);

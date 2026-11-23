@@ -27,17 +27,15 @@ public sealed class GpuPicker : IDisposable
 {
     private readonly GraphicsCompositor _compositor;
     private readonly MeshRenderFeature _meshFeature;
-    private readonly RenderStage _stage;
     private readonly GpuPickingRenderFeature _feature;
     private readonly SimpleGroupToRenderStageSelector _selector;
     private bool _disposed;
 
-    internal GpuPicker(GraphicsCompositor compositor, MeshRenderFeature meshFeature, RenderStage stage, GpuPickingRenderFeature feature,
+    internal GpuPicker(GraphicsCompositor compositor, MeshRenderFeature meshFeature, GpuPickingRenderFeature feature,
         SimpleGroupToRenderStageSelector selector, GpuPickingSceneRenderer renderer)
     {
         _compositor = compositor;
         _meshFeature = meshFeature;
-        _stage = stage;
         _feature = feature;
         _selector = selector;
         Renderer = renderer;

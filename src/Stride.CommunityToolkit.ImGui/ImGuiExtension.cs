@@ -93,15 +93,11 @@ public static class ImGuiExtension
         => new(open = BeginCombo(label, previewValue, flags), DisposableTypes.Combo);
 
     /// <summary>
-    /// Begins a tooltip; disposing the result ends it.
+    /// Begins a tooltip; disposing the result ends it when it was opened.
     /// </summary>
-    /// <returns>A scope whose <see cref="DisposableImGui.Dispose"/> calls <c>EndTooltip</c>.</returns>
-    public static DisposableImGui Tooltip()
-    {
-        BeginTooltip();
-
-        return new DisposableImGui(true, DisposableTypes.Tooltip);
-    }
+    /// <param name="open">Set to <see langword="true"/> when the tooltip is shown and its content should be emitted.</param>
+    /// <returns>A scope whose <see cref="DisposableImGui.Dispose"/> calls <c>EndTooltip</c> only if <paramref name="open"/> was <see langword="true"/>.</returns>
+    public static DisposableImGui Tooltip(out bool open) => new(open = BeginTooltip(), DisposableTypes.Tooltip);
 
     /// <summary>
     /// Indents the following widgets; disposing the result unindents by the same amount.
@@ -149,9 +145,30 @@ public static class ImGuiExtension
     /// <returns>A scope whose <see cref="DisposableImGui.Dispose"/> calls <c>EndChild</c>.</returns>
     public static DisposableImGui Child([CallerLineNumber] int cln = 0, Vector2 size = default, ImGuiChildFlags childFlags = ImGuiChildFlags.None, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
     {
-        BeginChild(cln.ToString(), size, childFlags, flags);
+        // Hashed with the id stack, like a string id, so the same line under two pushed ids is two regions
+        BeginChild(GetID(cln), size, childFlags, flags);
 
         return new DisposableImGui(true, DisposableTypes.Child);
+    }
+
+    /// <summary>
+    /// The arrow of a tree row that opens and closes it, or a gap of the same width for a row with nothing inside.
+    /// </summary>
+    /// <param name="canRecurse">Whether the row has anything to open.</param>
+    /// <param name="open">Whether it is open now.</param>
+    /// <param name="opened">The ids of the open rows; a click adds or removes <paramref name="id"/>.</param>
+    /// <param name="id">The row's id.</param>
+    /// <param name="gapWidth">The width of the gap, the arrow's own.</param>
+    internal static void RecurseArrow<T>(bool canRecurse, bool open, HashSet<T> opened, T id, float gapWidth)
+    {
+        if (!canRecurse)
+        {
+            Dummy(new Vector2(gapWidth, 1));
+        }
+        else if (ArrowButton("", open ? ImGuiDir.Down : ImGuiDir.Right) && !opened.Remove(id))
+        {
+            opened.Add(id);
+        }
     }
 
     /// <summary>
@@ -172,36 +189,36 @@ public static class ImGuiExtension
     }
 
     /// <summary>
-    /// Adds a texture to the ImGui element with the Texture width and height
+    /// Draws a texture in the current ImGui window at the texture's own width and height.
     /// </summary>
-    /// <param name="texture"></param>
+    /// <param name="texture">The texture to draw; it is registered with the ImGui renderer the first time it is seen.</param>
     public static void Image(Texture texture) => Hexa.NET.ImGui.ImGui.Image(GetTextureKey(texture), new Vector2(texture.Width, texture.Height));
 
     /// <summary>
-    /// Adds a texture to the ImGui element with a custom width and height
+    /// Draws a texture in the current ImGui window at the given size.
     /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
+    /// <param name="texture">The texture to draw; it is registered with the ImGui renderer the first time it is seen.</param>
+    /// <param name="width">The width to draw it at, in pixels.</param>
+    /// <param name="height">The height to draw it at, in pixels.</param>
     public static void Image(Texture texture, int width, int height) => Hexa.NET.ImGui.ImGui.Image(GetTextureKey(texture), new Vector2(width, height));
 
     /// <summary>
-    /// Adds a texture to the ImGui element button with the Texture width and height
+    /// Draws a button showing a texture at the texture's own width and height.
     /// </summary>
-    /// <param name="text"></param>
-    /// <param name="texture"></param>
-    /// <returns></returns>
-    public static bool ImageButton(string text, Texture texture) => Hexa.NET.ImGui.ImGui.ImageButton(text, GetTextureKey(texture), new Vector2(texture.Width, texture.Height));
+    /// <param name="id">The ImGui id of the button, unique among its siblings.</param>
+    /// <param name="texture">The texture on the button; it is registered with the ImGui renderer the first time it is seen.</param>
+    /// <returns><see langword="true"/> on the frame the button is clicked.</returns>
+    public static bool ImageButton(string id, Texture texture) => Hexa.NET.ImGui.ImGui.ImageButton(id, GetTextureKey(texture), new Vector2(texture.Width, texture.Height));
 
     /// <summary>
-    /// Adds a texture to the ImGui element button with a custom width and height
+    /// Draws a button showing a texture at the given size.
     /// </summary>
-    /// <param name="strid"></param>
-    /// <param name="texture"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <returns></returns>
-    public static bool ImageButton(string strid, Texture texture, int width, int height) => Hexa.NET.ImGui.ImGui.ImageButton(strid, GetTextureKey(texture), new Vector2(width, height));
+    /// <param name="id">The ImGui id of the button, unique among its siblings.</param>
+    /// <param name="texture">The texture on the button; it is registered with the ImGui renderer the first time it is seen.</param>
+    /// <param name="width">The width to draw it at, in pixels.</param>
+    /// <param name="height">The height to draw it at, in pixels.</param>
+    /// <returns><see langword="true"/> on the frame the button is clicked.</returns>
+    public static bool ImageButton(string id, Texture texture, int width, int height) => Hexa.NET.ImGui.ImGui.ImageButton(id, GetTextureKey(texture), new Vector2(width, height));
 
     /// <summary>
     /// Begins the window's menu bar; disposing the result ends it when it was opened.

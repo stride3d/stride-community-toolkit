@@ -42,8 +42,8 @@ CollisionLayer[] playerLayers = [PlayersA, PlayersB];
 CollisionLayer[] ballLayers = [BallsA, BallsB];
 
 var scoreboard = new Scoreboard();
-var handlers = new BallHits[] { new(0, scoreboard), new(1, scoreboard) };
-var players = new List<Entity>[] { [], [] };
+BallHits[] handlers = [new(0, scoreboard), new(1, scoreboard)];
+List<Entity>[] players = [[], []];
 var balls = new List<(Entity Entity, float Age)>();
 var random = new Random(21);
 var untilThrow = ThrowInterval;
@@ -67,7 +67,7 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    simulation = game.GetCameraEntity().GetSimulation();
+    simulation = game.GetSimulation();
     shapes = game.AddShapeBatch(depthTest: false);
     ballMaterials = [.. teamColours.Select(colour => game.CreateMaterial(colour, metalness: 0.1f, glossiness: 0.6f))];
 
@@ -222,9 +222,10 @@ void AgeBalls(float elapsed)
 IReadOnlyList<TextElement> BuildOverlayLines() =>
 [
     new("Space", "A volley from both teams", Color.Gold),
-    new("F", friendlyFire ? "Friendly fire: on, a team's balls hit its own players too" : "Friendly fire: off, a team's balls pass through its own players", friendlyFire ? Color.OrangeRed : Color.LightGreen),
+    new("F", friendlyFire ? "Friendly fire: on" : "Friendly fire: off", friendlyFire ? Color.OrangeRed : Color.LightGreen),
     new("R", "Reset the score", Color.Gold),
     new(""),
+    new(friendlyFire ? "A team's balls hit its own players too" : "A team's balls pass through its own players", Color.White),
     new($"Team A: {scoreboard.Scores[0]} hits", teamColours[0]),
     new($"Team B: {scoreboard.Scores[1]} hits", teamColours[1]),
     new($"Balls in the air: {balls.Count}", Color.White),

@@ -80,9 +80,9 @@ void Start(Scene scene)
     {
         Body = BodyMode.None,
         EntityName = "Wall",
+        Position = new Vector3(6f, 1f, 4f),
     });
 
-    wall.Transform.Position = new Vector3(6f, 1f, 4f);
     wall.Scene = scene;
 
     AddText(scene, new Vector3(6f, 1.3f, 6f), text =>
@@ -170,9 +170,8 @@ Entity AddText(Scene scene, Vector3 position, Action<WorldTextComponent> configu
 
     configure(component);
 
-    var entity = new Entity("WorldText") { component };
+    var entity = new Entity("WorldText", position) { component };
 
-    entity.Transform.Position = position;
     entity.Scene = scene;
 
     return entity;

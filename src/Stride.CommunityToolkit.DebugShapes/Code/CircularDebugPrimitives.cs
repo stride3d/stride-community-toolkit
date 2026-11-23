@@ -235,9 +235,11 @@ internal static class CircularDebugPrimitives
             indices[i + bottomIndices.Length] = topIndices[i] + bottomVertices.Length;
         }
 
-        // extrude middle vertex of center of first circle triangle fan
+        // Lift the bottom disc's centre to the apex: the fan's centre, and the second centre the uv splits add,
+        // which without splits would be the first rim vertex
         vertices[0].Position.Y = height / 2.0f;
-        vertices[1].Position.Y = height / 2.0f;
+
+        if (uvSplits > 0) vertices[1].Position.Y = height / 2.0f;
 
         return (vertices, indices);
     }

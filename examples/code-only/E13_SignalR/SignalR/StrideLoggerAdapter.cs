@@ -8,8 +8,7 @@ namespace E13_SignalR.SignalR;
 /// Bridges Microsoft.Extensions.Logging ILogger to Stride's logging system.
 /// Messages are forwarded to the provided Stride <see cref="Logger"/>.
 /// </summary>
-/// <typeparam name="T">Category type for the logger.</typeparam>
-public sealed class StrideLoggerAdapter<T>(Logger strideLogger) : ILogger<T>
+public sealed class StrideLoggerAdapter(Logger strideLogger) : MsLogger
 {
     private readonly Logger _strideLogger = strideLogger ?? throw new ArgumentNullException(nameof(strideLogger));
 

@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Input;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.Engine;
 using Stride.Input;
@@ -35,18 +36,17 @@ namespace Stride.CommunityToolkit.Scripts;
 /// <see cref="TextOverlay"/>.
 /// </para>
 /// </remarks>
+[DataContract(nameof(Basic3DFollowCameraController))]
 [Display("Follow Camera Controller")]
 [ComponentCategory("Camera")]
 public class Basic3DFollowCameraController : SyncScript
 {
-    private Vector2? _lastMousePosition;
     private Vector3 _pivot;
     private Vector3 _back = Vector3.UnitZ;
     private Vector3 _defaultBack = Vector3.UnitZ;
     private float _pitch;
     private float _distance;
     private float _shownDistance;
-    private float _elapsed;
     private float _defaultPitch;
     private float _defaultDistance;
     private TextOverlaySection? _instructions;
@@ -100,6 +100,7 @@ public class Basic3DFollowCameraController : SyncScript
     public float MaxPitch { get; set; } = 0.35f;
 
     /// <summary>Gets or sets the test for walls between the pivot and the camera, or <see langword="null"/> to pass through everything.</summary>
+    [DataMemberIgnore]
     public CameraObstacleTest? ObstacleTest { get; set; }
 
     /// <summary>Gets or sets how far short of an obstacle the camera stops, in world units. Defaults to <c>0.3</c>.</summary>
@@ -117,6 +118,24 @@ public class Basic3DFollowCameraController : SyncScript
 
     /// <summary>Gets or sets whether the help section starts collapsed. Defaults to <see langword="true"/>.</summary>
     public bool HelpCollapsed { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets whether the camera's key help is shown on the shared <see cref="TextOverlay"/>. Defaults to
+    /// <see langword="true"/>, and can be set before the script starts or at any time after.
+    /// </summary>
+    /// <remarks>
+    /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
+    /// it, is toggled with <see cref="TextOverlay.ToggleKey"/>.
+    /// </remarks>
+    public bool ShowHelp
+    {
+        get;
+        set
+        {
+            field = value;
+            _instructions?.Enabled = value;
+        }
+    } = true;
 
     /// <summary>Gets the point the camera is looking at: the target plus its offset, after the follow lag.</summary>
     public Vector3 Pivot => _pivot;
@@ -172,7 +191,7 @@ public class Basic3DFollowCameraController : SyncScript
         _defaultDistance = _distance;
         _shownDistance = _distance;
 
-        Apply();
+        Apply(0f);
 
         _instructions = TextOverlay.GetOrCreate(Game).AddCollapsibleSection(
             "Camera", "Camera controls", HelpToggleKey, () =>
@@ -184,6 +203,8 @@ public class Basic3DFollowCameraController : SyncScript
                 new("Shift", "Hold for faster zoom"),
                 new($"Distance: {_distance:0.00}  Yaw: {MathUtil.RadiansToDegrees(Yaw):0.0}°  Pitch: {MathUtil.RadiansToDegrees(_pitch):0.0}°", Color.Yellow),
             ], HelpCollapsed, order: -100);
+
+        _instructions.Enabled = ShowHelp;
     }
 
     /// <summary>
@@ -195,22 +216,17 @@ public class Basic3DFollowCameraController : SyncScript
         if (Target is null)
             return;
 
-        _elapsed = (float)Game.UpdateTime.Elapsed.TotalSeconds;
-        Follow(_elapsed);
+        var elapsed = (float)Game.UpdateTime.Elapsed.TotalSeconds;
+        Follow(elapsed);
 
-        var mousePosition = Input.MousePosition;
-        var orbiting = Input.IsMouseButtonDown(OrbitButton);
-
-        if (orbiting && _lastMousePosition is { } last)
+        if (Input.IsMouseButtonDown(OrbitButton))
         {
-            var delta = mousePosition - last;
+            var delta = Input.MouseDelta;
 
             // Dragging right swings the camera to the right around the target; dragging up climbs
             _back = Vector3.Transform(_back, Quaternion.RotationAxis(Frame().Up, -delta.X * OrbitSensitivity));
             _pitch = Math.Clamp(_pitch - delta.Y * OrbitSensitivity, MinPitch, MaxPitch);
         }
-
-        _lastMousePosition = orbiting ? mousePosition : null;
 
         Zoom();
 
@@ -221,7 +237,7 @@ public class Basic3DFollowCameraController : SyncScript
             _distance = _defaultDistance;
         }
 
-        Apply();
+        Apply(elapsed);
     }
 
     /// <summary>The target's position plus the offset, or where the camera is when there is no target yet.</summary>
@@ -244,6 +260,11 @@ public class Basic3DFollowCameraController : SyncScript
 
     private void Zoom()
     {
+        // Pressing the wheel to orbit almost always rolls it a notch too; while the middle button is both
+        // the orbit button and held down, the wheel is a grip, not a zoom request
+        if (OrbitButton == MouseButton.Middle && Input.IsMouseButtonDown(MouseButton.Middle))
+            return;
+
         var wheel = Input.MouseWheelDelta;
 
         if (wheel == 0f)
@@ -254,15 +275,14 @@ public class Basic3DFollowCameraController : SyncScript
             wheel *= SpeedFactor;
         }
 
-        // Multiplicative, so every notch changes the distance by the same fraction near or far
-        _distance = Math.Clamp(_distance * MathF.Pow(1f + ZoomStep, -wheel), MinDistance, MaxDistance);
+        _distance = CameraMath.StepZoom(_distance, wheel, ZoomStep, MinDistance, MaxDistance);
     }
 
     /// <summary>
     /// Places the camera behind the pivot along its yaw and pitch, at the wanted distance or as close as the
     /// first obstacle allows, looking at the pivot.
     /// </summary>
-    private void Apply()
+    private void Apply(float elapsed)
     {
         var (up, back0, _) = Frame();
 
@@ -284,7 +304,7 @@ public class Basic3DFollowCameraController : SyncScript
         // In at once, out with a lag: the camera never clips, and never jumps when the way behind it clears
         var distance = allowed < _shownDistance || ObstacleReturnSmoothing <= 0f
             ? allowed
-            : _shownDistance + (allowed - _shownDistance) * (1f - MathF.Exp(-_elapsed / ObstacleReturnSmoothing));
+            : _shownDistance + (allowed - _shownDistance) * (1f - MathF.Exp(-elapsed / ObstacleReturnSmoothing));
 
         _shownDistance = distance;
 
@@ -306,7 +326,7 @@ public class Basic3DFollowCameraController : SyncScript
     {
         var level = direction - up * Vector3.Dot(direction, up);
 
-        return level.LengthSquared() < 1e-6f ? fallback : Vector3.Normalize(level);
+        return level.LengthSquared() < MathUtil.ZeroTolerance ? fallback : Vector3.Normalize(level);
     }
 
     /// <summary>
@@ -318,7 +338,7 @@ public class Basic3DFollowCameraController : SyncScript
         var up = Up.LengthSquared() > MathUtil.ZeroTolerance ? Vector3.Normalize(Up) : Vector3.UnitY;
         var back = Vector3.UnitZ - up * Vector3.Dot(Vector3.UnitZ, up);
 
-        if (back.LengthSquared() < 1e-6f) back = Vector3.UnitX - up * Vector3.Dot(Vector3.UnitX, up);
+        if (back.LengthSquared() < MathUtil.ZeroTolerance) back = Vector3.UnitX - up * Vector3.Dot(Vector3.UnitX, up);
 
         back.Normalize();
 

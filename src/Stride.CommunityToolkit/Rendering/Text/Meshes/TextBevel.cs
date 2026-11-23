@@ -6,7 +6,7 @@ namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 /// </summary>
 /// <remarks>
 /// A bevel wider than a glyph's thinnest stem would fold the cap over itself; <see cref="TextMesh"/>
-/// halves <see cref="Size"/> for that glyph until it fits, up to six times, before giving up on it. In
+/// halves <see cref="Size"/> for that glyph until it fits, up to six times (<c>TextMesh.MaxBevelHalvings</c>), before giving up on it. In
 /// world units, like <see cref="TextMeshOptions.Depth"/>.
 /// </remarks>
 public sealed record TextBevel

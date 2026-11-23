@@ -56,9 +56,7 @@ void Start(Scene scene)
 // One square in a column and a row, labelled below
 Entity Square(Scene scene, int column, float y, Material material, string? label)
 {
-    var entity = game.CreatePrimitive(Primitive2D.Square(), new() { Material = material });
-
-    entity.Transform.Position = new Vector3(-4f + 2f * column, y, 0f);
+    var entity = game.CreatePrimitive(Primitive2D.Square(), new() { Material = material, Position = new Vector3(-4f + 2f * column, y, 0f) });
 
     if (label is not null)
     {

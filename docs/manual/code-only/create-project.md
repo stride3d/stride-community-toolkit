@@ -100,22 +100,22 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D().UseBepu(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     var entity = game.CreatePrimitive(Primitive3D.Capsule());
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 }
 ```
 
 - `using var game = new Game();` creates a new `Game` instance.
 - `game.Run(new SceneSetup3D().UseBepu(), start: Start);` sets up a basic 3D scene (camera, lighting, sky, ground) with Bepu physics, starts the game and calls `Start` when the scene is ready. Every piece of the setup is a property; see [Scene Setup](scene-setup.md).
-- `void Start(Scene rootScene)` is invoked on start with the active root scene.
+- `void Start(Scene scene)` is invoked on start with the active root scene.
 - `game.CreatePrimitive(Primitive3D.Capsule())` creates a capsule primitive. `Primitive3D.Capsule(radius, length)` sizes it.
 - `entity.Transform.Position = new Vector3(0, 8, 0);` places the capsule 8 units above the ground.
-- `entity.Scene = rootScene;` adds the entity to the scene so it is rendered and simulated. Without it the entity does not appear.
+- `entity.Scene = scene;` adds the entity to the scene so it is rendered and simulated. Without it the entity does not appear.
 
 With `UseBepu()` on the setup, `CreatePrimitive()` gives the capsule a [rigid body](https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html), so it falls to the ground.
 

@@ -89,7 +89,7 @@ PanelStation[] stations =
         (text, theme) => { text.TextColor = theme.Text; text.FontSize = 12f; }),
 
     new(4, "Fill.Alpha 0.35\nthe stripe shows through", "TextColor alpha 128",
-        (text, theme) => text.TextColor = new Color(theme.Text.R, theme.Text.G, theme.Text.B, (byte)128),
+        (text, theme) => text.TextColor = theme.Text.WithAlpha(128),
         FillAlpha: 0.35f),
 
     new(5, "Fill.Color null\nfill derives from the border", "Opacity 0.5",
@@ -101,7 +101,7 @@ PanelStation[] stations =
         CornerRadius: 0.35f),
 
     new(7, "BorderWidth 6\nheavy, still pixel-exact", "GlowSize 12, glow alpha 90\nsoft bloom",
-        (text, theme) => { text.TextColor = theme.Text; text.GlowColor = new Color(theme.Glow.R, theme.Glow.G, theme.Glow.B, (byte)90); text.GlowSize = 12f; },
+        (text, theme) => { text.TextColor = theme.Text; text.GlowColor = theme.Glow.WithAlpha(90); text.GlowSize = 12f; },
         BorderWidth: 6f),
 
     new(8, "Glow.Width 6\nin the accent colour", "Dark text, white halo\nlegible on anything",
@@ -133,7 +133,7 @@ PanelStation[] stations =
         GradientTo: GradientTarget.Text),
 
     new(15, "Gradient to alpha 0\nleft to right - a glass fade", "TextColor alpha 160\n+ GlowSize 3",
-        (text, theme) => { text.TextColor = new Color(theme.Text.R, theme.Text.G, theme.Text.B, (byte)160); text.GlowColor = theme.Glow; text.GlowSize = 3f; },
+        (text, theme) => { text.TextColor = theme.Text.WithAlpha(160); text.GlowColor = theme.Glow; text.GlowSize = 3f; },
         FillAlpha: 0.6f, GradientTo: GradientTarget.Transparent),
 
     new(16, "Opacity 0.35\nthe whole panel, one number", "Opacity 0.35\non the text as well",
@@ -239,7 +239,7 @@ void Start(Scene scene)
             var corner = CellCenter(i, withText) + new Vector3(-PanelWidth / 2f + 0.14f, PanelHeight / 2f - 0.1f, 0f);
 
             AddText(scene, corner, $"{station.Number:00}", 0.2f,
-                (text, theme) => text.TextColor = WithAlpha(theme.Accent, 170),
+                (text, theme) => text.TextColor = theme.Accent.WithAlpha(170),
                 anchor: Anchor.TopLeft, font: monoFont);
         }
     }
@@ -300,14 +300,14 @@ void DrawPanel(PanelStation station, Vector3 center, Theme theme)
     // is what makes a dark panel behind a bright border
     shapes.Fill.Set(station.DerivedFill ? null : theme.Fill, station.FillAlpha);
 
-    shapes.Glow.Set(station.GlowWidth, station.GlowWidth <= 0f ? null : WithAlpha(station.WhiteGlow ? Color.White : theme.Glow, station.GlowAlpha));
+    shapes.Glow.Set(station.GlowWidth, station.GlowWidth <= 0f ? null : (station.WhiteGlow ? Color.White : theme.Glow).WithAlpha(station.GlowAlpha));
 
     // Additive: the glow adds its light to whatever is behind it instead of covering it - a neon
     // over a dark ground. Over a light one it would only saturate.
     shapes.Glow.Additive = station.AdditiveGlow;
 
     // The outline colour's own alpha applies to the border, so a border can be see-through too
-    var accent = WithAlpha(theme.Accent, station.BorderAlpha);
+    var accent = theme.Accent.WithAlpha(station.BorderAlpha);
 
     // A gradient runs from the fill to this colour across the panel; alpha 0 fades the fill out
     switch (station.GradientTo)
@@ -316,7 +316,7 @@ void DrawPanel(PanelStation station, Vector3 center, Theme theme)
             shapes.Gradient.Set(theme.Text, Vector2.UnitY);
             break;
         case GradientTarget.Transparent:
-            shapes.Gradient.Set(WithAlpha(theme.Fill, 0), Vector2.UnitX);
+            shapes.Gradient.Set(theme.Fill.WithAlpha(0), Vector2.UnitX);
             break;
     }
 
@@ -368,11 +368,11 @@ void DrawPolygon(Vector3 center, int sides, float radius, Color color, float cor
     Span<Vector2> vertices = stackalloc Vector2[sides];
 
     // Counter-clockwise, starting so that one edge lies flat at the bottom
-    var start = -MathF.PI / 2f - MathF.PI / sides;
+    var start = -MathUtil.PiOverTwo - MathUtil.Pi / sides;
 
     for (var i = 0; i < sides; i++)
     {
-        var (sin, cos) = MathF.SinCos(start + i * MathF.Tau / sides);
+        var (sin, cos) = MathF.SinCos(start + i * MathUtil.TwoPi / sides);
 
         vertices[i] = new Vector2(cos, sin) * (radius - cornerRadius);
     }
@@ -432,7 +432,7 @@ void DrawRoute(Vector3 center, Theme theme)
     {
         var t = i / (route.Length - 1f);
         var x = center.X - PanelWidth / 2f + 0.3f + t * (PanelWidth - 0.6f);
-        var y = center.Y + MathF.Sin(t * MathF.Tau * 1.5f + time) * 0.55f;
+        var y = center.Y + MathF.Sin(t * MathUtil.TwoPi * 1.5f + time) * 0.55f;
 
         route[i] = new Vector2(x, y);
     }
@@ -471,14 +471,14 @@ void DrawOrnaments(Vector3 center, Theme theme)
         divider - new Vector3(PanelWidth / 2f - 0.35f, 0f, 0f),
         divider + new Vector3(PanelWidth / 2f - 0.35f, 0f, 0f),
         1f,
-        WithAlpha(theme.Accent, 110));
+        theme.Accent.WithAlpha(110));
 
     // A gauge sweep, three quarters of a turn, in the accent colour
     shapes.DrawArc(
         new Vector2(center.X + PanelWidth / 2f - 0.5f, center.Y - PanelHeight / 2f + 0.5f),
         0.28f,
-        -MathF.PI / 2f,
-        MathF.PI * 1.5f,
+        -MathUtil.PiOverTwo,
+        MathUtil.Pi * 1.5f,
         theme.Accent,
         0.05f);
 }
@@ -494,7 +494,7 @@ void DrawDashes(Vector3 center, Theme theme)
 
     shapes.StrokeWidth = 1.5f;
     shapes.Dash.Set(6f, 4f, time * 20f);
-    shapes.DrawArc(new Vector2(center.X - PanelWidth / 2f + 0.75f, center.Y), 0.5f, 0f, MathF.Tau, theme.Accent);
+    shapes.DrawArc(new Vector2(center.X - PanelWidth / 2f + 0.75f, center.Y), 0.5f, 0f, MathUtil.TwoPi, theme.Accent);
 
     shapes.Dash.Set(8f, 5f, -time * 30f);
     shapes.DrawPixelLine(center + new Vector3(-PanelWidth / 2f + 1.5f, 0f, 0f), center + new Vector3(PanelWidth / 2f - 0.3f, 0f, 0f), 1.5f, theme.Accent);
@@ -532,9 +532,8 @@ void AddText(Scene scene, Vector3 position, string content, float lineHeight, Ac
 
     restyle(component, themes[themeIndex]);
 
-    var entity = new Entity("Text") { component };
+    var entity = new Entity("Text", position) { component };
 
-    entity.Transform.Position = position;
     entity.Scene = scene;
 
     if (themed)
@@ -581,9 +580,6 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
     new("Corner numbers match the stations array in Program.cs", Color.LightGray),
     new("Borders, glows and dashes keep their pixel size", Color.LightGray),
 ];
-
-/// <summary>The same colour at a different alpha.</summary>
-static Color WithAlpha(Color color, byte alpha) => new(color.R, color.G, color.B, alpha);
 
 /*
 ---example-metadata

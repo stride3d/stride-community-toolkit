@@ -9,8 +9,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 
-WindowsDpiManager.LogDpiInfo("Before Game: ");
-
 // Path the cube travels along
 const float OrbitRadius = 3f;
 const float OrbitHeight = 2f;
@@ -53,19 +51,21 @@ game.Run(new SceneSetup3D
     DpiAware = true,
 }.UseBepu().UseSkybox(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
+    game.AddGrabber();
+
     imGuiSystem = game.AddImGuiNet();
 
-    orbitingCube = CreateOrbitingCube(rootScene);
+    orbitingCube = CreateOrbitingCube(scene);
     orbitingCubeBody = orbitingCube.Get<BodyComponent>();
 
-    CreateObstacleStacks(rootScene);
+    CreateObstacleStacks(scene);
 
     game.SetMaxFPS(TargetFps);
 }
 
-void Update(Scene rootScene, GameTime gameTime)
+void Update(Scene scene, GameTime gameTime)
 {
     if (imGuiSystem is null || orbitingCube is null) return;
 
@@ -75,18 +75,17 @@ void Update(Scene rootScene, GameTime gameTime)
 
     DrawTopLeftPanel(imGuiSystem, gameTime);
     DrawWorldLabels(imGuiSystem, orbitingCube);
-    DrawBottomLeftPanel(imGuiSystem, rootScene);
+    DrawBottomLeftPanel(imGuiSystem, scene);
 }
 
 /// <summary>
 /// Creates the cube the world-space label is attached to. It is kinematic, so it follows a scripted path without being affected by gravity or collisions, yet still pushes away the dynamic boxes it runs into.
 /// </summary>
-Entity CreateOrbitingCube(Scene rootScene)
+Entity CreateOrbitingCube(Scene scene)
 {
-    var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions { Body = BodyMode.Kinematic });
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions { Body = BodyMode.Kinematic, Position = new Vector3(0, OrbitHeight, 0) });
 
-    cube.Transform.Position = new Vector3(0, OrbitHeight, 0);
-    cube.Scene = rootScene;
+    cube.Scene = scene;
 
     return cube;
 }
@@ -94,19 +93,19 @@ Entity CreateOrbitingCube(Scene rootScene)
 /// <summary>
 /// Builds towers of dynamic boxes spaced evenly around the cube's path, so there is something visible for it to knock over.
 /// </summary>
-void CreateObstacleStacks(Scene rootScene)
+void CreateObstacleStacks(Scene scene)
 {
     for (var stack = 0; stack < ObstacleStackCount; stack++)
     {
-        var angle = MathF.Tau * stack / ObstacleStackCount;
+        var angle = MathUtil.TwoPi * stack / ObstacleStackCount;
         var x = MathF.Sin(angle) * OrbitRadius;
         var z = MathF.Cos(angle) * OrbitRadius;
 
         for (var level = 0; level < BoxesPerStack; level++)
         {
-            var box = game.CreatePrimitive(Primitive3D.Cube());
-            box.Transform.Position = new Vector3(x, BoxSize * (0.5f + level), z);
-            box.Scene = rootScene;
+            var box = game.CreatePrimitive(Primitive3D.Cube(), new() { Position = new Vector3(x, BoxSize * (0.5f + level), z) });
+
+            box.Scene = scene;
         }
     }
 }
@@ -135,6 +134,9 @@ void MoveOrbitingCube()
     // The path's own velocity, plus a gentle pull towards the path: it brings the cube out from
     // its start in the middle and keeps small errors from adding up
     orbitingCubeBody.LinearVelocity = pathVelocity + (onPath - orbitingCubeBody.Position) * PathCorrectionStrength;
+
+    // A kinematic body that starts still is put to sleep, and a sleeping body ignores its velocity
+    orbitingCubeBody.Awake = true;
 }
 
 /// <summary>
@@ -174,19 +176,19 @@ void DrawWorldLabels(ImGuiNetSystem imGui, Entity cube)
 /// <summary>
 /// Draws the diagnostics block anchored to the bottom-left corner, so it stays put when the window is resized.
 /// </summary>
-void DrawBottomLeftPanel(ImGuiNetSystem imGui, Scene rootScene)
+void DrawBottomLeftPanel(ImGuiNetSystem imGui, Scene scene)
 {
     // The font atlas follows this by itself - ImGuiNetSystem rebuilds it when the value changes,
     // which is what happens when the window is dragged to a differently scaled monitor
     var displayScale = DisplayScale.GetOrCreate(game).Value;
     var awareness = WindowsDpiManager.GetProcessDpiAwareness();
-    var cameraPosition = rootScene.GetCamera()?.Entity.Transform.Position;
+    var cameraPosition = scene.GetCamera()?.Entity.Transform.Position;
 
     string[] lines =
     [
         $"Display scale: {displayScale:F2}x  (process {awareness?.ToString() ?? "unknown"})",
         $"Camera Position: {cameraPosition?.ToString() ?? "n/a"}",
-        $"Entities: {rootScene.Entities.Count}",
+        $"Entities: {scene.Entities.Count}",
         $"Time: {elapsedSeconds:F1}s"
     ];
 

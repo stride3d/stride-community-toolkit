@@ -6,7 +6,7 @@ namespace Stride.CommunityToolkit.ImGui;
 /// <summary>
 /// Owns the textures Dear ImGui manages through its 1.92+ texture protocol (RendererHasTextures):
 /// creates, updates and destroys them as the draw data requests, and resolves texture ids at draw
-/// time. Split out of <see cref="ImGuiSystem"/>, which forwards the protocol events here.
+/// time. <see cref="ImGuiSystem"/> forwards the protocol events here.
 /// </summary>
 /// <param name="device">The device the textures are created on.</param>
 /// <param name="commandList">The command list the pixels are uploaded through.</param>
@@ -81,8 +81,12 @@ internal sealed class ImGuiTextureManager(GraphicsDevice device, CommandList com
 
     private Texture Create(ImTextureDataPtr textureData)
     {
-        var pixelFormat = textureData.Format == ImTextureFormat.Rgba32 ? PixelFormat.R8G8B8A8_UNorm : PixelFormat.R8_UNorm;
-        var texture = Texture.New2D(device, textureData.Width, textureData.Height, pixelFormat, TextureFlags.ShaderResource);
+        // The shader multiplies by the whole RGBA sample, so a single-channel atlas would draw every glyph as an
+        // opaque red box; ImGui's default format is the one that works
+        if (textureData.Format != ImTextureFormat.Rgba32)
+            throw new NotSupportedException($"ImGui texture format {textureData.Format} is not supported; leave io.Fonts.TexDesiredFormat at Rgba32.");
+
+        var texture = Texture.New2D(device, textureData.Width, textureData.Height, PixelFormat.R8G8B8A8_UNorm, TextureFlags.ShaderResource);
 
         Upload(texture, textureData);
 

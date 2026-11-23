@@ -27,4 +27,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_3D_SyncScript).
 
-[!code-csharp[](../../../../examples/code-only/E02_3D_SyncScript/Program.cs?start=1&end=24)]
+[!code-csharp[](../../../../examples/code-only/E02_3D_SyncScript/Program.cs?start=1&end=22)]

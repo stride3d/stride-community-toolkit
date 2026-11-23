@@ -26,8 +26,9 @@ namespace Stride.CommunityToolkit.Bepu;
 /// </para>
 /// <para>
 /// Tuning follows bepuphysics2's demo grabber: a soft spring (5 Hz, damping ratio 2), a force cap
-/// scaled by the body's mass so heavy and light bodies drag alike, no angular servo on a body whose
-/// rotation is locked, and the held body kept awake. The grab ends by itself if the body turns
+/// scaled by the body's mass so heavy and light bodies drag alike, no angular servo on a body Bepu
+/// reports as rotation-locked (a fully zeroed inertia tensor; the toolkit's own locks scale the tensor
+/// and still get one), and the held body kept awake. The grab ends by itself if the body turns
 /// kinematic or leaves the scene.
 /// </para>
 /// <para>
@@ -187,8 +188,9 @@ public class GrabberScript : SyncScript
         };
         Entity.Add(_linear);
 
-        // A body with locked rotation has nothing for the angular servo to do, and the solver
-        // would reject the constraint.
+        // A body whose inertia tensor is all zero has nothing for the angular servo to do, and the solver
+        // would reject the constraint. LockRotation and Body2DComponent scale the tensor instead, so
+        // their bodies get the servo.
         if (!Bodies.HasLockedInertia(inertia.InverseInertiaTensor))
         {
             _angular = new OneBodyAngularServoConstraintComponent

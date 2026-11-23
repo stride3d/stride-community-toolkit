@@ -22,17 +22,6 @@ public static class ModelComponentExtensions
         => modelComponent.Model.BoundingBox.Maximum - modelComponent.Model.BoundingBox.Minimum;
 
     /// <summary>
-    /// Calculates the height of the model represented by the ModelComponent.
-    /// </summary>
-    /// <param name="modelComponent">The ModelComponent whose model height is to be calculated.</param>
-    /// <returns>The height of the model along the Y-axis.</returns>
-    /// <remarks>
-    /// The height is calculated based on the model's bounding box, which encompasses its maximum extent in 3D space.
-    /// </remarks>
-    public static float GetMeshHeight(this ModelComponent modelComponent)
-        => modelComponent.Model.BoundingBox.Maximum.Y - modelComponent.Model.BoundingBox.Minimum.Y;
-
-    /// <summary>
     /// Retrieves the vertices and indices from the ModelComponent's mesh data.
     /// </summary>
     /// <param name="model">The ModelComponent from which to extract mesh data.</param>
@@ -42,7 +31,7 @@ public static class ModelComponentExtensions
     /// This method extracts raw vertex and index data from the meshes in the provided ModelComponent.
     /// It's useful for operations that require direct access to mesh data, such as custom rendering, collision detection, or physics simulations.
     /// </remarks>
-    public static (List<Vector3> vertices, List<int> indices) GetMeshVerticesAndIndices(this ModelComponent model, IGame game)
+    public static (List<Vector3> Vertices, List<int> Indices) GetMeshVerticesAndIndices(this ModelComponent model, IGame game)
         => GetMeshData(model.Model, game);
 
     /// <summary>
@@ -194,7 +183,7 @@ public static class ModelComponentExtensions
         internal required ModelComponent ModelComponent { get; init; }
     }
 
-    private static (List<Vector3> vertices, List<int> indices) GetMeshData(Model model, IGame game)
+    private static (List<Vector3> Vertices, List<int> Indices) GetMeshData(Model model, IGame game)
     {
         // Counted first so both lists are allocated once at the right size; a model with many meshes
         // would otherwise regrow them repeatedly while copying.
@@ -219,7 +208,7 @@ public static class ModelComponentExtensions
             var verticesBytes = vertexBinding.Buffer.GetData<byte>(game.GraphicsContext.CommandList);
             var indicesBytes = indexBinding.Buffer.GetData<byte>(game.GraphicsContext.CommandList);
 
-            // Empty lists if there is an issue
+            // A buffer that cannot be read ends the read; what the meshes before it gave is returned
             if (verticesBytes is not { Length: > 0 } || indicesBytes is not { Length: > 0 })
                 return (combinedVertices, combinedIndices);
 

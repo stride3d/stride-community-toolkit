@@ -24,6 +24,7 @@ public class HighlightShellTests
 
         var component = new ModelComponent(model);
 
+        // Only for the component's Entity, which the shell reads; the entity itself goes nowhere
         _ = new Entity(name) { component };
 
         return component;

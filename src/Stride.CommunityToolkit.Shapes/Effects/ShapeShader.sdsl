@@ -137,6 +137,11 @@ namespace Stride.CommunityToolkit.Shapes
             uint index = InstanceBase + streams.InstanceID;
             ShapeData data = Shapes[index];
 
+            // Written here, before any branch: a stream whose only writes sit inside an if or after an
+            // early return is carried from the vertex buffer when its semantic is a vertex input, and
+            // the quad has no TEXCOORD0 to give
+            streams.TexCoord = float2(0.0, 0.0);
+
             // A space run is not a flat shape. Its quad is the screen bounding box of its projected
             // points, padded for the widest stroke, the border and the glow, placed at the depth of
             // the nearest point so that a run entirely behind the near plane is clipped; the pixel

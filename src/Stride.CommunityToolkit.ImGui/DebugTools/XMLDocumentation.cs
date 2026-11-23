@@ -66,21 +66,11 @@ internal static class XMLDocumentation
         return document;
     }
 
-    // The id the compiler writes: M:Type.Method(Params), T:Type, P: or F: for the rest
-    private static string DocumentationId(MemberInfo member)
-    {
-        switch (member)
-        {
-            case MethodInfo method:
-                var parameters = string.Join(",", method.GetParameters().Select(p => p.ParameterType.FullName));
-
-                return $"M:{method.DeclaringType?.FullName}.{method.Name}{(parameters.Length > 0 ? $"({parameters})" : "")}";
-            case Type type:
-                return $"T:{type.FullName}";
-            default:
-                return $"{member.MemberType.ToString()[0]}:{member.DeclaringType}.{member.Name}";
-        }
-    }
+    // The id the compiler writes: T:Type for a type, P: or F: for a property or a field, which is all the inspector
+    // shows. A nested type is Outer+Inner to reflection and Outer.Inner to the compiler
+    private static string DocumentationId(MemberInfo member) => member is Type type
+        ? $"T:{type.FullName?.Replace('+', '.')}"
+        : $"{member.MemberType.ToString()[0]}:{member.DeclaringType?.FullName?.Replace('+', '.')}.{member.Name}";
 
     private sealed class CachedDocumentation(XmlElement element)
     {

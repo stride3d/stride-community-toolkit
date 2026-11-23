@@ -69,9 +69,7 @@ void Start(Scene scene)
 
 void Cube(Scene scene, Vector3 position, Material material, string label)
 {
-    var entity = game.CreatePrimitive(Primitive3D.Cube(), new() { Material = material });
-
-    entity.Transform.Position = position;
+    var entity = game.CreatePrimitive(Primitive3D.Cube(), new() { Material = material, Position = position });
 
     // The number above each cube: screen-space text anchored to the cube's centre, nudged up
     entity.Add(new EntityTextComponent

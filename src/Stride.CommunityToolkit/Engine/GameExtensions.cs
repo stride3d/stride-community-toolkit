@@ -1,19 +1,13 @@
-using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
-using Stride.Engine.Processors;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Graphics.Font;
-using Stride.Input;
 using Stride.Rendering;
-using Stride.Rendering.Colors;
 using Stride.Rendering.Compositing;
-using Stride.Rendering.Lights;
-using Stride.Rendering.Materials;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -24,179 +18,6 @@ namespace Stride.CommunityToolkit.Engine;
 /// </summary>
 public static partial class GameExtensions
 {
-    private const string NoCameraSlotMessage = "Cannot add camera: The GraphicsCompositor does not have any camera slots defined.";
-
-    /// <summary>
-    /// Starts the game loop, calling <paramref name="start"/> once the root scene exists and
-    /// <paramref name="update"/> on every frame after that.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// The engine creates the root scene only inside <see cref="GameBase.Run(GameContext)"/>, so
-    /// scene setup cannot happen before this call. <c>Run</c> schedules a script that invokes
-    /// <paramref name="start"/> on the first frame, then loops <paramref name="update"/> once per frame
-    /// until the game exits. Both callbacks run on the game thread, inside the script system, with
-    /// the same timing and exception behaviour as a <see cref="StartupScript"/> or <see cref="SyncScript"/>:
-    /// an exception thrown by either one propagates out of this method.
-    /// </para>
-    /// <para>
-    /// <paramref name="start"/> may be asynchronous - see the <see cref="Run(Game, Func{Scene, Task}, Action{Scene, GameTime}, GameContext)"/>
-    /// overload. <paramref name="update"/> is deliberately synchronous: it is the per-frame callback, and
-    /// anything that needs to await across frames belongs in an async <paramref name="start"/> that runs
-    /// its own loop.
-    /// </para>
-    /// </remarks>
-    /// <param name="game">The game to run.</param>
-    /// <param name="start">Called once, with the root scene, before the first <paramref name="update"/>. Optional.</param>
-    /// <param name="update">
-    /// Called every frame with the current root scene and the current <see cref="GameBase.UpdateTime"/>.
-    /// The scene is read fresh each frame, so after a scene switch it is the new root scene. Optional.
-    /// </param>
-    /// <param name="context">
-    /// The windowing context to run in - a host control to render into, a fixed initial size, an SDL or
-    /// headless backend. Leave <see langword="null"/> to let the engine pick the platform default.
-    /// </param>
-    /// <exception cref="ArgumentNullException"><paramref name="game"/> is <see langword="null"/>.</exception>
-    /// <example>
-    /// <code>
-    /// using var game = new Game();
-    ///
-    /// game.Run(start: Start, update: Update);
-    ///
-    /// void Start(Scene rootScene) => game.SetupBase3DScene();
-    ///
-    /// void Update(Scene rootScene, GameTime time) { /* per frame */ }
-    /// </code>
-    /// </example>
-    public static void Run(this Game game, Action<Scene>? start = null, Action<Scene, GameTime>? update = null, GameContext? context = null)
-        => game.Run(SceneSetup3D.Default, start, update, context);
-
-    /// <summary>
-    /// Starts the game loop with an asynchronous <paramref name="start"/>: the update loop begins only
-    /// after the returned task completes.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// <paramref name="start"/> runs as a script, so it can wait on the script system between steps -
-    /// <c>await game.GetScriptSystem().NextFrame()</c> to let physics attach, or
-    /// <see cref="ScriptSystemExtensions.Delay(ScriptSystem, float)"/> for a countdown - without writing
-    /// a <see cref="StartupScript"/> or <see cref="AsyncScript"/> class. A <paramref name="start"/> that never
-    /// completes is valid, and is how to write a per-frame loop that also awaits: the same idiom as
-    /// <see cref="AsyncScript.Execute"/>.
-    /// </para>
-    /// <para>
-    /// C# binds an <c>async</c> lambda or a <see cref="Task"/>-returning method group to this overload
-    /// and a synchronous one to <see cref="Run(Game, Action{Scene}, Action{Scene, GameTime}, GameContext)"/>,
-    /// so an <c>async</c> start is never silently compiled as <c>async void</c>.
-    /// </para>
-    /// </remarks>
-    /// <param name="game">The game to run.</param>
-    /// <param name="start">Called once with the root scene; the update loop starts when its task completes.</param>
-    /// <param name="update">
-    /// Called every frame with the current root scene and the current <see cref="GameBase.UpdateTime"/>.
-    /// The scene is read fresh each frame, so after a scene switch it is the new root scene. Optional.
-    /// </param>
-    /// <param name="context">
-    /// The windowing context to run in. Leave <see langword="null"/> to let the engine pick the platform default.
-    /// </param>
-    /// <exception cref="ArgumentNullException"><paramref name="game"/> or <paramref name="start"/> is <see langword="null"/>.</exception>
-    /// <example>
-    /// <code>
-    /// using var game = new Game();
-    ///
-    /// game.Run(start: async rootScene =>
-    /// {
-    ///     game.SetupBase3DScene();
-    ///
-    ///     await game.GetScriptSystem().Delay(3);   // countdown, splash, loading...
-    ///
-    ///     SpawnPlayer(rootScene);
-    /// }, update: Update);
-    /// </code>
-    /// </example>
-    public static void Run(this Game game, Func<Scene, Task> start, Action<Scene, GameTime>? update = null, GameContext? context = null)
-        => game.Run(SceneSetup3D.Default, start, update, context);
-
-    /// <summary>
-    /// Applies <paramref name="setup"/> and runs the game: the setup's pieces are added to the root scene in a fixed
-    /// order before <paramref name="start"/> runs, then <paramref name="update"/> runs every frame.
-    /// </summary>
-    /// <param name="game">The game to run.</param>
-    /// <param name="setup">What the scene gets before <paramref name="start"/>: a <see cref="SceneSetup3D"/>, a <see cref="SceneSetup2D"/>, or <see cref="SceneSetup.None"/> for nothing.</param>
-    /// <param name="start">Runs once, after the setup, with the root scene.</param>
-    /// <param name="update">Runs every frame with the root scene and the game time, after <paramref name="start"/> has run.</param>
-    /// <param name="context">The game context, or <see langword="null"/> for a window.</param>
-    /// <remarks>
-    /// The setup's <see cref="SceneSetup.GameSettings"/> and <see cref="SceneSetup.Physics"/> are applied before the
-    /// engine starts; the compositor, camera, lights, sky and ground once the root scene exists, so
-    /// <paramref name="start"/> finds them in place.
-    /// </remarks>
-    /// <example>
-    /// <code>
-    /// game.Run(new SceneSetup3D { Lighting = LightingSetup.Studio() }.UseBepu(), start: Start);
-    /// </code>
-    /// </example>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> or <paramref name="setup"/> is <see langword="null"/>.</exception>
-    public static void Run(this Game game, SceneSetup setup, Action<Scene>? start = null, Action<Scene, GameTime>? update = null, GameContext? context = null)
-    {
-        RunCore(game, setup, start is null ? null : scene => { start(scene); return Task.CompletedTask; }, update, context);
-    }
-
-    /// <summary>
-    /// Applies <paramref name="setup"/> and runs the game with an awaitable <paramref name="start"/>; <paramref name="update"/>
-    /// begins once it has completed.
-    /// </summary>
-    /// <inheritdoc cref="Run(Game, SceneSetup, Action{Scene}?, Action{Scene, GameTime}?, GameContext?)"/>
-    public static void Run(this Game game, SceneSetup setup, Func<Scene, Task> start, Action<Scene, GameTime>? update = null, GameContext? context = null)
-    {
-        ArgumentNullException.ThrowIfNull(start);
-
-        RunCore(game, setup, start, update, context);
-    }
-
-    private static void RunCore(Game game, SceneSetup setup, Func<Scene, Task>? start, Action<Scene, GameTime>? update, GameContext? context)
-    {
-        ArgumentNullException.ThrowIfNull(game);
-        ArgumentNullException.ThrowIfNull(setup);
-
-        // The settings and the physics service: read while the engine initialises, so before Run
-        setup.Prepare(game);
-
-        game.GetScriptSystem().Scheduler.Add(RootScript);
-
-        // Opt-in, environment-driven, and a no-op unless a capture was asked for. Every example reaches
-        // the loop through Run, which is what makes this one place instead of sixty.
-        ScreenshotCapture.TrySchedule(game);
-
-        game.Run(context);
-
-        async Task RootScript()
-        {
-            // The root scene exists now: the compositor, camera, lights, sky and ground, then the caller's content
-            setup.Apply(game);
-
-            if (start is not null)
-                await start(RootScene());
-
-            // A master with no render feature draws as one model and says nothing; this says it once
-            InstancingSupport.WarnIfMissing(game);
-
-            if (update is null) return;
-
-            while (true)
-            {
-                update(RootScene(), game.UpdateTime);
-
-                await game.GetScriptSystem().NextFrame();
-            }
-        }
-
-        // Re-read every frame on purpose. Both SceneSystem.SceneInstance and SceneInstance.RootScene
-        // have public setters and replacing them is how a game switches scenes; a scene captured once
-        // here would keep handing update the detached one.
-        Scene RootScene() => game.GetSceneSystem().SceneInstance.RootScene;
-    }
-
     /// <summary>
     /// Adds a default graphics compositor with post-processing effects enabled to the specified game.
     /// </summary>
@@ -232,72 +53,11 @@ public static partial class GameExtensions
     /// <returns>The newly created 2D graphics compositor.</returns>
     public static GraphicsCompositor Add2DGraphicsCompositor(this IGame game, Color? clearColor = null, MultisampleCount msaa = MultisampleCount.None)
     {
-        var graphicsCompositor = GraphicsCompositorHelper2D.CreateDefault(enablePostEffects: false, clearColor: clearColor, msaa: msaa);
+        var graphicsCompositor = GraphicsCompositorHelper2D.CreateDefault(clearColor, msaa);
 
         game.GetSceneSystem().GraphicsCompositor = graphicsCompositor;
 
         return graphicsCompositor;
-    }
-
-    /// <summary>
-    /// Adds a 2D camera entity to the game's root scene with customizable position and rotation, defaulting to orthographic projection.
-    /// </summary>
-    /// <param name="game">The Game instance to which the camera entity will be added.</param>
-    /// <param name="cameraName">Name for the camera entity and camera slot. Defaults to "Main". If null, the entity is not named.</param>
-    /// <param name="initialPosition">Initial position for the camera entity. If not provided, the camera will be positioned at a default 2D position.</param>
-    /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If not provided, the camera will be rotated to the default 2D orientation.</param>
-    /// <returns>The created Entity object representing the 2D camera.</returns>
-    /// <remarks>
-    /// The camera entity will be created with an orthographic projection mode and added to the game's root scene. It will also be assigned to the first available camera slot in the GraphicsCompositor.
-    /// </remarks>
-    public static Entity Add2DCamera(this IGame game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
-    {
-        return game.Add3DCamera(
-            cameraName,
-            initialPosition ?? CameraDefaults.Initial2DPosition,
-            initialRotation ?? CameraDefaults.Initial2DRotation,
-            CameraProjectionMode.Orthographic);
-    }
-
-    /// <summary>
-    /// Adds a 3D camera entity to the game's root scene with customizable position, rotation, projection mode and default camera name "Main".
-    /// </summary>
-    /// <param name="game">The Game instance to which the camera entity will be added.</param>
-    /// <param name="cameraName">Name for the camera entity and camera slot. Defaults to "Main". If null, the entity is not named.</param>
-    /// <param name="initialPosition">Initial position for the camera entity. If not provided, the camera will be positioned at a default 3D position (6, 6, 6).</param>
-    /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If not provided, the camera will be rotated to face towards the origin with default angles (Yaw: 45, Pitch: -30, Roll: 0).</param>
-    /// <param name="projectionMode">The projection mode for the camera (Perspective or Orthographic). Defaults to Perspective.</param>
-    /// <returns>The created Entity object representing the 3D camera.</returns>
-    /// <remarks>
-    /// The camera entity will be created with the specified projection mode and added to the game's root scene. It will also be assigned to the first available camera slot in the GraphicsCompositor.
-    /// </remarks>
-    /// <exception cref="InvalidOperationException">Thrown if the GraphicsCompositor does not have any camera slots defined.</exception>
-    public static Entity Add3DCamera(this IGame game, string? cameraName = CameraDefaults.MainCameraName,
-        Vector3? initialPosition = null, Vector3? initialRotation = null,
-        CameraProjectionMode projectionMode = CameraProjectionMode.Perspective)
-    {
-        var cameras = game.GetSceneSystem().GraphicsCompositor.Cameras;
-
-        if (cameras.Count == 0)
-            throw new InvalidOperationException(NoCameraSlotMessage);
-
-        cameras[0].Name = cameraName;
-
-        var entity = new Entity(cameraName)
-        {
-            new CameraComponent
-            {
-                Projection = projectionMode,
-                Slot = cameras[0].ToSlotId(),
-            }
-        };
-
-        entity.Transform.Position = initialPosition ?? CameraDefaults.Initial3DPosition;
-        entity.Transform.Rotation = RotationFromDegrees(initialRotation ?? CameraDefaults.Initial3DRotation);
-
-        entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
-
-        return entity;
     }
 
     /// <summary>
@@ -353,301 +113,6 @@ public static partial class GameExtensions
     }
 
     /// <summary>
-    /// Adds a 2D camera controller to the specified camera entity in the game's current scene.
-    /// </summary>
-    /// <remarks>This method extends the game to simplify attaching a 2D camera controller to a camera entity.
-    /// The camera entity must exist in the root scene; otherwise, an exception is thrown.</remarks>
-    /// <param name="game">The game instance containing the scene and camera entities to which the controller will be added.</param>
-    /// <param name="cameraName">The name of the camera entity to attach the 2D camera controller to. If not specified, the main camera name is
-    /// used.</param>
-    /// <returns>The camera entity to which the 2D camera controller was added.</returns>
-    /// <exception cref="InvalidOperationException">Thrown if no camera entity with the specified name exists in the current scene.</exception>
-    /// <param name="helpToggleKey">The key that collapses and expands the camera's help.</param>
-    /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
-    public static Entity Add2DCameraController(this IGame game,
-        string? cameraName = CameraDefaults.MainCameraName,
-        Keys helpToggleKey = Keys.F2,
-        bool helpCollapsed = true)
-    {
-        var cameraEntity = GetCameraEntity(game, cameraName);
-
-        cameraEntity.Add2DCameraController(helpToggleKey, helpCollapsed);
-
-        return cameraEntity;
-    }
-
-    /// <summary>
-    /// Adds a 3D camera controller to the specified camera entity in the game's current scene.
-    /// </summary>
-    /// <param name="game">The game instance containing the scene and camera entities to which the controller will be added.</param>
-    /// <param name="helpPosition">Where the shared <see cref="Rendering.Overlay.TextOverlay"/> is drawn. <see langword="null"/>, the default,
-    /// leaves the overlay's own position alone.</param>
-    /// <param name="cameraName">The name of the camera entity to attach the 3D camera controller to. If not specified, the main camera name is
-    /// used.</param>
-    /// <returns>The camera entity to which the 3D camera controller was added.</returns>
-    /// <exception cref="InvalidOperationException">Thrown if no camera entity with the specified name exists in the current scene.</exception>
-    /// <param name="helpToggleKey">The key that collapses and expands the camera's help.</param>
-    /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
-    /// <param name="showHelp"><see langword="false"/> keeps the controller but puts no key help on the overlay.</param>
-    public static Entity Add3DCameraController(this IGame game,
-        Anchor? helpPosition = null,
-        string? cameraName = CameraDefaults.MainCameraName,
-        Keys helpToggleKey = Keys.F2,
-        bool helpCollapsed = true,
-        bool showHelp = true)
-    {
-        var cameraEntity = GetCameraEntity(game, cameraName);
-
-        cameraEntity.Add3DCameraController(helpPosition, helpToggleKey, helpCollapsed, showHelp);
-
-        return cameraEntity;
-    }
-
-    /// <summary>
-    /// Moves the existing camera to a new position, leaving its rotation alone.
-    /// </summary>
-    /// <param name="game">The game whose camera is moved.</param>
-    /// <param name="position">The new world position.</param>
-    /// <param name="cameraName">The camera entity's name. Defaults to the main camera name.</param>
-    /// <returns>The camera entity, so calls can be chained.</returns>
-    /// <exception cref="InvalidOperationException">No camera entity with that name exists in the root scene.</exception>
-    /// <remarks>
-    /// <para>
-    /// For adjusting the camera that <c>SetupBase3DScene</c> has already created. Calling
-    /// <see cref="Add3DCamera"/> a second time is not the way to do it: that method builds a
-    /// <em>new</em> entity, binds it to camera slot 0 and adds it to the root scene, leaving two camera
-    /// entities competing for one slot.
-    /// </para>
-    /// <para>
-    /// Paired with <see cref="SetCameraRotation"/> rather than folded into one call, so that each line
-    /// of an example says exactly what it does.
-    /// </para>
-    /// </remarks>
-    public static Entity SetCameraPosition(this IGame game, Vector3 position,
-        string? cameraName = CameraDefaults.MainCameraName)
-    {
-        var cameraEntity = game.GetCameraEntity(cameraName);
-
-        cameraEntity.Transform.Position = position;
-
-        return cameraEntity;
-    }
-
-    /// <summary>
-    /// Rotates the existing camera, leaving its position alone.
-    /// </summary>
-    /// <param name="game">The game whose camera is rotated.</param>
-    /// <param name="rotation">
-    /// The rotation in degrees, packed as <c>X = Yaw</c>, <c>Y = Pitch</c>, <c>Z = Roll</c> - the same
-    /// convention <see cref="Add3DCamera"/> uses for its <c>initialRotation</c>, and the order the
-    /// camera controller's F2 panel prints.
-    /// </param>
-    /// <param name="cameraName">The camera entity's name. Defaults to the main camera name.</param>
-    /// <returns>The camera entity, so calls can be chained.</returns>
-    /// <exception cref="InvalidOperationException">No camera entity with that name exists in the root scene.</exception>
-    /// <remarks>
-    /// Yaw/pitch/roll rather than a quaternion because these numbers are meant to be read off the screen
-    /// and typed back in. See <see cref="SetCameraPosition"/> for why this is not
-    /// <see cref="Add3DCamera"/>.
-    /// </remarks>
-    public static Entity SetCameraRotation(this IGame game, Vector3 rotation,
-        string? cameraName = CameraDefaults.MainCameraName)
-    {
-        var cameraEntity = game.GetCameraEntity(cameraName);
-
-        cameraEntity.Transform.Rotation = RotationFromDegrees(rotation);
-
-        return cameraEntity;
-    }
-
-    /// <summary>
-    /// Adds a directional light entity to the game's root scene with optional customization.
-    /// </summary>
-    /// <param name="game">The Game instance to which the directional light will be added.</param>
-    /// <param name="entityName">Optional name for the new directional light entity. If null, the entity will not be named.</param>
-    /// <param name="enableShadows">Whether the light casts shadows. Defaults to <see langword="true"/>.</param>
-    /// <param name="intensity">Brightness of the light. Defaults to 20.</param>
-    /// <returns>The created Entity object representing the directional light.</returns>
-    /// <remarks>
-    /// <para>
-    /// This method creates a directional light with the following default settings:
-    /// - Intensity: 20.0f
-    /// - Position: (0, 2.0f, 0)
-    /// - Rotation: X-axis rotated by -30 degrees and Y-axis rotated by -180 degrees.
-    /// - Shadow Enabled: True
-    /// - Shadow Size: Large
-    /// - Shadow Filter: PCF (Percentage Closer Filtering) with a filter size of 5x5
-    /// </para>
-    /// <para>The entity will be added to the game's root scene. You can customize the light properties by accessing the returned Entity object.</para>
-    /// <para>
-    /// Note that <paramref name="enableShadows"/> only controls shadows <em>cast</em> by geometry onto
-    /// other geometry. It does not flatten shading: a surface facing away from the light is still
-    /// darkened by the diffuse N·L term, whatever this is set to. For a surface that reads as the same
-    /// colour from every angle, use an emissive material such as <see cref="CreateFlatMaterial"/>.
-    /// </para>
-    /// </remarks>
-    public static Entity AddDirectionalLight(this IGame game, string? entityName = "Directional Light", bool enableShadows = true, float intensity = 20.0f)
-    {
-        var entity = CreateDirectionalLight(entityName, intensity, enableShadows);
-
-        entity.Transform.Position = new Vector3(0, 2.0f, 0);
-        entity.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-30.0f)) *
-                                    Quaternion.RotationY(MathUtil.DegreesToRadians(-180.0f));
-
-        entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
-
-        return entity;
-    }
-
-    /// <summary>
-    /// Adds directional lighting from multiple angles to the current scene, enhancing scene illumination.
-    /// </summary>
-    /// <param name="game">The game instance to which the lighting will be added.</param>
-    /// <param name="intensity">The intensity of the light sources.</param>
-    /// <param name="showLightGizmo">Whether to show a gizmo for each light. Default is true.</param>
-    /// <returns>The six light entities, already in the root scene.</returns>
-    /// <remarks>
-    /// <para>
-    /// Creates six directional lights, one shining along each world axis, for even lighting from all directions.
-    /// </para>
-    /// </remarks>
-    public static IReadOnlyList<Entity> AddAllDirectionLighting(this IGame game, float intensity = 5, bool showLightGizmo = true)
-    {
-        var position = new Vector3(7f, 2f, 0);
-
-        // A directional light shines along its entity's forward axis, so these six rotations aim one
-        // light down each of the six world axes
-        ReadOnlySpan<Quaternion> rotations =
-        [
-            Quaternion.Identity,
-            Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(180)),
-            Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90)),
-            Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(270)),
-            Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(90)),
-            Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(270))
-        ];
-
-        var lights = new List<Entity>(rotations.Length);
-
-        foreach (var rotation in rotations)
-        {
-            var entity = CreateDirectionalLight(null, intensity, enableShadows: false);
-
-            entity.Transform.Position = position;
-            entity.Transform.Rotation = rotation;
-            entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
-
-            if (showLightGizmo)
-                entity.AddLightDirectionalGizmo(game.GraphicsDevice);
-
-            lights.Add(entity);
-        }
-
-        return lights;
-    }
-
-    /// <summary>
-    /// Adds a three-point studio lighting rig - key, fill and rim - aimed at the scene's centre.
-    /// </summary>
-    /// <param name="game">The game instance to which the lighting will be added.</param>
-    /// <param name="intensity">The key light's intensity. The fill and rim are derived from it. Default is 15.</param>
-    /// <param name="yawDegrees">
-    /// Horizontal direction the rig faces, in degrees about the world Y axis. The default of 45 faces
-    /// the toolkit's default camera at (6, 6, 6); pass the yaw of your own camera to swing the whole
-    /// rig around with it.
-    /// </param>
-    /// <param name="enableShadows">Whether the key light casts shadows. Only the key ever does. Default is true.</param>
-    /// <param name="showLightGizmo">Whether to show a gizmo for each light. Default is false.</param>
-    /// <returns>The three light entities - key, fill and rim - for further adjustment.</returns>
-    /// <remarks>
-    /// <para>
-    /// This is the photographer's rig: a bright <b>key</b> light from high on one side of the camera
-    /// gives every surface its main shading and the scene its shadows; a dim <b>fill</b> from low on
-    /// the other side lifts the key's shadows so they read as shadow rather than black; and a
-    /// <b>rim</b> from high behind the subject traces a bright edge along silhouettes, separating
-    /// objects from the background. Because the three intensities differ, curved and angled surfaces
-    /// shade differently on every face - which is what makes shapes look solid.
-    /// </para>
-    /// <para>
-    /// Compare <see cref="AddAllDirectionLighting"/>, which lights evenly from all six axes: nothing
-    /// is ever dark, but everything is lit the same, so shape flattens. Prefer the studio rig for
-    /// showing off models and lettering; prefer all-direction lighting when reading a surface's
-    /// colour matters more than reading its form, as on a game board of colour-coded cubes.
-    /// </para>
-    /// <para>
-    /// Directional lights ignore position, so the rig works whatever the scene's scale; positions are
-    /// set anyway so the gizmos hover where each light conceptually sits.
-    /// </para>
-    /// </remarks>
-    public static (Entity Key, Entity Fill, Entity Rim) AddStudioLighting(this IGame game, float intensity = 15f, float yawDegrees = 45f, bool enableShadows = true, bool showLightGizmo = false)
-    {
-        // Azimuth is measured about Y: a light at azimuth a sits on the (sin a, _, cos a) side of the
-        // scene and shines toward the centre. Elevation tilts it down from the horizon.
-        var key = CreateStudioLight("Studio Key Light", intensity, yawDegrees + 30f, elevationDegrees: 40f, enableShadows);
-        var fill = CreateStudioLight("Studio Fill Light", intensity * 0.35f, yawDegrees - 40f, elevationDegrees: 15f, enableShadows: false);
-        var rim = CreateStudioLight("Studio Rim Light", intensity * 0.7f, yawDegrees + 180f, elevationDegrees: 55f, enableShadows: false);
-
-        foreach (var entity in (ReadOnlySpan<Entity>)[key, fill, rim])
-        {
-            entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
-
-            if (showLightGizmo)
-                entity.AddLightDirectionalGizmo(game.GraphicsDevice);
-        }
-
-        return (key, fill, rim);
-    }
-
-    /// <summary>
-    /// A white directional light, not yet in a scene, with the large PCF-filtered shadow map every toolkit light
-    /// uses when it casts shadows at all.
-    /// </summary>
-    private static Entity CreateDirectionalLight(string? name, float intensity, bool enableShadows) => new(name)
-    {
-        new LightComponent
-        {
-            Intensity = intensity,
-            Type = new LightDirectional
-            {
-                Color = new ColorRgbProvider(Color.White),
-                Shadow =
-                {
-                    Enabled = enableShadows,
-                    Size = LightShadowMapSize.Large,
-                    Filter = new LightShadowMapFilterTypePcf { FilterSize = LightShadowMapFilterTypePcfSize.Filter5x5 },
-                    PartitionMode = new LightDirectionalShadowMap.PartitionLogarithmic(),
-                    ComputeTransmittance = false
-                }
-            }
-        }
-    };
-
-    /// <summary>
-    /// Creates one light of the studio rig, aimed at the scene centre from the given compass direction.
-    /// </summary>
-    private static Entity CreateStudioLight(string name, float intensity, float azimuthDegrees, float elevationDegrees, bool enableShadows)
-    {
-        var entity = CreateDirectionalLight(name, intensity, enableShadows);
-
-        var azimuth = MathUtil.DegreesToRadians(azimuthDegrees);
-        var elevation = MathUtil.DegreesToRadians(elevationDegrees);
-
-        // Yaw about Y first, then tilt down - the same composition the toolkit camera uses. A light
-        // shines along its forward (-Z) axis, so azimuth 0 with no tilt shines from +Z toward -Z.
-        entity.Transform.Rotation = Quaternion.RotationY(azimuth) * Quaternion.RotationX(-elevation);
-
-        // Purely cosmetic for a directional light: park the gizmo where the light conceptually sits
-        const float gizmoRadius = 5f;
-
-        entity.Transform.Position = new Vector3(
-            MathF.Sin(azimuth) * gizmoRadius,
-            MathF.Tan(elevation) * gizmoRadius,
-            MathF.Cos(azimuth) * gizmoRadius);
-
-        return entity;
-    }
-
-    /// <summary>
     /// Adds a ground gizmo to the game's root scene, attached to an existing ground entity.
     /// </summary>
     /// <param name="game">The <see cref="Game"/> instance in which the ground gizmo will be added.</param>
@@ -661,13 +126,14 @@ public static partial class GameExtensions
     /// A boolean indicating whether the axis names should rotate to always face the camera. Default is true.
     /// </param>
     /// <returns>The gizmo entity, a child of the ground, or <see langword="null"/> when there is no ground entity.</returns>
+    /// <exception cref="InvalidOperationException"><paramref name="showAxisName"/> is set and the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
     /// <remarks>
     /// The gizmo is added as a child to an existing ground entity. If the ground entity is not found, the method will return without adding the gizmo.
     /// The gizmo helps visualize the ground with axis indicators in 3D space.
     /// </remarks>
     public static Entity? AddGroundGizmo(this IGame game, Vector3? position = null, bool showAxisName = false, bool rotateAxisNames = true)
     {
-        var groundEntity = game.GetSceneSystem().SceneInstance.RootScene.Entities.FirstOrDefault(w => w.Name == GameDefaults.DefaultGroundName);
+        var groundEntity = game.GetSceneSystem().SceneInstance.RootScene.FindEntity(GameDefaults.DefaultGroundName);
 
         if (groundEntity is null) return null;
 
@@ -675,9 +141,7 @@ public static partial class GameExtensions
         // Doing it here rather than leaving it to the caller keeps this a single call - and without it
         // the letters simply never appear, with no error to explain why.
         if (showAxisName)
-        {
-            game.GetSceneSystem().GraphicsCompositor?.EnsureSceneRenderer(() => new WorldTextRenderer());
-        }
+            game.AddWorldTextRenderer();
 
         var gizmoEntity = new Entity("Gizmo");
 
@@ -691,118 +155,40 @@ public static partial class GameExtensions
     }
 
     /// <summary>
-    /// Adds a profiler to the game, which can be toggled on/off with Left Shift + Left Ctrl + P and provides other keyboard shortcuts.
-    /// Changing the filtering mode with F1, altering the sorting mode with F2, navigating result pages with F3 and F4,
-    /// and adjusting the refresh interval with the plus and minus keys.
+    /// Adds the <see cref="GameProfiler"/> script to the root scene, on its own entity, and turns it on. Ctrl+Shift+P
+    /// toggles it; the other keys are Ctrl chords, listed on the <see cref="GameProfiler"/> class and behind its F1.
     /// </summary>
     /// <param name="game">The game to which the profiler will be added.</param>
-    /// <param name="entityName">Optional name for the entity to which the <see cref="GameProfiler"/> script will be attached.</param>
-    /// <returns>The entity to which the <see cref="GameProfiler"/> script was attached.</returns>
+    /// <param name="entityName">The name of the entity the script is attached to, when one has to be created.</param>
+    /// <param name="enabled">Whether profiling starts on. <see langword="false"/> adds the script waiting for Ctrl+Shift+P.</param>
+    /// <returns>The entity holding the <see cref="GameProfiler"/> script.</returns>
     /// <remarks>
-    /// This extension method creates an entity and attaches a <see cref="GameProfiler"/> script to it, enabling in-game profiling.
-    /// The profiler's behavior can be interacted with using various keyboard shortcuts as described in the <see cref="GameProfiler"/> class.
+    /// Every <see cref="SceneSetup"/> adds the profiler, off unless <see cref="SceneSetup.Profiler"/> is set, so Ctrl+Shift+P
+    /// works in any scene. A root scene that already has a <see cref="GameProfiler"/> gets no second one: the call sets
+    /// <paramref name="enabled"/> on the one there and returns its entity.
     /// </remarks>
-    public static Entity AddProfiler(this IGame game, string? entityName = "Game Profiler")
+    public static Entity AddProfiler(this IGame game, string? entityName = "Game Profiler", bool enabled = true)
     {
-        var entity = new Entity(entityName) { new GameProfiler() };
+        ArgumentNullException.ThrowIfNull(game);
 
-        entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
+        var scene = game.GetSceneSystem().SceneInstance.RootScene;
+
+        foreach (var existing in scene.Entities)
+        {
+            if (existing.Get<GameProfiler>() is { } profiler)
+            {
+                profiler.Enabled = enabled;
+
+                return existing;
+            }
+        }
+
+        var entity = new Entity(entityName) { new GameProfiler { Enabled = enabled } };
+
+        entity.Scene = scene;
 
         return entity;
     }
-
-    /// <summary>
-    /// Creates a PBR (physically based rendering) material from a colour, a metalness and a glossiness,
-    /// under the Lambert diffuse and microfacet specular models.
-    /// </summary>
-    /// <param name="game">The game instance used to access the graphics device.</param>
-    /// <param name="color">The colour. Defaults to null, which uses <see cref="GameDefaults.DefaultMaterialColor"/>.</param>
-    /// <param name="metalness">0 for a dielectric, which keeps its colour as diffuse and reflects a colourless 2 percent; 1 for a metal, which has no diffuse and reflects in its own colour. Defaults to 0, a matte coloured surface.</param>
-    /// <param name="glossiness">0 for rough, where the highlight is a haze; 1 for a mirror. Defaults to 0.65f.</param>
-    /// <returns>A new material instance with the specified or default attributes.</returns>
-    /// <remarks>
-    /// Compiles <see cref="MaterialDescriptors.Pbr"/> with the game's content manager, so the specular model's
-    /// lookup-table environment term resolves; <c>Material.New</c> without it leaves the table empty and every metal
-    /// renders black. A colour alone gives a dielectric; ask for a metal explicitly. When the material is nearly
-    /// right but needs one more feature, take the descriptor from <see cref="MaterialDescriptors"/>, add to it,
-    /// and compile it with <see cref="CreateMaterial(IGame, MaterialDescriptor)"/>. The manual page on materials
-    /// explains what the numbers claim.
-    /// </remarks>
-    public static Material CreateMaterial(this IGame game, Color? color = null, float metalness = 0f, float glossiness = MaterialDescriptors.DefaultGlossiness)
-        => Material.New(game.GraphicsDevice, MaterialDescriptors.Pbr(color ?? GameDefaults.DefaultMaterialColor, metalness, glossiness), game.Content);
-
-    /// <summary>
-    /// Compiles a descriptor into a material with the game's content manager, so the engine's lookup-table
-    /// environment term resolves, and keeps the descriptor on it, so the material can be used as a
-    /// <see cref="MaterialBlendLayer"/> later: <c>Material.New</c> leaves
-    /// <see cref="Material.Descriptor"/> null, and the generator composes a layer from its features.
-    /// </summary>
-    /// <param name="game">The game instance used to access the graphics device.</param>
-    /// <param name="descriptor">The bag of features: one from <see cref="MaterialDescriptors"/> with something added, or your own.</param>
-    /// <returns>The compiled material, its descriptor attached.</returns>
-    public static Material CreateMaterial(this IGame game, MaterialDescriptor descriptor)
-    {
-        var material = Material.New(game.GraphicsDevice, descriptor, game.Content);
-
-        material.Descriptor = descriptor;
-
-        return material;
-    }
-
-    /// <summary>
-    /// Creates a material with a texture where the colour would be, tiled <paramref name="tiling"/> times, with
-    /// the same metalness and glossiness as <see cref="CreateMaterial(IGame, Color?, float, float)"/>.
-    /// </summary>
-    /// <param name="game">The game instance used to access the graphics device.</param>
-    /// <param name="texture">The albedo, loaded as a colour (sRGB) texture.</param>
-    /// <param name="metalness">0 for a dielectric, 1 for a metal.</param>
-    /// <param name="glossiness">0 for rough, 1 for a mirror.</param>
-    /// <param name="tiling">How many times the texture repeats across the UV range.</param>
-    /// <returns>A new material instance.</returns>
-    public static Material CreateTexturedMaterial(this IGame game, Texture texture, float metalness = 0f, float glossiness = MaterialDescriptors.DefaultGlossiness, float tiling = 1f)
-        => Material.New(game.GraphicsDevice, MaterialDescriptors.Textured(texture, metalness, glossiness, tiling), game.Content);
-
-    /// <summary>
-    /// Creates a material that gives off its own light: a lamp, a sign, a glowing edge. Above an intensity of 1 the
-    /// colour overshoots the display range, which is what a bloom post effect picks out of the frame.
-    /// </summary>
-    /// <param name="game">The game instance used to access the graphics device.</param>
-    /// <param name="color">The colour, lit and emitted.</param>
-    /// <param name="intensity">The emissive strength; 1 is the colour as given, 5 or more blooms under post effects.</param>
-    /// <returns>A new material instance.</returns>
-    public static Material CreateEmissiveMaterial(this IGame game, Color color, float intensity = 1f)
-        => Material.New(game.GraphicsDevice, MaterialDescriptors.Emissive(color, intensity), game.Content);
-
-    /// <summary>
-    /// Creates the material for a screen showing a texture, such as a monitor showing a render-texture camera's
-    /// feed or a poster: unlit and clamped at the edges, so the picture reads as given whichever way the surface faces.
-    /// </summary>
-    /// <param name="game">The game instance used to access the graphics device.</param>
-    /// <param name="texture">What the screen shows; a render target works as well as a loaded image.</param>
-    /// <param name="intensity">The emissive strength; 1 shows the texture's own colours.</param>
-    /// <returns>A new material instance.</returns>
-    public static Material CreateScreenMaterial(this IGame game, Texture texture, float intensity = 1f)
-        => Material.New(game.GraphicsDevice, MaterialDescriptors.Screen(texture, intensity), game.Content);
-
-    /// <summary>
-    /// Creates an unlit translucent material: a zone, a placement preview, a selection volume, a marker drawn over the
-    /// scene. The colour's alpha is the opacity, and no light touches it.
-    /// </summary>
-    /// <param name="game">The game instance used to access the graphics device.</param>
-    /// <param name="color">The colour, with its alpha as the opacity. 255 is opaque.</param>
-    /// <param name="intensity">The emissive strength; 1 is the colour as given, more than 1 blooms under post effects.</param>
-    /// <returns>A new material instance.</returns>
-    public static Material CreateOverlayMaterial(this IGame game, Color color, float intensity = 1f)
-        => Material.New(game.GraphicsDevice, MaterialDescriptors.Overlay(color, intensity), game.Content);
-
-    /// <summary>
-    /// Creates a material with flat colors ideal for 2D rendering, using emissive color unaffected by lighting.
-    /// </summary>
-    /// <param name="game">The game instance used to access the graphics device.</param>
-    /// <param name="color">The color of the material, including alpha. Uses white if not specified.</param>
-    /// <returns>A new material instance with flat coloring.</returns>
-    public static Material CreateFlatMaterial(this IGame game, Color? color = null)
-        => Material.New(game.GraphicsDevice, MaterialDescriptors.Flat(color ?? Color.White), game.Content);
 
     /// <summary>
     /// Saves a screenshot of the current frame to the specified file path.
@@ -810,7 +196,7 @@ public static partial class GameExtensions
     /// <param name="game">The game instance providing the current graphics context and render target.</param>
     /// <param name="fileName">The file path where the screenshot will be saved.</param>
     /// <param name="fileType">The image file format to use when saving the screenshot.</param>
-    public static void TakeScreenShot(this IGame game, string fileName, ImageFileType fileType = ImageFileType.Png)
+    public static void TakeScreenshot(this IGame game, string fileName, ImageFileType fileType = ImageFileType.Png)
     {
         using var stream = File.Create(fileName);
 
@@ -876,7 +262,7 @@ public static partial class GameExtensions
     /// </summary>
     /// <param name="game">The game whose services provide Stride's font system.</param>
     /// <param name="family">The family name as the system knows it, such as <c>"Segoe UI"</c>.</param>
-    /// <param name="size">The height the glyphs are rasterised at, in pixels.</param>
+    /// <param name="size">The default size in pixels, used when a draw does not pass one; glyphs are rasterised at the size they are drawn at.</param>
     /// <param name="style">The weight and slant wanted. Defaults to <see cref="FontStyle.Regular"/>.</param>
     /// <param name="fontFile">A TrueType file to load the family from, for fonts outside the system font folders.</param>
     /// <returns>The font, or <see langword="null"/> if the family is not installed.</returns>
@@ -898,9 +284,10 @@ public static partial class GameExtensions
     /// <param name="game">The game instance to which the render feature will be added. Cannot be null.</param>
     /// <param name="renderFeature">The root render feature to add. Cannot be null.</param>
     /// <returns>The game, so a chain of setup calls continues.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
     public static IGame AddRootRenderFeature(this IGame game, RootRenderFeature renderFeature)
     {
-        game.GetSceneSystem().GraphicsCompositor.AddRootRenderFeature(renderFeature);
+        game.RequireGraphicsCompositor().AddRootRenderFeature(renderFeature);
 
         return game;
     }
@@ -913,27 +300,13 @@ public static partial class GameExtensions
     /// method.</remarks>
     /// <param name="game">The game to which particle rendering stages and features will be added. Cannot be null.</param>
     /// <returns>The game, so a chain of setup calls continues.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
     public static IGame AddParticleRenderer(this IGame game)
     {
-        game.GetSceneSystem().GraphicsCompositor.AddParticleStagesAndFeatures();
+        game.RequireGraphicsCompositor().AddParticleStagesAndFeatures();
 
         return game;
     }
-
-    /// <summary>
-    /// Gets the camera entity by name from the game's root scene.
-    /// </summary>
-    /// <param name="game">The game whose root scene is searched.</param>
-    /// <param name="cameraName">The camera entity's name. Defaults to the main camera name.</param>
-    /// <returns>The camera entity.</returns>
-    /// <exception cref="InvalidOperationException">No entity with that name exists in the root scene.</exception>
-    /// <remarks>
-    /// The escape hatch for anything <see cref="SetCameraPosition"/> and <see cref="SetCameraRotation"/>
-    /// do not cover - reading the transform, attaching a component, or replacing the camera outright.
-    /// </remarks>
-    public static Entity GetCameraEntity(this IGame game, string? cameraName = CameraDefaults.MainCameraName)
-        => game.GetSceneSystem().SceneInstance.RootScene.Entities.FirstOrDefault(entity => entity.Name == cameraName)
-            ?? throw new InvalidOperationException($"No camera entity found with the name '{cameraName}' in the root scene.");
 
     /// <summary>
     /// Creates an entity with the procedural model of a 3D <paramref name="shape"/>.
@@ -946,14 +319,15 @@ public static partial class GameExtensions
     /// <para>The returned entity is not added to a scene automatically. Assign it to a scene before rendering.</para>
     /// <para>If a material is specified in <paramref name="options"/>, it is added to the generated model's material collection.</para>
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> or <paramref name="shape"/> is <see langword="null"/>.</exception>
     public static Entity CreatePrimitive(this IGame game, Primitive3D shape, PrimitiveEntityOptions? options = null)
     {
+        ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(shape);
 
         options ??= new();
 
-        var entity = CreatePrimitiveEntity(game, GameModelExtensions.ModelFor(game, shape, options), options);
+        var entity = CreatePrimitiveEntity(GameModelExtensions.ModelFor(game, shape, options), options);
 
         // The physics engine the setup chose, if any; the core alone attaches nothing
         if (options.Body != BodyMode.None)
@@ -967,7 +341,7 @@ public static partial class GameExtensions
     /// </summary>
     /// <param name="game">The <see cref="IGame"/> instance used to access game services.</param>
     /// <param name="shape">The shape and its dimensions, from the <see cref="Primitive2D"/> factories, such as <c>Primitive2D.Circle(0.5f)</c>.</param>
-    /// <param name="options">Optional creation parameters: material, render group, entity name, position, and the depth a physics package gives the collider. If <see langword="null"/>, default options are used.</param>
+    /// <param name="options">Optional creation parameters: material, render group, entity name and position; the collider depth is the shape's <see cref="Primitive2D.Depth"/>. If <see langword="null"/>, default options are used.</param>
     /// <returns>A new <see cref="Entity"/> with a <see cref="ModelComponent"/> containing the generated primitive model.</returns>
     /// <remarks>
     /// <para>The returned entity is not added to a scene automatically. Assign it to a scene before rendering.</para>
@@ -976,11 +350,12 @@ public static partial class GameExtensions
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> or <paramref name="shape"/> is <see langword="null"/>.</exception>
     public static Entity CreatePrimitive(this IGame game, Primitive2D shape, PrimitiveEntityOptions? options = null)
     {
+        ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(shape);
 
         options ??= new();
 
-        var entity = CreatePrimitiveEntity(game, GameModelExtensions.ModelFor(game, shape, options), options);
+        var entity = CreatePrimitiveEntity(GameModelExtensions.ModelFor(game, shape, options), options);
 
         if (options.Body != BodyMode.None)
             PhysicsSetupBase.Of(game).AddBody(entity, shape, options);
@@ -988,18 +363,9 @@ public static partial class GameExtensions
         return entity;
     }
 
-    /// <summary>A rotation from degrees packed as <c>X = Yaw</c>, <c>Y = Pitch</c>, <c>Z = Roll</c>: the camera helpers' convention.</summary>
-    private static Quaternion RotationFromDegrees(Vector3 yawPitchRoll)
-        => Quaternion.RotationYawPitchRoll(
-            MathUtil.DegreesToRadians(yawPitchRoll.X),
-            MathUtil.DegreesToRadians(yawPitchRoll.Y),
-            MathUtil.DegreesToRadians(yawPitchRoll.Z));
-
     /// <summary>The entity of a model with the options' name, render group and position; no physics yet.</summary>
-    private static Entity CreatePrimitiveEntity(IGame game, Model model, PrimitiveEntityOptions options)
+    private static Entity CreatePrimitiveEntity(Model model, PrimitiveEntityOptions options)
     {
-        ArgumentNullException.ThrowIfNull(game);
-
         var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
 
         if (options.Position is { } position)

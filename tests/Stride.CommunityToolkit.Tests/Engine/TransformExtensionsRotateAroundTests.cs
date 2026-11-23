@@ -11,8 +11,6 @@ namespace Stride.CommunityToolkit.Tests.Engine;
 /// </summary>
 public class TransformExtensionsRotateAroundTests
 {
-    private const float Tolerance = 1e-5f;
-
     [Fact]
     public void RotateAround_SwingsThePositionAboutThePoint()
     {
@@ -21,9 +19,9 @@ public class TransformExtensionsRotateAroundTests
         // A quarter turn about world Y, counter-clockwise seen from above, takes +X to -Z
         entity.Transform.RotateAround(Vector3.Zero, Vector3.UnitY, MathUtil.PiOverTwo);
 
-        Assert.Equal(0f, entity.Transform.Position.X, Tolerance);
-        Assert.Equal(0f, entity.Transform.Position.Y, Tolerance);
-        Assert.Equal(-1f, entity.Transform.Position.Z, Tolerance);
+        Assert.Equal(0f, entity.Transform.Position.X, Tolerances.Float);
+        Assert.Equal(0f, entity.Transform.Position.Y, Tolerances.Float);
+        Assert.Equal(-1f, entity.Transform.Position.Z, Tolerances.Float);
     }
 
     [Fact]
@@ -34,12 +32,12 @@ public class TransformExtensionsRotateAroundTests
         entity.Transform.RotateAround(new Vector3(0f, 0f, 2f), Vector3.UnitY, MathUtil.PiOverTwo);
 
         // Position on the axis stays; the entity's forward (-Z) now points along -X
-        Assert.Equal(2f, entity.Transform.Position.Z, Tolerance);
+        Assert.Equal(2f, entity.Transform.Position.Z, Tolerances.Float);
 
         var forward = entity.Transform.WorldMatrix.Forward;
 
-        Assert.Equal(-1f, forward.X, Tolerance);
-        Assert.Equal(0f, forward.Z, Tolerance);
+        Assert.Equal(-1f, forward.X, Tolerances.Float);
+        Assert.Equal(0f, forward.Z, Tolerances.Float);
     }
 
     [Fact]
@@ -54,9 +52,10 @@ public class TransformExtensionsRotateAroundTests
             entity.Transform.RotateAround(point, axis, MathUtil.TwoPi / 8f);
         }
 
-        Assert.Equal(3f, entity.Transform.Position.X, 1e-4f);
-        Assert.Equal(1f, entity.Transform.Position.Y, 1e-4f);
-        Assert.Equal(-2f, entity.Transform.Position.Z, 1e-4f);
+        // Eight rotations in a row, each adding its own rounding, so the looser tolerance
+        Assert.Equal(3f, entity.Transform.Position.X, Tolerances.Geometry);
+        Assert.Equal(1f, entity.Transform.Position.Y, Tolerances.Geometry);
+        Assert.Equal(-2f, entity.Transform.Position.Z, Tolerances.Geometry);
     }
 
     [Fact]
@@ -76,9 +75,9 @@ public class TransformExtensionsRotateAroundTests
 
         var forward = entity.Transform.WorldMatrix.Forward;
 
-        Assert.Equal(1f, forward.X, Tolerance);
-        Assert.Equal(0f, forward.Y, Tolerance);
-        Assert.Equal(0f, forward.Z, Tolerance);
+        Assert.Equal(1f, forward.X, Tolerances.Float);
+        Assert.Equal(0f, forward.Y, Tolerances.Float);
+        Assert.Equal(0f, forward.Z, Tolerances.Float);
     }
 
     [Fact]
@@ -106,7 +105,7 @@ public class TransformExtensionsRotateAroundTests
 
         var forward = child.Transform.WorldMatrix.Forward;
 
-        Assert.Equal(1f, forward.X, Tolerance);
-        Assert.Equal(0f, forward.Z, Tolerance);
+        Assert.Equal(1f, forward.X, Tolerances.Float);
+        Assert.Equal(0f, forward.Z, Tolerances.Float);
     }
 }

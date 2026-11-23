@@ -225,7 +225,8 @@ public static class HeightmapExtensions
             position.Z += stepZ;
         }
 
-        var indices = new int[vertexCount * 6];
+        // Six indices per quad; sized by the vertex count it would end in zeros, drawn as degenerate triangles
+        var indices = new int[quadsX * quadsZ * 6];
 
         count = 0;
 

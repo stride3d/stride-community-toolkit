@@ -60,7 +60,7 @@ game.Run(new SceneSetup2D
     DpiAware = true,
 }.UseBepu(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // The lift: a kinematic body, so it carries what lands on it and nothing pushes it back
     var platform = game.CreatePrimitive(Primitive2D.Rectangle(4f, 0.4f), new BepuPhysicsOptions
@@ -68,10 +68,10 @@ void Start(Scene rootScene)
         EntityName = "Lift",
         Material = game.CreateFlatMaterial(new Color(70, 140, 200)),
         Body = BodyMode.Kinematic,
+        Position = liftHome,
     });
 
-    platform.Transform.Position = liftHome;
-    platform.Scene = rootScene;
+    platform.Scene = scene;
     liftBody = platform.Get<BodyComponent>();
 
     // The boxes it carries: ordinary dynamic bodies
@@ -84,10 +84,10 @@ void Start(Scene rootScene)
         {
             EntityName = $"Box {i + 1}",
             Material = game.CreateFlatMaterial(i == 2 ? new Color(235, 180, 60) : new Color(220, 90, 70)),
+            Position = boxHomes[i],
         });
 
-        box.Transform.Position = boxHomes[i];
-        box.Scene = rootScene;
+        box.Scene = scene;
         boxes[i] = box.Get<BodyComponent>();
     }
 
@@ -106,36 +106,22 @@ void Start(Scene rootScene)
         });
 
         coin.Transform.Scale = Vector3.Zero;
-        coin.Scene = rootScene;
+        coin.Scene = scene;
         coins[i] = new Coin(coin, spot, new Tween(0.5f, EasingFunction.BackEaseOut), new Tween(0.6f, EasingFunction.QuadraticEaseIn));
     }
 
     // The score, as a label pinned to a point in the world
     scoreText = new EntityTextComponent { Text = "Score 0", FontSize = 22, TextColor = Color.White, Anchor = Anchor.MiddleLeft };
 
-    var scoreEntity = new Entity("Score") { scoreText };
+    var scoreEntity = new Entity("Score", scoreSpot) { scoreText };
 
-    scoreEntity.Transform.Position = scoreSpot;
-    rootScene.Entities.Add(scoreEntity);
+    scene.Entities.Add(scoreEntity);
 
     // Two coins to start with, so the scene is not empty
     PopNextCoin();
     PopNextCoin();
 
-    TextOverlay.GetOrCreate(game).AddSection("Easing", () =>
-    [
-        new("C", "Pop the next coin in", Color.Gold),
-        new("Space", "Collect every coin on screen", Color.Gold),
-        new("X", "Shake the camera", Color.Gold),
-        new("L", "Pause and resume the lift", Color.Gold),
-        new("R", "Drop the boxes back onto the lift", Color.Gold),
-        new(""),
-        new($"Score {score}", Color.LightGreen),
-        new($"Lift {(lift.IsRunning ? "running" : "paused")}, sine in-out ping-pong at {lift.Progress:0.00}", Color.LightGreen),
-        new("Lift: a kinematic body chasing an eased", Color.LightGray),
-        new("target with a velocity.", Color.LightGray),
-        new("Coins, popups, camera: transforms from tweens.", Color.LightGray),
-    ]);
+    TextOverlay.GetOrCreate(game).AddSection("Easing", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -172,8 +158,9 @@ void Update(Scene scene, GameTime time)
 
         if (coin.Fly.IsRunning || coin.Fly.IsComplete)
         {
+            // The smaller of the two, so a coin collected mid-pop keeps its size instead of jumping to full
             coin.Entity.Transform.Position = coin.Fly.Lerp(coin.Spot, scoreSpot);
-            coin.Entity.Transform.Scale = new Vector3(coin.Fly.Lerp(1f, 0.3f));
+            coin.Entity.Transform.Scale = new Vector3(MathF.Min(coin.Pop.Lerp(0f, 1f), coin.Fly.Lerp(1f, 0.3f)));
 
             if (coin.Fly.IsComplete)
             {
@@ -183,7 +170,9 @@ void Update(Scene scene, GameTime time)
                 coin.Entity.Transform.Scale = Vector3.Zero;
                 score += 10;
                 scoreText!.Text = $"Score {score}";
-                popups.Add(new Popup(Label("+10", at, scene), at, Tween.Run(0.9f, EasingFunction.QuadraticEaseOut)));
+                var label = Label("+10", at, scene);
+
+                popups.Add(new Popup(label.Entity, label, at, Tween.Run(0.9f, EasingFunction.QuadraticEaseOut)));
             }
         }
         else
@@ -197,7 +186,7 @@ void Update(Scene scene, GameTime time)
     {
         popup.Rise.Update(time);
         popup.Entity.Transform.Position = popup.From + new Vector3(0f, popup.Rise.Lerp(0f, 1.2f), 0f);
-        popup.Entity.Get<EntityTextComponent>().Opacity = popup.Rise.Lerp(1f, 0f);
+        popup.Text.Opacity = popup.Rise.Lerp(1f, 0f);
 
         if (popup.Rise.IsComplete) scene.Entities.Remove(popup.Entity);
     }
@@ -221,9 +210,10 @@ void HandleInput(Scene scene)
 
     if (input.IsKeyPressed(Keys.Space))
     {
+        // Every coin on screen, a coin still popping in included; a coin that has never popped is not there yet
         foreach (var coin in coins)
         {
-            if (coin.Pop.IsComplete && !coin.Fly.IsRunning && !coin.Counted) coin.Fly.Start();
+            if ((coin.Pop.IsRunning || coin.Pop.IsComplete) && !coin.Fly.IsRunning && !coin.Counted) coin.Fly.Start();
         }
     }
 
@@ -259,14 +249,28 @@ void PopNextCoin()
     coin.Pop.Start();
 }
 
-static Entity Label(string text, Vector3 position, Scene scene)
+IReadOnlyList<TextElement> BuildOverlayLines() =>
+[
+    new("C", "Pop the next coin in", Color.Gold),
+    new("Space", "Collect every coin on screen", Color.Gold),
+    new("X", "Shake the camera, as a game does on a hit", Color.Gold),
+    new("L", "Pause and resume the lift", Color.Gold),
+    new("R", "Drop the boxes back onto the lift", Color.Gold),
+    new(""),
+    new($"Score {score}", Color.LightGreen),
+    new($"Lift {(lift.IsRunning ? "running" : "paused")}, sine in-out ping-pong at {lift.Progress:0.00}", Color.LightGreen),
+    new("Lift: a kinematic body chasing an eased", Color.LightGray),
+    new("target with a velocity.", Color.LightGray),
+    new("Coins, popups, camera: transforms from tweens.", Color.LightGray),
+];
+
+static EntityTextComponent Label(string text, Vector3 position, Scene scene)
 {
-    var entity = new Entity($"Popup {text}") { new EntityTextComponent { Text = text, FontSize = 18, TextColor = new Color(250, 210, 60), Anchor = Anchor.MiddleCenter } };
+    var label = new EntityTextComponent { Text = text, FontSize = 18, TextColor = new Color(250, 210, 60), Anchor = Anchor.MiddleCenter };
 
-    entity.Transform.Position = position;
-    entity.Scene = scene;
+    new Entity($"Popup {text}", position) { label }.Scene = scene;
 
-    return entity;
+    return label;
 }
 
 /// <summary>A coin: its entity, where it lives, the tween that brings it in and the tween that takes it to the score.</summary>
@@ -285,7 +289,7 @@ sealed class Coin(Entity entity, Vector3 spot, Tween pop, Tween fly)
 }
 
 /// <summary>A "+10" on its way up: the label, where it started and the tween that lifts and fades it.</summary>
-sealed record Popup(Entity Entity, Vector3 From, Tween Rise);
+sealed record Popup(Entity Entity, EntityTextComponent Text, Vector3 From, Tween Rise);
 
 /*
 ---example-metadata

@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <Title>Stride Community Toolkit - ImGui.NET</Title>
         <Description>Dear ImGui for Stride through ImGui.NET - an alternative to Stride.CommunityToolkit.ImGui (which uses Hexa.NET.ImGui) for projects that already depend on ImGui.NET.
 
 What's inside:
-- ImGuiNetSystem: renders ImGui over the scene and feeds it Stride's keyboard and mouse input
+- ImGuiNetSystem: renders ImGui over the scene and feeds it Stride's mouse, wheel and text input
 - ImGuiNetExtensions: helpers for drawing with ImGui.NET from Stride scripts
 
 Depends on the ImGui.NET package.$(StrideVersionNote)</Description>

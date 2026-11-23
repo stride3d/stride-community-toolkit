@@ -6,15 +6,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="12.1.5" />
-        <PackageReference Include="Avalonia.Desktop" Version="12.1.5" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.5" />
+        <PackageReference Include="Avalonia" Version="12.1.6" />
+        <PackageReference Include="Avalonia.Desktop" Version="12.1.6" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.6" />
     </ItemGroup>
 
     <!--
         Manifest reading is shared with the console runner. The files are linked rather than split into
-        a library because both launchers are single-project tools and a third project to hold four types
-        would cost more than it saves.
+        a library because both launchers are single-project tools and a third project to hold a handful
+        of files would cost more than it saves.
     -->
     <ItemGroup>
         <Compile Include="..\Stride.CommunityToolkit.Examples\Core\Constants.cs" Link="Core\Constants.cs" />

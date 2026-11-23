@@ -15,9 +15,6 @@ namespace Stride.CommunityToolkit.Engine;
 /// </example>
 public sealed class SceneSetup2D : SceneSetup
 {
-    /// <summary>A fresh setup with every property at its default.</summary>
-    public static SceneSetup2D Default => new();
-
     /// <summary>Creates the setup with its defaults: an orthographic camera with the controller and a flat ground.</summary>
     public SceneSetup2D()
     {
@@ -27,12 +24,12 @@ public sealed class SceneSetup2D : SceneSetup
 
     internal override void Apply(Game game)
     {
-        // The 2D compositor has no post effects and no tone map, so flat colours stay as written; asking for
-        // post effects installs the clean set first, as the 3D setup has
+        // The 2D compositor has no post effects, so flat colours stay as written; asking for post effects installs
+        // the clean set as the 3D setup has, with its tone map off so the colours still stay as written
         var compositor = game.Add2DGraphicsCompositor(ClearColor, Msaa);
 
         if (PostEffects is { } configure)
-            compositor.AddCleanUIStage().ConfigurePostEffects(configure);
+            compositor.AddCleanUIStage(toneMap: false).ConfigurePostEffects(configure);
         else
             compositor.AddUIStage();
 

@@ -9,8 +9,6 @@ namespace Stride.CommunityToolkit.Tests.Charts;
 /// </summary>
 public class TickValuesTests
 {
-    private const float Tolerance = 1e-5f;
-
     [Fact]
     public void ProducesEveryMultipleInsideTheRangeInclusive()
     {
@@ -34,15 +32,14 @@ public class TickValuesTests
         var ticks = ChartFraming.TickValues(0f, 3f, 0.1f).ToArray();
 
         Assert.Equal(31, ticks.Length);
-        Assert.Equal(3f, ticks[^1], Tolerance);
+        Assert.Equal(3f, ticks[^1], Tolerances.Float);
     }
 
-    [Fact]
-    public void ProducesNothingForAStepThatIsNotPositive()
-    {
-        Assert.Empty(ChartFraming.TickValues(-5f, 5f, 0f));
-        Assert.Empty(ChartFraming.TickValues(-5f, 5f, -1f));
-    }
+    [Theory]
+    [InlineData(0f)]
+    [InlineData(-1f)]
+    public void ProducesNothingForAStepThatIsNotPositive(float step)
+        => Assert.Empty(ChartFraming.TickValues(-5f, 5f, step));
 
     [Fact]
     public void ProducesNothingWhenNoMultipleFits()
@@ -57,7 +54,7 @@ public class TickValuesTests
 
         for (var i = 1; i < ticks.Length; i++)
         {
-            Assert.True(ticks[i] > ticks[i - 1]);
+            Assert.True(ticks[i] > ticks[i - 1], $"tick {i} is {ticks[i]}, not above tick {i - 1} at {ticks[i - 1]}");
         }
     }
 }

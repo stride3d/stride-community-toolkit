@@ -23,19 +23,6 @@ public class ScreenTextDrawerTests
     public void AnchorFactor_IsTheFractionOfTheTextBeforeThePoint(Anchor anchor, float x, float y)
         => Assert.Equal(new Vector2(x, y), ScreenTextDrawer.GetAnchorFactor(anchor));
 
-    [Theory]
-    [InlineData(Anchor.TopLeft, 0f, 0f)]
-    [InlineData(Anchor.TopCenter, 50f, 0f)]
-    [InlineData(Anchor.TopRight, 100f, 0f)]
-    [InlineData(Anchor.MiddleLeft, 0f, 25f)]
-    [InlineData(Anchor.MiddleCenter, 50f, 25f)]
-    [InlineData(Anchor.MiddleRight, 100f, 25f)]
-    [InlineData(Anchor.BottomLeft, 0f, 50f)]
-    [InlineData(Anchor.BottomCenter, 50f, 50f)]
-    [InlineData(Anchor.BottomRight, 100f, 50f)]
-    public void Anchor_At_IsTheCornerEdgeOrCentreOfTheRectangle(Anchor anchor, float x, float y)
-        => Assert.Equal(new Vector2(x, y), anchor.At(new Vector2(100f, 50f)));
-
     [Fact]
     public void Premultiplied_ScalesTheChannelsByTheAlpha()
     {

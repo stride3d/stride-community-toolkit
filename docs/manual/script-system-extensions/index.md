@@ -35,9 +35,9 @@ Scenes, entities and components may only be touched from the game thread. A netw
 
 ```csharp
 // On a thread-pool thread, once a download has finished
-game.Script.RunOnGameThread(() => CreateCrate(bytes).Scene = rootScene);
+game.Script.RunOnGameThread(() => CreateCrate(bytes).Scene = scene);
 
-var count = await game.Script.RunOnGameThreadAsync(() => rootScene.Entities.Count);
+var count = await game.Script.RunOnGameThreadAsync(() => scene.Entities.Count);
 ```
 
 > [!TIP]

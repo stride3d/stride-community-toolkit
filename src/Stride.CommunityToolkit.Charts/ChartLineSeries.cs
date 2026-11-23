@@ -86,15 +86,7 @@ public sealed class ChartLineSeries : ChartSeries
     }
 
     /// <inheritdoc />
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _ribbon?.Dispose();
-        }
-
-        base.Dispose(disposing);
-    }
+    private protected override void Release() => _ribbon?.Dispose();
 
     /// <summary>The one depth every finite point shares, or <see langword="null"/> when they differ.</summary>
     private static float? SharedDepth(IReadOnlyList<Vector3> points)

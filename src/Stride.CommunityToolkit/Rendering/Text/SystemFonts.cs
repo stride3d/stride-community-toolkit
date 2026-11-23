@@ -12,13 +12,13 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// <para>
 /// A code-only game has no compiled font assets, so Stride's default font - bold, proportional, and
 /// the same in every such game - is the only one it gets for free. This finds a family's file in the
-/// operating system's font folders, registers it with Stride's font system and rasterises it at the
-/// size asked for, producing exactly what <see cref="WorldTextComponent.Font"/>,
+/// operating system's font folders and registers it with Stride's font system as a runtime-rasterised
+/// font, producing exactly what <see cref="WorldTextComponent.Font"/>,
 /// <see cref="EntityTextComponent.Font"/> and the text overlay all accept.
 /// </para>
 /// <para>
-/// Rasterised, not scaled: the font is sharp at whatever size it was loaded at, and a size well above
-/// what you draw at costs glyph cache space for nothing.
+/// The size is the font's default, used when a draw does not pass one. Glyphs are rasterised at the
+/// size they are drawn at, so one loaded font is sharp at every size.
 /// </para>
 /// <para>
 /// The result belongs to the caller. Loading the same family and size twice returns two separate
@@ -62,15 +62,20 @@ public static class SystemFonts
     /// </summary>
     /// <param name="services">The game's services, which must include Stride's font system.</param>
     /// <param name="family">The family name as the system knows it, such as <c>"Segoe UI"</c>.</param>
-    /// <param name="size">The height the glyphs are rasterised at, in pixels.</param>
+    /// <param name="size">The default size in pixels, used when a draw does not pass one; glyphs are rasterised at the size they are drawn at.</param>
     /// <param name="style">The weight and slant wanted. Defaults to <see cref="FontStyle.Regular"/>.</param>
     /// <param name="fontFile">
     /// The TrueType file to register the family from, for fonts that are not in the system font
     /// folders. <see langword="null"/>, the default, searches those folders.
     /// </param>
     /// <returns>The font, or <see langword="null"/> if no file for the family was found.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="family"/> is <see langword="null"/>.</exception>
     public static SpriteFont? Load(IServiceRegistry services, string family, float size, FontStyle style = FontStyle.Regular, string? fontFile = null)
-        => LoadFirst(services, [family], size, style, fontFile);
+    {
+        ArgumentNullException.ThrowIfNull(family);
+
+        return LoadFirst(services, [family], size, style, fontFile);
+    }
 
     /// <summary>
     /// Loads the first of several families that is installed - the way to ask for "a monospace font"
@@ -78,7 +83,7 @@ public static class SystemFonts
     /// </summary>
     /// <param name="services">The game's services, which must include Stride's font system.</param>
     /// <param name="families">Family names in order of preference, such as <see cref="MonospaceCandidates"/>.</param>
-    /// <param name="size">The height the glyphs are rasterised at, in pixels.</param>
+    /// <param name="size">The default size in pixels, used when a draw does not pass one; glyphs are rasterised at the size they are drawn at.</param>
     /// <param name="style">The weight and slant wanted. Defaults to <see cref="FontStyle.Regular"/>.</param>
     /// <param name="fontFile">A TrueType file to register the first family from, bypassing the search.</param>
     /// <returns>The font, or <see langword="null"/> if none of the families was found.</returns>
@@ -96,9 +101,11 @@ public static class SystemFonts
             return null;
         }
 
-        try
+        foreach (var family in families)
         {
-            foreach (var family in families)
+            // A family whose file is installed but will not load is skipped for the next one, which is what
+            // "the first of several" promises
+            try
             {
                 var runtimeFonts = fontSystem.RuntimeFonts;
 
@@ -113,10 +120,10 @@ public static class SystemFonts
 
                 return fontSystem.LoadRuntimeFont(family, size, style);
             }
-        }
-        catch (Exception exception)
-        {
-            _log.Warning($"A system font could not be loaded. {exception.Message}");
+            catch (Exception exception)
+            {
+                _log.Warning($"The system font '{family}' could not be loaded; trying the next candidate. {exception.Message}");
+            }
         }
 
         return null;
@@ -209,8 +216,8 @@ public static class SystemFonts
 
     private static IEnumerable<string> FileNameCandidates(string family, FontStyle style)
     {
-        var bold = (style & FontStyle.Bold) == FontStyle.Bold;
-        var italic = (style & FontStyle.Italic) == FontStyle.Italic;
+        var bold = style.HasFlag(FontStyle.Bold);
+        var italic = style.HasFlag(FontStyle.Italic);
         var styleIndex = (bold ? 1 : 0) + (italic ? 2 : 0);
 
         if (KnownFontFiles.TryGetValue(family, out var known))

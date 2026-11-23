@@ -12,25 +12,52 @@
     -->
 
     <!--
+        At file level, not inside the target: MSBuild expands a target's Inputs and Outputs before it
+        runs the target's body, so a property set in the body would expand to nothing there.
+    -->
+    <PropertyGroup>
+        <ExamplesRoot>$(MSBuildThisFileDirectory)..\examples\code-only</ExamplesRoot>
+        <MediaPath>$(MSBuildThisFileDirectory)..\docs\manual\code-only\examples\media</MediaPath>
+        <ManifestOutput>$(MSBuildProjectDirectory)\examples-manifest.json</ManifestOutput>
+        <GeneratorDirectory>$(MSBuildThisFileDirectory)Stride.CommunityToolkit.Examples.MetadataGenerator\</GeneratorDirectory>
+        <GeneratorProject>$(GeneratorDirectory)Stride.CommunityToolkit.Examples.MetadataGenerator.csproj</GeneratorProject>
+        <GeneratorAssembly>$(GeneratorDirectory)bin\$(Configuration)\$(TargetFramework)\MetadataGenerator.dll</GeneratorAssembly>
+        <GeneratorArgs>generate &quot;$(ExamplesRoot)&quot; --output &quot;$(ManifestOutput)&quot; --media-path &quot;$(MediaPath)&quot; --strict</GeneratorArgs>
+    </PropertyGroup>
+
+    <!--
+        What the manifest is made from: the source files that may carry a metadata block and the project
+        files the generator reads references from. Collected in a target of its own so the search over a
+        hundred-odd example folders runs for a build and not each time a launcher project is loaded.
+    -->
+    <Target Name="CollectExampleMetadataSources">
+        <ItemGroup>
+            <ExampleMetadataSources Include="$(ExamplesRoot)\**\*.cs;$(ExamplesRoot)\**\*.fs;$(ExamplesRoot)\**\*.vb;$(ExamplesRoot)\**\*.*proj"
+                                    Exclude="$(ExamplesRoot)\**\bin\**;$(ExamplesRoot)\**\obj\**" />
+        </ItemGroup>
+    </Target>
+
+    <!--
         DependsOnTargets is required, not decoration. BeforeBuild runs *before* ResolveReferences in
         CoreBuild's dependency chain, so the ProjectReference alone does not get the generator built in
         time - the hook fired first and failed with "cannot find MetadataGenerator.exe". Naming
         ResolveProjectReferences here pulls the project-to-project build in front of this target while
         leaving the hook point unchanged, so the None item below is still picked up for the copy.
-    -->
-    <Target Name="GenerateExamplesManifest" BeforeTargets="BeforeBuild" DependsOnTargets="ResolveProjectReferences">
-        <PropertyGroup>
-            <ExamplesRoot>$(MSBuildThisFileDirectory)..\examples\code-only</ExamplesRoot>
-            <MediaPath>$(MSBuildThisFileDirectory)..\docs\manual\code-only\examples\media</MediaPath>
-            <ManifestOutput>$(MSBuildProjectDirectory)\examples-manifest.json</ManifestOutput>
-            <GeneratorProject>$(MSBuildThisFileDirectory)Stride.CommunityToolkit.Examples.MetadataGenerator\Stride.CommunityToolkit.Examples.MetadataGenerator.csproj</GeneratorProject>
-            <GeneratorArgs>generate &quot;$(ExamplesRoot)&quot; --output &quot;$(ManifestOutput)&quot; --media-path &quot;$(MediaPath)&quot; --strict</GeneratorArgs>
-        </PropertyGroup>
 
+        Inputs and Outputs make the target incremental: with no example source, example project file or
+        generator build newer than the manifest, MSBuild skips the Exec and still adds the None item, so
+        a build that changed nothing starts no generator. The media folder is not an input; a missing
+        media: file is reported the next time a source changes.
+    -->
+    <Target Name="GenerateExamplesManifest"
+            BeforeTargets="BeforeBuild"
+            DependsOnTargets="ResolveProjectReferences;CollectExampleMetadataSources"
+            Inputs="@(ExampleMetadataSources);$(GeneratorAssembly)"
+            Outputs="$(ManifestOutput)">
         <Message Text="Generating examples metadata manifest..." Importance="high" />
 
         <!--
-            Deliberately fails the build on a validation error (plan D10). A malformed metadata block
+            Deliberately fails the build on a validation error. A malformed metadata block
             would otherwise produce a quietly incomplete manifest and a green build, which is how two
             examples lost their order without anyone noticing.
 

@@ -15,9 +15,6 @@ namespace Stride.CommunityToolkit.Engine;
 /// </example>
 public sealed class SceneSetup3D : SceneSetup
 {
-    /// <summary>A fresh setup with every property at its default.</summary>
-    public static SceneSetup3D Default => new();
-
     /// <summary>Creates the setup with its defaults: a perspective camera with the controller, a directional light, a gradient sky and a ground plane.</summary>
     public SceneSetup3D()
     {

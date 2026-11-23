@@ -1,3 +1,5 @@
+using Stride.CommunityToolkit.Bepu;
+using Stride.CommunityToolkit.Input;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -133,8 +135,7 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         {
             // Exit fly: teleport the body under the camera, then resume gravity. Writing
             // Transform.Position instead would move only the mesh; the physics sync overwrites it.
-            controller.Character.Teleport(controller.FlyPosition - new Vector3(0, controller.EyeHeight, 0), controller.Character.Orientation);
-            controller.Character.LinearVelocity = Vector3.Zero;
+            controller.Character.TeleportAtRest(controller.FlyPosition - new Vector3(0, controller.EyeHeight, 0), controller.Character.Orientation);
             controller.Character.Gravity = true;
         }
     }
@@ -156,7 +157,7 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         var character = controller.Character!;
 
         // Sprint: Shift scales the move vector (MoveVector treats vector length as a speed factor).
-        if (input.IsKeyDown(Keys.LeftShift) && move.LengthSquared() > 0)
+        if (input.IsShiftDown() && move.LengthSquared() > 0)
         {
             move *= controller.SprintMultiplier;
         }
@@ -197,7 +198,7 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         if (input.IsKeyDown(Keys.LeftCtrl)) move -= Vector3.UnitY;
         if (move.LengthSquared() > 0) move.Normalize();
 
-        var speed = controller.FlySpeed * (input.IsKeyDown(Keys.LeftShift) ? controller.FlyBoost : 1f);
+        var speed = controller.FlySpeed * (input.IsShiftDown() ? controller.FlyBoost : 1f);
 
         controller.FlyPosition += move * speed * dt;
         entity.Transform.Position = controller.FlyPosition;

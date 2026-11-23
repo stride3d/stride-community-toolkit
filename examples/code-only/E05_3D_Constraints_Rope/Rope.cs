@@ -29,20 +29,19 @@ public sealed record Rope(
     public void SetStabilised(bool stabilised)
     {
         var leverArm = stabilised ? 0 : Settings.LeverArm;
-        var step = Settings.LinkRadius * 2 + Settings.LinkSpacing;
 
         foreach (var constraint in LinkConstraints)
         {
             constraint.LocalOffsetA = new Vector3(0, -leverArm, 0);
             constraint.LocalOffsetB = new Vector3(0, leverArm, 0);
-            constraint.MaximumDistance = step - leverArm * 2;
+            constraint.MaximumDistance = Settings.LinkMaximum(leverArm);
             constraint.MinimumDistance = constraint.MaximumDistance * 0.1f;
         }
 
         // The weight's own constraint has to move with the rest, or one asymmetric joint at the
         // bottom leaves the last link visibly out of line while the rope swings.
         WeightConstraint.LocalOffsetA = new Vector3(0, -leverArm, 0);
-        WeightConstraint.MaximumDistance = Settings.LinkSpacing + Settings.LinkRadius - leverArm;
+        WeightConstraint.MaximumDistance = Settings.WeightMaximum(leverArm);
         WeightConstraint.MinimumDistance = WeightConstraint.MaximumDistance * 0.1f;
 
         foreach (var constraint in SkipConstraints) constraint.Enabled = stabilised;

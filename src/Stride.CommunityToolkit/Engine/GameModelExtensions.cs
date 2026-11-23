@@ -61,8 +61,6 @@ public static class GameModelExtensions
     /// <summary>A model generated from a procedural description, with the material added when there is one.</summary>
     private static Model GenerateModel(IGame game, PrimitiveProceduralModelBase modelBase, Material? material)
     {
-        ArgumentNullException.ThrowIfNull(game);
-
         var model = modelBase.Generate(game.Services);
 
         if (material != null) model.Materials.Add(material);

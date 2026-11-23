@@ -48,7 +48,7 @@ game.Run(sceneSetup, start: Start, update: Update);
 void Start(Scene scene)
 {
     // Six lights down the world axes, so the lettering reads from every side
-    game.AddAllDirectionLighting(intensity: 20f, showLightGizmo: false);
+    game.AddAllDirectionsLighting(intensity: 20f, showLightGizmo: false);
 
     dissolve = DissolveMaterial();
 
@@ -79,12 +79,11 @@ void AddText(Scene scene, string word, float y, Material material)
 {
     var options = new TextMeshOptions { Size = 0.75f, Depth = 0.25f, Anchor = Anchor.MiddleCenter, Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 3) };
 
-    var entity = new Entity($"Text {word}")
+    var entity = new Entity($"Text {word}", new Vector3(0f, y, 0f))
     {
         new ModelComponent { Model = TextMesh.CreateModel(game.GraphicsDevice, material, MeshFont.Default, word, options) },
     };
 
-    entity.Transform.Position = new Vector3(0f, y, 0f);
     entity.Scene = scene;
 }
 
@@ -183,7 +182,7 @@ concepts:
   - A shader class as a colour node - ComputeShaderClassColor with MixinReference, keys set on the pass
   - A material feature in the vertex stage - IMaterialDisplacementFeature and SetStreamFinalModifier, Global.Time
   - A material feature in the pixel stage - IMaterialTransparencyFeature with a discard, driven per frame
-  - "Using helpers: SceneSetup3D, AddAllDirectionLighting, TextMesh, TextBevel, TextOverlay"
+  - "Using helpers: SceneSetup3D, AddAllDirectionsLighting, TextMesh, TextBevel, TextOverlay"
 tags:
   - 3D
   - Text

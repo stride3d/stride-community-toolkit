@@ -23,7 +23,8 @@ public static class InputStations
     {
         station.Clear();
 
-        var shader = station.Pick("GalleryChecker", "GalleryStripes") == 0 ? "GalleryChecker" : "GalleryStripes";
+        var choice = station.Pick("GalleryChecker", "GalleryStripes");
+        var shader = station.VariationNames[choice];
 
         station.PlaceTrio(station.Compile(Recipes.Mapped(new ComputeShaderClassColor { MixinReference = shader }, glossiness: new ComputeFloat(0.45f))));
     }
@@ -32,8 +33,8 @@ public static class InputStations
     /// A material feature of your own, the next step past a node: where a node fills one slot's value,
     /// a feature decides which shaders a stage runs. Two of the gallery's own - a wobble in the
     /// displacement slot, the vertex stage, and a dissolve in the transparency slot, the pixel stage,
-    /// whose amount is driven every frame through a parameter. Each is a small class in
-    /// <c>CustomFeatures.cs</c> and a shader in <c>Effects</c>. V switches them.
+    /// whose amount is driven every frame through a parameter. Each is a small class in a file
+    /// of its own and a shader in <c>Effects</c>. V switches them.
     /// </summary>
     public static void CustomFeature(MaterialStation station)
     {
@@ -88,9 +89,8 @@ public static class InputStations
     {
         station.Clear();
 
-        var device = station.Game.GraphicsDevice;
-        var heights = station.Textures.Generated("ripples", () => RuntimeTextures.Ripples(device));
-        var normals = station.Textures.Generated("ripple-normals", () => RuntimeTextures.NormalFromHeight(device, RuntimeTextures.RipplePixels(), 256));
+        var heights = station.Textures.Ripples();
+        var normals = station.Textures.RippleNormals();
 
         var painted = station.Compile(Recipes.Mapped(Recipes.Colour(heights), glossiness: new ComputeFloat(0.5f)));
         var bumped = station.Compile(Recipes.Mapped(new ComputeColor(new Color(200, 170, 120)), glossiness: new ComputeFloat(0.7f), normal: Recipes.Colour(normals)));
@@ -176,7 +176,7 @@ public static class InputStations
             return station.Compile(descriptor);
         }
 
-        var behind = station.Compile(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f));
+        var behind = station.Compile(Recipes.Pbr(new Color(230, 120, 60), 0f, 0.5f));
 
         foreach (var (x, texture) in new[] { (-1.6f, straight), (1.6f, premultiplied) })
         {

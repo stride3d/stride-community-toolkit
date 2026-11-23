@@ -34,7 +34,7 @@ public sealed class Box2DSimulation : IDisposable
     };
 
     /// <summary>Creates a new simulation instance with a fresh Box2D world.</summary>
-    /// <param name="settings">Optional stepping and threading configuration; defaults to <see cref="PhysicsStepSettings"/> defaults.</param>
+    /// <param name="settings">Optional stepping and threading configuration; defaults to <see cref="PhysicsStepSettings"/> defaults, and stays reachable as <see cref="Settings"/>.</param>
     public Box2DSimulation(PhysicsStepSettings? settings = null)
     {
         _world = new PhysicsWorld2D(settings);
@@ -50,14 +50,11 @@ public sealed class Box2DSimulation : IDisposable
     /// <summary>Whether simulation stepping and event processing should occur.</summary>
     public bool Enabled { get; set; } = true;
 
-    /// <summary>Multiplier applied to incoming delta time before fixed-step accumulation.</summary>
-    public float TimeScale { get => _world.TimeScale; set => _world.TimeScale = value; }
-
-    /// <summary>Maximum number of fixed steps processed per frame, to avoid the spiral of death.</summary>
-    public int MaxStepsPerFrame { get => _world.MaxStepsPerFrame; set => _world.MaxStepsPerFrame = value; }
-
-    /// <summary>Target simulation frequency in hertz used to derive the fixed step size.</summary>
-    public int TargetHz { get => _world.TargetHz; set => _world.TargetHz = value; }
+    /// <summary>
+    /// The stepping settings, live: <c>simulation.Settings.TimeScale = 0.5f</c> slows the world from the next frame,
+    /// <c>MaxStepsPerFrame</c>, <c>TargetHz</c> and <c>SubStepCount</c> likewise. The worker count was fixed at creation.
+    /// </summary>
+    public PhysicsStepSettings Settings => _world.Settings;
 
     /// <summary>Enable dispatch of begin/end contact events.</summary>
     public bool EnableContactEvents { get; set; } = true;
@@ -147,59 +144,61 @@ public sealed class Box2DSimulation : IDisposable
 
     /// <summary>Creates a dynamic body associated with the given entity at a world position.</summary>
     /// <param name="entity">The entity driven by the body.</param>
-    /// <param name="position">Initial world position (Z is ignored).</param>
+    /// <param name="position">Initial world position.</param>
     /// <param name="rotation">Initial rotation in radians about the Z axis.</param>
     /// <returns>The id of the created body.</returns>
-    public B2BodyId CreateDynamicBody(Entity entity, Vector3 position, float rotation = 0f)
+    public B2BodyId CreateDynamicBody(Entity entity, Vector2 position, float rotation = 0f)
         => _bridge.CreateBody(entity, position, B2BodyType.b2_dynamicBody, rotation);
 
     /// <summary>Creates a dynamic body without an associated entity at a world position.</summary>
-    /// <param name="position">Initial world position (Z is ignored).</param>
+    /// <param name="position">Initial world position.</param>
     /// <param name="rotation">Initial rotation in radians about the Z axis.</param>
     /// <returns>The id of the created body.</returns>
-    public B2BodyId CreateDynamicBody(Vector3 position, float rotation = 0f)
+    public B2BodyId CreateDynamicBody(Vector2 position, float rotation = 0f)
         => _bridge.CreateBody(position, B2BodyType.b2_dynamicBody, rotation);
 
     /// <summary>Creates a kinematic body associated with the given entity at a world position.</summary>
     /// <param name="entity">The entity driven by the body.</param>
-    /// <param name="position">Initial world position (Z is ignored).</param>
+    /// <param name="position">Initial world position.</param>
     /// <param name="rotation">Initial rotation in radians about the Z axis.</param>
     /// <returns>The id of the created body.</returns>
-    public B2BodyId CreateKinematicBody(Entity entity, Vector3 position, float rotation = 0f)
+    public B2BodyId CreateKinematicBody(Entity entity, Vector2 position, float rotation = 0f)
         => _bridge.CreateBody(entity, position, B2BodyType.b2_kinematicBody, rotation);
 
     /// <summary>Creates a kinematic body without an associated entity at a world position.</summary>
-    /// <param name="position">Initial world position (Z is ignored).</param>
+    /// <param name="position">Initial world position.</param>
     /// <param name="rotation">Initial rotation in radians about the Z axis.</param>
     /// <returns>The id of the created body.</returns>
-    public B2BodyId CreateKinematicBody(Vector3 position, float rotation = 0f)
+    public B2BodyId CreateKinematicBody(Vector2 position, float rotation = 0f)
         => _bridge.CreateBody(position, B2BodyType.b2_kinematicBody, rotation);
 
     /// <summary>Creates a static body associated with the given entity at a world position.</summary>
     /// <param name="entity">The entity driven by the body.</param>
-    /// <param name="position">Initial world position (Z is ignored).</param>
+    /// <param name="position">Initial world position.</param>
     /// <param name="rotation">Initial rotation in radians about the Z axis.</param>
     /// <returns>The id of the created body.</returns>
-    public B2BodyId CreateStaticBody(Entity entity, Vector3 position, float rotation = 0f)
+    public B2BodyId CreateStaticBody(Entity entity, Vector2 position, float rotation = 0f)
         => _bridge.CreateBody(entity, position, B2BodyType.b2_staticBody, rotation);
 
     /// <summary>Creates a static body without an associated entity at a world position.</summary>
-    /// <param name="position">Initial world position (Z is ignored).</param>
+    /// <param name="position">Initial world position.</param>
     /// <param name="rotation">Initial rotation in radians about the Z axis.</param>
     /// <returns>The id of the created body.</returns>
-    public B2BodyId CreateStaticBody(Vector3 position, float rotation = 0f)
+    public B2BodyId CreateStaticBody(Vector2 position, float rotation = 0f)
         => _bridge.CreateBody(position, B2BodyType.b2_staticBody, rotation);
 
     /// <summary>Advances the simulation by the elapsed real time, executing zero or more fixed steps.</summary>
     /// <param name="elapsed">Frame time delta.</param>
     public void Update(TimeSpan elapsed)
     {
-        if (Enabled) _world.Step((float)elapsed.TotalSeconds, perFixedStep: _afterFixedStep, beforeFixedStep: _beforeFixedStep);
+        if (Enabled) _world.Step((float)elapsed.TotalSeconds, _beforeFixedStep, _afterFixedStep);
     }
 
+    // The handler loops run backwards by index, so a handler may unregister itself, or another, from inside its
+    // callback without the collection-modified exception a foreach would throw
     private void BeforeFixedStep(float deltaTime)
     {
-        foreach (var handler in _simulationUpdates) handler.SimulationUpdate(this, deltaTime);
+        for (var i = _simulationUpdates.Count - 1; i >= 0; i--) _simulationUpdates[i].SimulationUpdate(this, deltaTime);
     }
 
     // Events first, then the transforms, then the handlers, which see both. The router checks the
@@ -210,7 +209,7 @@ public sealed class Box2DSimulation : IDisposable
         _eventRouter.ProcessSensors(_world.WorldId, _resolveEntity, EnableSensorEvents);
         _bridge.SyncTransformsFromPhysics();
 
-        foreach (var handler in _simulationUpdates) handler.AfterSimulationUpdate(this, deltaTime);
+        for (var i = _simulationUpdates.Count - 1; i >= 0; i--) _simulationUpdates[i].AfterSimulationUpdate(this, deltaTime);
     }
 
     /// <summary>Removes the body associated with <paramref name="entity"/> from the world if present.</summary>
@@ -225,7 +224,7 @@ public sealed class Box2DSimulation : IDisposable
     /// <returns>The associated entity, or null when the body has none.</returns>
     public Entity? GetEntity(B2BodyId bodyId) => _bridge.GetEntity(bodyId);
 
-    /// <summary>Every body the simulation created, as a live view: do not create or remove bodies while enumerating it.</summary>
+    /// <summary>Every body created with an entity, as a live view: do not create or remove bodies while enumerating it. A body made without an entity is not in it.</summary>
     public IEnumerable<B2BodyId> Bodies => _bridge.Bodies;
 
     /// <summary>
@@ -265,7 +264,7 @@ public sealed class Box2DSimulation : IDisposable
     }
 
     // The raw hit with its entity looked up and its fraction turned into a distance
-    private RaycastHit Resolve(QueryRaycastHit hit, float maxDistance)
+    private RaycastHit Resolve(QueryHit hit, float maxDistance)
         => new(GetEntity(hit.BodyId), hit.BodyId, hit.ShapeId, hit.Point, hit.Normal, maxDistance * hit.Fraction, hit.Fraction);
 
     /// <summary>
@@ -305,7 +304,7 @@ public sealed class Box2DSimulation : IDisposable
     /// <param name="translation">The sweep, as a world-space displacement.</param>
     /// <param name="filter">Category and mask bits the struck shapes must satisfy.</param>
     /// <returns>The closest hit, or null when the sweep is clear.</returns>
-    public ShapeCastHit? CastCircleClosest(Vector2 center, float radius, Vector2 translation, B2QueryFilter filter)
+    public QueryHit? CastCircleClosest(Vector2 center, float radius, Vector2 translation, B2QueryFilter filter)
         => PhysicsQueries2D.CastCircleClosest(_world.WorldId, center, radius, translation, filter);
 
     /// <summary>
@@ -316,7 +315,7 @@ public sealed class Box2DSimulation : IDisposable
     /// <param name="translation">The sweep, as a world-space displacement.</param>
     /// <param name="filter">Category and mask bits the struck shapes must satisfy.</param>
     /// <returns>The closest hit, or null when the sweep is clear.</returns>
-    public ShapeCastHit? CastSegmentClosest(Vector2 a, Vector2 b, Vector2 translation, B2QueryFilter filter)
+    public QueryHit? CastSegmentClosest(Vector2 a, Vector2 b, Vector2 translation, B2QueryFilter filter)
         => PhysicsQueries2D.CastSegmentClosest(_world.WorldId, a, b, translation, filter);
 
     /// <summary>Disposes underlying world resources.</summary>

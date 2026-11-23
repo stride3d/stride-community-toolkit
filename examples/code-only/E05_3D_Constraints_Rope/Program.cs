@@ -9,7 +9,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
-using System.Globalization;
 
 // Bepu has no rope type. A rope is a chain of small bodies you build yourself, and the interesting
 // part is not stringing them together - it is stopping the result from thrashing itself apart.
@@ -74,8 +73,8 @@ const float SwingSpeed = 4f;
 
 var swingImpulse = new Vector3(0, 0, WeightMass * SwingSpeed);
 
-Rope? naiveRope = null;
-Rope? stableRope = null;
+Rope naiveRope = null!;
+Rope stableRope = null!;
 var stabilised = true;
 
 using var game = new Game();
@@ -96,17 +95,19 @@ void Start(Scene scene)
 
     AddInstructions();
 
+    var settings = new RopeSettings(LinkCount, LinkRadius, LinkSpacing, LinkMass, LeverArm: LinkRadius, SkipSpan, WeightRadius, WeightMass);
+
     // Anchored at the segment ends, neighbours only: the straightforward build, and the unstable one.
     naiveRope = RopeBuilder.Build(game, scene,
         new Vector3(NaiveRopeX, AnchorHeight, 0),
-        new RopeSettings(LinkCount, LinkRadius, LinkSpacing, LinkMass, LeverArm: LinkRadius, SkipSpan: 1, WeightRadius, WeightMass),
+        settings with { SkipSpan = 1 },
         Color.OrangeRed, Color.Firebrick);
 
     // Same rope, same weight. It is built with the naive lever arm and then stabilised, so the same
     // settings describe both states and Z can move it between them while it hangs.
     stableRope = RopeBuilder.Build(game, scene,
         new Vector3(StableRopeX, AnchorHeight, 0),
-        new RopeSettings(LinkCount, LinkRadius, LinkSpacing, LinkMass, LeverArm: LinkRadius, SkipSpan, WeightRadius, WeightMass),
+        settings,
         Color.LimeGreen, Color.DarkGreen);
 
     stableRope.SetStabilised(true);
@@ -142,7 +143,7 @@ void CreateTower(Scene scene, float x)
 
 void Update(Scene scene, GameTime time)
 {
-    if (game.Input.IsKeyPressed(Keys.Z) && stableRope is not null)
+    if (game.Input.IsKeyPressed(Keys.Z))
     {
         // Turns the right-hand rope into the left-hand one and back. Both fixes move together on
         // purpose: at this mass ratio the zero lever arm does nearly all the work, and toggling the
@@ -168,10 +169,8 @@ void SwingWeights()
     Push(naiveRope);
     Push(stableRope);
 
-    void Push(Rope? rope)
+    void Push(Rope rope)
     {
-        if (rope is null) return;
-
         rope.Weight.ApplyLinearImpulse(swingImpulse);
         rope.Weight.Awake = true;
     }
@@ -196,7 +195,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     ];
 }
 
-static string Length(Rope? rope) => rope is null ? "-" : rope.Length.ToString("0.00", CultureInfo.InvariantCulture);
+static string Length(Rope rope) => $"{rope.Length:0.00}";
 
 void AddInstructions()
 {

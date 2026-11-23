@@ -55,6 +55,9 @@ public sealed class DisplayScale : GameSystemBase
 {
     private static readonly Logger _log = GlobalLogger.GetLogger(nameof(DisplayScale));
 
+    // A change smaller than this is the detection's own noise, not a new scale; a thousandth is well under any step a display takes
+    private const float ChangeThreshold = 0.001f;
+
     /// <summary>The smallest value ever reported, so a broken query cannot make everything vanish.</summary>
     public static readonly float MinScale = 0.25f;
 
@@ -144,7 +147,7 @@ public sealed class DisplayScale : GameSystemBase
 
         _framesSincePoll = 0;
 
-        if (MathF.Abs(detected - Detected) < 0.001f) return;
+        if (MathF.Abs(detected - Detected) < ChangeThreshold) return;
 
         Detected = detected;
 
@@ -231,7 +234,7 @@ public sealed class DisplayScale : GameSystemBase
     {
         var value = MathF.Max(MinScale, Override ?? Detected);
 
-        if (MathF.Abs(value - Value) < 0.001f) return;
+        if (MathF.Abs(value - Value) < ChangeThreshold) return;
 
         Value = value;
 

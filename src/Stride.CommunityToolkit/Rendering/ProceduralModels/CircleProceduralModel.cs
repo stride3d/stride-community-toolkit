@@ -36,6 +36,7 @@ public class CircleProceduralModel : PrimitiveProceduralModelBase
     /// <param name="vScale">Texture V scale factor.</param>
     /// <param name="toLeftHanded">If true, converts to left-handed coordinate system.</param>
     /// <returns>Mesh data for a circle.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="tessellation"/> is below 3, the fewest segments that make a face.</exception>
     public static GeometricMeshData<VertexPositionNormalTexture> New(float radius = 0.5f, int tessellation = 32, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
         => _meshCache.GetOrAdd((radius, tessellation, uScale, vScale, toLeftHanded), _ => CreateMesh(radius, tessellation, uScale, vScale, toLeftHanded));
 
@@ -45,6 +46,8 @@ public class CircleProceduralModel : PrimitiveProceduralModelBase
     /// <inheritdoc cref="New(float, int, float, float, bool)"/>
     public static GeometricMeshData<VertexPositionNormalTexture> CreateMesh(float radius = 0.5f, int tessellation = 32, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
+        ArgumentOutOfRangeException.ThrowIfLessThan(tessellation, 3);
+
         var vertices = new VertexPositionNormalTexture[tessellation + 1];
         var indices = new int[tessellation * 3];
 

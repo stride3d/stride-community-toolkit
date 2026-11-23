@@ -50,12 +50,12 @@ public class TextOverlayPositionTests
         var overlay = TextOverlay.GetOrCreate(game);
 
         overlay.SetPosition(40, 60);
-        overlay.SetPosition(Anchor.BottomLeft);
+        overlay.Position = Anchor.BottomLeft;
 
         Assert.Equal(Anchor.BottomLeft, overlay.Position);
         Assert.Equal(new Int2(40, 60), overlay.CustomPosition);
 
-        overlay.SetPosition(null);
+        overlay.Position = null;
 
         Assert.Null(overlay.Position);
     }

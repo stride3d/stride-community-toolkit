@@ -78,14 +78,14 @@ public sealed class OrientationGizmoRenderer : SceneRendererBase
     /// <summary>Whether the negative halves are drawn, as small unlettered discs.</summary>
     public bool ShowNegativeEnds { get; set; } = true;
 
-    /// <summary>The colour of the X axis.</summary>
-    public Color XColor { get; set; } = new(0xFC, 0x37, 0x37);
+    /// <summary>The colour of the X axis. Defaults to the editor's red.</summary>
+    public Color XColor { get; set; } = GizmoColors.X;
 
-    /// <summary>The colour of the Y axis.</summary>
-    public Color YColor { get; set; } = new(0x32, 0xE3, 0x35);
+    /// <summary>The colour of the Y axis. Defaults to the editor's green.</summary>
+    public Color YColor { get; set; } = GizmoColors.Y;
 
-    /// <summary>The colour of the Z axis.</summary>
-    public Color ZColor { get; set; } = new(0x2F, 0x6A, 0xE1);
+    /// <summary>The colour of the Z axis. Defaults to the editor's blue.</summary>
+    public Color ZColor { get; set; } = GizmoColors.Z;
 
     /// <summary>The colour of the axis letters. A faint shadow under them keeps them readable on a light sky.</summary>
     public Color LabelColor { get; set; } = Color.White;

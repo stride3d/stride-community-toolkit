@@ -57,10 +57,10 @@ var linkColour = new Color(120, 170, 255);
 char[] teams = ['A', 'A', 'A', 'B', 'B', 'B'];
 Color[] laneColours = [teamA, Color.White, teamB];
 
-// A name each, drawn from the pool in a fresh order every run
+// A name each, drawn from the pool in a shuffled order that is the same every run
 string[] names = ["Ada", "Bea", "Cal", "Dev", "Eli", "Fay", "Gus", "Ivy", "Kai", "Lou", "Max", "Zoe"];
 
-Random.Shared.Shuffle(names);
+new Random(7).Shuffle(names);
 
 var spheres = new BodyComponent[teams.Length];
 var sphereLabels = new WorldTextComponent[teams.Length];
@@ -288,9 +288,8 @@ string LaneText(int lane)
 /// <summary>A label on its own entity at a world position, so it keeps the facing it was given whatever rolls beneath it.</summary>
 WorldTextComponent AddLabel(Scene scene, string text, Color colour, Vector3 position, Anchor anchor = Anchor.MiddleCenter, float height = 0.25f)
 {
-    var label = new Entity("Label") { MakeText(text, colour, anchor, height) };
+    var label = new Entity("Label", position) { MakeText(text, colour, anchor, height) };
 
-    label.Transform.Position = position;
     label.Transform.Rotation = labelTilt;
     label.Scene = scene;
 
@@ -306,11 +305,14 @@ WorldTextComponent MakeText(string text, Color colour, Anchor anchor, float heig
 
 IReadOnlyList<TextElement> BuildOverlayLines() =>
 [
-    new("Space", $"Run the lanes again; they run by themselves every {RunEvery:0} seconds", Color.Gold),
-    new("G", $"Team groups {(teamGroups ? "on: A is Id 1, B is Id 2" : "off: every sphere Id 0")}", Color.Gold),
-    new("C", $"Chain filtering {(chainFiltered ? "on: Id 1, indexes 0 to 3" : "off: Id 0")}", Color.Gold),
+    new("Space", "Run the lanes again", Color.Gold),
+    new("G", $"Team groups: {(teamGroups ? "on" : "off")}", Color.Gold),
+    new("C", $"Chain filtering: {(chainFiltered ? "on" : "off")}", Color.Gold),
     new("Left mouse", "Grab a sphere or a link", Color.Gold),
     new(""),
+    new($"The lanes run by themselves every {RunEvery:0} seconds", Color.White),
+    new(teamGroups ? "Teams: A is Id 1, B is Id 2" : "Teams: every sphere is Id 0", Color.White),
+    new(chainFiltered ? "Chain: Id 1, indexes 0 to 3" : "Chain: Id 0", Color.White),
     new($"Sphere collisions since the launch: {bounces.Count}", Color.White),
     new($"Link contacts since the switch: {linkTouches.Count}", Color.White),
 ];

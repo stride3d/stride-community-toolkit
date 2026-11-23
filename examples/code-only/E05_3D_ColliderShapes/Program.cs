@@ -145,7 +145,7 @@ void AddStand(Scene scene, Material material, float x)
 // A label that always faces the camera, on its own entity so the shape under it tumbles without it
 void AddLabel(Scene scene, string text, Vector3 position)
 {
-    var label = new Entity("Label")
+    var label = new Entity("Label", position)
     {
         new WorldTextComponent
         {
@@ -160,7 +160,6 @@ void AddLabel(Scene scene, string text, Vector3 position)
         },
     };
 
-    label.Transform.Position = position;
     label.Scene = scene;
 }
 

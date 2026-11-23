@@ -35,7 +35,7 @@ public sealed class RingInitializer : ParticleInitializer
     /// <inheritdoc/>
     public override void Initialize(ParticlePool pool, int startIdx, int endIdx, int maxCapacity)
     {
-        if (!pool.FieldExists(ParticleFields.Position) || !pool.FieldExists(ParticleFields.Velocity) || !pool.FieldExists(ParticleFields.RandomSeed)) return;
+        if (!pool.FieldExists(ParticleFields.Position) || !pool.FieldExists(ParticleFields.OldPosition) || !pool.FieldExists(ParticleFields.Velocity) || !pool.FieldExists(ParticleFields.RandomSeed)) return;
 
         var positions = pool.GetField(ParticleFields.Position);
         var oldPositions = pool.GetField(ParticleFields.OldPosition);
@@ -48,7 +48,7 @@ public sealed class RingInitializer : ParticleInitializer
             var seed = particle.Get(seeds);
 
             // Around the ring by seed, so a burst covers it evenly and a stream fills it over time
-            var angle = seed.GetFloat(RandomOffset.Offset2A + SeedOffset) * MathF.Tau;
+            var angle = seed.GetFloat(RandomOffset.Offset2A + SeedOffset) * MathUtil.TwoPi;
             var radius = Radius + (seed.GetFloat(RandomOffset.Offset2B + SeedOffset) - 0.5f) * Thickness * 2f;
             var (sin, cos) = MathF.SinCos(angle);
 

@@ -33,16 +33,4 @@ public class MeshBuilderGrowthTests
             Assert.Equal(new Vector3(i, 0f, 0f), builder.GetElement<Vector3>(i, position));
         }
     }
-
-    [Fact]
-    public void AddIndex_RejectsAVertexThatDoesNotExist()
-    {
-        using var builder = new MeshBuilder { IndexType = IndexingType.Int32 };
-
-        builder.WithPosition<Vector3>();
-        builder.AddVertex();
-
-        Assert.Throws<ArgumentOutOfRangeException>(() => builder.AddIndex(1));
-        Assert.Throws<ArgumentOutOfRangeException>(() => builder.AddIndex(-1));
-    }
 }

@@ -29,7 +29,7 @@ entity.Add(new EntityTextComponent
     EnableShadow = true
 });
 
-entity.Scene = rootScene;
+entity.Scene = scene;
 ```
 
 ## Where the text goes

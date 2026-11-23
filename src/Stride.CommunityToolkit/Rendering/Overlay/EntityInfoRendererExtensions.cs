@@ -19,8 +19,10 @@ public static class EntityInfoRendererExtensions
     /// <remarks>
     /// This method adds a custom <see cref="EntityInfoRenderer"/> to the graphics compositor, allowing the display of debug information
     /// such as entity names and positions in a 3D scene. The renderer can be customized using the <paramref name="options"/> parameter,
-    /// which allows the user to define font size, color, and other settings.
+    /// which allows the user to define font size, color, and other settings. Each call adds another renderer, since each
+    /// carries its own options; call it once per compositor.
     /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="graphicsCompositor"/> is <see langword="null"/>.</exception>
     /// <example>
     /// The following example demonstrates how to add an entity debug renderer with default settings:
     /// <code>
@@ -34,6 +36,8 @@ public static class EntityInfoRendererExtensions
     /// </example>
     public static GraphicsCompositor AddEntityInfoRenderer(this GraphicsCompositor graphicsCompositor, EntityInfoRendererOptions? options = null)
     {
+        ArgumentNullException.ThrowIfNull(graphicsCompositor);
+
         graphicsCompositor.AddSceneRenderer(new EntityInfoRenderer(options));
 
         return graphicsCompositor;
@@ -49,10 +53,12 @@ public static class EntityInfoRendererExtensions
     /// <remarks>
     /// This method adds a custom <see cref="EntityInfoRenderer"/> to the game's graphics compositor, allowing the display of debug information
     /// such as entity names and positions in a 3D scene. The renderer can be customized using the <paramref name="options"/> parameter,
-    /// which allows the user to define font size, color, and other settings.
+    /// which allows the user to define font size, color, and other settings. Each call adds another renderer, since each
+    /// carries its own options; call it once per game.
     /// <br/><br/>
     /// IMPORTANT: This may significantly reduce frame rate. Use only for development or debugging, or in scenes with very few entities.
     /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="game"/> is <see langword="null"/>.</exception>
     /// <example>
     /// The following example demonstrates how to add an entity debug renderer with default settings:
     /// <code>
@@ -66,6 +72,8 @@ public static class EntityInfoRendererExtensions
     /// </example>
     public static EntityInfoRenderer AddEntityInfoRenderer(this IGame game, EntityInfoRendererOptions? options = null)
     {
+        ArgumentNullException.ThrowIfNull(game);
+
         // The service registry rather than the Engine helper: this namespace is used by Engine, and must not use it back
         var graphicsCompositor = game.Services.GetSafeServiceAs<SceneSystem>().GraphicsCompositor
             ?? throw new InvalidOperationException("The game has no graphics compositor; call AddGraphicsCompositor first.");

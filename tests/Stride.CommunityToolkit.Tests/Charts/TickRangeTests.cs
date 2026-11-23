@@ -9,8 +9,6 @@ namespace Stride.CommunityToolkit.Tests.Charts;
 /// </summary>
 public class TickRangeTests
 {
-    private const float Tolerance = 1e-5f;
-
     [Fact]
     public void WalksTheSameMultiplesAsTickValues()
     {
@@ -55,6 +53,6 @@ public class TickRangeTests
         }
 
         Assert.Equal(31, count);
-        Assert.Equal(3f, last, Tolerance);
+        Assert.Equal(3f, last, Tolerances.Float);
     }
 }

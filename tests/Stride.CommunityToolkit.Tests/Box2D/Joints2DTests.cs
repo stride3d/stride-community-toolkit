@@ -118,7 +118,7 @@ public class Joints2DTests
         using var simulation = new Box2DSimulation();
         var with = new Entity("with");
         var without = new Entity("without");
-        simulation.CreateDynamicBody(with, Vector3.Zero);
+        simulation.CreateDynamicBody(with, Vector2.Zero);
 
         var ex = Assert.Throws<InvalidOperationException>(() => simulation.Joints.CreateWeld(with, without, Vector2.Zero));
 

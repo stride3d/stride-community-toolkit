@@ -1,6 +1,7 @@
 using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Input;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -35,7 +36,6 @@ const float DragThreshold = 0.004f;
 var maskChoice = 0;
 var candidates = new List<(Entity Entity, CollisionMask Layer, float Radius)>();
 var selected = new HashSet<Entity>();
-var selectedList = new List<Entity>();
 var lastHit = "nothing yet";
 Vector2? dragStart = null;
 
@@ -59,7 +59,7 @@ game.Run(sceneSetup, start: Start, update: Update);
 void Start(Scene scene)
 {
     camera = game.GetCameraEntity().Get<CameraComponent>();
-    simulation = game.GetCameraEntity().GetSimulation();
+    simulation = game.GetSimulation();
     rings = game.AddShapeBatch(depthTest: true);
     screen = game.AddShapeBatch(afterPostEffects: true);
 
@@ -96,7 +96,7 @@ void Update(Scene scene, GameTime time)
 
     if (input.IsMouseButtonReleased(MouseButton.Left) && dragStart is { } start)
     {
-        var additive = input.IsKeyDown(Keys.LeftShift) || input.IsKeyDown(Keys.RightShift);
+        var additive = input.IsShiftDown();
 
         if (Vector2.Distance(start, input.MousePosition) < DragThreshold) Click(input.MousePosition, additive);
         else Marquee(start, input.MousePosition, additive);
@@ -179,16 +179,9 @@ bool IsCandidate(Entity entity)
     return false;
 }
 
-void Select(Entity entity)
-{
-    if (selected.Add(entity)) selectedList.Add(entity);
-}
+void Select(Entity entity) => selected.Add(entity);
 
-void ClearSelection()
-{
-    selected.Clear();
-    selectedList.Clear();
-}
+void ClearSelection() => selected.Clear();
 
 void DrawSelection()
 {
@@ -198,7 +191,7 @@ void DrawSelection()
     {
         if (!selected.Contains(entity)) continue;
 
-        rings.DrawRing(new Vector3(entity.Transform.Position.X, 0.02f, entity.Transform.Position.Z), Vector3.UnitY, radius, Color.Gold);
+        rings.DrawRing(entity.Transform.Position with { Y = 0.02f }, Vector3.UnitY, radius, Color.Gold);
     }
 }
 
@@ -221,13 +214,14 @@ void DrawMarquee(Vector2 from, Vector2 to)
 
 IReadOnlyList<TextElement> BuildOverlayLines() =>
 [
-    new("Left click", "Select what the ray hits on the chosen layers", Color.Gold),
-    new("Left drag", "Marquee: select everything inside on the chosen layers", Color.Gold),
+    new("Left click", "Select what the ray hits", Color.Gold),
+    new("Left drag", "Marquee: select everything inside", Color.Gold),
     new("Shift", "Hold to add to the selection", Color.Gold),
-    new(["1", "2", "3"], $"The ray and the marquee may pick: {maskChoices[maskChoice].Name}", Color.Gold),
+    new(["1", "2", "3"], "Choose the layers that can be picked", Color.Gold),
     new(""),
+    new($"Layers that can be picked: {maskChoices[maskChoice].Name}", Color.White),
     new($"Last click hit: {lastHit}", Color.White),
-    new($"Selected: {selectedList.Count}", Color.White),
+    new($"Selected: {selected.Count}", Color.White),
 ];
 
 /*

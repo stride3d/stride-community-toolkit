@@ -48,16 +48,19 @@ public static class RenderTextureCameraExtensions
     /// </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">The game has no graphics compositor, or its opaque and transparent stages are missing.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="width"/> or <paramref name="height"/> is zero or negative.</exception>
     public static RenderTextureCamera AddRenderTextureCamera(this IGame game, Entity cameraEntity, int width, int height,
         PixelFormat format = PixelFormat.R16G16B16A16_Float, Action<PostProcessingEffects>? postEffects = null)
     {
         ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(cameraEntity);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
 
         var compositor = game.Services.GetSafeServiceAs<SceneSystem>().GraphicsCompositor
-            ?? throw new InvalidOperationException("The game has no graphics compositor; call AddGraphicsCompositor or SetupBase3D first.");
+            ?? throw new InvalidOperationException("The game has no graphics compositor; run it with a SceneSetup3D or SceneSetup2D, or call AddGraphicsCompositor first.");
 
-        if (!compositor.TryGetRenderStage("Opaque", out var opaque) || !compositor.TryGetRenderStage("Transparent", out var transparent))
+        if (!compositor.TryGetRenderStage(RenderStageNames.Opaque, out var opaque) || !compositor.TryGetRenderStage(RenderStageNames.Transparent, out var transparent))
         {
             throw new InvalidOperationException("The compositor has no Opaque and Transparent render stages to draw the feed with.");
         }

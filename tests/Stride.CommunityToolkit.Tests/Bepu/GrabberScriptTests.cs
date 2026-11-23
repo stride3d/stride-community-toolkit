@@ -64,7 +64,7 @@ public class GrabberScriptTests
 
             var body = box!.Get<BodyComponent>();
 
-            // Frame 1: the body has entered the simulation. Grab it half a unit off its centre.
+            // Frame 2: the body has entered the simulation. Grab it half a unit off its centre.
             if (frames == 2)
             {
                 grabbed = grabber!.Grab(body, body.Position + new Vector3(0.5f, 0, 0), 5);

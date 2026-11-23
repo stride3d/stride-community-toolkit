@@ -107,8 +107,9 @@ public static class DictionaryExtensions
     {
         ArgumentNullException.ThrowIfNull(dictionary);
 
-        dictionary[key] = dictionary.TryGetValue(key, out int result) ? result += 1 : result = 1;
+        dictionary.TryGetValue(key, out var count);
+        dictionary[key] = ++count;
 
-        return result;
+        return count;
     }
 }

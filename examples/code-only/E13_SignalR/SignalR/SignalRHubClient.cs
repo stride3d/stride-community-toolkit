@@ -28,13 +28,16 @@ public sealed class SignalRHubClient : IAsyncDisposable
     /// <summary>The background loop started by <see cref="BeginConnect"/>, awaited on shutdown.</summary>
     private Task? _connectLoop;
 
-    private readonly TimeSpan _minBackoff;
-    private readonly TimeSpan _maxBackoff;
+    // A failed connect waits somewhere between the two before the next attempt
+    private static readonly TimeSpan MinBackoff = TimeSpan.FromMilliseconds(500);
+    private static readonly TimeSpan MaxBackoff = TimeSpan.FromMilliseconds(2000);
 
     private readonly List<IDisposable> _subscriptions = [];
-    private readonly List<IStoppable> _sendQueues = [];
-    private readonly ILogger<SignalRHubClient>? _logger;
+    private readonly ILogger? _logger;
     private readonly Uri _hubUrl;
+
+    // The one background sender, stopped with the connection
+    private OutgoingQueue? _outgoing;
 
     /// <summary>
     /// Active SignalR hub connection.
@@ -48,43 +51,18 @@ public sealed class SignalRHubClient : IAsyncDisposable
     public bool IsConnected => Connection.State == HubConnectionState.Connected;
 
     /// <summary>
-    /// Initializes a new <see cref="SignalRHubClient"/> with explicit URL.
+    /// Initializes a new <see cref="SignalRHubClient"/>.
     /// </summary>
-    /// <param name="hubUrl">Absolute hub URL.</param>
-    /// <param name="configureBuilder">Optional builder customization callback.</param>
+    /// <param name="hubUrl">Absolute hub URL, for example https://localhost:44369/station.</param>
     /// <param name="logger">Optional logger.</param>
-    public SignalRHubClient(Uri hubUrl, Action<IHubConnectionBuilder>? configureBuilder = null, ILogger<SignalRHubClient>? logger = null)
-        : this(new SignalRClientOptions { HubUrl = hubUrl }, logger, configureBuilder)
+    public SignalRHubClient(Uri hubUrl, ILogger? logger = null)
     {
-    }
+        ArgumentNullException.ThrowIfNull(hubUrl);
 
-    /// <summary>
-    /// Initializes a new <see cref="SignalRHubClient"/> using <see cref="SignalRClientOptions"/>.
-    /// </summary>
-    /// <param name="options">Client options (URL and connection settings).</param>
-    /// <param name="logger">Optional logger.</param>
-    /// <param name="configureBuilder">Optional builder customization callback.</param>
-    public SignalRHubClient(SignalRClientOptions options, ILogger<SignalRHubClient>? logger = null, Action<IHubConnectionBuilder>? configureBuilder = null)
-    {
-        ArgumentNullException.ThrowIfNull(options);
-        if (options.HubUrl is null) throw new ArgumentException("HubUrl must be provided", nameof(options));
-
-        _hubUrl = options.HubUrl;
-
+        _hubUrl = hubUrl;
         _logger = logger;
 
-        IHubConnectionBuilder builder = new HubConnectionBuilder().WithUrl(options.HubUrl);
-        configureBuilder?.Invoke(builder);
-        Connection = builder.Build();
-
-        if (options.ServerTimeout is { } serverTimeout) Connection.ServerTimeout = serverTimeout;
-        if (options.KeepAliveInterval is { } keepAlive) Connection.KeepAliveInterval = keepAlive;
-        if (options.HandshakeTimeout is { } handshake) Connection.HandshakeTimeout = handshake;
-
-        _minBackoff = options.ReconnectBackoffMin ?? TimeSpan.FromMilliseconds(500);
-        _maxBackoff = options.ReconnectBackoffMax ?? TimeSpan.FromMilliseconds(2000);
-
-        if (_maxBackoff < _minBackoff) (_minBackoff, _maxBackoff) = (_maxBackoff, _minBackoff);
+        Connection = new HubConnectionBuilder().WithUrl(hubUrl).Build();
 
         // Closed only logs. Reconnecting is the connect loop's job: Closed does not fire when the
         // first connect fails, so a game started before the hub would stay offline.
@@ -163,7 +141,7 @@ public sealed class SignalRHubClient : IAsyncDisposable
 
             try
             {
-                var delayMs = _random.Next((int)_minBackoff.TotalMilliseconds, (int)_maxBackoff.TotalMilliseconds + 1);
+                var delayMs = _random.Next((int)MinBackoff.TotalMilliseconds, (int)MaxBackoff.TotalMilliseconds + 1);
 
                 await Task.Delay(delayMs, ct).ConfigureAwait(false);
             }
@@ -177,7 +155,7 @@ public sealed class SignalRHubClient : IAsyncDisposable
     /// <summary>
     /// Starts the connection if currently disconnected.
     /// </summary>
-    public async Task EnsureStartedAsync(CancellationToken ct = default)
+    private async Task EnsureStartedAsync(CancellationToken ct)
     {
         // Stopping is terminal (DisposeAsync follows StopAsync), so a later start is a race, not a
         // request
@@ -236,7 +214,7 @@ public sealed class SignalRHubClient : IAsyncDisposable
 
         try
         {
-            foreach (var queue in _sendQueues) queue.Stop();
+            _outgoing?.Stop();
 
             if (Connection.State != HubConnectionState.Disconnected)
             {
@@ -276,8 +254,7 @@ public sealed class SignalRHubClient : IAsyncDisposable
     /// <typeparam name="T">Payload type.</typeparam>
     /// <param name="methodName">Hub method name.</param>
     /// <param name="handler">Callback to invoke with received payload.</param>
-    /// <returns>Disposable subscription.</returns>
-    public IDisposable RegisterHandler<T>(string methodName, Action<T> handler)
+    public void RegisterHandler<T>(string methodName, Action<T> handler)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(methodName);
         ArgumentNullException.ThrowIfNull(handler);
@@ -291,8 +268,6 @@ public sealed class SignalRHubClient : IAsyncDisposable
 
         _subscriptions.Add(subscription);
         _logger?.LogDebug("Registered handler for method {Method}", methodName);
-
-        return subscription;
     }
 
     /// <summary>
@@ -300,8 +275,7 @@ public sealed class SignalRHubClient : IAsyncDisposable
     /// </summary>
     /// <param name="methodName">Hub method name.</param>
     /// <param name="handler">Callback to invoke when the method is received.</param>
-    /// <returns>Disposable subscription.</returns>
-    public IDisposable RegisterHandler(string methodName, Action handler)
+    public void RegisterHandler(string methodName, Action handler)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(methodName);
         ArgumentNullException.ThrowIfNull(handler);
@@ -310,8 +284,6 @@ public sealed class SignalRHubClient : IAsyncDisposable
 
         _subscriptions.Add(subscription);
         _logger?.LogDebug("Registered handler for method {Method}", methodName);
-
-        return subscription;
     }
 
     /// <summary>
@@ -323,7 +295,7 @@ public sealed class SignalRHubClient : IAsyncDisposable
     {
         var queue = new OutgoingQueue(this);
 
-        _sendQueues.Add(queue);
+        _outgoing = queue;
 
         _logger?.LogDebug("Created outgoing queue");
 

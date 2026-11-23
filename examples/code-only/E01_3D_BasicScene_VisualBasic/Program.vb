@@ -15,12 +15,12 @@ Module Program
         GameExtensions.Run(game, setup, AddressOf StartGame)
     End Sub
 
-    Private Sub StartGame(rootScene As Scene)
+    Private Sub StartGame(scene As Scene)
         game.AddProfiler()
 
         Dim entity = game.CreatePrimitive(Primitive3D.Capsule(), New BepuPhysicsOptions())
         entity.Transform.Position = New Vector3(0, 8, 0)
-        entity.Scene = rootScene
+        entity.Scene = scene
     End Sub
 End Module
 ' ---example-metadata

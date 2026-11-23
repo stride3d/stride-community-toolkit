@@ -20,7 +20,7 @@ using var game = new Game();
 
 game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
@@ -35,9 +35,8 @@ void Start(Scene rootScene)
             Material = game.CreateFlatMaterial(colour)
         });
 
-        // One above the other, each a little to one side, so the column topples into a pile
-        entity.Transform.Position = new Vector3(0.1f * (i % 3 - 1), 8 + i * 1.5f, 0);
-        entity.Scene = rootScene;
+        entity.Transform.Position = new Vector3(0, 8 + i * 1.5f, 0);
+        entity.Scene = scene;
     }
 }
 

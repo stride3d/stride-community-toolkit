@@ -19,36 +19,36 @@ internal sealed class EasingScene : IGoldScene
     private const float PitchX = 3.8f;
     private const float PitchY = 3f;
 
-    private ShapeBatch? _shapes;
+    private static readonly EasingFunction[] Functions = Enum.GetValues<EasingFunction>();
 
-    public SceneSetup Setup => GoldSetup.Orthographic;
+    private ShapeBatch _shapes = null!;
+
+    public SceneSetup Setup => GoldSetup.Orthographic(24f);
 
     public void Start(Game game, Scene scene)
     {
-        GoldSetup.SetOrthographicSize(scene, 24f);
-
         _shapes = game.AddShapeBatch();
     }
 
     public void Update(Game game, Scene scene, GameTime time)
     {
-        if (_shapes is not { } shapes) return;
-
         // Frame 60 on the fixed step is one second: half way along a two-second run
         var t = Math.Clamp((float)time.Total.TotalSeconds / 2f, 0f, 1f);
 
         Span<Vector2> points = stackalloc Vector2[49];
 
-        foreach (var (index, function) in Enum.GetValues<EasingFunction>().Index())
+        for (var index = 0; index < Functions.Length; index++)
         {
+            var function = Functions[index];
+
             var centre = new Vector2(-11f + TileSize / 2f + index % Columns * PitchX, 8f - index / Columns * PitchY);
             var left = centre.X - TileSize / 2f;
             var bottom = centre.Y - TileSize / 2f;
 
-            shapes.BorderWidth = 1f;
-            shapes.Fill.Set(new Color(32, 36, 46), 0.9f);
-            shapes.DrawRectangle(new Vector3(centre, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(TileSize), new Color(70, 76, 90), cornerRadius: 0.12f);
-            shapes.Fill.Set(null, 1f);
+            _shapes.BorderWidth = 1f;
+            _shapes.Fill.Set(new Color(32, 36, 46), 0.9f);
+            _shapes.DrawRectangle(new Vector3(centre, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(TileSize), new Color(70, 76, 90), cornerRadius: 0.12f);
+            _shapes.Fill.Set(null, 1f);
 
             for (var i = 0; i < points.Length; i++)
             {
@@ -57,9 +57,9 @@ internal sealed class EasingScene : IGoldScene
                 points[i] = new Vector2(left + s * TileSize, bottom + function.Ease(s) * TileSize);
             }
 
-            shapes.DrawPixelPolyline(points, 2f, new Color(90, 200, 255));
-            shapes.DrawPixelDisc(new Vector3(left + t * TileSize, bottom + function.Ease(t) * TileSize, 0f), 4f, Color.White);
-            shapes.DrawPixelDisc(new Vector3(left + function.Ease(t) * TileSize, bottom - 0.22f, 0f), 3.5f, new Color(255, 170, 60));
+            _shapes.DrawPixelPolyline(points, 2f, new Color(90, 200, 255));
+            _shapes.DrawPixelDisc(new Vector3(left + t * TileSize, bottom + function.Ease(t) * TileSize, 0f), 4f, Color.White);
+            _shapes.DrawPixelDisc(new Vector3(left + function.Ease(t) * TileSize, bottom - 0.22f, 0f), 3.5f, new Color(255, 170, 60));
         }
     }
 }

@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using Stride.CommunityToolkit.Examples.MetadataGenerator.Services;
 using System.CommandLine;
 
@@ -7,8 +6,8 @@ namespace Stride.CommunityToolkit.Examples.MetadataGenerator;
 /// <summary>
 /// Builds and configures the command-line interface structure.
 /// </summary>
-/// <param name="serviceProvider">Service provider for resolving command handlers.</param>
-public class CommandLineConfiguration(IServiceProvider serviceProvider)
+/// <param name="service">The service every command runs.</param>
+public class CommandLineConfiguration(ManifestService service)
 {
     // Relative to the generator project directory, matching how the MSBuild pre-build hook in the Launcher invokes the tool
     private static readonly string DefaultExamplesRoot = Path.Combine("..", "..", "examples", "code-only");
@@ -50,10 +49,10 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
         scanCommand.Arguments.Add(pathArgument);
         scanCommand.Options.Add(mediaOption);
 
-        scanCommand.SetAction((parseResult, cancellationToken) => RunAsync(service => service.ScanAndValidateAsync(
+        scanCommand.SetAction((parseResult, cancellationToken) => service.ScanAndValidateAsync(
             parseResult.GetValue(pathArgument),
             parseResult.GetValue(mediaOption),
-            cancellationToken)));
+            cancellationToken));
 
         return scanCommand;
     }
@@ -80,12 +79,12 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
         generateCommand.Options.Add(mediaOption);
         generateCommand.Options.Add(strictOption);
 
-        generateCommand.SetAction((parseResult, cancellationToken) => RunAsync(service => service.ScanAndGenerateManifestAsync(
+        generateCommand.SetAction((parseResult, cancellationToken) => service.ScanAndGenerateManifestAsync(
             parseResult.GetValue(pathArgument),
             parseResult.GetValue(outputOption) ?? DefaultOutputPath,
             parseResult.GetValue(mediaOption),
             parseResult.GetValue(strictOption),
-            cancellationToken)));
+            cancellationToken));
 
         return generateCommand;
     }
@@ -121,21 +120,13 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
         docsCommand.Options.Add(mediaOption);
         docsCommand.Options.Add(dryRunOption);
 
-        docsCommand.SetAction((parseResult, cancellationToken) => RunAsync(service => service.GenerateDocsAsync(
+        docsCommand.SetAction((parseResult, cancellationToken) => service.GenerateDocsAsync(
             parseResult.GetValue(pathArgument),
             parseResult.GetValue(docsOption),
             parseResult.GetValue(mediaOption),
             parseResult.GetValue(dryRunOption),
-            cancellationToken)));
+            cancellationToken));
 
         return docsCommand;
-    }
-
-    // Every command runs in a service scope of its own
-    private async Task<int> RunAsync(Func<ManifestService, Task<int>> command)
-    {
-        using var scope = serviceProvider.CreateScope();
-
-        return await command(scope.ServiceProvider.GetRequiredService<ManifestService>());
     }
 }

@@ -37,7 +37,7 @@ public sealed class StationScene(Game game)
     /// <summary>The feed stands off the left side of the deck.</summary>
     public static readonly Vector3 FeedCenter = new(-16.5f, 3.2f, 3f);
 
-    private const float CameraPitch = -36f;
+    public const float CameraPitch = -36f;
     private const float LipHeight = 1.2f;
     private const float PadRadius = 6f;
     private const float StarDistance = 380f;
@@ -70,11 +70,8 @@ public sealed class StationScene(Game game)
         // A faint cool ambient keeps the sides the sun does not reach dim rather than black
         AddAmbient(scene);
 
-        // Looking down at the pad from the open side, so lost cargo slides towards the viewer; a
-        // little wider than the default so the hatch and the board both fit in the frame
-        game.SetCameraPosition(CameraPosition);
-        game.SetCameraRotation(new Vector3(0, CameraPitch, 0));
-        game.GetCameraEntity().Get<CameraComponent>().VerticalFieldOfView = 60f;
+        // The setup placed the camera; a little wider than the default, so the hatch and the board both fit in the frame
+        scene.GetCamera()!.VerticalFieldOfView = 60f;
 
         // Depth-tested, so a container sitting on the pad ring covers it like anything else would.
         // Added before any text, whose renderers register themselves with the first label: the panels are drawn first, and the text sits on them.
@@ -215,7 +212,7 @@ public sealed class StationScene(Game game)
         {
             // Uniform over the sphere: a random direction, not random angles
             var z = random.NextSingle() * 2f - 1f;
-            var angle = random.NextSingle() * MathF.Tau;
+            var angle = random.NextSingle() * MathUtil.TwoPi;
             var ring = MathF.Sqrt(1f - z * z);
             var direction = new Vector3(ring * MathF.Cos(angle), z, ring * MathF.Sin(angle));
 
@@ -228,7 +225,7 @@ public sealed class StationScene(Game game)
             };
 
             stars[i] = new Star(direction, 0.8f + random.NextSingle() * random.NextSingle() * 2.2f, tint,
-                (byte)(120 + random.Next(136)), 0.4f + random.NextSingle() * 1.6f, random.NextSingle() * MathF.Tau);
+                (byte)(120 + random.Next(136)), 0.4f + random.NextSingle() * 1.6f, random.NextSingle() * MathUtil.TwoPi);
         }
 
         return stars;

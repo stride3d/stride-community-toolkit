@@ -1,4 +1,5 @@
 using Stride.Core.Mathematics;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace Stride.CommunityToolkit.Box2D;
@@ -86,7 +87,7 @@ public static class SvgPath2D
         'h' => current with { X = current.X + ReadNumber(path, ref index) },
         'V' => current with { Y = ReadNumber(path, ref index) },
         'v' => current with { Y = current.Y + ReadNumber(path, ref index) },
-        _ => throw new ArgumentOutOfRangeException(nameof(command), command, "Not a straight-line SVG command."),
+        _ => throw new UnreachableException($"'{command}' is not a straight-line SVG command; ReadCommand refuses it first."),
     };
 
     // One number: an optional sign, digits with a decimal point, an optional exponent.

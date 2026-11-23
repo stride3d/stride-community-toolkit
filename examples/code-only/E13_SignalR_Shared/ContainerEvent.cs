@@ -10,4 +10,8 @@ public sealed record ContainerEvent(
     ContainerPaint Paint,
     CommandOrigin Origin,
     Point3? Position = null,
-    float? AirTime = null);
+    float? AirTime = null)
+{
+    /// <summary>The container in a few words, for a log line on either side of the wire: "#12 large red".</summary>
+    public string Describe() => $"#{Id} {Size.ToString().ToLowerInvariant()} {Paint.ToString().ToLowerInvariant()}";
+}

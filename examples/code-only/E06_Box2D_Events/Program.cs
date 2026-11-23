@@ -59,8 +59,6 @@ void Start(Scene scene)
     batch.BorderWidth = 1.5f;
     batch.Fill.Alpha = 0.4f;
 
-    simulation.Gravity = new Vector2(0f, -10f);
-
     // The handler hears every shape that opted in; one object serves both interfaces
     simulation.RegisterContactEventHandler(log);
     simulation.RegisterSensorEventHandler(log);
@@ -102,12 +100,11 @@ void Update(Scene scene, GameTime time)
 void BuildFloor(Scene scene)
 {
     var size = new Vector2(FloorHalfWidth * 2f, 1f);
-    var entity = new Entity("Floor") { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = paleGreen } };
+    var entity = new Entity("Floor", new Vector3(0f, -0.5f, 0f)) { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = paleGreen } };
 
-    entity.Transform.Position = new Vector3(0f, -0.5f, 0f);
     entity.Scene = scene;
 
-    var body = simulation.CreateStaticBody(entity, new Vector3(0f, -0.5f, 0f));
+    var body = simulation.CreateStaticBody(entity, new Vector2(0f, -0.5f));
 
     // The floor reports too: a hit is between two shapes, and either may be the one that opted in
     ShapeFixtureBuilder.AttachShape(Primitive2D.Rectangle(size.X, size.Y), body, Reporting(ShapeFixtureBuilder.CreateDefaultShapeDef()));
@@ -118,12 +115,11 @@ void BuildSensor(Scene scene)
 {
     var size = new Vector2(16f, 5f);
     var centre = new Vector3(0f, 9f, 0f);
-    var entity = new Entity("Sensor") { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = wheat, FillAlpha = 0.12f } };
+    var entity = new Entity("Sensor", centre) { new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = wheat, FillAlpha = 0.12f } };
 
-    entity.Transform.Position = centre;
     entity.Scene = scene;
 
-    var body = simulation.CreateStaticBody(entity, centre);
+    var body = simulation.CreateStaticBody(entity, centre.XY());
     var definition = ShapeFixtureBuilder.CreateCustomShapeDef(1f, 0.6f, 0f, isSensor: true);
 
     // A sensor needs its own flag on, and so does every shape it is to notice
@@ -154,30 +150,26 @@ void Spawn(Scene scene)
 void AddBox(Scene scene, Vector3 position, Vector2 size, Color colour)
 {
     var component = new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = colour };
-    var entity = new Entity("Box") { component };
+    var entity = new Entity("Box", position) { component };
 
-    entity.Transform.Position = position;
     entity.Scene = scene;
 
-    var body = simulation.CreateDynamicBody(entity, position, random.NextSingle());
+    var body = simulation.CreateDynamicBody(entity, position.XY(), random.NextSingle());
 
     ShapeFixtureBuilder.AttachShape(Primitive2D.Rectangle(size.X, size.Y), body, Reporting(ShapeFixtureBuilder.CreateDefaultShapeDef()));
-    entity.Add(new Box2DBodyComponent { BodyId = body });
     shapes.Add((entity, component, colour));
 }
 
 void AddDisc(Scene scene, Vector3 position, float radius, Color colour)
 {
     var component = new ShapeComponent { Vertices = [Vector2.Zero], Radius = radius, Color = colour };
-    var entity = new Entity("Disc") { component };
+    var entity = new Entity("Disc", position) { component };
 
-    entity.Transform.Position = position;
     entity.Scene = scene;
 
-    var body = simulation.CreateDynamicBody(entity, position);
+    var body = simulation.CreateDynamicBody(entity, position.XY());
 
     ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(radius), body, Reporting(ShapeFixtureBuilder.CreateDefaultShapeDef()));
-    entity.Add(new Box2DBodyComponent { BodyId = body });
     shapes.Add((entity, component, colour));
 }
 
@@ -205,8 +197,8 @@ void Clear()
 
 IReadOnlyList<TextElement> BuildOverlayLines()
 {
-    var lines = new List<TextElement>
-    {
+    List<TextElement> lines =
+    [
         new("Space", "Drop a batch", Color.Gold),
         new("C", "Clear the shapes", Color.Gold),
         new("Left mouse", "Grab and throw a shape", Color.Gold),
@@ -216,7 +208,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
         new(""),
         new($"Touches begun {log.Begins}, ended {log.Ends}, hits {log.Hits}, inside the sensor {log.InsideCount}", Color.White),
         new(""),
-    };
+    ];
 
     foreach (var line in log.Lines) lines.Add(new(line, Color.LightGray));
 
@@ -254,42 +246,48 @@ public sealed class EventLog(int capacity) : IContactEventHandler, ISensorEventH
         {
             case ContactEventType.BeginTouch:
                 Begins++;
-                Add($"{data.EntityA.Name} touches {data.EntityB.Name}");
+                Add($"{Name(data.EntityA)} touches {Name(data.EntityB)}");
                 break;
 
             case ContactEventType.EndTouch:
                 Ends++;
-                Add($"{data.EntityA.Name} leaves {data.EntityB.Name}");
+                Add($"{Name(data.EntityA)} leaves {Name(data.EntityB)}");
                 break;
 
             case ContactEventType.Hit:
                 Hits++;
-                Add($"{data.EntityA.Name} hits {data.EntityB.Name} at {data.ApproachSpeed:0.0} m/s");
+                Add($"{Name(data.EntityA)} hits {Name(data.EntityB)} at {data.ApproachSpeed:0.0} m/s");
 
                 // The flash goes on whichever of the pair is a dropped shape; a static floor keeps its colour anyway
                 var brightness = Math.Clamp(data.ApproachSpeed / LoudSpeed, 0.3f, 1f);
 
-                _flashes[data.EntityA] = brightness;
-                _flashes[data.EntityB] = brightness;
+                if (data.EntityA is { } a) _flashes[a] = brightness;
+                if (data.EntityB is { } b) _flashes[b] = brightness;
                 break;
         }
     }
 
     public void OnSensorEvent(SensorEventData data)
     {
+        // A body made without an entity has none to count; every body here has one
+        if (data.VisitorEntity is not { } visitor) return;
+
         // Counted, not toggled: a shape that overlaps two sensor shapes leaves when it has left both
         if (data.Type == SensorEventType.BeginTouch)
         {
-            _inside[data.VisitorEntity] = _inside.GetValueOrDefault(data.VisitorEntity) + 1;
-            Add($"{data.VisitorEntity.Name} enters the sensor");
+            _inside[visitor] = _inside.GetValueOrDefault(visitor) + 1;
+            Add($"{visitor.Name} enters the sensor");
         }
-        else if (_inside.TryGetValue(data.VisitorEntity, out var depth))
+        else if (_inside.TryGetValue(visitor, out var depth))
         {
-            if (depth <= 1) _inside.Remove(data.VisitorEntity); else _inside[data.VisitorEntity] = depth - 1;
+            if (depth <= 1) _inside.Remove(visitor); else _inside[visitor] = depth - 1;
 
-            Add($"{data.VisitorEntity.Name} leaves the sensor");
+            Add($"{visitor.Name} leaves the sensor");
         }
     }
+
+    // A ground made from a position alone has no entity, so the event names its side by that
+    private static string Name(Entity? entity) => entity?.Name ?? "(no entity)";
 
     /// <summary>Fades every flash by the frame's time.</summary>
     public void Age(float elapsed)

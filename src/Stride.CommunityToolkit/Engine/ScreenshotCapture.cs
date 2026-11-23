@@ -162,7 +162,7 @@ public static class ScreenshotCapture
 
                 // Saves the GPU render target, not the screen: no window handle, no DPI scaling, no
                 // foreground requirement, and the window may sit behind others while it happens.
-                _game.TakeScreenShot(_outputPath, ImageFileType.Png);
+                _game.TakeScreenshot(_outputPath, ImageFileType.Png);
             }
             catch (Exception ex)
             {

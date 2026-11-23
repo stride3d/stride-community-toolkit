@@ -35,8 +35,8 @@ public sealed record ExampleEntry(
     string RunTarget,
     bool IsFileBased)
 {
-    /// <summary>Gets whether this example can actually be started.</summary>
-    public bool IsRunnable => RunTarget.Length > 0 && File.Exists(RunTarget);
+    /// <summary>Gets whether this example could be started when the entry was made: its run target was on disk.</summary>
+    public bool IsRunnable { get; } = RunTarget.Length > 0 && File.Exists(RunTarget);
 
     /// <summary>Gets the folder holding the example.</summary>
     public string? Directory => RunTarget.Length > 0 ? Path.GetDirectoryName(RunTarget) : null;
@@ -48,9 +48,7 @@ public sealed record ExampleEntry(
     /// A file-based app has no project file, so it is run by naming the source file directly - which is
     /// the whole point of that format and the reason the two cases are distinguished.
     /// </remarks>
-    public string CommandLine => IsFileBased
-        ? $"dotnet run \"{RunTarget}\""
-        : $"dotnet run --project \"{RunTarget}\"";
+    public string CommandLine => $"dotnet {ProcessArguments}";
 
     /// <summary>Gets the arguments to pass to <c>dotnet</c>.</summary>
     public string ProcessArguments => IsFileBased

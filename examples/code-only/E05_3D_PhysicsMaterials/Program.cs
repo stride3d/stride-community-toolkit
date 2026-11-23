@@ -84,7 +84,6 @@ FrictionLane[] frictionLanes =
 
 List<Ball> balls = [];
 List<Box> boxes = [];
-var launched = false;
 
 using var game = new Game();
 
@@ -114,20 +113,15 @@ void Start(Scene scene)
 
     BuildEndWall(scene);
 
+    // The first push: a body takes a velocity from the moment its entity is in the scene
+    Replay();
+
     TextOverlay.GetOrCreate(game).AddSection("Physics materials", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
 {
-    // A velocity only takes on a body the simulation already knows, so the first push waits for it
-    var ready = boxes.Count > 0 && boxes[0].Body.Simulation is not null;
-
-    if (ready && (!launched || game.Input.IsKeyPressed(Keys.R)))
-    {
-        launched = true;
-
-        Replay();
-    }
+    if (game.Input.IsKeyPressed(Keys.R)) Replay();
 
     foreach (var ball in balls)
     {
@@ -259,12 +253,11 @@ void BuildEndWall(Scene scene)
 /// <summary>Screen-space text anchored to a point in the world.</summary>
 void AddLabel(Scene scene, string text, Vector3 position, Anchor anchor)
 {
-    var label = new Entity("Label")
+    var label = new Entity("Label", position)
     {
         new EntityTextComponent { Text = text, FontSize = 14, Anchor = anchor, EnableShadow = true },
     };
 
-    label.Transform.Position = position;
     label.Scene = scene;
 }
 

@@ -18,10 +18,10 @@ public static class BufferExtensions
     /// <param name="offsetInBytes">Where in the buffer the data is written. Supported for buffers of default usage only, as for <see cref="Buffer.SetData{TData}(CommandList, ReadOnlySpan{TData}, int)"/>.</param>
     /// <remarks>
     /// Use it for a span over managed memory, such as an array or a <see cref="List{T}"/>. On
-    /// Direct3D 11 the engine's upload of a default-usage buffer hands the span's address to native
-    /// code without pinning it, in Stride 4.4.0 and earlier. A
-    /// garbage collection during that call may move the array, and the upload then reads the wrong
-    /// memory. The other backends pin the span themselves, where pinning again costs nothing.
+    /// Direct3D 11 the engine's upload of a default-usage buffer handed the span's address to native
+    /// code without pinning it, before Stride 4.4.3: a garbage collection during that call could move
+    /// the array, and the upload then read the wrong memory. Stride 4.4.3 and the other backends pin
+    /// the span themselves, where pinning again costs nothing.
     /// </remarks>
     /// <exception cref="ArgumentNullException"><paramref name="buffer"/> or <paramref name="commandList"/> is <see langword="null"/>.</exception>
     public static unsafe void SetDataPinned<T>(this Buffer buffer, CommandList commandList, ReadOnlySpan<T> data, int offsetInBytes = 0) where T : unmanaged

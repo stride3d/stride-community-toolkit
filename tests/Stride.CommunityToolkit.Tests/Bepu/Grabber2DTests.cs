@@ -28,21 +28,16 @@ public class Grabber2DTests
     [Fact]
     public void OrthographicPickRay_StartsAtTheCursorAndRunsAlongTheView()
     {
-        var entity = new Entity("camera") { new CameraComponent { Projection = CameraProjectionMode.Orthographic, OrthographicSize = OrthographicSize } };
-        entity.Transform.Position = new Vector3(0, 0, CameraZ);
-        entity.Transform.UpdateWorldMatrix();
-
-        var camera = entity.Get<CameraComponent>();
-        camera.Update(Aspect);
+        var camera = TestCameras.Orthographic(OrthographicSize, new Vector3(0, 0, CameraZ), Aspect);
 
         // A quarter of the way across, half way down: a quarter of the view's width left of centre
         var ray = camera.ScreenToWorldRay(new Vector2(0.25f, 0.5f));
 
-        Assert.Equal(-OrthographicSize * Aspect / 4f, ray.Position.X, 0.01f);
-        Assert.Equal(0f, ray.Position.Y, 0.01f);
-        Assert.Equal(-1f, ray.Direction.Z, 0.001f);
-        Assert.Equal(0f, ray.Direction.X, 0.001f);
-        Assert.Equal(0f, ray.Direction.Y, 0.001f);
+        Assert.Equal(-OrthographicSize * Aspect / 4f, ray.Position.X, Tolerances.Projection);
+        Assert.Equal(0f, ray.Position.Y, Tolerances.Projection);
+        Assert.Equal(-1f, ray.Direction.Z, Tolerances.Projection);
+        Assert.Equal(0f, ray.Direction.X, Tolerances.Projection);
+        Assert.Equal(0f, ray.Direction.Y, Tolerances.Projection);
     }
 
     [Fact]
@@ -130,15 +125,9 @@ public class Grabber2DTests
         var startDistance = Vector3.Distance(start, target);
         var endDistance = Vector3.Distance(end, target);
 
-        // With the cursor away from the centre the body is carried toward it; with the cursor at the
-        // centre it is held there against gravity. Either way the servo, not the fall, decides.
-        if (startDistance > 0.5f)
-        {
-            Assert.True(endDistance < startDistance * 0.5f, $"The body was not carried toward the cursor: {startDistance} to {endDistance}.");
-        }
-        else
-        {
-            Assert.True(endDistance < 0.5f, $"The body was not held in place: it is {endDistance} from the target.");
-        }
+        // A headless game reports the cursor at the corner of the view, far from the body at the centre,
+        // so this is a carry: the servo, not the fall, decides where the body goes
+        Assert.True(startDistance > 0.5f, $"The headless cursor is expected away from the body, and is {startDistance} from it.");
+        Assert.True(endDistance < startDistance * 0.5f, $"The body was not carried toward the cursor: {startDistance} to {endDistance}.");
     }
 }

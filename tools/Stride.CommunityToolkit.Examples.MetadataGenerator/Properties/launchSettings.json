@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "Stride.CommunityToolkit.ExamplesMetadataGenerator": {
+    "Stride.CommunityToolkit.Examples.MetadataGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "generate --output ..\\Stride.CommunityToolkit.Examples.Launcher\\examples-manifest.json"
+      "commandLineArgs": "generate ..\\..\\examples\\code-only --output ..\\Stride.CommunityToolkit.Examples.Launcher\\examples-manifest.json --media-path ..\\..\\docs\\manual\\code-only\\examples\\media --strict"
     }
   }
 }

@@ -23,7 +23,7 @@ Unless an entry names another namespace, they live in `Stride.CommunityToolkit.E
 
 The compositor, camera, lighting, sky and ground of a code-only scene as one object that `Run` applies before `start`.
 
-- [`SceneSetup3D`](xref:Stride.CommunityToolkit.Engine.SceneSetup3D) and [`SceneSetup2D`](xref:Stride.CommunityToolkit.Engine.SceneSetup2D) - Every piece a property with a default; `null` leaves a piece out. `game.Run(start:)` with no setup applies `SceneSetup3D.Default`.
+- [`SceneSetup3D`](xref:Stride.CommunityToolkit.Engine.SceneSetup3D) and [`SceneSetup2D`](xref:Stride.CommunityToolkit.Engine.SceneSetup2D) - Every piece a property with a default; `null` leaves a piece out. `game.Run(start:)` with no setup applies a default `new SceneSetup3D()`.
 - [`Run(setup, start, update)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.CommunityToolkit.Engine.SceneSetup,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime},Stride.Games.GameContext)) - Applies the setup and runs the game.
 
 The physics packages choose the engine with `UseBepu()` and `UseBullet()` - see [Physics Extensions](../physics-extensions/index.md); the pieces one by one are under [Code-Only Extensions](../code-only/extensions.md).
@@ -55,7 +55,7 @@ See [Camera Controllers](../camera-extensions/camera-controllers.md) for the key
 ## Lighting
 
 - [`AddDirectionalLight()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Games.IGame,System.String,System.Boolean,System.Single)) - Adds a single directional light, with shadows on by default.
-- [`AddAllDirectionLighting()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddAllDirectionLighting(Stride.Games.IGame,System.Single,System.Boolean)) - Lights the scene from every direction at once, so nothing is left in shadow. Blunt, but it makes a debug scene readable.
+- [`AddAllDirectionsLighting()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddAllDirectionsLighting(Stride.Games.IGame,System.Single,System.Boolean)) - Lights the scene from every direction at once, so nothing is left in shadow. Blunt, but it makes a debug scene readable.
 - [`AddStudioLighting()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddStudioLighting(Stride.Games.IGame,System.Single,System.Single,System.Boolean,System.Boolean)) - A three-point key, fill and rim rig aimed at the scene centre, returned as a tuple so you can adjust each light afterwards.
 
 The setup's gradient sky lights the scene as well; for a photographed sky, `UseSkybox()` and `AddSkybox()` ship in the `Stride.CommunityToolkit.Skyboxes` package - see [Code-Only Extensions](../code-only/extensions.md).
@@ -87,12 +87,12 @@ The two renderer calls register their renderer once, however many times you call
 
 ## Debugging and diagnostics
 
-- [`AddProfiler()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Games.IGame,System.String)) - Adds Stride's profiler, toggled with <kbd>Left Shift</kbd> + <kbd>Left Ctrl</kbd> + <kbd>P</kbd>.
+- [`AddProfiler()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Games.IGame,System.String,System.Boolean)) - Adds Stride's profiler, toggled with <kbd>Left Shift</kbd> + <kbd>Left Ctrl</kbd> + <kbd>P</kbd>. Every `SceneSetup` adds it, off unless `Profiler = true`, so the toggle works in any scene; on a scene that already has it the call turns it on. While it is on, <kbd>Ctrl</kbd> + <kbd>F1</kbd> changes the filter, <kbd>Ctrl</kbd> + <kbd>F2</kbd> the sort order, <kbd>Ctrl</kbd> + <kbd>F3</kbd> and <kbd>Ctrl</kbd> + <kbd>F4</kbd> page, <kbd>Ctrl</kbd> + <kbd>1</kbd> to <kbd>5</kbd> jump to a page, and <kbd>Ctrl</kbd> + <kbd>-</kbd> / <kbd>+</kbd> change the refresh rate; the plain function keys stay with the camera help and the text overlay. <kbd>F1</kbd> expands the profiler's key list on the text overlay, and its title names the chord last used for a few seconds.
 - [`SetDeterministic()`](xref:Stride.CommunityToolkit.Engine.GameLoopExtensions.SetDeterministic(Stride.Games.IGame,System.Nullable{System.TimeSpan})) - Pins the loop so frame N is the same simulated instant on every run: fixed timestep, draws in step, one update per draw. For replays, lockstep, tests and screenshots.
 - [`AddGroundGizmo()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Vector3},System.Boolean,System.Boolean)) - Draws the world axes, optionally labelled, as a child of the ground entity, at the origin unless you give a position. Returns `null` and adds nothing when there is no ground.
 - [`AddOrientationGizmo()`](xref:Stride.CommunityToolkit.Rendering.Gizmos.OrientationGizmoExtensions.AddOrientationGizmo(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.Anchor)) - Draws the world axes in a corner of the screen, turning with the camera, so you can tell which way you are facing; see [Orientation Gizmo](../rendering/orientation-gizmo.md). In `Stride.CommunityToolkit.Rendering.Gizmos`.
 - [`AddEntityInfoRenderer()`](xref:Stride.CommunityToolkit.Rendering.Overlay.EntityInfoRendererExtensions.AddEntityInfoRenderer(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.Overlay.EntityInfoRendererOptions)) - Draws entity names and positions over the scene. In `Stride.CommunityToolkit.Rendering.Overlay`.
-- [`TakeScreenShot()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot(Stride.Games.IGame,System.String,Stride.Graphics.ImageFileType)) - Saves the current frame to a file. This is what the toolkit's own screenshot capture is built on.
+- [`TakeScreenshot()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenshot(Stride.Games.IGame,System.String,Stride.Graphics.ImageFileType)) - Saves the current frame to a file. This is what the toolkit's own screenshot capture is built on.
 
 To see colliders, use `AddPhysicsDebug()` for Bepu or `ShowColliders()` for Bullet, both in [Physics Extensions](../physics-extensions/index.md).
 

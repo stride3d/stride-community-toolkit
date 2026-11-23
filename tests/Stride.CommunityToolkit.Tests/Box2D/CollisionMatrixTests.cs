@@ -1,12 +1,10 @@
-using Box2D.NET;
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Tests.Engine;
 using Stride.Core.Mathematics;
 using Xunit;
 using static Box2D.NET.B2Bodies;
-using static Box2D.NET.B2Geometries;
-using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
+using static Stride.CommunityToolkit.Tests.Box2D.Box2DFixtures;
 
 namespace Stride.CommunityToolkit.Tests.Box2D;
 
@@ -24,37 +22,21 @@ public class CollisionMatrixTests
 
         simulation.CollisionMatrix.SetCollision(1, 2, false);
 
-        var floor = simulation.CreateStaticBody(Vector3.Zero);
-        var floorDef = b2DefaultShapeDef().InCollisionGroup(1);
-        var floorBox = b2MakeBox(10f, 0.5f);
-
-        b2CreatePolygonShape(floor, in floorDef, in floorBox);
+        // The floor keeps Box2D's default category and joins group 1
+        StaticBox(simulation, Vector2.Zero, halfWidth: 10f, halfHeight: 0.5f, categoryBits: 1, group: 1);
 
         var falling = Box(simulation, new Vector3(-2, 3, 0), group: 2);
         var resting = Box(simulation, new Vector3(2, 3, 0), group: 1);
 
-        for (var i = 0; i < 180; i++) simulation.Update(TimeSpan.FromSeconds(1 / 60.0));
+        StepFor(simulation, 180);
 
         Assert.True(b2Body_GetPosition(falling).Y < -1f, "the group 2 box should have fallen through the group 1 floor");
         Assert.InRange(b2Body_GetPosition(resting).Y, 0.9f, 1.1f);
     }
 
-    [Fact]
-    public void InCollisionGroup_RefusesZeroAndNegativeGroups()
-    {
-        Assert.Throws<ArgumentOutOfRangeException>(() => b2DefaultShapeDef().InCollisionGroup(0));
-        Assert.Throws<ArgumentOutOfRangeException>(() => b2DefaultShapeDef().InCollisionGroup(-1));
-    }
-
-    /// <summary>A unit dynamic box in a collision group.</summary>
-    private static B2BodyId Box(Box2DSimulation simulation, Vector3 position, int group)
-    {
-        var body = simulation.CreateDynamicBody(position);
-        var def = b2DefaultShapeDef().InCollisionGroup(group);
-        var box = b2MakeBox(0.5f, 0.5f);
-
-        b2CreatePolygonShape(body, in def, in box);
-
-        return body;
-    }
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void InCollisionGroup_RefusesZeroAndNegativeGroups(int group)
+        => Assert.Throws<ArgumentOutOfRangeException>(() => b2DefaultShapeDef().InCollisionGroup(group));
 }

@@ -41,6 +41,7 @@ namespace Stride.CommunityToolkit.Bepu;
 /// </para>
 /// </remarks>
 [ComponentCategory("Physics - Bepu 2D")]
+[Display("Body 2D (Bepu)")]
 public class Body2DComponent : BodyComponent, ISimulationUpdate
 {
     /// <summary>
@@ -70,8 +71,7 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
     // residue it leaves is cleared by the angular velocity correction in SimulationUpdate on the same
     // step, so it cannot accumulate.
     //
-    // Do not simplify this back to zero.
-    private const float OutOfPlaneInertiaScale = 1e-4f;
+    // Do not simplify this back to zero. The scale itself is LockRotation's, which ApplyRotationLock goes through.
 
     // Tracks the kinematic state the rotation lock was applied for, so it can be restored when the
     // body switches back to dynamic and Bepu reinstates the full shape inertia
@@ -190,17 +190,8 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
     /// </summary>
     private void ApplyRotationLock()
     {
-        var inertia = BodyInertia;
-        ref var inverseInertia = ref inertia.InverseInertiaTensor;
-
-        // Scaled rather than zeroed - see OutOfPlaneInertiaScale, this is not an oversight
-        inverseInertia.XX *= OutOfPlaneInertiaScale;
-        inverseInertia.YY *= OutOfPlaneInertiaScale;
-        inverseInertia.YX = 0f;
-        inverseInertia.ZX = 0f;
-        inverseInertia.ZY = 0f; // ZZ is left alone, so the body can still roll in the plane
-
-        BodyInertia = inertia;
+        // Scaled rather than zeroed, see the note above; Z is left alone, so the body can still roll in the plane
+        this.LockRotation(lockX: true, lockY: true, lockZ: false);
 
         _lockedWhileKinematic = Kinematic;
     }

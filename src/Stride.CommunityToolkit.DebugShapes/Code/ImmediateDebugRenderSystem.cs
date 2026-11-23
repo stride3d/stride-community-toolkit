@@ -38,12 +38,12 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     /// <summary>
     /// Maximum number of one-frame primitives stored and rendered per update; past it, the oldest sixteenth of them makes room.
     /// </summary>
-    public int MaxPrimitives { get; set; } = 100;
+    public int MaxPrimitives { get; set; } = 4096;
 
     /// <summary>
     /// Maximum number of lifetime-based primitives stored and rendered per update; past it, the oldest sixteenth of them makes room.
     /// </summary>
-    public int MaxPrimitivesWithLifetime { get; set; } = 100;
+    public int MaxPrimitivesWithLifetime { get; set; } = 4096;
 
     /// <summary>
     /// Render group used for the internal debug render objects.
@@ -55,7 +55,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     /// </summary>
     /// <param name="registry">The service registry.</param>
     /// <param name="renderGroup">The render group to use for the debug render objects.</param>
-    public ImmediateDebugRenderSystem(IServiceRegistry registry, RenderGroup renderGroup = RenderGroup.Group31) : base(registry)
+    public ImmediateDebugRenderSystem(IServiceRegistry registry, RenderGroup renderGroup = RenderGroup.Group1) : base(registry)
     {
         Enabled = true;
         Visible = Platform.IsRunningDebugAssembly;
@@ -74,6 +74,9 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         var timed = msg.Lifetime > 0f;
         var queue = timed ? _renderMessagesWithLifetime : _renderMessages;
         var capacity = timed ? MaxPrimitivesWithLifetime : MaxPrimitives;
+
+        // No capacity means no shapes of that kind, rather than a clamp with its bounds crossed
+        if (capacity <= 0) return;
 
         if (queue.Count >= capacity) queue.RemoveRange(0, Math.Clamp(capacity / 16, 1, queue.Count));
 
@@ -108,15 +111,17 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     /// <summary>
     /// Draws multiple independent line segments from a vertex list (pairs form segments).
     /// </summary>
-    /// <param name="vertices">Array of vertices; each consecutive pair defines a line.</param>
-    /// <param name="color">Color for all lines. Uses <see cref="PrimitiveColor"/> when null.</param>
+    /// <param name="vertices">The vertices; each consecutive pair defines a line, and an odd last one is ignored.</param>
+    /// <param name="color">Color for all lines. Uses <see cref="PrimitiveColor"/> when default.</param>
     /// <param name="duration">Duration in seconds the lines remain visible. 0 draws for a single frame.</param>
     /// <param name="depthTest">Whether depth testing is enabled.</param>
-    public void DrawLines(Vector3[] vertices, Color? color = null, float duration = 0.0f, bool depthTest = true)
+    public void DrawLines(ReadOnlySpan<Vector3> vertices, Color color = default, float duration = 0.0f, bool depthTest = true)
     {
+        color = Resolve(color);
+
         for (var i = 0; i + 1 < vertices.Length; i += 2)
         {
-            DrawLine(vertices[i], vertices[i + 1], color ?? PrimitiveColor, duration, depthTest);
+            DrawLine(vertices[i], vertices[i + 1], color, duration, depthTest);
         }
     }
 
@@ -195,7 +200,8 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     /// <param name="solid">Whether rendered solid or wireframe.</param>
     public void DrawBounds(Vector3 start, Vector3 end, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
-        var cmd = new Cube { Start = start + ((end - start) / 2), End = end + ((end - start) / 2), Rotation = Resolve(rotation), Color = Resolve(color) };
+        var size = end - start;
+        var cmd = new Cube { Center = start + size / 2, Size = size, Rotation = Resolve(rotation), Color = Resolve(color) };
 
         PushMessage(new DebugRenderable(in cmd, Flags(depthTest, solid), duration));
     }
@@ -206,7 +212,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     /// <remarks>This method allows for flexible rendering of cubes in the scene, with options for wireframe
     /// or solid rendering, depth testing, and custom colors. Use this method to visualize objects, debug spatial
     /// layouts, or create temporary visual markers.</remarks>
-    /// <param name="start">The starting position of the cube, representing its center.</param>
+    /// <param name="center">The centre of the cube.</param>
     /// <param name="size">The dimensions of the cube, specified as a <see cref="Vector3"/>.</param>
     /// <param name="rotation">The rotation of the cube, specified as a <see cref="Quaternion"/>. Defaults to no rotation.</param>
     /// <param name="color">The color of the cube, specified as a <see cref="Color"/>. Defaults to the primitive color.</param>
@@ -216,9 +222,9 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     /// enable depth testing; otherwise, <see langword="false"/>. Defaults to <see langword="true"/>.</param>
     /// <param name="solid">A value indicating whether the cube should be rendered as a solid shape. Set to <see langword="true"/> for solid
     /// rendering; otherwise, <see langword="false"/> for wireframe rendering. Defaults to <see langword="false"/>.</param>
-    public void DrawCube(Vector3 start, Vector3 size, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
+    public void DrawCube(Vector3 center, Vector3 size, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
-        var cmd = new Cube { Start = start, End = start + size, Rotation = Resolve(rotation), Color = Resolve(color) };
+        var cmd = new Cube { Center = center, Size = size, Rotation = Resolve(rotation), Color = Resolve(color) };
 
         PushMessage(new DebugRenderable(in cmd, Flags(depthTest, solid), duration));
     }
@@ -352,8 +358,8 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         _transparentSolidPrimitiveRenderer!.RenderGroup = RenderGroup;
         _transparentWireframePrimitiveRenderer!.RenderGroup = RenderGroup;
 
-        HandlePrimitives(gameTime, _renderMessages);
-        HandlePrimitives(gameTime, _renderMessagesWithLifetime);
+        HandlePrimitives(_renderMessages);
+        HandlePrimitives(_renderMessagesWithLifetime);
 
         var delta = (float)gameTime.Elapsed.TotalSeconds;
 
@@ -371,10 +377,10 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     }
 
     /// <summary>
-    /// Hands one frame's queued shapes to the render objects: each message carries its own shape kind
-    /// in a tagged union, so the loop reads the tag and forwards the matching payload.
+    /// Hands one frame's queued shapes to the render objects: each message goes, as it is, to the one of the
+    /// four that draws its fill and its opacity.
     /// </summary>
-    private void HandlePrimitives(GameTime gameTime, List<DebugRenderable> messages)
+    private void HandlePrimitives(List<DebugRenderable> messages)
     {
         // Four render objects exist so that one pipeline state covers a whole batch: solid or wireframe,
         // opaque or transparent. A shape picks its own by its fill flag and its colour's alpha.
@@ -397,36 +403,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
             ref var msg = ref span[i];
             var useDepthTest = (msg.Flags & DebugRenderableFlags.DepthTest) != 0;
 
-            switch (msg.Type)
-            {
-                case DebugPrimitiveType.Quad:
-                    ChooseRenderer(msg.Flags, msg.QuadData.Color.A).DrawQuad(in msg.QuadData.Position, in msg.QuadData.Size, in msg.QuadData.Rotation, in msg.QuadData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Circle:
-                    ChooseRenderer(msg.Flags, msg.CircleData.Color.A).DrawCircle(in msg.CircleData.Position, msg.CircleData.Radius, in msg.CircleData.Rotation, in msg.CircleData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Line:
-                    ChooseRenderer(msg.Flags, msg.LineData.Color.A).DrawLine(in msg.LineData.Start, in msg.LineData.End, in msg.LineData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Cube:
-                    ChooseRenderer(msg.Flags, msg.CubeData.Color.A).DrawCube(in msg.CubeData.Start, in msg.CubeData.End, in msg.CubeData.Rotation, in msg.CubeData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Sphere:
-                    ChooseRenderer(msg.Flags, msg.SphereData.Color.A).DrawSphere(in msg.SphereData.Position, msg.SphereData.Radius, in msg.SphereData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.HalfSphere:
-                    ChooseRenderer(msg.Flags, msg.HalfSphereData.Color.A).DrawHalfSphere(in msg.HalfSphereData.Position, msg.HalfSphereData.Radius, in msg.HalfSphereData.Rotation, in msg.HalfSphereData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Capsule:
-                    ChooseRenderer(msg.Flags, msg.CapsuleData.Color.A).DrawCapsule(in msg.CapsuleData.Position, msg.CapsuleData.Height, msg.CapsuleData.Radius, in msg.CapsuleData.Rotation, in msg.CapsuleData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Cylinder:
-                    ChooseRenderer(msg.Flags, msg.CylinderData.Color.A).DrawCylinder(in msg.CylinderData.Position, msg.CylinderData.Height, msg.CylinderData.Radius, in msg.CylinderData.Rotation, in msg.CylinderData.Color, depthTest: useDepthTest);
-                    break;
-                case DebugPrimitiveType.Cone:
-                    ChooseRenderer(msg.Flags, msg.ConeData.Color.A).DrawCone(in msg.ConeData.Position, msg.ConeData.Height, msg.ConeData.Radius, in msg.ConeData.Rotation, in msg.ConeData.Color, depthTest: useDepthTest);
-                    break;
-            }
+            ChooseRenderer(msg.Flags, msg.Alpha).Push(in msg, useDepthTest);
         }
     }
 }

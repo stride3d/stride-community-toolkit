@@ -11,7 +11,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
-using System.Globalization;
 
 // Bepu constraints come in three flavours, and picking the wrong one is the usual reason a joint
 // "does nothing" or "never stops". This example puts all three on screen at once:
@@ -80,12 +79,12 @@ var pushVelocity = new Vector3(0, 0, 4.5f);
 
 // Kept so the update loop can switch them off at runtime - the fastest way to feel what a
 // constraint is actually contributing is to remove it while everything is moving.
-OneBodyAngularMotorConstraintComponent? mixerMotor = null;
-AngularAxisMotorConstraintComponent? armMotor = null;
-SwingLimitConstraintComponent? swingLimit = null;
+OneBodyAngularMotorConstraintComponent mixerMotor = null!;
+AngularAxisMotorConstraintComponent armMotor = null!;
+SwingLimitConstraintComponent swingLimit = null!;
 
-BodyComponent? limitedArm = null;
-BodyComponent? freeArm = null;
+BodyComponent limitedArm = null!;
+BodyComponent freeArm = null!;
 
 using var game = new Game();
 
@@ -113,20 +112,20 @@ void Start(Scene scene)
 
 void Update(Scene scene, GameTime time)
 {
-    if (game.Input.IsKeyPressed(Keys.M) && mixerMotor is not null)
+    if (game.Input.IsKeyPressed(Keys.M))
     {
         // The blade coasts down instead of stopping dead: removing a motor is not freezing a body.
         mixerMotor.Enabled = !mixerMotor.Enabled;
     }
 
-    if (game.Input.IsKeyPressed(Keys.N) && armMotor is not null)
+    if (game.Input.IsKeyPressed(Keys.N))
     {
         // Switch this off and the arm stops being swept around, decays into a plain swing, and
         // eventually hangs still. Nothing brakes it - it just loses its driver.
         armMotor.Enabled = !armMotor.Enabled;
     }
 
-    if (game.Input.IsKeyPressed(Keys.G) && swingLimit is not null)
+    if (game.Input.IsKeyPressed(Keys.G))
     {
         // With the limit off, the two right-hand pendulums behave identically - which is the point.
         swingLimit.Enabled = !swingLimit.Enabled;
@@ -204,7 +203,7 @@ void CreateLooseCubes(Scene scene)
     {
         // The half step keeps every cube clear of the blade's own footprint at spawn - bodies that
         // start interpenetrating get shoved apart hard and can jam the joint on the first frame.
-        var angle = MathF.Tau * (i + 0.5f) / LooseCubeCount;
+        var angle = MathUtil.TwoPi * (i + 0.5f) / LooseCubeCount;
 
         var cube = CreateBox("Loose Cube", Color.LightGoldenrodYellow,
             new Vector3(MixerX + MathF.Sin(angle) * 1.3f, 0.25f, MathF.Cos(angle) * 1.3f),
@@ -334,8 +333,6 @@ void CreateSwingLimitComparison(Scene scene)
 /// </remarks>
 void PushPendulums()
 {
-    if (limitedArm is null || freeArm is null) return;
-
     limitedArm.LinearVelocity = pushVelocity;
     limitedArm.Awake = true;
 
@@ -350,12 +347,8 @@ Entity CreateBox(string name, Color color, Vector3 position, Vector3 size, bool 
         EntityName = name,
         Material = game.CreateMaterial(color),
         Position = position,
+        Body = kinematic ? BodyMode.Kinematic : BodyMode.Dynamic,
     });
-
-    if (kinematic)
-    {
-        entity.Get<BodyComponent>().Kinematic = true;
-    }
 
     return entity;
 }
@@ -365,9 +358,9 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     // The live spin readouts matter: switching a motor off does not brake anything, so a hinged
     // blade coasts for a long time, and without a number on screen it looks as if nothing happened.
     return [
-        new("M", $"Mixer motor {OnOff(mixerMotor?.Enabled)}, blade spin {Spin(mixerMotor?.A)} rad/s", Color.Yellow),
-        new("N", $"Arm motor {OnOff(armMotor?.Enabled)}, arm spin {Spin(armMotor?.B)} rad/s", Color.Yellow),
-        new("G", $"Swing limit {OnOff(swingLimit?.Enabled)}", Color.Yellow),
+        new("M", $"Mixer motor {OnOff(mixerMotor.Enabled)}, blade spin {Spin(mixerMotor.A)} rad/s", Color.Yellow),
+        new("N", $"Arm motor {OnOff(armMotor.Enabled)}, arm spin {Spin(armMotor.B)} rad/s", Color.Yellow),
+        new("G", $"Swing limit {OnOff(swingLimit.Enabled)}", Color.Yellow),
         new("P", "Push both right-hand pendulums", Color.Yellow),
         new("Left mouse", "Pick up any body and throw it", Color.Yellow),
         new(""),
@@ -381,9 +374,9 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     ];
 }
 
-static string OnOff(bool? enabled) => enabled == true ? "ON" : "OFF";
+static string OnOff(bool enabled) => enabled ? "ON" : "OFF";
 
-static string Spin(BodyComponent? body) => body is null ? "-" : MathF.Abs(body.AngularVelocity.Y).ToString("0.0", CultureInfo.InvariantCulture);
+static string Spin(BodyComponent? body) => body is null ? "-" : $"{MathF.Abs(body.AngularVelocity.Y):0.0}";
 
 void AddInstructions()
 {

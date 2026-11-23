@@ -61,25 +61,7 @@ public class GameSettingsExtensionsTests
 
     [Fact]
     public void UseGameSettings_CompilationMode_ReachesTheEffectSystem()
-    {
-        using var game = new Game();
-
-        // AppStore is the one mode whose parameters differ from the engine's default (Debug = false,
-        // level 2), so it is the one that proves the value travelled.
-        game.UseGameSettings(settings => settings.CompilationMode = CompilationMode.AppStore);
-
-        EffectCompilerParameters? parameters = null;
-
-        game.Run(SceneSetup.None, update: (_, _) =>
-        {
-            parameters = ReadCompilerParameters(game);
-            game.Exit();
-        }, context: new GameContextHeadless());
-
-        Assert.NotNull(parameters);
-        Assert.False(parameters.Value.Debug);
-        Assert.Equal(2, parameters.Value.OptimizationLevel);
-    }
+        => AssertAppStoreModeReachesTheEffectSystem(game => game.UseGameSettings(settings => settings.CompilationMode = CompilationMode.AppStore));
 
     [Fact]
     public void UseGameSettings_AppliesRenderingSettingsToTheDeviceManagerBeforeRun()
@@ -125,11 +107,19 @@ public class GameSettingsExtensionsTests
 
     [Fact]
     public void UseGameSettings_CompilationModeSetOnASecondCall_ReachesTheEffectSystem()
+        => AssertAppStoreModeReachesTheEffectSystem(game =>
+        {
+            game.UseGameSettings();
+            game.UseGameSettings(settings => settings.CompilationMode = CompilationMode.AppStore);
+        });
+
+    // AppStore is the one mode whose parameters differ from the engine's default (Debug = false,
+    // level 2), so it is the one that proves the value travelled
+    private static void AssertAppStoreModeReachesTheEffectSystem(Action<Game> configure)
     {
         using var game = new Game();
 
-        game.UseGameSettings();
-        game.UseGameSettings(settings => settings.CompilationMode = CompilationMode.AppStore);
+        configure(game);
 
         EffectCompilerParameters? parameters = null;
 

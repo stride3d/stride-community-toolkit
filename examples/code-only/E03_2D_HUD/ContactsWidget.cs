@@ -50,9 +50,9 @@ public sealed class ContactsWidget(ShipState ship) : HudWidget
 
         // The row's bar: faint until the pointer or the selection lights it
         canvas.Style(HudCanvas.Thin * selected, 0.04f + 0.08f * hover + 0.14f * selected, bar);
-        canvas.Shapes.Tag = id;
+        canvas.Tag(id);
         canvas.ChamferedPanel(row.Center, row.Size, 0.1f, bar.WithAlpha(selected));
-        canvas.Shapes.Tag = null;
+        canvas.Untag();
 
         var colour = contact.Hostile ? HudTheme.Warning : Color.Lerp(theme.Text.WithAlpha(0.75f), theme.Text, MathF.Max(selected, hover));
         var y = row.Center.Y;

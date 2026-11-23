@@ -30,8 +30,8 @@ public abstract class SceneSetup
 
     /// <summary>
     /// A setup that adds nothing to the scene: for a game that builds its compositor and scene by hand, and for the
-    /// headless tests. What is not scene still applies when set, the physics engine, the game settings, the overlay
-    /// and the profiler, so <c>SceneSetup.None.UseBepu()</c> is a hand-built scene whose primitives get Bepu bodies.
+    /// headless tests. What is not scene still applies when set, the physics engine, the game settings and the overlay,
+    /// and the profiler script is added as in every setup, so <c>SceneSetup.None.UseBepu()</c> is a hand-built scene whose primitives get Bepu bodies.
     /// A new instance each time, so what one game sets on it is not seen by the next.
     /// </summary>
     public static SceneSetup None => new NoSceneSetup();
@@ -66,7 +66,10 @@ public abstract class SceneSetup
     /// <summary>Creates the <see cref="Rendering.Overlay.TextOverlay"/>, so the first section added shows at once.</summary>
     public bool TextOverlay { get; set; }
 
-    /// <summary>Adds the frame-time profiler readout.</summary>
+    /// <summary>
+    /// Starts the frame-time profiler readout on. Every setup adds the <see cref="Scripts.GameProfiler"/> script, so
+    /// Ctrl+Shift+P brings the readout up in any scene; this shows it from the first frame.
+    /// </summary>
     public bool Profiler { get; set; }
 
     /// <summary>
@@ -118,8 +121,7 @@ public abstract class SceneSetup
         if (TextOverlay)
             Rendering.Overlay.TextOverlay.GetOrCreate(game);
 
-        if (Profiler)
-            game.AddProfiler();
+        game.AddProfiler(enabled: Profiler);
     }
 
     private sealed class NoSceneSetup : SceneSetup

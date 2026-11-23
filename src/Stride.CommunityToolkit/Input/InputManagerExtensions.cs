@@ -91,6 +91,21 @@ public static class InputManagerExtensions
     }
 
     /// <summary>
+    /// Whether <paramref name="button"/> went down this frame on the pad at <paramref name="index"/>.
+    /// </summary>
+    /// <param name="input">The input manager.</param>
+    /// <param name="button">The button.</param>
+    /// <param name="index">The pad's index, as <see cref="IGamePadDevice.Index"/> assigns it.</param>
+    /// <returns><see langword="true"/> on the frame the button is pressed; <see langword="false"/> when no pad has that index.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="input"/> is <see langword="null"/>.</exception>
+    public static bool IsGamePadButtonPressed(this InputManager input, GamePadButton button, int index)
+    {
+        ArgumentNullException.ThrowIfNull(input);
+
+        return input.GetGamePadByIndex(index) is { } pad && pad.IsButtonPressed(button);
+    }
+
+    /// <summary>
     /// Whether <paramref name="button"/> went down this frame on any connected pad.
     /// </summary>
     /// <param name="input">The input manager.</param>
@@ -151,21 +166,7 @@ public static class InputManagerExtensions
     {
         ArgumentNullException.ThrowIfNull(input);
 
-        var pads = input.GamePads;
-        var total = Vector2.Zero;
-        var count = 0;
-
-        for (var i = 0; i < pads.Count; i++)
-        {
-            var stick = PastDeadZone(pads[i].State.LeftThumb, deadZone);
-
-            if (stick == Vector2.Zero) continue;
-
-            total += stick;
-            count++;
-        }
-
-        return count > 1 ? total / count : total;
+        return AverageSticks(input.GamePads, static state => state.LeftThumb, deadZone);
     }
 
     /// <summary>
@@ -208,21 +209,7 @@ public static class InputManagerExtensions
     {
         ArgumentNullException.ThrowIfNull(input);
 
-        var pads = input.GamePads;
-        var total = Vector2.Zero;
-        var count = 0;
-
-        for (var i = 0; i < pads.Count; i++)
-        {
-            var stick = PastDeadZone(pads[i].State.RightThumb, deadZone);
-
-            if (stick == Vector2.Zero) continue;
-
-            total += stick;
-            count++;
-        }
-
-        return count > 1 ? total / count : total;
+        return AverageSticks(input.GamePads, static state => state.RightThumb, deadZone);
     }
 
     /// <summary>
@@ -265,21 +252,7 @@ public static class InputManagerExtensions
     {
         ArgumentNullException.ThrowIfNull(input);
 
-        var pads = input.GamePads;
-        var total = 0f;
-        var count = 0;
-
-        for (var i = 0; i < pads.Count; i++)
-        {
-            var trigger = PastDeadZone(pads[i].State.LeftTrigger, deadZone);
-
-            if (trigger == 0f) continue;
-
-            total += trigger;
-            count++;
-        }
-
-        return count > 1 ? total / count : total;
+        return AverageTriggers(input.GamePads, static state => state.LeftTrigger, deadZone);
     }
 
     /// <summary>
@@ -322,13 +295,37 @@ public static class InputManagerExtensions
     {
         ArgumentNullException.ThrowIfNull(input);
 
-        var pads = input.GamePads;
+        return AverageTriggers(input.GamePads, static state => state.RightTrigger, deadZone);
+    }
+
+    /// <summary>The sticks <paramref name="read"/> picks, past the dead zone, averaged over the pads that are.</summary>
+    private static Vector2 AverageSticks(IReadOnlyList<IGamePadDevice> pads, Func<GamePadState, Vector2> read, float deadZone)
+    {
+        var total = Vector2.Zero;
+        var count = 0;
+
+        for (var i = 0; i < pads.Count; i++)
+        {
+            var stick = PastDeadZone(read(pads[i].State), deadZone);
+
+            if (stick == Vector2.Zero) continue;
+
+            total += stick;
+            count++;
+        }
+
+        return count > 1 ? total / count : total;
+    }
+
+    /// <summary>The triggers <paramref name="read"/> picks, past the dead zone, averaged over the pads that are.</summary>
+    private static float AverageTriggers(IReadOnlyList<IGamePadDevice> pads, Func<GamePadState, float> read, float deadZone)
+    {
         var total = 0f;
         var count = 0;
 
         for (var i = 0; i < pads.Count; i++)
         {
-            var trigger = PastDeadZone(pads[i].State.RightTrigger, deadZone);
+            var trigger = PastDeadZone(read(pads[i].State), deadZone);
 
             if (trigger == 0f) continue;
 
@@ -344,11 +341,11 @@ public static class InputManagerExtensions
     /// </summary>
     private static Vector2 PastDeadZone(Vector2 stick, float deadZone)
     {
+        if (deadZone <= 0f) return stick;
+
         var length = stick.Length();
 
-        if (length <= deadZone || length == 0f) return Vector2.Zero;
-
-        if (deadZone <= 0f) return stick;
+        if (length <= deadZone) return Vector2.Zero;
 
         var scaled = (length - deadZone) / (1f - deadZone);
 
@@ -360,9 +357,9 @@ public static class InputManagerExtensions
     /// </summary>
     private static float PastDeadZone(float trigger, float deadZone)
     {
-        if (trigger <= deadZone) return 0f;
-
         if (deadZone <= 0f) return trigger;
+
+        if (trigger <= deadZone) return 0f;
 
         return MathF.Min((trigger - deadZone) / (1f - deadZone), 1f);
     }

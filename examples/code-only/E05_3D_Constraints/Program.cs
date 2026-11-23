@@ -38,15 +38,10 @@ var cubeLayer = CollisionLayer.Layer2;
 var groundLayer = CollisionLayer.Layer3;
 var otherLayer = CollisionLayer.Layer5;
 
-var collisionMatrix = new CollisionMatrix();
+// Everything collides, except the line's links with the cubes and with each other
+var collisionMatrix = CollisionMatrix.All;
 collisionMatrix.Set(lineLayer, cubeLayer, shouldCollide: false);
-collisionMatrix.Set(lineLayer, groundLayer, shouldCollide: true);
-collisionMatrix.Set(lineLayer, otherLayer, shouldCollide: true);
-collisionMatrix.Set(groundLayer, otherLayer, shouldCollide: true);
-collisionMatrix.Set(otherLayer, otherLayer, shouldCollide: true);
-collisionMatrix.Set(cubeLayer, groundLayer, shouldCollide: true);
-collisionMatrix.Set(cubeLayer, otherLayer, shouldCollide: true);
-collisionMatrix.Set(cubeLayer, cubeLayer, shouldCollide: true);
+collisionMatrix.Set(lineLayer, lineLayer, shouldCollide: false);
 
 using var game = new Game();
 
@@ -56,10 +51,10 @@ void Start(Scene scene)
 {
     game.AddGroundGizmo(new(-5, 0, -5), showAxisName: true);
 
-    game.GetCameraEntity().GetSimulation().CollisionMatrix = collisionMatrix;
+    game.GetSimulation().CollisionMatrix = collisionMatrix;
 
     // The setup's ground gets the ground layer, so the matrix applies to it too
-    scene.Entities.First(e => e.Name == "Ground").Get<StaticComponent>().CollisionLayer = groundLayer;
+    scene.FindEntity(GameDefaults.DefaultGroundName)!.Get<StaticComponent>().CollisionLayer = groundLayer;
 
     AddInstructions();
     InitializeEntities(scene);
@@ -310,18 +305,12 @@ void Place(Entity entity, Scene scene)
 Entity CreateCubeEntity(string name, Color color, Vector3 position, Vector3? size = null)
     => CreateEntity(Primitive3D.Box(size ?? Vector3.One), name, color, position);
 
-Entity CreateEntity(Primitive3D shape, string name, Color color, Vector3 position)
+Entity CreateEntity(Primitive3D shape, string name, Color color, Vector3 position) => game.CreatePrimitive(shape, new()
 {
-    var entity = game.CreatePrimitive(shape, new()
-    {
-        EntityName = name,
-        Material = game.CreateMaterial(color),
-    });
-
-    entity.Transform.Position = position;
-
-    return entity;
-}
+    EntityName = name,
+    Material = game.CreateMaterial(color),
+    Position = position,
+});
 /*
 ---example-metadata
 slug: constraints

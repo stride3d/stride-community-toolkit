@@ -6,8 +6,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Bepu\Stride.CommunityToolkit.Bepu.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Shapes\Stride.CommunityToolkit.Shapes.csproj" />
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
-        <ProjectReference Include="..\Example.Common\Example.Common.csproj" />
     </ItemGroup>
 
 </Project>

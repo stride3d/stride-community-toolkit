@@ -26,9 +26,8 @@ public static class ModelStations
         station.Clear();
 
         var intensity = station.Pick("intensity 0.15", "intensity 0.35", "none") switch { 0 => 0.15f, 1 => 0.35f, _ => 0f };
-        var device = station.Game.GraphicsDevice;
-        var heights = station.Textures.Generated("ripples", () => RuntimeTextures.Ripples(device));
-        var normals = station.Textures.Generated("ripple-normals", () => RuntimeTextures.NormalFromHeight(device, RuntimeTextures.RipplePixels(), 256));
+        var heights = station.Textures.Ripples();
+        var normals = station.Textures.RippleNormals();
 
         var descriptor = Recipes.Mapped(new ComputeColor(new Color(90, 140, 170)), glossiness: new ComputeFloat(0.6f), normal: Recipes.Colour(normals));
 

@@ -44,8 +44,13 @@ public static class ScriptSystemExtensions
     /// <param name="seconds">The number of seconds to delay execution.</param>
     /// <returns>A <see cref="Task"/> representing the delay.</returns>
     /// <remarks>This delay takes into account the game's time warp factor, using the <c>WarpElapsed</c> property of <c>UpdateTime</c>.</remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="script"/> is <see langword="null"/>.</exception>
     public static Task DelayWarped(this ScriptSystem script, float seconds)
-        => RunFor(script, seconds, warped: true, action: null);
+    {
+        ArgumentNullException.ThrowIfNull(script);
+
+        return RunFor(script, seconds, warped: true, action: null);
+    }
 
     /// <summary>
     /// Waits <paramref name="seconds"/> of game time, counted frame by frame and not scaled by the time warp;
@@ -55,8 +60,13 @@ public static class ScriptSystemExtensions
     /// <param name="seconds">The number of seconds to wait.</param>
     /// <returns>A <see cref="Task"/> representing the delay.</returns>
     /// <remarks>The wait is on the game's clock, so it does not count while the game is paused, and it ends early when the game stops.</remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="script"/> is <see langword="null"/>.</exception>
     public static Task Delay(this ScriptSystem script, float seconds)
-        => RunFor(script, seconds, warped: false, action: null);
+    {
+        ArgumentNullException.ThrowIfNull(script);
+
+        return RunFor(script, seconds, warped: false, action: null);
+    }
 
     /// <summary>
     /// Executes an action every frame for a specified duration, adjusting for any time warp factors.
@@ -66,8 +76,14 @@ public static class ScriptSystemExtensions
     /// <param name="action">The action to perform on each frame, which receives the elapsed time as a parameter.</param>
     /// <returns>A <see cref="Task"/> representing the action execution.</returns>
     /// <remarks>This method accounts for the game's <c>WarpElapsed</c> time factor during execution.</remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="script"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
     public static Task ExecuteInWarpedTime(this ScriptSystem script, float seconds, Action<float> action)
-        => RunFor(script, seconds, warped: true, action);
+    {
+        ArgumentNullException.ThrowIfNull(script);
+        ArgumentNullException.ThrowIfNull(action);
+
+        return RunFor(script, seconds, warped: true, action);
+    }
 
     /// <summary>
     /// Executes an action every frame for a specified duration, counted in the game's elapsed time without the warp factor.
@@ -77,8 +93,14 @@ public static class ScriptSystemExtensions
     /// <param name="action">The action to perform on each frame, which receives the elapsed time as a parameter.</param>
     /// <returns>A <see cref="Task"/> representing the action execution.</returns>
     /// <remarks>Counts the game's elapsed time, <c>UpdateTime.Elapsed</c>, leaving out only the warp factor; it is not wall-clock time.</remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="script"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
     public static Task ExecuteInTime(this ScriptSystem script, float seconds, Action<float> action)
-        => RunFor(script, seconds, warped: false, action);
+    {
+        ArgumentNullException.ThrowIfNull(script);
+        ArgumentNullException.ThrowIfNull(action);
+
+        return RunFor(script, seconds, warped: false, action);
+    }
 
     /// <summary>
     /// Waits for the specified delay <paramref name="delay"/>.
@@ -86,8 +108,15 @@ public static class ScriptSystemExtensions
     /// <param name="scriptSystem">The <see cref="ScriptSystem"/>.</param>
     /// <param name="delay">The amount of time to wait.</param>
     /// <returns>The <see cref="Task"/> to await.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="scriptSystem"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delay"/> is zero or negative.</exception>
     public static Task WaitFor(this ScriptSystem scriptSystem, TimeSpan delay)
-        => scriptSystem.WaitFor(delay, default);
+    {
+        ArgumentNullException.ThrowIfNull(scriptSystem);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(delay, TimeSpan.Zero);
+
+        return scriptSystem.WaitFor(delay, default);
+    }
 
     /// <summary>
     /// Adds a micro thread function to the <paramref name="scriptSystem"/> that executes when the event is published.
@@ -221,7 +250,7 @@ public static class ScriptSystemExtensions
     public static MicroThread AddOverTimeAction(this ScriptSystem scriptSystem, Action<float> action, TimeSpan duration, long priority = 0L)
     {
         ArgumentNullException.ThrowIfNull(action);
-        ThrowIfNotPositive(duration);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(duration, TimeSpan.Zero);
 
         return scriptSystem.AddWatched(action, async (game, watcher) =>
         {
@@ -334,8 +363,6 @@ public static class ScriptSystemExtensions
     /// </summary>
     private static async Task RunFor(ScriptSystem script, float seconds, bool warped, Action<float>? action)
     {
-        ArgumentNullException.ThrowIfNull(script);
-
         var game = GetGame(script);
         var elapsed = 0f;
 
@@ -355,9 +382,6 @@ public static class ScriptSystemExtensions
     /// </summary>
     private static async Task WaitFor(this ScriptSystem scriptSystem, TimeSpan delay, ScriptDelegateWatcher watcher)
     {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
-        ThrowIfNotPositive(delay);
-
         var game = GetGame(scriptSystem);
 
         while (game.IsRunning && watcher.IsActive && delay >= TimeSpan.Zero)
@@ -380,7 +404,9 @@ public static class ScriptSystemExtensions
         {
             while (game.IsRunning && watcher.IsActive)
             {
-                if (receiver.TryReceive(out var data))
+                // Everything that arrived since the last frame, so a burst of events is handled in the frame it
+                // came in rather than one per frame from then on
+                while (watcher.IsActive && receiver.TryReceive(out var data))
                     await invoke(data);
 
                 await scriptSystem.NextFrame();
@@ -391,7 +417,7 @@ public static class ScriptSystemExtensions
     /// <summary>Runs <paramref name="invoke"/> once, after <paramref name="delay"/>, unless the game or the owning script stopped first.</summary>
     private static MicroThread AddDelayed(this ScriptSystem scriptSystem, Delegate owner, Func<Task> invoke, TimeSpan delay, long priority)
     {
-        ThrowIfNotPositive(delay);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(delay, TimeSpan.Zero);
 
         return scriptSystem.AddWatched(owner, async (game, watcher) =>
         {
@@ -405,8 +431,8 @@ public static class ScriptSystemExtensions
     /// <summary>Runs <paramref name="invoke"/> after <paramref name="delay"/>, then every <paramref name="repeatEvery"/>, on the game clock.</summary>
     private static MicroThread AddRepeating(this ScriptSystem scriptSystem, Delegate owner, Func<Task> invoke, TimeSpan delay, TimeSpan repeatEvery, long priority)
     {
-        ThrowIfNotPositive(delay);
-        ThrowIfNotPositive(repeatEvery);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(delay, TimeSpan.Zero);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(repeatEvery, TimeSpan.Zero);
 
         return scriptSystem.AddWatched(owner, async (game, watcher) =>
         {
@@ -442,12 +468,6 @@ public static class ScriptSystemExtensions
         var watcher = new ScriptDelegateWatcher(owner);
 
         return scriptSystem.AddTask(() => body(game, watcher), priority);
-    }
-
-    private static void ThrowIfNotPositive(TimeSpan value, [System.Runtime.CompilerServices.CallerArgumentExpression(nameof(value))] string? name = null)
-    {
-        if (value <= TimeSpan.Zero)
-            throw new ArgumentOutOfRangeException(name, "Must be greater than zero.");
     }
 
     /// <summary>

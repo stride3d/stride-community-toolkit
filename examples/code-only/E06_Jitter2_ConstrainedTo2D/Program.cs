@@ -37,10 +37,10 @@ game.Run(new SceneSetup3D
     WindowTitle = "Jitter 2 Physics Axis Locking Example - Stride Community Toolkit",
 }.UseSkybox(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
-    CreateGround(rootScene);
-    CreateCubes(rootScene, count: 350);
+    CreateGround(scene);
+    CreateCubes(scene, count: 350);
 }
 
 void Update(Scene scene, GameTime time)
@@ -67,11 +67,11 @@ void Update(Scene scene, GameTime time)
     SyncPhysicsToEntities();
 }
 
-void CreateGround(Scene rootScene)
+void CreateGround(Scene scene)
 {
     var groundEntity = game.CreatePrimitive(Primitive3D.Plane(groundSize.X, groundSize.Z));
 
-    groundEntity.Scene = rootScene;
+    groundEntity.Scene = scene;
 
     var groundBody = world.CreateRigidBody();
     groundBody.MotionType = MotionType.Static;
@@ -79,7 +79,7 @@ void CreateGround(Scene rootScene)
     groundBody.Position = new JVector(0, -0.5f, 0);
 }
 
-void CreateCubes(Scene rootScene, int count)
+void CreateCubes(Scene scene, int count)
 {
     for (int i = 0; i < count; i++)
     {
@@ -94,7 +94,7 @@ void CreateCubes(Scene rootScene, int count)
             Position = cubePosition,
         });
 
-        cubeEntity.Scene = rootScene;
+        cubeEntity.Scene = scene;
 
         var cubeBody = world.CreateRigidBody();
         cubeBody.AddShape(new BoxShape(CubeSize));

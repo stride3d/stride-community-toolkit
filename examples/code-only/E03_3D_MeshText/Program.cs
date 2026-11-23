@@ -49,7 +49,7 @@ void Start(Scene scene)
 
     // The base scene's single directional light shines from behind this gallery, leaving the front
     // caps in the dark. Six lights down the six world axes make solid lettering read from any side
-    game.AddAllDirectionLighting(intensity: 20f, showLightGizmo: false);
+    game.AddAllDirectionsLighting(intensity: 20f, showLightGizmo: false);
 
     var gold = game.CreateMaterial(Color.Gold);
     var silver = game.CreateMaterial(new Color(210, 215, 225));
@@ -74,16 +74,13 @@ void Start(Scene scene)
     AddText(scene, MeshFont.Default, "lines of text\nalign to each other\nand share one mesh", new Vector3(0f, 2.1f, 0f), blue,
         new TextMeshOptions { Size = 0.3f, Depth = 0.1f, Alignment = TextAlignment.Center, LineSpacing = 0.9f, Anchor = Anchor.TopCenter, CurveQuality = 16 });
 
-    // The counter: a script that replaces its digit mesh whenever the number changes
-    var counter = new Entity("FrameCounter")
+    // The counter: a script that replaces its digit mesh whenever the number changes. It is a step
+    // toward the camera, so it sits in front of the gallery
+    var counter = new Entity("FrameCounter", new Vector3(1.6f, 0.4f, 1.6f), faceCamera, new Vector3(0.5f))
     {
         new FrameCounterScript { Material = blue }
     };
 
-    // A step toward the camera, so it sits in front of the gallery
-    counter.Transform.Position = new Vector3(1.6f, 0.4f, 1.6f);
-    counter.Transform.Rotation = faceCamera;
-    counter.Transform.Scale = new Vector3(0.5f);
     counter.Scene = scene;
 
     // Three words to begin with, each higher than the last, so they land on each other
@@ -115,13 +112,11 @@ void AddText(Scene scene, MeshFont font, string text, Vector3 position, Material
 {
     // CreateModel uploads the mesh and sets its bounds, which the renderer needs to cull the lettering
     // when it is off screen; a bare MeshDraw has none
-    var entity = new Entity($"Text {text}")
+    var entity = new Entity($"Text {text}", position, faceCamera)
     {
         new ModelComponent { Model = TextMesh.CreateModel(game.GraphicsDevice, material, font, text, options) }
     };
 
-    entity.Transform.Position = position;
-    entity.Transform.Rotation = faceCamera;
     entity.Scene = scene;
 }
 
@@ -133,9 +128,12 @@ void AddText(Scene scene, MeshFont font, string text, Vector3 position, Material
 void DropWord(Scene scene)
 {
     var material = game.CreateMaterial(random.NextColor(), metalness: 0.1f, glossiness: 0.5f);
-    var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new BepuPhysicsOptions { Material = material });
+    var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new BepuPhysicsOptions
+    {
+        Material = material,
+        Position = new Vector3(-2.2f, 4f + dropped * 0.7f, 2.2f),
+    });
 
-    word.Transform.Position = new Vector3(-2.2f, 4f + dropped * 0.7f, 2.2f);
     word.Transform.Rotation = faceCamera;
     word.Scene = scene;
 
@@ -175,7 +173,7 @@ concepts:
   - TextMeshOptions - size per EM, depth, bevel, anchor, alignment, line spacing, curve quality
   - Words as primitives with bodies - Primitive3D.Text through CreatePrimitive, one convex hull per glyph
   - Static lettering built once versus text that changes, and releasing the old buffers
-  - "Using helpers: SceneSetup3D, AddAllDirectionLighting, CreatePrimitive, TextOverlay"
+  - "Using helpers: SceneSetup3D, AddAllDirectionsLighting, CreatePrimitive, TextOverlay"
 tags:
   - 3D
   - Text

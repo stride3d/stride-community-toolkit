@@ -4,6 +4,7 @@ using Stride.Core.Diagnostics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Graphics;
+using System.Collections.Concurrent;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -26,6 +27,13 @@ public class PerfMonitor : BaseWindow
     public float FrameHeight = 128;
 
     /// <summary>
+    /// The time in milliseconds a frame stays on the sample strips before the next one replaces it. Redrawn every
+    /// frame, the bars shift a few pixels with each frame's timing and cannot be read; half a second, Stride's own
+    /// profiler rate, can. Zero redraws every frame. A frame that trips <see cref="PauseOnLargeDelta"/> shows at once.
+    /// </summary>
+    public double StripRefreshTime = 500;
+
+    /// <summary>
     /// When <see langword="true"/>, the graphs and sample strips stop updating and keep showing the last frame,
     /// so a spike can be examined. Toggled by the "Pause" checkbox.
     /// </summary>
@@ -44,29 +52,29 @@ public class PerfMonitor : BaseWindow
     public bool MonitorSampleAlloc;
 
     /// <summary>
-    /// Circumvents the <see cref="_cpuSamples"/> dictionary lookup, but
-    /// only works for <see cref="_threadStaticMonitor"/>
+    /// This thread's sample collection and the monitor it belongs to, so most samples skip the dictionary lookup.
+    /// Checked against the sampler's monitor, so two monitors on one thread do not cross-wire.
     /// </summary>
-    [ThreadStatic] private static ThreadSampleCollection? _threadStaticCollection;
+    [ThreadStatic] private static (PerfMonitor? Monitor, ThreadSampleCollection? Collection) _threadCache;
 
-    /// <summary> Owner of <see cref="_threadStaticCollection"/> </summary>
-    private static PerfMonitor? _threadStaticMonitor;
-
-    // Work agnostic data
-    private readonly Dictionary<Thread, ThreadSampleCollection> _cpuSamples = [];
+    // Work agnostic data. Written from whichever thread opens its first sample and read on the game thread
+    private readonly ConcurrentDictionary<Thread, ThreadSampleCollection> _cpuSamples = [];
     private LightweightTimer _timer = LightweightTimer.StartNew();
+    private LightweightTimer _stripTimer = LightweightTimer.StartNew();
     private (TimeSpan start, double duration) _cpuFrame;
 
-    // Stride-specific data
-    private readonly List<EventWrapper> _sorter = [];
+    // Stride-specific data: the events the marker loop has delivered since the last frame, and the two strips they
+    // feed. The GPU's frame starts at the compositor's root event, the systems' at the game update
+    private readonly List<ProfilingEvent> _incoming = [];
     private CancellationTokenSource? _stopProfiling;
-    private (List<SampleInstance> samples, TimeSpan start, double duration, int depth) _gpu = ([], default, default, default), _stride = ([], default, default, default);
+    private readonly ProfilerStrip _gpu = new(static e => e.Key.Name == "GraphicsCompositor");
+    private readonly ProfilerStrip _stride = new(static e => e.Key == GameProfilingKeys.GameUpdate);
 
     private GraphPoint _graphAggregated;
     private GraphPoint[] _graph = new GraphPoint[256];
     private GraphPoint Average => _graphAggregated / _graph.Length;
 
-    private bool _windowSizeApplied;
+    private bool _profiling;
     private PerfSampler? _frame;
 
     private PerfMonitorAutoSampler? _autoSampler;
@@ -80,31 +88,29 @@ public class PerfMonitor : BaseWindow
         bool sample = true,
         [CallerLineNumber] int line = 0,
         [CallerMemberName] string? member = null,
-        [CallerFilePath] string? filePath = null) => Sample($"{filePath} . {member}:{S(line)}", sample);
+        [CallerFilePath] string? filePath = null) => Sample($"{filePath} . {member}:{line}", sample);
 
     /// <summary> Place within a using statement to monitor the code within it </summary>
     public PerfSampler Sample(string id, bool sample = true) => sample ? new PerfSampler(id, this) : default;
 
     /// <inheritdoc />
-    protected override ImGuiWindowFlags WindowFlags => ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoFocusOnAppearing;
+    protected override ImGuiWindowFlags WindowFlags => ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoFocusOnAppearing;
 
     /// <inheritdoc />
     protected override Vector2? WindowPos => new Vector2(1f, 1f);
 
     /// <inheritdoc />
-    protected override Vector2? WindowSize => _windowSizeApplied ? null : new Vector2(420f, 240f);
+    protected override Vector2? WindowSize => new Vector2(420f, 240f);
 
     private Vector2 GetGraphSize() => new(GetContentRegionAvail().X, GraphHeight * Scale);
 
     /// <summary>
     /// Changes how many frames the history graphs keep, preserving the most recent samples.
     /// </summary>
-    /// <param name="newSize">The number of frames to keep.</param>
-    /// <param name="force">When <see langword="false"/>, <paramref name="newSize"/> is clamped to 10..2048.</param>
-    public void SetGraphSize(int newSize, bool force = false)
+    /// <param name="frames">The number of frames to keep, clamped to 10..2048.</param>
+    public void SetGraphSize(int frames)
     {
-        if (!force) newSize = Math.Clamp(newSize, 10, 2048);
-
+        var newSize = Math.Clamp(frames, 10, 2048);
         var delta = newSize - _graph.Length;
 
         if (delta == 0) return;
@@ -147,7 +153,11 @@ public class PerfMonitor : BaseWindow
     protected override void OnDestroy()
     {
         if (IsStrideProfilingAll()) Profiler.DisableAll();
-        if (_threadStaticMonitor == this) _threadStaticMonitor = null;
+
+        // Ends the marker loop too, or it would stay subscribed and fill the dead sorter once anything re-enables profiling
+        _stopProfiling?.Cancel();
+        _stopProfiling?.Dispose();
+        _stopProfiling = null;
 
         _autoSampler?.Dispose();
         _autoSampler = null;
@@ -191,9 +201,6 @@ public class PerfMonitor : BaseWindow
         DrawFrameTimeGraph();
         DrawMemoryAndDrawCallGraphs();
         DrawFrameSection();
-
-        // Leave it as dynamic after first set
-        _windowSizeApplied = true;
     }
 
     private void DrawControls()
@@ -275,8 +282,8 @@ public class PerfMonitor : BaseWindow
         using (Child())
         {
             DrawCpuSampleStrips();
-            DrawProfilingToggle();
-            DrawProfilerSampleStrips();
+            DrawProfilingToggle(_profiling);
+            DrawProfilerSampleStrips(_profiling);
         }
     }
 
@@ -284,34 +291,57 @@ public class PerfMonitor : BaseWindow
     {
         foreach (var (thread, collection) in _cpuSamples)
         {
-            if (CollapsingHeader(thread.Name ?? "unnamed")) DrawStrip(collection.Displayed, _cpuFrame.start, _cpuFrame.duration);
+            // One id per thread: two unnamed threads share a header label, and every strip shares this line
+            using (ID(thread.ManagedThreadId))
+            {
+                if (CollapsingHeader(thread.Name ?? "unnamed")) DrawStrip(collection.Displayed, _cpuFrame.start, _cpuFrame.duration);
+            }
         }
     }
 
-    private void DrawProfilingToggle()
+    private void DrawProfilingToggle(bool profiling)
     {
         var buttonSize = new Vector2(GetContentRegionAvail().X, GetTextLineHeightWithSpacing());
-        var profiling = IsStrideProfilingAll();
 
         if (!Button(profiling ? "Stop Profiling" : "Profile Stride", buttonSize)) return;
 
+        // The marker loop follows at the end of the frame, through SyncMarkerLoop
+        if (profiling) Profiler.DisableAll();
+        else Profiler.EnableAll();
+    }
+
+    /// <summary>
+    /// Keeps the marker loop in step with Stride's profiler, whichever side switched it: the button here,
+    /// <see cref="Scripts.GameProfiler"/>'s Ctrl+Shift+P, or the game itself. Started only from the button, a scene
+    /// that began with the profiler on showed empty strips until the button had been pressed twice.
+    /// </summary>
+    private void SyncMarkerLoop(bool profiling)
+    {
+        if (profiling == (_stopProfiling is not null)) return;
+
         if (profiling)
         {
-            _stopProfiling?.Cancel();
-            Profiler.DisableAll();
+            _stopProfiling = new CancellationTokenSource();
+            _ = StartProcessingMarkers(_incoming, _stopProfiling.Token);
         }
         else
         {
-            _stopProfiling = new CancellationTokenSource();
-            StartProcessingMarkers(_sorter, _stopProfiling.Token);
-            Profiler.EnableAll();
+            _stopProfiling!.Cancel();
+            _stopProfiling.Dispose();
+            _stopProfiling = null;
+
+            // The strips show the last complete frame; off, they are empty
+            lock (_incoming) _incoming.Clear();
+
+            _gpu.Clear();
+            _stride.Clear();
         }
     }
 
-    private void DrawProfilerSampleStrips()
+    private void DrawProfilerSampleStrips(bool profiling)
     {
-        if (CollapsingHeader(_gpu.samples.Count != 0 ? "GPU" : "GPU (profiling is off)")) DrawStrip(_gpu.samples, _gpu.start, _gpu.duration);
-        if (CollapsingHeader(_stride.samples.Count != 0 ? "Stride Systems" : "Stride Systems (profiling is off)")) DrawStrip(_stride.samples, _stride.start, _stride.duration);
+        if (CollapsingHeader(profiling ? "GPU" : "GPU (profiling is off)")) DrawStrip(_gpu.Samples, _gpu.Start, _gpu.Duration);
+        if (CollapsingHeader(profiling ? "Stride Systems" : "Stride Systems (profiling is off)")) DrawStrip(_stride.Samples, _stride.Start, _stride.Duration);
     }
 
     // A child region keeps the strip's buttons aligned within it; the caller's line keeps the regions apart
@@ -319,7 +349,11 @@ public class PerfMonitor : BaseWindow
     {
         using (Child(cln, new Vector2(0f, FrameHeight)))
         {
-            for (var i = 0; i < samples.Count; i++) DrawSample(default, GetContentRegionAvail().X, samples[i], start, duration);
+            // A frame holds several events of one name, so the button's ID is the sample's index, not its label
+            for (var i = 0; i < samples.Count; i++)
+            {
+                using (ID(i)) DrawSample(default, GetContentRegionAvail().X, samples[i], start, duration);
+            }
         }
     }
 
@@ -327,22 +361,20 @@ public class PerfMonitor : BaseWindow
     {
         using (Sample($"{nameof(PerfSampler)}:{nameof(EndFrame)}"))
         {
-            _threadStaticMonitor ??= this;
-
             // The first frame opens this thread's root scope; every later one closes the previous frame's sample
             if (_frame is { } frame) frame.Dispose();
-            else Guaranteed(_cpuSamples, Thread.CurrentThread).EnterScope();
+            else CollectionFor(Thread.CurrentThread).EnterScope();
 
             _frame = new PerfSampler("Frame", this, 0);
 
-            // Manage stride-specific profiler events
-            using (Sample($"{nameof(PerfSampler)}:StrideProfilerParsing"))
-            {
-                ParseStrideProfilerEvents(_sorter, ref _gpu, ref _stride, PauseEval);
-            }
+            // Read once a frame: the check is not free, and the button, the strip titles and the marker loop must agree
+            _profiling = IsStrideProfilingAll();
+            SyncMarkerLoop(_profiling);
 
             if (PauseEval)
             {
+                ParseStrideProfilerEvents(_incoming, _gpu, _stride, pauseEval: true, refresh: false);
+
                 foreach (var collection in _cpuSamples.Values) collection.ClearBuffered();
 
                 _timer = LightweightTimer.StartNew();
@@ -350,27 +382,51 @@ public class PerfMonitor : BaseWindow
                 return;
             }
 
-            foreach (var collection in _cpuSamples.Values) collection.SetReady();
+            var frameStart = _timer.InitTime;
+            var frameDuration = _timer.Restart().TotalMilliseconds;
+            var point = NewGraphPoint((float)frameDuration);
+            var spike = PauseOnLargeDelta && (point.FrameTime < Average.FrameTime * 0.5f || point.FrameTime > Average.FrameTime * 1.5f);
 
-            _cpuFrame = (_timer.InitTime, _timer.Restart().TotalMilliseconds);
+            // The strips hold a frame long enough to read; a spike goes up at once, since it is what the pause is for
+            var refresh = spike || StripRefreshTime <= 0 || _stripTimer.Elapsed.TotalMilliseconds >= StripRefreshTime;
 
-            PushGraphPoint();
+            if (refresh)
+            {
+                _stripTimer = LightweightTimer.StartNew();
+                _cpuFrame = (frameStart, frameDuration);
+            }
+
+            foreach (var collection in _cpuSamples.Values)
+            {
+                if (refresh) collection.SetReady();
+                else collection.ClearBuffered();
+            }
+
+            using (Sample($"{nameof(PerfSampler)}:StrideProfilerParsing"))
+            {
+                ParseStrideProfilerEvents(_incoming, _gpu, _stride, pauseEval: false, refresh);
+            }
+
+            PushGraphPoint(point);
+
+            if (spike) PauseEval = true;
         }
     }
 
-    private void PushGraphPoint()
+    private GraphPoint NewGraphPoint(float frameTime)
     {
         const double MB = 1 << 20;
 
-        var newPoint = new GraphPoint(
-            (float)_cpuFrame.duration,
+        return new GraphPoint(
+            frameTime,
             (float)(GC.GetTotalMemory(false) / MB),
             GraphicsDevice.FrameDrawCalls,
             (float)(GraphicsDevice.BuffersMemory / MB),
             (float)(GraphicsDevice.TextureMemory / MB));
+    }
 
-        if (PauseOnLargeDelta && (newPoint.FrameTime < Average.FrameTime * 0.5f || newPoint.FrameTime > Average.FrameTime * 1.5f)) PauseEval = true;
-
+    private void PushGraphPoint(GraphPoint newPoint)
+    {
         // Use simple aggregate to avoid having to loop through the array to get the average
         _graphAggregated -= _graph[0];
         _graphAggregated += newPoint;
@@ -379,6 +435,9 @@ public class PerfMonitor : BaseWindow
         Array.Copy(_graph, 1, _graph, 0, _graph.Length - 1);
         _graph[^1] = newPoint;
     }
+
+    /// <summary>The sample collection of <paramref name="thread"/>, made on its first sample.</summary>
+    private ThreadSampleCollection CollectionFor(Thread thread) => _cpuSamples.GetOrAdd(thread, static _ => new());
 
     /// <summary>
     /// Put this within a using statement to log performance of the code within it.
@@ -407,9 +466,9 @@ public class PerfMonitor : BaseWindow
             _id = id;
 
             // Cached per thread, so most samples skip the dictionary lookup
-            if (_threadStaticCollection is null || _threadStaticMonitor != monitor) _threadStaticCollection = Guaranteed(monitor._cpuSamples, Thread.CurrentThread);
+            if (_threadCache.Monitor != monitor) _threadCache = (monitor, monitor.CollectionFor(Thread.CurrentThread));
 
-            _target = _threadStaticCollection;
+            _target = _threadCache.Collection!;
             _customDepth = customDepthParam >= 0;
             _depth = _customDepth ? customDepthParam : _target.EnterScope();
             _timer = LightweightTimer.StartNew();
@@ -447,13 +506,153 @@ public class PerfMonitor : BaseWindow
         public static GraphPoint operator /(GraphPoint a, float v) => new(a.FrameTime / v, a.TotalManagedMB / v, a.DrawCalls / v, a.BufferMemMB / v, a.TexMemMB / v);
     }
 
-    internal readonly record struct EventWrapper(ProfilingEvent Event, bool Begin, TimeSpan Stamp) : IComparable<EventWrapper>
+    /// <summary>
+    /// An event's begin or end marker, in time order. Stride stamps a parent and its children at the same instant
+    /// when nothing happens between them, so the ties decide the nesting: ends come before begins, two begins put
+    /// the longer event first, and two ends the shorter; when even the spans match, the arrival order
+    /// (<paramref name="Seq"/>) tells, since Stride publishes an event when it ends, children before their parent.
+    /// </summary>
+    internal readonly record struct EventWrapper(ProfilingEvent Event, bool Begin, TimeSpan Stamp, long Seq) : IComparable<EventWrapper>
     {
-        public int CompareTo(EventWrapper other) => Stamp.CompareTo(other.Stamp);
+        private TimeSpan End => Event.TimeStamp + Event.ElapsedTime;
+
+        public int CompareTo(EventWrapper other)
+        {
+            var order = Stamp.CompareTo(other.Stamp);
+
+            if (order != 0) return order;
+            if (Begin != other.Begin) return Begin ? 1 : -1;
+
+            if (Begin)
+            {
+                order = other.End.CompareTo(End);
+
+                return order != 0 ? order : other.Seq.CompareTo(Seq);
+            }
+
+            order = other.Event.TimeStamp.CompareTo(Event.TimeStamp);
+
+            return order != 0 ? order : Seq.CompareTo(other.Seq);
+        }
     }
 
     /// <summary> Object containing a sample's data </summary>
     internal readonly record struct SampleInstance(string Id, int Depth, TimeSpan Start, double Duration, long? DeltaMemAlloc);
+
+    /// <summary>
+    /// One strip of Stride's own profiler events, the GPU's or the systems', showing one whole frame at a time.
+    /// </summary>
+    /// <remarks>
+    /// Stride publishes an event when it ends, so a frame's children arrive before their parent, and the GPU's
+    /// events arrive a frame or more after the CPU's, on a clock of their own. Parsing whatever had arrived by the
+    /// end of each monitor frame drew children at the wrong depth, parents on their own a frame later, and two GPU
+    /// frames squeezed into one strip, which flashed. The strip therefore holds its events back until the next
+    /// frame's start event has arrived, which proves the frame before it complete, and shows that frame.
+    /// </remarks>
+    /// <param name="isFrameStart">Recognises the event that begins a frame on this strip's timeline.</param>
+    internal sealed class ProfilerStrip(Predicate<ProfilingEvent> isFrameStart)
+    {
+        // A bound on what is held back, in case the frame-start event never comes
+        private const int MaxPending = 4096;
+
+        private readonly List<(ProfilingEvent Event, long Seq)> _pending = [];
+        private readonly List<EventWrapper> _markers = [];
+        private long _seq;
+
+        /// <summary>The samples of the frame on display.</summary>
+        internal List<SampleInstance> Samples { get; } = [];
+
+        /// <summary>Where the displayed frame's first sample starts.</summary>
+        internal TimeSpan Start { get; private set; }
+
+        /// <summary>From the first displayed sample's start to the last one's end, in milliseconds.</summary>
+        internal double Duration { get; private set; }
+
+        /// <summary>Holds an event back until its frame is complete.</summary>
+        internal void Add(ProfilingEvent e) => _pending.Add((e, _seq++));
+
+        /// <summary>
+        /// Drops everything older than the newest complete frame and, when <paramref name="show"/> is set, puts
+        /// that frame on display; otherwise it is kept for the next call that shows.
+        /// </summary>
+        internal void Advance(bool show)
+        {
+            if (_pending.Count == 0) return;
+
+            // By time, and by arrival within the same instant, so the order is the same every frame
+            _pending.Sort(static (a, b) => a.Event.TimeStamp != b.Event.TimeStamp ? a.Event.TimeStamp.CompareTo(b.Event.TimeStamp) : a.Seq.CompareTo(b.Seq));
+
+            if (_pending.Count > MaxPending) _pending.RemoveRange(0, _pending.Count - MaxPending);
+
+            // The newest frame start closes the frame before it; a lone one leaves a partial frame to drop. The frame
+            // is bounded by time, not position: events stamped at the same instant as a frame start belong with it
+            var close = _pending.FindLastIndex(p => isFrameStart(p.Event));
+
+            if (close < 0) return;
+
+            var frameEnd = _pending[close].Event.TimeStamp;
+            var open = close == 0 ? -1 : _pending.FindLastIndex(close - 1, p => isFrameStart(p.Event) && p.Event.TimeStamp < frameEnd);
+            var first = open < 0 ? close : open;
+
+            while (first > 0 && _pending[first - 1].Event.TimeStamp == _pending[first].Event.TimeStamp) first--;
+
+            if (open < 0 || !show)
+            {
+                _pending.RemoveRange(0, first);
+
+                return;
+            }
+
+            var next = first;
+
+            _markers.Clear();
+
+            while (next < _pending.Count && _pending[next].Event.TimeStamp < frameEnd)
+            {
+                var (e, seq) = _pending[next++];
+
+                _markers.Add(new EventWrapper(e, true, e.TimeStamp, seq));
+                _markers.Add(new EventWrapper(e, false, e.TimeStamp + e.ElapsedTime, seq));
+            }
+
+            _markers.Sort();
+            Samples.Clear();
+
+            var depth = 0;
+            TimeSpan min = TimeSpan.MaxValue, max = TimeSpan.MinValue;
+
+            foreach (var marker in _markers)
+            {
+                if (marker.Begin)
+                {
+                    depth++;
+                    continue;
+                }
+
+                var e = marker.Event;
+
+                if (e.TimeStamp < min) min = e.TimeStamp;
+                if (marker.Stamp > max) max = marker.Stamp;
+
+                // A zero-length event's end sorts before its begin; it is drawn on its parent's row rather than below zero
+                Samples.Add(new SampleInstance(e.Key.Name, Math.Max(depth, 1), e.TimeStamp, e.ElapsedTime.TotalMilliseconds, null));
+
+                if (depth > 0) depth--;
+            }
+
+            Start = min;
+            Duration = (max - min).TotalMilliseconds;
+
+            _pending.RemoveRange(0, next);
+        }
+
+        /// <summary>Empties the strip: what is on display and what was held back.</summary>
+        internal void Clear()
+        {
+            Samples.Clear();
+            _pending.Clear();
+        }
+    }
 
     /// <summary>
     /// A collection of <see cref="SampleInstance"/> for a specific thread,
@@ -530,6 +729,14 @@ public class PerfMonitor : BaseWindow
         {
             _monitor._update = _monitor.Sample(nameof(Update));
             base.Update(gameTime);
+        }
+
+        // Disposing a game system does not take it out of the collection; left in, it would open a sample every
+        // frame that the closed monitor never closes
+        protected override void Destroy()
+        {
+            Game.GameSystems.Remove(this);
+            base.Destroy();
         }
     }
 }

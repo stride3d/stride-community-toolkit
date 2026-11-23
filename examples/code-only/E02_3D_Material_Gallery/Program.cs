@@ -61,7 +61,7 @@ game.Run(new SceneSetup3D
 // The textures loaded in Start are this example's own: released once the game has ended
 textures?.Dispose();
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     var sun = game.AddDirectionalLight();
 
@@ -88,13 +88,13 @@ void Start(Scene rootScene)
     // The frame comes from Example.Common; what a material station needs on top of it is the textures
     var loaded = textures;
 
-    gallery = new Gallery<MaterialStation>(game, rootScene, Stations.All, configure: station =>
+    gallery = new Gallery<MaterialStation>(game, scene, Stations.All, configure: station =>
     {
         station.Textures = loaded;
         if (station.Number == startStation) station.Variation = startVariation;
     });
     gallery.UpdateLabels();
-    LightTheRing(rootScene, gallery.Radius, sun);
+    LightTheRing(scene, gallery.Radius, sun);
 
     if (startStation > 0)
     {
@@ -139,7 +139,7 @@ void HandleInput(Gallery<MaterialStation> gallery)
     if (game.Input.IsKeyPressed(Keys.V) && station.VariationNames.Count > 1)
     {
         station.Variation++;
-        Gallery<MaterialStation>.Guarded(station, Stations.All[gallery.Current].Setup);
+        gallery.RunSetup(station);
     }
 }
 
@@ -158,7 +158,7 @@ void LightTheRing(Scene scene, float radius, Entity sun)
     // mismatch and the frame is wrong (an engine matter, reported upstream), so it stays off
     ((LightDirectional)sun.Get<LightComponent>().Type).Shadow.ComputeTransmittance = true;
 
-    var key = new Entity("Key light")
+    var key = new Entity("Key light", new Vector3(0f, radius, 0f))
     {
         new LightComponent
         {
@@ -168,7 +168,6 @@ void LightTheRing(Scene scene, float radius, Entity sun)
         }
     };
 
-    key.Transform.Position = new Vector3(0f, radius, 0f);
     key.Scene = scene;
 }
 

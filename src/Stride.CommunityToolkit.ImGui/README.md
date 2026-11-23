@@ -1,90 +1,90 @@
-# Stride.CommunityToolkit.ImGuiDebug
+# Stride.CommunityToolkit.ImGui
 
-Bare-bone implementation of ImGui and a couple of debug tools for Stride
+Dear ImGui for Stride through Hexa.NET.ImGui, and a few debug tools built on it: a scene hierarchy, an inspector and a performance monitor.
 
 ![](https://user-images.githubusercontent.com/5742236/55237373-563a1400-5232-11e9-8c24-beeaf127c0ac.png)
 
 ## How to:
 
-* Add this repo as a submodule of your game's repo.
-* Add a project reference pointing to this project inside your game's .csproj.
-* Reference Hexa.NET.ImGui's nuget package in your game's project, see below.
-```xml
-<ProjectReference Include="..\Stride.CommunityToolkit.ImGuiDebug.csproj" />
+* Add the package to your game's project:
 ```
-* Start ImGui within your game's BeginRun():
+dotnet add package Stride.CommunityToolkit.ImGui
+```
+* Start ImGui once the game is running, for example in the `start` callback of `game.Run`. The system registers itself with the game, so the instance need not be kept:
 ```cs
-using Stride.CommunityToolkit.ImGuiDebug;
-protected override void BeginRun()
-{
-    base.BeginRun();
-    new ImGuiSystem( Services, GraphicsDeviceManager );
-}
+using Stride.CommunityToolkit.ImGui;
+
+_ = new ImGuiSystem(game.Services);
 ```
 
 Builtin Debug interfaces:
 
 ```cs
-new HierarchyView( Services );
-new PerfMonitor( Services );
-Inspector.FindFreeInspector( Services ).Target = objectToInspect;
+using Stride.CommunityToolkit.ImGui.DebugTools;
+
+_ = new HierarchyView(game.Services);
+_ = new PerfMonitor(game.Services);
+Inspector.FindFreeInspector(game.Services).Target = objectToInspect;
 ```
 
 Example interface implementation:
 
 ```cs
-using System.Numerics;
-using static Hexa.NET.ImGui.ImGui;
-using static Stride.CommunityToolkit.ImGuiDebug.ImGuiExtension;
+using Hexa.NET.ImGui;
+using Stride.CommunityToolkit.ImGui;
+using Stride.Core;
 
-public class YourInterface : Stride.CommunityToolkit.ImGuiDebug.BaseWindow
+public sealed class YourInterface(IServiceRegistry services) : BaseWindow(services)
 {
-    bool my_tool_active;
-    Vector4 my_color;
-    float[] my_values = { 0.2f, 0.1f, 1.0f, 0.5f, 0.9f, 2.2f };
+    private bool _showStats = true;
+    private float _speed = 0.25f;
 
-    public YourInterface( Stride.Core.IServiceRegistry services ) : base( services )
+    protected override ImGuiWindowFlags WindowFlags => ImGuiWindowFlags.MenuBar;
+
+    protected override void OnDraw(bool collapsed)
     {
+        if (collapsed) return;
+
+        if (ImGui.BeginMenuBar())
+        {
+            if (ImGui.BeginMenu("File"))
+            {
+                if (ImGui.MenuItem("Reset")) _speed = 0.25f;
+
+                ImGui.EndMenu();
+            }
+
+            ImGui.EndMenuBar();
+        }
+
+        ImGui.SliderFloat("Speed", ref _speed, 0f, 2f);
+        ImGui.Checkbox("Show stats", ref _showStats);
+
+        if (_showStats) ImGui.Text($"Speed {_speed:0.00}");
     }
 
     protected override void OnDestroy()
     {
     }
-
-    protected override void OnDraw( bool collapsed )
-    {
-        if( collapsed )
-            return;
-
-        if( BeginMenuBar() )
-        {
-            if( BeginMenu( "File" ) )
-            {
-                if( MenuItem( "Open..", "Ctrl+O" ) ) { /* Do stuff */ }
-                if( MenuItem( "Save", "Ctrl+S" ) ) { /* Do stuff */ }
-                if( MenuItem( "Close", "Ctrl+W" ) ) { my_tool_active = false; }
-                EndMenu();
-            }
-            EndMenuBar();
-        }
-
-        // Edit a color (stored as ~4 floats)
-        ColorEdit4( "Color", ref my_color );
-
-        // Plot some values
-        PlotLines( "Frame Times", ref my_values[ 0 ], my_values.Length );
-
-        // Display contents in a scrolling region
-        TextColored( new Vector4( 1, 1, 0, 1 ), "Important Stuff" );
-        using( Child() )
-        {
-            for( int n = 0; n < 50; n++ )
-                Text( $"{n}: Some text" );
-        }
-    }
 }
-
 ```
+
+A window is created the same way as the debug tools, and draws every frame from then on:
+
+```cs
+_ = new YourInterface(game.Services);
+```
+
+`ImGuiExtension` has scopes that end themselves when disposed, for use with `using static Stride.CommunityToolkit.ImGui.ImGuiExtension`: `Child()`, `MenuBar(out open)`, `Menu(label, out open)`, `UCombo`, `UColumns`, `Tooltip(out open)` and `ID`.
+
+```cs
+using (Child())
+{
+    for (var n = 0; n < 50; n++) Text($"{n}: Some text");
+}
+```
+
+See `examples/code-only/E04_ImGui` for a complete working example.
 
 ## Add-ons
 
@@ -93,16 +93,13 @@ public class YourInterface : Stride.CommunityToolkit.ImGuiDebug.BaseWindow
 Add the Hexa.NET.ImNodes package
 `dotnet add package Hexa.NET.ImNodes`
 
-In your Game class add the `ImNodes` context after the `ImGuiSystem` and add the context to `ImNodes`
+Create the `ImNodes` context after the `ImGuiSystem` and hand it the ImGui context
 
 ```cs
-protected override void BeginRun()
-{
-    base.BeginRun();
-    var imGuiSystem = new ImGuiSystem(Services, GraphicsDeviceManager);
-    ImNodesContextPtr = ImNodes.CreateContext();
-    ImNodes.SetImGuiContext(imGuiSystem.ImGuiContext);
-}
+var imGuiSystem = new ImGuiSystem(game.Services);
+
+ImNodes.CreateContext();
+ImNodes.SetImGuiContext(imGuiSystem.ImGuiContext);
 ```
 
 Create ImNodes widgets as needed
@@ -110,7 +107,7 @@ Create ImNodes widgets as needed
 ```cs
 using Hexa.NET.ImNodes;
 using Stride.Core;
-using Stride.CommunityToolkit.ImGuiDebug;
+using Stride.CommunityToolkit.ImGui;
 using static Hexa.NET.ImGui.ImGui;
 using static Hexa.NET.ImNodes.ImNodes;
 

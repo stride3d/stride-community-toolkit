@@ -1,6 +1,7 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
 using Stride.Games;
+using System.Diagnostics;
 using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Engine;
@@ -100,7 +101,7 @@ public class SceneSearchGameTests
         var gameThread = -1;
         var actionThread = -2;
         var result = -1;
-        var frames = 0;
+        var clock = Stopwatch.StartNew();
         Task<int>? asyncResult = null;
 
         game.Run(SceneSetup.None, start: _ =>
@@ -120,7 +121,7 @@ public class SceneSearchGameTests
                 result = asyncResult.Result;
                 game.Exit();
             }
-            else if (++frames > 600)
+            else if (clock.Elapsed > TimeSpan.FromSeconds(5))
             {
                 game.Exit();
             }
@@ -137,8 +138,9 @@ public class SceneSearchGameTests
         Scene scene = null!;
         IGame game = null!;
 
-        Assert.Throws<ArgumentNullException>(() => scene.GetComponentsInScene<CameraComponent>());
-        Assert.Throws<ArgumentNullException>(() => game.GetComponentsInScene<CameraComponent>());
-        Assert.Throws<ArgumentNullException>(() => scene.GetCamera("Main"));
+        Assert.Multiple(
+            () => Assert.Throws<ArgumentNullException>(() => scene.GetComponentsInScene<CameraComponent>()),
+            () => Assert.Throws<ArgumentNullException>(() => game.GetComponentsInScene<CameraComponent>()),
+            () => Assert.Throws<ArgumentNullException>(() => scene.GetCamera("Main")));
     }
 }

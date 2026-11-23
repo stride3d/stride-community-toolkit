@@ -98,11 +98,9 @@ public static class ImmediateDebugPrimitives
     /// <returns>A <see cref="Vector3"/> representing the position on the circle.</returns>
     public static Vector3 GetCircleVector(int i, int tessellation)
     {
-        var angle = (float)(i * 2.0 * Math.PI / tessellation);
-        var dx = (float)Math.Sin(angle);
-        var dz = (float)Math.Cos(angle);
+        var (sin, cos) = MathF.SinCos(MathUtil.TwoPi * i / tessellation);
 
-        return new Vector3(dx, 0, dz);
+        return new Vector3(sin, 0f, cos);
     }
 
     /// <summary>
@@ -111,7 +109,7 @@ public static class ImmediateDebugPrimitives
     /// <param name="primitiveData">The source geometric mesh data.</param>
     /// <param name="vertices">The destination vertex array.</param>
     /// <param name="indices">The destination index array.</param>
-    public static void CopyFromGeometricPrimitive(GeometricMeshData<VertexPositionNormalTexture> primitiveData, ref VertexPositionTexture[] vertices, ref int[] indices)
+    public static void CopyFromGeometricPrimitive(GeometricMeshData<VertexPositionNormalTexture> primitiveData, VertexPositionTexture[] vertices, int[] indices)
     {
         for (var i = 0; i < vertices.Length; ++i)
         {
@@ -137,7 +135,7 @@ public static class ImmediateDebugPrimitives
         var vertices = new VertexPositionTexture[quadMeshData.Vertices.Length];
         var indices = new int[quadMeshData.Indices.Length];
 
-        CopyFromGeometricPrimitive(quadMeshData, ref vertices, ref indices);
+        CopyFromGeometricPrimitive(quadMeshData, vertices, indices);
 
         // transform it because in its default orientation it isn't flat to the normal up
         var rotation = Quaternion.BetweenDirections(Vector3.UnitZ, Vector3.UnitY);
@@ -173,7 +171,7 @@ public static class ImmediateDebugPrimitives
         var vertices = new VertexPositionTexture[cubeMeshData.Vertices.Length];
         var indices = new int[cubeMeshData.Indices.Length];
 
-        CopyFromGeometricPrimitive(cubeMeshData, ref vertices, ref indices);
+        CopyFromGeometricPrimitive(cubeMeshData, vertices, indices);
 
         return (vertices, indices);
     }

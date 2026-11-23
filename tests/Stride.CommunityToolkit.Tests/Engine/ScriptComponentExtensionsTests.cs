@@ -6,6 +6,8 @@ using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Engine;
 
+using Answer = (CameraComponent? ByDefault, CameraComponent? ByName, CameraComponent? Missing, CameraComponent? First);
+
 /// <summary>
 /// The camera lookups on <see cref="ScriptComponentExtensions"/> read the graphics compositor's slots, so they
 /// need a script running in a game whose compositor has slots: a headless game with a compositor that has
@@ -92,11 +94,5 @@ public class ScriptComponentExtensionsTests
             Result = Ask(this);
             Answered = true;
         }
-    }
-
-    private record struct Answer(CameraComponent? ByDefault, CameraComponent? ByName, CameraComponent? Missing, CameraComponent? First)
-    {
-        public static implicit operator Answer((CameraComponent?, CameraComponent?, CameraComponent?, CameraComponent?) tuple)
-            => new(tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4);
     }
 }

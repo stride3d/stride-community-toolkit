@@ -27,7 +27,7 @@ internal sealed class TextScene : IGoldScene
         var cube = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions
         {
             EntityName = "Cube",
-            Material = game.CreateMaterial(new Color(96, 103, 116), metalness: 0.1f, glossiness: 0.35f),
+            Material = GoldSetup.PillarMaterial(game),
             Position = new Vector3(0f, 0.5f, 0f),
         });
 

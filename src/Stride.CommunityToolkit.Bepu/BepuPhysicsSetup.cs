@@ -15,13 +15,13 @@ namespace Stride.CommunityToolkit.Bepu;
 public sealed class BepuPhysicsSetup : PhysicsSetupBase
 {
     /// <inheritdoc/>
-    public override void AddBody(Entity entity, Primitive3D shape, PrimitiveEntityOptions? options)
+    public override void AddBody(Entity entity, Primitive3D shape, PrimitiveEntityOptions options)
         => entity.AddBepuPhysics(shape, Carry(options));
 
     /// <inheritdoc/>
-    public override void AddBody(Entity entity, Primitive2D shape, PrimitiveEntityOptions? options)
+    public override void AddBody(Entity entity, Primitive2D shape, PrimitiveEntityOptions options)
         => entity.AddBepuPhysics(shape, Carry(options));
 
-    private static BepuPhysicsOptions Carry(PrimitiveEntityOptions? options)
-        => options as BepuPhysicsOptions ?? new BepuPhysicsOptions { Body = options?.Body ?? BodyMode.Dynamic };
+    private static BepuPhysicsOptions Carry(PrimitiveEntityOptions options)
+        => options as BepuPhysicsOptions ?? new BepuPhysicsOptions { Body = options.Body };
 }

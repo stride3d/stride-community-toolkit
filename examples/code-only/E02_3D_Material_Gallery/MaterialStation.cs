@@ -99,14 +99,11 @@ public sealed class MaterialStation : GalleryStation
         model.Materials.Clear();
         model.Materials.Add(material);
 
-        var entity = new Entity($"Station {Number} model")
+        var entity = new Entity($"Station {Number} model", At(local), FacingRotation() * (rotation ?? Quaternion.Identity), new Vector3(scale))
         {
             new ModelComponent(model) { IsShadowCaster = castShadows },
         };
 
-        entity.Transform.Position = At(local);
-        entity.Transform.Rotation = FacingRotation() * (rotation ?? Quaternion.Identity);
-        entity.Transform.Scale = new Vector3(scale);
         entity.Scene = Scene;
         _entities.Add(entity);
 

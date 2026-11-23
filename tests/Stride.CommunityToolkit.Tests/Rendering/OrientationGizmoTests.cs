@@ -16,8 +16,6 @@ namespace Stride.CommunityToolkit.Tests.Rendering;
 /// </summary>
 public class OrientationGizmoMathTests
 {
-    private const float Tolerance = 1e-5f;
-
     [Fact]
     public void AnUnrotatedCameraSeesXRightYUpAndZTowardsIt()
     {
@@ -27,17 +25,17 @@ public class OrientationGizmoMathTests
         var y = Positive(ends, 1);
         var z = Positive(ends, 2);
 
-        Assert.Equal(1f, x.Direction.X, Tolerance);
-        Assert.Equal(0f, x.Direction.Y, Tolerance);
-        Assert.Equal(0f, x.Depth, Tolerance);
+        Assert.Equal(1f, x.Direction.X, Tolerances.Float);
+        Assert.Equal(0f, x.Direction.Y, Tolerances.Float);
+        Assert.Equal(0f, x.Depth, Tolerances.Float);
 
         // Screen Y points down, so up on the screen is a negative Y
-        Assert.Equal(0f, y.Direction.X, Tolerance);
-        Assert.Equal(-1f, y.Direction.Y, Tolerance);
+        Assert.Equal(0f, y.Direction.X, Tolerances.Float);
+        Assert.Equal(-1f, y.Direction.Y, Tolerances.Float);
 
         // The camera looks down -Z, so +Z comes straight at it: no screen offset, full depth
-        Assert.Equal(0f, z.Direction.Length(), Tolerance);
-        Assert.Equal(1f, z.Depth, Tolerance);
+        Assert.Equal(0f, z.Direction.Length(), Tolerances.Float);
+        Assert.Equal(1f, z.Depth, Tolerances.Float);
     }
 
     [Fact]
@@ -47,10 +45,10 @@ public class OrientationGizmoMathTests
 
         var ends = Project(view);
 
-        Assert.Equal(1f, Positive(ends, 0).Depth, Tolerance);
-        Assert.Equal(-1f, Positive(ends, 2).Direction.X, Tolerance);
-        Assert.Equal(0f, Positive(ends, 2).Depth, Tolerance);
-        Assert.Equal(-1f, Positive(ends, 1).Direction.Y, Tolerance);
+        Assert.Equal(1f, Positive(ends, 0).Depth, Tolerances.Float);
+        Assert.Equal(-1f, Positive(ends, 2).Direction.X, Tolerances.Float);
+        Assert.Equal(0f, Positive(ends, 2).Depth, Tolerances.Float);
+        Assert.Equal(-1f, Positive(ends, 1).Direction.Y, Tolerances.Float);
     }
 
     [Fact]
@@ -65,9 +63,9 @@ public class OrientationGizmoMathTests
             var positive = Positive(ends, axis);
             var negative = Assert.Single(ends, end => end.Axis == axis && !end.Positive);
 
-            Assert.Equal(-positive.Direction.X, negative.Direction.X, Tolerance);
-            Assert.Equal(-positive.Direction.Y, negative.Direction.Y, Tolerance);
-            Assert.Equal(-positive.Depth, negative.Depth, Tolerance);
+            Assert.Equal(-positive.Direction.X, negative.Direction.X, Tolerances.Float);
+            Assert.Equal(-positive.Direction.Y, negative.Direction.Y, Tolerances.Float);
+            Assert.Equal(-positive.Depth, negative.Depth, Tolerances.Float);
         }
     }
 
@@ -120,7 +118,7 @@ public class OrientationGizmoGameTests
         var renderers = -1;
         var anchor = Anchor.TopLeft;
 
-        game.Run(new SceneSetup3D { Camera = null, Lighting = null, Skybox = null, Ground = null }, start: _ =>
+        game.Run(TestSetups.Bare(), start: _ =>
         {
             var first = game.AddOrientationGizmo(Anchor.BottomRight);
             var second = game.AddOrientationGizmo(Anchor.BottomRight);

@@ -1,9 +1,9 @@
-using Stride.Core.Mathematics;
 using Stride.Graphics;
 using Stride.Rendering.ComputeEffect.GGXPrefiltering;
 using Stride.Rendering.ComputeEffect.LambertianPrefiltering;
 using Stride.Rendering.Skyboxes;
 using Stride.Shaders;
+using System.Numerics;
 
 namespace Stride.CommunityToolkit.Rendering;
 
@@ -77,9 +77,9 @@ public static class SkyboxGenerator
 
         if (skyboxTexture.ViewDimension == TextureDimension.Texture2D)
         {
-            // Maximum resolution is around the horizontal middle line, which composes 4 images.
-            // Clamped at 1 so a very small source cannot reach Math.Log(0).
-            var cubemapSize = (int)Math.Pow(2, Math.Ceiling(Math.Log2(Math.Max(1, skyboxTexture.Width / 4))));
+            // Maximum resolution is around the horizontal middle line, which composes 4 images, rounded up
+            // to a power of two. Clamped at 1 so a very small source does not round to 0.
+            var cubemapSize = (int)BitOperations.RoundUpToPowerOf2((uint)Math.Max(1, skyboxTexture.Width / 4));
 
             generatedCubemap = CubemapFromTextureRenderer.GenerateCubemap(context.Services, context.RenderDrawContext, skyboxTexture, cubemapSize);
             skyboxTexture = generatedCubemap;
@@ -111,20 +111,20 @@ public static class SkyboxGenerator
     /// </summary>
     private static void ApplyDiffuseLighting(Skybox skybox, SkyboxGeneratorContext context, Texture skyboxTexture)
     {
-        using var lamberFiltering = new LambertianPrefilteringSHNoCompute(context.RenderContext)
+        using var lambertFiltering = new LambertianPrefilteringSHNoCompute(context.RenderContext)
         {
             HarmonicOrder = 3,
             RadianceMap = skyboxTexture
         };
 
-        lamberFiltering.Draw(context.RenderDrawContext);
+        lambertFiltering.Draw(context.RenderDrawContext);
 
-        var coefficients = lamberFiltering.PrefilteredLambertianSH.Coefficients;
+        var coefficients = lambertFiltering.PrefilteredLambertianSH.Coefficients;
 
         for (int i = 0; i < coefficients.Length; i++)
             coefficients[i] *= SphericalHarmonics.BaseCoefficients[i];
 
-        skybox.DiffuseLightingParameters.Set(SkyboxKeys.Shader, new ShaderClassSource("SphericalHarmonicsEnvironmentColor", lamberFiltering.HarmonicOrder));
+        skybox.DiffuseLightingParameters.Set(SkyboxKeys.Shader, new ShaderClassSource("SphericalHarmonicsEnvironmentColor", lambertFiltering.HarmonicOrder));
         skybox.DiffuseLightingParameters.Set(SphericalHarmonicsEnvironmentColorKeys.SphericalColors, coefficients);
     }
 

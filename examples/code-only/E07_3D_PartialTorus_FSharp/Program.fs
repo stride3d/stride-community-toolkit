@@ -7,26 +7,8 @@ open Stride.CommunityToolkit.Rendering
 open Stride.Graphics
 open System
 open Stride.Rendering
-open Stride.Rendering.Materials
-open Stride.Rendering.Materials.ComputeColors
 
 let game = new Game()
-
-let CreateMaterial (game: Game) : Material =
-    Material.New(
-        game.GraphicsDevice,
-        MaterialDescriptor(
-            Attributes = MaterialAttributes(
-                    MicroSurface =  MaterialGlossinessMapFeature(GlossinessMap = ComputeFloat(0.9f)),
-                    Diffuse = MaterialDiffuseMapFeature(DiffuseMap = ComputeColor(Color4(1.0f, 0.3f, 0.5f, 1.0f))),
-                    DiffuseModel = MaterialDiffuseLambertModelFeature(),
-                    Specular = MaterialMetalnessMapFeature(MetalnessMap = ComputeFloat(0.0f)),
-                    SpecularModel = MaterialSpecularMicrofacetModelFeature(
-                            Environment = MaterialSpecularMicrofacetEnvironmentGGXPolynomial()
-                        )
-                )
-        )
-    )
 
 let CreateMeshEntity (graphicsDevice:GraphicsDevice) (scene:Scene) (position:Vector3) (build:MeshBuilder -> unit) =
     use meshBuilder = new MeshBuilder()
@@ -34,7 +16,7 @@ let CreateMeshEntity (graphicsDevice:GraphicsDevice) (scene:Scene) (position:Vec
     build(meshBuilder)
 
     let model = new Model()
-    model.Add(MaterialInstance(Material = CreateMaterial(game)))
+    model.Add(MaterialInstance(Material = game.CreateMaterial(Color(255uy, 77uy, 128uy), metalness = 0.0f, glossiness = 0.9f)))
     model.Add(Mesh(
         Draw = meshBuilder.ToMeshDraw(graphicsDevice),
         MaterialIndex = 0
@@ -95,9 +77,7 @@ let BuildPartialTorusMesh (meshBuilder:MeshBuilder) cylinderRadius torusAngle be
         meshBuilder.AddIndex(i_next)
         meshBuilder.AddIndex(i_next + circumferenceStepsCount)
 
-let Start rootScene =
-    game.AddProfiler() |> ignore
-
+let Start scene =
     // Torus parameters
     let cylinderRadius = 0.3f
     let torusAngle = 270.0f
@@ -107,7 +87,7 @@ let Start rootScene =
 
     CreateMeshEntity
         game.GraphicsDevice
-        rootScene
+        scene
         (Vector3(0.0f, 1.0f, 0.0f))
         (fun b -> BuildPartialTorusMesh b (float cylinderRadius) (float torusAngle) (float bendRadius) circumferenceStepsCount bendSegmentSteps)
     |> ignore

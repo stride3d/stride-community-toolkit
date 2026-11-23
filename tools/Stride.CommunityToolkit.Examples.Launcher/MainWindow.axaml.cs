@@ -1,5 +1,5 @@
 using Avalonia.Controls;
-using Avalonia.Input;
+using Avalonia.Input.Platform;
 using Avalonia.Threading;
 using Stride.CommunityToolkit.Examples.Core;
 using System.Collections.ObjectModel;
@@ -12,6 +12,12 @@ public partial class MainWindow : Window
 {
     private readonly ObservableCollection<ExampleListItem> _visible = [];
     private readonly List<ExampleEntry> _all = [];
+    private int _notRunnable;
+
+    // The log text, and whether a refresh of the panel is already queued
+    private readonly StringBuilder _log = new();
+    private bool _logRefreshQueued;
+
     private Process? _running;
     private CancellationTokenSource? _cts;
 
@@ -23,18 +29,15 @@ public partial class MainWindow : Window
 
         LoadExamples();
 
-        SearchBox.PropertyChanged += (_, e) =>
-        {
-            if (e.Property.Name == nameof(TextBox.Text)) Filter(SearchBox.Text);
-        };
+        SearchBox.TextChanged += (_, _) => Filter(SearchBox.Text);
 
         ExamplesList.SelectionChanged += (_, _) => ShowDetails(Current);
 
         BtnRun.Click += async (_, _) => await RunSelectedAsync();
         BtnStop.Click += (_, _) => StopRunning();
         BtnOpenFolder.Click += (_, _) => OpenFolder();
-        BtnCopyCmd.Click += (_, _) => CopyCommand();
-        BtnClearLog.Click += (_, _) => LogPanel.Text = string.Empty;
+        BtnCopyCmd.Click += async (_, _) => await CopyCommandAsync();
+        BtnClearLog.Click += (_, _) => ClearLog();
     }
 
     private ExampleEntry? Current => (ExamplesList.SelectedItem as ExampleListItem)?.Entry;
@@ -60,6 +63,8 @@ public partial class MainWindow : Window
             return;
         }
 
+        _notRunnable = _all.Count(entry => !entry.IsRunnable);
+
         Filter(null);
     }
 
@@ -74,10 +79,8 @@ public partial class MainWindow : Window
             if (Matches(entry, text)) _visible.Add(new ExampleListItem(entry));
         }
 
-        var notRunnable = _all.Count(entry => !entry.IsRunnable);
-
-        CountLabel.Text = notRunnable > 0
-            ? $"{_visible.Count} of {_all.Count} examples · {notRunnable} not found on disk"
+        CountLabel.Text = _notRunnable > 0
+            ? $"{_visible.Count} of {_all.Count} examples · {_notRunnable} not found on disk"
             : $"{_visible.Count} of {_all.Count} examples";
     }
 
@@ -135,7 +138,7 @@ public partial class MainWindow : Window
 
         StopRunning();
 
-        LogPanel.Text = string.Empty;
+        ClearLog();
         AppendLine($"▶️ Starting: {entry.Title}");
         AppendLine($"📁 {entry.RunTarget}");
         AppendLine(new string('-', 80));
@@ -166,13 +169,22 @@ public partial class MainWindow : Window
                 Task.Run(() => ReadLinesAsync(process.StandardOutput, isError: false, token)),
                 Task.Run(() => ReadLinesAsync(process.StandardError, isError: true, token)));
 
-            process.WaitForExit();
+            // Stop, or Run on another example, disposed this process while the readers were draining
+            if (token.IsCancellationRequested) return;
+
+            await process.WaitForExitAsync(token);
             AppendLine($"✅ Process exited with code: {process.ExitCode}");
+        }
+        catch (OperationCanceledException)
+        {
+            // Stopped on purpose; StopRunning already said so
         }
         catch (Exception ex)
         {
             AppendLine($"❌ Error: {ex.Message}");
-            StopRunning();
+
+            // Only this run's process: by now _running may be the next example, started while this one was ending
+            if (ReferenceEquals(_running, process)) StopRunning();
         }
     }
 
@@ -221,14 +233,29 @@ public partial class MainWindow : Window
     {
         Dispatcher.UIThread.Post(() =>
         {
-            var log = new StringBuilder(LogPanel.Text ?? string.Empty);
+            if (_log.Length > 0) _log.AppendLine();
+            if (isError) _log.Append("❌ ");
 
-            if (log.Length > 0) log.AppendLine();
-            if (isError) log.Append("❌ ");
+            _log.Append(text);
 
-            log.Append(text);
-            LogPanel.Text = log.ToString();
+            if (_logRefreshQueued) return;
+
+            // An example prints hundreds of lines as it starts. The panel takes the text once the lines
+            // already waiting have been appended, and not once for each of them.
+            _logRefreshQueued = true;
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                _logRefreshQueued = false;
+                LogPanel.Text = _log.ToString();
+            }, DispatcherPriority.Background);
         });
+    }
+
+    private void ClearLog()
+    {
+        _log.Clear();
+        LogPanel.Text = string.Empty;
     }
 
     private void OpenFolder()
@@ -252,22 +279,17 @@ public partial class MainWindow : Window
         }
     }
 
-    private void CopyCommand()
+    private async Task CopyCommandAsync()
     {
-        if (Current is not { } entry) return;
+        if (Current is not { } entry || Clipboard is not { } clipboard) return;
 
-        var cmd = entry.CommandLine;
+        var command = entry.CommandLine;
 
         try
         {
-            var item = new DataTransferItem();
-            item.SetText(cmd);
+            await clipboard.SetTextAsync(command);
 
-            var data = new DataTransfer();
-            data.Add(item);
-
-            Clipboard?.SetDataAsync(data);
-            AppendLine($"📋 Copied to clipboard: {cmd}");
+            AppendLine($"📋 Copied to clipboard: {command}");
         }
         catch (Exception ex)
         {

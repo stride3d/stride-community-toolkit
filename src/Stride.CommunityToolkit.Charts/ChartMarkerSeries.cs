@@ -32,7 +32,7 @@ public sealed class ChartMarkerSeries : ChartSeries
         var o = Chart.Options;
 
         // Just above the curves' layer, so the depth test keeps markers on top of a curve they sit on
-        var lift = 2.5f * Chart.LayerStep;
+        var lift = Chart.MarkerLayer;
 
         foreach (var p in Points)
         {

@@ -25,18 +25,6 @@ namespace Stride.CommunityToolkit.Shapes;
 [StructLayout(LayoutKind.Sequential)]
 internal readonly struct ShapeInstance
 {
-    /// <summary>Bit 2 of the GPU flags: the fill runs from <see cref="FillColor"/> to <see cref="GradientColor"/> along the gradient direction.</summary>
-    internal const int GradientFlag = 4;
-
-    /// <summary>Bit 5 of the GPU flags: the glow adds light rather than covering what is behind it.</summary>
-    internal const int AdditiveGlowFlag = 32;
-
-    /// <summary>The fill is multiplied by the batch's fill source.</summary>
-    internal const int TexturedFlag = 128;
-
-    /// <summary>Position and points are pixels from the top left of the viewport, not a plane in the world.</summary>
-    internal const int ScreenFlag = 256;
-
     /// <summary>xyz: world position of the local origin; w: plane mode.</summary>
     public readonly Vector4 Position;
 
@@ -89,7 +77,7 @@ internal readonly struct ShapeInstance
         PointOffset = run.Offset;
         Count = run.Count;
         Radius = radius;
-        Flags = slice.Flags | (style.Gradient.Enabled ? GradientFlag : 0) | (style.Glow.Additive ? AdditiveGlowFlag : 0) | (style.Textured ? TexturedFlag : 0) | (style.Screen ? ScreenFlag : 0);
+        Flags = (int)(slice.Flags | (style.Gradient.Enabled ? ShapeFlags.Gradient : 0) | (style.Glow.Additive ? ShapeFlags.AdditiveGlow : 0) | (style.Textured ? ShapeFlags.Textured : 0) | (style.Screen ? ShapeFlags.Screen : 0));
         Color = style.Color;
         FillColor = style.FillColor;
         GlowColor = style.Glow.Color;
@@ -98,6 +86,10 @@ internal readonly struct ShapeInstance
         _dash = new DashData(style.Dash.Length, style.Dash.Gap, style.Dash.Phase, slice.RunOffset);
         _gradient = new GradientData(style.Gradient.Direction, style.Opacity, style.DepthFade);
     }
+
+    // The three structs below take their values through primary constructors, used only in field initializers.
+    // A parameter used in a method body would become a hidden field and shift the GPU layout with no compile
+    // error; ShapeBatchSubmissionTests pins the size.
 
     /// <summary>Which part of the shape is kept, plus the glow width in the spare slot.</summary>
     [StructLayout(LayoutKind.Sequential)]

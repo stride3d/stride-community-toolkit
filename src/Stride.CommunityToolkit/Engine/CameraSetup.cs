@@ -15,12 +15,16 @@ namespace Stride.CommunityToolkit.Engine;
 /// <see cref="GameExtensions.Add3DCamera"/> uses for its <c>initialRotation</c>, and the order the camera controller's F2 panel prints.
 /// </param>
 /// <param name="Controller">Whether the camera controller is added, after the camera is aimed, so its reset pose is the aimed one.</param>
-/// <param name="Name">The entity name, which <see cref="GameExtensions.GetCameraEntity"/> finds it by.</param>
 /// <param name="HelpPosition">Where the 3D controller's key help goes, or <see langword="null"/> for the overlay's own anchor.</param>
 /// <param name="OrthographicSize">The height of the view in world units for an orthographic camera, or <see langword="null"/> for the engine's default of 10.</param>
-/// <param name="ShowHelp">Whether the 3D controller puts its key help on the overlay at all.</param>
-public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Position, Vector3 Rotation, bool Controller = false, string Name = CameraDefaults.MainCameraName, Anchor? HelpPosition = null, float? OrthographicSize = null, bool ShowHelp = true)
+public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Position, Vector3 Rotation, bool Controller = false, Anchor? HelpPosition = null, float? OrthographicSize = null)
 {
+    /// <summary>The entity name, which <see cref="GameExtensions.GetCameraEntity"/> finds it by. Defaults to <see cref="CameraDefaults.MainCameraName"/>.</summary>
+    public string Name { get; init; } = CameraDefaults.MainCameraName;
+
+    /// <summary>Whether the 3D controller puts its key help on the overlay at all. Defaults to <see langword="true"/>.</summary>
+    public bool ShowHelp { get; init; } = true;
+
     /// <summary>A perspective camera, at <see cref="CameraDefaults.Initial3DPosition"/> looking at the origin unless told otherwise.</summary>
     /// <param name="position">The initial position, or <see langword="null"/> for <see cref="CameraDefaults.Initial3DPosition"/>.</param>
     /// <param name="rotation">The initial rotation in degrees, <c>X = Yaw</c>, <c>Y = Pitch</c>, <c>Z = Roll</c>, or <see langword="null"/> for <see cref="CameraDefaults.Initial3DRotation"/>.</param>

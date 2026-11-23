@@ -34,7 +34,8 @@ const float LaneOffset = 3.5f;
 const int RightSubsteps = 4;
 
 var topBlocks = new BodyComponent?[2];
-var lanes = new List<Entity>[] { [], [] };
+List<Entity>[] lanes = [[], []];
+Color[] laneColours = [new(230, 140, 80), new(90, 190, 130)];
 
 using var game = new Game();
 
@@ -89,22 +90,20 @@ void Build(Scene scene)
 
         lanes[lane].Clear();
 
-        var x = lane == LeftSimulation ? -LaneOffset : LaneOffset;
-        var colour = lane == LeftSimulation ? new Color(230, 140, 80) : new Color(90, 190, 130);
-        var material = game.CreateMaterial(colour, metalness: 0f, glossiness: 0.4f);
+        var material = game.CreateMaterial(laneColours[lane], metalness: 0f, glossiness: 0.4f);
 
         for (var i = 0; i < StackHeight; i++)
         {
-            var block = AddBlock(scene, $"Block {i + 1}", Primitive3D.Cube(BlockSize), material, new Vector3(x, BlockSize * (i + 0.5f), 0f), lane);
+            var block = AddBlock(scene, $"Block {i + 1}", material, new Vector3(LaneX(lane), BlockSize * (i + 0.5f), 0f), lane);
 
             if (i == StackHeight - 1) topBlocks[lane] = block.Get<BodyComponent>();
         }
     }
 }
 
-Entity AddBlock(Scene scene, string name, Primitive3D shape, Material material, Vector3 position, int lane)
+Entity AddBlock(Scene scene, string name, Material material, Vector3 position, int lane)
 {
-    var block = game.CreatePrimitive(shape, new BepuPhysicsOptions
+    var block = game.CreatePrimitive(Primitive3D.Cube(BlockSize), new BepuPhysicsOptions
     {
         EntityName = name,
         Material = material,
@@ -128,17 +127,19 @@ float Drift(int lane)
     if (topBlocks[lane] is not { } top) return 0f;
 
     var position = top.Entity.Transform.Position;
-    var axis = lane == LeftSimulation ? -LaneOffset : LaneOffset;
 
-    return new Vector2(position.X - axis, position.Z).Length();
+    return new Vector2(position.X - LaneX(lane), position.Z).Length();
 }
+
+// Where a lane's stack stands on X
+static float LaneX(int lane) => lane == LeftSimulation ? -LaneOffset : LaneOffset;
 
 IReadOnlyList<TextElement> BuildOverlayLines() =>
 [
     new("Space", "Build both stacks again", Color.Gold),
     new(""),
-    new($"Left: 1 substep, top block drift {Drift(LeftSimulation):0.00} m", new Color(230, 140, 80)),
-    new($"Right: {RightSubsteps} substeps, top block drift {Drift(RightSimulation):0.00} m", new Color(90, 190, 130)),
+    new($"Left: 1 substep, top block drift {Drift(LeftSimulation):0.00} m", laneColours[LeftSimulation]),
+    new($"Right: {RightSubsteps} substeps, top block drift {Drift(RightSimulation):0.00} m", laneColours[RightSimulation]),
     new("Both with one velocity iteration", Color.LightGray),
 ];
 

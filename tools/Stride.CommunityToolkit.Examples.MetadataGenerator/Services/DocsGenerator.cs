@@ -18,7 +18,7 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
     /// Generates every documentation file for a set of examples.
     /// </summary>
     /// <param name="examples">The published examples, in manifest order.</param>
-    /// <param name="docsDirectory">The <c>docs/manual/code-only/examples</c> folder.</param>
+    /// <param name="docsDirectory">The <c>docs/manual/code-only/examples</c> folder, which must exist.</param>
     /// <param name="mediaDirectory">The screenshot folder, used to decide whether to link an image.</param>
     /// <param name="dryRun">When <see langword="true"/>, report what would change and write nothing.</param>
     /// <returns>The number of files written, or that would be written.</returns>
@@ -34,11 +34,6 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
         _written = 0;
         _skipped = 0;
         _unchanged = 0;
-
-        if (!docsDirectory.Exists)
-        {
-            throw new InvalidOperationException($"Docs directory does not exist: {docsDirectory.FullName}");
-        }
 
         var builder = new DocPageBuilder(mediaDirectory);
         var documented = examples.Where(example => example.Docs != false).ToList();
@@ -184,7 +179,7 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
 
             foreach (var example in group.Examples)
             {
-                var name = example.TocName ?? example.Title?.GetValueOrDefault("en") ?? example.Slug;
+                var name = example.TocName ?? example.TitleFor(ExampleMetadata.FallbackLanguage) ?? example.Slug;
 
                 toc.AppendLine($"  - name: {YamlScalar(name)}");
                 toc.AppendLine($"    href: {example.Slug}.md");
@@ -197,11 +192,10 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
     /// <summary>
     /// Groups examples the way the toc presents them, preserving the manifest's ordering.
     /// </summary>
-    private static IEnumerable<(string Language, string Level, IReadOnlyList<ExampleMetadata> Examples)> GroupByLanguageAndLevel(
-        IReadOnlyList<ExampleMetadata> examples)
+    private static IEnumerable<ExampleGroup> GroupByLanguageAndLevel(IReadOnlyList<ExampleMetadata> examples)
         => examples
             .GroupBy(example => (Language: example.EffectiveLanguage, Level: example.Level ?? MetadataVocabulary.Other))
-            .Select(group => (group.Key.Language, group.Key.Level, (IReadOnlyList<ExampleMetadata>)[.. group]));
+            .Select(group => new ExampleGroup(group.Key.Language, group.Key.Level, [.. group]));
 
     /// <summary>
     /// Writes a file the generator owns, unless a person has taken it over.

@@ -88,16 +88,8 @@ internal sealed class GalleryBoard
         _textTopLeft = _centre - _right * (half.X - Inset) + _up * (half.Y - 0.5f);
         _lineWidth = Width - 2f * Inset;
 
-        var entity = new Entity("Index board")
-        {
-            Transform =
-            {
-                Position = _textTopLeft + towardsCamera * 0.01f,
-                Rotation = homeRotation,
-            },
-        };
+        var entity = new Entity("Index board", _textTopLeft + towardsCamera * 0.01f, homeRotation) { list };
 
-        entity.Add(list);
         entity.Scene = scene;
     }
 

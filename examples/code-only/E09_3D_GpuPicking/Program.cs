@@ -68,11 +68,13 @@ void Start(Scene scene)
 
     // The hover glow, a shell that moves onto whatever is under the mouse, kept out of the picking pass
     hover = new HighlightShell(game.CreateMaterial(MaterialDescriptors.Highlight(Color.Cyan)));
-    picker.Pickable = RenderGroupMask.All & ~RenderGroupMask.Group30;
+
+    // Everything but the shell's own render group
+    picker.Pickable = RenderGroupMask.All & ~(RenderGroupMask)(1u << (int)hover.RenderGroup);
 
     var overlay = TextOverlay.GetOrCreate(game);
     overlay.AddSection("Picking", BuildOverlayLines);
-    overlay.SetPosition(Anchor.BottomLeft);
+    overlay.Position = Anchor.BottomLeft;
 }
 
 void Update(Scene scene, GameTime time)
@@ -140,7 +142,7 @@ void BuildScene(Scene scene)
 
     for (var i = 0; i < colours.Length; i++)
     {
-        var angle = i * MathF.Tau / colours.Length;
+        var angle = i * MathUtil.TwoPi / colours.Length;
         var height = 2f + (i % 3) * 1.2f;
 
         var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new PrimitiveEntityOptions

@@ -26,7 +26,7 @@ using Buffer = Stride.Graphics.Buffer;
 // caller owns. Point the first at the second and the simulation and the rendering never leave the
 // card.
 //
-// SPACE freezes the flock, R scatters it again, 1-3 change how many boids there are.
+// SPACE freezes the flock, R scatters it again, 1 to 4 change how many boids there are.
 
 int[] boidCounts = [2048, 4096, 8192, 16384];
 
@@ -61,13 +61,7 @@ void Start(Scene scene)
     game.AddInstancingSupport();
 
     // The boid: a small cone, tip along +Y, which the shader points along the heading
-    //boidModel = game.GetOrCreateModel(Primitive3D.Cone(0.14f, 0.4f), game.CreateMaterial(new Color(255, 150, 40)));
-
-    boidModel = game.CreatePrimitive(Primitive3D.Cone(0.14f, 0.4f), new PrimitiveEntityOptions
-    {
-        Body = BodyMode.None,
-        Material = game.CreateMaterial(new Color(255, 150, 40)),
-    }).Get<ModelComponent>().Model;
+    boidModel = game.GetOrCreateModel(Primitive3D.Cone(0.14f, 0.4f), game.CreateMaterial(new Color(255, 150, 40)));
 
     Rebuild(scene);
 
@@ -135,7 +129,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     [
         new("Space", simulation.Paused ? "Resume" : "Freeze", Color.Yellow),
         new("R", "Scatter", Color.Yellow),
-        new([.. boidCounts.Select((_, i) => $"{i + 1}")], "Flock size", Color.Yellow),
+        new("1 - 4", "Flock size", Color.Yellow),
         new(""),
         new($"{simulation.Count} boids, {pairs / 1_000_000f:0.0} million pairs a frame", Color.LightGreen),
         new("All on the GPU: one dispatch, one instanced draw call,", Color.LightGray),
@@ -318,6 +312,12 @@ public sealed class BoidsComputeRenderer : SceneRendererBase
         parameters.Set(BoidsShaderKeys.InstanceWorldInverse, flock.WorldInverseBuffer);
 
         _compute.Draw(drawContext);
+
+        // Written, and read next: the mesh renderer binds the two matrix buffers as shader resources in
+        // this same frame. The transition is what lets it. On Direct3D 11 it unbinds them from the compute
+        // stage; left bound for writing there, the runtime refuses the read and the flock draws nothing.
+        drawContext.CommandList.ResourceBarrierTransition(flock.WorldBuffer, BarrierLayout.ShaderResource);
+        drawContext.CommandList.ResourceBarrierTransition(flock.WorldInverseBuffer, BarrierLayout.ShaderResource);
 
         flock.Swap();
     }

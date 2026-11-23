@@ -6,8 +6,7 @@ Extension methods for `ModelComponent`, in the `Stride.CommunityToolkit.Engine` 
 
 Useful when you are placing procedurally created entities and do not know their size up front.
 
-- [`GetModelSize()`](xref:Stride.CommunityToolkit.Engine.ModelComponentExtensions.GetModelSize(Stride.Engine.ModelComponent)) - Returns the size of the model's bounding box as a `Vector3`: width along X, height along Y and depth along Z.
-- [`GetMeshHeight()`](xref:Stride.CommunityToolkit.Engine.ModelComponentExtensions.GetMeshHeight(Stride.Engine.ModelComponent)) - Just the height, for the common case of standing something on the ground.
+- [`GetModelSize()`](xref:Stride.CommunityToolkit.Engine.ModelComponentExtensions.GetModelSize(Stride.Engine.ModelComponent)) - Returns the size of the model's bounding box as a `Vector3`: width along X, height along Y and depth along Z. `GetModelSize().Y` is the height, for the common case of standing something on the ground.
 - [`GetMeshVerticesAndIndices()`](xref:Stride.CommunityToolkit.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices(Stride.Engine.ModelComponent,Stride.Games.IGame)) - Reads the raw vertex and index data back out of the mesh, for building a collider or doing your own geometry work.
 
 ## Material parameters

@@ -8,7 +8,7 @@ using Stride.UI.Controls;
 
 namespace E04_StrideUI_DragAndDrop;
 
-public sealed class UIManager : IDisposable
+public sealed class UIManager
 {
     /// <summary>
     /// The root UI entity containing all UI elements.
@@ -29,10 +29,13 @@ public sealed class UIManager : IDisposable
     /// <param name="font">The font used in the UI.</param>
     /// <param name="onGenerateItems">The action the Generate Items button calls.</param>
     /// <exception cref="ArgumentNullException">Thrown if font or onGenerateItems is null.</exception>
-    public UIManager(SpriteFont? font, Action? onGenerateItems)
+    public UIManager(SpriteFont font, Action onGenerateItems)
     {
-        _font = font ?? throw new ArgumentNullException(nameof(font));
-        _onGenerateItems = onGenerateItems ?? throw new ArgumentNullException(nameof(onGenerateItems));
+        ArgumentNullException.ThrowIfNull(font);
+        ArgumentNullException.ThrowIfNull(onGenerateItems);
+
+        _font = font;
+        _onGenerateItems = onGenerateItems;
 
         Entity = new Entity
         {
@@ -52,7 +55,7 @@ public sealed class UIManager : IDisposable
     /// <param name="text">The text to display.</param>
     public void UpdateTextBlock(string text)
     {
-        if (_textBlock is not null) _textBlock.Text = text;
+        _textBlock?.Text = text;
     }
 
     private void CreateMainWindow()
@@ -117,7 +120,4 @@ public sealed class UIManager : IDisposable
         TextAlignment = TextAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center
     };
-
-    /// <summary>Disposes the UI entity and everything under it.</summary>
-    public void Dispose() => Entity.Dispose();
 }

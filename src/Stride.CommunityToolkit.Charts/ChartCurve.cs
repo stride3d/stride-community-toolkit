@@ -16,7 +16,7 @@ namespace Stride.CommunityToolkit.Charts;
 public sealed class ChartCurve : ChartSeries
 {
     // The most samples a re-sample may use, so a deep zoom-out cannot make a rebuild arbitrarily expensive
-    private const int MaxSamples = 8000;
+    internal const int MaxSamples = 8000;
 
     private readonly int _sampleCount;
     private readonly float _sampleDensity;

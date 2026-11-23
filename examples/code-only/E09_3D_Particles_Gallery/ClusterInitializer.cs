@@ -46,7 +46,7 @@ public sealed class ClusterInitializer : ParticleInitializer
             var seed = particle.Get(seeds);
 
             var nozzle = Nozzles[Math.Min((int)(seed.GetFloat(RandomOffset.Offset1A) * Nozzles.Count), Nozzles.Count - 1)];
-            var angle = seed.GetFloat(RandomOffset.Offset2A) * MathF.Tau;
+            var angle = seed.GetFloat(RandomOffset.Offset2A) * MathUtil.TwoPi;
             var radius = MathF.Sqrt(seed.GetFloat(RandomOffset.Offset2B)) * Radius;
             var (sin, cos) = MathF.SinCos(angle);
 

@@ -114,8 +114,6 @@ public static class MaterialDescriptors
             Emissive = new MaterialEmissiveMapFeature(new ComputeColor(colour)),
             Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(colour)),
             DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            Specular = null,
-            SpecularModel = null,
         },
     };
 

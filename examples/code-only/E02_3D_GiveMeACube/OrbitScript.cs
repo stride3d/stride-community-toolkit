@@ -68,19 +68,24 @@ public class OrbitScript : SyncScript
     /// </summary>
     public override void Update()
     {
-        // DeltaTime keeps the motion frame rate independent
-        _angle += AngularSpeed * Game.DeltaTime();
+        // DeltaTime keeps the motion frame rate independent. The angle wraps at a full turn, so it stays
+        // small and keeps its precision however long the scene runs
+        _angle = (_angle + AngularSpeed * Game.DeltaTime()) % MathUtil.TwoPi;
 
         if (_body is null) return;
 
         // Move the body with a velocity, never Entity.Transform.Position: the sync runs physics to
         // transform only, so a transform write moves the mesh, leaves the collider and pushes nothing.
 
-        // Velocity of a point travelling around a circle is the derivative of its position
-        var tangent = new Vector3(MathF.Cos(_angle), 0, -MathF.Sin(_angle)) * (AngularSpeed * Radius);
+        // The direction from the centre to where the body should be on the circle, one unit long
+        var radial = new Vector3(MathF.Sin(_angle), 0f, MathF.Cos(_angle));
+        var idealPosition = Centre + radial * Radius;
+
+        // A point on a circle travels at a right angle to its radius: the same direction turned a
+        // quarter turn, at the angular speed times the radius
+        var tangent = new Vector3(radial.Z, 0f, -radial.X) * (AngularSpeed * Radius);
 
         // Steer gently back onto the circle so small integration errors cannot accumulate
-        var idealPosition = Centre + new Vector3(MathF.Sin(_angle), 0, MathF.Cos(_angle)) * Radius;
         var correction = (idealPosition - _body.Position) * CorrectionStrength;
 
         _body.LinearVelocity = tangent + correction;

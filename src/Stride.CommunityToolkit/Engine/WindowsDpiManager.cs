@@ -116,16 +116,14 @@ public static class WindowsDpiManager
         if (!OperatingSystem.IsWindows()) return null;
         try
         {
-            var proc = Process.GetCurrentProcess().Handle;
-            if (NativeMethods.GetProcessDpiAwareness(proc, out var awareness) == 0)
+            using var process = Process.GetCurrentProcess();
+
+            if (NativeMethods.GetProcessDpiAwareness(process.Handle, out var awareness) == 0)
             {
-                return awareness switch
-                {
-                    NativeMethods.NativeProcessDpiAwareness.Process_DPI_Unaware => ProcessDpiAwareness.Unaware,
-                    NativeMethods.NativeProcessDpiAwareness.Process_System_DPI_Aware => ProcessDpiAwareness.System,
-                    NativeMethods.NativeProcessDpiAwareness.Process_Per_Monitor_DPI_Aware => ProcessDpiAwareness.PerMonitor,
-                    _ => null
-                };
+                // The two enums share their values by design, see NativeMethods
+                var result = (ProcessDpiAwareness)awareness;
+
+                return Enum.IsDefined(result) ? result : null;
             }
         }
         catch (Exception ex)

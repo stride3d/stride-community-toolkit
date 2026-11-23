@@ -41,7 +41,7 @@ var keepPng = false;
 string? outputDirectory = null;
 int? frameOverride = null;
 var timeout = TimeSpan.FromMinutes(5);
-bool updateIndex = false;
+var updateIndex = false;
 
 // The folder --review writes to. Gitignored, and at the repository root so it is easy to find.
 const string ReviewDirectory = "screenshots-review";
@@ -329,6 +329,14 @@ static string BuildIndex(List<JsonElement> examples, string directory, Dictionar
     // Teaching order, not alphabetical: the sheet is read top to bottom the way the docs are.
     string[] levelOrder = ["Getting Started", "Beginner", "Intermediate", "Advanced"];
 
+    // A level's place in that order; one the list does not know goes last
+    int Rank(string level)
+    {
+        var index = Array.IndexOf(levelOrder, level);
+
+        return index < 0 ? levelOrder.Length : index;
+    }
+
     var cards = new List<(string Level, int Order, string Slug, string Html, bool HasImage)>();
 
     foreach (var example in examples)
@@ -345,7 +353,7 @@ static string BuildIndex(List<JsonElement> examples, string directory, Dictionar
     }
 
     var ordered = cards
-        .OrderBy(c => Array.IndexOf(levelOrder, c.Level) is var rank && rank >= 0 ? rank : levelOrder.Length)
+        .OrderBy(c => Rank(c.Level))
         .ThenBy(c => c.Level, StringComparer.Ordinal)
         .ThenBy(c => c.Order)
         .ThenBy(c => c.Slug, StringComparer.Ordinal)

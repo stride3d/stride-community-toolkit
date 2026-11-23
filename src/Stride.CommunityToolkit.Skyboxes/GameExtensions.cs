@@ -1,6 +1,5 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
-using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Graphics;
@@ -28,7 +27,7 @@ public static class GameExtensions
     /// <remarks>
     /// The skybox texture is loaded from the Resources folder and is used to generate a skybox using the <see cref="SkyboxGenerator"/>.
     /// The skybox entity is created with both a <see cref="BackgroundComponent"/> and a <see cref="LightComponent"/>, configured for the skybox.
-    /// The entity is added to the root scene of the game and placed at the default position (0.0f, 2.0f, -2.0f).
+    /// The entity is added to the root scene of the game; a background and a skybox light take no position.
     /// </remarks>
     /// <example>
     /// This example demonstrates how to add a skybox to a game:
@@ -42,7 +41,7 @@ public static class GameExtensions
 
         using var stream = new FileStream(Path.Combine(AppContext.BaseDirectory, "Resources", SkyboxTexture), FileMode.Open, FileAccess.Read);
 
-        var texture = Texture.Load(game.GraphicsDevice, stream, TextureFlags.ShaderResource, GraphicsResourceUsage.Dynamic);
+        var texture = Texture.Load(game.GraphicsDevice, stream, TextureFlags.ShaderResource);
 
         using var context = new SkyboxGeneratorContext(game);
 
@@ -53,8 +52,6 @@ public static class GameExtensions
             new BackgroundComponent { Texture = texture },
             new LightComponent { Type = new LightSkybox { Skybox = skybox } }
         };
-
-        entity.Transform.Position = new Vector3(0.0f, 2.0f, -2.0f);
 
         entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
 

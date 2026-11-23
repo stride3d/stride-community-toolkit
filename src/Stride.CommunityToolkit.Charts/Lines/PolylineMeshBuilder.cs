@@ -4,6 +4,7 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
+using System.Buffers;
 using Buffer = Stride.Graphics.Buffer;
 
 namespace Stride.CommunityToolkit.Charts;
@@ -14,7 +15,7 @@ namespace Stride.CommunityToolkit.Charts;
 /// <remarks>
 /// <para>
 /// Every point becomes two vertices, offset by half the width to either side of the line's direction
-/// within the plane given by <see cref="PolylineOptions.Normal"/>. Consecutive pairs are joined with two
+/// within the chart plane, whose normal is Z. Consecutive pairs are joined with two
 /// triangles. At interior points the offset direction is the average of the incoming and outgoing
 /// directions, which gives a mitred join; very sharp corners therefore pinch, which is acceptable for
 /// sampled curves and axes and avoids the extra geometry a rounded join would need.
@@ -27,6 +28,9 @@ namespace Stride.CommunityToolkit.Charts;
 /// </remarks>
 internal static class PolylineMeshBuilder
 {
+    // The longest run whose distances are kept on the stack
+    private const int StackDistances = 256;
+
     /// <summary>
     /// Builds one continuous ribbon through <paramref name="points"/>.
     /// </summary>
@@ -35,7 +39,7 @@ internal static class PolylineMeshBuilder
     /// <param name="options">Width, plane and closure of the ribbon.</param>
     /// <returns>A mesh whose bounds are set, ready to be put in a <see cref="Model"/>.</returns>
     /// <exception cref="ArgumentNullException">If any argument is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If there are fewer than two points, or <see cref="PolylineOptions.Normal"/> has no length.</exception>
+    /// <exception cref="ArgumentException">If there are fewer than two points.</exception>
     internal static Mesh Build(GraphicsDevice device, IReadOnlyList<Vector3> points, PolylineOptions options)
     {
         ArgumentNullException.ThrowIfNull(device);
@@ -47,7 +51,7 @@ internal static class PolylineMeshBuilder
             throw new ArgumentException("A polyline needs at least two points.", nameof(points));
         }
 
-        var normal = NormalOf(options);
+        var normal = Vector3.UnitZ;
         var vertices = new List<VertexPositionNormalTexture>(points.Count * 2);
         var indices = new List<int>(points.Count * 6);
 
@@ -65,7 +69,7 @@ internal static class PolylineMeshBuilder
     /// <param name="options">Width and plane of the ribbons. <see cref="PolylineOptions.Closed"/> is ignored.</param>
     /// <returns>A mesh whose bounds are set, ready to be put in a <see cref="Model"/>.</returns>
     /// <exception cref="ArgumentNullException">If any argument is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If there are no polylines, one has fewer than two points, or <see cref="PolylineOptions.Normal"/> has no length.</exception>
+    /// <exception cref="ArgumentException">If there are no polylines, or one has fewer than two points.</exception>
     internal static Mesh BuildMany(GraphicsDevice device, IReadOnlyList<IReadOnlyList<Vector3>> polylines, PolylineOptions options)
     {
         ArgumentNullException.ThrowIfNull(device);
@@ -77,7 +81,7 @@ internal static class PolylineMeshBuilder
             throw new ArgumentException("At least one polyline is required.", nameof(polylines));
         }
 
-        var normal = NormalOf(options);
+        var normal = Vector3.UnitZ;
         var halfWidth = options.Width * 0.5f;
         var vertices = new List<VertexPositionNormalTexture>();
         var indices = new List<int>();
@@ -133,16 +137,6 @@ internal static class PolylineMeshBuilder
         draw.IndexBuffer?.Buffer?.Dispose();
     }
 
-    internal static Vector3 NormalOf(PolylineOptions options)
-    {
-        if (options.Normal.LengthSquared() <= MathUtil.ZeroTolerance)
-        {
-            throw new ArgumentException("The plane normal must not be zero.", nameof(options));
-        }
-
-        return Vector3.Normalize(options.Normal);
-    }
-
     /// <summary>
     /// Appends the ribbon for one polyline to the shared vertex and index lists.
     /// </summary>
@@ -152,8 +146,12 @@ internal static class PolylineMeshBuilder
         var segmentCount = closed ? count : count - 1;
         var baseIndex = vertices.Count;
 
-        // Distance along the line at each point, for the U texture coordinate
-        var distances = new float[count];
+        // Distance along the line at each point, for the U texture coordinate. A growing trail builds its
+        // ribbon again on every point added, so the scratch is the stack's for a short run and rented for a long one
+        float[]? rented = null;
+        Span<float> distances = count <= StackDistances ? stackalloc float[count] : (rented = ArrayPool<float>.Shared.Rent(count)).AsSpan(0, count);
+
+        distances[0] = 0f;
 
         for (var i = 1; i < count; i++)
         {
@@ -177,6 +175,8 @@ internal static class PolylineMeshBuilder
             vertices.Add(new VertexPositionNormalTexture(points[i] - side, normal, new Vector2(u, 0f)));
             vertices.Add(new VertexPositionNormalTexture(points[i] + side, normal, new Vector2(u, 1f)));
         }
+
+        if (rented is not null) ArrayPool<float>.Shared.Return(rented);
 
         // Two triangles per segment, joining each vertex pair to the next; a closed loop wraps the
         // last pair back to the first

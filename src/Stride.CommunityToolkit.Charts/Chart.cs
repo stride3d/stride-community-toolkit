@@ -36,8 +36,22 @@ public sealed class Chart : IDisposable
     // Each layer is nudged along Z by this much: grids behind the axes, area fills and curves in front.
     internal const float LayerStep = 0.005f;
 
-    // Where the curves sit: above the axes at 0 and the area fills at half a step
+    // The layers, back to front: minor grid, grid, the axes at 0, area fills, curves, markers, then the legend
+    // and the cursor over everything
+    internal const float MinorGridLayer = -2f * LayerStep;
+    internal const float GridLayer = -LayerStep;
+    internal const float AreaLayer = 0.5f * LayerStep;
     internal const float CurveLayer = 2f * LayerStep;
+    internal const float MarkerLayer = 2.5f * LayerStep;
+    internal const float OverlayLayer = 3f * LayerStep;
+
+    /// <summary>Where the axes cross: zero on each axis, or the nearest edge of its range; Z is 0 on a flat chart.</summary>
+    internal Vector3 AxisOrigin()
+    {
+        var r = Options.Range;
+
+        return new Vector3(Math.Clamp(0f, r.XMin, r.XMax), Math.Clamp(0f, r.YMin, r.YMax), Is3D ? Math.Clamp(0f, r.ZMin, r.ZMax) : 0f);
+    }
 
     private readonly List<ChartSeries> _series = [];
     private readonly ChartScaffold _scaffold;
@@ -90,11 +104,15 @@ public sealed class Chart : IDisposable
     /// <param name="options">What the chart shows and how it is drawn; <see langword="null"/> for <see cref="ChartOptions.Glow3D"/>.</param>
     /// <param name="name">The root entity's name, or <c>"Chart"</c>.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="game"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="options"/> has a range with no positive width or height.</exception>
     public Chart(IGame game, ChartOptions? options = null, string? name = null)
     {
         ArgumentNullException.ThrowIfNull(game);
 
         options ??= ChartOptions.Glow3D();
+
+        if (!HasPositiveExtent(options.Range))
+            throw new ArgumentException("Options.Range must have positive width and height.", nameof(options));
 
         if (options.Labels.Visible)
         {
@@ -127,13 +145,16 @@ public sealed class Chart : IDisposable
     /// <param name="f">The function to plot.</param>
     /// <param name="color">The curve's colour; <see langword="null"/> takes the next palette colour.</param>
     /// <param name="name">The series name.</param>
-    /// <param name="samples">How many points to sample; more is smoother.</param>
+    /// <param name="samples">How many points to sample; more is smoother. From 2 to 8000.</param>
     /// <param name="style">Width and glow where they should differ from the chart's defaults.</param>
     /// <returns>The curve, already on the chart; keep it to animate it with <see cref="ChartCurve.SetFunction"/> or to <see cref="Remove"/> it later.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="f"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="samples"/> is below 2 or above 8000.</exception>
     public ChartCurve Plot(Func<float, float> f, Color? color = null, string? name = null, int samples = 200, ChartSeriesStyle? style = null)
     {
         ArgumentNullException.ThrowIfNull(f);
+        ArgumentOutOfRangeException.ThrowIfLessThan(samples, 2);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(samples, ChartCurve.MaxSamples);
 
         var seriesName = name ?? $"Plot {_series.Count + 1}";
 
@@ -148,14 +169,17 @@ public sealed class Chart : IDisposable
     /// <param name="to">The last <c>t</c>.</param>
     /// <param name="color">The curve's colour; <see langword="null"/> takes the next palette colour.</param>
     /// <param name="name">The series name.</param>
-    /// <param name="samples">How many points to sample; more is smoother.</param>
+    /// <param name="samples">How many points to sample; more is smoother. From 2 to 8000.</param>
     /// <param name="closed">Whether to join the last point back to the first - a circle, an ellipse, any loop.</param>
     /// <param name="style">Width and glow where they should differ from the chart's defaults.</param>
     /// <returns>The series, already on the chart; keep it to <see cref="Remove"/> the curve later.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="p"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="samples"/> is below 2 or above 8000.</exception>
     public ChartLineSeries PlotParametric(Func<float, Vector3> p, float from, float to, Color? color = null, string? name = null, int samples = 200, bool closed = false, ChartSeriesStyle? style = null)
     {
         ArgumentNullException.ThrowIfNull(p);
+        ArgumentOutOfRangeException.ThrowIfLessThan(samples, 2);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(samples, ChartCurve.MaxSamples);
 
         var points = PolylineSampling.Parametric(p, from, to, samples);
 
@@ -434,10 +458,8 @@ public sealed class Chart : IDisposable
         if (snapshot == _appliedRange)
             return;
 
-        if (!(r.XMax > r.XMin) || !(r.YMax > r.YMin))
-        {
+        if (!HasPositiveExtent(r))
             throw new InvalidOperationException("Options.Range must have positive width and height.");
-        }
 
         _appliedRange = snapshot;
 
@@ -549,6 +571,9 @@ public sealed class Chart : IDisposable
             _ownedBatch = null;
         }
     }
+
+    /// <summary>Whether the range spans something on both plotted axes; a flat or inverted range draws nothing.</summary>
+    private static bool HasPositiveExtent(ChartRangeOptions r) => r.XMax > r.XMin && r.YMax > r.YMin;
 
     /// <summary>The range fields <see cref="Update(CameraComponent)"/> compares to know whether a rebuild is due.</summary>
     private readonly record struct RangeSnapshot(float XMin, float XMax, float YMin, float YMax, float ZMin, float ZMax, float TickStep, int MinorDivisions)

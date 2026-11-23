@@ -90,11 +90,11 @@ public class MeshOutlineRenderFeature : RootRenderFeature
 
             if (model.Entity.Get<MeshOutlineComponent>() is not { Enabled: true } outline) continue;
 
-            DrawOutline(context, renderMesh, outline, viewProjection, outlineScale);
+            DrawOutline(context, _shader, _pipelineState, renderMesh, outline, viewProjection, outlineScale);
         }
     }
 
-    private void DrawOutline(RenderDrawContext context, RenderMesh renderMesh, MeshOutlineComponent outline, Matrix viewProjection, Vector3 outlineScale)
+    private static void DrawOutline(RenderDrawContext context, DynamicEffectInstance shader, MutablePipelineState pipelineState, RenderMesh renderMesh, MeshOutlineComponent outline, Matrix viewProjection, Vector3 outlineScale)
     {
         var drawData = renderMesh.ActiveMeshDraw;
         var commandList = context.CommandList;
@@ -105,16 +105,16 @@ public class MeshOutlineRenderFeature : RootRenderFeature
             commandList.SetVertexBuffer(slot, vertexBuffer.Buffer, vertexBuffer.Offset, vertexBuffer.Stride);
         }
 
-        _shader!.Parameters.Set(TransformationKeys.WorldViewProjection, renderMesh.World * viewProjection);
-        _shader.Parameters.Set(TransformationKeys.WorldScale, outlineScale);
-        _shader.Parameters.Set(MeshOutlineShaderKeys.Color, outline.Color);
-        _shader.Parameters.Set(MeshOutlineShaderKeys.Intensity, outline.Intensity);
+        shader.Parameters.Set(TransformationKeys.WorldViewProjection, renderMesh.World * viewProjection);
+        shader.Parameters.Set(TransformationKeys.WorldScale, outlineScale);
+        shader.Parameters.Set(MeshOutlineShaderKeys.Color, outline.Color);
+        shader.Parameters.Set(MeshOutlineShaderKeys.Intensity, outline.Intensity);
 
-        _pipelineState!.State.PrimitiveType = drawData.PrimitiveType;
-        _pipelineState.Update();
-        commandList.SetPipelineState(_pipelineState.CurrentState);
+        pipelineState.State.PrimitiveType = drawData.PrimitiveType;
+        pipelineState.Update();
+        commandList.SetPipelineState(pipelineState.CurrentState);
 
-        _shader.Apply(context.GraphicsContext);
+        shader.Apply(context.GraphicsContext);
 
         if (drawData.IndexBuffer is null)
         {

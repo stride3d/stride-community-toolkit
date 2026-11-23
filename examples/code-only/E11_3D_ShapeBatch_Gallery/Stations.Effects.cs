@@ -1,10 +1,10 @@
+using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Graphics;
 using static E11_3D_ShapeBatch_Gallery.Palette;
 
 namespace E11_3D_ShapeBatch_Gallery;
@@ -57,7 +57,7 @@ public static class EffectStations
         shapes.Glow.Additive = true;
         shapes.DrawRing(s.At(0f, 2.6f, -1f), s.Forward, 1.2f, Color.Cyan);
         shapes.DrawDisc(s.At(-3.4f, 2.6f, -1f), s.Forward, 0.9f, Color.Magenta);
-        shapes.DrawArc(s.At(3.4f, 2.6f, -1f), s.Forward, 1.2f, s.Seconds * 1.5f, MathF.PI * 1.2f, Color.OrangeRed);
+        shapes.DrawArc(s.At(3.4f, 2.6f, -1f), s.Forward, 1.2f, s.Seconds * 1.5f, MathUtil.Pi * 1.2f, Color.OrangeRed);
 
         s.ResetStyle(shapes);
     }
@@ -273,13 +273,8 @@ public static class EffectStations
         // Beside the pad, looking at the station's own pillar from a few units away, so the panel
         // is unmistakably another camera's view
         var eye = s.At(-3.5f, 2.6f, 4f);
-        var direction = Vector3.Normalize(s.Pillars[0].Centre - eye);
-        var camera = new Entity("Mirror camera");
+        var camera = new Entity("Mirror camera", eye, QuaternionUtil.LookAt(eye, s.Pillars[0].Centre));
 
-        camera.Transform.Position = eye;
-
-        // A camera looks down its -Z; yaw turns that towards -X, pitch lifts it
-        camera.Transform.Rotation = Quaternion.RotationYawPitchRoll(MathF.Atan2(-direction.X, -direction.Z), MathF.Asin(direction.Y), 0f);
         camera.Scene = s.Scene;
 
         var feed = s.Game.AddRenderTextureCamera(camera, 512, 512);
@@ -364,9 +359,9 @@ public static class EffectStations
         var level = (MathF.Sin(s.Seconds * 0.8f) + 1f) * 0.5f;
 
         shapes.Fill.Alpha = 0.25f;
-        shapes.DrawArc(gauge, 50f, 0f, MathF.Tau, Color.Gray, width: 14f);
+        shapes.DrawArc(gauge, 50f, 0f, MathUtil.TwoPi, Color.Gray, width: 14f);
         shapes.Fill.Alpha = 0.9f;
-        shapes.DrawArc(gauge, 50f, -MathF.PI * 0.5f, MathF.Tau * level, Color.LimeGreen, width: 14f);
+        shapes.DrawArc(gauge, 50f, -MathUtil.PiOverTwo, MathUtil.TwoPi * level, Color.LimeGreen, width: 14f);
 
         // A panel in the bottom-right corner, HUD style, with a dashed ring turning inside it
         var panel = shapes.AnchorPoint(Anchor.BottomRight) + new Vector2(-150f, -90f);
@@ -396,26 +391,7 @@ public static class EffectStations
     /// <summary>The label above the station that says what the mouse is over.</summary>
     public static void PickingSetup(ShapeStation s)
     {
-        var text = new WorldTextComponent
-        {
-            Text = "",
-            FontSize = 40,
-            Height = 0.32f,
-            TextColor = HudBlue,
-            GlowColor = new Color(0, 140, 255, 170),
-            GlowSize = 3f,
-            Alignment = TextAlignment.Center,
-            Billboard = false,
-        };
-
-        var entity = new Entity($"Station {s.Number} pick label")
-        {
-            Transform = { Position = s.At(0f, 4f, -1f), Rotation = s.FacingRotation() },
-        };
-
-        entity.Add(text);
-        entity.Scene = s.Scene;
-        s.State = text;
+        s.State = HudLabel.Add(s, "pick label", height: 0.32f, new Vector3(0f, 4f, -1f), fontSize: 40, glow: 3f);
     }
 
     /// <summary>

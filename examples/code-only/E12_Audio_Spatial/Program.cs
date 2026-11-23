@@ -10,7 +10,6 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 using Stride.Media;
-using System.Reflection;
 
 // 3D positional audio for a runtime sound: a pad loops on an orb that circles a pillar, and the
 // listener is the camera, so the sound moves as the orb does and as you walk around.
@@ -36,17 +35,17 @@ var angle = 0f;
 var orbiting = true;
 var hrtf = true;
 
-WavSound? pad = null;
-WavSound? chime = null;
-AudioListener? listener = null;
-SoundInstance? padInstance = null;
+WavSound pad = null!;
+WavSound chime = null!;
+AudioListener listener = null!;
+SoundInstance padInstance = null!;
 
 // Every chime that is still sounding, so each can be disposed when it has finished
 var chimes = new List<SoundInstance>();
-Entity? orb = null;
-SoundEmitterScript? emitter = null;
+Entity orb = null!;
+SoundEmitterScript emitter = null!;
 
-var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
+var directory = AppContext.BaseDirectory;
 
 using var game = new Game();
 
@@ -101,12 +100,12 @@ void StartPad()
     padInstance?.Dispose();
 
     // The second HRTF switch is per instance, which is why T can flip it: dispose and recreate.
-    padInstance = pad!.CreateInstance(spatialized: true, useHrtf: hrtf, listener: listener);
+    padInstance = pad.CreateInstance(spatialized: true, useHrtf: hrtf, listener: listener);
     padInstance.IsLooping = true;
     padInstance.Volume = 0.7f;
     padInstance.Play();
 
-    emitter!.Instance = padInstance;
+    emitter.Instance = padInstance;
 }
 
 void Update(Scene scene, GameTime time)
@@ -121,12 +120,12 @@ void Update(Scene scene, GameTime time)
         StartPad();
     }
 
-    if (input.IsKeyPressed(Keys.Space) && padInstance is not null)
+    if (input.IsKeyPressed(Keys.Space))
     {
         if (padInstance.PlayState == PlayState.Playing) padInstance.Stop(); else padInstance.Play();
     }
 
-    if (input.IsKeyPressed(Keys.N) && chime is not null && emitter is not null)
+    if (input.IsKeyPressed(Keys.N))
     {
         // A one-shot needs positioning once: it is over before the orb has moved far.
         var instance = chime.CreateInstance(spatialized: true, useHrtf: hrtf, listener: listener);
@@ -147,10 +146,7 @@ void Update(Scene scene, GameTime time)
 
     if (orbiting) angle += OrbitSpeed * (float)time.Elapsed.TotalSeconds;
 
-    if (orb is not null)
-    {
-        orb.Transform.Position = new Vector3(MathF.Cos(angle) * OrbitRadius, 1.2f, MathF.Sin(angle) * OrbitRadius);
-    }
+    orb.Transform.Position = new Vector3(MathF.Cos(angle) * OrbitRadius, 1.2f, MathF.Sin(angle) * OrbitRadius);
 }
 
 void AddInstructions()
@@ -158,10 +154,10 @@ void AddInstructions()
     TextOverlay.GetOrCreate(game).AddSection("Spatial sound", () =>
     {
         var camera = game.GetCameraEntity().Transform.WorldMatrix;
-        var toOrb = orb!.Transform.Position - camera.TranslationVector;
+        var toOrb = orb.Transform.Position - camera.TranslationVector;
         var side = Vector3.Dot(toOrb, (Vector3)camera.Row1);          // the camera's +X is screen-right
         var ahead = Vector3.Dot(toOrb, -(Vector3)camera.Row3);        // it looks down its -Z
-        var playing = padInstance?.PlayState == PlayState.Playing;
+        var playing = padInstance.PlayState == PlayState.Playing;
 
         return
         [

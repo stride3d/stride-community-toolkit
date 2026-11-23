@@ -1,3 +1,4 @@
+using Example.Common;
 using Stride.CommunityToolkit.Charts;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Overlay;
@@ -31,21 +32,18 @@ if (zoomIndex >= 0 && zoomIndex + 1 < args.Length) _ = float.TryParse(args[zoomI
 
 using var game = new Game();
 
-Chart? chart = null;
+Chart chart = null!;
 ChartCurve? tangent = null;
-ChartCurve? wave = null;
-ChartTrajectory? trail = null;
-CameraComponent? camera = null;
-ShapeBatch? batch = null;
+ChartCurve wave = null!;
+ChartTrajectory trail = null!;
+CameraComponent camera = null!;
+ShapeBatch batch = null!;
 
-// The thrown ball: launched from the lower left, integrated by hand each frame - the point is watching
-// the trajectory series record a moving body, not the integrator
-var launchPosition = new Vector2(-4.5f, -3.5f);
-var launchVelocity = new Vector2(4f, 7f);
-const float Gravity = 9.81f;
-var ballPosition = Vector2.Zero;
-var ballVelocity = Vector2.Zero;
-var ballFlying = false;
+// The thrown ball: launched from the lower left and integrated by hand each frame, by a helper the
+// two chart examples share - the point is watching the trajectory series record a moving body
+var launchPosition = new Vector3(-4.5f, -3.5f, 0f);
+var launchVelocity = new Vector3(4f, 7f, 0f);
+var ball = new ThrownBall();
 
 // The animated curve: sin(kx) with k sweeping up and down, re-plotted in place every frame
 var animate = true;
@@ -64,7 +62,7 @@ game.Run(new SceneSetup2D
     DpiAware = true,
 }, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     var cameraEntity = game.GetCameraEntity();
     var controller = cameraEntity.Get<Basic2DCameraController>()!;
@@ -73,10 +71,10 @@ void Start(Scene rootScene)
     controller.MouseDragButton = MouseButton.Left;
     controller.MaxOrthographicSize = 500f;
 
-    if (zoomArg > 0f && cameraEntity.Get<CameraComponent>() is { } zoomCamera)
-    {
-        zoomCamera.OrthographicSize = zoomArg;
-    }
+    // The chart is told which camera looks at it: a scene can hold several
+    camera = cameraEntity.Get<CameraComponent>();
+
+    if (zoomArg > 0f) camera.OrthographicSize = zoomArg;
 
     // Light2D is the flat preset: dark axes, a major and minor grid, no glow, and labels that keep their
     // pixel size while zooming. Everything below is a change to one group of it.
@@ -92,7 +90,7 @@ void Start(Scene rootScene)
     options.Axes.YTitle = "y";
 
     chart = new Chart(game, options);
-    chart.Root.Scene = rootScene;
+    chart.Root.Scene = scene;
 
     // Curves added without a colour take the next one from the palette
     chart.Plot(x => 2f * MathF.Sin(x), name: "sin");
@@ -116,7 +114,7 @@ void Start(Scene rootScene)
     // curve the equations predict: y = y0 + (vy/vx)(x - x0) - g (x - x0)^2 / (2 vx^2)
     chart.Plot(
         x => launchPosition.Y + launchVelocity.Y / launchVelocity.X * (x - launchPosition.X)
-            - Gravity * (x - launchPosition.X) * (x - launchPosition.X) / (2f * launchVelocity.X * launchVelocity.X),
+            - ThrownBall.Gravity * (x - launchPosition.X) * (x - launchPosition.X) / (2f * launchVelocity.X * launchVelocity.X),
         color: new Color(180, 180, 180),
         name: "ballistic",
         style: new ChartSeriesStyle { Width = options.Series.CurveWidth * 0.5f });
@@ -127,20 +125,11 @@ void Start(Scene rootScene)
     // Scatter: noisy measurements around the sin curve, drawn as pixel-sized x glyphs each frame - the
     // classic "data points versus fitted curve" picture. The jitter is a deterministic hash of x, so the
     // picture is identical every run without involving Random.
-    var samples = new List<Vector3>();
-
-    for (var x = -4.5f; x <= 4.5f; x += 0.45f)
-    {
-        var hash = MathF.Sin(x * 12.9898f) * 43758.5453f;
-        var jitter = (hash - MathF.Floor(hash) - 0.5f) * 0.7f;
-        samples.Add(new Vector3(x, 2f * MathF.Sin(x) + jitter, 0f));
-    }
-
-    chart.AddMarkers(samples, color: new Color(96, 66, 166), name: "samples");
+    chart.AddMarkers(SampleData.ScatterAroundSine(), color: new Color(96, 66, 166), name: "samples");
 
     // The integral picture: one arch of the sine shaded down to the x axis, re-sampled and re-clipped
     // with the curves whenever the view changes
-    chart.AddArea(x => 2f * MathF.Sin(x), from: 0f, to: MathF.PI, color: options.Series.Palette[0], name: "integral");
+    chart.AddArea(x => 2f * MathF.Sin(x), from: 0f, to: MathUtil.Pi, color: options.Series.Palette[0], name: "integral");
 
     // The animated curve. An explicit colour: the palette's pick here would repeat the samples' purple.
     wave = chart.Plot(x => WaveAmplitude * MathF.Sin(waveFrequency * x), color: new Color(0, 158, 150), name: "wave");
@@ -179,8 +168,20 @@ void Start(Scene rootScene)
 
 void Update(Scene scene, GameTime time)
 {
-    if (chart is null) return;
+    HandleKeys();
+    AnimateWave(time);
 
+    // The chart's frame: applies whatever changed in its options since last time (the G and L toggles,
+    // the range the follower derives from the camera) and moves the cursor readout. The ball goes into
+    // the same batch after it, so it is drawn over the curves.
+    chart.Update(camera, batch);
+    batch.DrawDisc(new Vector3(ball.Position.X, ball.Position.Y, 0.05f), Vector3.UnitZ, 0.12f, new Color(40, 40, 40));
+
+    MoveBall(time);
+}
+
+void HandleKeys()
+{
     if (game.Input.IsKeyPressed(Keys.G)) chart.Options.Grid.Visible = !chart.Options.Grid.Visible;
     if (game.Input.IsKeyPressed(Keys.L)) chart.Options.Legend.Visible = !chart.Options.Legend.Visible;
 
@@ -199,51 +200,35 @@ void Update(Scene scene, GameTime time)
 
     if (game.Input.IsKeyPressed(Keys.Space)) ThrowBall();
     if (game.Input.IsKeyPressed(Keys.A)) animate = !animate;
+}
 
-    // Swapping the function re-samples just this curve, in place - same colour, same legend row - so it
-    // is cheap enough to do every frame
-    if (animate && wave is not null)
-    {
-        waveTime += (float)time.Elapsed.TotalSeconds;
-        waveFrequency = 1.75f + 1.25f * MathF.Sin(waveTime * 0.9f);
+// Swapping the function re-samples just this curve, in place - same colour, same legend row - so it
+// is cheap enough to do every frame
+void AnimateWave(GameTime time)
+{
+    if (!animate) return;
 
-        wave.SetFunction(x => WaveAmplitude * MathF.Sin(waveFrequency * x));
-    }
+    waveTime += (float)time.Elapsed.TotalSeconds;
+    waveFrequency = 1.75f + 1.25f * MathF.Sin(waveTime * 0.9f);
+    wave.SetFunction(x => WaveAmplitude * MathF.Sin(waveFrequency * x));
+}
 
-    // The chart's frame: applies whatever changed in its options since last time (the G and L toggles
-    // above, the range the follower derives from the camera) and moves the cursor readout. The camera is
-    // explicit because a scene can hold several, and only you know which one is looking at this chart.
-    camera ??= scene.GetCamera();
+void MoveBall(GameTime time)
+{
+    if (!ball.Flying) return;
 
-    if (camera is not null && batch is not null)
-    {
-        chart.Update(camera, batch);
-        batch.DrawDisc(new Vector3(ballPosition.X, ballPosition.Y, 0.05f), Vector3.UnitZ, 0.12f, new Color(40, 40, 40));
-    }
-
-    if (!ballFlying || trail is null) return;
-
-    // Semi-implicit Euler; capped so a stall (a dragged window) cannot teleport the ball
-    var dt = MathF.Min((float)time.Elapsed.TotalSeconds, 0.1f);
-
-    ballVelocity.Y -= Gravity * dt;
-    ballPosition += ballVelocity * dt;
+    ball.Step((float)time.Elapsed.TotalSeconds);
 
     // The trajectory clips to the chart's ranges by itself; the trail simply ends at the edge
-    trail.Add(new Vector3(ballPosition.X, ballPosition.Y, 0f));
+    trail.Add(ball.Position);
 
-    if (ballPosition.Y < chart.Options.Range.YMin - 1f || ballPosition.X > chart.Options.Range.XMax + 1f)
-    {
-        ballFlying = false;
-    }
+    if (ball.Position.Y < chart.Options.Range.YMin - 1f || ball.Position.X > chart.Options.Range.XMax + 1f) ball.Land();
 }
 
 void ThrowBall()
 {
-    trail?.Clear();
-    ballPosition = launchPosition;
-    ballVelocity = launchVelocity;
-    ballFlying = true;
+    trail.Clear();
+    ball.Launch(launchPosition, launchVelocity);
 }
 /*
 ---example-metadata

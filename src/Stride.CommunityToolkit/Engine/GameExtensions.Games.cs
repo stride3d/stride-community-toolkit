@@ -72,14 +72,9 @@ public static partial class GameExtensions
     /// <para>The <paramref name="game"/> instance must be a <see cref="GameBase"/> implementation.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidCastException">Thrown when <paramref name="game"/> is not a <see cref="GameBase"/> instance.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="game"/> is not a <see cref="GameBase"/> instance.</exception>
     public static void SetFocusLostFPS(this IGame game, int targetFPS)
-    {
-        ArgumentNullException.ThrowIfNull(game);
-
-        var gameBase = (GameBase)game;
-        gameBase.MinimizedMinimumUpdateRate.MinimumElapsedTime = MinimumElapsedTime(targetFPS);
-    }
+        => RequireGameBase(game).MinimizedMinimumUpdateRate.MinimumElapsedTime = MinimumElapsedTime(targetFPS);
 
     /// <summary>
     /// Sets the minimum update interval used while the game window is active.
@@ -91,18 +86,24 @@ public static partial class GameExtensions
     /// <para>The <paramref name="game"/> instance must be a <see cref="GameBase"/> implementation.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidCastException">Thrown when <paramref name="game"/> is not a <see cref="GameBase"/> instance.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="game"/> is not a <see cref="GameBase"/> instance.</exception>
     public static void SetMaxFPS(this IGame game, int targetFPS)
-    {
-        ArgumentNullException.ThrowIfNull(game);
-
-        var gameBase = (GameBase)game;
-        gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = MinimumElapsedTime(targetFPS);
-    }
+        => RequireGameBase(game).WindowMinimumUpdateRate.MinimumElapsedTime = MinimumElapsedTime(targetFPS);
 
     // Zero and below mean no cap, where the division would give an infinite TimeSpan and throw
     private static TimeSpan MinimumElapsedTime(int targetFPS)
         => targetFPS <= 0 ? TimeSpan.Zero : TimeSpan.FromMilliseconds(1000.0 / targetFPS);
+
+    /// <summary>The game as the <see cref="GameBase"/> that owns the update rates and the exit.</summary>
+    /// <exception cref="ArgumentNullException"><paramref name="game"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException"><paramref name="game"/> is not a <see cref="GameBase"/>.</exception>
+    private static GameBase RequireGameBase(IGame game)
+    {
+        ArgumentNullException.ThrowIfNull(game);
+
+        return game as GameBase
+            ?? throw new ArgumentException($"The game must inherit from {nameof(GameBase)}.", nameof(game));
+    }
 
     /// <summary>
     /// Sets the presentation interval to wait for every second vertical blank.
@@ -177,13 +178,5 @@ public static partial class GameExtensions
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentException">Thrown when <paramref name="game"/> is not a <see cref="GameBase"/> instance.</exception>
-    public static void Exit(this IGame game)
-    {
-        ArgumentNullException.ThrowIfNull(game);
-
-        if (game is not GameBase gameBase)
-            throw new ArgumentException($"The provided game instance must inherit from {nameof(GameBase)} in order to exit properly.", nameof(game));
-
-        gameBase.Exit();
-    }
+    public static void Exit(this IGame game) => RequireGameBase(game).Exit();
 }

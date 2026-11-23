@@ -58,9 +58,8 @@ void Add3DPrimitives(Scene scene)
 
     foreach (var (index, (type, position, rotation)) in primitives.Index())
     {
-        var entity = game.CreatePrimitive(type, new() { EntityName = GroupName, Material = game.CreateMaterial(colours[index % colours.Length]) });
+        var entity = game.CreatePrimitive(type, new() { EntityName = GroupName, Material = game.CreateMaterial(colours[index % colours.Length]), Position = position });
 
-        entity.Transform.Position = position;
         entity.Transform.Rotation = rotation ?? Quaternion.Identity;
         entity.Scene = scene;
     }

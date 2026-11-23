@@ -31,7 +31,8 @@ public sealed class ShapeFill
     /// </summary>
     /// <remarks>
     /// The colour is used as given, including its own alpha; <see cref="Alpha"/> scales only its
-    /// opacity. Without a colour, <see cref="Alpha"/> also darkens the outline colour.
+    /// opacity. Without a colour, the fill is the outline colour dimmed by <see cref="Alpha"/>; the
+    /// outline itself is not dimmed.
     /// </remarks>
     public Color? Color { get; set; }
 

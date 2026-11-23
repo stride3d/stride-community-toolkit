@@ -25,7 +25,7 @@ while (true)
 
 void DisplayMenu()
 {
-    Constants.SafeClear();
+    ExampleProvider.SafeClear();
 
     Console.WriteLine("Stride Community Toolkit Examples".Pastel(Color.LightBlue));
     Console.WriteLine();
@@ -83,17 +83,20 @@ void HandleUserInput()
     {
         Console.WriteLine("Invalid choice. Try again.".Pastel(Color.Red));
     }
-    else
+    else if (example.Entry is null)
     {
-        if (example.Title != Constants.Quit && example.Title != Constants.Clear)
-        {
-            Console.WriteLine($"Starting example: {example.Title}");
-        }
-
+        // A command: Quit never returns, Clear leaves an empty console to redraw the menu on
         example.Action();
 
         if (example.Title == Constants.Clear) DisplayMenu();
-        else if (example.Title != Constants.Quit) Console.WriteLine("It might take a few moments to start the example...");
+    }
+    else
+    {
+        Console.WriteLine($"Starting example: {example.Title}");
+
+        example.Action();
+
+        Console.WriteLine("It might take a few moments to start the example...");
     }
 
     Console.WriteLine();

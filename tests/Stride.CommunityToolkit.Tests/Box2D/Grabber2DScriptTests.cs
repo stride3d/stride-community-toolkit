@@ -59,7 +59,7 @@ public class Grabber2DScriptTests
             if (frames is > 2 and <= 40)
             {
                 grabber!.Carry(new Vector2(3, 0));
-                simulation.Update(TimeSpan.FromSeconds(1 / 60.0));
+                simulation.Update(Frame);
                 return;
             }
 
@@ -96,7 +96,7 @@ public class Grabber2DScriptTests
             var camera = new Entity("camera") { new CameraComponent(), grabber };
             camera.Scene = scene;
 
-            wall = simulation.CreateStaticBody(Vector3.Zero);
+            wall = simulation.CreateStaticBody(Vector2.Zero);
         }, update: (_, _) =>
         {
             if (++frames < 2) return;

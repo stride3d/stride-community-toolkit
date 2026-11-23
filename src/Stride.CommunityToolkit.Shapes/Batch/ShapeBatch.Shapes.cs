@@ -26,7 +26,7 @@ public sealed partial class ShapeBatch
     /// <param name="radius">Radius in world units.</param>
     /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     public void DrawSolidCircle(Vector2 center, float radius, Color color)
-        => DrawSolidPolygon([Vector2.Zero], center, 0f, color, radius);
+        => DrawDisc(center, radius, color);
 
     /// <summary>
     /// Submits a convex polygon lying in an arbitrary plane in 3D.
@@ -52,9 +52,7 @@ public sealed partial class ShapeBatch
     /// <param name="radius">Optional rounding radius around the polygon, in world units.</param>
     /// <exception cref="ArgumentException">No vertices were given.</exception>
     public void DrawSolidPolygon(ReadOnlySpan<Vector2> vertices, Vector3 position, Quaternion rotation, Color color, float radius = 0f)
-        => Add(vertices,
-            new ShapePlane(position, Vector3.Transform(Vector3.UnitX, rotation), Vector3.Transform(Vector3.UnitY, rotation), PlaneMode.Fixed),
-            CurrentStyle(color), ShapeSlice.Whole, radius, 1f);
+        => DrawSolidPolygon(vertices, position, Vector3.Transform(Vector3.UnitX, rotation), Vector3.Transform(Vector3.UnitY, rotation), color, radius);
 
     /// <summary>
     /// Submits a convex polygon that always faces the camera, screen-aligned - a marker that keeps
@@ -202,7 +200,7 @@ public sealed partial class ShapeBatch
 
     /// <summary>
     /// Submits an arc of a circle with round ends, lying flat in the plane a normal defines. With no
-    /// width it is a stroke the border's pixel width - a partial <see cref="DrawRing(Vector3, Vector3, float, Color)"/>; with one it
+    /// width it is a stroke <see cref="StrokeWidth"/> pixels wide - a partial <see cref="DrawRing(Vector3, Vector3, float, Color)"/>; with one it
     /// is a filled, outlined band of that world width centred on the radius - a radial progress bar.
     /// </summary>
     /// <param name="center">World-space centre of the circle.</param>
@@ -243,6 +241,9 @@ public sealed partial class ShapeBatch
     /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     /// <param name="cornerRadius">Optional corner rounding, in world units. Limited to half the smaller side, where the rectangle is a capsule or a circle.</param>
     public void DrawRectangle(Vector3 center, Vector3 axisX, Vector3 axisY, Vector2 size, Color color, float cornerRadius = 0f)
+        => AddRectangle(ShapePlane.Fixed(center, axisX, axisY), size, color, cornerRadius);
+
+    private void AddRectangle(in ShapePlane plane, Vector2 size, Color color, float cornerRadius)
     {
         // A radius beyond half the smaller side would grow the rectangle past the size asked for.
         // The limit stops a hair short, so the corners never coincide.
@@ -260,7 +261,7 @@ public sealed partial class ShapeBatch
             new(-halfWidth, halfHeight),
         ];
 
-        Add(corners, ShapePlane.Fixed(center, axisX, axisY), CurrentStyle(color), ShapeSlice.Whole, cornerRadius, 1f);
+        Add(corners, plane, CurrentStyle(color), ShapeSlice.Whole, cornerRadius, 1f);
     }
 
     /// <summary>
@@ -272,9 +273,5 @@ public sealed partial class ShapeBatch
     /// <param name="cornerRadius">Optional corner rounding, in the same units as <paramref name="size"/>. Limited to half the smaller side.</param>
     /// <param name="rotation">Rotation in radians about the centre, counter-clockwise in the world and clockwise on screen.</param>
     public void DrawRectangle(Vector2 center, Vector2 size, Color color, float cornerRadius = 0f, float rotation = 0f)
-    {
-        var (sin, cos) = MathF.SinCos(rotation);
-
-        DrawRectangle(new Vector3(center, 0f), new Vector3(cos, sin, 0f), new Vector3(-sin, cos, 0f), size, color, cornerRadius);
-    }
+        => AddRectangle(ShapePlane.XY(center, rotation), size, color, cornerRadius);
 }

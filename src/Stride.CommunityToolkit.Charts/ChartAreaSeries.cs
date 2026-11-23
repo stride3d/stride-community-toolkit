@@ -69,7 +69,7 @@ public sealed class ChartAreaSeries : ChartSeries
         batch.BorderWidth = 0f;
         batch.Fill.Set(Color, Chart.Options.Series.AreaOpacity);
 
-        var plane = view.PlaneAt(Chart.LayerStep * 0.5f);
+        var plane = view.PlaneAt(Chart.AreaLayer);
         Span<Vector2> corners = stackalloc Vector2[4];
 
         foreach (var run in _runs)

@@ -25,7 +25,11 @@ public static class TextureExtensions
     {
         // Three folders above the executing assembly is where the solution usually sits
         var startupPath = Directory.GetParent(Assembly.GetExecutingAssembly().Location)?.Parent?.Parent?.Parent?.FullName;
-        var asset = new DirectoryInfo(startupPath + workDir).GetFiles(urlName, SearchOption.AllDirectories).FirstOrDefault();
+
+        // No such folder, no search: a null here would otherwise search the working directory
+        if (startupPath is null) return string.Empty;
+
+        var asset = new DirectoryInfo(Path.Join(startupPath, workDir)).GetFiles(urlName, SearchOption.AllDirectories).FirstOrDefault();
 
         if (asset is null) return string.Empty;
 

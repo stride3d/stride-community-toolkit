@@ -62,7 +62,7 @@ follow the steps, but it is there if you want to compare.
 
    game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
-   void Start(Scene rootScene)
+   void Start(Scene scene)
    {
        // Left mouse grabs any body, drags it and throws it on release
        game.AddGrabber();
@@ -79,7 +79,7 @@ follow the steps, but it is there if you want to compare.
 
            // One above the other, each a little to one side, so the column topples into a pile
            entity.Transform.Position = new Vector3(0.1f * (i % 3 - 1), 8 + i * 1.5f, 0);
-           entity.Scene = rootScene;
+           entity.Scene = scene;
        }
    }
    ```
@@ -315,7 +315,7 @@ Add `DrawEnergyDial();` after `DrawHealthBar();`.
 What to notice:
 
 - **Angles.** An arc takes a start angle and a sweep, in radians. Zero points right and a positive
-  angle turns clockwise, so `-MathF.PI * 0.5f` is the top. `MathF.Tau` is a full turn.
+  angle turns clockwise, so `-MathUtil.PiOverTwo` is the top. `MathUtil.TwoPi` is a full turn.
 - **An arc is a band.** Its last argument is the band's width. The band is filled like any other
   shape, which is why the function starts with `Solid()`.
 - **Set what you need.** The state stays as the last piece left it. Here the bar happened to leave
@@ -478,7 +478,7 @@ of one class, `HudStyle.cs`:
 
 [!code-csharp[](../../../examples/code-only/E03_2D_HUD_Basics/HudStyle.cs)]
 
-**The drawing goes into a class.** `SimpleHud.cs` takes the game, the scene, the batch and a style, keeps the labels, and
+**The drawing goes into a class.** `SimpleHud.cs` takes the scene, the batch and a style, keeps the labels, and
 offers three numbers to set and one method to call:
 
 [!code-csharp[](../../../examples/code-only/E03_2D_HUD_Basics/SimpleHud.cs#Step8Class)]

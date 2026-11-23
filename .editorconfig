@@ -48,3 +48,8 @@ dotnet_naming_style.camel_case_underscore_style.capitalization = camel_case
 # Xml files
 [*.xml]
 indent_size = 2
+
+# The simulation.Joints facade forwards three static Joints2D members as instance members on purpose, so one
+# place reaches every joint operation
+[src/Stride.CommunityToolkit.Box2D/Joints/SimulationJoints2D.cs]
+dotnet_diagnostic.CA1822.severity = none

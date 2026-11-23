@@ -1,8 +1,8 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Rendering.Lights;
@@ -30,16 +30,16 @@ game.Run(new SceneSetup2D
     Resizable = true,
 }.UseBepu(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
 
-    var ground = rootScene.Entities.First(e => e.Name == GameDefaults.DefaultGroundName);
+    var ground = scene.FindEntity(GameDefaults.DefaultGroundName)!;
     ground.Transform.Position = new Vector3(0, -4, 0);
 
     // 2D scenes are lit like any other, and look flat without a light
-    AddSpotLight(rootScene);
+    AddSpotLight(scene);
 
     for (var i = -Count / 2; i < Count / 2; i++)
     {
@@ -48,10 +48,10 @@ void Start(Scene rootScene)
             var entity = game.CreatePrimitive(primitive, new()
             {
                 Material = game.CreateFlatMaterial(random.NextColor()),
+                Position = new Vector3(i, 10 + index * 1.5f, 0),
             });
 
-            entity.Transform.Position = new Vector3(i, 10 + index * 1.5f, 0);
-            entity.Scene = rootScene;
+            entity.Scene = scene;
         }
     }
 
@@ -67,9 +67,9 @@ void Start(Scene rootScene)
     ]);
 }
 
-static void AddSpotLight(Scene rootScene)
+static void AddSpotLight(Scene scene)
 {
-    var spotLight = new Entity("SpotLight")
+    var spotLight = new Entity("SpotLight", new Vector3(0, -4, 2))
     {
         new LightComponent
         {
@@ -83,8 +83,7 @@ static void AddSpotLight(Scene rootScene)
         }
     };
 
-    spotLight.Transform.Position = new Vector3(0, -4, 2);
-    spotLight.Scene = rootScene;
+    spotLight.Scene = scene;
 }
 /*
 ---example-metadata
@@ -104,7 +103,7 @@ description:
     any other and look flat without one.
 concepts:
   - Both debug views on one entity with AddPhysicsDebug, the colliders on P and the debug meshes on F11
-  - Why one entity is enough, since CollidableGizmoScript and DebugRenderComponentScript act on the whole scene
+  - Why one entity is enough, since CollidableGizmoScript and DebugRenderComponent act on the whole scene
   - Lighting a 2D scene with a LightSpot
   - Giving each shape its own colour with a flat material
   - "Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial, AddPhysicsDebug, AddGrabber"

@@ -20,7 +20,7 @@ var debugDraw = game.AddDebugShapes();
 
 > [!NOTE]
 > At most `MaxPrimitives` one-frame shapes and `MaxPrimitivesWithLifetime` timed shapes are kept (both
-> default to `100`); past that, each new shape drops the oldest. Raise them when drawing many shapes.
+> default to `4096`); past that, the oldest sixteenth of them makes room. Raise them when drawing more.
 
 ## Shared parameters
 
@@ -28,7 +28,7 @@ Every method below ends with the same optional parameters, so they are listed on
 
 | Parameter | Default | Meaning |
 |---|---|---|
-| `color` | `default` (`null` on `DrawLines`) | The shape's colour; the default draws in `PrimitiveColor` (light green). Alpha below 255 draws it transparent. |
+| `color` | `default` | The shape's colour; the default draws in `PrimitiveColor` (light green). Alpha below 255 draws it transparent. |
 | `duration` | `0.0f` | Seconds the shape stays visible without being re-issued. `0` means this frame only. |
 | `depthTest` | `true` | When `false`, the shape draws through geometry in front of it. |
 | `solid` | `false` | Filled instead of wireframe. Not available on the line methods. |
@@ -38,12 +38,12 @@ Every method below ends with the same optional parameters, so they are listed on
 | Method | Shape-specific parameters |
 |---|---|
 | [`DrawLine`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawLine*) | `start`, `end` - no `solid` |
-| [`DrawLines`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawLines*) | `vertices` - each consecutive pair is one separate segment. No `solid` |
+| [`DrawLines`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawLines*) | `vertices` - a span or array; each consecutive pair is one separate segment. No `solid` |
 | [`DrawRay`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawRay*) | `start`, `dir` - a direction rather than an end point. No `solid` |
 | [`DrawArrow`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawArrow*) | `from`, `to`, `coneHeight`, `coneRadius` |
 | [`DrawSphere`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawSphere*) | `position`, `radius` - no `rotation` |
 | [`DrawHalfSphere`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere*) | `position`, `radius`, `rotation` |
-| [`DrawCube`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCube*) | `start` - the centre, not a corner - `size`, `rotation` |
+| [`DrawCube`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCube*) | `center`, `size`, `rotation` |
 | [`DrawBounds`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawBounds*) | `start`, `end`, `rotation` - a box given by two opposite corners |
 | [`DrawCapsule`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCapsule*) | `position`, `height`, `radius`, `rotation` |
 | [`DrawCylinder`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCylinder*) | `position`, `height`, `radius`, `rotation` |

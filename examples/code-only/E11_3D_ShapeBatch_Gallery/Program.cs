@@ -33,8 +33,8 @@ using Stride.Rendering.Materials.ComputeColors;
 // "--station 7" starts the visitor at a station instead of the index board - handy for screenshots
 var startStation = args.Length >= 2 && args[0] == "--station" && int.TryParse(args[1], out var number) ? number : 0;
 
-Gallery<ShapeStation>? gallery = null;
-GalleryBatches? batches = null;
+Gallery<ShapeStation> gallery = null!;
+GalleryBatches batches = null!;
 var depthTested = true;
 var submitted = 0;
 
@@ -53,7 +53,7 @@ var sceneSetup = new SceneSetup3D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Depth-tested: scene geometry occludes these, so a disc on the floor goes behind a pillar.
     // Overlay: drawn on top of everything, which is what you want for gizmos and debug marks.
@@ -80,17 +80,15 @@ void Start(Scene rootScene)
 
     // The frame comes from Example.Common; what a ShapeBatch station needs on top of it - the
     // batches, the visitor's style, which batch to draw through this frame - is put there by these
-    var galleryBatches = batches;
-
-    gallery = new Gallery<ShapeStation>(game, rootScene, Stations.All, configure: station =>
+    gallery = new Gallery<ShapeStation>(game, scene, Stations.All, configure: station =>
     {
-        station.Batches = galleryBatches;
+        station.Batches = batches;
         station.Style = style;
     });
 
     gallery.Prepare = station =>
     {
-        station.Shapes = depthTested ? galleryBatches.Scene : galleryBatches.Overlay;
+        station.Shapes = depthTested ? batches.Scene : batches.Overlay;
         station.ResetAll();
     };
     gallery.UpdateLabels();
@@ -109,9 +107,7 @@ void Start(Scene rootScene)
 
 void Update(Scene scene, GameTime gameTime)
 {
-    if (gallery is null) return;
-
-    HandleInput(gallery);
+    HandleInput();
 
     // How many shapes the stations submitted: the gallery's own furniture goes through batches of its own
     var before = Submitted();
@@ -120,7 +116,7 @@ void Update(Scene scene, GameTime gameTime)
     submitted = Submitted() - before;
 }
 
-void HandleInput(Gallery<ShapeStation> gallery)
+void HandleInput()
 {
     if (game.Input.IsKeyPressed(Keys.N)) gallery.Step(+1);
     if (game.Input.IsKeyPressed(Keys.P)) gallery.Step(-1);
@@ -167,12 +163,10 @@ void HandleInput(Gallery<ShapeStation> gallery)
     }
 }
 
-int Submitted() => batches is null ? 0 : batches.Scene.Count + batches.Overlay.Count + batches.Pictures.Count + batches.Stripes.Count + batches.Shaded.Count;
+int Submitted() => batches.Scene.Count + batches.Overlay.Count + batches.Pictures.Count + batches.Stripes.Count + batches.Shaded.Count;
 
 IReadOnlyList<TextElement> BuildOverlayLines()
 {
-    if (gallery is null) return [];
-
     List<TextElement> lines =
     [
         new("N", "Next station", Color.Gold),

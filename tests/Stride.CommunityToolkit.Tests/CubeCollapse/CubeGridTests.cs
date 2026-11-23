@@ -3,6 +3,7 @@ using CubeCollapse.Gameplay;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Xunit;
+using static Stride.CommunityToolkit.Tests.CubeCollapse.CubeFixtures;
 
 namespace Stride.CommunityToolkit.Tests.CubeCollapse;
 
@@ -15,8 +16,6 @@ namespace Stride.CommunityToolkit.Tests.CubeCollapse;
 /// </remarks>
 public class CubeGridTests
 {
-    private static Entity MakeCube(Color colour) => new("Cube") { new CubeComponent(colour) };
-
     private static CubeGrid BuildColumn(params Color[] coloursFromBottom)
     {
         var grid = new CubeGrid();

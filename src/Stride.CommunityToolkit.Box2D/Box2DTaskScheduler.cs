@@ -48,6 +48,7 @@ internal sealed class Box2DTaskScheduler : IDisposable
 
     private readonly BlockingCollection<Job> _queue = new();
     private readonly Thread[] _threads;
+    private int _disposed;
 
     /// <summary>The number of pool threads, matching the world's worker count.</summary>
     internal int WorkerCount => _threads.Length;
@@ -109,9 +110,14 @@ internal sealed class Box2DTaskScheduler : IDisposable
         if (userTask is Batch batch) batch.Wait();
     }
 
-    /// <summary>Stops accepting work and joins the pool threads.</summary>
+    /// <summary>
+    /// Stops accepting work, joins the pool threads and then releases the queue. A second call, from any
+    /// thread, does nothing: the guard is atomic, so two threads disposing at once run the join once.
+    /// </summary>
     public void Dispose()
     {
+        if (Interlocked.Exchange(ref _disposed, 1) != 0) return;
+
         _queue.CompleteAdding();
 
         foreach (var thread in _threads) thread.Join();

@@ -13,8 +13,9 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// Solid lettering from the embedded font: the whole alphabet in both cases, the digits and the
 /// common signs, so a change to any glyph's outline decode, hole classification, bridging or
 /// extrusion shows in the picture; plus a centred block and a shape made by Primitive3D.Text for
-/// the layout, the anchor and the shape route, and a bevelled word for the rounded edge. Lit from every side, as the setup's one light is
-/// behind the lettering. The embedded font is what makes the pixels the same on every machine.
+/// the layout, the anchor and the shape route, and a bevelled word for the rounded edge. Lit from
+/// every side, as the setup's one light is behind the lettering. The embedded font is what makes the
+/// pixels the same on every machine.
 /// </summary>
 internal sealed class Text3DScene : IGoldScene
 {
@@ -27,7 +28,7 @@ internal sealed class Text3DScene : IGoldScene
 
         // The setup's one light shines from behind the lettering and leaves the caps black; six lights
         // down the world axes light solids from every side, as the example does
-        game.AddAllDirectionLighting(intensity: 20f, showLightGizmo: false);
+        game.AddAllDirectionsLighting(intensity: 20f, showLightGizmo: false);
 
         GoldSetup.AddGround(game, scene);
 

@@ -16,7 +16,7 @@ public static class TextureCanvasExtensions
     /// <param name="size">The size of the texture canvas. If null, a default size will be used.</param>
     /// <param name="pixelFormat">The pixel format of the texture canvas. Default is <see cref="PixelFormat.R8G8B8A8_UNorm"/>.</param>
     /// <returns>A new instance of <see cref="TextureCanvas"/>.</returns>
-    public static TextureCanvas CreateTextureCanvas(this RenderContext renderContext, Size2? size, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
+    public static TextureCanvas CreateTextureCanvas(this RenderContext renderContext, Size2? size = null, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
         => new(renderContext, size, pixelFormat);
 
     /// <summary>
@@ -26,7 +26,7 @@ public static class TextureCanvasExtensions
     /// <param name="size">The size of the texture canvas. If null, a default size will be used.</param>
     /// <param name="pixelFormat">The pixel format of the texture canvas. Default is <see cref="PixelFormat.R8G8B8A8_UNorm"/>.</param>
     /// <returns>A new instance of <see cref="TextureCanvas"/>.</returns>
-    public static TextureCanvas CreateTextureCanvas(this IServiceRegistry services, Size2? size, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
+    public static TextureCanvas CreateTextureCanvas(this IServiceRegistry services, Size2? size = null, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
         => new(RenderContext.GetShared(services), size, pixelFormat);
 
     /// <summary>
@@ -36,6 +36,6 @@ public static class TextureCanvasExtensions
     /// <param name="size">The size of the texture canvas. If null, a default size will be used.</param>
     /// <param name="pixelFormat">The pixel format of the texture canvas. Default is <see cref="PixelFormat.R8G8B8A8_UNorm"/>.</param>
     /// <returns>A new instance of <see cref="TextureCanvas"/>.</returns>
-    public static TextureCanvas CreateTextureCanvas(this IGame game, Size2? size, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
+    public static TextureCanvas CreateTextureCanvas(this IGame game, Size2? size = null, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
         => new(RenderContext.GetShared(game.Services), size, pixelFormat);
 }

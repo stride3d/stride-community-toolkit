@@ -13,8 +13,8 @@ namespace Stride.CommunityToolkit.DebugShapes;
 public class ImmediateDebugRenderObject : RenderObject
 {
     // This frame's shapes, one list per depth test
-    private readonly List<Renderable> _renderablesWithDepth = [];
-    private readonly List<Renderable> _renderablesNoDepth = [];
+    private readonly List<DebugRenderable> _renderablesWithDepth = [];
+    private readonly List<DebugRenderable> _renderablesNoDepth = [];
 
     // How many of each kind have been queued this frame
     private Primitives _totalPrimitives, _totalPrimitivesNoDepth;
@@ -42,7 +42,7 @@ public class ImmediateDebugRenderObject : RenderObject
     {
         var cmd = new Quad { Position = position, Size = size, Rotation = rotation, Color = color };
 
-        Push(new Renderable(in cmd), depthTest);
+        Push(new DebugRenderable(in cmd, 0), depthTest);
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public class ImmediateDebugRenderObject : RenderObject
     {
         var cmd = new Circle { Position = position, Radius = radius, Rotation = rotation, Color = color };
 
-        Push(new Renderable(in cmd), depthTest);
+        Push(new DebugRenderable(in cmd, 0), depthTest);
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public class ImmediateDebugRenderObject : RenderObject
     {
         var cmd = new Sphere { Position = position, Radius = radius, Color = color };
 
-        Push(new Renderable(in cmd), depthTest);
+        Push(new DebugRenderable(in cmd, 0), depthTest);
     }
 
     /// <summary>
@@ -86,22 +86,22 @@ public class ImmediateDebugRenderObject : RenderObject
     {
         var cmd = new HalfSphere { Position = position, Radius = radius, Rotation = rotation, Color = color };
 
-        Push(new Renderable(in cmd), depthTest);
+        Push(new DebugRenderable(in cmd, 0), depthTest);
     }
 
     /// <summary>
     /// Adds a cube to the debug render queue.
     /// </summary>
-    /// <param name="start">The centre of the cube.</param>
-    /// <param name="end"><paramref name="start"/> plus the cube's size.</param>
+    /// <param name="center">The centre of the cube.</param>
+    /// <param name="size">The cube's size.</param>
     /// <param name="rotation">The rotation of the cube.</param>
     /// <param name="color">The color of the cube.</param>
     /// <param name="depthTest">Whether to use depth testing for rendering.</param>
-    public void DrawCube(in Vector3 start, in Vector3 end, in Quaternion rotation, in Color color, bool depthTest = true)
+    public void DrawCube(in Vector3 center, in Vector3 size, in Quaternion rotation, in Color color, bool depthTest = true)
     {
-        var cmd = new Cube { Start = start, End = end, Rotation = rotation, Color = color };
+        var cmd = new Cube { Center = center, Size = size, Rotation = rotation, Color = color };
 
-        Push(new Renderable(in cmd), depthTest);
+        Push(new DebugRenderable(in cmd, 0), depthTest);
     }
 
     /// <summary>
@@ -117,7 +117,7 @@ public class ImmediateDebugRenderObject : RenderObject
     {
         var cmd = new Capsule { Position = position, Height = height, Radius = radius, Rotation = rotation, Color = color };
 
-        Push(new Renderable(in cmd), depthTest);
+        Push(new DebugRenderable(in cmd, 0), depthTest);
     }
 
     /// <summary>
@@ -133,7 +133,7 @@ public class ImmediateDebugRenderObject : RenderObject
     {
         var cmd = new Cylinder { Position = position, Height = height, Radius = radius, Rotation = rotation, Color = color };
 
-        Push(new Renderable(in cmd), depthTest);
+        Push(new DebugRenderable(in cmd, 0), depthTest);
     }
 
     /// <summary>
@@ -149,7 +149,7 @@ public class ImmediateDebugRenderObject : RenderObject
     {
         var cmd = new Cone { Position = position, Height = height, Radius = radius, Rotation = rotation, Color = color };
 
-        Push(new Renderable(in cmd), depthTest);
+        Push(new DebugRenderable(in cmd, 0), depthTest);
     }
 
     /// <summary>
@@ -163,11 +163,11 @@ public class ImmediateDebugRenderObject : RenderObject
     {
         var cmd = new Line { Start = start, End = end, Color = color };
 
-        Push(new Renderable(in cmd), depthTest);
+        Push(new DebugRenderable(in cmd, 0), depthTest);
     }
 
     /// <summary>Queues one shape in the list its depth test puts it in, and counts it under its kind.</summary>
-    private void Push(in Renderable renderable, bool depthTest)
+    internal void Push(in DebugRenderable renderable, bool depthTest)
     {
         ref var counts = ref depthTest ? ref _totalPrimitives : ref _totalPrimitivesNoDepth;
 

@@ -11,6 +11,14 @@ namespace Stride.CommunityToolkit.Tests.Rendering;
 /// </summary>
 public class ShapeBatchSubmissionTests
 {
+    /// <summary>
+    /// The record is the GPU buffer's element, 144 bytes as the shader declares it. A hidden field, which a
+    /// primary-constructor parameter used in a method body becomes, would change it with no compile error.
+    /// </summary>
+    [Fact]
+    public void TheShapeRecord_Is144Bytes_AsTheShaderDeclaresIt()
+        => Assert.Equal(144, System.Runtime.CompilerServices.Unsafe.SizeOf<ShapeInstance>());
+
     [Fact]
     public void FlatOverloadsDrawWhatTheirXYPlaneCallsDraw()
     {
@@ -87,7 +95,7 @@ public class ShapeBatchSubmissionTests
 
         batch.DrawSolidCircle(Vector2.Zero, 0f, Color.White);
 
-        Assert.True(Assert.Single(batch.Instances).LocalScale > 0f);
+        Assert.InRange(Assert.Single(batch.Instances).LocalScale, float.Epsilon, float.MaxValue);
     }
 
     [Fact]
@@ -97,7 +105,7 @@ public class ShapeBatchSubmissionTests
 
         batch.DrawPixelPolyline([new Vector2(3f, 3f), new Vector2(3f, 3f), new Vector2(3f, 3f)], 2f, Color.White);
 
-        Assert.All(batch.Instances, instance => Assert.True(instance.LocalScale > 0f));
+        Assert.All(batch.Instances, instance => Assert.InRange(instance.LocalScale, float.Epsilon, float.MaxValue));
     }
 
     [Theory]

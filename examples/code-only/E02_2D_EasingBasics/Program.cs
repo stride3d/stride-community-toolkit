@@ -78,7 +78,7 @@ game.Run(new SceneSetup2D
     DpiAware = true,
 }, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     shapes = game.AddShapeBatch();
     // The markers are coloured discs with a white rim
@@ -86,8 +86,8 @@ void Start(Scene rootScene)
 
     for (var lane = 0; lane < laneY.Length; lane++)
     {
-        rootScene.Entities.Add(Label(titles[lane], new Vector2(StartX, laneY[lane] + 1.3f), 16, Color.White, Anchor.BottomLeft));
-        rootScene.Entities.Add(Label(code[lane], new Vector2(EndX + 2.2f, laneY[lane]), 13, new Color(170, 210, 255), Anchor.MiddleLeft));
+        scene.Entities.Add(Label(titles[lane], new Vector2(StartX, laneY[lane] + 1.3f), 16, Color.White, Anchor.BottomLeft));
+        scene.Entities.Add(Label(code[lane], new Vector2(EndX + 2.2f, laneY[lane]), 13, new Color(170, 210, 255), Anchor.MiddleLeft));
     }
 
     TextOverlay.GetOrCreate(game).AddSection("Easing basics", BuildOverlayLines);
@@ -150,7 +150,7 @@ void Draw(ShapeBatch shapes)
         // Where the disc is at every tenth of the run: the spacing is the easing
         for (var i = 0; i <= 10; i++)
         {
-            shapes.DrawPixelDisc(new Vector3(MathUtil.Lerp(StartX, EndX, Spacing(lane, i / 10f)), y - 0.75f, 0f), 2.5f, new Color(colour.R, colour.G, colour.B, (byte)150));
+            shapes.DrawPixelDisc(new Vector3(MathUtil.Lerp(StartX, EndX, Spacing(lane, i / 10f)), y - 0.75f, 0f), 2.5f, colour.WithAlpha(150));
         }
 
         shapes.Fill.Set(colour, 1f);
@@ -203,7 +203,7 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
 
 static Entity Label(string text, Vector2 position, float fontSize, Color colour, Anchor anchor)
 {
-    var entity = new Entity($"Label {text.Split('\n')[0]}")
+    return new Entity($"Label {text.Split('\n')[0]}", new Vector3(position, 0f))
     {
         new EntityTextComponent
         {
@@ -214,10 +214,6 @@ static Entity Label(string text, Vector2 position, float fontSize, Color colour,
             Alignment = TextAlignment.Left,
         },
     };
-
-    entity.Transform.Position = new Vector3(position, 0f);
-
-    return entity;
 }
 
 /*

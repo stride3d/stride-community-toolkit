@@ -12,7 +12,7 @@ The `Program.cs` file shows how to:
 
 - Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, RegularPolygon, Triangle, Polygon)
 - Positioning entities with Transform.Position
-- Adding entities to a Scene (rootScene)
+- Adding entities to a Scene (scene)
 - Using helpers: SceneSetup2D, AddGrabber
 
 ![2D Primitives](media/primitives-2d.webp)

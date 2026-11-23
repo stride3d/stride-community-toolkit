@@ -60,15 +60,12 @@ var modelShape = Scaled(modelType);
 
 var random = new Random(1);
 
-// Every body ever spawned, so they can all be removed again
-List<Entity> stockItems = [];
-List<Entity> toolkitItems = [];
-List<Entity> bufferedItems = [];
-List<Entity> plainItems = [];
+// Every body ever spawned, by kind, so they can be counted and all removed again
+var items = Enum.GetValues<ItemKind>().ToDictionary(kind => kind, _ => new List<Entity>());
 
 InstancingComponent stockMaster = null!;
 Model sharedModel = null!;
-Scene scene = null!;
+Scene rootScene = null!;
 
 using var game = new Game();
 
@@ -87,11 +84,11 @@ var sceneSetup = new SceneSetup3D
 
 game.Run(sceneSetup, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     game.AddGrabber();
 
-    scene = rootScene;
+    rootScene = scene;
 
     TextOverlay.GetOrCreate(game).AddSection("Instancing", BuildOverlayLines);
 
@@ -99,15 +96,15 @@ void Start(Scene rootScene)
     sharedModel = game.GetOrCreateModel(modelShape);
 
     // Three masters sharing one model: Stride's own, the toolkit's, and the toolkit's buffered
-    stockMaster = CreateMaster(rootScene, sharedModel, new TimedInstancingEntityTransform(), "StockMaster");
+    stockMaster = CreateMaster(scene, sharedModel, new TimedInstancingEntityTransform(), "StockMaster");
 
     // The toolkit master stands a little above the ground, which shows only when M asks for its transform to be used
-    var toolkitMaster = CreateMaster(rootScene, sharedModel, toolkitInstancing, "ToolkitMaster");
+    var toolkitMaster = CreateMaster(scene, sharedModel, toolkitInstancing, "ToolkitMaster");
 
     toolkitMaster.Entity.Transform.Position = new Vector3(0f, 1.5f, 0f);
 
     // The buffered one wraps a Bepu gather, so it skips the update AND the upload once bodies sleep
-    CreateMaster(rootScene, sharedModel, bufferedInstancing, "BufferedMaster");
+    CreateMaster(scene, sharedModel, bufferedInstancing, "BufferedMaster");
 
     // Creates and uploads the buffered master's GPU buffers, ahead of the renderer that draws them
     game.AddInstancingBufferUpload(bufferedInstancing);
@@ -151,7 +148,7 @@ static Primitive3D Scaled(Primitive3D shape) => shape switch
 /// instancing type decides where the matrices come from - collected from entities in every case
 /// here, but by three different implementations.
 /// </remarks>
-InstancingComponent CreateMaster(Scene rootScene, Model model, IInstancing instancingType, string name)
+InstancingComponent CreateMaster(Scene scene, Model model, IInstancing instancingType, string name)
 {
     var entity = new Entity(name)
     {
@@ -159,7 +156,7 @@ InstancingComponent CreateMaster(Scene rootScene, Model model, IInstancing insta
         new InstancingComponent { Type = instancingType }
     };
 
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 
     return entity.Get<InstancingComponent>();
 }
@@ -187,27 +184,18 @@ void DropItems(int count, ItemKind kind)
             DropHeight + random.NextSingle() * DropHeight,
             (random.NextSingle() - 0.5f) * DropSpread);
 
-        entity.Scene = scene;
+        entity.Scene = rootScene;
+        items[kind].Add(entity);
 
+        // No InstanceComponent on the toolkit kinds: their master is told about the entity directly
         switch (kind)
         {
-            case ItemKind.Stock:
-                stockItems.Add(entity);
-                break;
-
             case ItemKind.Toolkit:
-                // No InstanceComponent: the toolkit master is told about the entity directly
                 toolkitInstancing.AddInstance(entity);
-                toolkitItems.Add(entity);
                 break;
 
             case ItemKind.ToolkitBuffered:
                 bufferedInstancing.AddInstance(entity);
-                bufferedItems.Add(entity);
-                break;
-
-            default:
-                plainItems.Add(entity);
                 break;
         }
     }
@@ -217,30 +205,20 @@ void DropItems(int count, ItemKind kind)
 /// Removes every body from the scene.
 /// </summary>
 /// <remarks>
-/// An <see cref="InstanceComponent"/> disconnects from the stock master when its entity leaves the
-/// scene, but it unsubscribes from the master's InstancingChanged event only when Master changes, so
-/// the master keeps every instance it ever had alive, bodies and all, unless Master is cleared first.
-/// The toolkit types unregister an entity that leaves the scene by themselves.
+/// An entity that leaves the scene unregisters itself: the stock <see cref="InstanceComponent"/> from
+/// its master, the toolkit types from their instancing.
 /// </remarks>
 void ClearItems()
 {
-    foreach (var entity in stockItems)
+    foreach (var list in items.Values)
     {
-        if (entity.Get<InstanceComponent>() is { } instance) instance.Master = null;
-    }
+        foreach (var entity in list) entity.Scene = null;
 
-    foreach (var entity in stockItems.Concat(toolkitItems).Concat(bufferedItems).Concat(plainItems))
-    {
-        entity.Scene = null;
+        list.Clear();
     }
 
     toolkitInstancing.Clear();
     bufferedInstancing.Clear();
-
-    stockItems.Clear();
-    toolkitItems.Clear();
-    bufferedItems.Clear();
-    plainItems.Clear();
 }
 
 /// <summary>
@@ -298,7 +276,7 @@ Entity CreatePhysicsItem(string name)
     return entity;
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     HandleInput();
 }
@@ -345,10 +323,10 @@ IReadOnlyList<TextElement> BuildOverlayLines()
 
     return
     [
-        new("1", $"Stock: {stockItems.Count:N0} bodies, 1 draw call", stockItems.Count > 0 ? Color.LightGreen : Color.Gray),
-        new("2", $"Plain: {plainItems.Count:N0} bodies, {plainItems.Count:N0} draw calls", plainItems.Count > 0 ? Color.Orange : Color.Gray),
-        new("3", $"Toolkit: {toolkitItems.Count:N0} bodies, 1 draw call", toolkitItems.Count > 0 ? Color.Cyan : Color.Gray),
-        new("4", $"Buffered: {bufferedItems.Count:N0} bodies, 1 draw call", bufferedItems.Count > 0 ? Color.Magenta : Color.Gray),
+        new("1", $"Stock: {items[ItemKind.Stock].Count:N0} bodies, 1 draw call", items[ItemKind.Stock].Count > 0 ? Color.LightGreen : Color.Gray),
+        new("2", $"Plain: {items[ItemKind.Plain].Count:N0} bodies, {items[ItemKind.Plain].Count:N0} draw calls", items[ItemKind.Plain].Count > 0 ? Color.Orange : Color.Gray),
+        new("3", $"Toolkit: {items[ItemKind.Toolkit].Count:N0} bodies, 1 draw call", items[ItemKind.Toolkit].Count > 0 ? Color.Cyan : Color.Gray),
+        new("4", $"Buffered: {items[ItemKind.ToolkitBuffered].Count:N0} bodies, 1 draw call", items[ItemKind.ToolkitBuffered].Count > 0 ? Color.Magenta : Color.Gray),
         new("X", "Remove all", Color.Yellow),
         new("M", $"Toolkit master transform usage: {toolkitInstancing.ModelTransformUsage}, {UsageNote(toolkitInstancing.ModelTransformUsage)}", Color.Yellow),
         new("Shift", $"Hold for {ItemsPerDrop * 10} per drop", Color.Yellow),
@@ -359,7 +337,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
         new($"Shape: {modelType.Name}, set modelType at the top of Program.cs", Color.LightGray),
         new("Drop one kind at a time and let the pile come to rest.", Color.LightGray),
         new("The frame counter is a rolling average; give it a second.", Color.LightGray),
-        new("Kinds 3 and 4 stop working once Bepu sleeps every body:", Color.LightGray),
+        new("Kinds 3 and 4 stop updating once Bepu sleeps every body:", Color.LightGray),
         new("their update cost falls to zero as the pile rests, while", Color.LightGray),
         new("kind 1 keeps paying for a scene that is not moving.", Color.LightGray),
         new("Kind 4 stops uploading to the GPU as well.", Color.LightGray),

@@ -23,7 +23,7 @@ public class ChainTests
     public void AttachChain_CreatesOneSegmentPerEdge()
     {
         using var simulation = new Box2DSimulation();
-        var ground = simulation.CreateStaticBody(Vector3.Zero);
+        var ground = simulation.CreateStaticBody(Vector2.Zero);
 
         var chain = ShapeFixtureBuilder.AttachChain([new(-5, 0), new(0, 0), new(5, 1), new(10, 1)], ground);
 
@@ -34,15 +34,14 @@ public class ChainTests
     public void AttachChain_ListedRightToLeft_HoldsABodyUp()
     {
         using var simulation = new Box2DSimulation();
-        var ground = simulation.CreateStaticBody(Vector3.Zero);
+        var ground = simulation.CreateStaticBody(Vector2.Zero);
 
         // A chain collides on the right of its direction of travel: a floor runs right to left.
         ShapeFixtureBuilder.AttachChain([new(20, 0), new(-20, 0)], ground);
 
         var box = Box(simulation, new Vector3(0, 1, 0));
 
-        for (var i = 0; i < 120; i++)
-            simulation.Update(TimeSpan.FromSeconds(1 / 60.0));
+        StepFor(simulation, 120);
 
         // Resting on the chain: half a unit up, not fallen through.
         Assert.InRange(b2Body_GetPosition(box).Y, 0.4f, 0.6f);
@@ -52,9 +51,10 @@ public class ChainTests
     public void AttachChain_RefusesTooFewPoints()
     {
         using var simulation = new Box2DSimulation();
-        var ground = simulation.CreateStaticBody(Vector3.Zero);
+        var ground = simulation.CreateStaticBody(Vector2.Zero);
 
-        Assert.Throws<ArgumentException>(() => ShapeFixtureBuilder.AttachChain([new(0, 0)], ground));
-        Assert.Throws<ArgumentException>(() => ShapeFixtureBuilder.AttachChain([new(0, 0), new(1, 0), new(1, 1)], ground, isLoop: true));
+        Assert.Multiple(
+            () => Assert.Throws<ArgumentException>(() => ShapeFixtureBuilder.AttachChain([new(0, 0)], ground)),
+            () => Assert.Throws<ArgumentException>(() => ShapeFixtureBuilder.AttachChain([new(0, 0), new(1, 0), new(1, 1)], ground, isLoop: true)));
     }
 }

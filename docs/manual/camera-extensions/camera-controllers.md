@@ -73,7 +73,7 @@ All off unless stated, and all plain properties on the script:
   for levels with an edge.
 - **`EnableScreenEdgeMovement`** (`ScreenEdgeBorderWidth` 10 px) - RTS-style panning when the
   cursor sits at a window edge.
-- **`FollowTarget`** (`FollowOffset`, `FollowSmoothing` 5) - tracks an entity; while set, the
+- **`FollowTarget`** (`FollowOffset`, `FollowSmoothing` 0.12 s) - tracks an entity; while set, the
   manual movement controls are ignored, though zoom, bounds and reset still work.
 
 ### Changing settings after setup
@@ -202,8 +202,7 @@ void Start(Scene scene) => game.GetCameraEntity().Add(new MyOrbitCameraControlle
 ```
 
 If you keep a controller but want the on-screen help gone, pass `showHelp: false` to the 3D helper,
-or set `ShowHelp = false` on the 2D or 3D controller, before it starts or at any time after. The
-orbit controller has no `ShowHelp`. Hiding the
+or set `ShowHelp = false` on any of the four controllers, before it starts or at any time after. Hiding the
 whole overlay with <kbd>F4</kbd> is the runtime equivalent.
 
 ## See them in use

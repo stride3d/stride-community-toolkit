@@ -1,14 +1,6 @@
 name: Build & Deploy Docs (GitHub Pages)
 on:
   workflow_dispatch:
-  # (Optionally re-enable push triggers)
-  # push:
-  #   branches: [ main ]
-  #   paths-ignore:
-  #     - 'README.md'
-  #     - 'BuildDocs.ps1'
-  #     - 'wiki/**'
-  #     - '.github/**'
 
 # Only allow one deployment at a time, cancel previous in-progress runs on new pushes
 concurrency:
@@ -35,10 +27,6 @@ jobs:
       uses: actions/setup-dotnet@v6
       with:
         dotnet-version: 10.x
-
-    # - name: Configure Pages
-    #   id: pages
-    #   uses: actions/configure-pages@v5
 
     - name: Install docfx
       run: dotnet tool update -g docfx

@@ -61,7 +61,7 @@
        at Stride.Rendering.RendererBase.Draw(RenderDrawContext context) in C:\BuildAgent\work\b5f46e3c4829a09e\sources\engine\Stride.Rendering\Rendering\RendererBase.cs:line 51
        at Stride.CommunityToolkit.Skyboxes.SkyboxGenerator.Generate(Skybox skybox, SkyboxGeneratorContext context, Texture skyboxTexture) in D:\a\stride-community-toolkit\stride-community-toolkit\src\Stride.CommunityToolkit.Skyboxes\SkyboxGenerator.cs:line 49
        at Stride.CommunityToolkit.Skyboxes.GameExtensions.AddSkybox(Game game, String entityName) in D:\a\stride-community-toolkit\stride-community-toolkit\src\Stride.CommunityToolkit.Skyboxes\GameExtensions.cs:line 46
-       at Program.<>c__DisplayClass0_0.<<Main>$>b__0(Scene rootScene) in C:\Users\user-name\RiderProjects\Label3d\Program.cs:line 13
+       at Program.<>c__DisplayClass0_0.<<Main>$>b__0(Scene scene) in C:\Users\user-name\RiderProjects\Label3d\Program.cs:line 13
        at Stride.CommunityToolkit.Engine.GameExtensions.<>c__DisplayClass0_0.<<Run>g__RootScript|0>d.MoveNext() in D:\a\stride-community-toolkit\stride-community-toolkit\src\Stride.CommunityToolkit\Engine\GameExtensions.cs:line 46  
     --- End of stack trace from previous location ---
        at Stride.Core.MicroThreading.MicroThread.<>c__DisplayClass52_0.<<Start>b__0>d.MoveNext() in C:\BuildAgent\work\b5f46e3c4829a09e\sources\core\Stride.Core.MicroThreading\MicroThread.cs:line 176

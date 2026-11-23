@@ -41,10 +41,10 @@ List<FieldBody> bodies = [];
 List<BodyComponent> inside = [];
 List<Entity> thrown = [];
 var probeLine = "Probe holds nothing";
-var sweepLine = "Sweep: nothing within 16 m";
+var sweepLine = $"Sweep: nothing within {SweepReach:0} m";
 
 CameraComponent camera = null!;
-BepuSimulation? simulation = null;
+BepuSimulation simulation = null!;
 ImmediateDebugRenderSystem debugDraw = null!;
 Material highlight = null!;
 Material ballMaterial = null!;
@@ -77,16 +77,16 @@ void Start(Scene scene)
     BuildField(scene);
     BuildLauncher(scene);
 
+    // Per-body gravity, which the thrown balls switch off, is honoured only once the simulation is
+    // told to look at per-body settings
+    simulation = game.GetSimulation();
+    simulation.UsePerBodyAttributes = true;
+
     TextOverlay.GetOrCreate(game).AddSection("Shape queries", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
 {
-    // The bodies carry their simulation from the moment their entities join the scene; read once, here, and kept
-    simulation ??= bodies[0].Body.Simulation;
-
-    if (simulation is null) return;
-
     if (game.Input.IsKeyPressed(Keys.R)) Reset();
 
     FollowMouse();
@@ -119,7 +119,7 @@ void ProbeForOverlaps()
 
     inside.Clear();
 
-    foreach (var collidable in simulation!.Overlap(new Box(probeSize.X, probeSize.Y, probeSize.Z), new RigidPose(centre, Quaternion.Identity), buffer))
+    foreach (var collidable in simulation.Overlap(new Box(probeSize.X, probeSize.Y, probeSize.Z), new RigidPose(centre, Quaternion.Identity), buffer))
     {
         if (collidable is BodyComponent body)
         {
@@ -175,7 +175,7 @@ void SweepTowardsAim(Scene scene)
 
     direction.Normalize();
 
-    var found = simulation!.SweepCast(new Sphere(BallRadius), new RigidPose(launcher, Quaternion.Identity), new BodyVelocity(direction, Vector3.Zero), SweepReach, out var hit);
+    var found = simulation.SweepCast(new Sphere(BallRadius), new RigidPose(launcher, Quaternion.Identity), new BodyVelocity(direction, Vector3.Zero), SweepReach, out var hit);
     var touch = launcher + direction * (found ? hit.Distance : SweepReach);
     var colour = found ? Color.DeepSkyBlue : Color.Gray;
 
@@ -202,9 +202,6 @@ void SweepTowardsAim(Scene scene)
 /// <summary>A real ball along the sweep's line, with no gravity so it follows the straight path the sweep tested.</summary>
 void Throw(Scene scene, Vector3 direction)
 {
-    // Per-body gravity is honoured only once the simulation is told to look at per-body settings
-    simulation!.UsePerBodyAttributes = true;
-
     var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
     {
         EntityName = $"Ball {thrown.Count + 1}",
@@ -286,12 +283,11 @@ void BuildLauncher(Scene scene)
 
     marker.Scene = scene;
 
-    var label = new Entity("Label")
+    var label = new Entity("Label", launcher - new Vector3(0f, 1.2f, 0f))
     {
         new EntityTextComponent { Text = "Launcher", FontSize = 14, Anchor = Anchor.MiddleCenter, EnableShadow = true },
     };
 
-    label.Transform.Position = launcher - new Vector3(0f, 1.2f, 0f);
     label.Scene = scene;
 }
 

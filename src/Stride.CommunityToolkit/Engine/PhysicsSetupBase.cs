@@ -37,7 +37,7 @@ public abstract class PhysicsSetupBase
     /// <param name="entity">The entity, already carrying the shape's model.</param>
     /// <param name="shape">The shape the model was built from; the collider is derived from it.</param>
     /// <param name="options">The options, whose <see cref="PrimitiveEntityOptions.Body"/> picks the kind; an engine's own options type carries its component and mass.</param>
-    public abstract void AddBody(Entity entity, Primitive3D shape, PrimitiveEntityOptions? options);
+    public abstract void AddBody(Entity entity, Primitive3D shape, PrimitiveEntityOptions options);
 
     /// <summary>
     /// Attaches the physics the options ask for to an entity built from a flat shape, with the collider fitted
@@ -46,11 +46,11 @@ public abstract class PhysicsSetupBase
     /// <param name="entity">The entity, already carrying the shape's model.</param>
     /// <param name="shape">The flat shape the model was built from; the collider is derived from it.</param>
     /// <param name="options">The options, whose <see cref="PrimitiveEntityOptions.Body"/> picks the kind; an engine's own options type carries its component and mass.</param>
-    public abstract void AddBody(Entity entity, Primitive2D shape, PrimitiveEntityOptions? options);
+    public abstract void AddBody(Entity entity, Primitive2D shape, PrimitiveEntityOptions options);
 
     private sealed class NoPhysicsSetup : PhysicsSetupBase
     {
-        public override void AddBody(Entity entity, Primitive3D shape, PrimitiveEntityOptions? options) { }
-        public override void AddBody(Entity entity, Primitive2D shape, PrimitiveEntityOptions? options) { }
+        public override void AddBody(Entity entity, Primitive3D shape, PrimitiveEntityOptions options) { }
+        public override void AddBody(Entity entity, Primitive2D shape, PrimitiveEntityOptions options) { }
     }
 }

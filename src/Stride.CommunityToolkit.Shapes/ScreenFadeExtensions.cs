@@ -25,7 +25,8 @@ public static class ScreenFadeExtensions
         var fade = new ScreenFade { Color = color ?? Color.Black };
         var entity = new Entity("Screen fade") { fade };
 
-        entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
+        entity.Scene = game.GetSceneSystem().SceneInstance?.RootScene
+            ?? throw new InvalidOperationException("The game has no scene yet; add the fade from the Start callback or later.");
 
         return fade;
     }

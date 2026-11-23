@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Games;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
@@ -21,7 +22,7 @@ public static class DebugShapeExtensions
     /// <param name="game">The game to add debug shapes to.</param>
     /// <param name="debugShapeRenderGroup">The render group the shapes are drawn in.</param>
     /// <returns>The system the shapes are drawn through, also registered as a service.</returns>
-    /// <remarks>Shapes are visible by default only when the toolkit itself is a Debug build; set <see cref="ImmediateDebugRenderSystem"/>.<c>Visible</c> otherwise.</remarks>
+    /// <remarks>Shapes are visible by default only in a Debug build of your game or of the toolkit; set <see cref="ImmediateDebugRenderSystem"/>.<c>Visible</c> otherwise.</remarks>
     public static ImmediateDebugRenderSystem AddDebugShapes(this IGame game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
     {
         game.GetSceneSystem().GraphicsCompositor.AddImmediateDebugRenderFeature();
@@ -53,12 +54,12 @@ public static class DebugShapeExtensions
             return existing;
         }
 
-        if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
+        if (!graphicsCompositor.TryGetRenderStage(RenderStageNames.Opaque, out var opaqueRenderStage))
         {
             throw new InvalidOperationException("The graphics compositor has no 'Opaque' render stage, which the debug shapes draw into. AddGraphicsCompositor() creates it.");
         }
 
-        if (!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
+        if (!graphicsCompositor.TryGetRenderStage(RenderStageNames.Transparent, out var transparentRenderStage))
         {
             throw new InvalidOperationException("The graphics compositor has no 'Transparent' render stage, which the debug shapes draw into. AddGraphicsCompositor() creates it.");
         }
@@ -74,33 +75,5 @@ public static class DebugShapeExtensions
         graphicsCompositor.RenderFeatures.Add(renderFeature);
 
         return renderFeature;
-    }
-
-    /// <summary>
-    /// Finds a render stage of the given name in the compositor's render system.
-    /// </summary>
-    /// <param name="graphicsCompositor">The <see cref="GraphicsCompositor"/> containing the render stages.</param>
-    /// <param name="effectName">The name of the render stage to search for.</param>
-    /// <param name="renderStage">
-    /// When this method returns, contains the <see cref="RenderStage"/> if the render stage was found; otherwise, <c>null</c>.
-    /// </param>
-    /// <returns>
-    /// <c>true</c> if the render stage is found; otherwise, <c>false</c>.
-    /// </returns>
-    public static bool TryGetRenderStage(this GraphicsCompositor graphicsCompositor, string effectName, out RenderStage? renderStage)
-    {
-        foreach (var stage in graphicsCompositor.RenderSystem.RenderStages)
-        {
-            if (stage.Name == effectName)
-            {
-                renderStage = stage;
-
-                return true;
-            }
-        }
-
-        renderStage = null;
-
-        return false;
     }
 }

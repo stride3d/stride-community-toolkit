@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Input;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.Engine;
@@ -29,12 +30,12 @@ namespace Stride.CommunityToolkit.Scripts;
 /// the live target, distance and angles.
 /// </para>
 /// </remarks>
+[DataContract(nameof(Basic3DOrbitCameraController))]
 [Display("Orbit Camera Controller")]
 [ComponentCategory("Camera")]
 public class Basic3DOrbitCameraController : SyncScript
 {
     private CameraComponent? _camera;
-    private Vector2? _lastMousePosition;
     private float _yaw;
     private float _pitch;
     private float _distance = 10f;
@@ -87,6 +88,24 @@ public class Basic3DOrbitCameraController : SyncScript
     public bool HelpCollapsed { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets whether the camera's key help is shown on the shared <see cref="TextOverlay"/>. Defaults to
+    /// <see langword="true"/>, and can be set before the script starts or at any time after.
+    /// </summary>
+    /// <remarks>
+    /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
+    /// it, is toggled with <see cref="TextOverlay.ToggleKey"/>.
+    /// </remarks>
+    public bool ShowHelp
+    {
+        get;
+        set
+        {
+            field = value;
+            _instructions?.Enabled = value;
+        }
+    } = true;
+
+    /// <summary>
     /// Reads the starting pose - distance and angles come from the entity's position relative to
     /// <see cref="Target"/> - and registers the shared help section.
     /// </summary>
@@ -125,6 +144,8 @@ public class Basic3DOrbitCameraController : SyncScript
                 new($"Target: {Target.X:0.00}, {Target.Y:0.00}, {Target.Z:0.00}", Color.Yellow),
                 new($"Distance: {_distance:0.00}  Yaw: {MathUtil.RadiansToDegrees(_yaw):0.0}°  Pitch: {MathUtil.RadiansToDegrees(_pitch):0.0}°", Color.Yellow),
             ], HelpCollapsed, order: -100);
+
+        _instructions.Enabled = ShowHelp;
     }
 
     /// <summary>
@@ -135,13 +156,12 @@ public class Basic3DOrbitCameraController : SyncScript
         if (_camera is null)
             return;
 
-        var mousePosition = Input.MousePosition;
         var panning = Input.IsMouseButtonDown(PanButton);
         var orbiting = !panning && Input.IsMouseButtonDown(OrbitButton);
 
-        if ((panning || orbiting) && _lastMousePosition is { } last)
+        if (panning || orbiting)
         {
-            var delta = mousePosition - last;
+            var delta = Input.MouseDelta;
 
             if (panning)
             {
@@ -154,8 +174,6 @@ public class Basic3DOrbitCameraController : SyncScript
                 _pitch = Math.Clamp(_pitch - delta.Y * OrbitSensitivity, MinPitch, MaxPitch);
             }
         }
-
-        _lastMousePosition = panning || orbiting ? mousePosition : null;
 
         Zoom();
 
@@ -207,8 +225,7 @@ public class Basic3DOrbitCameraController : SyncScript
             wheel *= SpeedFactor;
         }
 
-        // Multiplicative, so every notch changes the distance by the same fraction near or far
-        _distance = Math.Clamp(_distance * MathF.Pow(1f + ZoomStep, -wheel), MinDistance, MaxDistance);
+        _distance = CameraMath.StepZoom(_distance, wheel, ZoomStep, MinDistance, MaxDistance);
     }
 
     /// <summary>

@@ -26,7 +26,6 @@ public sealed class MaterialStreamView : IDisposable
 {
     private readonly MeshRenderFeature _meshFeature;
     private readonly MaterialStreamRenderFeature _feature;
-    private MaterialStream? _stream;
 
     /// <summary>Every stream, in the order <see cref="Next"/> walks them.</summary>
     public static IReadOnlyList<MaterialStream> All { get; } = Enum.GetValues<MaterialStream>();
@@ -40,21 +39,21 @@ public sealed class MaterialStreamView : IDisposable
     /// <summary>The stream every mesh draws, or <see langword="null"/> for lit shading. Takes effect on the next frame, after a recompile.</summary>
     public MaterialStream? Stream
     {
-        get => _stream;
+        get;
         set
         {
-            _stream = value;
+            field = value;
             _feature.Filter = value is { } stream ? FilterFor(stream) : null;
         }
     }
 
     /// <summary>What the view shows, for an overlay: the stream's name, or "Lit" when none is set.</summary>
-    public string Name => _stream is { } stream ? DisplayName(stream) : "Lit";
+    public string Name => Stream is { } stream ? DisplayName(stream) : "Lit";
 
     /// <summary>Steps to the next stream, and after the last back to lit shading.</summary>
     public void Next()
     {
-        if (_stream is not { } stream)
+        if (Stream is not { } stream)
         {
             Stream = All[0];
             return;

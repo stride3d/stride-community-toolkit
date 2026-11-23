@@ -10,8 +10,8 @@ using Xunit;
 namespace Stride.CommunityToolkit.Tests.Rendering;
 
 /// <summary>
-/// The two traps of ARCHITECTURE items 8 and 9, against a real headless game: an instance that leaves
-/// its scene is unregistered, and instancing is either set up for you or warned about.
+/// Two traps of instancing, against a real headless game: an instance that leaves its scene is
+/// unregistered, and a master with no instancing render feature is either set up for you or warned about.
 /// </summary>
 [Collection(GameExtensionsRunTests.Name)]
 public class EntityInstancingTests
@@ -66,7 +66,7 @@ public class EntityInstancingTests
 
         var present = false;
 
-        game.Run(Bare().UseInstancing(), start: _ =>
+        game.Run(TestSetups.Bare().UseInstancing(), start: _ =>
         {
             present = HasInstancingFeature(game);
             game.Exit();
@@ -83,7 +83,7 @@ public class EntityInstancingTests
         var before = true;
         var after = false;
 
-        game.Run(Bare(), start: _ =>
+        game.Run(TestSetups.Bare(), start: _ =>
         {
             before = HasInstancingFeature(game);
 
@@ -115,7 +115,7 @@ public class EntityInstancingTests
 
         try
         {
-            game.Run(Bare(), start: scene =>
+            game.Run(TestSetups.Bare(), start: scene =>
             {
                 var master = new Entity("master") { new ModelComponent(), new InstancingComponent { Type = new EntityInstancing() } };
                 master.Scene = scene;
@@ -133,9 +133,6 @@ public class EntityInstancingTests
 
         Assert.Contains("master", warning);
     }
-
-    // The compositor and nothing that needs a shader: the test host has none
-    private static SceneSetup3D Bare() => new() { Camera = null, Lighting = null, Skybox = null, Ground = null };
 
     private static bool HasInstancingFeature(Game game)
         => game.SceneSystem.GraphicsCompositor.RenderFeatures.OfType<MeshRenderFeature>().Any(mesh => mesh.RenderFeatures.OfType<InstancingRenderFeature>().Any());

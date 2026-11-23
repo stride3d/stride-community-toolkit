@@ -37,7 +37,7 @@ public class TextColliderTests
     public void TwoFontsOfTheSameNameKeepTheirOwnHulls()
     {
         // Two copies of the embedded font are two fonts named Open Sans; a cache keyed by the name
-        // handed the second the first's geometry (the second review's F10)
+        // handed the second the first's geometry
         using var one = MeshFont.Load(TestGeometry.DefaultFontBytes(), "copy");
         using var two = MeshFont.Load(TestGeometry.DefaultFontBytes(), "copy");
 

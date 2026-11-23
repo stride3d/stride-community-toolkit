@@ -1,7 +1,6 @@
 using CubeCollapse.Components;
 using CubeCollapse.Gameplay;
 using CubeCollapse.Setup;
-using CubeCollapse.Shared;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
@@ -64,7 +63,7 @@ public class HoverHighlightScript : SyncScript
 
         var cube = hitInfo.Collidable.Entity;
 
-        if (cube.Name != EntityNames.Cube) return;
+        if (cube.Get<CubeComponent>() is null) return;
 
         var group = MatchFinder.FindGroup(Grid, cube);
 

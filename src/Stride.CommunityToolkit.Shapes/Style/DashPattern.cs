@@ -7,8 +7,8 @@ namespace Stride.CommunityToolkit.Shapes;
 /// <remarks>
 /// <para>
 /// Dashes run around circles, rings, annuli, sectors and arcs - starting at the start angle, so a
-/// gauge's ticks begin where its sweep does - and along lines. A polygon with more than two
-/// corners is always drawn solid; its outline has no single direction to dash along.
+/// gauge's ticks begin where its sweep does - and along lines and polylines. A polygon with more than
+/// two corners is always drawn solid; its outline has no single direction to dash along.
 /// </para>
 /// <para>
 /// Around a circle or arc the pattern is stretched or squeezed by up to half a period so that a
@@ -21,7 +21,7 @@ namespace Stride.CommunityToolkit.Shapes;
 /// <code>
 /// shapes.Dash.Length = 6f;          // gap defaults to the same
 /// shapes.Dash.Phase += 30f * dt;    // and the ring turns
-/// shapes.DrawArc(center, radius, 0f, MathF.Tau, color);
+/// shapes.DrawArc(center, radius, 0f, MathUtil.TwoPi, color);
 /// shapes.Dash.Clear();
 /// </code>
 /// </example>

@@ -18,7 +18,7 @@ NexYamlSerializerRegistry.Init();
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     game.AddGroundGizmo(showAxisName: true);
 
@@ -28,7 +28,7 @@ void Start(Scene rootScene)
 
     var ui = gameManager.CreateUI();
     ui.Add(new ClickHandlerComponent());
-    ui.Scene = rootScene;
+    ui.Scene = scene;
 }
 /*
 ---example-metadata

@@ -1,7 +1,5 @@
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
-using Stride.Engine;
-using Stride.Graphics;
 using static E11_3D_ShapeBatch_Gallery.Palette;
 
 namespace E11_3D_ShapeBatch_Gallery;
@@ -73,7 +71,7 @@ public static class ShapeStations
 
         for (var i = 0; i < 4; i++)
         {
-            var angle = s.Seconds * 0.4f + i * MathF.PI * 0.5f;
+            var angle = s.Seconds * 0.4f + i * MathUtil.PiOverTwo;
             var (sin, cos) = MathF.SinCos(angle);
             var axisX = s.Direction(cos, 0f, -sin);
             var axisY = s.Direction(sin, 0f, cos);
@@ -103,11 +101,11 @@ public static class ShapeStations
         ];
 
         var chart = s.At(1.5f, Lift, 0.5f);
-        var angle = MathF.PI * 0.5f;
+        var angle = MathUtil.PiOverTwo;
 
         foreach (var (share, fill) in segments)
         {
-            var sweep = share * MathF.Tau;
+            var sweep = share * MathUtil.TwoPi;
 
             shapes.Fill.Color = fill;
             shapes.DrawSector(chart, s.Up, 2.4f, angle + 0.03f, sweep - 0.06f, Color.White, innerRadius: 1.2f);
@@ -117,11 +115,11 @@ public static class ShapeStations
 
         shapes.Fill.Color = null;
 
-        shapes.DrawSector(s.At(4.6f, Lift, -1f), s.Up, 1.5f, s.Seconds * 0.8f, MathF.PI * 0.6f, Color.Gold);
+        shapes.DrawSector(s.At(4.6f, Lift, -1f), s.Up, 1.5f, s.Seconds * 0.8f, MathUtil.Pi * 0.6f, Color.Gold);
 
         // A cone that starts at the centre: the watcher's field of view, sweeping
         var watcher = s.Pillars[0].Base + Vector3.UnitY * Lift;
-        var facing = MathF.Sin(s.Seconds * 0.5f) * 0.9f - MathF.PI * 0.5f;
+        var facing = MathF.Sin(s.Seconds * 0.5f) * 0.9f - MathUtil.PiOverTwo;
 
         shapes.DrawSector(watcher, s.Up, 5f, facing - 0.45f, 0.9f, Color.Yellow);
     }
@@ -144,15 +142,15 @@ public static class ShapeStations
             var progress = (MathF.Sin(s.Seconds * 0.7f + i * 1.1f) + 1f) * 0.5f;
 
             shapes.Fill.Alpha = 0.25f;
-            shapes.DrawArc(centre, s.Forward, 1f, 0f, MathF.Tau, Color.Gray, width: 0.3f);
+            shapes.DrawArc(centre, s.Forward, 1f, 0f, MathUtil.TwoPi, Color.Gray, width: 0.3f);
 
             shapes.Fill.Alpha = 0.9f;
-            shapes.DrawArc(centre, s.Forward, 1f, MathF.PI * 0.5f, -progress * MathF.Tau, Color.LimeGreen, width: 0.3f);
+            shapes.DrawArc(centre, s.Forward, 1f, MathUtil.PiOverTwo, -progress * MathUtil.TwoPi, Color.LimeGreen, width: 0.3f);
         }
 
         shapes.Fill.Alpha = s.Style.FillAlpha;
 
-        shapes.DrawArc(s.At(2f, Lift, 1.5f), s.Up, 3f, s.Seconds, MathF.Tau * 0.8f, Color.HotPink);
+        shapes.DrawArc(s.At(2f, Lift, 1.5f), s.Up, 3f, s.Seconds, MathUtil.TwoPi * 0.8f, Color.HotPink);
     }
 
     /// <summary>
@@ -220,27 +218,8 @@ public static class ShapeStations
     /// </summary>
     public static void HudPanelSetup(ShapeStation s)
     {
-        var text = new WorldTextComponent
-        {
-            Text = "",
-            FontSize = 48,
-            Height = 1.3f,
-            TextColor = HudBlue,
-            GlowColor = new Color(0, 140, 255, 170),
-            GlowSize = 4f,
-            Alignment = TextAlignment.Center,
-            Billboard = false,
-        };
-
         // A hair in front of the panel, so the text is unambiguously the nearer surface
-        var entity = new Entity($"Station {s.Number} text")
-        {
-            Transform = { Position = s.At(0f, 3f, -1f) + s.Forward * 0.01f, Rotation = s.FacingRotation() },
-        };
-
-        entity.Add(text);
-        entity.Scene = s.Scene;
-        s.State = text;
+        s.State = HudLabel.Add(s, "text", height: 1.3f, new Vector3(0f, 3f, -0.99f));
     }
 
     /// <summary>
@@ -283,35 +262,11 @@ public static class ShapeStations
     /// </summary>
     public static void TextOverflowSetup(ShapeStation s)
     {
-        var spilling = Label(s, Overflowing, 0.5f, new Vector3(-2.4f, 2.6f, -1f));
-        var wrapped = Label(s, Wrapped, 1.25f, new Vector3(2.4f, 2.6f, -1f));
+        // Each a hair in front of its panel
+        var spilling = HudLabel.Add(s, "spilling", height: 0.5f, new Vector3(-2.4f, 2.6f, -0.99f), Overflowing);
+        var wrapped = HudLabel.Add(s, "wrapped", height: 1.25f, new Vector3(2.4f, 2.6f, -0.99f), Wrapped);
 
         s.State = new[] { spilling, wrapped };
-
-        static WorldTextComponent Label(ShapeStation s, string text, float height, Vector3 local)
-        {
-            var label = new WorldTextComponent
-            {
-                Text = text,
-                FontSize = 48,
-                Height = height,
-                TextColor = HudBlue,
-                GlowColor = new Color(0, 140, 255, 170),
-                GlowSize = 4f,
-                Alignment = TextAlignment.Center,
-                Billboard = false,
-            };
-
-            var entity = new Entity($"Station {s.Number} {(text == Overflowing ? "spilling" : "wrapped")}")
-            {
-                Transform = { Position = s.At(local) + s.Forward * 0.01f, Rotation = s.FacingRotation() },
-            };
-
-            entity.Add(label);
-            entity.Scene = s.Scene;
-
-            return label;
-        }
     }
 
     /// <summary>

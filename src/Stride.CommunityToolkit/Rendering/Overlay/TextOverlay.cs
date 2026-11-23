@@ -1,7 +1,7 @@
+using Stride.CommunityToolkit.Input;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Games;
 using Stride.Graphics;
-using Stride.Graphics.Font;
 using Stride.Input;
 
 namespace Stride.CommunityToolkit.Rendering.Overlay;
@@ -40,7 +40,6 @@ public sealed class TextOverlay : GameSystemBase
     private readonly TextOverlayFontResolver _fontResolver = new();
     private Texture? _background;
     private InputManager? _input;
-    private IGraphicsDeviceService? _graphicsDeviceService;
     private DisplayScale? _displayScale;
 
     // The widest the block has been since its line count last changed, in unscaled pixels
@@ -48,35 +47,17 @@ public sealed class TextOverlay : GameSystemBase
     private int _stickyLineCount;
 
     /// <summary>
-    /// Gets or sets a font to draw with, overriding <see cref="FontName"/>. <see langword="null"/>, the default, uses the system font named by <see cref="FontName"/>.
+    /// Gets or sets a font to draw with, overriding <see cref="FontFamily"/>. <see langword="null"/>, the default, uses an installed font of that family. For a specific installed font, a weight or a file, load one with <c>game.LoadSystemFont("Consolas", 14, FontStyle.Bold)</c> and set it here.
     /// </summary>
     public SpriteFont? Font { get; set; }
 
     /// <summary>
-    /// Gets or sets which kind of installed font to draw with when <see cref="FontName"/> is not set. Defaults to <see cref="TextOverlayFontFamily.Monospace"/>, the character of Stride's own debug text.
+    /// Gets or sets which kind of installed font to draw with when <see cref="Font"/> is not set. Defaults to <see cref="TextOverlayFontFamily.Monospace"/>, the character of Stride's own debug text.
     /// </summary>
     /// <remarks>
     /// The font file is located in the system font folders and rasterised at the size asked for, so it stays sharp at any <see cref="FontSize"/> and <see cref="Scale"/>. If none of the family's fonts is installed, Stride's default font is used - which is bold and proportional.
     /// </remarks>
     public TextOverlayFontFamily FontFamily { get; set; } = TextOverlayFontFamily.Monospace;
-
-    /// <summary>
-    /// Gets or sets the family name of a specific installed font to draw with, such as <c>"Consolas"</c> or <c>"Segoe UI"</c>, overriding <see cref="FontFamily"/>. <see langword="null"/>, the default, chooses from <see cref="FontFamily"/>. A font that cannot be found falls back the same way.
-    /// </summary>
-    /// <remarks>
-    /// Set <see cref="FontFile"/> to point at a specific file instead of searching the system font folders.
-    /// </remarks>
-    public string? FontName { get; set; }
-
-    /// <summary>
-    /// Gets or sets the weight and slant of <see cref="FontName"/>. Defaults to <see cref="FontStyle.Regular"/>.
-    /// </summary>
-    public FontStyle FontStyle { get; set; } = FontStyle.Regular;
-
-    /// <summary>
-    /// Gets or sets the path of the TrueType file for <see cref="FontName"/>, for fonts that are not in the system font folders. <see langword="null"/>, the default, searches those folders.
-    /// </summary>
-    public string? FontFile { get; set; }
 
     /// <summary>
     /// Gets or sets the text height in unscaled pixels. Defaults to 14.
@@ -162,26 +143,26 @@ public sealed class TextOverlay : GameSystemBase
     /// <summary>
     /// Gets or sets a fixed vertical distance between lines, in unscaled pixels. <see langword="null"/>, the default, derives it from the font: the text height plus the background padding plus <see cref="LineSpacing"/>, so lines neither overlap nor drift apart when <see cref="FontSize"/> changes.
     /// </summary>
-    public int? LineHeight { get; set; }
+    public float? LineHeight { get; set; }
 
     /// <summary>
     /// Gets or sets the gap between one line's background strip and the next, in unscaled pixels, when <see cref="LineHeight"/> is not set. Defaults to 2; <c>0</c> makes the strips touch.
     /// </summary>
     public float LineSpacing { get; set; } = 2f;
 
-    /// <summary>Gets or sets how many blank lines separate one section from the next - the empty line under the camera controls, for one. Defaults to 1; <c>0</c> runs a section straight on from the one above it.</summary>
-    public int SectionGap { get; set; } = 1;
+    /// <summary>Gets or sets how many blank lines separate one section from the next - the empty line under the camera controls, for one. Defaults to 0; <c>1</c> runs a section 1 line from the one above it.</summary>
+    public int SectionGap { get; set; }
 
     /// <summary>
     /// Gets or sets how far the text is shifted inside its background strip, in screen pixels, positive downwards. Defaults to <c>-1</c>: a font's line gap sits above its ascender, so glyphs land about a pixel low in a strip sized from the line height, and one pixel up centres them. Not multiplied by the scale: the imbalance stays close to one pixel at the sizes the overlay is drawn at.
     /// </summary>
     public float TextNudge { get; set; } = -1f;
 
-    /// <summary>Gets or sets the gap kept between the overlay and the edge of the screen, in pixels.</summary>
+    /// <summary>Gets or sets the gap kept between the overlay and the edge of the screen, in unscaled pixels.</summary>
     public Int2 Margin { get; set; } = new(5, 10);
 
     /// <summary>Gets or sets the marker shown on a collapsed section's title line.</summary>
-    /// <remarks>Printable ASCII only; arrow glyphs such as <c>▼</c> render as blanks.</remarks>
+    /// <remarks>A glyph the font lacks, as many lack <c>▼</c>, draws as the font's missing-glyph box.</remarks>
     public string CollapsedMarker { get; set; } = "[+]";
 
     /// <summary>Gets or sets the marker shown on an expanded section's title line.</summary>
@@ -228,18 +209,26 @@ public sealed class TextOverlay : GameSystemBase
     {
         ArgumentNullException.ThrowIfNull(keys);
 
-        return string.Join(KeySeparator, keys.Select(key => string.Format(KeyFormat, key)));
+        // One key is the common line, and the overlay formats every line every frame
+        return keys.Count switch
+        {
+            0 => string.Empty,
+            1 => string.Format(KeyFormat, keys[0]),
+            _ => string.Join(KeySeparator, keys.Select(key => string.Format(KeyFormat, key))),
+        };
     }
 
     /// <summary>What is drawn before a line's text, in the key colour: its marker, then its decorated keys, then a space.</summary>
     private string Prefix(TextElement line)
     {
-        var parts = new List<string>(2);
+        var marker = line.Marker ?? string.Empty;
+        var keys = line.Keys is { Count: > 0 } named ? FormatKeys(named) : string.Empty;
 
-        if (!string.IsNullOrEmpty(line.Marker)) parts.Add(line.Marker);
-        if (line.Keys is { Count: > 0 } keys) parts.Add(FormatKeys(keys));
+        if (marker.Length == 0 && keys.Length == 0) return string.Empty;
 
-        return parts.Count == 0 ? string.Empty : string.Join(" ", parts) + (line.Text.Length > 0 ? " " : string.Empty);
+        var prefix = marker.Length == 0 ? keys : keys.Length == 0 ? marker : marker + " " + keys;
+
+        return line.Text.Length > 0 ? prefix + " " : prefix;
     }
 
     /// <summary>
@@ -290,6 +279,7 @@ public sealed class TextOverlay : GameSystemBase
     /// <param name="collapsed">Whether it starts collapsed.</param>
     /// <param name="order">Sort order; lower is drawn first.</param>
     /// <returns>The section, so it can be collapsed, disabled or removed later.</returns>
+    /// <exception cref="ArgumentException"><paramref name="title"/> is <see langword="null"/> or empty; the title is the line that stays while the section is collapsed.</exception>
     public TextOverlaySection AddCollapsibleSection(
         string name,
         string title,
@@ -298,6 +288,8 @@ public sealed class TextOverlay : GameSystemBase
         bool collapsed = false,
         int order = 0)
     {
+        ArgumentException.ThrowIfNullOrEmpty(title);
+
         var section = AddSection(name, lines, order);
 
         section.Title = title;
@@ -349,12 +341,6 @@ public sealed class TextOverlay : GameSystemBase
     /// <param name="y">Pixels from the top edge of the window, unscaled.</param>
     public void SetPosition(int x, int y) => SetPosition(new Int2(x, y));
 
-    /// <summary>
-    /// Places the overlay at an anchor. The same as setting <see cref="Position"/>; here so an anchor and a pixel position are chosen through one method.
-    /// </summary>
-    /// <param name="position">The corner, edge or centre, or <see langword="null"/> to draw at <see cref="CustomPosition"/> as last set.</param>
-    public void SetPosition(Anchor? position) => Position = position;
-
     /// <inheritdoc />
     public override void Update(GameTime gameTime)
     {
@@ -362,15 +348,16 @@ public sealed class TextOverlay : GameSystemBase
 
         if (_input is null || !_input.HasKeyboard) return;
 
-        if (_input.IsKeyPressed(ToggleKey)) Visible = !Visible;
+        // Plain keys only: the profiler's Ctrl chords share F1 to F4 with the overlay and its sections
+        if (_input.IsKeyPressedUnmodified(ToggleKey)) Visible = !Visible;
 
-        if (_input.IsKeyPressed(RepositionKey) && Position is not null) CyclePosition();
+        if (_input.IsKeyPressedUnmodified(RepositionKey) && Position is not null) CyclePosition();
 
         // Section keys are read even while the overlay is hidden, so a collapse toggle pressed with
         // everything off still takes effect rather than silently doing nothing
         foreach (var section in _sections)
         {
-            if (section.IsCollapsible && _input.IsKeyPressed(section.ToggleKey!.Value))
+            if (section.IsCollapsible && _input.IsKeyPressedUnmodified(section.ToggleKey!.Value))
             {
                 section.Collapsed = !section.Collapsed;
             }
@@ -405,7 +392,10 @@ public sealed class TextOverlay : GameSystemBase
         var block = MeasureBlock(lines, font, scale);
         var padding = new Vector2(MathF.Round(BackgroundPadding.X * scale), MathF.Round(BackgroundPadding.Y * scale));
         var linePitch = LinePitch(block.Sizes, padding, scale);
-        var origin = GetOrigin(lines.Count * linePitch / scale, block.Width / scale);
+
+        // The screen in unscaled pixels: everything placed on it is multiplied by the scale when drawn
+        var screen = new Vector2(backBuffer.Width / scale, backBuffer.Height / scale);
+        var origin = GetOrigin(screen, lines.Count * linePitch / scale, block.Width / scale);
 
         BlockBounds = new RectangleF(origin.X * scale - padding.X, origin.Y * scale - padding.Y, block.Width + padding.X * 2f, lines.Count * linePitch);
 
@@ -439,7 +429,7 @@ public sealed class TextOverlay : GameSystemBase
         {
             var position = new Vector2(left + (lines[i].Indented ? block.IndentWidth : 0f), y);
 
-            DrawLine(_spriteBatch, _background, lines[i], block.Prefixes[i], position, block.Sizes[i], style);
+            DrawLine(_spriteBatch, _background, lines[i], block.Prefixes[i], block.PrefixWidths[i], position, block.Sizes[i], style);
 
             y += linePitch;
         }
@@ -450,9 +440,10 @@ public sealed class TextOverlay : GameSystemBase
     /// <summary>What the lines measure at the current font and scale, in screen pixels.</summary>
     /// <param name="Sizes">The size of each line's text, in whole pixels. Zero for a blank line.</param>
     /// <param name="Prefixes">The marker and keys each line starts with.</param>
+    /// <param name="PrefixWidths">The width of each prefix in whole pixels, where the line's own text starts.</param>
     /// <param name="IndentWidth">How far a line under a collapsible title is moved in.</param>
     /// <param name="Width">The width of the block.</param>
-    private readonly record struct BlockMeasure(Vector2[] Sizes, string[] Prefixes, float IndentWidth, float Width);
+    private readonly record struct BlockMeasure(Vector2[] Sizes, string[] Prefixes, float[] PrefixWidths, float IndentWidth, float Width);
 
     /// <summary>
     /// Measures every line. Measured rather than declared, so a section appearing or a key menu
@@ -463,6 +454,7 @@ public sealed class TextOverlay : GameSystemBase
         var fontSize = FontSize * scale;
         var sizes = new Vector2[lines.Count];
         var prefixes = new string[lines.Count];
+        var prefixWidths = new float[lines.Count];
         var blockWidth = 0f;
 
         // Lines under a collapsible title start one marker in, so their keys sit under the title's key
@@ -471,6 +463,8 @@ public sealed class TextOverlay : GameSystemBase
         for (var i = 0; i < lines.Count; i++)
         {
             prefixes[i] = Prefix(lines[i]);
+
+            if (prefixes[i].Length > 0) prefixWidths[i] = MathF.Round(font.MeasureString(prefixes[i], fontSize).X);
 
             var text = prefixes[i] + lines[i].Text;
 
@@ -495,7 +489,7 @@ public sealed class TextOverlay : GameSystemBase
 
         _stickyWidth = Math.Max(_stickyWidth, blockWidth / scale);
 
-        return new BlockMeasure(sizes, prefixes, indentWidth, _stickyWidth * scale);
+        return new BlockMeasure(sizes, prefixes, prefixWidths, indentWidth, _stickyWidth * scale);
     }
 
     /// <summary>Line pitch in screen pixels: fixed if asked for, otherwise what the font and strips need.</summary>
@@ -515,7 +509,7 @@ public sealed class TextOverlay : GameSystemBase
     /// Draws one line: one strip under the whole line, then the text in up to two runs, the marker
     /// and keys in the key colour, and what they do in the line's own, starting where the keys end.
     /// </summary>
-    private void DrawLine(SpriteBatch batch, Texture background, TextElement line, string prefix, Vector2 position, Vector2 size, ScreenTextStyle style)
+    private void DrawLine(SpriteBatch batch, Texture background, TextElement line, string prefix, float prefixWidth, Vector2 position, Vector2 size, ScreenTextStyle style)
     {
         // Blank entries exist to space sections apart; drawing them would be wasted work
         if (prefix.Length + line.Text.Length == 0) return;
@@ -531,7 +525,7 @@ public sealed class TextOverlay : GameSystemBase
             var keyColour = KeyColor ?? Color.Lerp(colour, Color.White, 0.5f);
 
             ScreenTextDrawer.Draw(batch, null, prefix, position, size, style with { Color = keyColour });
-            position.X += MathF.Round(style.Font.MeasureString(prefix, style.FontSize).X);
+            position.X += prefixWidth;
         }
 
         if (line.Text.Length > 0) ScreenTextDrawer.Draw(batch, null, line.Text, position, size, style);
@@ -606,19 +600,10 @@ public sealed class TextOverlay : GameSystemBase
         return lines;
     }
 
-    private Int2 GetOrigin(float blockHeight, float blockWidth)
+    /// <summary>The block's top left in unscaled pixels: the anchor's point of the room the screen leaves it, or the custom position.</summary>
+    private Int2 GetOrigin(Vector2 screen, float blockHeight, float blockWidth)
     {
         if (Position is not { } anchor) return CustomPosition;
-
-        _graphicsDeviceService ??= Services.GetService<IGraphicsDeviceService>();
-
-        var backBuffer = _graphicsDeviceService?.GraphicsDevice?.Presenter?.BackBuffer;
-
-        // In unscaled pixels: everything here is multiplied by Scale when drawn
-        var scale = EffectiveScale;
-        var screen = backBuffer is null
-            ? new Int2((int)(1280 / scale), (int)(720 / scale))
-            : new Int2((int)(backBuffer.Width / scale), (int)(backBuffer.Height / scale));
 
         // Measured rather than declared, so a section appearing or a key menu expanding keeps the
         // block anchored to its corner instead of running off the edge
@@ -632,7 +617,7 @@ public sealed class TextOverlay : GameSystemBase
 
         // The block's top left can go anywhere in the screen less the block and a margin on each
         // side; the anchor picks the point of that room, so an edge or the centre needs no case
-        var room = new Vector2(Math.Max(0, screen.X - width - 2 * left), Math.Max(0, screen.Y - height - 2 * top));
+        var room = new Vector2(Math.Max(0f, (int)screen.X - width - 2 * left), Math.Max(0f, (int)screen.Y - height - 2 * top));
         var origin = anchor.At(room);
 
         return new(left + (int)origin.X, top + (int)origin.Y);

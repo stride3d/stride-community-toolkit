@@ -52,9 +52,9 @@ public sealed class ModesWidget(ShipState ship) : HudWidget
             Additive = true,
         });
 
-        canvas.Shapes.Tag = id;
+        canvas.Tag(id);
         canvas.ChamferedPanel(button.Center, button.Size, 0.14f, Color.Lerp(accent, theme.Text, engaged));
-        canvas.Shapes.Tag = null;
+        canvas.Untag();
 
         // The decoy button carries its count on a second line
         var caption = mode.Name == "DECOY" ? $"{mode.Name}\n{ship.Decoys}" : mode.Name;

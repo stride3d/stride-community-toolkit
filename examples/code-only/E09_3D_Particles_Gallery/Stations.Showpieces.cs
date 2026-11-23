@@ -247,7 +247,7 @@ public static class ShowStations
         for (var b = 0; b < beams; b++)
         {
             var tint = v == 2 ? b switch { 0 => new Color4(1f, 0.15f, 0.1f, 1f), 1 => new Color4(0.15f, 1f, 0.2f, 1f), _ => new Color4(0.15f, 0.3f, 1f, 1f) } : colour;
-            var direction = Quaternion.RotationY(b * MathF.Tau / beams);
+            var direction = Quaternion.RotationY(b * MathUtil.TwoPi / beams);
 
             foreach (var (width, alpha, name) in new[] { (0.9f, 0.5f, "halo"), (0.25f, 1f, "core") })
             {

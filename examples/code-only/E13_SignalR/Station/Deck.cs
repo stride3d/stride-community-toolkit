@@ -28,7 +28,13 @@ public sealed class Deck(ContainerFactory factory)
 
     private readonly List<Container> _containers = [];
     private readonly Queue<(ReleaseRequest Request, CommandOrigin Origin)> _pending = new();
+    private static readonly ContainerSize[] Sizes = Enum.GetValues<ContainerSize>();
+
     private readonly Random _random = new();
+
+    // The census counts, kept so a snapshot a frame allocates neither
+    private readonly int[] _bySize = new int[Sizes.Length];
+    private readonly int[] _byPaint = new int[Paints.All.Length];
 
     private int _nextId = 1;
     private int _released;
@@ -36,7 +42,7 @@ public sealed class Deck(ContainerFactory factory)
     private float _time;
     private float _untilNextPending;
 
-    public event Action<ContainerEvent>? Released;
+    public event Action<Container>? Released;
 
     public event Action<ContainerEvent>? Landed;
 
@@ -46,19 +52,16 @@ public sealed class Deck(ContainerFactory factory)
 
     public int PendingCount => _pending.Count;
 
-    /// <summary>The live container with this id, or <see langword="null"/> once it has been lost or cleared.</summary>
-    public Container? Find(int id) => _containers.Find(container => container.Id == id);
-
     /// <summary>Drops one container now. Unspecified size or paint is chosen at random.</summary>
     public Container Release(ReleaseRequest request, CommandOrigin origin)
     {
-        var size = request.Size ?? _random.GetItems(Enum.GetValues<ContainerSize>(), 1)[0];
-        var paint = request.Paint ?? _random.GetItems(Paints.All.AsSpan(), 1)[0];
+        var size = request.Size ?? Sizes[_random.Next(Sizes.Length)];
+        var paint = request.Paint ?? Paints.All[_random.Next(Paints.All.Length)];
 
         // A little scatter under the hatch and a random tilt, so no two drops are the same and stacks
         // form by accident rather than by alignment
         var position = new Vector3(Jitter(2f), HatchHeight, Jitter(2f));
-        var rotation = Quaternion.RotationYawPitchRoll(Jitter(MathF.PI), Jitter(0.35f), Jitter(0.35f));
+        var rotation = Quaternion.RotationYawPitchRoll(Jitter(MathUtil.Pi), Jitter(0.35f), Jitter(0.35f));
 
         var entity = factory.Create(_nextId, size, paint, position, rotation);
 
@@ -76,7 +79,7 @@ public sealed class Deck(ContainerFactory factory)
         _containers.Add(container);
         _released++;
 
-        Released?.Invoke(container.ToEvent());
+        Released?.Invoke(container);
 
         return container;
     }
@@ -166,20 +169,25 @@ public sealed class Deck(ContainerFactory factory)
     }
 
     /// <summary>The census: what is on the deck right now, and the running totals.</summary>
+    /// <remarks>
+    /// The two count arrays are the deck's own, counted again on every call: a snapshot that outlives the
+    /// frame, as the one sent to the hub does, needs copies of them.
+    /// </remarks>
     public DeckSnapshot Snapshot(string scheme, float uptimeSeconds)
     {
-        var bySize = new int[Enum.GetValues<ContainerSize>().Length];
-        var byPaint = new int[Paints.All.Length];
+        Array.Clear(_bySize);
+        Array.Clear(_byPaint);
+
         var totalMass = 0f;
 
         foreach (var container in _containers)
         {
-            bySize[(int)container.Size]++;
-            byPaint[(int)container.Paint]++;
+            _bySize[(int)container.Size]++;
+            _byPaint[(int)container.Paint]++;
             totalMass += container.Mass;
         }
 
-        return new DeckSnapshot(_containers.Count, _released, _lost, totalMass, scheme, uptimeSeconds, bySize, byPaint);
+        return new DeckSnapshot(_containers.Count, _released, _lost, totalMass, scheme, uptimeSeconds, _bySize, _byPaint);
     }
 
     private float Jitter(float amplitude) => (_random.NextSingle() * 2f - 1f) * amplitude;

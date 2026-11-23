@@ -56,6 +56,8 @@ public sealed class WavSound
     /// Decodes a <c>.wav</c> from a stream. Data only: the result cannot create instances - use
     /// <c>game.GetAudioSystem().LoadWav</c> for that.
     /// </summary>
+    /// <param name="stream">The WAVE data, read from its current position to the end of the data chunk. Not disposed.</param>
+    /// <returns>The decoded sound.</returns>
     /// <exception cref="InvalidDataException">The stream is not a WAVE file, or holds a format this class does not decode.</exception>
     public static WavSound Read(Stream stream) => WavReader.Read(stream, engine: null);
 
@@ -63,6 +65,8 @@ public sealed class WavSound
     /// Decodes a <c>.wav</c> file. Data only: the result cannot create instances - use
     /// <c>game.GetAudioSystem().LoadWav</c> for that.
     /// </summary>
+    /// <param name="path">The file. Relative paths resolve against the working directory.</param>
+    /// <returns>The decoded sound.</returns>
     /// <exception cref="InvalidDataException">The file is not a WAVE file, or holds a format this class does not decode.</exception>
     public static WavSound Read(string path)
     {

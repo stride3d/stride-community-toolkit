@@ -14,7 +14,7 @@ any other and look flat without one.
 The `Program.cs` file shows how to:
 
 - Both debug views on one entity with AddPhysicsDebug, the colliders on P and the debug meshes on F11
-- Why one entity is enough, since CollidableGizmoScript and DebugRenderComponentScript act on the whole scene
+- Why one entity is enough, since CollidableGizmoScript and DebugRenderComponent act on the whole scene
 - Lighting a 2D scene with a LightSpot
 - Giving each shape its own colour with a flat material
 - Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial, AddPhysicsDebug, AddGrabber
@@ -23,4 +23,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E08_2D_DebugRender).
 
-[!code-csharp[](../../../../examples/code-only/E08_2D_DebugRender/Program.cs?start=1&end=88)]
+[!code-csharp[](../../../../examples/code-only/E08_2D_DebugRender/Program.cs?start=1&end=87)]

@@ -4,7 +4,7 @@
 image effects, and composing several textures into one.
 
 ```csharp
-using var canvas = game.CreateTextureCanvas(new Size2(1024, 1024));
+using var canvas = game.CreateTextureCanvas(); // 1024 by 1024 unless a Size2 is given
 ```
 
 `CreateTextureCanvas` also extends `RenderContext` and `IServiceRegistry`, and the constructor

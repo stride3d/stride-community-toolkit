@@ -1,4 +1,5 @@
 using Stride.Core;
+using Stride.Core.Diagnostics;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Numerics;
@@ -6,7 +7,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using static Hexa.NET.ImGui.ImGui;
 using static Stride.CommunityToolkit.ImGui.ImGuiExtension;
-using ImGuiDir = Hexa.NET.ImGui.ImGuiDir;
 
 namespace Stride.CommunityToolkit.ImGui.DebugTools;
 
@@ -15,8 +15,10 @@ namespace Stride.CommunityToolkit.ImGui.DebugTools;
 /// </summary>
 public class Inspector : BaseWindow
 {
+    internal static readonly Logger Log = GlobalLogger.GetLogger(nameof(Inspector));
+
     internal const float DummyWidth = 19;
-    private const float Indentation = DummyWidth + 8;
+    internal const float Indentation = DummyWidth + 8;
 
     /// <summary>Array of all possible <see cref="Filter"/> values</summary>
     private static readonly Filter[] _filterValues = Enum.GetValues<Filter>();
@@ -152,7 +154,10 @@ public class Inspector : BaseWindow
 
                     if (IsItemHovered())
                     {
-                        using (Tooltip()) TextUnformatted(summary);
+                        using (Tooltip(out var open))
+                        {
+                            if (open) TextUnformatted(summary);
+                        }
                     }
 
                     SameLine();
@@ -204,7 +209,7 @@ public class Inspector : BaseWindow
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Log.Warning($"The inspector could not set {member.DeclaringType?.Name}.{member.Name}.", e);
         }
     }
 
@@ -252,7 +257,7 @@ public class Inspector : BaseWindow
 
             using (UColumns(2))
             {
-                DrawRecurseArrow(recursable, recurse, memberInHierarchyId);
+                RecurseArrow(recursable, recurse, _openedId, memberInHierarchyId, DummyWidth);
                 SameLine();
                 TextUnformatted(constantName);
                 NextColumn();
@@ -279,18 +284,6 @@ public class Inspector : BaseWindow
 
             // Sub-members hash from this member's id, so their ids differ per branch
             return recurse && DrawMembers(value!, memberInHierarchyId);
-        }
-    }
-
-    private void DrawRecurseArrow(bool recursable, bool recurse, int memberInHierarchyId)
-    {
-        if (!recursable)
-        {
-            Dummy(new Vector2(DummyWidth, 1));
-        }
-        else if (ArrowButton("", recurse ? ImGuiDir.Down : ImGuiDir.Right) && !_openedId.Remove(memberInHierarchyId))
-        {
-            _openedId.Add(memberInHierarchyId);
         }
     }
 
@@ -335,18 +328,21 @@ public class Inspector : BaseWindow
         Inherited = Instance << 1,
     }
 
+    /// <summary>A dictionary type as the inspector reads it: its key and value types and the getters of its keys and values.</summary>
+    internal readonly record struct DictionaryShape(Type Key, Type Value, MethodInfo? GetKey, MethodInfo? GetValue);
+
     /// <summary>What the inspector needs to know about one type, resolved once per type and filter.</summary>
     internal sealed class TypeCache(Type type, Filter filter)
     {
         internal readonly MemberInfo[] FilteredMembers = [.. GetAllMembers(type).Where(m => PassesFilter(type, filter, m))];
-        internal readonly (Type key, Type value, MethodInfo? getKey, MethodInfo? getValue)? AsDictionary = DictionaryShape(type);
+        internal readonly DictionaryShape? AsDictionary = ShapeOf(type);
         internal readonly Type? AsList = ListItemType(type);
         internal readonly (bool flags, Array values)? AsEnum = type.IsEnum ? (type.IsDefined(typeof(FlagsAttribute)), Enum.GetValues(type)) : null;
 
         internal object? NewObject() => type == typeof(string) ? string.Empty : type.IsValueType ? Activator.CreateInstance(type) : type.GetConstructor(Type.EmptyTypes)?.Invoke(null);
 
         // The key and value types of an IDictionary<,> (or object for a plain IDictionary), with the Keys and Values getters
-        private static (Type key, Type value, MethodInfo? getKey, MethodInfo? getValue)? DictionaryShape(Type type)
+        private static DictionaryShape? ShapeOf(Type type)
         {
             var generics = GenericArguments(type, typeof(IDictionary<,>));
 
@@ -354,7 +350,7 @@ public class Inspector : BaseWindow
 
             var (key, value) = generics is null ? (typeof(object), typeof(object)) : (generics[0], generics[1]);
 
-            return (key, value, Getter(type, nameof(IDictionary.Keys)), Getter(type, nameof(IDictionary.Values)));
+            return new DictionaryShape(key, value, Getter(type, nameof(IDictionary.Keys)), Getter(type, nameof(IDictionary.Values)));
         }
 
         private static Type? ListItemType(Type type)

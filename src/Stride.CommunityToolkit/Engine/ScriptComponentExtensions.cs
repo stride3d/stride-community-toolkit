@@ -13,8 +13,13 @@ public static class ScriptComponentExtensions
     /// </summary>
     /// <param name="scriptComponent">The <see cref="ScriptComponent"/> used to access game timing information.</param>
     /// <returns>The time elapsed since the last game update, in seconds, as a single-precision floating-point number.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="scriptComponent"/> is <see langword="null"/>.</exception>
     public static float DeltaTime(this ScriptComponent scriptComponent)
-        => (float)scriptComponent.Game.UpdateTime.Elapsed.TotalSeconds;
+    {
+        ArgumentNullException.ThrowIfNull(scriptComponent);
+
+        return (float)scriptComponent.Game.UpdateTime.Elapsed.TotalSeconds;
+    }
 
     /// <summary>
     /// The camera in the <see cref="GraphicsCompositor"/>'s slot of the given name, <see cref="CameraDefaults.MainCameraName"/>

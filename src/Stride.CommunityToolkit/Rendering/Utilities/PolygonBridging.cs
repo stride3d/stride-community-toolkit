@@ -15,7 +15,10 @@ internal static class PolygonBridging
     /// <exception cref="InvalidOperationException">No ring edge lies to the right of <paramref name="m"/>: the hole is outside the polygon.</exception>
     internal static int FindBridge(List<int> ring, IReadOnlyList<Vector2> corners, Vector2 m, float tolerance)
     {
-        var hit = CastRay(ring, corners, m, tolerance);
+        // The tolerance is in area units, for cross products and squared lengths; the ray and distance
+        // comparisons are in lengths and take its root
+        var lengthTolerance = MathF.Sqrt(tolerance);
+        var hit = CastRay(ring, corners, m, lengthTolerance);
 
         // The ray met a corner itself: that corner is visible, bridge to it
         if (hit.Corner >= 0) return CopyFacing(ring, corners, hit.Corner, m, tolerance);
@@ -34,10 +37,10 @@ internal static class PolygonBridging
         // reflex corner of the ring sits in the way
         var p = firstCorner.X > secondCorner.X ? first : second;
 
-        return CopyFacing(ring, corners, NearestReflexInTheWay(ring, corners, m, point, p, tolerance), m, tolerance);
+        return CopyFacing(ring, corners, NearestReflexInTheWay(ring, corners, m, point, p, tolerance, lengthTolerance), m, tolerance);
     }
 
-    /// <summary>The first ring edge, or ring corner, a ray from <paramref name="m"/> to the right meets.</summary>
+    /// <summary>The first ring edge, or ring corner, a ray from <paramref name="m"/> to the right meets; <paramref name="tolerance"/> is a length.</summary>
     private static RayHit CastRay(List<int> ring, IReadOnlyList<Vector2> corners, Vector2 m, float tolerance)
     {
         var count = ring.Count;
@@ -72,7 +75,7 @@ internal static class PolygonBridging
     /// of those, the one closest in angle to the ray is the one m can see, by Eberly's argument. Without
     /// one, p itself.
     /// </summary>
-    private static int NearestReflexInTheWay(List<int> ring, IReadOnlyList<Vector2> corners, Vector2 m, Vector2 hitPoint, int p, float tolerance)
+    private static int NearestReflexInTheWay(List<int> ring, IReadOnlyList<Vector2> corners, Vector2 m, Vector2 hitPoint, int p, float tolerance, float lengthTolerance)
     {
         var pCorner = corners[ring[p]];
         var best = p;
@@ -92,7 +95,7 @@ internal static class PolygonBridging
             var d = r - m;
             var distance = d.Length();
 
-            if (distance < tolerance) continue;
+            if (distance < lengthTolerance) continue;
 
             var cos = d.X / distance;
 

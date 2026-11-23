@@ -77,7 +77,3 @@ before, and run it before submitting.
 - [Contribute Examples](../../docs/contributing/examples/index.md) - the walkthrough.
 - [Example Metadata Schema](../../docs/contributing/examples/metadata-schema.md) - every field, the
   level rubric and the category vocabulary.
-- [Design Decisions](../../docs/contributing/examples/decisions.md) - why the pipeline works the way
-  it does, including
-  [D56](../../docs/contributing/examples/decisions.md#d56---why-the-project-number-is-a-shelf-not-a-classification)
-  on the naming scheme.

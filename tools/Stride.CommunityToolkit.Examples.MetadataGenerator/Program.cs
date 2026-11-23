@@ -1,39 +1,31 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Events;
+using Serilog.Extensions.Logging;
 using Stride.CommunityToolkit.Examples.MetadataGenerator;
 using Stride.CommunityToolkit.Examples.MetadataGenerator.Services;
+using System.Globalization;
 
-// The content root must be the tool's own folder, not the caller's working directory. Configuration
-// is resolved against the content root, so with the default the MSBuild pre-build hook - which runs
-// the generator from the Launcher directory - silently found no appsettings.json, configured no
-// Serilog sinks, and produced no output whatsoever: a failed validation reported nothing but an exit
-// code. appsettings.json is copied next to the assembly, so BaseDirectory always finds it.
-var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings
-{
-    Args = args,
-    ContentRootPath = AppContext.BaseDirectory
-});
+// Warnings and errors go to stderr, which the MSBuild pre-build hook raises at high importance while
+// leaving stdout at low. That is what keeps a clean build silent: the per-example lines are hidden, and
+// a failed validation still prints its reasons and not only an exit code.
+var log = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console(
+        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
+        formatProvider: CultureInfo.InvariantCulture,
+        standardErrorFromLevel: LogEventLevel.Warning)
+    .CreateLogger();
 
-builder.Services.AddSerilog((services, configuration) =>
-{
-    configuration
-        .ReadFrom.Configuration(builder.Configuration)
-        .ReadFrom.Services(services)
-        .Enrich.FromLogContext();
-});
+// A process runs one command, so the service and what it uses are built once, by hand
+using var loggers = new SerilogLoggerFactory(log, dispose: true);
 
-builder.Services.AddScoped<ExampleScanner>();
-builder.Services.AddScoped<MetadataParser>();
-builder.Services.AddScoped<MetadataValidator>();
-builder.Services.AddScoped<ManifestWriter>();
-builder.Services.AddScoped<DocsGenerator>();
-builder.Services.AddScoped<ManifestService>();
+var service = new ManifestService(
+    loggers.CreateLogger<ManifestService>(),
+    new ExampleScanner(loggers.CreateLogger<ExampleScanner>()),
+    new MetadataParser(loggers.CreateLogger<MetadataParser>()),
+    new MetadataValidator(loggers.CreateLogger<MetadataValidator>()),
+    new ManifestWriter(loggers.CreateLogger<ManifestWriter>()),
+    new DocsGenerator(loggers.CreateLogger<DocsGenerator>()));
 
-using var host = builder.Build();
-
-var cliConfiguration = new CommandLineConfiguration(host.Services);
-var rootCommand = cliConfiguration.CreateRootCommand();
-var parseResult = rootCommand.Parse(args);
-
-return parseResult.Invoke();
+return new CommandLineConfiguration(service).CreateRootCommand().Parse(args).Invoke();

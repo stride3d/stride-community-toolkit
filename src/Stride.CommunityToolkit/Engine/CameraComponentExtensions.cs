@@ -42,21 +42,6 @@ public static class CameraComponentExtensions
     }
 
     /// <summary>
-    /// The two ends of the ray through a screen position, as a tuple: the same points as the <see cref="RaySegment.Start"/>
-    /// and <see cref="RaySegment.End"/> of <see cref="ScreenToWorldRaySegment(CameraComponent, Vector2)"/>.
-    /// </summary>
-    /// <param name="camera">The camera the ray starts from.</param>
-    /// <param name="screenPosition">The normalized screen position, from (0,0) at the top-left to (1,1) at the bottom-right.</param>
-    /// <returns>The world-space points on the near and far planes.</returns>
-    [Obsolete("Use ScreenToWorldRaySegment(screenPosition): its Start and End are these two points. This method will be removed in a later release.")]
-    public static (Vector3 nearPoint, Vector3 farPoint) CalculateRayFromScreenPosition(this CameraComponent camera, Vector2 screenPosition)
-    {
-        var ray = camera.ScreenToWorldRaySegment(screenPosition);
-
-        return (ray.Start, ray.End);
-    }
-
-    /// <summary>
     /// A <see cref="Ray"/> from the camera through a screen position, into the world: the starting point of picking
     /// and of a physics ray cast.
     /// </summary>
@@ -366,7 +351,15 @@ public static class CameraComponentExtensions
             return false;
         }
 
-        cameraComponent.WorldToScreenPoint(ref position, out screenPoint);
+        // X and Y come from the clip position already in hand; only Z needs the view transform
+        Vector3.TransformCoordinate(ref position, ref cameraComponent.ViewMatrix, out var viewSpace);
+
+        screenPoint = new Vector3
+        {
+            X = (clip.X / clip.W + 1f) / 2f,
+            Y = 1f - (clip.Y / clip.W + 1f) / 2f,
+            Z = viewSpace.Z + cameraComponent.NearClipPlane,
+        };
 
         return true;
     }

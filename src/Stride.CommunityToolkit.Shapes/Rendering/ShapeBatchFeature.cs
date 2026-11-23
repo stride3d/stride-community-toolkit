@@ -57,7 +57,7 @@ public sealed class ShapeBatchFeature : RootRenderFeature
     // feature. Stride draws a stage on worker threads when it knows the stage's depth access;
     // for a feature without render effects it does not, so today the draws are sequential - but
     // a compositor may say so explicitly, and then two batches would draw at once.
-    private readonly object _drawLock = new();
+    private readonly Lock _drawLock = new();
 
     /// <summary>
     /// Creates the feature. Shapes sort after everything else in their stage, so an overlay batch

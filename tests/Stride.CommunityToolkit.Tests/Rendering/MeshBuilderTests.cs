@@ -203,16 +203,27 @@ public class MeshBuilderTests
     }
 
     [Fact]
-    public void Int16IndexingRejectsIndicesBeyondShortRange()
+    public void Int16IndexingTakesTheWholeUnsignedRange()
     {
         using var builder = new MeshBuilder { IndexType = IndexingType.Int16 };
 
-        // No elements registered, so vertices cost nothing and 40k of them are cheap to add
-        for (var i = 0; i <= 40_000; i++) builder.AddVertex();
+        // No elements registered, so vertices cost nothing and 70k of them are cheap to add
+        for (var i = 0; i <= 70_000; i++) builder.AddVertex();
 
-        builder.AddIndex(short.MaxValue);
+        // 16-bit GPU indices are unsigned: 65,535 is stored and read back as itself, not as -1
+        builder.AddIndex(ushort.MaxValue);
 
-        Assert.Throws<ArgumentOutOfRangeException>(() => builder.AddIndex(short.MaxValue + 1));
+        Assert.Equal(ushort.MaxValue, builder.GetIndex(0));
+        Assert.Throws<ArgumentOutOfRangeException>(() => builder.AddIndex(ushort.MaxValue + 1));
+    }
+
+    [Fact]
+    public void AddIndexWithoutIndicesSaysSoBeforeTheRange()
+    {
+        using var builder = new MeshBuilder();
+
+        // No vertices either: the builder reports its own state, not a range of 0 to -1
+        Assert.Throws<InvalidOperationException>(() => builder.AddIndex(5));
     }
 
     [Fact]

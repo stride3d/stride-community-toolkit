@@ -11,7 +11,7 @@ public enum IndexingType
     None = 0,
 
     /// <summary>
-    ///     Use a <see cref="short" /> for vertex indices
+    ///     Use 16-bit indices, which the GPU reads as a <see cref="ushort" />: vertices 0 to 65,535
     /// </summary>
     Int16 = 2,
 

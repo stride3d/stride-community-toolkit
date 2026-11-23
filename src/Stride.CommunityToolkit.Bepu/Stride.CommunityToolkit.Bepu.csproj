@@ -1,16 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <Title>Stride Community Toolkit - Bepu Physics</Title>
         <Description>Bepu Physics helpers for the Stride Community Toolkit - the recommended physics package.
 
 What's inside:
-- SetupBase3DScene / SetupBase2DScene: compositor, camera, light, ground and physics in one call
-- Create3DPrimitive / Create2DPrimitive with a matching Bepu collider, plus Add3DGround and Add2DGround
+- UseBepu() on SceneSetup3D or SceneSetup2D: compositor, camera, light, ground and physics in one call
+- CreatePrimitive with BepuPhysicsOptions: a primitive with a matching Bepu collider; AddBepuPhysics and Colliders.For for an entity or a collider of your own
 - Extra colliders: cone, torus, teapot, triangular prism and 2D polygon, with convex hull helpers and a shared hull cache
 - Raycasting from a camera, the mouse or a RaySegment: RayCast and RayCastPenetrating on the simulation
 - Body2DComponent for 2D scenes running on the 3D simulation
-- CollidableGizmoScript and DebugRenderComponentScript to see colliders and bodies in the scene
+- CollidableGizmoScript and AddPhysicsDebug to see colliders and bodies in the scene
 - BepuEntityInstancing: instanced rendering of many physics bodies that skips sleeping ones
 
 Requires Stride.BepuPhysics, Stride's Bepu-based physics.$(StrideVersionNote)</Description>

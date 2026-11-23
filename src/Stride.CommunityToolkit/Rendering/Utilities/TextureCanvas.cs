@@ -6,10 +6,9 @@ using Stride.Rendering.Images;
 namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
-/// Provides functionality for drawing and manipulating textures on a canvas.
-/// This class supports various operations such as drawing rectangles, drawing textures,
-/// applying filters, transforming colors, and resampling textures. It is designed to work
-/// with the Stride graphics framework and provides methods for loading and storing texture data.
+/// A texture built and edited at run time on the GPU: textures and rectangles are drawn into it, and it is
+/// filtered, recoloured and resampled through the engine's image effects. <see cref="ToTexture"/> hands out a
+/// copy of the result, so the canvas can go on being drawn into.
 /// </summary>
 public class TextureCanvas : IDisposable
 {
@@ -27,7 +26,7 @@ public class TextureCanvas : IDisposable
     /// <summary>
     /// Initializes a new instance of the <see cref="TextureCanvas"/> class.
     /// </summary>
-    public TextureCanvas(RenderContext renderContext, Size2? size, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
+    public TextureCanvas(RenderContext renderContext, Size2? size = null, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
     {
         RenderContext = renderContext;
         _size = size ?? new Size2(1024, 1024);
@@ -231,6 +230,9 @@ public class TextureCanvas : IDisposable
     /// </remarks>
     public void Load(Stream stream)
     {
+        // The secondary buffer goes too: it is sized for the old texture, and the next filter would render into it
+        _secondaryBuffer?.Dispose();
+        _secondaryBuffer = null;
         _primaryBuffer?.Dispose();
         _primaryBuffer = Texture.Load(GraphicsDevice, stream, TextureFlags.ShaderResource | TextureFlags.RenderTarget);
         _size = new Size2(_primaryBuffer.Size.Width, _primaryBuffer.Size.Height);
@@ -244,7 +246,7 @@ public class TextureCanvas : IDisposable
     /// <param name="fileType">The file type to write or null for automatic inference based on the file extension</param>
     public void Store(string path, ImageFileType? fileType = null)
     {
-        using var stream = File.Open(path, FileMode.Create);
+        // The format is settled before the file is created, so an unsupported extension leaves no empty file behind
         fileType ??= Path.GetExtension(path) switch
         {
             ".stride" => ImageFileType.Stride,
@@ -257,6 +259,9 @@ public class TextureCanvas : IDisposable
             ".tga" => ImageFileType.Tga,
             _ => throw new NotSupportedException($"'{Path.GetExtension(path)}' is not an image format the canvas can write. Use .png, .jpg, .bmp, .gif, .tiff, .tga, .dds or .stride, or pass the fileType.")
         };
+
+        using var stream = File.Open(path, FileMode.Create);
+
         Store(stream, fileType.Value);
     }
 
@@ -281,6 +286,8 @@ public class TextureCanvas : IDisposable
     /// </remarks>
     public void SetData(byte[] data, int width, int height, PixelFormat pixelFormat)
     {
+        _secondaryBuffer?.Dispose();
+        _secondaryBuffer = null;
         _primaryBuffer?.Dispose();
         _primaryBuffer = Texture.New2D(GraphicsDevice, width, height, pixelFormat, data,
             TextureFlags.ShaderResource | TextureFlags.RenderTarget);
@@ -302,8 +309,18 @@ public class TextureCanvas : IDisposable
     /// <summary>
     ///     Copies the current texture data to a new texture
     /// </summary>
+    /// <remarks>
+    ///     A copy on the GPU: the same size and format, so the command list copies the resource without reading the
+    ///     pixels back to the CPU and uploading them again.
+    /// </remarks>
     public Texture ToTexture(TextureFlags flags = TextureFlags.ShaderResource)
-        => Texture.New2D(GraphicsDevice, _size.Width, _size.Height, PixelFormat, GetData(), flags);
+    {
+        var texture = Texture.New2D(GraphicsDevice, _size.Width, _size.Height, PixelFormat, flags);
+
+        CommandList.Copy(EnsurePrimary(), texture);
+
+        return texture;
+    }
 
     /// <summary>
     ///     Applies a <see cref="Stride.Rendering.Images.BrightFilter" /> effect.

@@ -2,8 +2,8 @@ using E03_2D_HUD_Basics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -97,10 +97,10 @@ game.Run(new SceneSetup2D
     DpiAware = true,
 }.UseBepu(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Something for the HUD to sit over: the scene of E01_2D_FallingShapes
-    AddFallingShapes(rootScene);
+    AddFallingShapes(scene);
 
     #region Step1Create
     // After the post effects, so that the HUD's colours are drawn as written
@@ -113,19 +113,19 @@ void Start(Scene rootScene)
     grid.Visible = false;
 
     #region Step5Create
-    healthLabel = AddLabel(rootScene, Anchor.BottomLeft);
-    energyLabel = AddLabel(rootScene, Anchor.MiddleCenter);
+    healthLabel = AddLabel(scene, Anchor.BottomLeft);
+    energyLabel = AddLabel(scene, Anchor.MiddleCenter);
     #endregion
 
     #region Step6Create
-    warningLabel = AddLabel(rootScene, Anchor.MiddleCenter);
+    warningLabel = AddLabel(scene, Anchor.MiddleCenter);
     warningLabel.Text = "WARNING";
     warningLabel.TextColor = hurt;
     warningLabel.FontSize = 20;
     #endregion
 
     #region Step8Create
-    hud = new SimpleHud(game, rootScene, shapeBatch, new HudStyle());
+    hud = new SimpleHud(scene, shapeBatch, new HudStyle());
     #endregion
 
     TextOverlay.GetOrCreate(game).AddSection("HUD basics", () =>
@@ -140,10 +140,7 @@ void Start(Scene rootScene)
 
 void Update(Scene scene, GameTime time)
 {
-    for (var i = 0; i < LastStep; i++)
-    {
-        if (game.Input.IsKeyPressed(Keys.D1 + i) || game.Input.IsKeyPressed(Keys.NumPad1 + i)) step = i + 1;
-    }
+    SelectStepFromKeys();
 
     #region Step2Update
     if (game.Input.IsKeyPressed(Keys.K)) health = 1f;
@@ -166,13 +163,7 @@ void Update(Scene scene, GameTime time)
 
     if (holdFlash >= 0f) flash = holdFlash;
 
-    // Labels are entities, not draw calls: they stay until they are hidden. Hide those the
-    // chosen step has not reached yet, and all of them when the class draws its own
-    healthLabel.Opacity = energyLabel.Opacity = step is >= 5 and < 8 ? 1f : 0f;
-
-    if (step is < 6 or 8) warningLabel.IsVisible = false;
-
-    hud.Visible = step == 8;
+    ShowStepPieces();
 
     if (step == 8)
     {
@@ -199,6 +190,26 @@ void Update(Scene scene, GameTime time)
     if (step >= 6) DrawWarning(seconds);
 
     shapeBatch.Screen = false;
+}
+
+// The number keys choose how far through the tutorial the HUD is drawn
+void SelectStepFromKeys()
+{
+    for (var i = 0; i < LastStep; i++)
+    {
+        if (game.Input.IsKeyPressed(Keys.D1 + i) || game.Input.IsKeyPressed(Keys.NumPad1 + i)) step = i + 1;
+    }
+}
+
+// Labels are entities, not draw calls: they stay until they are hidden. Hides those the chosen
+// step has not reached yet, and all of them when the class draws its own
+void ShowStepPieces()
+{
+    healthLabel.Opacity = energyLabel.Opacity = step is >= 5 and < 8 ? 1f : 0f;
+
+    if (step is < 6 or 8) warningLabel.IsVisible = false;
+
+    hud.Visible = step == 8;
 }
 
 #region Step1
@@ -272,11 +283,11 @@ void DrawEnergyDial()
     Solid();
 
     // The whole circle, dim
-    shapeBatch.DrawArc(DialCentre(), DialRadius, 0f, MathF.Tau, dialTrack, DialWidth);
+    shapeBatch.DrawArc(DialCentre(), DialRadius, 0f, MathUtil.TwoPi, dialTrack, DialWidth);
 
     // The part that is full. An angle of zero points right and a positive angle turns clockwise,
     // so this starts at the top and runs round to the right
-    shapeBatch.DrawArc(DialCentre(), DialRadius, -MathF.PI * 0.5f, MathF.Tau * energy, energyColour, DialWidth);
+    shapeBatch.DrawArc(DialCentre(), DialRadius, -MathUtil.PiOverTwo, MathUtil.TwoPi * energy, energyColour, DialWidth);
 }
 #endregion
 
@@ -340,7 +351,7 @@ void DrawWarning(float seconds)
     var centre = new Vector2(shapeBatch.ScreenSize.X * 0.5f, Margin + warningSize.Y * 0.5f);
 
     // Rises and falls twice a second
-    var pulse = 0.4f + 0.6f * MathF.Abs(MathF.Sin(seconds * MathF.Tau));
+    var pulse = 0.4f + 0.6f * MathF.Abs(MathF.Sin(seconds * MathUtil.TwoPi));
 
     // A panel like the first one, with a red edge, a soft halo and the pulse as its opacity
     shapeBatch.BorderWidth = 2f;
@@ -391,9 +402,12 @@ void AddFallingShapes(Scene scene)
     for (var i = 0; i < 30; i++)
     {
         var (type, colour) = kinds[i % kinds.Length];
-        var entity = game.CreatePrimitive(type, new() { Material = game.CreateFlatMaterial(colour) });
+        var entity = game.CreatePrimitive(type, new()
+        {
+            Material = game.CreateFlatMaterial(colour),
+            Position = new Vector3(0.1f * (i % 3 - 1), 8 + i * 1.5f, 0),
+        });
 
-        entity.Transform.Position = new Vector3(0.1f * (i % 3 - 1), 8 + i * 1.5f, 0);
         entity.Scene = scene;
     }
 }

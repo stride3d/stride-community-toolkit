@@ -7,7 +7,7 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 
-ImmediateDebugRenderSystem? debugDraw = null;
+ImmediateDebugRenderSystem debugDraw = null!;
 
 // Kept in a list, so Update does not search the scene every frame
 List<Entity> spheres = [];
@@ -16,32 +16,29 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     debugDraw = game.AddDebugShapes();
     debugDraw.Visible = true; // force visible in non-debug builds
     debugDraw.PrimitiveColor = Color.Lime;
 
-    CreateSpheres(rootScene, 6);
+    CreateSpheres(scene, 6);
 }
 
-void CreateSpheres(Scene rootScene, int count)
+void CreateSpheres(Scene scene, int count)
 {
     var half = count / 2;
 
     for (var i = -half; i < half; i++)
     {
-        var entity = game.CreatePrimitive(Primitive3D.Sphere());
-        entity.Transform.Position = new Vector3(i * 0.99f, 8, 0);
-        entity.Scene = rootScene;
+        var entity = game.CreatePrimitive(Primitive3D.Sphere(), new() { Position = new Vector3(i * 0.99f, 8, 0) });
+        entity.Scene = scene;
         spheres.Add(entity);
     }
 }
 
 void Update(Scene scene, GameTime gameTime)
 {
-    if (debugDraw is null) return;
-
     foreach (var sphere in spheres)
     {
         var position = sphere.Transform.Position;

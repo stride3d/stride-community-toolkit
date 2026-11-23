@@ -24,24 +24,20 @@ internal sealed class EasingBasicsScene : IGoldScene
     private const float Speed = (EndX - StartX) / Duration;
 
     private readonly Tween _tween = Tween.Run(Duration, EasingFunction.CubicEaseOut);
-    private ShapeBatch? _shapes;
+    private ShapeBatch _shapes = null!;
     private float _elapsed;
     private float _x5 = StartX;
 
-    public SceneSetup Setup => GoldSetup.Orthographic;
+    public SceneSetup Setup => GoldSetup.Orthographic(16f);
 
     public void Start(Game game, Scene scene)
     {
-        GoldSetup.SetOrthographicSize(scene, 16f);
-
         _shapes = game.AddShapeBatch();
         _shapes.BorderWidth = 3f;
     }
 
     public void Update(Game game, Scene scene, GameTime time)
     {
-        if (_shapes is not { } shapes) return;
-
         var dt = (float)time.Elapsed.TotalSeconds;
 
         _elapsed += dt;
@@ -50,7 +46,7 @@ internal sealed class EasingBasicsScene : IGoldScene
 
         var t = Math.Clamp(_elapsed / Duration, 0f, 1f);
 
-        float[] positions =
+        ReadOnlySpan<float> positions =
         [
             MathUtil.Lerp(StartX, EndX, t),
             MathUtil.Lerp(StartX, EndX, 1f - (1f - t) * (1f - t) * (1f - t)),
@@ -64,18 +60,18 @@ internal sealed class EasingBasicsScene : IGoldScene
             var y = 6f - lane * 3f;
             var colour = lane is 0 or 4 ? new Color(160, 166, 180) : new Color(90, 200, 255);
 
-            shapes.DrawPixelLine(new Vector3(StartX, y, 0f), new Vector3(EndX, y, 0f), 2f, new Color(70, 76, 90));
+            _shapes.DrawPixelLine(new Vector3(StartX, y, 0f), new Vector3(EndX, y, 0f), 2f, new Color(70, 76, 90));
 
             for (var i = 0; i <= 10; i++)
             {
                 var s = lane is 0 or 4 ? i / 10f : Easing.CubicEaseOut(i / 10f);
 
-                shapes.DrawPixelDisc(new Vector3(MathUtil.Lerp(StartX, EndX, s), y - 0.75f, 0f), 2.5f, colour);
+                _shapes.DrawPixelDisc(new Vector3(MathUtil.Lerp(StartX, EndX, s), y - 0.75f, 0f), 2.5f, colour);
             }
 
-            shapes.Fill.Set(colour, 1f);
-            shapes.DrawDisc(new Vector3(positions[lane], y, 0f), Vector3.UnitZ, 0.45f, Color.White);
-            shapes.Fill.Set(null, 1f);
+            _shapes.Fill.Set(colour, 1f);
+            _shapes.DrawDisc(new Vector3(positions[lane], y, 0f), Vector3.UnitZ, 0.45f, Color.White);
+            _shapes.Fill.Set(null, 1f);
         }
     }
 }

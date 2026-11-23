@@ -123,6 +123,17 @@ The callbacks run on the main thread after the physics step, so they may change 
 
 A simulation running faster than the game needs more fixed steps per frame: at four times the speed and sixty frames a second it needs four, and the default `MaxStepPerFrame` of three lets it fall behind the clock. Raise the cap when a game runs fast. To read the simulation's clock exactly, give a component `ISimulationUpdate`: it is called once per fixed step with the step's length, before the step and after it. `E05_3D_TimeControl` puts a dropper on the game clock and a spinning bar on the physics clock, so the difference can be watched.
 
+The first frames after a scene loads can take hundreds of milliseconds while shaders compile. The engine caps what a frame reports at 500 ms, and the simulation catches that time up over the frames that follow, so a scene's first fall looks different from a restart of the same scene. A scene that must start calmly holds the simulation until the first short frame:
+
+```csharp
+simulation.Enabled = false;                      // in Start
+
+if (!simulation.Enabled && time.Elapsed.TotalMilliseconds < 100)
+    simulation.Enabled = true;                   // in Update, once
+```
+
+A held simulation banks nothing, so the bodies start falling on the first smooth frame.
+
 ### Putting a body back
 
 - [`TeleportAtRest()`](xref:Stride.CommunityToolkit.Bepu.BodyComponentExtensions.TeleportAtRest(Stride.BepuPhysics.BodyComponent,Stride.Core.Mathematics.Vector3,System.Nullable{Stride.Core.Mathematics.Quaternion})) - Teleports a body to a pose and leaves it still and awake. `Teleport()` alone keeps the body's velocity, its spin and its sleep, so a reset key or a respawn wants this one.
@@ -148,7 +159,7 @@ The same call serves a 2D scene: under an orthographic camera the pick ray runs 
 
 ### Debug views
 
-- [`AddPhysicsDebug()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.AddPhysicsDebug(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color4},System.Boolean,System.Boolean,System.Boolean)) - One entity carrying Bepu's two scene-wide debug views: [`CollidableGizmoScript`](xref:Stride.CommunityToolkit.Bepu.CollidableGizmoScript) draws every collider on <kbd>P</kbd>, and [`DebugRenderComponentScript`](xref:Stride.CommunityToolkit.Bepu.DebugRenderComponentScript) turns the physics debug meshes on for every Bepu entity on <kbd>F11</kbd>. Both act on the whole scene, so one entity is all a scene needs; a second copy of either script answers the same key and toggles the first one back. `contactsVisible: true` adds the solver's contact points and normals to the debug meshes (Stride 4.4.1 or later).
+- [`AddPhysicsDebug()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.AddPhysicsDebug(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color4},System.Boolean,System.Boolean,System.Boolean)) - One entity carrying Bepu's two scene-wide debug views: [`CollidableGizmoScript`](xref:Stride.CommunityToolkit.Bepu.CollidableGizmoScript) draws every collider on <kbd>P</kbd>, and Bepu's own `DebugRenderComponent` turns the physics debug meshes on for every Bepu entity on <kbd>F11</kbd>. Both act on the whole scene, so one entity is all a scene needs; a second copy of either answers the same key and toggles the first one back. `contactsVisible: true` adds the solver's contact points and normals to the debug meshes (Stride 4.4.1 or later).
 
 ```csharp
 game.AddPhysicsDebug(gizmoColor: new Color4(0.4f, 0.843f, 0, 0.9f));

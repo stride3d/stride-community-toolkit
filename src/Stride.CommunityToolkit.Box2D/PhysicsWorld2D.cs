@@ -7,7 +7,7 @@ using static Box2D.NET.B2Worlds;
 namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
-/// Engine-agnostic 2D physics world wrapper around Box2D.NET: owns the native world and advances it
+/// A 2D physics world wrapper around Box2D.NET: owns the native world and advances it
 /// on a fixed timestep. It deliberately avoids any dependency on Stride <c>Entity</c> types; pairing
 /// bodies with entities is <see cref="Box2DStrideBridge"/>'s job.
 /// </summary>
@@ -16,7 +16,6 @@ public sealed class PhysicsWorld2D : IDisposable
     private static readonly Logger Log = GlobalLogger.GetLogger("Box2D");
 
     private B2WorldId _worldId;
-    private PhysicsStepSettings _settings;
     private readonly Box2DTaskScheduler? _scheduler;
 
     private double _accumulator;
@@ -43,41 +42,19 @@ public sealed class PhysicsWorld2D : IDisposable
         return 1;
     }
 
-    /// <summary>Target simulation frequency in hertz used to derive the fixed step size.</summary>
-    public int TargetHz
-    {
-        get => _settings.TargetHz;
-        set => _settings = _settings with { TargetHz = value };
-    }
-
-    /// <summary>Maximum number of fixed steps processed per frame, to avoid the spiral of death.</summary>
-    public int MaxStepsPerFrame
-    {
-        get => _settings.MaxStepsPerFrame;
-        set => _settings = _settings with { MaxStepsPerFrame = value };
-    }
-
-    /// <summary>Box2D sub-step count passed to each world step.</summary>
-    public int SubStepCount
-    {
-        get => _settings.SubStepCount;
-        set => _settings = _settings with { SubStepCount = value };
-    }
-
-    /// <summary>Multiplier applied to incoming delta time before fixed-step accumulation.</summary>
-    public float TimeScale
-    {
-        get => _settings.TimeScale;
-        set => _settings = _settings with { TimeScale = value };
-    }
+    /// <summary>
+    /// The stepping settings: the fixed step, the catch-up cap, the sub-steps and the time scale, live, so a change
+    /// applies from the next <see cref="Step"/>. <see cref="PhysicsStepSettings.WorkerCount"/> is read once, here.
+    /// </summary>
+    public PhysicsStepSettings Settings { get; }
 
     /// <summary>
     /// Creates a new physics world with default gravity (0, -10).
     /// </summary>
-    /// <param name="settings">Optional stepping configuration; defaults to <see cref="PhysicsStepSettings"/> defaults.</param>
+    /// <param name="settings">Optional stepping configuration; defaults to <see cref="PhysicsStepSettings"/> defaults. The world keeps and exposes it as <see cref="Settings"/>.</param>
     public PhysicsWorld2D(PhysicsStepSettings? settings = null)
     {
-        _settings = settings ?? new PhysicsStepSettings();
+        Settings = settings ?? new PhysicsStepSettings();
 
         var def = b2DefaultWorldDef();
 
@@ -86,7 +63,7 @@ public sealed class PhysicsWorld2D : IDisposable
         // b2DefaultWorldDef gives a single-threaded world - without task callbacks every solve runs
         // on the stepping thread, which is 4-5x slower for a large active scene. Measured on the
         // 10k-box stress pile: 25-43 ms per step single-threaded, 5.6-10.4 ms with 8 workers.
-        var workerCount = ResolveWorkerCount(_settings.WorkerCount);
+        var workerCount = ResolveWorkerCount(Settings.WorkerCount);
 
         if (workerCount > 1)
         {
@@ -125,26 +102,31 @@ public sealed class PhysicsWorld2D : IDisposable
     /// Advances the simulation using a fixed-timestep accumulator strategy.
     /// </summary>
     /// <param name="deltaSeconds">Elapsed real time in seconds since the last call.</param>
-    /// <param name="perFixedStep">Optional callback invoked after each fixed step with the step duration.</param>
     /// <param name="beforeFixedStep">Optional callback invoked before each fixed step with the step duration.</param>
+    /// <param name="afterFixedStep">Optional callback invoked after each fixed step with the step duration.</param>
     /// <returns>The number of fixed steps performed this call.</returns>
-    public int Step(float deltaSeconds, Action<float>? perFixedStep = null, Action<float>? beforeFixedStep = null)
+    public int Step(float deltaSeconds, Action<float>? beforeFixedStep = null, Action<float>? afterFixedStep = null)
     {
         if (deltaSeconds <= 0f) return 0;
 
-        _accumulator += deltaSeconds * _settings.TimeScale;
+        _accumulator += deltaSeconds * Settings.TimeScale;
 
-        var fixedStep = _settings.FixedDeltaSeconds;
+        var fixedStep = Settings.FixedDeltaSeconds;
         var performed = 0;
 
-        while (_accumulator >= fixedStep && performed < _settings.MaxStepsPerFrame)
+        while (_accumulator >= fixedStep && performed < Settings.MaxStepsPerFrame)
         {
             beforeFixedStep?.Invoke(fixedStep);
-            b2World_Step(_worldId, fixedStep, _settings.SubStepCount);
+            b2World_Step(_worldId, fixedStep, Settings.SubStepCount);
             _accumulator -= fixedStep;
             performed++;
-            perFixedStep?.Invoke(fixedStep);
+            afterFixedStep?.Invoke(fixedStep);
         }
+
+        // The cap stopped the catch-up: the rest of the debt is dropped, or the next frames would replay the
+        // stall at up to MaxStepsPerFrame times speed, which is the spiral the cap is there to avoid. The
+        // time a stall swallowed is simply not simulated
+        if (_accumulator >= fixedStep) _accumulator = 0f;
 
         return performed;
     }
@@ -154,7 +136,7 @@ public sealed class PhysicsWorld2D : IDisposable
     /// </summary>
     public void Dispose()
     {
-        if (_worldId.index1 != 0)
+        if (b2World_IsValid(_worldId))
         {
             b2DestroyWorld(_worldId);
 

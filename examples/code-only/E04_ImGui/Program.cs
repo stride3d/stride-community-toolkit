@@ -35,8 +35,12 @@ void Start(Scene scene)
     game.SetMaxFPS(60);
 
     // A cube of the example's own, steered from the window below
-    cube = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions { Body = BodyMode.None, Material = game.CreateMaterial(new Color(255, 160, 60)) });
-    cube.Transform.Position = new Vector3(0, 1, 0);
+    cube = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions
+    {
+        Body = BodyMode.None,
+        Material = game.CreateMaterial(new Color(255, 160, 60)),
+        Position = new Vector3(0, 1, 0),
+    });
     cube.Scene = scene;
 
     // A window of this example's own: a menu, a slider and live stats, described again every frame from the values as they are

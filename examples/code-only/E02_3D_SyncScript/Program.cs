@@ -13,13 +13,11 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 void Start(Scene scene)
 {
     // The cube starts on its circle; the script works the centre out from where it starts
-    var entity = game.CreatePrimitive(Primitive3D.Cube());
-    entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
+    var entity = game.CreatePrimitive(Primitive3D.Cube(), new() { Position = new Vector3(1f, 0.5f, 3f) });
     entity.Add(new RotationComponentScript());
     entity.Scene = scene;
 
-    var cone = game.CreatePrimitive(Primitive3D.Cone(0.5f, 5));
-    cone.Transform.Position = new Vector3(0, 6, 0);
+    var cone = game.CreatePrimitive(Primitive3D.Cone(0.5f, 5), new() { Position = new Vector3(0, 6, 0) });
     cone.Scene = scene;
 }
 /*

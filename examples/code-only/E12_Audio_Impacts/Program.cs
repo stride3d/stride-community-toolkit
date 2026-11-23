@@ -40,8 +40,8 @@ var balls = new List<Entity>();
 var impacts = new Impacts();
 var random = new Random(9);
 
-SoundInstance? sound = null;
-ShapeBatch? shapes = null;
+SoundInstance sound = null!;
+ShapeBatch shapes = null!;
 Material[] materials = [];
 
 using var game = new Game();
@@ -109,7 +109,7 @@ void Update(Scene scene, GameTime time)
         }
     }
 
-    if (shapes is not null) impacts.DrawMarks(shapes, (float)time.Elapsed.TotalSeconds);
+    impacts.DrawMarks(shapes, (float)time.Elapsed.TotalSeconds);
 }
 
 /// <summary>Balls of every size from a spread of heights, so the first seconds are a scale of notes.</summary>

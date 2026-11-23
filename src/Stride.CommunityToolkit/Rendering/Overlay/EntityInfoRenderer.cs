@@ -1,11 +1,8 @@
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Diagnostics;
 using Stride.Engine;
-using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
-using Stride.Rendering.Compositing;
 using System.Globalization;
 using System.Text;
 
@@ -27,17 +24,16 @@ namespace Stride.CommunityToolkit.Rendering.Overlay;
 /// shadows and projection behave identically in both.
 /// </para>
 /// </remarks>
-public class EntityInfoRenderer : SceneRendererBase
+public class EntityInfoRenderer : SpriteTextRendererBase
 {
-    private SpriteBatch? _spriteBatch;
-    private SpriteFont? _font;
-    private Texture? _backgroundTexture;
     private readonly StringBuilder _stringBuilder = new();
     private readonly EntityInfoRendererOptions _options;
-    private DisplayScale? _displayScale;
 
     // The display's scale for this frame, applied to every pixel figure in the options
-    private float _display = 1f;
+    private float _displayScaleFactor = 1f;
+
+    // The style every label is drawn with this frame, built once the scale is known; only the colour varies per label
+    private ScreenTextStyle _style;
 
     /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
     public static readonly ProfilingKey ProfilingKey = new("EntityInfo");
@@ -56,20 +52,7 @@ public class EntityInfoRenderer : SceneRendererBase
     public EntityInfoRenderer(EntityInfoRendererOptions? options = null) => _options = options ?? new();
 
     /// <inheritdoc />
-    protected override void InitializeCore()
-    {
-        base.InitializeCore();
-
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _font = Content.Load<SpriteFont>(RendererDefaults.DefaultFontPath);
-        _backgroundTexture = ScreenTextDrawer.CreateBackgroundTexture(GraphicsDevice);
-
-        // Absent outside a game, which leaves every size at exactly the pixels asked for
-        if (Services.GetService<IGame>() is { } game)
-        {
-            _displayScale = DisplayScale.GetOrCreate(game);
-        }
-    }
+    protected override float DefaultFontSize => _options.FontSize;
 
     /// <inheritdoc />
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
@@ -78,26 +61,40 @@ public class EntityInfoRenderer : SceneRendererBase
 
         if (!_options.ShowEntityName && !_options.ShowEntityPosition) return;
 
-        if (_spriteBatch is null || _font is null) return;
-
-        // Resolved per frame rather than cached at initialisation, so swapping the scene or the
-        // camera does not leave the overlay drawing against the ones it started with
+        // Resolved per frame rather than cached at initialisation, so swapping the scene does not
+        // leave the overlay drawing against the one it started with
         var scene = SceneInstance.GetCurrent(context)?.RootScene;
-        var camera = CompositorCameras.Find(context);
 
-        if (scene is null || camera is null || scene.Entities.Count == 0) return;
+        if (scene is null || scene.Entities.Count == 0) return;
 
-        var viewport = drawContext.CommandList.Viewport;
-        var screenSize = new Vector2(viewport.Width, viewport.Height);
+        if (!TryBeginFrame(context, drawContext, out var frame)) return;
 
-        if (screenSize.X <= 0 || screenSize.Y <= 0) return;
+        var viewProjection = frame.Camera.ViewProjectionMatrix;
+        var cameraPosition = frame.Camera.Entity?.Transform.WorldMatrix.TranslationVector ?? Vector3.Zero;
 
-        var viewProjection = camera.ViewProjectionMatrix;
-        var cameraPosition = camera.Entity?.Transform.WorldMatrix.TranslationVector ?? Vector3.Zero;
+        _displayScaleFactor = DisplayScaleFactor(_options.AutoScale);
 
-        _display = _options.AutoScale && _displayScale is not null ? _displayScale.Value : 1f;
+        _style = new ScreenTextStyle
+        {
+            Font = frame.DefaultFont,
+            // Rasterised at the scaled size rather than drawn scaled, so the glyphs stay sharp
+            FontSize = _options.FontSize * _displayScaleFactor,
+            Color = _options.FontColor,
+            Anchor = _options.Anchor,
+            Alignment = TextAlignment.Left,
+            Scale = 1f,
+            Rotation = 0f,
+            Opacity = 1f,
+            LayerDepth = 0f,
+            EnableShadow = _options.EnableShadow,
+            ShadowColor = _options.ShadowColor,
+            ShadowOffset = _options.ShadowOffset * _displayScaleFactor,
+            EnableBackground = _options.EnableBackground,
+            BackgroundColor = _options.BackgroundColor ?? RendererDefaults.DefaultDebugBackground,
+            Padding = _options.Padding * _displayScaleFactor,
+        };
 
-        _spriteBatch.Begin(drawContext.GraphicsContext,
+        frame.Batch.Begin(drawContext.GraphicsContext,
             sortMode: SpriteSortMode.Deferred,
             blendState: BlendStates.AlphaBlend,
             samplerState: null,
@@ -105,10 +102,10 @@ public class EntityInfoRenderer : SceneRendererBase
 
         foreach (var entity in scene.Entities)
         {
-            DrawEntity(entity, ref viewProjection, cameraPosition, screenSize);
+            DrawEntity(entity, ref viewProjection, cameraPosition, frame.ScreenSize);
         }
 
-        _spriteBatch.End();
+        frame.Batch.End();
     }
 
     /// <summary>
@@ -145,7 +142,7 @@ public class EntityInfoRenderer : SceneRendererBase
             return;
         }
 
-        var position = screenPosition + _options.Offset * _display;
+        var position = screenPosition + _options.Offset * _displayScaleFactor;
 
         // With a separate colour the two parts have to be drawn separately, so they are stacked
         // instead of chained along one line - see EntityInfoRendererOptions.PositionColor
@@ -175,7 +172,7 @@ public class EntityInfoRenderer : SceneRendererBase
         Draw(text, position, Measure(text), _options.FontColor);
     }
 
-    private Vector2 Measure(string text) => _spriteBatch!.MeasureString(_font, text, _options.FontSize * _display);
+    private Vector2 Measure(string text) => SpriteBatch!.MeasureString(_style.Font, text, _style.FontSize);
 
     /// <summary>
     /// Draws one line of debug text through the shared drawer.
@@ -187,29 +184,7 @@ public class EntityInfoRenderer : SceneRendererBase
     /// for every labelled entity.
     /// </remarks>
     private void Draw(string text, Vector2 position, Vector2 textSize, Color color)
-    {
-        var style = new ScreenTextStyle
-        {
-            Font = _font!,
-            // Rasterised at the scaled size rather than drawn scaled, so the glyphs stay sharp
-            FontSize = _options.FontSize * _display,
-            Color = color,
-            Anchor = _options.Anchor,
-            Alignment = TextAlignment.Left,
-            Scale = 1f,
-            Rotation = 0f,
-            Opacity = 1f,
-            LayerDepth = 0f,
-            EnableShadow = _options.EnableShadow,
-            ShadowColor = _options.ShadowColor,
-            ShadowOffset = _options.ShadowOffset * _display,
-            EnableBackground = _options.EnableBackground,
-            BackgroundColor = _options.BackgroundColor ?? RendererDefaults.DefaultDebugBackground,
-            Padding = _options.Padding * _display,
-        };
-
-        ScreenTextDrawer.Draw(_spriteBatch!, _backgroundTexture, text, position, textSize, style);
-    }
+        => ScreenTextDrawer.Draw(SpriteBatch!, BackgroundTexture, text, position, textSize, _style with { Color = color });
 
     /// <summary>
     /// Builds the combined debug text for an entity.
@@ -244,13 +219,4 @@ public class EntityInfoRenderer : SceneRendererBase
 
     private static void AppendPosition(StringBuilder builder, Vector3 worldPosition)
         => builder.Append(CultureInfo.InvariantCulture, $"({worldPosition.X:F1}, {worldPosition.Y:F1}, {worldPosition.Z:F1})");
-
-    /// <inheritdoc />
-    protected override void Destroy()
-    {
-        base.Destroy();
-
-        _spriteBatch?.Dispose();
-        _backgroundTexture?.Dispose();
-    }
 }

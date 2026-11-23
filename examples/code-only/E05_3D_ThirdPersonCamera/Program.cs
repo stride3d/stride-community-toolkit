@@ -2,6 +2,7 @@ using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Input;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -35,6 +36,9 @@ Entity nose = null!;
 Basic3DFollowCameraController follow = null!;
 BepuSimulation simulation = null!;
 var noseYaw = 0f;
+
+// Where the nose sits on the capsule, in the body's own space
+var noseOffset = new Vector3(0f, 0.3f, -0.4f);
 
 // The character is on its own layer, so the camera's ray ignores the capsule and sees only the scenery
 const CollisionLayer CharacterLayer = CollisionLayer.Layer2;
@@ -81,9 +85,9 @@ void Start(Scene scene)
         EntityName = "Nose",
         Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(60, 60, 70)),
+        Position = noseOffset,
     });
 
-    nose.Transform.Position = new Vector3(0f, 0.3f, -0.4f);
     body.AddChild(nose);
     body.Scene = scene;
 
@@ -124,7 +128,7 @@ void Update(Scene scene, GameTime time)
     {
         move.Normalize();
 
-        if (input.IsKeyDown(Keys.LeftShift) || input.IsKeyDown(Keys.RightShift)) move *= SprintMultiplier;
+        if (input.IsShiftDown()) move *= SprintMultiplier;
 
         // The nose eases round to the walk direction; its yaw is the direction's angle in the ground plane
         noseYaw = TurnTowards(noseYaw, MathF.Atan2(-move.X, -move.Z), NoseTurnSpeed * (float)time.Elapsed.TotalSeconds);
@@ -133,7 +137,7 @@ void Update(Scene scene, GameTime time)
     // The move vector's Y is the world's Z: the capsule keeps the identity orientation, so the frames agree
     character.MoveVector = new Vector2(move.X, move.Z);
     nose.Transform.Rotation = Quaternion.RotationY(noseYaw);
-    nose.Transform.Position = Vector3.Transform(new Vector3(0f, 0.3f, -0.4f), nose.Transform.Rotation);
+    nose.Transform.Position = Vector3.Transform(noseOffset, nose.Transform.Rotation);
 
     if (input.IsKeyPressed(Keys.Space)) character.TryJump();
 }
@@ -163,7 +167,7 @@ void BuildScenery(Scene scene)
     var stone = game.CreateMaterial(new Color(150, 140, 130), metalness: 0f, glossiness: 0.3f);
     var pillarMaterial = game.CreateMaterial(new Color(110, 130, 170), metalness: 0.1f, glossiness: 0.4f);
 
-    game.Add3DGround(new Vector2(70f), new() { EntityName = "Ground", Material = game.CreateMaterial(new Color(120, 125, 120), metalness: 0f, glossiness: 0.2f) });
+    game.Add3DGround(new Vector2(70f), new() { Material = game.CreateMaterial(new Color(120, 125, 120), metalness: 0f, glossiness: 0.2f) });
 
     // Each level is a square of blocks one block narrower on each side than the one below
     for (var level = 0; level < PyramidLevels; level++)
@@ -216,7 +220,8 @@ IReadOnlyList<TextElement> BuildOverlayLines() =>
     new("Right drag", "Swing the camera round", Color.Gold),
     new("Mouse wheel", "Closer or further", Color.Gold),
     new(""),
-    new("Walk behind a pillar or down a step: the camera comes forward", Color.White),
+    new("Walk behind a pillar or down a step:", Color.White),
+    new("the camera comes forward", Color.White),
 ];
 
 /*

@@ -312,49 +312,33 @@ public static class TransformExtensions
     }
 
     /// <summary>
-    /// Performs a normal transformation using the given <see cref="TransformComponent.WorldMatrix"/>.
+    /// Performs a normal transformation using the given <see cref="TransformComponent.WorldMatrix"/>: the same as
+    /// <see cref="TransformDirection(TransformComponent, Vector3)"/>, under the name some callers know it by.
     /// </summary>
     /// <param name="transform">The transform to get the world matrix from.</param>
     /// <param name="vector">The normal vector to transform.</param>
-    /// <param name="result">The transformed normal.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This method does not update the <see cref="TransformComponent.WorldMatrix"/> before performing the transformation. If the <see cref="TransformComponent"/> has been modified since the last frame you may need to call the <see cref="TransformComponent.UpdateWorldMatrix"/> method first.
-    /// </remarks>
-    public static void TransformVector(this TransformComponent transform, ref Vector3 vector, out Vector3 result)
-    {
-        ArgumentNullException.ThrowIfNull(transform);
-
-        Vector3.TransformNormal(ref vector, ref transform.WorldMatrix, out result);
-    }
-
-    /// <inheritdoc cref="TransformVector(TransformComponent, ref Vector3, out Vector3)"/>
     /// <returns>The transformed normal.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
+    /// <inheritdoc cref="TransformDirection(TransformComponent, ref Vector3, out Vector3)" path="/remarks"/>
     public static Vector3 TransformVector(this TransformComponent transform, Vector3 vector)
     {
-        transform.TransformVector(ref vector, out var result);
+        transform.TransformDirection(ref vector, out var result);
 
         return result;
     }
 
     /// <summary>
-    /// Performs a normal transformation using the inverse of the given <see cref="TransformComponent.WorldMatrix"/>.
+    /// Performs a normal transformation using the inverse of the given <see cref="TransformComponent.WorldMatrix"/>: the
+    /// same as <see cref="InverseTransformDirection(TransformComponent, Vector3)"/>, under the name some callers know it by.
     /// </summary>
-    /// <inheritdoc cref="TransformVector(TransformComponent, ref Vector3, out Vector3)"/>
-    public static void InverseTransformVector(this TransformComponent transform, ref Vector3 vector, out Vector3 result)
-    {
-        ArgumentNullException.ThrowIfNull(transform);
-
-        Matrix.Invert(ref transform.WorldMatrix, out var inverseMatrix);
-
-        Vector3.TransformNormal(ref vector, ref inverseMatrix, out result);
-    }
-
-    /// <inheritdoc cref="InverseTransformVector(TransformComponent, ref Vector3, out Vector3)"/>
+    /// <param name="transform">The transform to get the world matrix from.</param>
+    /// <param name="vector">The normal vector to transform.</param>
     /// <returns>The transformed normal.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
+    /// <inheritdoc cref="TransformDirection(TransformComponent, ref Vector3, out Vector3)" path="/remarks"/>
     public static Vector3 InverseTransformVector(this TransformComponent transform, Vector3 vector)
     {
-        transform.InverseTransformVector(ref vector, out var result);
+        transform.InverseTransformDirection(ref vector, out var result);
 
         return result;
     }
@@ -417,11 +401,14 @@ public static class TransformExtensions
             Vector3.TransformNormal(ref worldUp, ref inverseParent, out localUp);
         }
 
-        var localEye = transform.LocalMatrix.TranslationVector;
+        // The position, not the local matrix: the engine rebuilds the matrix once a frame, so until then it
+        // holds the position of the frame before, and a transform moved and then turned in the same
+        // update would aim from where it was
+        var localEye = transform.Position;
 
-        MathUtilEx.LookRotation(ref localEye, ref localTarget, ref localUp, out var lookRotation);
+        QuaternionUtil.LookAt(in localEye, in localTarget, in localUp, out var lookRotation);
 
-        // A backstop rather than the fix. MathUtilEx.LookRotation no longer returns a non-finite
+        // A backstop rather than the fix. QuaternionUtil.LookAt no longer returns a non-finite
         // rotation for any input, but this check stays because of how far the damage travels if one
         // ever gets through: the rotation poisons the world matrix, and anything that integrates a
         // position through that matrix afterwards is NaN too, which cannot be undone by further

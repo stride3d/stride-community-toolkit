@@ -4,6 +4,7 @@ using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Rendering;
@@ -19,13 +20,57 @@ namespace Stride.CommunityToolkit.Tests.Bepu;
 public class AddBepuPhysicsColliderTests
 {
     [Fact]
+    public void EveryThreeDimensionalShapeHasACollider()
+    {
+        Primitive3D[] shapes =
+        [
+            Primitive3D.Box(new Vector3(1f, 2f, 3f)),
+            Primitive3D.Sphere(),
+            Primitive3D.Capsule(),
+            Primitive3D.Cylinder(),
+            Primitive3D.Cone(),
+            Primitive3D.Torus(),
+            Primitive3D.Plane(),
+            Primitive3D.Teapot(),
+            Primitive3D.TriangularPrism(Vector3.One),
+            Primitive3D.Text("A", MeshFont.Default),
+        ];
+
+        foreach (var shape in shapes) Assert.NotNull(Colliders.For(shape));
+
+        // One of each record: a record added without a case here, and so perhaps without a collider, fails
+        Assert.Equal(ShapeRecords(typeof(Primitive3D)), shapes.Select(shape => shape.GetType()).Distinct().Count());
+    }
+
+    [Fact]
+    public void EveryFlatShapeHasACollider()
+    {
+        Primitive2D[] shapes =
+        [
+            Primitive2D.Rectangle(),
+            Primitive2D.Circle(),
+            Primitive2D.Capsule(),
+            Primitive2D.Triangle(),
+            Primitive2D.RegularPolygon(),
+            Primitive2D.Polygon(new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 1f)),
+        ];
+
+        foreach (var shape in shapes) Assert.NotNull(Colliders.For(shape, shape.Depth));
+
+        Assert.Equal(ShapeRecords(typeof(Primitive2D)), shapes.Select(shape => shape.GetType()).Distinct().Count());
+    }
+
+    private static int ShapeRecords(Type set) => set.GetNestedTypes().Count(type => type.IsSubclassOf(set));
+
+    [Fact]
     public void WideCapsuleGetsAColliderClampedLikeItsMesh()
     {
-        // A height under two radii: the mesh keeps a straight part of a hundredth of a radius, and so does the collider
-        var collider = Assert.IsType<CapsuleCollider>(CommunityToolkit.Bepu.EntityExtensions.ColliderFor(Primitive2D.Capsule(radius: 0.5f, height: 0.8f), depth: 1f));
+        // A height under two radii: the mesh keeps a straight part of a hundredth of a unit, and so does the collider
+        var collider = Assert.IsType<CapsuleCollider>(Colliders.For(Primitive2D.Capsule(radius: 0.5f, height: 0.8f), depth: 1f));
 
         Assert.Equal(0.5f, collider.Radius);
-        Assert.Equal(0.005f, collider.Length, 0.0001f);
+        Assert.Equal(Capsule2DProceduralModel.StraightLength(0.8f, 0.5f), collider.Length);
+        Assert.Equal(0.01f, collider.Length, Tolerances.Geometry);
     }
 
     [Fact]

@@ -15,13 +15,13 @@ namespace Stride.CommunityToolkit.Bullet;
 public sealed class BulletPhysicsSetup : PhysicsSetupBase
 {
     /// <inheritdoc/>
-    public override void AddBody(Entity entity, Primitive3D shape, PrimitiveEntityOptions? options)
+    public override void AddBody(Entity entity, Primitive3D shape, PrimitiveEntityOptions options)
         => entity.AddBulletPhysics(shape, Carry(options));
 
     /// <inheritdoc/>
-    public override void AddBody(Entity entity, Primitive2D shape, PrimitiveEntityOptions? options)
+    public override void AddBody(Entity entity, Primitive2D shape, PrimitiveEntityOptions options)
         => entity.AddBulletPhysics(shape, Carry(options));
 
-    private static BulletPhysicsOptions Carry(PrimitiveEntityOptions? options)
-        => options as BulletPhysicsOptions ?? new BulletPhysicsOptions { Body = options?.Body ?? BodyMode.Dynamic };
+    private static BulletPhysicsOptions Carry(PrimitiveEntityOptions options)
+        => options as BulletPhysicsOptions ?? new BulletPhysicsOptions { Body = options.Body };
 }

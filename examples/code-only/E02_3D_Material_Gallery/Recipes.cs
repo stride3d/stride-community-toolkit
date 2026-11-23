@@ -14,7 +14,7 @@ public static class Recipes
 {
     /// <summary>
     /// The microfacet model with a distribution of the station's choosing. The environment term stays
-    /// the engine's lookup texture, which resolves because <see cref="MaterialStation.Material"/>
+    /// the engine's lookup texture, which resolves because <see cref="MaterialStation.Compile"/>
     /// compiles with the game's content manager; without it the table is empty and metals come out black.
     /// </summary>
     public static MaterialSpecularMicrofacetModelFeature Microfacet(IMaterialSpecularMicrofacetNormalDistributionFunction? distribution = null) => new()
@@ -23,11 +23,11 @@ public static class Recipes
     };
 
     /// <summary>
-    /// The metalness workflow in one descriptor: a colour, a glossiness, a metalness and the
+    /// The metalness workflow in one descriptor: a colour, a metalness, a glossiness and the
     /// microfacet specular model - the four numbers of a PBR material, and what
     /// <c>game.CreateMaterial</c> builds.
     /// </summary>
-    public static MaterialDescriptor Pbr(Color colour, float glossiness, float metalness, IMaterialSpecularMicrofacetNormalDistributionFunction? distribution = null)
+    public static MaterialDescriptor Pbr(Color colour, float metalness, float glossiness, IMaterialSpecularMicrofacetNormalDistributionFunction? distribution = null)
     {
         // The toolkit's own bag, with the distribution swapped when a station asks for one
         var descriptor = MaterialDescriptors.Pbr(colour, metalness, glossiness);
@@ -56,16 +56,16 @@ public static class Recipes
     /// means no tangent-space work at all.
     /// </summary>
     /// <param name="diffuse">The colour, or the albedo texture.</param>
-    /// <param name="glossiness">The glossiness, a number or a map; null for the toolkit's default, 0.65.</param>
     /// <param name="metalness">The metalness, a number or a map; leave null when <paramref name="specular"/> is given.</param>
+    /// <param name="glossiness">The glossiness, a number or a map; null for the toolkit's default, 0.65.</param>
     /// <param name="specular">A specular colour or map instead of a metalness.</param>
     /// <param name="normal">A normal map, in the pack's XY convention.</param>
     /// <param name="occlusion">An ambient occlusion map.</param>
     /// <param name="emissive">An emissive colour or map, at <paramref name="emissiveIntensity"/>.</param>
     public static MaterialDescriptor Mapped(
         IComputeColor diffuse,
-        IComputeScalar? glossiness = null,
         IComputeScalar? metalness = null,
+        IComputeScalar? glossiness = null,
         IComputeColor? specular = null,
         IComputeColor? normal = null,
         IComputeScalar? occlusion = null,

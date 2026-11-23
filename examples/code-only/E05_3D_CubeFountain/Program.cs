@@ -52,8 +52,8 @@ float[] timeScales = [0f, 0.01f, 0.0625f, 0.125f, 0.25f, 0.5f, 1f, 2f, 3f, 4f, 5
 var models = new Model[shapes.Length];
 var masters = new BufferedEntityInstancing[shapes.Length];
 
-CubeFountain? fountain = null;
-KeyMenu? shapeMenu = null;
+CubeFountain fountain = null!;
+KeyMenu shapeMenu = null!;
 var timeScaleIndex = Array.IndexOf(timeScales, 1f);
 var interpolated = true;
 
@@ -98,10 +98,13 @@ void Start(Scene scene)
     };
 
     // The fountain's entity is the mouth of the nozzle: bodies start where it is
-    var mouth = new Entity("Fountain") { fountain };
+    var mouth = new Entity("Fountain", new Vector3(0f, NozzleHeight + 0.4f, 0f)) { fountain };
 
-    mouth.Transform.Position = new Vector3(0f, NozzleHeight + 0.4f, 0f);
     scene.Entities.Add(mouth);
+
+    // Five times the speed is five physics steps a frame at 60 frames a second, over the default
+    // cap of three (Stride 4.4.0 ignored the cap; 4.4.1 applies it)
+    game.GetSimulation().MaxStepPerFrame = 8;
 
     // The shape to launch, as a key menu in the overlay: O opens it, a digit picks
     shapeMenu = new KeyMenu
@@ -118,9 +121,7 @@ void Start(Scene scene)
 
 void Update(Scene scene, GameTime time)
 {
-    if (fountain is null) return;
-
-    shapeMenu?.Update(game.Input);
+    shapeMenu.Update(game.Input);
 
     if (game.Input.IsKeyPressed(Keys.J)) fountain.Rate = MathF.Max(fountain.Rate - 5f, 0f);
     if (game.Input.IsKeyPressed(Keys.K)) fountain.Rate = MathF.Min(fountain.Rate + 5f, 120f);
@@ -129,16 +130,12 @@ void Update(Scene scene, GameTime time)
     var faster = game.Input.IsKeyPressed(Keys.OemPlus) || game.Input.IsKeyPressed(Keys.Add);
     var slower = game.Input.IsKeyPressed(Keys.OemMinus) || game.Input.IsKeyPressed(Keys.Subtract);
 
-    if ((faster || slower) && fountain.Simulation is { } simulation)
+    if (faster || slower)
     {
         timeScaleIndex = Math.Clamp(timeScaleIndex + (faster ? 1 : -1), 0, timeScales.Length - 1);
 
         // The one line that slows, stops or speeds up the fountain. Nothing is sent to the fountain
-        simulation.TimeScale = timeScales[timeScaleIndex];
-
-        // Five times the speed is five physics steps a frame at 60 frames a second, over the default
-        // cap of three (Stride 4.4.0 ignored the cap; 4.4.1 applies it)
-        simulation.MaxStepPerFrame = 8;
+        game.GetSimulation().TimeScale = timeScales[timeScaleIndex];
     }
 
     if (game.Input.IsKeyPressed(Keys.I))
@@ -152,9 +149,7 @@ void Update(Scene scene, GameTime time)
     {
         // A thrown body comes from the same store as the fountain's, so the count stays capped
         var camera = game.GetCameraEntity().Transform;
-        var forward = Vector3.TransformNormal(-Vector3.UnitZ, camera.WorldMatrix);
-
-        forward.Normalize();
+        var forward = Vector3.Normalize(camera.WorldMatrix.Forward);
 
         fountain.Launch(camera.WorldMatrix.TranslationVector + forward * 1.5f, forward * ThrowSpeed);
     }
@@ -162,11 +157,9 @@ void Update(Scene scene, GameTime time)
 
 IReadOnlyList<TextElement> BuildOverlayLines()
 {
-    if (fountain is null) return shapeMenu?.GetLines() ?? [];
-
     return
     [
-        .. shapeMenu?.GetLines() ?? [],
+        .. shapeMenu.GetLines(),
         new(["J", "K"], "Fewer or more bodies per second", Color.Gold),
         new(["+", "-"], "Simulation speed, from paused to 5x", Color.Gold),
         new("I", interpolated ? "Interpolation on: smooth between steps" : "Interpolation off: moved on steps only", Color.Gold),
@@ -190,7 +183,7 @@ InterpolationMode Interpolation() => interpolated ? InterpolationMode.Interpolat
 Entity CreateBody(Scene scene, int kind, Vector3 position)
 {
     // AddBepuPhysics derives the collider from the shape alone, so no ModelComponent is needed for it
-    var body = new Entity(shapes[kind].Name);
+    var body = new Entity(shapes[kind].Name, position);
 
     body.AddBepuPhysics(shapes[kind].Type, new BepuPhysicsOptions
     {
@@ -198,7 +191,6 @@ Entity CreateBody(Scene scene, int kind, Vector3 position)
         Interpolation = interpolated,
     });
 
-    body.Transform.Position = position;
     body.Scene = scene;
 
     masters[kind].AddInstance(body);

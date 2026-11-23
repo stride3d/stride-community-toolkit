@@ -1,3 +1,4 @@
+using Example.Common;
 using Stride.CommunityToolkit.Charts;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
@@ -27,35 +28,26 @@ using Stride.Rendering.Images;
 
 using var game = new Game();
 
-Chart? chart = null;
+Chart chart = null!;
 ChartCurve? tangent = null;
-ChartCurve? wave = null;
-ChartTrajectory? trail = null;
-CameraComponent? camera = null;
-ShapeBatch? batch = null;
+ChartCurve wave = null!;
+ChartTrajectory trail = null!;
+CameraComponent camera = null!;
+ShapeBatch batch = null!;
 
 // The thrown ball, integrated by hand each frame. Unlike the 2D example it is given a Z velocity too, so
 // the recorded trail arcs through the depth of the chart instead of staying on the z = 0 plane.
 var launchPosition = new Vector3(-4.5f, -3.5f, -2.5f);
 var launchVelocity = new Vector3(4f, 7f, 1.6f);
-const float Gravity = 9.81f;
-var ballPosition = Vector3.Zero;
-var ballVelocity = Vector3.Zero;
-var ballFlying = false;
+var ball = new ThrownBall();
 
 // The animated curve: sin(kx) with k sweeping up and down, re-plotted in place every frame
 var animate = true;
 var showcase = false;
-LightComponent? keyLight = null;
-Bloom? bloom = null;
-const float ChartGlow = 6f;
-const float ShowcaseGlow = 16f;
-const float ChartLight = 20f;
-const float ShowcaseLight = 2f;
-const float ChartBloomRadius = 10f;
-const float ShowcaseBloomRadius = 20f;
-const float ChartBloomAmount = 0.3f;
-const float ShowcaseBloomAmount = 0.5f;
+LightComponent keyLight = null!;
+Bloom bloom = null!;
+var chartLook = new Look(Glow: 6f, Light: 20f, BloomRadius: 10f, BloomAmount: 0.3f);
+var showcaseLook = new Look(Glow: 16f, Light: 2f, BloomRadius: 20f, BloomAmount: 0.5f);
 var waveTime = 0f;
 var waveFrequency = 1f;
 const float WaveAmplitude = 1.5f;
@@ -79,9 +71,9 @@ game.Run(new SceneSetup3D
     DpiAware = true,
 }, start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
-    keyLight = game.AddDirectionalLight(intensity: ChartLight).Get<LightComponent>();
+    keyLight = game.AddDirectionalLight(intensity: chartLook.Light).Get<LightComponent>();
 
     // Glow3D is the lit preset: a bright palette and a glow halo on every stroke; ribbons go emissive
     // above 1, which the bloom enabled above turns into a glow
@@ -111,7 +103,7 @@ void Start(Scene rootScene)
 
     // Lifted so most of the chart stands above y = 0
     chart.Root.Transform.Position = new Vector3(0, 3f, 0);
-    chart.Root.Scene = rootScene;
+    chart.Root.Scene = scene;
 
     chart.Plot(x => 2f * MathF.Sin(x), name: "sin");
 
@@ -129,19 +121,10 @@ void Start(Scene rootScene)
     trail = chart.AddTrajectory(capacity: 900, name: "throw");
 
     // Scatter markers, here lifted off the z = 0 plane so they sit inside the box
-    var samples = new List<Vector3>();
-
-    for (var x = -4.5f; x <= 4.5f; x += 0.45f)
-    {
-        var hash = MathF.Sin(x * 12.9898f) * 43758.5453f;
-        var jitter = (hash - MathF.Floor(hash) - 0.5f) * 0.7f;
-        samples.Add(new Vector3(x, 2f * MathF.Sin(x) + jitter, 1.5f));
-    }
-
-    chart.AddMarkers(samples, color: new Color(186, 132, 255), name: "samples");
+    chart.AddMarkers(SampleData.ScatterAroundSine(z: 1.5f), color: new Color(186, 132, 255), name: "samples");
 
     // A shaded region still belongs to the XY plane - the picture of a definite integral
-    chart.AddArea(x => 2f * MathF.Sin(x), from: 0f, to: MathF.PI, color: options.Series.Palette[0], name: "integral");
+    chart.AddArea(x => 2f * MathF.Sin(x), from: 0f, to: MathUtil.Pi, color: options.Series.Palette[0], name: "integral");
 
     wave = chart.Plot(x => WaveAmplitude * MathF.Sin(waveFrequency * x), color: new Color(0, 210, 200), name: "wave");
 
@@ -155,25 +138,24 @@ void Start(Scene rootScene)
 
     // Swap the fly controller for an orbit around the chart, then frame the camera so the whole figure
     // fits the window. The orbit reads its starting angles from the pose FrameCamera leaves behind.
-    if (rootScene.GetCamera() is { } sceneCamera)
+    camera = game.GetCameraEntity().Get<CameraComponent>();
+
+    var cameraEntity = camera.Entity;
+
+    if (cameraEntity.Get<Basic3DCameraController>() is { } flyController)
     {
-        var cameraEntity = sceneCamera.Entity;
-
-        if (cameraEntity.Get<Basic3DCameraController>() is { } flyController)
-        {
-            cameraEntity.Remove(flyController);
-        }
-
-        cameraEntity.Add(new Basic3DOrbitCameraController { Target = chart.Root.Transform.Position });
-
-        // A gently angled start, mostly facing the chart plane: the framing distance is set by the box
-        // corner the frustum touches, and the helix gives the box real depth, so a flatter angle fills
-        // more of the window
-        cameraEntity.Transform.Rotation = Quaternion.RotationYawPitchRoll(
-            MathUtil.DegreesToRadians(18f), MathUtil.DegreesToRadians(-12f), 0f);
-
-        chart.FrameCamera(sceneCamera, padding: 0.12f);
+        cameraEntity.Remove(flyController);
     }
+
+    cameraEntity.Add(new Basic3DOrbitCameraController { Target = chart.Root.Transform.Position });
+
+    // A gently angled start, mostly facing the chart plane: the framing distance is set by the box
+    // corner the frustum touches, and the helix gives the box real depth, so a flatter angle fills
+    // more of the window
+    cameraEntity.Transform.Rotation = Quaternion.RotationYawPitchRoll(
+        MathUtil.DegreesToRadians(18f), MathUtil.DegreesToRadians(-12f), 0f);
+
+    chart.FrameCamera(camera, padding: 0.12f);
 
     var overlay = TextOverlay.GetOrCreate(game);
 
@@ -195,8 +177,23 @@ void Start(Scene rootScene)
 
 void Update(Scene scene, GameTime time)
 {
-    if (chart is null) return;
+    HandleKeys();
+    AnimateWave(time);
 
+    // The chart's frame: applies whatever changed in its options (the toggles, the showcase glow) and
+    // moves the cursor readout. Nothing follows the camera here - that is the 2D chart's trick - but the
+    // call is the same. The ball goes into the same batch after it, with the chart's own glow.
+    chart.Update(camera, batch);
+    batch.Glow.Set(chart.Options.Series.Glow);
+    batch.Glow.Additive = true;
+    batch.DrawBillboardCircle(chart.Root.Transform.Position + ball.Position, 0.12f, Color.White);
+    batch.Glow.Clear();
+
+    MoveBall(time);
+}
+
+void HandleKeys()
+{
     if (game.Input.IsKeyPressed(Keys.G)) chart.Options.Grid.Visible = !chart.Options.Grid.Visible;
     if (game.Input.IsKeyPressed(Keys.L)) chart.Options.Legend.Visible = !chart.Options.Legend.Visible;
 
@@ -215,79 +212,65 @@ void Update(Scene scene, GameTime time)
 
     if (game.Input.IsKeyPressed(Keys.Space)) ThrowBall();
     if (game.Input.IsKeyPressed(Keys.A)) animate = !animate;
+    if (game.Input.IsKeyPressed(Keys.V)) ToggleShowcase();
+}
 
-    // The showcase look. What holds the figure back in the default view is the grid behind the curves and
-    // a modest glow halo. Drop the grid and widen the halo and the same figure reads as the neon thing you
-    // get by orbiting behind it - no rotating needed. Glow is a number the strokes read as they are
-    // submitted, so nothing is rebuilt.
-    if (game.Input.IsKeyPressed(Keys.V))
-    {
-        showcase = !showcase;
+// The showcase look. What holds the figure back in the default view is the grid behind the curves and
+// a modest glow halo. Drop the grid and widen the halo and the same figure reads as the neon thing you
+// get by orbiting behind it - no rotating needed.
+void ToggleShowcase()
+{
+    showcase = !showcase;
+    chart.Options.Grid.Visible = !showcase;
 
-        chart.Options.Grid.Visible = !showcase;
-        chart.Options.Series.Glow = showcase ? ShowcaseGlow : ChartGlow;
+    ApplyLook(showcase ? showcaseLook : chartLook);
+}
 
-        // The light matters more than it looks. A ribbon (the helix, the trail) is emissive AND lit, so a
-        // bright key light adds white and washes the colour out - which is why the halo always looked
-        // better from behind, where the ribbons face away from it. Dimming the light brings that side to
-        // the front; it is not turned off, so the labels and axes keep some shading.
-        if (keyLight is not null) keyLight.Intensity = showcase ? ShowcaseLight : ChartLight;
+void ApplyLook(Look look)
+{
+    // Glow is a number the strokes read as they are submitted, so nothing is rebuilt
+    chart.Options.Series.Glow = look.Glow;
 
-        // The last piece, and the one that explains why orbiting behind the chart always looked better:
-        // bloom spreads in SCREEN space, so the same halo covers far more of a figure that sits small in
-        // the frame than of one that fills it. Rather than push the camera away, widen the bloom.
-        if (bloom is not null)
-        {
-            bloom.Radius = showcase ? ShowcaseBloomRadius : ChartBloomRadius;
-            bloom.Amount = showcase ? ShowcaseBloomAmount : ChartBloomAmount;
-        }
-    }
+    // The light matters more than it looks. A ribbon (the helix, the trail) is emissive AND lit, so a
+    // bright key light adds white and washes the colour out - which is why the halo always looked
+    // better from behind, where the ribbons face away from it. Dimming the light brings that side to
+    // the front; it is not turned off, so the labels and axes keep some shading.
+    keyLight.Intensity = look.Light;
 
-    if (animate && wave is not null)
-    {
-        waveTime += (float)time.Elapsed.TotalSeconds;
-        waveFrequency = 1.75f + 1.25f * MathF.Sin(waveTime * 0.9f);
+    // The last piece, and the one that explains why orbiting behind the chart always looked better:
+    // bloom spreads in SCREEN space, so the same halo covers far more of a figure that sits small in
+    // the frame than of one that fills it. Rather than push the camera away, widen the bloom.
+    bloom.Radius = look.BloomRadius;
+    bloom.Amount = look.BloomAmount;
+}
 
-        wave.SetFunction(x => WaveAmplitude * MathF.Sin(waveFrequency * x));
-    }
+void AnimateWave(GameTime time)
+{
+    if (!animate) return;
 
-    // The chart's frame: applies whatever changed in its options (the toggles above, the showcase glow)
-    // and moves the cursor readout. Nothing follows the camera here - that is the 2D chart's trick - but
-    // the call is the same, and the camera is explicit because a scene can hold several.
-    camera ??= scene.GetCamera();
+    waveTime += (float)time.Elapsed.TotalSeconds;
+    waveFrequency = 1.75f + 1.25f * MathF.Sin(waveTime * 0.9f);
+    wave.SetFunction(x => WaveAmplitude * MathF.Sin(waveFrequency * x));
+}
 
-    if (camera is not null && batch is not null)
-    {
-        chart.Update(camera, batch);
+void MoveBall(GameTime time)
+{
+    if (!ball.Flying) return;
 
-        batch.Glow.Set(chart.Options.Series.Glow);
-        batch.Glow.Additive = true;
-        batch.DrawBillboardCircle(chart.Root.Transform.Position + ballPosition, 0.12f, Color.White);
-        batch.Glow.Clear();
-    }
+    ball.Step((float)time.Elapsed.TotalSeconds);
+    trail.Add(ball.Position);
 
-    if (!ballFlying || trail is null) return;
-
-    var dt = MathF.Min((float)time.Elapsed.TotalSeconds, 0.1f);
-
-    ballVelocity.Y -= Gravity * dt;
-    ballPosition += ballVelocity * dt;
-
-    trail.Add(ballPosition);
-
-    if (ballPosition.Y < chart.Options.Range.YMin - 1f || ballPosition.X > chart.Options.Range.XMax + 1f)
-    {
-        ballFlying = false;
-    }
+    if (ball.Position.Y < chart.Options.Range.YMin - 1f || ball.Position.X > chart.Options.Range.XMax + 1f) ball.Land();
 }
 
 void ThrowBall()
 {
-    trail?.Clear();
-    ballPosition = launchPosition;
-    ballVelocity = launchVelocity;
-    ballFlying = true;
+    trail.Clear();
+    ball.Launch(launchPosition, launchVelocity);
 }
+
+/// <summary>One look of the chart: the strokes' glow, the key light, and the bloom's radius and amount.</summary>
+readonly record struct Look(float Glow, float Light, float BloomRadius, float BloomAmount);
 /*
 ---example-metadata
 slug: charts-3d

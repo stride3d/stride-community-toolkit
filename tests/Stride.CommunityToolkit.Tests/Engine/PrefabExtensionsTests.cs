@@ -60,8 +60,9 @@ public class PrefabExtensionsTests
     [Fact]
     public void InstantiateSingle_Throws_UnlessThePrefabHasExactlyOneEntity()
     {
-        Assert.Throws<InvalidOperationException>(() => new Prefab().InstantiateSingle());
-        Assert.Throws<InvalidOperationException>(() => TwoEntityPrefab().InstantiateSingle(Vector3.Zero));
-        Assert.Throws<ArgumentNullException>(() => ((Prefab)null!).InstantiateSingle());
+        Assert.Multiple(
+            () => Assert.Throws<InvalidOperationException>(() => new Prefab().InstantiateSingle()),
+            () => Assert.Throws<InvalidOperationException>(() => TwoEntityPrefab().InstantiateSingle(Vector3.Zero)),
+            () => Assert.Throws<ArgumentNullException>(() => ((Prefab)null!).InstantiateSingle()));
     }
 }

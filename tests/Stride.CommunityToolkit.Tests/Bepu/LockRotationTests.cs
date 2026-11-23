@@ -56,7 +56,8 @@ public class LockRotationTests
                 return;
             }
 
-            if (frames == 40)
+            // Read on game time, not a frame count: the headless loop runs frames far faster than the physics clock
+            if (frames > 2 && game.UpdateTime.Total.TotalSeconds >= 0.5)
             {
                 var lockedBody = locked!.Get<BodyComponent>();
                 var freeBody = free!.Get<BodyComponent>();

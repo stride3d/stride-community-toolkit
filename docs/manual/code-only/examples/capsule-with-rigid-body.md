@@ -12,7 +12,7 @@ The `Program.cs` file shows how to:
 
 - Creating a 3D primitive with CreatePrimitive
 - Positioning an entity with Transform.Position
-- Adding entities to a Scene (rootScene)
+- Adding entities to a Scene (scene)
 - Using helpers: SceneSetup3D, UseSkybox
 
 ![Basic 3D Scene (Capsule)](media/capsule-with-rigid-body.webp)

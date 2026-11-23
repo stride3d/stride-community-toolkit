@@ -5,7 +5,7 @@ namespace Stride.CommunityToolkit.Audio;
 
 /// <summary>
 /// Sound for a game with no sound assets: generated sounds, <c>.wav</c> files read at runtime, and
-/// a listener that follows an entity. All on <c>game.Audio</c>.
+/// a listener that follows an entity. All on the audio system, <c>game.GetAudioSystem()</c>.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -27,7 +27,7 @@ public static class AudioSystemExtensions
     /// Creates a sound whose samples come from a callback: a tone, noise, a synthesiser - anything
     /// with no file behind it.
     /// </summary>
-    /// <param name="audio">The game's audio system, <c>game.Audio</c>.</param>
+    /// <param name="audio">The game's audio system, <c>game.GetAudioSystem()</c>.</param>
     /// <param name="fill">Produces each block of samples. Runs on the audio worker thread; see <see cref="SampleFiller"/>.</param>
     /// <param name="sampleRate">Samples per second per channel.</param>
     /// <param name="mono">One channel when <see langword="true"/>, two when <see langword="false"/>.</param>
@@ -61,7 +61,7 @@ public static class AudioSystemExtensions
     /// <summary>
     /// Reads a <c>.wav</c> file into memory, ready to create instances from.
     /// </summary>
-    /// <param name="audio">The game's audio system, <c>game.Audio</c>.</param>
+    /// <param name="audio">The game's audio system, <c>game.GetAudioSystem()</c>.</param>
     /// <param name="path">The file. Relative paths resolve against the working directory, so prefer a path built from the executable's folder.</param>
     /// <returns>The decoded sound. Keep it and call <see cref="WavSound.CreateInstance"/> per playback.</returns>
     /// <exception cref="InvalidOperationException">The audio engine is not available.</exception>
@@ -78,8 +78,9 @@ public static class AudioSystemExtensions
     /// <summary>
     /// Reads a <c>.wav</c> from a stream into memory, ready to create instances from.
     /// </summary>
-    /// <param name="audio">The game's audio system, <c>game.Audio</c>.</param>
+    /// <param name="audio">The game's audio system, <c>game.GetAudioSystem()</c>.</param>
     /// <param name="stream">The WAVE data, read from its current position to the end of the data chunk. Not disposed.</param>
+    /// <returns>The decoded sound. Keep it and call <see cref="WavSound.CreateInstance"/> per playback.</returns>
     /// <exception cref="InvalidOperationException">The audio engine is not available.</exception>
     /// <exception cref="InvalidDataException">The stream is not a WAVE file, or holds a format <see cref="WavSound"/> does not decode.</exception>
     public static WavSound LoadWav(this AudioSystem audio, Stream stream)
@@ -94,7 +95,7 @@ public static class AudioSystemExtensions
     /// listener, which the engine then moves with the entity every frame. Put it on the camera and
     /// pass the result as the <c>listener</c> of every spatialised sound.
     /// </summary>
-    /// <param name="audio">The game's audio system, <c>game.Audio</c>.</param>
+    /// <param name="audio">The game's audio system, <c>game.GetAudioSystem()</c>.</param>
     /// <param name="entity">The entity to listen from. Must already be in the scene: the engine creates the listener when the component enters one.</param>
     /// <returns>The entity's listener. Calling again for the same entity returns the same listener.</returns>
     /// <remarks>

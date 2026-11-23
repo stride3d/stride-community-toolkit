@@ -4,6 +4,7 @@ using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.Shapes;
@@ -28,7 +29,7 @@ namespace Stride.CommunityToolkit.Shapes;
 /// <para>
 /// <see cref="BorderWidth"/>, <see cref="StrokeWidth"/>, <see cref="Fill"/>, <see cref="Glow"/>, <see cref="Dash"/>,
 /// <see cref="Gradient"/>, <see cref="Opacity"/>, <see cref="DepthFade"/>, <see cref="Textured"/>,
-/// <see cref="Screen"/> and <see cref="Tag"/> are current state, captured by each draw call as it is
+/// <see cref="Screen"/>, <see cref="Viewport"/> and <see cref="Tag"/> are current state, captured by each draw call as it is
 /// made, so you can change them between calls the way you would with a sprite batch.
 /// </para>
 /// </remarks>
@@ -59,10 +60,13 @@ public sealed partial class ShapeBatch : RenderObject
     private const int PolylineRunLength = 64;
 
     /// <summary>A stroke with no area: a hollow band of zero depth, which is what a ring or an arc is.</summary>
-    private static readonly ShapeSlice Stroke = new(Hollow: true, RingWidth: 0f, StartAngle: 0f, SweepAngle: 0f, RoundCaps: false);
+    private static readonly ShapeSlice Stroke = ShapeSlice.Whole with { Hollow = true };
 
     /// <summary>The slice of every space run: a polyline, stroked on screen.</summary>
     private static readonly ShapeSlice SpaceStroke = ShapeSlice.Whole with { Polyline = true, Space = true };
+
+    /// <summary>The plane of the flat overloads: Z = 0, unrotated.</summary>
+    private static readonly ShapePlane Flat = ShapePlane.XY(Vector2.Zero);
 
     /// <summary>A stand-in plane for a space run, which has none; the shader never reads it.</summary>
     private static readonly ShapePlane SpacePlane = new(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, PlaneMode.Fixed);
@@ -118,7 +122,7 @@ public sealed partial class ShapeBatch : RenderObject
 
     /// <summary>
     /// The dash pattern along outlines - length, gap and phase in on-screen pixels. A length of 0,
-    /// the default, draws solid. Circles, arcs and lines dash; polygons stay solid. See
+    /// the default, draws solid. Circles, arcs, lines and polylines dash; polygons stay solid. See
     /// <see cref="DashPattern"/>. Captured by each draw call as it is made.
     /// </summary>
     public DashPattern Dash { get; } = new();
@@ -300,9 +304,7 @@ public sealed partial class ShapeBatch : RenderObject
     /// <summary>Called by the render feature once the batch is drawn; the next frame starts empty, and the drawn frame's tagged shapes become what a pick is answered from.</summary>
     internal void Reset()
     {
-        Instances.Clear();
-        Points.Clear();
-        SpacePoints.Clear();
+        ClearSubmissions();
         HandOverPicks();
     }
 
@@ -312,10 +314,15 @@ public sealed partial class ShapeBatch : RenderObject
     /// </summary>
     internal void Discard()
     {
+        ClearSubmissions();
+        DiscardPicks();
+    }
+
+    private void ClearSubmissions()
+    {
         Instances.Clear();
         Points.Clear();
         SpacePoints.Clear();
-        DiscardPicks();
     }
 
     private void AddSector(in ShapePlane plane, float radius, float innerRadius, float startAngle, float sweepAngle, Color color)
@@ -466,8 +473,7 @@ public sealed partial class ShapeBatch : RenderObject
 
         // A pixel-measured radius is converted to world units on the GPU, at the shape's own
         // depth, and the scale with it - which only works out when there is nothing else to scale
-        if (slice.PixelRadius && vertices.Length != 1)
-            throw new ArgumentException("A shape with a pixel-measured radius is a single point.", nameof(vertices));
+        Debug.Assert(!slice.PixelRadius || vertices.Length == 1, "A shape with a pixel-measured radius is a single point.");
 
         var lower = vertices[0];
         var upper = vertices[0];

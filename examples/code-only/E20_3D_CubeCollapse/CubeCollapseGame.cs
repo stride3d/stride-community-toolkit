@@ -4,9 +4,9 @@ using CubeCollapse.Scripts;
 using CubeCollapse.Setup;
 using CubeCollapse.Shared;
 using Stride.BepuPhysics;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
@@ -106,7 +106,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
 
         var cameraEntity = AddCamera();
 
-        game.AddSceneRenderer(new EntityTextRenderer());
+        game.AddEntityTextRenderer();
         _light = game.AddDirectionalLight();
         _fillLight = AddFillLight(_light);
         LowerGroundSurface(game.Add3DGround());
@@ -167,7 +167,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         _cameraRotation = new CameraRotationScript { RotationCentre = _levels.Current.PlatformCentre };
         cameraEntity.Add(_cameraRotation);
 
-        ConfigureSolverForLockedStacks(cameraEntity.GetSimulation());
+        ConfigureSolverForLockedStacks(game.GetSimulation());
     }
 
     /// <summary>
@@ -196,7 +196,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         {
             _platformComplete = true;
 
-            ReleaseCubesToPhysics(scene);
+            ReleaseCubesToPhysics();
         }
     }
 
@@ -207,14 +207,11 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// Cubes are spawned kinematic so each layer hangs in place while the ones above it are still
     /// being built. Letting them fall as they spawn would scatter the platform before it exists.
     /// </remarks>
-    /// <param name="scene">The scene holding the cubes.</param>
-    private static void ReleaseCubesToPhysics(Scene scene)
+    private void ReleaseCubesToPhysics()
     {
-        foreach (var entity in scene.Entities)
+        foreach (var cube in _grid.Cubes.Values)
         {
-            if (entity.Name != EntityNames.Cube) continue;
-
-            var body = entity.Get<SlidingCubeComponent>();
+            var body = cube.Get<SlidingCubeComponent>();
 
             if (body is null) continue;
 
@@ -407,7 +404,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     }
 
     /// <summary>The colours the board plays with from a palette: the first <see cref="_colourCount"/> of them.</summary>
-    private IReadOnlyList<Color> Colours(int paletteIndex) => [.. ColourPalettes.All[paletteIndex].Colours.Take(_colourCount)];
+    private List<Color> Colours(int paletteIndex) => [.. ColourPalettes.All[paletteIndex].Colours.Take(_colourCount)];
 
     /// <summary>
     /// Switches the whole game to another palette: cubes yet to spawn, the hover variants, and every
@@ -441,7 +438,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
 
             if (component is null || model is null) continue;
 
-            var colourIndex = IndexOf(oldColours, component.Color);
+            var colourIndex = oldColours.IndexOf(component.Color);
 
             if (colourIndex < 0) continue;
 
@@ -451,16 +448,6 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
             // touches no other cube. The hover override sits above this and is per component anyway.
             model.Materials[0] = new MaterialInstance { Material = _materials.Normal[component.Color] };
         }
-    }
-
-    private static int IndexOf(IReadOnlyList<Color> colours, Color colour)
-    {
-        for (var i = 0; i < colours.Count; i++)
-        {
-            if (colours[i] == colour) return i;
-        }
-
-        return -1;
     }
 
     /// <summary>

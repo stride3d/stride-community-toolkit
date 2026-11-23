@@ -111,7 +111,8 @@ public static partial class YamlSourceInspector
 
     /// <summary>
     /// Finds the first occurrence of <paramref name="target"/> outside quotes, and the key of the line
-    /// it appears on.
+    /// it appears on. A quote counts only where YAML reads one, at the start of a scalar: the apostrophe
+    /// in <c>Player's score</c> is text, and must not hide a <c>#</c> after it.
     /// </summary>
     private static (int Index, string Key) FindUnquoted(string line, char target)
     {
@@ -119,29 +120,47 @@ public static partial class YamlSourceInspector
         var inDouble = false;
         var found = -1;
         var colon = -1;
+        var scalarStart = true;
 
         for (var i = 0; i < line.Length; i++)
         {
             var current = line[i];
 
-            if (current == '\'' && !inDouble)
+            if (inSingle)
             {
-                inSingle = !inSingle;
+                if (current == '\'') inSingle = false;
+
+                continue;
             }
-            else if (current == '"' && !inSingle)
+
+            if (inDouble)
             {
-                inDouble = !inDouble;
+                if (current == '"') inDouble = false;
+
+                continue;
             }
-            else if (!inSingle && !inDouble)
+
+            if (char.IsWhiteSpace(current)) continue;
+
+            if (scalarStart && current is '\'' or '"')
             {
-                if (current == ':' && colon < 0)
-                {
-                    colon = i;
-                }
-                else if (current == target && found < 0)
-                {
-                    found = i;
-                }
+                inSingle = current == '\'';
+                inDouble = current == '"';
+                scalarStart = false;
+
+                continue;
+            }
+
+            // A scalar starts after the key's colon or a sequence dash; anything else means we are inside one
+            scalarStart = current == ':' || (current == '-' && i + 1 < line.Length && char.IsWhiteSpace(line[i + 1]));
+
+            if (current == ':' && colon < 0)
+            {
+                colon = i;
+            }
+            else if (current == target && found < 0)
+            {
+                found = i;
             }
         }
 

@@ -39,17 +39,5 @@ public class CameraScreenRectangleTests
         Assert.False(camera.IsInScreenRectangle(new Vector3(0f, 0f, 20f), Vector2.Zero, Vector2.One));
     }
 
-    private static CameraComponent Camera()
-    {
-        var entity = new Entity("camera") { new CameraComponent() };
-
-        entity.Transform.Position = new Vector3(0, 0, 10);
-        entity.Transform.UpdateWorldMatrix();
-
-        var camera = entity.Get<CameraComponent>();
-
-        camera.Update(Aspect);
-
-        return camera;
-    }
+    private static CameraComponent Camera() => TestCameras.Perspective(new Vector3(0, 0, 10), Aspect);
 }

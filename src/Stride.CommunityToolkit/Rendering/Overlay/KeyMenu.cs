@@ -1,10 +1,11 @@
+using Stride.CommunityToolkit.Input;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Input;
 
 namespace Stride.CommunityToolkit.Rendering.Overlay;
 
 /// <summary>
-/// A collapsible list of choices drawn with the debug text system, driven entirely by the keyboard.
+/// A collapsible list of choices, drawn by the <see cref="TextOverlay"/> section it is handed to and driven entirely by the keyboard.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -19,9 +20,8 @@ namespace Stride.CommunityToolkit.Rendering.Overlay;
 /// key menu shares one position and one toggle key with the camera help and everything else on screen.
 /// </para>
 /// <para>
-/// Keep every title and label to printable ASCII. The debug text renderer replaces anything outside
-/// the range 32 to 126 with a space, so accented letters and arrow glyphs vanish silently rather than
-/// failing loudly.
+/// A title or a label can hold any character the overlay's font has a glyph for; one it lacks draws
+/// as the font's missing-glyph box.
 /// </para>
 /// </remarks>
 /// <example>
@@ -65,20 +65,10 @@ public class KeyMenu
     /// </summary>
     public Color? TitleColor { get; set; }
 
-    /// <summary>
-    /// Gets or sets the marker drawn before the toggle key while the list is collapsed.
-    /// </summary>
-    /// <remarks>
-    /// Printable ASCII only - see the remarks on <see cref="KeyMenu"/>. Arrow glyphs such as
-    /// <c>▼</c> render as blanks.
-    /// </remarks>
-    public string CollapsedMarker { get; set; } = "[+]";
-
-    /// <summary>
-    /// Gets or sets the marker drawn before the toggle key while the list is expanded.
-    /// </summary>
-    /// <inheritdoc cref="CollapsedMarker" path="/remarks"/>
-    public string ExpandedMarker { get; set; } = "[-]";
+    // The markers before the toggle key, the same glyphs TextOverlay draws for its collapsible sections; the
+    // overlay's CollapsedMarker and ExpandedMarker are the one place to restyle them
+    private const string CollapsedMarker = "[+]";
+    private const string ExpandedMarker = "[-]";
 
     /// <summary>
     /// Gets or sets the colour used for the currently selected entry while the list is expanded.
@@ -145,7 +135,8 @@ public class KeyMenu
 
         if (!input.HasKeyboard) return false;
 
-        if (input.IsKeyPressed(ToggleKey))
+        // Plain keys only, so a Ctrl chord bound elsewhere, such as the profiler's Ctrl+1 to 5, does not pick an item
+        if (input.IsKeyPressedUnmodified(ToggleKey))
         {
             IsOpen = !IsOpen;
 
@@ -163,7 +154,7 @@ public class KeyMenu
 
         for (var i = 0; i < Items.Count; i++)
         {
-            if (!input.IsKeyPressed(Items[i].Key)) continue;
+            if (!input.IsKeyPressedUnmodified(Items[i].Key)) continue;
 
             SelectedIndex = i;
 

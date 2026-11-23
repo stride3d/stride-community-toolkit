@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Example.Common\Example.Common.csproj" />
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Charts\Stride.CommunityToolkit.Charts.csproj" />
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>

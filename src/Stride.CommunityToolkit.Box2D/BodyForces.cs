@@ -1,14 +1,30 @@
 using Box2D.NET;
 using Stride.Core.Mathematics;
 using static Box2D.NET.B2Bodies;
+using static Box2D.NET.B2MathFunction;
 
 namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
-/// Force, impulse, and velocity helpers applied to bodies by id.
+/// Force, impulse, velocity and teleport helpers applied to bodies by id, for a body without an entity;
+/// <see cref="Box2DBodyComponent"/> has the same for an entity's body.
 /// </summary>
 public static class BodyForces
 {
+    /// <summary>
+    /// Moves a body to a pose and stops it there, awake, as a reset does: no velocity carries over into the new position.
+    /// </summary>
+    /// <param name="bodyId">The target body.</param>
+    /// <param name="position">The world position.</param>
+    /// <param name="rotation">The rotation in radians about the Z axis.</param>
+    public static void TeleportAtRest(B2BodyId bodyId, Vector2 position, float rotation = 0f)
+    {
+        b2Body_SetTransform(bodyId, position.ToB2Vec2(), b2MakeRot(rotation));
+        b2Body_SetLinearVelocity(bodyId, b2Vec2_zero);
+        b2Body_SetAngularVelocity(bodyId, 0f);
+        b2Body_SetAwake(bodyId, true);
+    }
+
     /// <summary>
     /// Applies a linear impulse to the body's center of mass, waking it.
     /// </summary>

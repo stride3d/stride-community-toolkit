@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <Version>1.0.0.0-preview.1</Version>
     </PropertyGroup>
 
     <ItemGroup>

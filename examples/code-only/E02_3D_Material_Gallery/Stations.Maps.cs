@@ -57,7 +57,8 @@ public static class MapStations
     {
         station.Clear();
 
-        var set = station.Pick("brick", "rock", "rooftile") switch { 0 => "brick", 1 => "rock", _ => "rooftile" };
+        var choice = station.Pick("brick", "rock", "rooftile");
+        var set = station.VariationNames[choice];
         var albedo = station.Textures.Color($"{set}/{set}_dif.png");
         var normal = station.Textures.Normal($"{set}/{set}_nml.png");
         var gloss = station.Textures.Data($"{set}/{set}_gls.png");
@@ -249,7 +250,7 @@ public static class MapStations
             glossiness: new ComputeFloat(0.4f)));
 
         station.PlaceModel(ColouredCube(station), material, new Vector3(-1.8f, 0.9f, 0f), 1.8f);
-        station.PlaceModel(ColouredCube(station), material, new Vector3(1.8f, 0.9f, 0f), 1.8f, Quaternion.RotationY(MathF.PI * 0.25f) * Quaternion.RotationX(MathF.PI * 0.2f));
+        station.PlaceModel(ColouredCube(station), material, new Vector3(1.8f, 0.9f, 0f), 1.8f, Quaternion.RotationY(MathUtil.PiOverFour) * Quaternion.RotationX(MathUtil.Pi * 0.2f));
     }
 
     /// <summary>

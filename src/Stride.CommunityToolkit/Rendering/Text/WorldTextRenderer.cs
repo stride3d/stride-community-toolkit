@@ -1,10 +1,7 @@
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Core.Diagnostics;
 using Stride.Engine;
-using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
-using Stride.Rendering.Compositing;
 
 namespace Stride.CommunityToolkit.Rendering.Text;
 
@@ -26,51 +23,27 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// tens of labels, not for thousands.
 /// </para>
 /// </remarks>
-public class WorldTextRenderer : SceneRendererBase
+public class WorldTextRenderer : SpriteTextRendererBase
 {
-    private SpriteBatch? _spriteBatch;
-    private SpriteFont? _defaultFont;
-    private DisplayScale? _displayScale;
-
     /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
     public static readonly ProfilingKey ProfilingKey = new("WorldText");
 
     private static readonly Color4 ProfileColor = new(0.9f, 0.9f, 0.3f, 1f);
 
     /// <inheritdoc />
-    protected override void InitializeCore()
-    {
-        base.InitializeCore();
-
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _defaultFont = RendererDefaults.LoadDefaultFont(Content, Services, 32f);
-
-        // The display's scale, for components whose rasterisation size follows it. Absent outside a
-        // game, which leaves every text rasterised at exactly the FontSize asked for.
-        if (Services.GetService<IGame>() is { } game)
-        {
-            _displayScale = DisplayScale.GetOrCreate(game);
-        }
-    }
-
-    /// <inheritdoc />
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
     {
         using var _ = drawContext.QueryManager.BeginProfile(ProfileColor, ProfilingKey);
-
-        if (_spriteBatch is null || _defaultFont is null) return;
 
         var processor = SceneInstance.GetCurrent(context)?.GetProcessor<WorldTextProcessor>();
 
         if (processor is null || processor.Texts.Count == 0) return;
 
-        var camera = CompositorCameras.Find(context);
+        if (!TryBeginFrame(context, drawContext, out var frame)) return;
 
-        if (camera is null) return;
-
-        var view = camera.ViewMatrix;
-        var projection = camera.ProjectionMatrix;
-        var cameraPosition = camera.Entity?.Transform.WorldMatrix.TranslationVector ?? Vector3.Zero;
+        var view = frame.Camera.ViewMatrix;
+        var projection = frame.Camera.ProjectionMatrix;
+        var cameraPosition = frame.Camera.Entity?.Transform.WorldMatrix.TranslationVector ?? Vector3.Zero;
 
         foreach (var data in processor.Texts)
         {
@@ -96,14 +69,14 @@ public class WorldTextRenderer : SceneRendererBase
 
         if (!ScreenTextDrawer.TryApplyDistanceFade(component.FadeStartDistance, component.MaxDistance, cameraPosition, origin, ref opacity)) return;
 
-        var font = component.Font ?? _defaultFont!;
+        var font = component.Font ?? DefaultFont!;
 
         // Rasterised that much larger on a scaled display, where the same world height covers that
         // many more pixels. Sharpness only: Height still decides the size in the world, and the scale
         // below divides the larger measurement straight back out
-        var display = component.AutoScale && _displayScale is not null ? _displayScale.Value : 1f;
+        var display = DisplayScaleFactor(component.AutoScale);
         var fontSize = component.FontSize * display;
-        var textSize = data.GetMeasuredSize(_spriteBatch!, font, fontSize);
+        var textSize = data.GetMeasuredSize(SpriteBatch!, font, fontSize);
 
         if (textSize.Y <= 0f) return;
 
@@ -111,11 +84,11 @@ public class WorldTextRenderer : SceneRendererBase
         // not cosmetic: SpriteBatch builds its quads with Y increasing downwards, the screen
         // convention, so without the flip every string is drawn upside down in the world.
         var scale = component.Height / textSize.Y;
-        var textToWorld = Matrix.Scaling(scale, -scale, scale) * GetOrientation(component, entity, origin, cameraPosition);
+        var textToWorld = Matrix.Scaling(scale, -scale, scale) * GetOrientation(component, in world, origin, cameraPosition);
 
         textToWorld.TranslationVector = origin;
 
-        _spriteBatch!.Begin(
+        SpriteBatch!.Begin(
             drawContext.GraphicsContext,
             textToWorld * view,
             projection,
@@ -141,7 +114,7 @@ public class WorldTextRenderer : SceneRendererBase
         // the dimmer on top of it - and distance fading has already been folded into that dimmer
         DrawText(font, component, fontSize, Vector2.Zero, anchorOrigin, ScreenTextDrawer.Premultiplied(component.TextColor, opacity * component.TextColor.A / 255f));
 
-        _spriteBatch.End();
+        SpriteBatch.End();
     }
 
     /// <summary>
@@ -177,9 +150,14 @@ public class WorldTextRenderer : SceneRendererBase
     /// Draws the string at an offset from the origin of its own space, which has already been placed
     /// in the world; the anchor is expressed as the SpriteBatch origin, in unscaled text pixels.
     /// </summary>
-    // fontSize: the rasterisation size, the component's own times the display's scale
+    /// <param name="font">The font to draw with.</param>
+    /// <param name="component">The component whose text and alignment are drawn.</param>
+    /// <param name="fontSize">The rasterisation size, the component's own times the display's scale.</param>
+    /// <param name="offset">The offset from the origin, in text pixels; the glow copies use it.</param>
+    /// <param name="anchorOrigin">The anchor as the SpriteBatch origin, in unscaled text pixels.</param>
+    /// <param name="color">The premultiplied colour.</param>
     private void DrawText(SpriteFont font, WorldTextComponent component, float fontSize, Vector2 offset, Vector2 anchorOrigin, Color4 color)
-        => _spriteBatch!.DrawString(
+        => SpriteBatch!.DrawString(
             font,
             component.Text,
             fontSize,
@@ -193,19 +171,17 @@ public class WorldTextRenderer : SceneRendererBase
             component.Alignment);
 
     /// <summary>
-    /// Builds the rotation part of the text's world matrix.
+    /// Builds the rotation part of the text's world matrix from the entity's world matrix.
     /// </summary>
-    private static Matrix GetOrientation(WorldTextComponent component, Entity entity, Vector3 origin, Vector3 cameraPosition)
+    internal static Matrix GetOrientation(WorldTextComponent component, in Matrix world, Vector3 origin, Vector3 cameraPosition)
     {
         if (!component.Billboard)
         {
-            // Keep the entity's own orientation, but strip its scale: scale is applied through Height
-            // so the text does not end up sized twice
-            var rotation = entity.Transform.WorldMatrix;
-
-            rotation.TranslationVector = Vector3.Zero;
-
-            return Matrix.RotationQuaternion(Quaternion.RotationMatrix(rotation));
+            // Keep the entity's own orientation, but strip its scale: scale is applied through Height so the text
+            // is not sized twice. Decomposed, because a quaternion read straight off a scaled matrix is not a unit
+            // one and skews the text. A matrix with a zero scale on an axis has no rotation to recover, and the text
+            // then stays world-aligned, still at its Height
+            return world.Decompose(out _, out Quaternion rotation, out _) ? Matrix.RotationQuaternion(rotation) : Matrix.Identity;
         }
 
         var toCamera = cameraPosition - origin;
@@ -247,13 +223,5 @@ public class WorldTextRenderer : SceneRendererBase
             M33 = toCamera.Z,
             M44 = 1f,
         };
-    }
-
-    /// <inheritdoc />
-    protected override void Destroy()
-    {
-        base.Destroy();
-
-        _spriteBatch?.Dispose();
     }
 }

@@ -35,6 +35,9 @@ Vector3[] lineVertices = new Vector3[2];
 // What the sphere's ray went through, one line per hit, for the overlay
 List<string> through = [];
 
+// What the camera's ray hit on the last click, for the overlay
+var lastClick = "nothing yet";
+
 using var game = new Game();
 
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
@@ -71,12 +74,12 @@ void ProcessMouseClick()
 {
     if (!mainCamera.Raycast(game.Input.MousePosition, 100, out var hitInfo))
     {
-        Console.WriteLine("No hit");
+        lastClick = "nothing";
 
         return;
     }
 
-    Console.WriteLine($"Hit entity: {hitInfo.Collidable.Entity.Name}");
+    lastClick = hitInfo.Collidable.Entity.Name;
 
     // The sphere itself: stop it dead
     if (hitInfo.Collidable.Entity == sphereEntity)
@@ -145,6 +148,8 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     [
         new("Left click", "On the ground: push the sphere towards the click", Color.Gold),
         new("Left click", "On the sphere: stop it moving", Color.Gold),
+        new(""),
+        new($"Camera ray hit: {lastClick}", Color.White),
     ];
 
     if (through.Count > 0)
@@ -164,7 +169,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
 // The line's far end goes to the ray's end, in the sphere's local space since the line is its child
 void UpdateLineVisualization(Vector3 rayEndWorld)
 {
-    lineVertices[1] = Vector3.Transform(rayEndWorld, Matrix.Invert(sphereEntity.Transform.WorldMatrix)).XYZ();
+    lineVertices[1] = Vector3.TransformCoordinate(rayEndWorld, Matrix.Invert(sphereEntity.Transform.WorldMatrix));
 
     vertexBuffer.SetData(game.GraphicsContext.CommandList, lineVertices);
 }

@@ -132,9 +132,10 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
     /// <exception cref="ArgumentException">Thrown when <paramref name="vertices"/> contains fewer than 3 points or duplicate points.</exception>
     public static GeometricMeshData<VertexPositionNormalTexture> New(Vector2[] vertices, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
-        ValidatePoints(vertices);
+        ArgumentNullException.ThrowIfNull(vertices);
 
-        // The key keeps its own copy of the outline, so a caller that reuses its array cannot change a cached key
+        // The key keeps its own copy of the outline, so a caller that reuses its array cannot change a cached key.
+        // CreateMesh validates the points on the miss, so an outline that fails is never cached and fails every time
         return _meshCache.GetOrAdd(new MeshCacheKey([.. vertices], uScale, vScale, toLeftHanded), key => CreateMesh(key.Vertices, uScale, vScale, toLeftHanded));
     }
 

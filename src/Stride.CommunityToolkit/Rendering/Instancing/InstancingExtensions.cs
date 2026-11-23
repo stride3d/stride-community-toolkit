@@ -62,10 +62,9 @@ public static class InstancingExtensions
     /// adding another. It enables instancing as well, so <see cref="AddInstancingSupport"/> need not be
     /// called first.
     /// </remarks>
-    public static InstancingBufferUploadRenderer AddInstancingBufferUpload(this IGame game, params BufferedEntityInstancing[] instancings)
+    public static InstancingBufferUploadRenderer AddInstancingBufferUpload(this IGame game, params ReadOnlySpan<BufferedEntityInstancing> instancings)
     {
         ArgumentNullException.ThrowIfNull(game);
-        ArgumentNullException.ThrowIfNull(instancings);
 
         var compositor = game.GetSceneSystem().GraphicsCompositor
             ?? throw new InvalidOperationException("The game has no graphics compositor.");

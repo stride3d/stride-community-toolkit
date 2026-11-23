@@ -1,7 +1,7 @@
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
+using Stride.Core;
 using Stride.Core.Mathematics;
-using Stride.Engine;
 using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Rendering;
@@ -10,13 +10,18 @@ namespace Stride.CommunityToolkit.Tests.Rendering;
 /// Keys are data on a <see cref="TextElement"/> and the overlay decorates them: one property restyles
 /// every help line in every example, which is the point of not baking the brackets into the text.
 /// </summary>
+/// <remarks>
+/// Formatting is string work, so the overlay is built on a bare registry: a <c>Game</c> here would run
+/// outside the serialised collection the headless games are in.
+/// </remarks>
 public class TextOverlayKeyTests
 {
+    private static TextOverlay Create() => new(new ServiceRegistry());
+
     [Fact]
     public void FormatKeys_DecoratesEachKeyAndJoinsThem()
     {
-        using var game = new Game();
-        var overlay = TextOverlay.GetOrCreate(game);
+        var overlay = Create();
 
         Assert.Equal("[H]", overlay.FormatKeys(["H"]));
         Assert.Equal("[Q] [E]", overlay.FormatKeys(["Q", "E"]));
@@ -27,8 +32,7 @@ public class TextOverlayKeyTests
     [Fact]
     public void FormatKeys_FollowsTheFormatAndSeparator()
     {
-        using var game = new Game();
-        var overlay = TextOverlay.GetOrCreate(game);
+        var overlay = Create();
 
         overlay.KeyFormat = "{0}:";
         overlay.KeySeparator = ", ";

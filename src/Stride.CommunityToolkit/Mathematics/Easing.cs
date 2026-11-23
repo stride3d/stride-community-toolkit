@@ -391,18 +391,28 @@ public static class Easing
     /// <typeparam name="T">A floating-point type.</typeparam>
     /// <param name="amount">The normalised time.</param>
     /// <returns>The eased progress, dipping below 0 early on.</returns>
-    /// <remarks>Modeled after the overshooting cubic <c>y = x³ - x sin(xπ)</c>.</remarks>
+    /// <remarks>
+    /// Modeled after the overshooting cubic <c>y = x³ - x sin(xπ)</c>, pinned to exactly 1 at time 1, where the
+    /// sine of a rounded π leaves the formula a rounding error above it.
+    /// </remarks>
     public static T BackEaseIn<T>(T amount) where T : IFloatingPointIeee754<T>
-        => amount * amount * amount - amount * T.Sin(amount * T.Pi);
+        => amount == T.One ? amount : amount * amount * amount - amount * T.Sin(amount * T.Pi);
 
     /// <summary>Back ease-out: overshoots past 1 and settles back onto it.</summary>
     /// <typeparam name="T">A floating-point type.</typeparam>
     /// <param name="amount">The normalised time.</param>
     /// <returns>The eased progress, rising above 1 late on.</returns>
-    /// <remarks>Modeled after the overshooting cubic <c>y = 1 - ((1 - x)³ - (1 - x) sin((1 - x)π))</c>.</remarks>
+    /// <remarks>
+    /// Modeled after the overshooting cubic <c>y = 1 - ((1 - x)³ - (1 - x) sin((1 - x)π))</c>, pinned to exactly 0
+    /// at time 0. The formula alone gives a rounding error below it, and a scale that starts a hair under zero
+    /// is a mirrored mesh for a frame.
+    /// </remarks>
     public static T BackEaseOut<T>(T amount) where T : IFloatingPointIeee754<T>
     {
         var f = T.One - amount;
+
+        // Time 0, and any time too small to survive the subtraction
+        if (f == T.One) return T.Zero;
 
         return T.One - (f * f * f - f * T.Sin(f * T.Pi));
     }
@@ -444,26 +454,34 @@ public static class Easing
     /// <returns>The eased progress.</returns>
     /// <remarks>
     /// Modeled after four parabolic arcs of shrinking height, with the breaks at 4/11, 8/11 and 9/10
-    /// of the time; the classic coefficients from Penner's bounce.
+    /// of the time; the classic coefficients from Penner's bounce. The arcs touch 1 and never pass it, so the
+    /// result is capped at 1 and pinned to exactly 1 at time 1: the coefficients alone leave a rounding error
+    /// above it, which <see cref="BounceEaseIn{T}(T)"/> would turn into a value below 0.
     /// </remarks>
     public static T BounceEaseOut<T>(T amount) where T : IFloatingPointIeee754<T>
     {
+        if (amount == T.One) return amount;
+
+        T arc;
+
         if (amount < K<T>.BounceBreak1)
         {
-            return K<T>.BounceA1 * amount * amount;
+            arc = K<T>.BounceA1 * amount * amount;
         }
-
-        if (amount < K<T>.BounceBreak2)
+        else if (amount < K<T>.BounceBreak2)
         {
-            return K<T>.BounceA2 * amount * amount - K<T>.BounceB2 * amount + K<T>.BounceC2;
+            arc = K<T>.BounceA2 * amount * amount - K<T>.BounceB2 * amount + K<T>.BounceC2;
         }
-
-        if (amount < K<T>.BounceBreak3)
+        else if (amount < K<T>.BounceBreak3)
         {
-            return K<T>.BounceA3 * amount * amount - K<T>.BounceB3 * amount + K<T>.BounceC3;
+            arc = K<T>.BounceA3 * amount * amount - K<T>.BounceB3 * amount + K<T>.BounceC3;
+        }
+        else
+        {
+            arc = K<T>.BounceA4 * amount * amount - K<T>.BounceB4 * amount + K<T>.BounceC4;
         }
 
-        return K<T>.BounceA4 * amount * amount - K<T>.BounceB4 * amount + K<T>.BounceC4;
+        return T.Min(arc, T.One);
     }
 
     /// <summary>Bounce ease-in-out: bounces off the start and lands with bounces.</summary>

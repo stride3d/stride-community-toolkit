@@ -14,7 +14,7 @@ mesh ring. The overlay prints where each dropped thing came to rest, and P draws
 The `Program.cs` file shows how to:
 
 - ConvexHullCollider from a model through TorusCollider, and what a hull does to a hole
-- MeshCollider from a model, attached once the model exists, Closed for the inertia
+- MeshCollider from the model the entity draws, Closed for the inertia
 - A mesh is a surface with no inside, so a body that starts inside is not pushed out
 - Meshes meet meshes, triangle against triangle, which is why what moves is better off convex
 - Reading where a body came to rest from its position and velocity, with Teleport for the replay
@@ -24,4 +24,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_MeshColliders).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_MeshColliders/Program.cs?start=1&end=257)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_MeshColliders/Program.cs?start=1&end=240)]

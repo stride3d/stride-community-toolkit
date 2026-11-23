@@ -6,7 +6,7 @@ namespace Stride.CommunityToolkit.Mathematics;
 /// <remarks>
 /// Provides convenience APIs for:
 /// <list type="bullet">
-/// <item><description>Generating scalar values (<see cref="NextSingle(Random)"/>, <see cref="NextSingle(Random, float, float)"/>) compatible with Stride math types.</description></item>
+/// <item><description>Generating a scalar in a range (<see cref="NextSingle(Random, float, float)"/>) compatible with Stride math types.</description></item>
 /// <item><description>Sampling uniformly within 2D rectangles (<see cref="NextPoint(Random, RectangleF)"/>), 3D bounding boxes (<see cref="NextPoint(Random, BoundingBox)"/>) and component ranges (<see cref="NextVector3(Random, Vector3, Vector3)"/>).</description></item>
 /// <item><description>Producing random direction vectors in 2D/3D (<see cref="NextDirection2D"/>, <see cref="NextDirection3D"/>).</description></item>
 /// <item><description>Sampling a point uniformly inside a circle (<see cref="PointInACircle"/>) using area-correct square–root radial distribution.</description></item>
@@ -17,19 +17,6 @@ namespace Stride.CommunityToolkit.Mathematics;
 /// </remarks>
 public static class RandomExtensions
 {
-    /// <summary>
-    /// Generates a random <see cref="float"/>.
-    /// </summary>
-    /// <param name="random">An instance of <see cref="Random"/>.</param>
-    /// <returns>A random <see cref="float"/>.</returns>
-    /// <exception cref="ArgumentNullException">If the random argument is null.</exception>
-    public static float NextSingle(this Random random)
-    {
-        ArgumentNullException.ThrowIfNull(random);
-
-        return (float)random.NextDouble();
-    }
-
     /// <summary>
     /// Generates a random point in 2D space within the specified region.
     /// </summary>

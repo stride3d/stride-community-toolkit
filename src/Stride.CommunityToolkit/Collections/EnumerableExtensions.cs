@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Stride.CommunityToolkit.Collections;
 
 /// <summary>
@@ -11,7 +13,7 @@ public static class EnumerableExtensions
     /// <typeparam name="T">The type of elements in the collection.</typeparam>
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to check.</param>
     /// <returns>Returns <see langword="true"/> if <paramref name="enumerable"/> is <see langword="null"/> or empty, otherwise <see langword="false"/>.</returns>
-    public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
+    public static bool IsNullOrEmpty<T>([NotNullWhen(false)] this IEnumerable<T>? enumerable)
         => enumerable is null || !enumerable.Any();
 
     /// <summary>

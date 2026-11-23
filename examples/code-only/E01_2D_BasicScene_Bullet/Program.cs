@@ -8,14 +8,14 @@ using var game = new Game();
 
 game.Run(new SceneSetup2D().UseBullet(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     var entity = game.CreatePrimitive(Primitive2D.Capsule(), new()
     {
         Material = game.CreateFlatMaterial(Color.White)
     });
     entity.Transform.Position = new Vector3(0, 8, 0);
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 }
 
 /*

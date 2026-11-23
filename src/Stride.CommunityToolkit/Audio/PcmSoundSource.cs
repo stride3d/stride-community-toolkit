@@ -33,6 +33,7 @@ internal sealed class PcmSoundSource : DynamicSoundSource
 
     private readonly ReadOnlyMemory<short> _samples;
     private readonly short[] _buffer;
+    private readonly List<AudioLayer.Buffer> _reclaimed = [];
 
     private int _position;
     private volatile bool _looped;
@@ -84,19 +85,20 @@ internal sealed class PcmSoundSource : DynamicSoundSource
 
         // Reclaim what the device has finished with. The native handle is internal to the engine, so
         // the reclaim goes through the base class's CanFill, which pulls one returned buffer into
-        // freeBuffers per call - but only when freeBuffers is empty, hence the shuffle.
-        var reclaimed = new List<AudioLayer.Buffer>(deviceBuffers.Count);
+        // freeBuffers per call - but only when freeBuffers is empty, hence the shuffle. The list is a
+        // field because this runs on every worker tick until the last buffer is back.
+        _reclaimed.Clear();
 
         while (true)
         {
             while (freeBuffers.Count > 0)
-                reclaimed.Add(freeBuffers.Dequeue());
+                _reclaimed.Add(freeBuffers.Dequeue());
 
             if (!CanFill)
                 break;
         }
 
-        foreach (var buffer in reclaimed)
+        foreach (var buffer in _reclaimed)
             freeBuffers.Enqueue(buffer);
 
         // When every buffer is back, the last sample has played. The stop is explicit so the native

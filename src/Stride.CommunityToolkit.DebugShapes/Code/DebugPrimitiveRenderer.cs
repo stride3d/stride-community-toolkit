@@ -22,7 +22,7 @@ internal sealed class DebugPrimitiveRenderer
     private DynamicEffectInstance? _primitiveEffect;
     private DynamicEffectInstance? _lineEffect;
 
-    private PrimitiveGeometryCache? _geometry;
+    private PrimitiveGeometry? _geometry;
     private PrimitiveInstanceStore? _store;
     private PrimitivePipeline? _pipeline;
 
@@ -48,10 +48,9 @@ internal sealed class DebugPrimitiveRenderer
         _lineEffect.Initialize(services);
         _lineEffect.UpdateEffect(device);
 
-        _geometry = new PrimitiveGeometryCache();
+        _geometry = new PrimitiveGeometry();
 
-        var vertexData = _geometry.BuildVertexData();
-        var indexData = _geometry.BuildIndexData();
+        var (vertexData, indexData) = _geometry.Build();
 
         if (indexData.Length >= 0xFFFF && device.Features.CurrentProfile <= GraphicsProfile.Level_9_3)
             throw new InvalidOperationException("Cannot generate more than 65535 indices on feature level HW <= 9.3");
@@ -79,7 +78,7 @@ internal sealed class DebugPrimitiveRenderer
     /// Processes renderable commands and writes instance data into internal buffers.
     /// Offsets are updated in-place to reflect consumption.
     /// </summary>
-    internal void ProcessRenderables(List<Renderable> renderables, ref Primitives offsets)
+    internal void ProcessRenderables(List<DebugRenderable> renderables, ref Primitives offsets)
         => _store!.ProcessRenderables(renderables, ref offsets);
 
     /// <summary>

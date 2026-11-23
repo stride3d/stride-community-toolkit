@@ -15,9 +15,7 @@ public class TriangleProceduralModel : PrimitiveProceduralModelBase
     public Vector2 Size { get; set; } = Vector2.One;
 
     private static readonly Vector2[] _textureCoordinates = [new(0.5f, 1), new(0, 0), new(1, 0)];
-    private static readonly ConcurrentDictionary<MeshCacheKey, GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
-
-    private readonly record struct MeshCacheKey(Vector2 Size, float UScale, float VScale, bool ToLeftHanded);
+    private static readonly ConcurrentDictionary<(Vector2 Size, float UScale, float VScale, bool ToLeftHanded), GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
 
     /// <inheritdoc />
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
@@ -32,7 +30,7 @@ public class TriangleProceduralModel : PrimitiveProceduralModelBase
     /// <param name="toLeftHanded">Whether to convert the mesh to left-handed coordinates.</param>
     /// <returns>A geometric mesh data instance representing the triangle.</returns>
     public static GeometricMeshData<VertexPositionNormalTexture> New(Vector2 size, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
-        => _meshCache.GetOrAdd(new MeshCacheKey(size, uScale, vScale, toLeftHanded), _ => CreateMesh(size, uScale, vScale, toLeftHanded));
+        => _meshCache.GetOrAdd((size, uScale, vScale, toLeftHanded), _ => CreateMesh(size, uScale, vScale, toLeftHanded));
 
     /// <summary>
     /// Builds a new triangle mesh (no caching).

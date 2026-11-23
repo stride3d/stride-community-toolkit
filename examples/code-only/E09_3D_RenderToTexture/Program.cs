@@ -100,7 +100,7 @@ void BuildScene(Scene scene)
 
     for (var i = 0; i < colours.Length; i++)
     {
-        var angle = i * MathF.Tau / colours.Length;
+        var angle = i * MathUtil.TwoPi / colours.Length;
         var height = 2f + (i % 3) * 1.2f;
 
         var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new PrimitiveEntityOptions
@@ -144,10 +144,9 @@ void MoveScene(float seconds)
 /// <summary>Straight down over the middle, orthographic, the whole ring in view: a live map.</summary>
 RenderTextureCamera Map(Scene scene)
 {
-    var camera = new Entity("Map camera") { new CameraComponent { Projection = CameraProjectionMode.Orthographic, OrthographicSize = 26f } };
+    var camera = new Entity("Map camera", new Vector3(0f, 30f, 0f)) { new CameraComponent { Projection = CameraProjectionMode.Orthographic, OrthographicSize = 26f } };
 
-    camera.Transform.Position = new Vector3(0f, 30f, 0f);
-    camera.Transform.Rotation = Quaternion.RotationYawPitchRoll(0f, -MathF.PI * 0.5f, 0f);
+    camera.Transform.Rotation = Quaternion.RotationYawPitchRoll(0f, -MathUtil.PiOverTwo, 0f);
     camera.Scene = scene;
 
     return game.AddRenderTextureCamera(camera, FeedSize, FeedSize);
@@ -177,9 +176,8 @@ RenderTextureCamera ThermalFeed(Scene scene)
 
 Entity FixedCamera(Scene scene, string name, Vector3 position, Vector3 target)
 {
-    var camera = new Entity(name);
+    var camera = new Entity(name, position);
 
-    camera.Transform.Position = position;
     camera.Transform.Rotation = QuaternionUtil.LookAt(position, target);
     camera.Scene = scene;
 
@@ -244,7 +242,7 @@ void BuildMonitors(Scene scene)
             Position = position,
         });
 
-        monitor.Transform.Rotation = Quaternion.RotationX(MathF.PI * 0.5f);
+        monitor.Transform.Rotation = Quaternion.RotationX(MathUtil.PiOverTwo);
         monitor.Scene = scene;
 
         return monitor;

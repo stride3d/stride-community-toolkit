@@ -33,20 +33,13 @@ public partial class ExampleScanner(ILogger<ExampleScanner> logger)
     /// <summary>
     /// Finds every source file under <paramref name="examplesRootPath"/> that contains a metadata block.
     /// </summary>
-    /// <param name="examplesRootPath">The root directory to scan.</param>
+    /// <param name="examplesRootPath">The root directory to scan, which must exist.</param>
     /// <returns>The matching file paths, in a stable alphabetical order.</returns>
     public IReadOnlyList<string> FindExampleFiles(DirectoryInfo examplesRootPath)
     {
         ArgumentNullException.ThrowIfNull(examplesRootPath);
 
         logger.LogInformation("Scanning for example metadata blocks in: {Path}", examplesRootPath.FullName);
-
-        if (!examplesRootPath.Exists)
-        {
-            logger.LogError("Examples directory does not exist: {Path}", examplesRootPath.FullName);
-
-            return [];
-        }
 
         var candidates = YamlMetadataExtractor.LanguageByExtension.Keys
             .SelectMany(extension => Directory.EnumerateFiles(examplesRootPath.FullName, $"*{extension}", SearchOption.AllDirectories))

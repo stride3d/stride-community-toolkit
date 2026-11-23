@@ -71,7 +71,7 @@ void Start(Scene scene)
 
     rootScene = scene;
 
-    sun = scene.Entities.Select(e => e.Get<LightComponent>()).First(l => l is not null);
+    sun = scene.FindEntity("Directional Light")?.Get<LightComponent>();
     physicsDebug = game.AddPhysicsDebug();
 
     selectedMaterial = game.CreateMaterial(Color.White, metalness: 0f, glossiness: 0.7f);
@@ -198,11 +198,11 @@ Grid BuildSceneTab()
 
     // The setup's sun is bright, so the slider starts where the light is rather than at 1
     var light = new HorizontalSlider { Minimum = 0f, Maximum = 40f, Value = sun?.Intensity ?? 20f, Tooltip = "The directional light's intensity" };
-    light.ValueChanged += (_, _) => { if (sun is not null) sun.Intensity = light.Value; };
+    light.ValueChanged += (_, _) => { sun?.Intensity = light.Value; };
     AddRow(grid, row++, "Light", light);
 
     var timeScale = new HorizontalSlider { Minimum = 0f, Maximum = 2f, Value = 1f, Tooltip = "The physics clock against the game clock" };
-    timeScale.ValueChanged += (_, _) => { if (simulation is not null) simulation.TimeScale = timeScale.Value; };
+    timeScale.ValueChanged += (_, _) => { simulation?.TimeScale = timeScale.Value; };
     AddRow(grid, row++, "Time scale", timeScale);
 
     var gravity = new ComboView { Tooltip = "Takes effect on every body on the next step" };
@@ -221,7 +221,7 @@ Grid BuildSceneTab()
     AddRow(grid, row++, "", shadows);
 
     var gizmos = new CheckButton { Content = new Label { Text = "Collider gizmos" }, Tooltip = "The same view as the P key" };
-    gizmos.IsCheckedChanged += (_, _) => { var script = physicsDebug?.Get<CollidableGizmoScript>(); if (script is not null) script.Visible = gizmos.IsChecked; };
+    gizmos.IsCheckedChanged += (_, _) => { physicsDebug?.Get<CollidableGizmoScript>()?.Visible = gizmos.IsChecked; };
     AddRow(grid, row++, "", gizmos);
 
     return grid;
@@ -319,9 +319,9 @@ void BuildScenery(Scene scene)
         {
             Material = game.CreateMaterial(new Color(150, 150, 160), metalness: 0f, glossiness: 0.3f),
             Body = BodyMode.Static,
+            Position = position,
         });
 
-        block.Transform.Position = position;
         block.Scene = scene;
     }
 }
@@ -339,11 +339,11 @@ void Spawn(int count)
 
         var entity = game.CreatePrimitive(shape, new BepuPhysicsOptions
         {
+            EntityName = $"{name} {spawned.Count + 1}",
             Material = materials[spawned.Count % materials.Length],
+            Position = new Vector3(random.NextSingle() * 4f - 2f, 6f + i * 0.9f, random.NextSingle() * 4f - 2f),
         });
 
-        entity.Name = $"{name} {spawned.Count + 1}";
-        entity.Transform.Position = new Vector3(random.NextSingle() * 4f - 2f, 6f + i * 0.9f, random.NextSingle() * 4f - 2f);
         entity.Transform.Rotation = Quaternion.RotationY(random.NextSingle() * MathUtil.TwoPi);
         entity.Scene = rootScene;
 

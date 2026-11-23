@@ -60,12 +60,7 @@ internal static class ScreenTextDrawer
     {
         var opacity = MathUtil.Clamp(style.Opacity, 0f, 1f);
         var scale = new Vector2(style.Scale);
-
-        // SpriteBatch subtracts the origin in unscaled text pixels, so the anchor is a fraction of the
-        // measured size. This is the thing TextAlignment cannot do: alignment only arranges lines
-        // within a block and leaves single-line text exactly where it was, whichever value it takes.
-        var anchorFactor = GetAnchorFactor(style.Anchor);
-        var origin = new Vector2(textSize.X * anchorFactor.X, textSize.Y * anchorFactor.Y);
+        var origin = AnchorOrigin(textSize, style);
 
         if (style.EnableBackground && backgroundTexture is not null)
         {
@@ -115,8 +110,7 @@ internal static class ScreenTextDrawer
     {
         var opacity = MathUtil.Clamp(style.Opacity, 0f, 1f);
         var scale = new Vector2(style.Scale);
-        var anchorFactor = GetAnchorFactor(style.Anchor);
-        var origin = new Vector2(textSize.X * anchorFactor.X, textSize.Y * anchorFactor.Y);
+        var origin = AnchorOrigin(textSize, style);
         var scaledSize = textSize * scale;
         var topLeft = position - origin * scale - style.Padding;
 
@@ -140,6 +134,18 @@ internal static class ScreenTextDrawer
     /// <see cref="Anchor"/> is laid out as a 3 by 3 grid row by row, so the ordinal gives the column and the row.
     /// </summary>
     internal static Vector2 GetAnchorFactor(Anchor anchor) => new Vector2((int)anchor % 3, (int)anchor / 3) * 0.5f;
+
+    /// <summary>
+    /// The SpriteBatch origin that puts the style's anchor at the draw position: SpriteBatch subtracts the origin in
+    /// unscaled text pixels, so the anchor is a fraction of the measured size. This is the thing TextAlignment cannot
+    /// do: alignment only arranges lines within a block and leaves single-line text exactly where it was.
+    /// </summary>
+    private static Vector2 AnchorOrigin(Vector2 textSize, in ScreenTextStyle style)
+    {
+        var anchorFactor = GetAnchorFactor(style.Anchor);
+
+        return new Vector2(textSize.X * anchorFactor.X, textSize.Y * anchorFactor.Y);
+    }
 
     /// <summary>
     /// Applies a distance cutoff and fade to <paramref name="opacity"/>: nothing beyond <paramref name="maxDistance"/>,

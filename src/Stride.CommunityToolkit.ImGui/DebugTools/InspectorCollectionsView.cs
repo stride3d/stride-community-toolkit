@@ -9,8 +9,8 @@ namespace Stride.CommunityToolkit.ImGui.DebugTools;
 /// <summary>
 /// The collection views of <see cref="Inspector"/>: an <see cref="IEnumerable"/> shown item by item,
 /// with in-place editing, add and remove for types that expose <see cref="IList"/> or
-/// <see cref="IDictionary"/> shapes. Split out of <see cref="Inspector"/>, which owns the member
-/// tree; this owns the collection editing and the pending dictionary-add entry.
+/// <see cref="IDictionary"/> shapes. <see cref="Inspector"/> owns the member tree; this owns the
+/// collection editing and the pending dictionary-add entry.
 /// </summary>
 /// <param name="inspector">The inspector whose values and type cache the views draw with.</param>
 internal sealed class InspectorCollectionsView(Inspector inspector)
@@ -74,10 +74,10 @@ internal sealed class InspectorCollectionsView(Inspector inspector)
         return true;
     }
 
-    private bool DrawDictionaryEntries(object target, (Type key, Type value, MethodInfo? getKey, MethodInfo? getValue) data, int hashcodeSource)
+    private bool DrawDictionaryEntries(object target, Inspector.DictionaryShape data, int hashcodeSource)
     {
-        var keys = (data.getKey?.Invoke(target, null) as IEnumerable)?.GetEnumerator();
-        var values = (data.getValue?.Invoke(target, null) as IEnumerable)?.GetEnumerator();
+        var keys = (data.GetKey?.Invoke(target, null) as IEnumerable)?.GetEnumerator();
+        var values = (data.GetValue?.Invoke(target, null) as IEnumerable)?.GetEnumerator();
 
         if (keys is null || values is null) return false;
 
@@ -122,19 +122,19 @@ internal sealed class InspectorCollectionsView(Inspector inspector)
 
         if (removeKey)
         {
-            target.GetType().GetMethod(nameof(IDictionary.Remove), [data.key])?.Invoke(target, [keyToRemove]);
+            target.GetType().GetMethod(nameof(IDictionary.Remove), [data.Key])?.Invoke(target, [keyToRemove]);
         }
 
         if (changeKey)
         {
             // IDictionary[keyToChange] = valueOfKeyToChange
-            target.GetType().GetProperty("Item", data.value, [data.key])?.SetMethod?.Invoke(target, [keyToChange, valueOfKeyToChange]);
+            target.GetType().GetProperty("Item", data.Value, [data.Key])?.SetMethod?.Invoke(target, [keyToChange, valueOfKeyToChange]);
         }
 
         return true;
     }
 
-    private void DrawDictionaryAddControls(object target, (Type key, Type value, MethodInfo? getKey, MethodInfo? getValue) data, int hashcodeSource)
+    private void DrawDictionaryAddControls(object target, Inspector.DictionaryShape data, int hashcodeSource)
     {
         // An add in progress: the upcoming key and value are shown and edited until Add or Cancel
         if (_dicAddCommandTarget.TryGetTarget(out var addActionTarget) && addActionTarget == target)
@@ -155,7 +155,7 @@ internal sealed class InspectorCollectionsView(Inspector inspector)
 
             if (Button("Add"))
             {
-                target.GetType().GetMethod(nameof(IDictionary.Add), [data.key, data.value])?.Invoke(target, [key, value]);
+                target.GetType().GetMethod(nameof(IDictionary.Add), [data.Key, data.Value])?.Invoke(target, [key, value]);
 
                 _dicAddCommandData = (null, null);
                 _dicAddCommandTarget.SetTarget(null);
@@ -164,7 +164,7 @@ internal sealed class InspectorCollectionsView(Inspector inspector)
         // Prepare an add to the dictionary: create an editable instance for key and value
         else if (Button("+", new Vector2(GetContentRegionAvail().X, GetTextLineHeightWithSpacing())))
         {
-            _dicAddCommandData = (inspector.GetTypeData(data.key).NewObject(), inspector.GetTypeData(data.value).NewObject());
+            _dicAddCommandData = (inspector.GetTypeData(data.Key).NewObject(), inspector.GetTypeData(data.Value).NewObject());
             _dicAddCommandTarget.SetTarget(target);
         }
     }
@@ -225,7 +225,7 @@ internal sealed class InspectorCollectionsView(Inspector inspector)
                     listAccessor?.Invoke(target, [changed, objectToAssign]);
                 }
 
-                if (listAccessor is null) Console.WriteLine($"Couldn't find {nameof(listAccessor)} for {target.GetType()}");
+                if (listAccessor is null) Inspector.Log.Warning($"The inspector found no way to set an item of {target.GetType()}.");
             }
 
             // Calling 'RemoveAt(int index)'

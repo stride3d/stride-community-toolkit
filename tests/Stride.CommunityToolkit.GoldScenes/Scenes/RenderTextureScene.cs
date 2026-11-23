@@ -22,7 +22,7 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal sealed class RenderTextureScene : IGoldScene
 {
-    private Entity? _ball;
+    private Entity _ball = null!;
 
     public SceneSetup Setup => GoldSetup.Perspective;
 
@@ -132,8 +132,6 @@ internal sealed class RenderTextureScene : IGoldScene
 
     public void Update(Game game, Scene scene, GameTime time)
     {
-        if (_ball is null) return;
-
         var seconds = (float)time.Total.TotalSeconds;
         var angle = seconds * 0.7f;
 

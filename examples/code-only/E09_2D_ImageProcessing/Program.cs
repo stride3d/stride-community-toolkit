@@ -18,7 +18,7 @@ game.SetWindowSize(1000, 1080);
 
 game.Run(new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null }, start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // sRGB and premultiplied, as the content pipeline would import it. Texture.Load with its defaults
     // reads it as linear, and every mid-tone comes out pale
@@ -48,7 +48,7 @@ void Start(Scene rootScene)
 
     var entity = new Entity { new UIComponent { Page = new UIPage { RootElement = grid } } };
 
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 
     void AddCard(int column, int row, Rectangle destination, Stretch stretch, Anchor anchor, SamplingPattern sampling)
     {

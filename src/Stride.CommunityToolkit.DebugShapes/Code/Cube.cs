@@ -13,8 +13,8 @@ namespace Stride.CommunityToolkit.DebugShapes;
 [StructLayout(LayoutKind.Sequential)]
 internal struct Cube
 {
-    public Vector3 Start;
-    public Vector3 End;
+    public Vector3 Center;
+    public Vector3 Size;
     public Quaternion Rotation;
     public Color Color;
 }

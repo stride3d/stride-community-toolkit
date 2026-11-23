@@ -197,6 +197,12 @@ public class MeshBuilder : IDisposable
     /// <exception cref="InvalidOperationException">The mesh builder isn't configured to use indices</exception>
     public void AddIndex(int vertexIndex)
     {
+        // First, so a builder without indices says so rather than complaining about the index's range
+        if (_indexStride == 0)
+        {
+            throw new InvalidOperationException("The mesh builder was not defined to use indices.");
+        }
+
         // >= rather than >: an index equal to VertexCount references a vertex that does not exist,
         // which the GPU would happily read as garbage
         if (vertexIndex < 0 || vertexIndex >= VertexCount)
@@ -205,15 +211,11 @@ public class MeshBuilder : IDisposable
                 $"VertexIndex must be a value between 0 and {VertexCount - 1}");
         }
 
-        if (_indexStride == Unsafe.SizeOf<short>() && vertexIndex > short.MaxValue)
+        // 16-bit GPU indices are unsigned, so the whole 0 to 65,535 range is usable
+        if (_indexStride == (int)IndexingType.Int16 && vertexIndex > ushort.MaxValue)
         {
             throw new ArgumentOutOfRangeException(nameof(vertexIndex),
-                $"VertexIndex must be a value between 0 and {short.MaxValue}. To use bigger values use indexing type {IndexingType.Int32}");
-        }
-
-        if (_indexStride == 0)
-        {
-            throw new InvalidOperationException("The mesh builder was not defined to use indices.");
+                $"VertexIndex must be a value between 0 and {ushort.MaxValue}. To use bigger values use indexing type {IndexingType.Int32}");
         }
 
         if ((IndexCount + 1) * _indexStride > _indexBuffer.Length)
@@ -223,9 +225,9 @@ public class MeshBuilder : IDisposable
 
         ref var address = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(_indexBuffer), (nuint)(IndexCount * _indexStride));
 
-        if (_indexStride == 2)
+        if (_indexStride == (int)IndexingType.Int16)
         {
-            Unsafe.WriteUnaligned(ref address, (short)vertexIndex);
+            Unsafe.WriteUnaligned(ref address, (ushort)vertexIndex);
         }
         else
         {
@@ -258,8 +260,8 @@ public class MeshBuilder : IDisposable
             ref MemoryMarshal.GetArrayDataReference(_indexBuffer),
             (nuint)(indexPosition * _indexStride));
 
-        return _indexStride == 2
-            ? Unsafe.ReadUnaligned<short>(ref address)
+        return _indexStride == (int)IndexingType.Int16
+            ? Unsafe.ReadUnaligned<ushort>(ref address)
             : Unsafe.ReadUnaligned<int>(ref address);
     }
 
@@ -465,7 +467,7 @@ public class MeshBuilder : IDisposable
                 _indexStride,
                 BufferFlags.IndexBuffer);
 
-            draw.IndexBuffer = new IndexBufferBinding(indexBuffer, _indexStride == Unsafe.SizeOf<int>(), IndexCount);
+            draw.IndexBuffer = new IndexBufferBinding(indexBuffer, _indexStride == (int)IndexingType.Int32, IndexCount);
             draw.DrawCount = IndexCount;
         }
 

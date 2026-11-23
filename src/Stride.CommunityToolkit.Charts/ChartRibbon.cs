@@ -12,6 +12,9 @@ internal sealed class ChartRibbon : IDisposable
     // Emissive intensity standing in for a glow: bloom, where the scene has it, makes the ribbon bleed
     internal const float GlowEmissive = 2.5f;
 
+    /// <summary>How far a ribbon's width may drift from the one it was built at, as a fraction, before it is rebuilt.</summary>
+    internal const float WidthTolerance = 0.05f;
+
     private readonly Chart _chart;
     private readonly Entity _entity;
     private List<IReadOnlyList<Vector3>> _runs = [];
@@ -49,7 +52,7 @@ internal sealed class ChartRibbon : IDisposable
         var centre = new Vector3((r.XMin + r.XMax) * 0.5f, (r.YMin + r.YMax) * 0.5f, (r.ZMin + r.ZMax) * 0.5f);
         var width = view.ToUnits(pixelWidth, centre);
 
-        if (_builtWidth > 0f && MathF.Abs(width - _builtWidth) <= _builtWidth * 0.05f && glow == _builtGlow)
+        if (_builtWidth > 0f && MathF.Abs(width - _builtWidth) <= _builtWidth * WidthTolerance && glow == _builtGlow)
             return;
 
         Release();

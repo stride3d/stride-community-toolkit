@@ -16,7 +16,7 @@ The `Program.cs` file shows how to:
 - Building a single triangle from a vertex and index buffer
 - Choosing a vertex format: VertexPositionTexture and its Layout
 - Labelling vertices on screen to debug a mesh
-- Registering the label renderer with AddSceneRenderer(new EntityTextRenderer())
+- Registering the label renderer with AddEntityTextRenderer()
 - Orienting yourself with a named-axis ground gizmo
 - Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo, AddOrientationGizmo, CreateFlatMaterial
 
@@ -24,4 +24,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_SimpleGeometry).
 
-[!code-csharp[](../../../../examples/code-only/E07_3D_SimpleGeometry/Program.cs?start=1&end=87)]
+[!code-csharp[](../../../../examples/code-only/E07_3D_SimpleGeometry/Program.cs?start=1&end=88)]

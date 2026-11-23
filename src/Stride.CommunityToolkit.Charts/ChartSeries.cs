@@ -97,16 +97,13 @@ public abstract class ChartSeries : IDisposable
     /// </summary>
     public void Dispose()
     {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
+        if (IsDisposed) return;
+
+        IsDisposed = true;
+
+        Release();
     }
 
-    /// <summary>The standard dispose pattern for an unsealed type; overrides release their own resources first, then call this.</summary>
-    protected virtual void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            IsDisposed = true;
-        }
-    }
+    /// <summary>Frees what a series holds beyond its points; the base holds nothing. Runs once, from the first <see cref="Dispose"/>.</summary>
+    private protected virtual void Release() { }
 }

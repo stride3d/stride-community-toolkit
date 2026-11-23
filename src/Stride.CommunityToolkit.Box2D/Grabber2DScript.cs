@@ -168,7 +168,7 @@ public class Grabber2DScript : SyncScript
         // A target transform gives the anchor the velocity to get there in one physics step, so
         // the joint sees motion rather than a teleport.
         var transform = new B2Transform(worldPoint.ToB2Vec2(), b2Rot_identity);
-        b2Body_SetTargetTransform(_anchor, transform, 1f / Simulation.TargetHz, true);
+        b2Body_SetTargetTransform(_anchor, transform, 1f / Simulation.Settings.TargetHz, true);
     }
 
     /// <summary>

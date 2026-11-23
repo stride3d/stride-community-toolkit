@@ -2,13 +2,14 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Diagnostics;
 using Stride.Core.Serialization.Contents;
 using Stride.Graphics;
+using Stride.Graphics.Font;
 
 namespace Stride.CommunityToolkit.Rendering.Overlay;
 
 /// <summary>
 /// Finds, registers and caches the font <see cref="TextOverlay"/> draws with: the overlay's explicit
-/// <see cref="TextOverlay.Font"/> if set, otherwise an installed system font matching the overlay's
-/// font settings, otherwise Stride's default font. Split out of <see cref="TextOverlay"/> so the
+/// <see cref="TextOverlay.Font"/> if set, otherwise an installed system font of the overlay's
+/// <see cref="TextOverlay.FontFamily"/>, otherwise Stride's default font. Split out of <see cref="TextOverlay"/> so the
 /// overlay owns the settings and this owns the lookup and the caching.
 /// </summary>
 internal sealed class TextOverlayFontResolver : IDisposable
@@ -17,23 +18,21 @@ internal sealed class TextOverlayFontResolver : IDisposable
 
     private SpriteFont? _defaultFont;
     private SpriteFont? _systemFont;
-    private string? _systemFontKey;
+    private TextOverlayFontFamily? _systemFontFamily;
     private bool _systemFontFailed;
 
     /// <summary>
-    /// <see cref="TextOverlay.Font"/> if set; otherwise an installed font - <see cref="TextOverlay.FontName"/>, or the first of <see cref="TextOverlay.FontFamily"/> 's candidates that is present - registered with Stride's font system from its file the first time it is needed; otherwise Stride's default font.
+    /// <see cref="TextOverlay.Font"/> if set; otherwise an installed font, the first of <see cref="TextOverlay.FontFamily"/>'s candidates that is present, registered with Stride's font system from its file the first time it is needed; otherwise Stride's default font.
     /// </summary>
     internal SpriteFont Resolve(TextOverlay overlay, IContentManager content, IServiceRegistry services)
     {
         if (overlay.Font != null) return overlay.Font;
 
-        var key = $"{overlay.FontFamily}|{overlay.FontName}|{overlay.FontStyle}|{overlay.FontFile}";
-
-        if (key != _systemFontKey)
+        if (overlay.FontFamily != _systemFontFamily)
         {
             _systemFont?.Dispose();
             _systemFont = null;
-            _systemFontKey = key;
+            _systemFontFamily = overlay.FontFamily;
             _systemFontFailed = false;
         }
 
@@ -55,26 +54,14 @@ internal sealed class TextOverlayFontResolver : IDisposable
 
     private static SpriteFont? LoadSystemFont(TextOverlay overlay, IServiceRegistry services)
     {
-        var families = FamilyCandidates(overlay);
-        var font = SystemFonts.LoadFirst(services, families, overlay.FontSize, overlay.FontStyle, overlay.FontFile);
+        var families = overlay.FontFamily == TextOverlayFontFamily.Monospace ? SystemFonts.MonospaceCandidates : SystemFonts.SansSerifCandidates;
+        var font = SystemFonts.LoadFirst(services, families, overlay.FontSize, FontStyle.Regular);
 
         if (font is null)
         {
-            _log.Warning($"None of the fonts {string.Join(", ", families)} ({overlay.FontStyle}) could be loaded; drawing with Stride's default font instead.");
+            _log.Warning($"None of the fonts {string.Join(", ", families)} could be loaded; drawing with Stride's default font instead.");
         }
 
         return font;
-    }
-
-    /// <summary>
-    /// The families tried, in order: the one the overlay names, or the platform's candidates for the kind of font it asks for.
-    /// </summary>
-    private static IReadOnlyList<string> FamilyCandidates(TextOverlay overlay)
-    {
-        if (overlay.FontName is { Length: > 0 } explicitName) return [explicitName];
-
-        return overlay.FontFamily == TextOverlayFontFamily.Monospace
-            ? SystemFonts.MonospaceCandidates
-            : SystemFonts.SansSerifCandidates;
     }
 }

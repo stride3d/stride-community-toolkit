@@ -10,7 +10,8 @@ namespace Stride.CommunityToolkit.Box2D;
 /// <summary>
 /// Component that ties a Stride entity to a Box2D body, with live velocity, force and impulse
 /// access once <see cref="BodyId"/> refers to a created body. The body itself is created from code
-/// through <see cref="Box2DSimulation"/>; its type, density, friction and the rest are given there.
+/// through <see cref="Box2DSimulation"/>, which adds this component to the entity it creates a body for; its type,
+/// density, friction and the rest are given there.
 /// </summary>
 // DataContract is what makes the component usable from Game Studio at all; the body itself is
 // created by the simulation from code.
@@ -88,5 +89,16 @@ public class Box2DBodyComponent : EntityComponent
     public void ApplyTorque(float torque)
     {
         if (b2Body_IsValid(BodyId)) b2Body_ApplyTorque(BodyId, torque, true);
+    }
+
+    /// <summary>
+    /// Moves the body to a pose and stops it there, awake, as a reset does: no velocity carries over into the new
+    /// position. Ignored while <see cref="BodyId"/> is not a valid body.
+    /// </summary>
+    /// <param name="position">The world position.</param>
+    /// <param name="rotation">The rotation in radians about the Z axis.</param>
+    public void TeleportAtRest(Vector2 position, float rotation = 0f)
+    {
+        if (b2Body_IsValid(BodyId)) BodyForces.TeleportAtRest(BodyId, position, rotation);
     }
 }

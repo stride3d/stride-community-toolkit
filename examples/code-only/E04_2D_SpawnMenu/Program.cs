@@ -37,19 +37,19 @@ ShapeItem[] shapes =
     new(Primitive2D.Polygon(parallelogram), "Parallelogram")
 ];
 
-Scene? scene = null;
+Scene? rootScene = null;
 KeyMenu? spawnMenu = null;
 
 using var game = new Game();
 
 game.Run(new SceneSetup2D().UseBepu(), start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Left mouse grabs any body, drags it and throws it on release
     game.AddGrabber();
 
-    scene = rootScene;
+    rootScene = scene;
 
     // The starting column, one of each shape
     foreach (var (index, shape) in shapes.Index())
@@ -70,8 +70,7 @@ void Start(Scene rootScene)
         Items = [.. shapes.Index().Select(pair => new KeyMenuItem(
             Key: (Keys)(Keys.D1 + pair.Index),
             Text: pair.Item.Name ?? pair.Item.Type.Name,
-            Action: () => Spawn(pair.Item, random.NextVector3(new Vector3(-7, 6, 0), new Vector3(7, 20, 0))))
-)]
+            Action: () => Spawn(pair.Item, random.NextVector3(new Vector3(-7, 6, 0), new Vector3(7, 20, 0)))))]
     };
     // No order given, so it lands after the camera controller's help, which registers at -100
     var overlay = TextOverlay.GetOrCreate(game);
@@ -83,10 +82,10 @@ void Spawn(ShapeItem shape, Vector3 position)
 {
     var entity = game.CreatePrimitive(shape.Type, new() { Material = game.CreateFlatMaterial(random.NextColor()), Position = position });
 
-    entity.Scene = scene;
+    entity.Scene = rootScene;
 }
 
-void Update(Scene rootScene, GameTime time)
+void Update(Scene scene, GameTime time)
 {
     // Only the input. The overlay draws the menu for us, every frame, from GetLines()
     spawnMenu?.Update(game.Input);

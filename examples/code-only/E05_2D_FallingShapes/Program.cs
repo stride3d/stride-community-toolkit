@@ -11,7 +11,7 @@ using var game = new Game();
 
 game.Run(new SceneSetup2D { Profiler = true }.UseBepu(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Left mouse grabs any dynamic body, drags it and throws it on release
     game.AddGrabber();
@@ -22,7 +22,7 @@ void Start(Scene rootScene)
         Position = new Vector3(0.2f, 4f, 0),
     });
 
-    otherShape.Scene = rootScene;
+    otherShape.Scene = scene;
 
     for (int i = 0; i < ShapeCount; i++)
     {
@@ -37,7 +37,7 @@ void Start(Scene rootScene)
             Position = new Vector3(0.001f * i, 10 + i * 2, 0)
         });
 
-        shape.Scene = rootScene;
+        shape.Scene = scene;
     }
 }
 

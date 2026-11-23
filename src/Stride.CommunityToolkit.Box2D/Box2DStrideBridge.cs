@@ -10,7 +10,8 @@ namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
 /// Bridge responsible for mapping Box2D bodies to Stride entities and synchronizing transforms.
-/// This isolates engine-specific concerns away from the engine-agnostic <see cref="PhysicsWorld2D"/>.
+/// This keeps entities out of <see cref="PhysicsWorld2D"/>, which knows bodies only.
+/// An entity given a body also gets a <see cref="Box2DBodyComponent"/> carrying the id, so the entity and the map agree.
 /// </summary>
 /// <param name="world">The physics world bodies are created in.</param>
 public sealed class Box2DStrideBridge(PhysicsWorld2D world)
@@ -21,16 +22,16 @@ public sealed class Box2DStrideBridge(PhysicsWorld2D world)
     /// <summary>
     /// Creates a body of the given type at a world position, without an associated entity.
     /// </summary>
-    /// <param name="position">Initial world position (Z is ignored).</param>
+    /// <param name="position">Initial world position.</param>
     /// <param name="type">The Box2D body type.</param>
     /// <param name="rotation">Initial rotation in radians about the Z axis.</param>
     /// <returns>The id of the created body.</returns>
-    public B2BodyId CreateBody(Vector3 position, B2BodyType type, float rotation = 0f)
+    public B2BodyId CreateBody(Vector2 position, B2BodyType type, float rotation = 0f)
     {
         var bodyDef = b2DefaultBodyDef();
 
         bodyDef.type = type;
-        bodyDef.position = new B2Vec2(position.X, position.Y);
+        bodyDef.position = position.ToB2Vec2();
         bodyDef.rotation = b2MakeRot(rotation);
 
         return b2CreateBody(world.WorldId, in bodyDef);
@@ -38,25 +39,28 @@ public sealed class Box2DStrideBridge(PhysicsWorld2D world)
 
     /// <summary>
     /// Creates a body of the given type at a world position and associates it with an entity,
-    /// so <see cref="SyncTransformsFromPhysics"/> keeps the entity transform in step with the body.
+    /// so <see cref="SyncTransformsFromPhysics"/> keeps the entity transform in step with the body. The entity's
+    /// <see cref="Box2DBodyComponent"/>, added here when it has none, carries the id.
     /// </summary>
     /// <param name="entity">The entity driven by the body.</param>
-    /// <param name="position">Initial world position (Z is ignored).</param>
+    /// <param name="position">Initial world position.</param>
     /// <param name="type">The Box2D body type.</param>
     /// <param name="rotation">Initial rotation in radians about the Z axis.</param>
     /// <returns>The id of the created body.</returns>
-    public B2BodyId CreateBody(Entity entity, Vector3 position, B2BodyType type, float rotation = 0f)
+    public B2BodyId CreateBody(Entity entity, Vector2 position, B2BodyType type, float rotation = 0f)
     {
         var bodyId = CreateBody(position, type, rotation);
 
         _bodyToEntity[bodyId] = entity;
         _entityToBody[entity] = bodyId;
+        entity.GetOrCreate<Box2DBodyComponent>().BodyId = bodyId;
 
         return bodyId;
     }
 
     /// <summary>
-    /// Destroys the body associated with <paramref name="entity"/> and forgets the mapping, if present.
+    /// Destroys the body associated with <paramref name="entity"/> and forgets the mapping, if present; the entity's
+    /// <see cref="Box2DBodyComponent"/> stays, with its id cleared.
     /// </summary>
     /// <param name="entity">The entity whose body should be removed.</param>
     public void RemoveBody(Entity entity)
@@ -65,6 +69,8 @@ public sealed class Box2DStrideBridge(PhysicsWorld2D world)
 
         b2DestroyBody(bodyId);
         _bodyToEntity.Remove(bodyId);
+
+        if (entity.Get<Box2DBodyComponent>() is { } component) component.BodyId = default;
     }
 
     /// <summary>Gets the entity registered for the given body id, or null.</summary>

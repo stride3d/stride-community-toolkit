@@ -4,6 +4,10 @@ using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Mathematics;
 
+/// <summary>
+/// The random helpers on a seeded <see cref="Random"/>: points stay inside the rectangle or box asked for,
+/// directions have unit length, and the other draws stay in their ranges.
+/// </summary>
 public class RandomExtensionsTests
 {
     // A fixed seed, so a failure is the same failure every run
@@ -51,13 +55,7 @@ public class RandomExtensionsTests
         {
             var dir = _random.NextDirection2D();
 
-            // The length drifts a little with float precision, and a zero vector is left as it is by the normalisation
-            Assert.InRange(dir.Length(), 0.0f, 1.0001f);
-
-            if (dir != Vector2.Zero)
-            {
-                Assert.InRange(Math.Abs(dir.Length() - 1f), 0f, 1e-4f);
-            }
+            Assert.Equal(1f, dir.Length(), Tolerances.Geometry);
         }
     }
 
@@ -68,12 +66,7 @@ public class RandomExtensionsTests
         {
             var dir = _random.NextDirection3D();
 
-            Assert.InRange(dir.Length(), 0.0f, 1.0001f);
-
-            if (dir != Vector3.Zero)
-            {
-                Assert.InRange(Math.Abs(dir.Length() - 1f), 0f, 2e-4f);
-            }
+            Assert.Equal(1f, dir.Length(), 2f * Tolerances.Geometry);
         }
     }
 

@@ -2,6 +2,7 @@ using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Graphics;
+using Stride.Rendering;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
 
@@ -137,7 +138,7 @@ public static class SampleStations
 
         descriptor.Layers.Add(new MaterialBlendLayer
         {
-            Material = station.Compile(glow),
+            Material = new Material { Descriptor = glow },
             BlendMap = new ComputeTextureScalar(sign, TextureCoordinate.Texcoord0, Vector2.One, Vector2.Zero) { Channel = ColorChannel.A },
         });
 

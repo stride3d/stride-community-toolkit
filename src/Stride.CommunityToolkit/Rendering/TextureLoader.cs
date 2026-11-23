@@ -71,7 +71,9 @@ public sealed class TextureLoader(GraphicsDevice device, string? root = null) : 
     /// <param name="options">The role and the steps to take.</param>
     public static Texture Load(GraphicsDevice device, Stream stream, TextureLoadOptions options)
     {
+        ArgumentNullException.ThrowIfNull(device);
         ArgumentNullException.ThrowIfNull(stream);
+        ArgumentNullException.ThrowIfNull(options);
 
         using var image = Image.Load(stream);
 

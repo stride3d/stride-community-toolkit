@@ -3,7 +3,8 @@ using System.Runtime.CompilerServices;
 namespace Stride.CommunityToolkit.Mathematics;
 
 /// <summary>
-/// Some more common utility methods for math operations.
+/// Integer rounding, <c>MoveTowards</c>, Euler conversions and eased <c>Interpolate</c> overloads, beside Stride's
+/// <see cref="MathUtil"/>.
 /// </summary>
 public static class MathUtilEx
 {
@@ -13,7 +14,7 @@ public static class MathUtilEx
     /// <param name="value">The value.</param>
     /// <returns>The smallest integer greater than or equal to the amount.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static int CeilingToInt(this float value) => (int)Math.Ceiling(value);
+    public static int CeilingToInt(this float value) => (int)MathF.Ceiling(value);
 
     /// <summary>
     /// Gets largest integer less than or equal to the amount.
@@ -21,15 +22,16 @@ public static class MathUtilEx
     /// <param name="value">The value.</param>
     /// <returns>The largest integer less than or equal to the amount.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static int FloorToInt(this float value) => (int)Math.Floor(value);
+    public static int FloorToInt(this float value) => (int)MathF.Floor(value);
 
     /// <summary>
-    /// Gets the integer value nearest to the amount.
+    /// Gets the integer value nearest to the amount. A value exactly halfway between two integers rounds to the even
+    /// one, as <see cref="MathF.Round(float)"/> does (<see cref="MidpointRounding.ToEven"/>): 2.5 gives 2 and 3.5 gives 4.
     /// </summary>
     /// <param name="value">The value.</param>
-    /// <returns>The integer value nearest to the amount.</returns>
+    /// <returns>The integer value nearest to the amount, halves to even.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static int RoundToInt(this float value) => (int)Math.Round(value);
+    public static int RoundToInt(this float value) => (int)MathF.Round(value);
 
     /// <summary>
     /// Clamps the value between 0 and 1.
@@ -110,97 +112,6 @@ public static class MathUtilEx
         normal.Normalize();
         tangent -= Vector3.Dot(normal, tangent) * normal;
         tangent.Normalize();
-    }
-
-    /// <summary>
-    /// Creates a rotation that looks from <paramref name="eye"/> towards <paramref name="target"/>.
-    /// </summary>
-    /// <param name="eye">The position of the observer, such as a camera.</param>
-    /// <param name="target">The location of the object to look-at.</param>
-    /// <param name="up">The vector that defines which direction is up.</param>
-    /// <param name="result">The created quaternion rotation</param>
-    /// <remarks>
-    /// The result is always finite and unit length, including for the degenerate inputs: an eye
-    /// sitting on the target, a line of sight parallel to <paramref name="up"/>, and a zero-length
-    /// <paramref name="up"/>.
-    /// </remarks>
-    public static void LookRotation(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Quaternion result)
-    {
-        // Stride is right-handed, so the basis is built around the axis pointing from the target back
-        // towards the eye rather than along the line of sight
-        var forward = eye - target;
-
-        // Nothing to face: the observer is standing on the target, so no rotation is more correct
-        // than any other and the caller's existing orientation is worth more than a guess
-        if (forward.Length() < MathUtil.ZeroTolerance)
-        {
-            result = Quaternion.Identity;
-
-            return;
-        }
-
-        forward.Normalize();
-
-        var upwards = up;
-
-        if (upwards.Length() < MathUtil.ZeroTolerance)
-        {
-            upwards = Vector3.UnitY;
-        }
-
-        Vector3.Cross(ref upwards, ref forward, out var right);
-
-        // Looking straight along the up vector leaves nothing to say which way is sideways. Any axis
-        // not parallel to forward restores that, and the choice only sets the roll, which is
-        // arbitrary in this case anyway.
-        if (right.Length() < MathUtil.ZeroTolerance)
-        {
-            var reference = MathF.Abs(forward.Y) < 0.9f ? Vector3.UnitY : Vector3.UnitX;
-
-            Vector3.Cross(ref reference, ref forward, out right);
-        }
-
-        right.Normalize();
-
-        // Re-derived rather than reusing the caller's up, so the three axes are exactly orthogonal
-        // whatever was passed in. A skewed basis is what makes the conversion below produce a
-        // quaternion that is finite but not unit length.
-        Vector3.Cross(ref forward, ref right, out upwards);
-
-        upwards.Normalize();
-
-        var orientation = new Matrix
-        {
-            M11 = right.X,
-            M12 = right.Y,
-            M13 = right.Z,
-            M21 = upwards.X,
-            M22 = upwards.Y,
-            M23 = upwards.Z,
-            M31 = forward.X,
-            M32 = forward.Y,
-            M33 = forward.Z,
-            M44 = 1f,
-        };
-
-        Quaternion.RotationMatrix(ref orientation, out result);
-    }
-
-    /// <summary>
-    /// Creates a rotation that looks from <paramref name="eye"/> towards <paramref name="target"/>.
-    /// </summary>
-    /// <param name="eye">The position of the observer, such as a camera.</param>
-    /// <param name="target">The location of the object to look-at.</param>
-    /// <param name="up">The vector that defines which direction is up.</param>
-    /// <returns>The created quaternion rotation</returns>
-    /// <example>
-    /// var cameraRotation = MathUtilEx.LookRotation(cameraPosition, targetPosition, Vector3.UnitY);
-    /// </example>
-    public static Quaternion LookRotation(Vector3 eye, Vector3 target, Vector3 up)
-    {
-        LookRotation(ref eye, ref target, ref up, out var result);
-
-        return result;
     }
 
     /// <summary>
@@ -417,8 +328,8 @@ public static class MathUtilEx
     /// </summary>
     /// <param name="start">Start color.</param>
     /// <param name="end">End color.</param>
-    /// <param name="easingFunction">The function used to ease the interpolation.</param>
     /// <param name="amount">Value between 0 and 1 indicating the weight of <paramref name="end"/>; values outside that range are clamped to it.</param>
+    /// <param name="easingFunction">The function used to ease the interpolation.</param>
     /// <returns>The interpolation of the two colors.</returns>
     /// <remarks>
     /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned.

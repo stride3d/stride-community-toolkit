@@ -23,7 +23,8 @@ namespace Stride.CommunityToolkit.Charts;
 /// since the last frame, so a range, a visibility, a colour or a glow is changed by writing the option,
 /// the same way it was set up. <see cref="Series"/> holds the defaults a series takes when added, and a
 /// series whose style left a value unset keeps reading the default, so those are live too. Whether the
-/// chart is 3D (a Z spread) is read once, when it is built.
+/// chart is 3D (a Z spread) is read once, when it is built, and so is the style of its text: see
+/// <see cref="ChartLabelOptions"/> and <see cref="ChartTitleOptions"/>.
 /// </para>
 /// <para>
 /// Ranges are in the chart's own units; scale the chart's root entity to change its size in the world.

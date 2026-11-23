@@ -19,27 +19,27 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // From here on, any entity carrying a MeshOutlineComponent gets an outline
     game.AddRootRenderFeature(new MeshOutlineRenderFeature { Thickness = OutlineThickness });
 
-    CreateOutlinedPrimitive(rootScene, Primitive3D.Sphere(), Color.Cyan, new Vector3(2f, 0.5f, -2f));
-    CreateOutlinedPrimitive(rootScene, Primitive3D.Capsule(), Color.Yellow, new Vector3(-1f, 0.5f, -2f));
-    CreateOutlinedPrimitive(rootScene, Primitive3D.Sphere(), Color.Red, new Vector3(-1f, 0.5f, 4f));
-    CreateOutlinedPrimitive(rootScene, Primitive3D.Capsule(), Color.Green, new Vector3(2f, 0.5f, 1f));
-    CreateOutlinedPrimitive(rootScene, Primitive3D.Sphere(), Color.Magenta, new Vector3(-1f, 0.5f, 1f));
+    CreateOutlinedPrimitive(scene, Primitive3D.Sphere(), Color.Cyan, new Vector3(2f, 0.5f, -2f));
+    CreateOutlinedPrimitive(scene, Primitive3D.Capsule(), Color.Yellow, new Vector3(-1f, 0.5f, -2f));
+    CreateOutlinedPrimitive(scene, Primitive3D.Sphere(), Color.Red, new Vector3(-1f, 0.5f, 4f));
+    CreateOutlinedPrimitive(scene, Primitive3D.Capsule(), Color.Green, new Vector3(2f, 0.5f, 1f));
+    CreateOutlinedPrimitive(scene, Primitive3D.Sphere(), Color.Magenta, new Vector3(-1f, 0.5f, 1f));
     // The cube's per-face normals push its faces apart, so its outline has gaps at the edges and corners
-    CreateOutlinedPrimitive(rootScene, Primitive3D.Cube(), Color.Orange, new Vector3(2f, 0.5f, 4f));
+    CreateOutlinedPrimitive(scene, Primitive3D.Cube(), Color.Orange, new Vector3(2f, 0.5f, 4f));
 }
 
-void CreateOutlinedPrimitive(Scene rootScene, Primitive3D modelType, Color4 color, Vector3 position)
+void CreateOutlinedPrimitive(Scene scene, Primitive3D modelType, Color4 color, Vector3 position)
 {
     var entity = game.CreatePrimitive(modelType, new PrimitiveEntityOptions { Position = position });
 
     entity.Add(new MeshOutlineComponent { Color = color, Intensity = OutlineIntensity });
 
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 }
 
 /*

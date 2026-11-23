@@ -42,7 +42,7 @@ public class MetadataParser(ILogger<MetadataParser> logger)
         ArgumentException.ThrowIfNullOrWhiteSpace(exampleFilePath);
         ArgumentException.ThrowIfNullOrWhiteSpace(examplesRootPath);
 
-        var projectName = Path.GetFileName(Path.GetDirectoryName(exampleFilePath));
+        var projectName = ExampleScanner.GetProjectName(exampleFilePath);
 
         var content = await File.ReadAllTextAsync(exampleFilePath, cancellationToken);
 
@@ -132,7 +132,7 @@ public class MetadataParser(ILogger<MetadataParser> logger)
     /// </remarks>
     private static string BuildErrorMessage(string headline, string exampleFilePath, string yamlContent, string detail)
     {
-        var projectName = Path.GetFileName(Path.GetDirectoryName(exampleFilePath)) ?? exampleFilePath;
+        var projectName = ExampleScanner.GetProjectName(exampleFilePath);
         var findings = YamlSourceInspector.Inspect(projectName, yamlContent);
         var message = new StringBuilder();
 

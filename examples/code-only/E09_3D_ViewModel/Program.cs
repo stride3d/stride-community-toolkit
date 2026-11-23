@@ -27,6 +27,9 @@ using Stride.Rendering.Compositing;
 const RenderGroup ToolGroup = RenderGroup.Group30;
 const RenderGroupMask ToolMask = RenderGroupMask.Group30;
 
+// What the main view draws of the scene: Group31 is the overlay stage's
+const RenderGroupMask SceneMask = RenderGroupMask.All & ~RenderGroupMask.Group31;
+
 var separate = true;
 
 Entity tool = null!;
@@ -53,7 +56,7 @@ void Start(Scene scene)
     var camera = game.GetCameraEntity();
 
     // The tool: two pieces on the tool's render group, children of the camera so they ride with it
-    tool = new Entity("Tool");
+    tool = new Entity("Tool", new Vector3(0.35f, -0.3f, -0.6f), Quaternion.RotationY(-0.1f));
 
     var grip = game.CreatePrimitive(Primitive3D.Box(new Vector3(0.12f, 0.3f, 0.14f)), new PrimitiveEntityOptions
     {
@@ -76,8 +79,6 @@ void Start(Scene scene)
     barrel.Transform.Rotation = Quaternion.RotationX(MathUtil.PiOverTwo);
     tool.AddChild(grip);
     tool.AddChild(barrel);
-    tool.Transform.Position = new Vector3(0.35f, -0.3f, -0.6f);
-    tool.Transform.Rotation = Quaternion.RotationY(-0.1f);
     camera.AddChild(tool);
 
     // The tool's camera: a child of the main one, so it has the same pose, drawing only the tool's group into a
@@ -86,13 +87,13 @@ void Start(Scene scene)
 
     camera.AddChild(toolCamera);
     feed = game.AddRenderTextureCamera(toolCamera, 1280, 720);
-    feed.Renderer.RenderMask = ToolMask;
     feed.Forward.Clear.Color = new Color4(0f, 0f, 0f, 0f);
 
     // The main view stops drawing the tool's group; the feed is laid over it after the post effects
     mainView = MainView(game);
     overlay = game.AddShapeBatch(afterPostEffects: true);
     overlay.FillWith(feed.Texture);
+    overlay.Screen = true;
 
     Apply();
 
@@ -112,17 +113,13 @@ void Update(Scene scene, GameTime time)
     // The feed over the whole window: the texture's alpha leaves the view showing wherever the tool is not
     var size = overlay.ScreenSize;
 
-    overlay.Screen = true;
-    overlay.BorderWidth = 0f;
-    overlay.Fill.Set(Color.White, 1f);
     overlay.DrawRectangle(new Vector3(size * 0.5f, 0f), Vector3.UnitX, Vector3.UnitY, size, Color.White);
-    overlay.Screen = false;
 }
 
 // With the trick on, the main view skips the tool's group and the feed draws it; off, the main view draws everything
 void Apply()
 {
-    mainView.RenderMask = separate ? RenderGroupMask.All & ~RenderGroupMask.Group31 & ~ToolMask : RenderGroupMask.All & ~RenderGroupMask.Group31;
+    mainView.RenderMask = separate ? SceneMask & ~ToolMask : SceneMask;
     feed.Renderer.RenderMask = separate ? ToolMask : RenderGroupMask.None;
 }
 

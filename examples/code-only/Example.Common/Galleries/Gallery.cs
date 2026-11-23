@@ -88,7 +88,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         _scene = scene;
         _exhibits = exhibits;
         Options = options ?? GalleryOptions.Default;
-        Radius = MathF.Max(Options.MinimumRadius, exhibits.Count * Options.Spacing / MathF.Tau);
+        Radius = MathF.Max(Options.MinimumRadius, exhibits.Count * Options.Spacing / MathUtil.TwoPi);
         _camera = new GalleryCamera(game);
         // A regular face for the labels: Stride's built-in font is bold
         _labelFont = SystemFonts.LoadFirst(game.Services, SystemFonts.SansSerifCandidates, 20f);
@@ -261,7 +261,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     private TStation BuildStation(int index, int count, Exhibit<TStation> exhibit, Action<TStation>? configure)
     {
         // Station 1 straight ahead of the home view, the rest clockwise as seen from above
-        var angle = -MathF.PI * 0.5f + index * MathF.Tau / count;
+        var angle = -MathUtil.PiOverTwo + index * MathUtil.TwoPi / count;
         var (sin, cos) = MathF.SinCos(angle);
         var outward = new Vector3(cos, 0f, sin);
         var forward = -outward;
@@ -315,9 +315,8 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
             GlowSize = 2f,
         };
 
-        var entity = new Entity($"Station {station.Number} label") { Transform = { Position = PinOf(station), Rotation = LabelRotation(station) } };
+        var entity = new Entity($"Station {station.Number} label", PinOf(station), LabelRotation(station)) { label };
 
-        entity.Add(label);
         entity.Scene = _scene;
         _labels.Add(label);
 
@@ -325,13 +324,18 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     }
 
     /// <summary>
+    /// Runs a station's setup again, for a gallery that rebuilds a station itself - a variation on V.
+    /// Guarded like the first run, so a variation that throws leaves its message on the station.
+    /// </summary>
+    public void RunSetup(TStation station) => Guarded(station, _exhibits[_stations.IndexOf(station)].Setup);
+
+    /// <summary>
     /// Runs a station's own code with the ring standing by: an exhibit that throws - a feature the
     /// GPU or the engine refuses - leaves its pad empty with the message on the station, and the
-    /// other stations stand. Once a station has failed its update is not run again. A gallery that
-    /// rebuilds a station itself - a variation on V - runs the rebuild through here for the same reason.
-    /// An exhibit with nothing to run passes null.
+    /// other stations stand. Once a station has failed its update is not run again. An exhibit with
+    /// nothing to run passes null.
     /// </summary>
-    public static void Guarded(TStation station, Action<TStation>? action)
+    private static void Guarded(TStation station, Action<TStation>? action)
     {
         if (action is null || station.Error is not null) return;
 

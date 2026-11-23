@@ -20,7 +20,7 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 | Call | What it does |
 |---|---|
 | `game.Run(setup, start: Start, update: Update)` | Applies `setup`, runs `start` once with the root scene, then `update` every frame. `start` may be `async`. |
-| `game.Run(start: Start)` | The same with `SceneSetup3D.Default`. |
+| `game.Run(start: Start)` | The same with a default `new SceneSetup3D()`. |
 | `game.Run(SceneSetup.None, start: Start)` | Adds nothing to the scene: for a game that builds its compositor and scene by hand, and for headless tests. What is not scene still applies when set - the physics engine, game settings, DPI awareness, window title, resizing, instancing, overlay and profiler - so `SceneSetup.None.UseBepu()` is a hand-built scene whose primitives get Bepu bodies. |
 
 `DpiAware`, `GameSettings` and `Physics` are applied before the engine starts, because they must be in place before the window and the engine's systems are created; everything else once the root scene exists. See [`Run`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.CommunityToolkit.Engine.SceneSetup,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime},Stride.Games.GameContext)).
@@ -41,7 +41,7 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 | `PostEffects` | `null` | Configures the compositor's post effects, which are otherwise all off but the tone map: `fx => fx.Bloom.Enabled = true`. |
 | `GameSettings` | `null` | Configures the engine's `GameSettings` before the window is created: the graphics profile, the colour space, the window size. |
 | `TextOverlay` | `false` | Creates the [text overlay](../rendering/text-overlay.md), so the first section added shows at once. |
-| `Profiler` | `false` | Adds the frame-time profiler readout. |
+| `Profiler` | `false` | Starts the frame-time profiler readout on. Every setup adds the profiler script, so <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> brings it up in any scene; this shows it from the first frame. |
 | `Instancing` | `false` | Puts the instancing render feature in the compositor, so instanced masters draw from the first frame. Set through `UseInstancing()`. Without it a master draws as one model and the run loop warns. |
 | `WindowTitle` | `null` | The window's title; `null` leaves the engine's. |
 | `Resizable` | `false` | Whether the window can be resized by dragging its edges. |

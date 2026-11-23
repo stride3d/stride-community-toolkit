@@ -8,7 +8,8 @@ using Stride.Engine;
 
 // A cube orbits the scene and knocks a ring of smaller cubes out of its way.
 // The orbit is driven by OrbitScript, a SyncScript attached to the entity, rather than by the update
-// callback of game.Run(...) - the point of the example.
+// callback of game.Run(...) - the point of the example. The left mouse button picks up a loose cube
+// and throws it.
 
 // Half of a 1x1x1 cube, so it sits exactly on the ground
 const float CubeRestingHeight = 0.5f;
@@ -17,47 +18,54 @@ const float OrbitRadius = 3f;
 const float OrbitSpeed = 1f;
 
 const float LooseCubeSize = 0.4f;
-const int LooseCubeCount = 8;
+
+// The orbit is divided into this many equal slots, one loose cube to a slot
+const int OrbitSlotCount = 30;
+
+// The orbiting cube starts on slot 0, so that slot and this many on each side of it stay empty
+const int ClearSlotsEachSide = 1;
 
 using var game = new Game();
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
-    CreateCentreCube(rootScene);
-    CreateLooseCubes(rootScene);
-    CreateOrbitingCube(rootScene);
+    game.AddGrabber();
+
+    CreateCentreCube(scene);
+    CreateLooseCubes(scene);
+    CreateOrbitingCube(scene);
 }
 
 /// <summary>
 /// Creates the cube the orbit is centred on, using the toolkit's default Bepu physics: a dynamic body
 /// with a matching box collider. It rests on the ground and the orbit never reaches it.
 /// </summary>
-void CreateCentreCube(Scene rootScene)
+void CreateCentreCube(Scene scene)
 {
     var cube = game.CreatePrimitive(Primitive3D.Cube());
 
     cube.Transform.Position = new Vector3(0, CubeRestingHeight, 0);
-    cube.Scene = rootScene;
+    cube.Scene = scene;
 }
 
 /// <summary>
-/// Scatters small dynamic cubes evenly around the orbit path, so there is something for the orbiting
-/// cube to collide with.
+/// Places small dynamic cubes around the orbit path, so there is something for the orbiting cube to
+/// collide with, and leaves a gap where that cube starts.
 /// </summary>
-void CreateLooseCubes(Scene rootScene)
+void CreateLooseCubes(Scene scene)
 {
-    for (var i = 0; i < LooseCubeCount; i++)
+    for (var slot = ClearSlotsEachSide + 1; slot < OrbitSlotCount - ClearSlotsEachSide; slot++)
     {
-        // The half step keeps the first cube clear of the orbiting cube's spawn point
-        var angle = MathF.Tau * (i + 0.5f) / LooseCubeCount;
+        // Slot 0 is along +Z from the centre, where the orbiting cube spawns
+        var angle = MathUtil.TwoPi * slot / OrbitSlotCount;
 
         // Size drives both the generated model and the generated collider
         var cube = game.CreatePrimitive(Primitive3D.Cube(LooseCubeSize));
 
         cube.Transform.Position = new Vector3(MathF.Sin(angle) * OrbitRadius, LooseCubeSize / 2, MathF.Cos(angle) * OrbitRadius);
-        cube.Scene = rootScene;
+        cube.Scene = scene;
     }
 }
 
@@ -70,7 +78,7 @@ void CreateLooseCubes(Scene rootScene)
 /// an entity with no body at all could be moved by writing its transform, but would pass straight
 /// through everything.
 /// </remarks>
-void CreateOrbitingCube(Scene rootScene)
+void CreateOrbitingCube(Scene scene)
 {
     var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions { Body = BodyMode.Kinematic });
 
@@ -85,7 +93,7 @@ void CreateOrbitingCube(Scene rootScene)
         AngularSpeed = OrbitSpeed
     });
 
-    cube.Scene = rootScene;
+    cube.Scene = scene;
 }
 
 /*
@@ -117,7 +125,7 @@ concepts:
   - Waking a body after changing its velocity
   - Why writing Transform.Position does not move a physics body
   - Sizing a primitive and its collider together
-  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, UseSkybox, AddGrabber, CreatePrimitive"
 tags:
   - 3D
   - Script

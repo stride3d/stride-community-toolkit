@@ -123,7 +123,7 @@ public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisp
             _retiredThisFrame = [InstanceWorldBuffer, InstanceWorldInverseBuffer];
         }
 
-        var capacity = (int)System.Numerics.BitOperations.RoundUpToPowerOf2((uint)Math.Max(needed, 64));
+        var capacity = EntityInstancing.InstancingCapacity(needed);
 
         InstanceWorldBuffer = CreateMatrixBuffer(device, capacity);
         InstanceWorldInverseBuffer = CreateMatrixBuffer(device, capacity);

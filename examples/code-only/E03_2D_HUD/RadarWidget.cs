@@ -51,7 +51,7 @@ public sealed class RadarWidget(ShipState ship) : HudWidget
 
         // Bezel, and a tick ring outside it that turns slowly: its phase is the whole animation
         canvas.Style(new HudStyle(HudCanvas.Thick, 0f) { Glow = 4f, GlowColour = glow });
-        canvas.Shapes.DrawArc(center, radius, 0f, MathF.Tau, colour);
+        canvas.Shapes.DrawArc(center, radius, 0f, MathUtil.TwoPi, colour);
         canvas.DashedRing(center, radius + 0.22f, 4f, 10f, dim, canvas.Time * 12f);
     }
 
@@ -74,7 +74,7 @@ public sealed class RadarWidget(ShipState ship) : HudWidget
             var pulse = 0.5f + 0.5f * MathF.Sin(canvas.Time * 5f);
 
             canvas.Style(new HudStyle(HudCanvas.Thin, 0f) { Glow = 4f + 6f * pulse, GlowColour = colour, Additive = true });
-            canvas.Shapes.DrawArc(position, 0.18f, 0f, MathF.Tau, colour);
+            canvas.Shapes.DrawArc(position, 0.18f, 0f, MathUtil.TwoPi, colour);
         }
 
         // The target wears a bracket

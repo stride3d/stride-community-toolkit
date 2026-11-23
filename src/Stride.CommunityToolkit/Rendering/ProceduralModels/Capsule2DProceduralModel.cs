@@ -13,12 +13,12 @@ public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
     /// <summary>
     /// Gets or sets the height of the capsule: the whole shape end to end, the two semicircles included.
     /// </summary>
-    public float Height { get; set; } = 1.2f;
+    public float Height { get; set; } = 1f;
 
     /// <summary>
     /// Gets or sets the radius of the capsule.
     /// </summary>
-    public float Radius { get; set; } = 0.35f;
+    public float Radius { get; set; } = 0.25f;
 
     /// <summary>
     /// Gets or sets the tessellation for the semicircle ends (higher values = smoother curves).
@@ -26,6 +26,28 @@ public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
     public int Tessellation { get; set; } = 16;
 
     private static readonly ConcurrentDictionary<(float Height, float Radius, int Tessellation, float UScale, float VScale, bool IsLeftHanded), GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
+
+    /// <summary>The straight part is never shorter than this, in units.</summary>
+    private const float MinimumStraightLength = 0.01f;
+
+    /// <summary>Nor shorter than this fraction of the radius, so a large capsule keeps a visible rectangle.</summary>
+    private const float MinimumStraightFraction = 0.01f;
+
+    /// <summary>
+    /// The length of the straight part between the two semicircles of a capsule <paramref name="height"/> tall end to
+    /// end: the height less two radii, but never shorter than a sliver, a hundredth of a unit or of the radius,
+    /// whichever is longer.
+    /// </summary>
+    /// <remarks>
+    /// The mesh keeps the sliver so the shape always has its rectangle. The Bepu and Bullet 2D capsule colliders take
+    /// their length from here too, so a collider is exactly as tall as the mesh it is drawn with, and never zero or
+    /// negative, which Bepu rejects.
+    /// </remarks>
+    /// <param name="height">The whole capsule, caps included.</param>
+    /// <param name="radius">The radius of the semicircular ends.</param>
+    /// <returns>The straight length, always positive.</returns>
+    public static float StraightLength(float height, float radius)
+        => MathF.Max(height - 2 * radius, MathF.Max(MinimumStraightLength, radius * MinimumStraightFraction));
 
     /// <summary>
     /// Creates mesh data using current property values, honoring UV scale.
@@ -64,8 +86,7 @@ public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
 
         tessellation = Math.Max(4, tessellation);
 
-        // The straight part is never shorter than a sliver, so the shape always has its rectangle
-        var halfRectHeight = Math.Max(0.01f, Math.Max(height, radius * 2.01f) - 2 * radius) * 0.5f;
+        var halfRectHeight = StraightLength(height, radius) * 0.5f;
         var uvScale = new Vector2(uScale, vScale);
         var normal = Vector3.UnitZ;
 

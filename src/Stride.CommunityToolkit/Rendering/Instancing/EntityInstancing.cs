@@ -225,7 +225,7 @@ public class EntityInstancing : InstancingUserArray
 
         if (_world.Length < count)
         {
-            var capacity = (int)System.Numerics.BitOperations.RoundUpToPowerOf2((uint)Math.Max(count, 64));
+            var capacity = InstancingCapacity(count);
 
             _world = new Matrix[capacity];
             _worldInverse = new Matrix[capacity];
@@ -312,10 +312,13 @@ public class EntityInstancing : InstancingUserArray
         manager.EntityRemoved += OnEntityRemoved;
     }
 
-    private void OnEntityRemoved(object? sender, Entity entity)
-    {
-        if (_indexOf.ContainsKey(entity)) RemoveInstance(entity);
-    }
+    private void OnEntityRemoved(object? sender, Entity entity) => RemoveInstance(entity);
+
+    /// <summary>
+    /// The capacity to allocate for <paramref name="needed"/> instances: the next power of two, 64 at the least. The CPU
+    /// arrays and the GPU buffers grow by the same rule, so <c>Update</c>'s clamp and the buffers never disagree.
+    /// </summary>
+    internal static int InstancingCapacity(int needed) => (int)System.Numerics.BitOperations.RoundUpToPowerOf2((uint)Math.Max(needed, 64));
 
     /// <summary>
     /// Gathers world matrices, inverses and position bounds for one index range. Shared by the

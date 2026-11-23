@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
+using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -30,7 +31,7 @@ public static class ShapeBatchExtensions
     /// Draw the batch after post-processing, in the compositor's UI stage, so colours are not
     /// tone-mapped; in the scene, auto exposure can draw a white shape about half grey. Right for a
     /// HUD, wrong for a decal. Nothing is depth-tested there. Needs the toolkit's UI stage
-    /// (<c>AddUIStage</c> or <c>AddCleanUIStage</c>, added by <c>SetupBase3D</c> and
+    /// (<c>AddUIStage</c> or <c>AddCleanUIStage</c>, added by <c>SceneSetup3D</c> and
     /// <c>AddGraphicsCompositor</c>); without it the batch draws in the transparent stage.
     /// </param>
     /// <returns>The batch: submit shapes to it every frame from your update logic.</returns>
@@ -44,7 +45,7 @@ public static class ShapeBatchExtensions
     /// <see cref="ShapeComponent"/> draws through. A scene that never calls this still draws its
     /// components: the processor registers a depth-tested batch of its own the first time it needs one.
     /// </remarks>
-    /// <exception cref="InvalidOperationException">The compositor has no "Transparent" render stage.</exception>
+    /// <exception cref="InvalidOperationException">The game has no graphics compositor, no scene instance yet, or a compositor with no "Transparent" render stage.</exception>
     public static ShapeBatch AddShapeBatch(this IGame game, bool depthTest = false, IComputeColor? fill = null, bool afterPostEffects = false)
     {
         var batch = Create(game, depthTest, fill, afterPostEffects);
@@ -111,8 +112,8 @@ public static class ShapeBatchExtensions
 
         foreach (var stage in renderSystem.RenderStages)
         {
-            if (stage.Name == "Transparent") transparentStage = stage;
-            else if (stage.Name == "UiStage") uiStage = stage;
+            if (stage.Name == RenderStageNames.Transparent) transparentStage = stage;
+            else if (stage.Name == RenderStageNames.Ui) uiStage = stage;
         }
 
         if (transparentStage is null)

@@ -4,12 +4,8 @@ using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
 using Stride.Input;
 using static Box2D.NET.B2Bodies;
-using static Box2D.NET.B2Geometries;
-using static Box2D.NET.B2MathFunction;
-using static Box2D.NET.B2Shapes;
 
 namespace E06_Box2D.Helpers;
 
@@ -27,22 +23,7 @@ public class SceneManager
     private readonly ShapeSpawner _shapeSpawner;
 
     private string _lastAction = "Initialized";
-    private DateTime _lastActionTime = DateTime.Now;
-
-    public int ShapeCount
-    {
-        get
-        {
-            var count = 0;
-
-            foreach (var entity in _scene.Entities)
-            {
-                if (entity.Name.EndsWith(GameConfig.ShapeName)) count++;
-            }
-
-            return count;
-        }
-    }
+    private TimeSpan _lastActionTime;
 
     public SceneManager(Game game, Scene scene, Box2DSimulation simulation)
     {
@@ -50,9 +31,9 @@ public class SceneManager
         _scene = scene;
         _simulation = simulation;
         _camera = game.GetCameraEntity().Get<CameraComponent>();
-        _shapeFactory = new ShapeFactory(scene);
-        _uiHelper = new UiHelper(game);
-        _shapeSpawner = new ShapeSpawner(scene, simulation, _shapeFactory);
+        _shapeFactory = new ShapeFactory(scene, new Random(1));
+        _uiHelper = new UiHelper(game, simulation);
+        _shapeSpawner = new ShapeSpawner(simulation, _shapeFactory);
     }
 
     /// <summary>
@@ -70,13 +51,7 @@ public class SceneManager
         AddGroundAndWalls();
 
         // One shape with no gravity, so it hangs where it was put
-        var shape = ShapeFactory.Rectangle;
-        var entity = _shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
-        var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
-
-        b2Body_SetGravityScale(bodyId, 0);
-
-        ShapeFixtureBuilder.AttachShape(shape.Type, bodyId, ShapeSpawner.DefaultShapeDef());
+        b2Body_SetGravityScale(_shapeSpawner.Add(ShapeFactory.Rectangle, new Vector2(0, 2)), 0);
 
         AddInitialShapes();
     }
@@ -85,45 +60,38 @@ public class SceneManager
     {
         // Junkyard-style yard: one static body carrying rows of slightly overlapping squares,
         // each square also an entity drawn by a ShapeComponent
-        var groundId = _simulation.CreateStaticBody(Vector3.Zero);
-        var shapeDef = ShapeSpawner.DefaultShapeDef();
+        var groundId = _simulation.CreateStaticBody(Vector2.Zero);
 
         for (var i = 0; i <= 50; i++)
         {
-            var x = -25f + i;
-            var box = b2MakeOffsetBox(0.55f, 0.5f, new B2Vec2(x, -3f), b2Rot_identity);
-            b2CreatePolygonShape(groundId, in shapeDef, in box);
-            AddStaticSquare(new Vector2(x, -3f), new Vector2(1.1f, 1f));
+            AddStaticSquare(groundId, new Vector2(-25f + i, -3f), new Vector2(1.1f, 1f));
         }
 
         for (var i = 0; i < 10; i++)
         {
             var y = -2f + i;
 
-            foreach (var x in (float[])[-25f, 25f])
-            {
-                var box = b2MakeOffsetBox(0.5f, 0.55f, new B2Vec2(x, y), b2Rot_identity);
-                b2CreatePolygonShape(groundId, in shapeDef, in box);
-                AddStaticSquare(new Vector2(x, y), new Vector2(1f, 1.1f));
-            }
+            AddStaticSquare(groundId, new Vector2(-25f, y), new Vector2(1f, 1.1f));
+            AddStaticSquare(groundId, new Vector2(25f, y), new Vector2(1f, 1.1f));
         }
     }
 
-    private void AddStaticSquare(Vector2 position, Vector2 size)
+    // A box on the ground body, off its centre, and the entity that draws it
+    private void AddStaticSquare(B2BodyId groundId, Vector2 position, Vector2 size)
     {
-        var entity = new Entity(GameConfig.WallName)
+        ShapeFixtureBuilder.AttachBox(size, groundId, position, ShapeSpawner.DefaultShapeDef());
+
+        var entity = new Entity(GameConfig.WallName, new Vector3(position, 0))
         {
             new ShapeComponent { Vertices = [.. ShapeComponent.Box(size)], Color = GameConfig.GroundColor }
         };
-        entity.Transform.Position = new Vector3(position, 0);
         entity.Scene = _scene;
     }
 
     /// <summary>
     /// Reads the input and refreshes the UI lines.
     /// </summary>
-    /// <param name="gameTime">Current game time</param>
-    public void Update(GameTime gameTime)
+    public void Update()
     {
         ProcessInput();
         UpdateUI();
@@ -232,19 +200,18 @@ public class SceneManager
 
     private void UpdateUI()
     {
-        _uiHelper.RenderNavigation(ShapeCount, _shapeSpawner.TotalCreated, _simulation);
+        _uiHelper.SetReadout(_shapeSpawner.Count);
 
-        if ((DateTime.Now - _lastActionTime).TotalSeconds < 3)
+        // On the game's clock, so a paused game does not run the message out
+        if ((_game.UpdateTime.Total - _lastActionTime).TotalSeconds < 3)
         {
-            _uiHelper.RenderStatusMessage($"Last action: {_lastAction}", Color.LightGreen);
+            _uiHelper.SetStatus($"Last action: {_lastAction}", Color.LightGreen);
         }
     }
 
     private void LogAction(string action)
     {
         _lastAction = action;
-        _lastActionTime = DateTime.Now;
-
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] {action}");
+        _lastActionTime = _game.UpdateTime.Total;
     }
 }

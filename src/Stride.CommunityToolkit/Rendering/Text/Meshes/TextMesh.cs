@@ -36,6 +36,9 @@ namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 /// </remarks>
 public static class TextMesh
 {
+    /// <summary>How many times a bevel too wide for a glyph is halved before the glyph is given up; <see cref="TextBevel"/> says so.</summary>
+    internal const int MaxBevelHalvings = 6;
+
     /// <summary>
     /// Builds the lettering as one mesh.
     /// </summary>
@@ -59,7 +62,7 @@ public static class TextMesh
 
         foreach (var placed in layout.Glyphs)
         {
-            emitter.Add(Prepare(font, placed.Glyph, options, prepared), placed.Pen, placed.Pen + layout.Shift, layout.Block.Min, layout.Block.Max);
+            emitter.Add(Prepare(font, placed.Glyph, options, prepared), emitter.PlaceAt(placed.Pen + layout.Shift, uvOrigin: placed.Pen, layout.Block));
         }
 
         return emitter.ToMeshData($"Text '{text}'");
@@ -150,7 +153,7 @@ public static class TextMesh
             var centre = origin + (placed.Glyph.BoundsMin + placed.Glyph.BoundsMax) * 0.5f;
             var emitter = new Emitter(options);
 
-            emitter.Add(glyph, Vector2.Zero, origin - centre, placed.Glyph.BoundsMin, placed.Glyph.BoundsMax);
+            emitter.Add(glyph, emitter.PlaceAt(origin - centre, uvOrigin: Vector2.Zero, new Block(placed.Glyph.BoundsMin, placed.Glyph.BoundsMax)));
 
             glyphs.Add(new GlyphMesh(placed.Glyph.Codepoint, new Vector3(centre * options.Size, 0f), emitter.ToMeshData($"Glyph '{char.ConvertFromUtf32(placed.Glyph.Codepoint)}'")));
         }
@@ -187,20 +190,23 @@ public static class TextMesh
     {
         options ??= new TextMeshOptions();
 
+        // The parameter is options throughout; the message names the property
         Positive(options.Size, nameof(options.Size));
         Positive(options.Depth, nameof(options.Depth));
         Positive(options.LineSpacing, nameof(options.LineSpacing));
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(options.CurveQuality, nameof(options.CurveQuality));
+
+        if (options.CurveQuality <= 0)
+            throw new ArgumentOutOfRangeException(nameof(options), options.CurveQuality, $"{nameof(options.CurveQuality)} must be greater than zero.");
 
         if (!float.IsFinite(options.LetterSpacing))
-            throw new ArgumentOutOfRangeException(nameof(options), options.LetterSpacing, "The letter spacing must be a finite number.");
+            throw new ArgumentOutOfRangeException(nameof(options), options.LetterSpacing, $"{nameof(options.LetterSpacing)} must be a finite number.");
 
         return options;
 
-        static void Positive(float value, string name)
+        void Positive(float value, string property)
         {
             if (!float.IsFinite(value) || value <= 0f)
-                throw new ArgumentOutOfRangeException(name, value, $"{name} must be a positive finite number.");
+                throw new ArgumentOutOfRangeException(nameof(options), value, $"{property} must be a positive finite number.");
         }
     }
 
@@ -242,7 +248,7 @@ public static class TextMesh
         /// </summary>
         internal static Layout Build(MeshFont font, string text, TextMeshOptions options)
         {
-            var lines = text.Replace("\r", "", StringComparison.Ordinal).Split('\n');
+            var lines = text.ReplaceLineEndings("\n").Split('\n');
             var lineHeight = font.LineHeight * options.LineSpacing;
             var placed = new List<PlacedGlyph>(text.Length);
             var lineWidths = new float[lines.Length];
@@ -301,21 +307,13 @@ public static class TextMesh
 
         private static Vector2 ShiftFor(Anchor? anchor, Block block)
         {
-            if (anchor is null) return Vector2.Zero;
+            if (anchor is not { } at) return Vector2.Zero;
 
-            var x = anchor switch
-            {
-                Anchor.TopLeft or Anchor.MiddleLeft or Anchor.BottomLeft => block.Min.X,
-                Anchor.TopRight or Anchor.MiddleRight or Anchor.BottomRight => block.Max.X,
-                _ => (block.Min.X + block.Max.X) * 0.5f,
-            };
-
-            var y = anchor switch
-            {
-                Anchor.TopLeft or Anchor.TopCenter or Anchor.TopRight => block.Max.Y,
-                Anchor.BottomLeft or Anchor.BottomCenter or Anchor.BottomRight => block.Min.Y,
-                _ => (block.Min.Y + block.Max.Y) * 0.5f,
-            };
+            // The anchor's point of the block, as the fractions the grid encodes; Y flipped, since EM units
+            // are y-up where the anchor grid counts down from the top
+            var fraction = at.At(Vector2.One);
+            var x = block.Min.X + (block.Max.X - block.Min.X) * fraction.X;
+            var y = block.Max.Y - (block.Max.Y - block.Min.Y) * fraction.Y;
 
             return new Vector2(-x, -y);
         }
@@ -399,14 +397,14 @@ public static class TextMesh
 
                 if (fits) return new PreparedGlyph(polygons, sizeEm);
 
-                if (attempt == 6) throw new InvalidOperationException("the bevel is wider than the glyph's thinnest part, so the cap would fold over itself; lower the bevel size");
+                if (attempt == MaxBevelHalvings) throw new InvalidOperationException("the bevel is wider than the glyph's thinnest part, so the cap would fold over itself; lower the bevel size");
 
                 sizeEm *= 0.5f;
             }
         }
 
         private static List<int> Triangulate(Vector2[][] loops)
-            => EarClipping.Triangulate(loops[0], loops.Skip(1).ToList());
+            => EarClipping.Triangulate(loops[0], loops[1..]);
     }
 
     /// <summary>Accumulates the caps, bevels and walls of prepared polygons into one vertex and index list, scaled and placed on the way in.</summary>
@@ -419,34 +417,39 @@ public static class TextMesh
         private readonly TextBevel? _bevel = options.Bevel;
 
         /// <summary>
-        /// Adds a prepared glyph placed at <paramref name="origin"/>, with cap texture coordinates spread over
-        /// the box from <paramref name="uvMin"/> to <paramref name="uvMax"/>, in which the glyph sits at
-        /// <paramref name="uvOrigin"/>. Everything in EM units; the scale is applied here.
+        /// Where a glyph goes: placed at <paramref name="origin"/>, with cap texture coordinates spread over
+        /// <paramref name="uvBox"/>, in which the glyph sits at <paramref name="uvOrigin"/>. Everything in EM units;
+        /// the emitter's scale is applied as the glyph is added.
         /// </summary>
-        internal void Add(PreparedGlyph glyph, Vector2 uvOrigin, Vector2 origin, Vector2 uvMin, Vector2 uvMax)
-        {
-            var placement = new Placement(origin, _scale, uvOrigin, uvMin, uvMax);
+        internal Placement PlaceAt(Vector2 origin, Vector2 uvOrigin, Block uvBox) => new(origin, _scale, uvOrigin, uvBox.Min, uvBox.Max);
 
-            foreach (var polygon in glyph.Polygons)
+        /// <summary>Adds a prepared glyph at its placement: the caps, the walls and, with a bevel, the rings between them.</summary>
+        internal void Add(PreparedGlyph glyph, in Placement placement)
+        {
+            if (_bevel is null)
             {
-                if (_bevel is null)
+                foreach (var polygon in glyph.Polygons)
                 {
                     AddCaps(polygon.Rings[0], polygon.CapTriangles, _halfDepth, placement);
 
                     foreach (var loop in polygon.Loops) AddWalls(loop, _halfDepth, placement);
-
-                    continue;
                 }
 
-                // The bevel cannot go deeper than the middle, where the front and the back bevels meet. One
-                // within a ten-thousandth of it is taken as reaching it: a wall thinner than that is left
-                // out below, and the rings must then end exactly where the two sides meet, not a hair short
-                var thickness = MathF.Min(_bevel.Thickness, _halfDepth);
+                return;
+            }
 
-                if (_halfDepth - thickness <= 1e-4f * _halfDepth) thickness = _halfDepth;
+            // The bevel cannot go deeper than the middle, where the front and the back bevels meet. One
+            // within a ten-thousandth of it is taken as reaching it: a wall thinner than that is left
+            // out below, and the rings must then end exactly where the two sides meet, not a hair short.
+            // The same for every polygon of the glyph, so it is worked out once
+            var thickness = MathF.Min(_bevel.Thickness, _halfDepth);
 
-                var profile = new BevelProfile(glyph.BevelSizeEm * _scale, thickness, _bevel.Segments, _halfDepth);
+            if (_halfDepth - thickness <= 1e-4f * _halfDepth) thickness = _halfDepth;
 
+            var profile = new BevelProfile(glyph.BevelSizeEm * _scale, thickness, _bevel.Segments, _halfDepth);
+
+            foreach (var polygon in glyph.Polygons)
+            {
                 AddCaps(polygon.Rings[profile.Steps], polygon.CapTriangles, _halfDepth, placement);
 
                 for (var l = 0; l < polygon.Loops.Length; l++)
@@ -639,9 +642,9 @@ public static class TextMesh
 
         /// <summary>
         /// Where a glyph sits: its origin in EM units and the scale to world units, and the texture box of
-        /// the block it belongs to, in which it sits at the texture origin.
+        /// the block it belongs to, in which it sits at the texture origin. Made by <see cref="PlaceAt"/>.
         /// </summary>
-        private readonly struct Placement
+        internal readonly struct Placement
         {
             private readonly Vector2 _origin;
             private readonly float _scale;

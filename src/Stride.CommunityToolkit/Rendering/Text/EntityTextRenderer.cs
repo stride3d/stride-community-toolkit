@@ -1,10 +1,7 @@
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Core.Diagnostics;
 using Stride.Engine;
-using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
-using Stride.Rendering.Compositing;
 
 namespace Stride.CommunityToolkit.Rendering.Text;
 
@@ -22,12 +19,8 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// the scene rather than being occluded by geometry in front of it.
 /// </para>
 /// </remarks>
-public class EntityTextRenderer : SceneRendererBase
+public class EntityTextRenderer : SpriteTextRendererBase
 {
-    private SpriteBatch? _spriteBatch;
-    private SpriteFont? _defaultFont;
-    private Texture? _backgroundTexture;
-    private DisplayScale? _displayScale;
     private readonly List<EntityTextRenderData> _drawList = [];
 
     /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
@@ -36,52 +29,25 @@ public class EntityTextRenderer : SceneRendererBase
     private static readonly Color4 ProfileColor = new(0.9f, 0.7f, 0.3f, 1f);
 
     /// <inheritdoc />
-    protected override void InitializeCore()
-    {
-        base.InitializeCore();
-
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _defaultFont = RendererDefaults.LoadDefaultFont(Content, Services, 32f);
-
-        _backgroundTexture = ScreenTextDrawer.CreateBackgroundTexture(GraphicsDevice);
-
-        // The display's scale, for components whose pixel sizes follow it. Absent outside a game,
-        // which leaves every size at exactly the pixels asked for.
-        if (Services.GetService<IGame>() is { } game)
-        {
-            _displayScale = DisplayScale.GetOrCreate(game);
-        }
-    }
-
-    /// <inheritdoc />
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
     {
         using var _ = drawContext.QueryManager.BeginProfile(ProfileColor, ProfilingKey);
 
-        if (_spriteBatch is null || _defaultFont is null) return;
-
-        // Resolved per frame rather than cached, so a change of scene or camera is picked up
+        // Resolved per frame rather than cached, so a change of scene is picked up
         var processor = SceneInstance.GetCurrent(context)?.GetProcessor<EntityTextProcessor>();
 
         if (processor is null || processor.Texts.Count == 0) return;
 
-        var camera = CompositorCameras.Find(context);
-
-        if (camera is null) return;
-
-        var viewport = drawContext.CommandList.Viewport;
-        var screenSize = new Vector2(viewport.Width, viewport.Height);
-
-        if (screenSize.X <= 0 || screenSize.Y <= 0) return;
+        if (!TryBeginFrame(context, drawContext, out var frame)) return;
 
         BuildDrawList(processor);
 
         if (_drawList.Count == 0) return;
 
-        var viewProjection = camera.ViewProjectionMatrix;
-        var cameraPosition = camera.Entity?.Transform.WorldMatrix.TranslationVector ?? Vector3.Zero;
+        var viewProjection = frame.Camera.ViewProjectionMatrix;
+        var cameraPosition = frame.Camera.Entity?.Transform.WorldMatrix.TranslationVector ?? Vector3.Zero;
 
-        _spriteBatch.Begin(drawContext.GraphicsContext,
+        frame.Batch.Begin(drawContext.GraphicsContext,
             sortMode: SpriteSortMode.Deferred,
             blendState: BlendStates.AlphaBlend,
             samplerState: null,
@@ -89,10 +55,10 @@ public class EntityTextRenderer : SceneRendererBase
 
         foreach (var data in _drawList)
         {
-            Draw(data, ref viewProjection, cameraPosition, screenSize);
+            Draw(data, ref viewProjection, cameraPosition, frame.ScreenSize);
         }
 
-        _spriteBatch.End();
+        frame.Batch.End();
 
         _drawList.Clear();
     }
@@ -129,7 +95,7 @@ public class EntityTextRenderer : SceneRendererBase
 
         // Everything the component measures in pixels is multiplied by this; a projected world
         // position is not, because it is not a design figure but where the entity happens to be
-        var display = component.AutoScale && _displayScale is not null ? _displayScale.Value : 1f;
+        var display = DisplayScaleFactor(component.AutoScale);
         var offset = component.Offset * display;
 
         if (component.PositionMode == TextPositionMode.World)
@@ -158,8 +124,7 @@ public class EntityTextRenderer : SceneRendererBase
         // and stays on screen. Anchor is ignored here rather than obeyed, because the combination
         // that a HUD wants is the only one that keeps the text visible - and getting it wrong shows
         // up as text half off the edge of the window. Screen mode is there when the caller wants to
-        // place and anchor text independently. The two enums share one layout, so the text anchor
-        // of the same name is the cast.
+        // place and anchor text independently.
         DrawAt(data, ResolveAnchoredPosition(component.ScreenAnchor, offset, screenSize), opacity, component.ScreenAnchor, display);
     }
 
@@ -199,11 +164,16 @@ public class EntityTextRenderer : SceneRendererBase
         return anchor.At(screenSize) + new Vector2(x, y);
     }
 
-    // display: the display's scale, applied to every pixel figure; 1 when not following it
+    /// <summary>Draws one text at a screen position, styled from its component.</summary>
+    /// <param name="data">The text and its entity.</param>
+    /// <param name="position">Where the anchor lands, in pixels.</param>
+    /// <param name="opacity">The opacity after any distance fade.</param>
+    /// <param name="anchor">The point of the text put at <paramref name="position"/>.</param>
+    /// <param name="display">The display's scale, applied to every pixel figure; 1 when not following it.</param>
     private void DrawAt(EntityTextRenderData data, Vector2 position, float opacity, Anchor anchor, float display)
     {
         var component = data.Component;
-        var font = component.Font ?? _defaultFont!;
+        var font = component.Font ?? DefaultFont!;
 
         // Rasterised at the scaled size rather than drawn scaled, so the glyphs stay sharp
         var fontSize = component.FontSize * display;
@@ -231,20 +201,11 @@ public class EntityTextRenderer : SceneRendererBase
         };
 
         ScreenTextDrawer.Draw(
-            _spriteBatch!,
-            _backgroundTexture,
+            SpriteBatch!,
+            BackgroundTexture,
             component.Text,
             position,
-            data.GetMeasuredSize(_spriteBatch!, font, fontSize),
+            data.GetMeasuredSize(SpriteBatch!, font, fontSize),
             style);
-    }
-
-    /// <inheritdoc />
-    protected override void Destroy()
-    {
-        base.Destroy();
-
-        _spriteBatch?.Dispose();
-        _backgroundTexture?.Dispose();
     }
 }

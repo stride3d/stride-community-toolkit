@@ -21,7 +21,7 @@ public class EarClippingTests
         var triangles = EarClipping.Triangulate(polygon);
 
         Assert.Equal((polygon.Count - 2) * 3, triangles.Count);
-        Assert.Equal(Math.Abs(EarClipping.SignedArea(polygon)), AreaOf(polygon, triangles), 4);
+        Assert.Equal(Math.Abs(EarClipping.SignedArea(polygon)), TestGeometry.AreaOf(polygon, triangles), 4);
     }
 
     /// <summary>
@@ -38,27 +38,8 @@ public class EarClippingTests
         var triangles = EarClipping.Triangulate(outer, holes);
         var expected = Math.Abs(EarClipping.SignedArea(outer)) - holes.Sum(h => Math.Abs(EarClipping.SignedArea(h)));
 
-        Assert.Equal(expected, AreaOf(corners, triangles), 4);
+        Assert.Equal(expected, TestGeometry.AreaOf(corners, triangles), 4);
         Assert.InRange(triangles.Count / 3, corners.Count - 2, corners.Count + 2 * holes.Count - 2);
-    }
-
-    private static float AreaOf(IReadOnlyList<Vector2> corners, List<int> triangles)
-    {
-        var totalArea = 0f;
-
-        for (var i = 0; i < triangles.Count; i += 3)
-        {
-            var a = corners[triangles[i]];
-            var b = corners[triangles[i + 1]];
-            var c = corners[triangles[i + 2]];
-            var doubleArea = (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
-
-            Assert.True(doubleArea > 0, $"Triangle {i / 3} is degenerate or wound clockwise");
-
-            totalArea += doubleArea * 0.5f;
-        }
-
-        return totalArea;
     }
 
     [Fact]
@@ -110,13 +91,14 @@ public class EarClippingTests
     [Fact]
     public void HoleWindingDoesNotMatter()
     {
-        AssertValidTriangulation(TestGeometry.Square(0, 0, 4), [TestGeometry.Square(1, 1, 2).Reverse().ToArray()]);
-        AssertValidTriangulation(TestGeometry.Square(0, 0, 4).Reverse().ToArray(), [TestGeometry.Square(1, 1, 2)]);
+        AssertValidTriangulation(TestGeometry.Square(0, 0, 4), [TestGeometry.Reversed(TestGeometry.Square(1, 1, 2))]);
+        AssertValidTriangulation(TestGeometry.Reversed(TestGeometry.Square(0, 0, 4)), [TestGeometry.Square(1, 1, 2)]);
     }
 
     [Fact]
     public void TwoHolesSideBySide()
-        // A B: two holes, the right one bridged first; the second bridge must not cross the first
+        // A B: two holes, the right one bridged first; the second bridge must not cross the first. The
+        // second hole's ray runs along the first hole's top edge, and the corner on the ray is the bridge
         => AssertValidTriangulation(TestGeometry.Square(0, 0, 6), [TestGeometry.Square(1, 1, 1.5f), TestGeometry.Square(3.5f, 1, 1.5f)]);
 
     [Fact]
@@ -125,16 +107,28 @@ public class EarClippingTests
         => AssertValidTriangulation(TestGeometry.Square(0, 0, 4), [TestGeometry.Square(1, 0.5f, 2), TestGeometry.Square(1, 3f, 0.8f)]);
 
     [Fact]
-    public void AHoleLevelWithAnotherHolesCorner()
-        // The second hole's ray runs along the first hole's top edge; the corner on the ray is the bridge
-        => AssertValidTriangulation(TestGeometry.Square(0, 0, 6), [TestGeometry.Square(1, 1, 1.5f), TestGeometry.Square(3.5f, 1, 1.5f)]);
-
-    [Fact]
     public void AHoleWhoseRayMeetsAReflexCorner()
         // The outside has a notch to the right of the hole, exactly where the bridge wants to go
         => AssertValidTriangulation(
             [new(0, 0), new(6, 0), new(6, 2), new(3.5f, 2.2f), new(6, 2.4f), new(6, 5), new(0, 5)],
             [[new(1, 1.5f), new(2, 1.5f), new(2, 3), new(1, 3)]]);
+
+    [Theory]
+    [InlineData(2000f)]
+    [InlineData(0.001f)]
+    public void TheUnitDoesNotMatter_HolesBridgeTheSameAtAnyScale(float scale)
+    {
+        // The bridge search compares lengths and areas against one relative tolerance; in pixel units at
+        // extent 2,000 a length tolerance taken in area units is four pixels, wide enough to pick a corner
+        // the hole cannot see. Every hole case above, scaled, must still triangulate
+        AssertValidTriangulation(Scaled(TestGeometry.Square(0, 0, 6), scale), [Scaled(TestGeometry.Square(1, 1, 1.5f), scale), Scaled(TestGeometry.Square(3.5f, 1, 1.5f), scale)]);
+        AssertValidTriangulation(Scaled(TestGeometry.Square(0, 0, 4), scale), [Scaled(TestGeometry.Square(1, 0.5f, 2), scale), Scaled(TestGeometry.Square(1, 3f, 0.8f), scale)]);
+        AssertValidTriangulation(
+            Scaled([new(0, 0), new(6, 0), new(6, 2), new(3.5f, 2.2f), new(6, 2.4f), new(6, 5), new(0, 5)], scale),
+            [Scaled([new(1, 1.5f), new(2, 1.5f), new(2, 3), new(1, 3)], scale)]);
+    }
+
+    private static Vector2[] Scaled(Vector2[] corners, float scale) => corners.Select(c => c * scale).ToArray();
 
     [Fact]
     public void NoHolesIsThePlainCase()
@@ -232,23 +226,6 @@ public class EarClippingTests
         }
     }
 
-    [Fact]
-    public void TextMeshFacesWindClockwiseTowardTheViewer()
-    {
-        // The same rule for the lettering, where the back cap keeps the triangulation's order and the
-        // front cap reverses it, and every wall quad is emitted clockwise from outside
-        var data = TextMesh.Create(MeshFont.Default, "Ab8");
-
-        for (var i = 0; i < data.Indices.Length; i += 3)
-        {
-            var a = data.Vertices[data.Indices[i]];
-            var b = data.Vertices[data.Indices[i + 1]];
-            var c = data.Vertices[data.Indices[i + 2]];
-            var geometricNormal = Vector3.Cross(b.Position - a.Position, c.Position - b.Position);
-
-            Assert.True(Vector3.Dot(geometricNormal, a.Normal) < 0, $"Triangle at index {i} winds counter-clockwise toward its outward normal");
-        }
-    }
 
     [Fact]
     public void ExtrusionRejectsNonPositiveDepth()

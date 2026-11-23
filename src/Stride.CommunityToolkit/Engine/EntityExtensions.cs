@@ -4,6 +4,7 @@ using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
 using Stride.Graphics;
 using Stride.Input;
+using Stride.Rendering;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Stride.CommunityToolkit.Engine;
@@ -36,6 +37,8 @@ public static partial class EntityExtensions
         bool helpCollapsed = true,
         bool showHelp = true)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         var controller = new Basic3DCameraController(helpPosition)
         {
             HelpToggleKey = helpToggleKey,
@@ -60,6 +63,8 @@ public static partial class EntityExtensions
         Keys helpToggleKey = Keys.F2,
         bool helpCollapsed = true)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         var controller = new Basic2DCameraController
         {
             HelpToggleKey = helpToggleKey,
@@ -81,6 +86,7 @@ public static partial class EntityExtensions
     /// <param name="blueColor">Optional custom color for the Z-axis of the gizmo. If not specified, a default color is used.</param>
     /// <param name="showAxisName">Optional flag to show axis names. Default is false.</param>
     /// <param name="rotateAxisNames">Optional flag to rotate axis names. Default is true.</param>
+    /// <param name="renderGroup">The render group the gizmo's parts are drawn in. Default is <see cref="RenderGroup.Group0"/>.</param>
     /// <returns>The gizmo, whose entity is already a child of <paramref name="entity"/>.</returns>
     /// <example>
     /// This example shows how to add a gizmo to an entity with the default colors:
@@ -90,9 +96,11 @@ public static partial class EntityExtensions
     /// entity.AddGizmo(game.GraphicsDevice);
     /// </code>
     /// </example>
-    public static TranslationGizmo AddGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null, bool showAxisName = false, bool rotateAxisNames = true)
+    public static TranslationGizmo AddGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null, bool showAxisName = false, bool rotateAxisNames = true, RenderGroup renderGroup = RenderGroup.Group0)
     {
-        var gizmo = new TranslationGizmo(graphicsDevice, redColor, greenColor, blueColor);
+        ArgumentNullException.ThrowIfNull(entity);
+
+        var gizmo = new TranslationGizmo(graphicsDevice, redColor, greenColor, blueColor, renderGroup);
 
         gizmo.Create(entity, showAxisName, rotateAxisNames);
 
@@ -120,6 +128,8 @@ public static partial class EntityExtensions
     /// </example>
     public static LightDirectionalGizmo AddLightDirectionalGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? color = null)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         var gizmo = new LightDirectionalGizmo(graphicsDevice, color);
 
         gizmo.Create(entity);

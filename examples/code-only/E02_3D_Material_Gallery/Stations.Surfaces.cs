@@ -35,7 +35,7 @@ public static class SurfaceStations
         var v = station.Pick("blend", "additive", "cutoff", "dithered", "overlay: unlit, the alpha is the opacity");
 
         var descriptor = v == 4
-            ? MaterialDescriptors.Overlay(new Color(colour.R, colour.G, colour.B, 115))
+            ? MaterialDescriptors.Overlay(colour.WithAlpha(115))
             : Recipes.Pbr(colour, glossiness: 0.7f, metalness: 0f);
 
         descriptor.Attributes.Transparency = v switch
@@ -48,7 +48,7 @@ public static class SurfaceStations
         };
 
         // Something behind, so see-through has something to see
-        station.Place(Primitive3D.Sphere(0.8f), station.Compile(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f)), new Vector3(0f, 0.8f, -2.4f));
+        station.Place(Primitive3D.Sphere(0.8f), station.Compile(Recipes.Pbr(new Color(230, 120, 60), 0f, 0.5f)), new Vector3(0f, 0.8f, -2.4f));
         station.PlaceTrio(station.Compile(descriptor));
     }
 
@@ -90,8 +90,8 @@ public static class SurfaceStations
             },
         });
 
-        station.Place(Primitive3D.Sphere(0.8f), station.Compile(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f)), new Vector3(-2.8f, 0.8f, -2.4f));
-        station.Place(Primitive3D.Cube(1.4f), station.Compile(Recipes.Pbr(new Color(60, 160, 90), 0.5f, 0f)), new Vector3(2.8f, 0.8f, -2.4f));
+        station.Place(Primitive3D.Sphere(0.8f), station.Compile(Recipes.Pbr(new Color(230, 120, 60), 0f, 0.5f)), new Vector3(-2.8f, 0.8f, -2.4f));
+        station.Place(Primitive3D.Cube(1.4f), station.Compile(Recipes.Pbr(new Color(60, 160, 90), 0f, 0.5f)), new Vector3(2.8f, 0.8f, -2.4f));
         station.PlaceTrio(glass);
     }
 
@@ -124,19 +124,14 @@ public static class SurfaceStations
             _ => HairShared.HairShadingModel.KajiyaKayShifted,
         };
 
-        var colour = new Color(120, 75, 35);
         var device = station.Game.GraphicsDevice;
-        var strands = station.Textures.Generated("strands", () => HairCards.Strands(device, colour));
 
         // The strand texture is the diffuse; its alpha is what the passes cut by. Both faces of a card are hair
-        // Clamped along the strand: wrapped, the tip row would blend with the root row and paint a line across every card end
-        var strandInput = Recipes.Colour(strands);
-        strandInput.AddressModeV = TextureAddressMode.Clamp;
-        var cards = station.Compile(HairMaterial(model, strandInput, twoSided: true));
+        var cards = station.Compile(HairMaterial(model, StrandInput(station), twoSided: true));
 
         // A skin-coloured head, so the clear forehead reads as a face; the face is towards the visitor
         const float headRadius = 0.55f;
-        var skin = station.Compile(Recipes.Pbr(new Color(225, 180, 150), 0.35f, 0f));
+        var skin = station.Compile(Recipes.Pbr(new Color(225, 180, 150), 0f, 0.35f));
 
         var heads = new List<(Entity Entity, Quaternion Placed)>();
 
@@ -197,10 +192,7 @@ public static class SurfaceStations
         station.Clear();
 
         var device = station.Game.GraphicsDevice;
-        var colour = new Color(120, 75, 35);
-        var strands = station.Textures.Generated("strands", () => HairCards.Strands(device, colour));
-        var strandInput = Recipes.Colour(strands);
-        strandInput.AddressModeV = TextureAddressMode.Clamp;
+        var strandInput = StrandInput(station);
 
         var part = station.Pick("plain", "the three passes in colour", "scattering shadowing", "per-strand noise", "direction from the bitangent");
 
@@ -212,11 +204,26 @@ public static class SurfaceStations
             sway: false, debugPasses: part == 1, shadowing: shadowing, noise: noise, direction: direction));
 
         const float headRadius = 0.55f;
-        var skin = station.Compile(Recipes.Pbr(new Color(225, 180, 150), 0.35f, 0f));
+        var skin = station.Compile(Recipes.Pbr(new Color(225, 180, 150), 0f, 0.35f));
         var at = new Vector3(0f, 1.1f, 0f);
 
         station.Place(Primitive3D.Sphere(headRadius), skin, at);
         station.PlaceModel(HairCards.Haircut(device, headRadius, HairStyle.Bob, directionInBitangent: part == 4), cards, at);
+    }
+
+    /// <summary>
+    /// The strand texture as a diffuse input. Clamped along the strand: wrapped, the tip row would
+    /// blend with the root row and paint a line across every card end.
+    /// </summary>
+    private static ComputeTextureColor StrandInput(MaterialStation station)
+    {
+        var device = station.Game.GraphicsDevice;
+        var colour = new Color(120, 75, 35);
+        var input = Recipes.Colour(station.Textures.Generated("strands", () => HairCards.Strands(device, colour)));
+
+        input.AddressModeV = TextureAddressMode.Clamp;
+
+        return input;
     }
 
     /// <summary>
@@ -282,7 +289,7 @@ public static class SurfaceStations
 
         var translucency = station.Pick("translucency 0.83", "translucency 0.3", "translucency 1") switch { 0 => 0.83f, 1 => 0.3f, _ => 1f };
 
-        var descriptor = Recipes.Pbr(new Color(230, 180, 160), 0.45f, 0f);
+        var descriptor = Recipes.Pbr(new Color(230, 180, 160), 0f, 0.45f);
         descriptor.Attributes.SubsurfaceScattering = new MaterialSubsurfaceScatteringFeature
         {
             Translucency = translucency,

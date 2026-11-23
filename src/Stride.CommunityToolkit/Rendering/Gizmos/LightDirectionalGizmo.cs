@@ -11,16 +11,10 @@ namespace Stride.CommunityToolkit.Rendering.Gizmos;
 /// </summary>
 public class LightDirectionalGizmo
 {
-    /// <summary>
-    /// The tessellation value for the gizmo, which defines the level of detail for its geometry.
-    /// </summary>
-    private const int GizmoTessellation = 64;
-
     private const float BodyLength = 0.4f;
     private const float ConeHeight = BodyLength / 5;
     private const float BodyRadius = ConeHeight / 6;
     private const float ConeRadius = ConeHeight / 3;
-    private const float OriginRadius = 1.33f * 0.15f / 3f;
 
     private readonly GraphicsDevice _graphicsDevice;
     private readonly Material _rayMaterial;
@@ -47,9 +41,9 @@ public class LightDirectionalGizmo
         // The ray runs down -Z: the cone at its far end, the shaft behind it, a sphere at the origin
         var lightRay = new Entity($"Light ray for light gizmo {root.Id}");
 
-        lightRay.AddChild(Part($"Light ray cone for light gizmo {root.Id}", GeometricPrimitive.Cone.New(_graphicsDevice, ConeRadius, ConeHeight, GizmoTessellation), -BodyLength - ConeHeight * 0.5f));
-        lightRay.AddChild(Part($"Light ray body for light gizmo {root.Id}", GeometricPrimitive.Cylinder.New(_graphicsDevice, BodyLength, BodyRadius, GizmoTessellation), -BodyLength / 2));
-        lightRay.AddChild(Part("OriginSphere", GeometricPrimitive.Sphere.New(_graphicsDevice, OriginRadius, GizmoTessellation), 0f, alongRay: false));
+        lightRay.AddChild(Part($"Light ray cone for light gizmo {root.Id}", GeometricPrimitive.Cone.New(_graphicsDevice, ConeRadius, ConeHeight, GizmoSizes.Tessellation), -BodyLength - ConeHeight * 0.5f));
+        lightRay.AddChild(Part($"Light ray body for light gizmo {root.Id}", GeometricPrimitive.Cylinder.New(_graphicsDevice, BodyLength, BodyRadius, GizmoSizes.Tessellation), -BodyLength / 2));
+        lightRay.AddChild(Part("OriginSphere", GeometricPrimitive.Sphere.New(_graphicsDevice, GizmoSizes.OriginRadius, GizmoSizes.Tessellation), 0f, alongRay: false));
 
         root.AddChild(lightRay);
 

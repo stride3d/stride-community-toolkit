@@ -8,11 +8,9 @@ namespace E06_Box2D.Helpers;
 public static class GameConfig
 {
     // Entity naming
-    public const string ShapeName = "Box2DShape";
     public const string WallName = "Wall";
 
     // Physics settings
-    public const float Gravity = -10.0f;
     public const float DefaultDensity = 2.0f;
     public const float DefaultFriction = 0.3f;
     public const float DefaultRestitution = 0.1f;
